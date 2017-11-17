@@ -1,0 +1,2 @@
+wagtail==1.13
+psycopg2==2.7.3.2
