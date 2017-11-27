@@ -3,6 +3,7 @@ from wagtail.contrib.modeladmin.options import (
 
 from base.models import Event, Department
 
+
 class EventModelAdmin(ModelAdmin):
     model = Event
 
