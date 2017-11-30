@@ -20,6 +20,7 @@ class HomePage(Page):
 
 
 WYSIWYG_FEATURES = ['h1', 'h2', 'h3', 'bold', 'italic', 'link', 'ul', 'ol']
+DEFAULT_MAX_LENGTH = 255
 
 
 class ServicePage(Page):
@@ -66,27 +67,27 @@ class ApplicationBlock(ClusterableModel):
 
 @register_snippet
 class Event(ClusterableModel):
-    title = models.CharField(max_length=255)
+    title = models.CharField(max_length=DEFAULT_MAX_LENGTH)
     start_at = models.DateTimeField()
     end_at = models.DateTimeField()
     address = models.TextField()
-    fees = models.CharField(max_length=255)
+    fees = models.CharField(max_length=DEFAULT_MAX_LENGTH)
 
 
 @register_snippet
 class Director(ClusterableModel):
-    name = models.CharField(max_length=255)
-    photo = models.CharField(max_length=255)
+    name = models.CharField(max_length=DEFAULT_MAX_LENGTH)
+    photo = models.CharField(max_length=DEFAULT_MAX_LENGTH)
     email = models.EmailField()
-    phone_number = models.CharField(max_length=255)
+    phone_number = models.CharField(max_length=DEFAULT_MAX_LENGTH)
 
 
 @register_snippet
 class Department(ClusterableModel):
-    name = models.CharField(max_length=255)
-    address = models.CharField(max_length=255)
-    hours = models.CharField(max_length=255)
-    phone_number = models.CharField(max_length=255)
+    name = models.CharField(max_length=DEFAULT_MAX_LENGTH)
+    address = models.CharField(max_length=DEFAULT_MAX_LENGTH)
+    hours = models.CharField(max_length=DEFAULT_MAX_LENGTH)
+    phone_number = models.CharField(max_length=DEFAULT_MAX_LENGTH)
     email = models.EmailField()
     description = models.TextField()
 
@@ -96,13 +97,13 @@ class Department(ClusterableModel):
 
 @register_snippet
 class Location(ClusterableModel):
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=DEFAULT_MAX_LENGTH)
     address = models.TextField()
-    hours = models.CharField(max_length=255)
+    hours = models.CharField(max_length=DEFAULT_MAX_LENGTH)
 
 
 @register_snippet
 class Contact(ClusterableModel):
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=DEFAULT_MAX_LENGTH)
     email = models.EmailField()
-    phone_number = models.CharField(max_length=255)
+    phone_number = models.CharField(max_length=DEFAULT_MAX_LENGTH)
