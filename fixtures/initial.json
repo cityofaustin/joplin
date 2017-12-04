@@ -1,34 +1,26 @@
 [
   {
-    "model": "base.servicepagetag",
-    "pk": 7,
+    "model": "base.applicationblock",
+    "pk": 2,
     "fields": {
-      "tag": 1,
-      "content_object": 4
-    }
-  },
-  {
-    "model": "base.servicepagetag",
-    "pk": 8,
-    "fields": {
-      "tag": 2,
-      "content_object": 4
-    }
-  },
-  {
-    "model": "base.servicepagetag",
-    "pk": 9,
-    "fields": {
-      "tag": 3,
-      "content_object": 4
+      "url": "http://austintexas.gov/what-do-i-do",
+      "description": "What Do I Do With app"
     }
   },
   {
     "model": "base.applicationblock",
-    "pk": 1,
+    "pk": 3,
     "fields": {
-      "url": "http://google.com",
-      "description": "it's google"
+      "url": "http://www.austintexas.gov/page/my-collection-schedule",
+      "description": "Collection Schedule Look-up app"
+    }
+  },
+  {
+    "model": "base.applicationblock",
+    "pk": 4,
+    "fields": {
+      "url": "https://www.google.com/maps/place/2514+Business+Center+Dr,+Austin,+TX+78744/@30.2131997,-97.739937,17z/data=!4m18!1m12!4m11!1m3!2m2!1d-97.7377161!2d30.2133712!1m6!1m2!1s0x8644b47c2745281f:0xf3692414b6",
+      "description": "Map"
     }
   },
   {
@@ -1332,7 +1324,7 @@
     "pk": 1,
     "fields": {
       "password": "pbkdf2_sha256$36000$0ELJCoacaMh2$/gjCsWA9LGtoSMjG868AYgn6ah3l//B7UPwLpjV9KHk=",
-      "last_login": "2017-11-28T19:45:33.320Z",
+      "last_login": "2017-11-28T22:25:05.760Z",
       "is_superuser": true,
       "username": "admin",
       "first_name": "",
@@ -1473,37 +1465,37 @@
   },
   {
     "model": "wagtailcore.pagerevision",
-    "pk": 1,
+    "pk": 6,
     "fields": {
-      "page": 4,
+      "page": 5,
       "submitted_for_moderation": false,
-      "created_at": "2017-11-28T19:46:55.795Z",
+      "created_at": "2017-11-30T22:39:25.202Z",
       "user": 1,
-      "content_json": "{\"pk\": 4, \"path\": \"000100010001\", \"depth\": 3, \"numchild\": 0, \"title\": \"This is a sweet new page\", \"draft_title\": \"This is a sweet new page\", \"slug\": \"sweet-new-page\", \"content_type\": 12, \"live\": false, \"has_unpublished_changes\": false, \"url_path\": \"/home/sweet-new-page/\", \"owner\": 1, \"seo_title\": \"\", \"show_in_menus\": false, \"search_description\": \"\", \"go_live_at\": null, \"expire_at\": null, \"expired\": false, \"locked\": false, \"first_published_at\": null, \"last_published_at\": null, \"latest_revision_created_at\": null, \"live_revision\": null, \"created_at\": \"2017-11-28T19:46:55.724Z\", \"updated_at\": \"2017-11-28T19:46:55.789Z\", \"content\": \"<p>This is some sweet content</p><p><br/></p><ol><li>do this first</li><li>then do this</li><li>now you're done<br/></li></ol>\", \"extra_content\": \"[{\\\"type\\\": \\\"content\\\", \\\"value\\\": \\\"<p><b>This is my extra content</b><br/></p>\\\", \\\"id\\\": \\\"695e363a-6ecf-457e-8e53-e351aecc2ad6\\\"}, {\\\"type\\\": \\\"application_blocks\\\", \\\"value\\\": 1, \\\"id\\\": \\\"ab15af2a-5bef-476d-a467-2c583eded4ea\\\"}, {\\\"type\\\": \\\"content\\\", \\\"value\\\": \\\"<h1>This is some other extra content<br/></h1>\\\", \\\"id\\\": \\\"fb4ab425-9391-496a-aa5f-70915b02bde5\\\"}]\", \"tagged_items\": [{\"pk\": 1, \"tag\": 1, \"content_object\": 4}, {\"pk\": 2, \"tag\": 2, \"content_object\": 4}, {\"pk\": 3, \"tag\": 3, \"content_object\": 4}]}",
+      "content_json": "{\"pk\": 5, \"path\": \"000100010002\", \"depth\": 3, \"numchild\": 0, \"title\": \"Get Ready for Bulk Item Pick-up\", \"draft_title\": \"Get Ready for Bulk Item Pick-up\", \"slug\": \"residential-bulk-collection\", \"content_type\": 12, \"live\": true, \"has_unpublished_changes\": false, \"url_path\": \"/home/residential-bulk-collection/\", \"owner\": 1, \"seo_title\": \"\", \"show_in_menus\": false, \"search_description\": \"\", \"go_live_at\": null, \"expire_at\": null, \"expired\": false, \"locked\": false, \"first_published_at\": null, \"last_published_at\": null, \"latest_revision_created_at\": null, \"live_revision\": null, \"created_at\": \"2017-11-30T22:39:25.138Z\", \"updated_at\": \"2017-11-30T22:39:25.197Z\", \"content\": \"<ol><li><p>Check what items are accepted for bulk pick-up below. </p></li><li><p>Look up your twice-a-year bulk pick-up weeks below. We only collect bulk items from residential trash and recycling customers. </p></li><li><p>Place bulk items at the curb in front of your house by 6:30 a.m. on the first day of your scheduled collection week</p></li><li><p>Separate items into three piles. </p></li><ol><li><p>Metal - includes appliances, doors must be removed</p></li><li><p>Passenger car tires - limit of eight tires per household, rims must be removed, no truck or tractor tires </p></li><li><p>Non-metal items - includes carpeting and nail-free lumber</p></li></ol></ol>\", \"extra_content\": \"[{\\\"type\\\": \\\"application_block\\\", \\\"value\\\": 2, \\\"id\\\": \\\"a23a34f0-428a-4fcc-8f74-b21b6b031e2f\\\"}, {\\\"type\\\": \\\"application_block\\\", \\\"value\\\": 3, \\\"id\\\": \\\"9e1e4732-6a2a-4d4a-abb2-ce65d50cb462\\\"}, {\\\"type\\\": \\\"content\\\", \\\"value\\\": \\\"<p>Do not put bulk items in bags, boxes or other containers. Bags will be treated as extra trash and are subject to extra trash fees.</p><br/><p>Items will not be picked up if they are in an alley in any area, including Hyde Park, in front of a vacant lot or in front of a business</p><br/><p>To prevent damage to your property, keep bulk items 5 feet away from your:</p><ol><ol><li><p>trash cart</p></li><li><p>Mailbox</p></li><li><p>fences or walls</p></li><li><p>water meter</p></li><li><p>telephone connection box</p></li><li><p>parked cars. </p></li></ol></ol><br/><p>Do not place any items under low hanging tree limbs or power lines.</p><br/><p>The three separate piles are collected by different trucks and may be collected at different times throughout the week.</p>\\\", \\\"id\\\": \\\"b2b6c0dd-ea50-4f01-9192-0e5a1d0f87b1\\\"}]\", \"tagged_items\": []}",
       "approved_go_live_at": null
     }
   },
   {
     "model": "wagtailcore.pagerevision",
-    "pk": 2,
+    "pk": 7,
     "fields": {
-      "page": 4,
+      "page": 6,
       "submitted_for_moderation": false,
-      "created_at": "2017-11-28T19:47:05.474Z",
+      "created_at": "2017-11-30T22:40:30.148Z",
       "user": 1,
-      "content_json": "{\"pk\": 4, \"path\": \"000100010001\", \"depth\": 3, \"numchild\": 0, \"title\": \"This is a sweet new page\", \"draft_title\": \"This is a sweet new page\", \"slug\": \"sweet-new-page\", \"content_type\": 12, \"live\": false, \"has_unpublished_changes\": true, \"url_path\": \"/home/sweet-new-page/\", \"owner\": 1, \"seo_title\": \"\", \"show_in_menus\": false, \"search_description\": \"\", \"go_live_at\": null, \"expire_at\": null, \"expired\": false, \"locked\": false, \"first_published_at\": null, \"last_published_at\": null, \"latest_revision_created_at\": \"2017-11-28T19:46:55.795Z\", \"live_revision\": null, \"created_at\": \"2017-11-28T19:46:55.724Z\", \"updated_at\": \"2017-11-28T19:47:05.473Z\", \"content\": \"<p>This is some sweet content</p><p><br/></p><ol><li>do this first</li><li>then do this</li><li>now you're done<br/></li></ol>\", \"extra_content\": \"[{\\\"type\\\": \\\"content\\\", \\\"value\\\": \\\"<p><b>This is my extra content</b><br/></p>\\\", \\\"id\\\": \\\"695e363a-6ecf-457e-8e53-e351aecc2ad6\\\"}, {\\\"type\\\": \\\"application_blocks\\\", \\\"value\\\": 1, \\\"id\\\": \\\"ab15af2a-5bef-476d-a467-2c583eded4ea\\\"}, {\\\"type\\\": \\\"content\\\", \\\"value\\\": \\\"<h1>This is some other extra content<br/></h1>\\\", \\\"id\\\": \\\"fb4ab425-9391-496a-aa5f-70915b02bde5\\\"}]\", \"tagged_items\": [{\"pk\": null, \"tag\": 1, \"content_object\": 4}, {\"pk\": null, \"tag\": 2, \"content_object\": 4}, {\"pk\": null, \"tag\": 3, \"content_object\": 4}]}",
+      "content_json": "{\"pk\": 6, \"path\": \"000100010003\", \"depth\": 3, \"numchild\": 0, \"title\": \"Look up your Trash and Recycling Days\", \"draft_title\": \"Look up your Trash and Recycling Days\", \"slug\": \"residential-curbside-collection-schedule\", \"content_type\": 12, \"live\": true, \"has_unpublished_changes\": false, \"url_path\": \"/home/residential-curbside-collection-schedule/\", \"owner\": 1, \"seo_title\": \"\", \"show_in_menus\": false, \"search_description\": \"\", \"go_live_at\": null, \"expire_at\": null, \"expired\": false, \"locked\": false, \"first_published_at\": null, \"last_published_at\": null, \"latest_revision_created_at\": null, \"live_revision\": null, \"created_at\": \"2017-11-30T22:40:30.098Z\", \"updated_at\": \"2017-11-30T22:40:30.145Z\", \"content\": \"<p>1.Type your address, without apartment or unit number, in the box below</p><p>2. Press the search button to view your pickup schedule</p><p>3. (Optional) Click the icon to add your pickup days to your Google, iCal, or Microsoft calendar or print a copy of your schedule.</p>\", \"extra_content\": \"[{\\\"type\\\": \\\"application_block\\\", \\\"value\\\": 3, \\\"id\\\": \\\"311396a7-4ff4-408b-9223-2744c49c0222\\\"}, {\\\"type\\\": \\\"content\\\", \\\"value\\\": \\\"<p>If your pickup day falls on Thanksgiving Day, Christmas Day or New Year's Day\\\\u2014or if it falls after the holiday in the same week\\\\u2014it slides to one day later. If the holiday falls on a Sunday, your pickup day will not slide.</p><br/>We will pick up your trash and yard trimmings every week. Every other week, we will pick up recycling, clothing, and housewares are collected every other week. All curbside pick-ups happen on the same day of the week unless it is a holiday. Use <a href=\\\\\\\"https://austintexas.gov/page/my-collection-schedule\\\\\\\">My Schedule</a> to get your personalized collection calendar.\\\", \\\"id\\\": \\\"7413efe7-6af6-4f42-b37c-82f3eb5c2a14\\\"}]\", \"tagged_items\": []}",
       "approved_go_live_at": null
     }
   },
   {
     "model": "wagtailcore.pagerevision",
-    "pk": 3,
+    "pk": 8,
     "fields": {
-      "page": 4,
+      "page": 7,
       "submitted_for_moderation": false,
-      "created_at": "2017-11-28T20:35:54.530Z",
+      "created_at": "2017-11-30T22:44:19.674Z",
       "user": 1,
-      "content_json": "{\"pk\": 4, \"path\": \"000100010001\", \"depth\": 3, \"numchild\": 0, \"title\": \"This is a sweet new page\", \"draft_title\": \"This is a sweet new page\", \"slug\": \"sweet-new-page\", \"content_type\": 12, \"live\": true, \"has_unpublished_changes\": false, \"url_path\": \"/home/sweet-new-page/\", \"owner\": 1, \"seo_title\": \"\", \"show_in_menus\": false, \"search_description\": \"\", \"go_live_at\": null, \"expire_at\": null, \"expired\": false, \"locked\": false, \"first_published_at\": \"2017-11-28T19:47:05.575Z\", \"last_published_at\": \"2017-11-28T19:47:05.575Z\", \"latest_revision_created_at\": \"2017-11-28T19:47:05.474Z\", \"live_revision\": 2, \"created_at\": \"2017-11-28T19:46:55.724Z\", \"updated_at\": \"2017-11-28T20:35:54.529Z\", \"content\": \"<p>This is some sweet content</p><p><br/></p><ol><li>do this first</li><li>then do this</li><li>now you're done<br/></li></ol>\", \"extra_content\": \"[{\\\"type\\\": \\\"content\\\", \\\"value\\\": \\\"<p><b>This is my extra content</b><br/></p>\\\", \\\"id\\\": \\\"695e363a-6ecf-457e-8e53-e351aecc2ad6\\\"}, {\\\"type\\\": \\\"application_block\\\", \\\"value\\\": 1, \\\"id\\\": \\\"dbb9e30f-2aff-4669-aee3-e555192a8580\\\"}, {\\\"type\\\": \\\"content\\\", \\\"value\\\": \\\"<h1>This is some other extra content<br/></h1>\\\", \\\"id\\\": \\\"fb4ab425-9391-496a-aa5f-70915b02bde5\\\"}]\", \"tagged_items\": [{\"pk\": null, \"tag\": 1, \"content_object\": 4}, {\"pk\": null, \"tag\": 2, \"content_object\": 4}, {\"pk\": null, \"tag\": 3, \"content_object\": 4}]}",
+      "content_json": "{\"pk\": 7, \"path\": \"000100010004\", \"depth\": 3, \"numchild\": 0, \"title\": \"Visit the Recycle and Reuse Drop-off Center\", \"draft_title\": \"Visit the Recycle and Reuse Drop-off Center\", \"slug\": \"dropoff\", \"content_type\": 12, \"live\": true, \"has_unpublished_changes\": false, \"url_path\": \"/home/dropoff/\", \"owner\": 1, \"seo_title\": \"\", \"show_in_menus\": false, \"search_description\": \"\", \"go_live_at\": null, \"expire_at\": null, \"expired\": false, \"locked\": false, \"first_published_at\": null, \"last_published_at\": null, \"latest_revision_created_at\": null, \"live_revision\": null, \"created_at\": \"2017-11-30T22:44:19.608Z\", \"updated_at\": \"2017-11-30T22:44:19.668Z\", \"content\": \"<ol><li><p>Check below to find out what hazardous waste items are accepted. Some items are free to drop off and some items, like tires, require a fee.</p></li><li><p>Drop off your household hazardous waste or visit the ReUse Store at 2514 Business Center Dr, Austin, TX 78744.</p></li><li><p>Be sure to bring products in original containers; do not mix, bring items in 5-gallon (or smaller) containers and put small containers upright in sturdy boxes.</p></li><li><p>If something is leaking, put it in a container and absorb the spill with cat litter.</p></li></ol>\", \"extra_content\": \"[{\\\"type\\\": \\\"application_block\\\", \\\"value\\\": 2, \\\"id\\\": \\\"36b6961d-f820-42cd-b619-68fd9923d1c8\\\"}, {\\\"type\\\": \\\"application_block\\\", \\\"value\\\": 4, \\\"id\\\": \\\"5a9a2106-3757-4e14-b907-2b52de42071a\\\"}, {\\\"type\\\": \\\"content\\\", \\\"value\\\": \\\"<p><br/></p><h1>Household Hazardous Waste</h1><p></p><p>Throwing household hazardous waste in the trash or pouring it down the drain is dangerous and harmful to the environment. Austin and Travis County residents can drop off hazardous waste for free, up to 30 gallons annually. Large truck or trailer loads will not be accepted after 4:45PM.</p><br/><p>Businesses are not eligible to drop off hazardous waste. For information about how businesses can dispose of hazardous waste, call 512-974-4336.</p><h1>ReUse Store</h1><p>Many materials that are dropped off at the center are in usable condition. These items go to the ReUse Store, where everyone can pick them up for free. Store items often include: </p><ul><li><p>Art supplies</p></li><li><p>Cleaning products</p></li><li><p>Household chemicals</p></li><li><p>Automotive fluids</p></li><li><p><a href=\\\\\\\"http://www.austintexas.gov/department/austin-reblend\\\\\\\">Austin ReBlend paint</a> </p></li><li><p>Mulch</p></li></ul><br/><p>Austin ReBlend paint is free for individuals and nonprofits. It is not available to businesses.</p><p>Mulch is free for everyone, but you must load it yourself. Bring a pitchfork or shovel, work gloves and containers. </p>\\\", \\\"id\\\": \\\"98d4892d-f7f1-4d46-91e9-c6f1ba5f278c\\\"}]\", \"tagged_items\": []}",
       "approved_go_live_at": null
     }
   },
@@ -1541,7 +1533,7 @@
     "fields": {
       "path": "00010001",
       "depth": 2,
-      "numchild": 1,
+      "numchild": 3,
       "title": "Home",
       "draft_title": "Home",
       "slug": "home",
@@ -1565,18 +1557,18 @@
   },
   {
     "model": "wagtailcore.page",
-    "pk": 4,
+    "pk": 5,
     "fields": {
-      "path": "000100010001",
+      "path": "000100010002",
       "depth": 3,
       "numchild": 0,
-      "title": "This is a sweet new page",
-      "draft_title": "This is a sweet new page",
-      "slug": "sweet-new-page",
+      "title": "Get Ready for Bulk Item Pick-up",
+      "draft_title": "Get Ready for Bulk Item Pick-up",
+      "slug": "residential-bulk-collection",
       "content_type": 12,
       "live": true,
       "has_unpublished_changes": false,
-      "url_path": "/home/sweet-new-page/",
+      "url_path": "/home/residential-bulk-collection/",
       "owner": 1,
       "seo_title": "",
       "show_in_menus": false,
@@ -1585,20 +1577,96 @@
       "expire_at": null,
       "expired": false,
       "locked": false,
-      "first_published_at": "2017-11-28T19:47:05.575Z",
-      "last_published_at": "2017-11-28T20:35:54.649Z",
-      "latest_revision_created_at": "2017-11-28T20:35:54.530Z",
-      "live_revision": 3
+      "first_published_at": "2017-11-30T22:39:25.314Z",
+      "last_published_at": "2017-11-30T22:39:25.314Z",
+      "latest_revision_created_at": "2017-11-30T22:39:25.202Z",
+      "live_revision": 6
+    }
+  },
+  {
+    "model": "wagtailcore.page",
+    "pk": 6,
+    "fields": {
+      "path": "000100010003",
+      "depth": 3,
+      "numchild": 0,
+      "title": "Look up your Trash and Recycling Days",
+      "draft_title": "Look up your Trash and Recycling Days",
+      "slug": "residential-curbside-collection-schedule",
+      "content_type": 12,
+      "live": true,
+      "has_unpublished_changes": false,
+      "url_path": "/home/residential-curbside-collection-schedule/",
+      "owner": 1,
+      "seo_title": "",
+      "show_in_menus": false,
+      "search_description": "",
+      "go_live_at": null,
+      "expire_at": null,
+      "expired": false,
+      "locked": false,
+      "first_published_at": "2017-11-30T22:40:30.230Z",
+      "last_published_at": "2017-11-30T22:40:30.230Z",
+      "latest_revision_created_at": "2017-11-30T22:40:30.148Z",
+      "live_revision": 7
+    }
+  },
+  {
+    "model": "wagtailcore.page",
+    "pk": 7,
+    "fields": {
+      "path": "000100010004",
+      "depth": 3,
+      "numchild": 0,
+      "title": "Visit the Recycle and Reuse Drop-off Center",
+      "draft_title": "Visit the Recycle and Reuse Drop-off Center",
+      "slug": "dropoff",
+      "content_type": 12,
+      "live": true,
+      "has_unpublished_changes": false,
+      "url_path": "/home/dropoff/",
+      "owner": 1,
+      "seo_title": "",
+      "show_in_menus": false,
+      "search_description": "",
+      "go_live_at": null,
+      "expire_at": null,
+      "expired": false,
+      "locked": false,
+      "first_published_at": "2017-11-30T22:44:19.765Z",
+      "last_published_at": "2017-11-30T22:44:19.765Z",
+      "latest_revision_created_at": "2017-11-30T22:44:19.674Z",
+      "live_revision": 8
     }
   },
   {
     "model": "base.servicepage",
-    "pk": 4,
+    "pk": 5,
     "fields": {
-      "created_at": "2017-11-28T19:46:55.724Z",
-      "updated_at": "2017-11-28T20:35:54.675Z",
-      "content": "<p>This is some sweet content</p><p><br/></p><ol><li>do this first</li><li>then do this</li><li>now you're done<br/></li></ol>",
-      "extra_content": "[{\"type\": \"content\", \"value\": \"<p><b>This is my extra content</b><br/></p>\", \"id\": \"695e363a-6ecf-457e-8e53-e351aecc2ad6\"}, {\"type\": \"application_block\", \"value\": 1, \"id\": \"dbb9e30f-2aff-4669-aee3-e555192a8580\"}, {\"type\": \"content\", \"value\": \"<h1>This is some other extra content<br/></h1>\", \"id\": \"fb4ab425-9391-496a-aa5f-70915b02bde5\"}]"
+      "created_at": "2017-11-30T22:39:25.138Z",
+      "updated_at": "2017-11-30T22:39:25.360Z",
+      "content": "<ol><li><p>Check what items are accepted for bulk pick-up below. </p></li><li><p>Look up your twice-a-year bulk pick-up weeks below. We only collect bulk items from residential trash and recycling customers. </p></li><li><p>Place bulk items at the curb in front of your house by 6:30 a.m. on the first day of your scheduled collection week</p></li><li><p>Separate items into three piles. </p></li><ol><li><p>Metal - includes appliances, doors must be removed</p></li><li><p>Passenger car tires - limit of eight tires per household, rims must be removed, no truck or tractor tires </p></li><li><p>Non-metal items - includes carpeting and nail-free lumber</p></li></ol></ol>",
+      "extra_content": "[{\"type\": \"application_block\", \"value\": 2, \"id\": \"a23a34f0-428a-4fcc-8f74-b21b6b031e2f\"}, {\"type\": \"application_block\", \"value\": 3, \"id\": \"9e1e4732-6a2a-4d4a-abb2-ce65d50cb462\"}, {\"type\": \"content\", \"value\": \"<p>Do not put bulk items in bags, boxes or other containers. Bags will be treated as extra trash and are subject to extra trash fees.</p><br/><p>Items will not be picked up if they are in an alley in any area, including Hyde Park, in front of a vacant lot or in front of a business</p><br/><p>To prevent damage to your property, keep bulk items 5 feet away from your:</p><ol><ol><li><p>trash cart</p></li><li><p>Mailbox</p></li><li><p>fences or walls</p></li><li><p>water meter</p></li><li><p>telephone connection box</p></li><li><p>parked cars. </p></li></ol></ol><br/><p>Do not place any items under low hanging tree limbs or power lines.</p><br/><p>The three separate piles are collected by different trucks and may be collected at different times throughout the week.</p>\", \"id\": \"b2b6c0dd-ea50-4f01-9192-0e5a1d0f87b1\"}]"
+    }
+  },
+  {
+    "model": "base.servicepage",
+    "pk": 6,
+    "fields": {
+      "created_at": "2017-11-30T22:40:30.098Z",
+      "updated_at": "2017-11-30T22:40:30.255Z",
+      "content": "<p>1.Type your address, without apartment or unit number, in the box below</p><p>2. Press the search button to view your pickup schedule</p><p>3. (Optional) Click the icon to add your pickup days to your Google, iCal, or Microsoft calendar or print a copy of your schedule.</p>",
+      "extra_content": "[{\"type\": \"application_block\", \"value\": 3, \"id\": \"311396a7-4ff4-408b-9223-2744c49c0222\"}, {\"type\": \"content\", \"value\": \"<p>If your pickup day falls on Thanksgiving Day, Christmas Day or New Year's Day\\u2014or if it falls after the holiday in the same week\\u2014it slides to one day later. If the holiday falls on a Sunday, your pickup day will not slide.</p><br/>We will pick up your trash and yard trimmings every week. Every other week, we will pick up recycling, clothing, and housewares are collected every other week. All curbside pick-ups happen on the same day of the week unless it is a holiday. Use <a href=\\\"https://austintexas.gov/page/my-collection-schedule\\\">My Schedule</a> to get your personalized collection calendar.\", \"id\": \"7413efe7-6af6-4f42-b37c-82f3eb5c2a14\"}]"
+    }
+  },
+  {
+    "model": "base.servicepage",
+    "pk": 7,
+    "fields": {
+      "created_at": "2017-11-30T22:44:19.608Z",
+      "updated_at": "2017-11-30T22:44:19.798Z",
+      "content": "<ol><li><p>Check below to find out what hazardous waste items are accepted. Some items are free to drop off and some items, like tires, require a fee.</p></li><li><p>Drop off your household hazardous waste or visit the ReUse Store at 2514 Business Center Dr, Austin, TX 78744.</p></li><li><p>Be sure to bring products in original containers; do not mix, bring items in 5-gallon (or smaller) containers and put small containers upright in sturdy boxes.</p></li><li><p>If something is leaking, put it in a container and absorb the spill with cat litter.</p></li></ol>",
+      "extra_content": "[{\"type\": \"application_block\", \"value\": 2, \"id\": \"36b6961d-f820-42cd-b619-68fd9923d1c8\"}, {\"type\": \"application_block\", \"value\": 4, \"id\": \"5a9a2106-3757-4e14-b907-2b52de42071a\"}, {\"type\": \"content\", \"value\": \"<p><br/></p><h1>Household Hazardous Waste</h1><p></p><p>Throwing household hazardous waste in the trash or pouring it down the drain is dangerous and harmful to the environment. Austin and Travis County residents can drop off hazardous waste for free, up to 30 gallons annually. Large truck or trailer loads will not be accepted after 4:45PM.</p><br/><p>Businesses are not eligible to drop off hazardous waste. For information about how businesses can dispose of hazardous waste, call 512-974-4336.</p><h1>ReUse Store</h1><p>Many materials that are dropped off at the center are in usable condition. These items go to the ReUse Store, where everyone can pick them up for free. Store items often include: </p><ul><li><p>Art supplies</p></li><li><p>Cleaning products</p></li><li><p>Household chemicals</p></li><li><p>Automotive fluids</p></li><li><p><a href=\\\"http://www.austintexas.gov/department/austin-reblend\\\">Austin ReBlend paint</a> </p></li><li><p>Mulch</p></li></ul><br/><p>Austin ReBlend paint is free for individuals and nonprofits. It is not available to businesses.</p><p>Mulch is free for everyone, but you must load it yourself. Bring a pitchfork or shovel, work gloves and containers. </p>\", \"id\": \"98d4892d-f7f1-4d46-91e9-c6f1ba5f278c\"}]"
     }
   },
   {
