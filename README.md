@@ -26,7 +26,7 @@ You can access the admin at `localhost:800/admin` with the credentials `admin@au
 
 #### Access the API
 
-You can access the API at `localhost:8000/api`. You can see e.g. service pages by visiting `http://localhost:8000/api/pages/?format=json&type=base.ServicePage&fields=content,extra_content,theme`.
+You can access the API at `localhost:8000/api`. You can see e.g. service pages by visiting `http://localhost:8000/api/pages/?format=json&type=base.ServicePage&fields=content,extra_content,theme(text)`.
 
 
 ## Create migrations
