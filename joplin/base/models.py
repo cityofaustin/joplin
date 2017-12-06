@@ -13,7 +13,8 @@ from . import blocks as custom_blocks
 
 
 class HomePage(Page):
-    pass
+    parent_page_types = []
+    subpage_types = ['base.ServicePage']
 
 
 WYSIWYG_FEATURES = ['h1', 'h2', 'link', 'ul', 'ol']
