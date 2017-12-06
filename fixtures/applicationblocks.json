@@ -1,0 +1,34 @@
+[
+  {
+    "model": "base.applicationblock",
+    "pk": 1,
+    "fields": {
+      "url": "http://www.austintexas.gov/page/my-collection-schedule",
+      "description": "Collection Schedule Lookup"
+    }
+  },
+  {
+    "model": "base.applicationblock",
+    "pk": 2,
+    "fields": {
+      "url": "http://austintexas.gov/what-do-i-do",
+      "description": "What do I do with..."
+    }
+  },
+  {
+    "model": "base.applicationblock",
+    "pk": 3,
+    "fields": {
+      "url": "http://www.austintexas.gov/sites/default/files/files/Resource_Recovery/ZilkerMap_ButtonArtwork.png",
+      "description": "Map for Christmas Tree Dropoff"
+    }
+  },
+  {
+    "model": "base.applicationblock",
+    "pk": 4,
+    "fields": {
+      "url": "https://www.google.com/maps/place/2514+Business+Center+Dr,+Austin,+TX+78744/@30.2131997,-97.739937,17z",
+      "description": "Map for Hazardous Waste Dropoff Center"
+    }
+  }
+]

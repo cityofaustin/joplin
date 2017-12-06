@@ -1,0 +1,127 @@
+[
+  {
+    "model": "base.servicepage",
+    "pk": 4,
+    "fields": {
+      "created_at": "2017-12-06T17:09:43.155Z",
+      "updated_at": "2017-12-06T17:09:43.297Z",
+      "content": "<ol><li><p>All residents can drop-off their trees to be recycled into mulch. To drop your tree off at Zilker Park, remove any ornaments, lighting, decorations, and stands from your tree. Trees with flocking, or fake-snow, will not be accepted.</p></li><li><p>Do not place in a plastic bag.</p></li><li><p>Drop your tree off between 10am and 2pm on one of the following days:</p></li><ol><li><p>Saturday, December 30, 2017</p></li><li><p>Sunday, December 31, 2017</p></li><li><p>Saturday, January 6, 2018</p></li><li><p>Sunday, January 7, 2018</p></li></ol><li><p>Pick-up mulch at Zilker park on January 18, 2018. It will be available for free on a first-come, first serve basis. Be sure to bring your own tools and storage containers for loading and transporting the mulch.</p></li></ol><br/><ol><li><p>If you are a City of Austin curbside customer, and you would like to have your tree picked up and turned into mulch, remove any ornaments, lighting, decorations, and stands from your tree. Trees with flocking, or fake-snow, will not be accepted.</p></li><li><p>Cut the tree in half if it is longer than 6 feet.</p></li><li><p>Do not place in a plastic bag.</p></li><li><p>Set your tree out on the curb by 6:30 am on your regular collection day.</p></li><li><p>Pick-up mulch at Zilker park on January 18, 2018. It will be available for free on a first-come, first serve basis. Be sure to bring your own tools and storage containers for loading and transporting the mulch.</p></li></ol>",
+      "extra_content": "[{\"type\": \"application_block\", \"value\": 3, \"id\": \"f3154cf7-22c1-4d88-89f9-ee3f834f6ec7\"}, {\"type\": \"content\", \"value\": \"<h2>Free Drop-Off Locations</h2><p>Trees will be accepted free of cost at the locations listed below. However, a contamination fee will be added to any trees with tags, decorations, and/or plastic remaining.</p><br/><p><a href=\\\"http://www.texasdisposal.com/contact/\\\">Texas Disposal Systems</a></p><ul><li><p>TDS Landfill: 3016 FM 1327, Creedmoor, Texas</p></li><li><p>Eco Depot: 4001 RR 620 South, Bee Cave, Texas</p></li></ul><p><a href=\\\"http://www.organicsbygosh.com/drop-off-collection/\\\">Organics By Gosh</a></p><ul><li><p>13602 FM 969, Austin, TX 78724\\u2028 | (512) 276-1211</p></li></ul><p><a href=\\\"http://www.daisyworksdirt.com/\\\">Walker Aero Environmental (JV Dirt) </a></p><ul><li><p>3600 FM 973 North Austin, Texas 78725</p></li></ul><p><a href=\\\"http://www.989rock.com/\\\">Whittlesey Landscape Supplies</a></p><ul><li><p>3219 S IH 35 Round Rock, Texas 78664</p></li><li><p>629 Dalton Lane, Austin, Texas 78742</p></li></ul><p><a href=\\\"https://www.traviscountytx.gov/news/1212-15-recycle-tree\\\">Travis County Transfer Station</a></p><ul><li><p>2625 Woodall Dr. Leander, Texas 78641</p></li></ul><p><a href=\\\"https://www.traviscountytx.gov/news/1212-15-recycle-tree\\\">Travis County Service Center</a></p><ul><li><p>6013 Blue Bluff Rd Austin, Texas 78724</p></li></ul><p><a href=\\\"https://www.traviscountytx.gov/news/1212-15-recycle-tree\\\">Del Valle Softball Complex (Behind the Southwest Rural Center)</a></p><ul><li><p>3614 FM 973 Del Valle, Texas 78617</p></li></ul><br/><h2>Drop-Off Locations with a Fee</h2><p>Locations listed below have varying fees. Call the location for more information. \\u00a0</p><p><a href=\\\"http://firewoodandmulchaustintx.com/\\\">Kinser Ranch LLC.</a></p><p>Starts at $1.00/per tree to $20/per load.</p><p>For more information: 512-748-0800</p><p>10701 Kinser Lane, Austin, Texas 78736</p><p><a href=\\\"http://www.sidmourningtreeservice.com/\\\">Sid Mourning Tree Service</a></p><p>Pricing varies. </p><p>Call for fee information: 512-420-0733</p><p>3810 Medical Parkway Austin, TX 78756</p><p><a href=\\\"http://www.austinwoodrecycling.com/\\\">Austin Wood Recycling</a></p><p>$5.00/per tree.</p><p>For more information: 512-259-7430</p><p>3875 E. Whitestone Blvd., Cedar Park, TX 78613</p><p><a href=\\\"http://www.goodguystreeservice.com/\\\">Good Guys Tree Service</a></p><p>Prices vary.</p><p>For more information: 512-743-3909</p><p>11601 Anderson Mill Rd., Austin, TX 78750</p>\", \"id\": \"b748924c-4c94-4a4f-a3b2-3730684980f8\"}]",
+      "theme": 1
+    }
+  },
+  {
+    "model": "base.homepage",
+    "pk": 3,
+    "fields": {}
+  },
+  {
+    "model": "wagtailcore.page",
+    "pk": 1,
+    "fields": {
+      "path": "0001",
+      "depth": 1,
+      "numchild": 1,
+      "title": "Root",
+      "draft_title": "Root",
+      "slug": "root",
+      "content_type": [
+        "wagtailcore",
+        "page"
+      ],
+      "live": true,
+      "has_unpublished_changes": false,
+      "url_path": "/",
+      "owner": null,
+      "seo_title": "",
+      "show_in_menus": false,
+      "search_description": "",
+      "go_live_at": null,
+      "expire_at": null,
+      "expired": false,
+      "locked": false,
+      "first_published_at": null,
+      "last_published_at": null,
+      "latest_revision_created_at": null,
+      "live_revision": null
+    }
+  },
+  {
+    "model": "wagtailcore.page",
+    "pk": 3,
+    "fields": {
+      "path": "00010001",
+      "depth": 2,
+      "numchild": 1,
+      "title": "Home",
+      "draft_title": "Home",
+      "slug": "home",
+      "content_type": [
+        "base",
+        "homepage"
+      ],
+      "live": true,
+      "has_unpublished_changes": false,
+      "url_path": "/home/",
+      "owner": null,
+      "seo_title": "",
+      "show_in_menus": false,
+      "search_description": "",
+      "go_live_at": null,
+      "expire_at": null,
+      "expired": false,
+      "locked": false,
+      "first_published_at": null,
+      "last_published_at": null,
+      "latest_revision_created_at": null,
+      "live_revision": null
+    }
+  },
+  {
+    "model": "wagtailcore.page",
+    "pk": 4,
+    "fields": {
+      "path": "000100010001",
+      "depth": 3,
+      "numchild": 0,
+      "title": "Recycle your Christmas tree",
+      "draft_title": "Recycle your Christmas tree",
+      "slug": "holiday-tree-recycling",
+      "content_type": [
+        "base",
+        "servicepage"
+      ],
+      "live": true,
+      "has_unpublished_changes": false,
+      "url_path": "/home/holiday-tree-recycling/",
+      "owner": [
+        "admin@austintexas.io"
+      ],
+      "seo_title": "",
+      "show_in_menus": false,
+      "search_description": "",
+      "go_live_at": null,
+      "expire_at": null,
+      "expired": false,
+      "locked": false,
+      "first_published_at": "2017-12-06T17:09:43.276Z",
+      "last_published_at": "2017-12-06T17:09:43.276Z",
+      "latest_revision_created_at": "2017-12-06T17:09:43.202Z",
+      "live_revision": 1
+    }
+  },
+  {
+    "model": "wagtailcore.pagerevision",
+    "pk": 1,
+    "fields": {
+      "page": 4,
+      "submitted_for_moderation": false,
+      "created_at": "2017-12-06T17:09:43.202Z",
+      "user": [
+        "admin@austintexas.io"
+      ],
+      "content_json": "{\"pk\": 4, \"path\": \"000100010001\", \"depth\": 3, \"numchild\": 0, \"title\": \"Recycle your Christmas tree\", \"draft_title\": \"Recycle your Christmas tree\", \"slug\": \"holiday-tree-recycling\", \"content_type\": 12, \"live\": true, \"has_unpublished_changes\": false, \"url_path\": \"/home/holiday-tree-recycling/\", \"owner\": 1, \"seo_title\": \"\", \"show_in_menus\": false, \"search_description\": \"\", \"go_live_at\": null, \"expire_at\": null, \"expired\": false, \"locked\": false, \"first_published_at\": null, \"last_published_at\": null, \"latest_revision_created_at\": null, \"live_revision\": null, \"created_at\": \"2017-12-06T17:09:43.155Z\", \"updated_at\": \"2017-12-06T17:09:43.200Z\", \"content\": \"<ol><li><p>All residents can drop-off their trees to be recycled into mulch. To drop your tree off at Zilker Park, remove any ornaments, lighting, decorations, and stands from your tree. Trees with flocking, or fake-snow, will not be accepted.</p></li><li><p>Do not place in a plastic bag.</p></li><li><p>Drop your tree off between 10am and 2pm on one of the following days:</p></li><ol><li><p>Saturday, December 30, 2017</p></li><li><p>Sunday, December 31, 2017</p></li><li><p>Saturday, January 6, 2018</p></li><li><p>Sunday, January 7, 2018</p></li></ol><li><p>Pick-up mulch at Zilker park on January 18, 2018. It will be available for free on a first-come, first serve basis. Be sure to bring your own tools and storage containers for loading and transporting the mulch.</p></li></ol><br/><ol><li><p>If you are a City of Austin curbside customer, and you would like to have your tree picked up and turned into mulch, remove any ornaments, lighting, decorations, and stands from your tree. Trees with flocking, or fake-snow, will not be accepted.</p></li><li><p>Cut the tree in half if it is longer than 6 feet.</p></li><li><p>Do not place in a plastic bag.</p></li><li><p>Set your tree out on the curb by 6:30 am on your regular collection day.</p></li><li><p>Pick-up mulch at Zilker park on January 18, 2018. It will be available for free on a first-come, first serve basis. Be sure to bring your own tools and storage containers for loading and transporting the mulch.</p></li></ol>\", \"extra_content\": \"[{\\\"type\\\": \\\"application_block\\\", \\\"value\\\": 3, \\\"id\\\": \\\"f3154cf7-22c1-4d88-89f9-ee3f834f6ec7\\\"}, {\\\"type\\\": \\\"content\\\", \\\"value\\\": \\\"<h2>Free Drop-Off Locations</h2><p>Trees will be accepted free of cost at the locations listed below. However, a contamination fee will be added to any trees with tags, decorations, and/or plastic remaining.</p><br/><p><a href=\\\\\\\"http://www.texasdisposal.com/contact/\\\\\\\">Texas Disposal Systems</a></p><ul><li><p>TDS Landfill: 3016 FM 1327, Creedmoor, Texas</p></li><li><p>Eco Depot: 4001 RR 620 South, Bee Cave, Texas</p></li></ul><p><a href=\\\\\\\"http://www.organicsbygosh.com/drop-off-collection/\\\\\\\">Organics By Gosh</a></p><ul><li><p>13602 FM 969, Austin, TX 78724\\\\u2028 | (512) 276-1211</p></li></ul><p><a href=\\\\\\\"http://www.daisyworksdirt.com/\\\\\\\">Walker Aero Environmental (JV Dirt) </a></p><ul><li><p>3600 FM 973 North Austin, Texas 78725</p></li></ul><p><a href=\\\\\\\"http://www.989rock.com/\\\\\\\">Whittlesey Landscape Supplies</a></p><ul><li><p>3219 S IH 35 Round Rock, Texas 78664</p></li><li><p>629 Dalton Lane, Austin, Texas 78742</p></li></ul><p><a href=\\\\\\\"https://www.traviscountytx.gov/news/1212-15-recycle-tree\\\\\\\">Travis County Transfer Station</a></p><ul><li><p>2625 Woodall Dr. Leander, Texas 78641</p></li></ul><p><a href=\\\\\\\"https://www.traviscountytx.gov/news/1212-15-recycle-tree\\\\\\\">Travis County Service Center</a></p><ul><li><p>6013 Blue Bluff Rd Austin, Texas 78724</p></li></ul><p><a href=\\\\\\\"https://www.traviscountytx.gov/news/1212-15-recycle-tree\\\\\\\">Del Valle Softball Complex (Behind the Southwest Rural Center)</a></p><ul><li><p>3614 FM 973 Del Valle, Texas 78617</p></li></ul><br/><h2>Drop-Off Locations with a Fee</h2><p>Locations listed below have varying fees. Call the location for more information. \\\\u00a0</p><p><a href=\\\\\\\"http://firewoodandmulchaustintx.com/\\\\\\\">Kinser Ranch LLC.</a></p><p>Starts at $1.00/per tree to $20/per load.</p><p>For more information: 512-748-0800</p><p>10701 Kinser Lane, Austin, Texas 78736</p><p><a href=\\\\\\\"http://www.sidmourningtreeservice.com/\\\\\\\">Sid Mourning Tree Service</a></p><p>Pricing varies. </p><p>Call for fee information: 512-420-0733</p><p>3810 Medical Parkway Austin, TX 78756</p><p><a href=\\\\\\\"http://www.austinwoodrecycling.com/\\\\\\\">Austin Wood Recycling</a></p><p>$5.00/per tree.</p><p>For more information: 512-259-7430</p><p>3875 E. Whitestone Blvd., Cedar Park, TX 78613</p><p><a href=\\\\\\\"http://www.goodguystreeservice.com/\\\\\\\">Good Guys Tree Service</a></p><p>Prices vary.</p><p>For more information: 512-743-3909</p><p>11601 Anderson Mill Rd., Austin, TX 78750</p>\\\", \\\"id\\\": \\\"b748924c-4c94-4a4f-a3b2-3730684980f8\\\"}]\", \"theme\": 1}",
+      "approved_go_live_at": null
+    }
+  }
+]

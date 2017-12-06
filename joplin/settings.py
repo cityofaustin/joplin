@@ -25,6 +25,7 @@ BASE_DIR = os.path.dirname(PROJECT_DIR)
 
 INSTALLED_APPS = [
     'base',
+    'users',
 
     'wagtail.api.v2',
 
@@ -43,6 +44,7 @@ INSTALLED_APPS = [
     'modelcluster',
     'taggit',
     'rest_framework',
+    'corsheaders',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -52,7 +54,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'wagtail.contrib.modeladmin',
-    'corsheaders'
 ]
 
 MIDDLEWARE = [
@@ -70,8 +71,6 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'urls'
-
-CORS_ORIGIN_ALLOW_ALL = True
 
 TEMPLATES = [
     {
@@ -137,14 +136,18 @@ STATIC_URL = '/static/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
+AUTH_USER_MODEL = 'users.User'
+
+CORS_ORIGIN_ALLOW_ALL = True
+
 
 # Wagtail settings
 
-WAGTAIL_SITE_NAME = "joplin"
+WAGTAIL_SITE_NAME = 'joplin'
 
 # Base URL to use when referring to full URLs within the Wagtail admin backend -
 # e.g. in notification emails. Don't include '/admin' or a trailing slash
-BASE_URL = 'http://example.com'
+BASE_URL = 'https://austintexas.io'
 
 
 # SECURITY WARNING: don't run with debug turned on in production!

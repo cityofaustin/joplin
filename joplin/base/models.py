@@ -1,25 +1,23 @@
 from django.db import models
 
-from modelcluster.contrib.taggit import ClusterTaggableManager
 from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
 
 from wagtail.api import APIField
-from wagtail.wagtailadmin.edit_handlers import FieldPanel, StreamFieldPanel
+from wagtail.wagtailadmin.edit_handlers import FieldPanel, InlinePanel, StreamFieldPanel
 from wagtail.wagtailcore import blocks
 from wagtail.wagtailcore.fields import StreamField, RichTextField
 from wagtail.wagtailcore.models import Page
 from wagtail.wagtailsnippets.blocks import SnippetChooserBlock
+from wagtail.wagtailsnippets.edit_handlers import SnippetChooserPanel
 from wagtail.wagtailsnippets.models import register_snippet
-
-from taggit.models import TaggedItemBase
 
 
 class HomePage(Page):
     pass
 
 
-WYSIWYG_FEATURES = ['h1', 'h2', 'h3', 'bold', 'italic', 'link', 'ul', 'ol']
+WYSIWYG_FEATURES = ['h1', 'h2', 'link', 'ul', 'ol']
 DEFAULT_MAX_LENGTH = 255
 
 
@@ -27,28 +25,43 @@ class ServicePage(Page):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    content = RichTextField(features=WYSIWYG_FEATURES, help_text='Write out the steps a resident needs to take to use the service')
-    extra_content = StreamField([
-        ('content', blocks.RichTextBlock(features=WYSIWYG_FEATURES, help_text='Write any additional content describing the service')),
-        ('application_block', SnippetChooserBlock('base.ApplicationBlock')),
-    ])
-    tags = ClusterTaggableManager(through='base.ServicePageTag', blank=True)
+    content = RichTextField(features=WYSIWYG_FEATURES, verbose_name='Write out the steps a resident needs to take to use the service')
+    extra_content = StreamField(
+        [
+            ('content', blocks.RichTextBlock(features=WYSIWYG_FEATURES, help_text='Write any additional content describing the service')),
+            ('application_block', SnippetChooserBlock('base.ApplicationBlock')),
+        ],
+        verbose_name='Add any forms, maps, apps, or content that will help the resident use the service'
+    )
+    theme = models.ForeignKey(
+        'base.Theme',
+        on_delete=models.PROTECT,
+        related_name='+'
+    )
 
-    content_panels = Page.content_panels + [
-        FieldPanel('content', classname='full'),
+    parent_page_types = ['base.HomePage']
+    subpage_types = []
+
+    content_panels = [
+        FieldPanel('theme'),
+        FieldPanel('title'),
+        FieldPanel('content'),
         StreamFieldPanel('extra_content'),
-        FieldPanel('tags'),
     ]
 
     api_fields = [
         APIField('content'),
         APIField('extra_content'),
-        APIField('tags'),
+        APIField('theme'),
     ]
 
 
-class ServicePageTag(TaggedItemBase):
-    content_object = ParentalKey('base.ServicePage', related_name='tagged_items')
+@register_snippet
+class Theme(ClusterableModel):
+    text = models.CharField(max_length=DEFAULT_MAX_LENGTH)
+
+    def __str__(self):
+        return self.text
 
 
 @register_snippet

@@ -1,0 +1,4 @@
+.full input {padding: 1em;}
+
+.object .object-help {display: none;}
+.object fieldset, .object .field-content {width: 100%;}
