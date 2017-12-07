@@ -1,16 +1,15 @@
 from django.db import models
 
-from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
 
 from wagtail.api import APIField
-from wagtail.wagtailadmin.edit_handlers import FieldPanel, InlinePanel, StreamFieldPanel
+from wagtail.wagtailadmin.edit_handlers import FieldPanel, StreamFieldPanel
 from wagtail.wagtailcore import blocks
 from wagtail.wagtailcore.fields import StreamField, RichTextField
 from wagtail.wagtailcore.models import Page
-from wagtail.wagtailsnippets.blocks import SnippetChooserBlock
-from wagtail.wagtailsnippets.edit_handlers import SnippetChooserPanel
 from wagtail.wagtailsnippets.models import register_snippet
+
+from . import blocks as custom_blocks
 
 
 class HomePage(Page):
@@ -29,9 +28,9 @@ class ServicePage(Page):
     extra_content = StreamField(
         [
             ('content', blocks.RichTextBlock(features=WYSIWYG_FEATURES, help_text='Write any additional content describing the service')),
-            ('application_block', SnippetChooserBlock('base.ApplicationBlock')),
+            ('application_block', custom_blocks.SnippetChooserBlockWithAPIGoodness('base.ApplicationBlock')),
         ],
-        verbose_name='Add any forms, maps, apps, or content that will help the resident use the service'
+        verbose_name='Add any forms, maps, apps, or content that will help the resident use the service',
     )
     theme = models.ForeignKey(
         'base.Theme',
@@ -59,6 +58,8 @@ class ServicePage(Page):
 @register_snippet
 class Theme(ClusterableModel):
     text = models.CharField(max_length=DEFAULT_MAX_LENGTH)
+
+    api_fields = ['text']
 
     def __str__(self):
         return self.text
