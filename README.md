@@ -37,3 +37,11 @@ While the server is running, run the following commands:
 docker exec joplin python joplin/manage.py makemigrations
 docker exec joplin python joplin/manage.py migrate
 ```
+
+## Dump fixture data
+
+Run the following to dump the latest page data. You might need to add other items from `base` or another package if you want other page types or snippets dumped.
+
+```
+docker exec --interactive --tty joplin python joplin/manage.py dumpdata --indent 2 base.ServicePage base.HomePage wagtailcore.Page wagtailcore.PageRevision
+```
