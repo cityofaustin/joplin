@@ -47,11 +47,12 @@ function configureLivePreview() {
     return;
   }
 
+  let pageID = window.location.href.split('/').find((item) => item && !isNaN(item));
   let previewHTMLString = `
   <div id="live-preview" class="preview-container">
     <div class="thumbnail-container" title="Preview">
       <div class="thumbnail">
-        <iframe src="https://grackle.austintexas.io/" frameborder="0" onload="this.style.opacity = 1"></iframe>
+        <iframe src="${window.JANIS_URL}/service/${pageID}" frameborder="0" onload="this.style.opacity = 1" sandbox="allow-scripts"></iframe>
       </div>
     </div>
   </div>

@@ -8,7 +8,7 @@
   /* This container helps the thumbnail behave as if it were an unscaled IMG element */
   .thumbnail-container {
     width: calc(360px);
-    height: calc(400px);
+    height: calc(500px);
     display: inline-block;
     overflow: hidden;
     position: relative;
@@ -42,7 +42,7 @@
   .thumbnail,
   .thumbnail iframe {
     width: 1440px;
-    height: 1600px;
+    height: 2000px;
   }
   /* This facilitates the fade-in transition instead of flicker. It also helps us maintain the illusion that this is an image, since some webpages will have a preloading animation or wait for some images to download */
   .thumbnail iframe {
