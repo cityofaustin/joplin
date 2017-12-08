@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', function(event) {
   });
 
   configureTranslationToggles();
+  configureLivePreview();
   navigateWithHash();
 });
 
@@ -39,6 +40,34 @@ function configureTranslationToggles() {
     // the field around based on what's on top of it
     parentElem.querySelector('fieldset').style['padding-top'] = helpElemClassList.contains('hidden') ? '4em' : '0.5em';
   });
+}
+
+function configureLivePreview() {
+  if (!document.body.classList.contains('page-editor')) {
+    return;
+  }
+
+  let previewHTMLString = `
+  <div id="live-preview" class="preview-container">
+    <div class="thumbnail-container" title="Preview">
+      <div class="thumbnail">
+        <iframe src="https://grackle.austintexas.io/" frameborder="0" onload="this.style.opacity = 1"></iframe>
+      </div>
+    </div>
+  </div>
+  `;
+  let el = document.body.insertAdjacentHTML('beforeend', previewHTMLString);
+
+  document.addEventListener('click', (ev) => {
+    if (!ev.target.classList.contains('action-preview')) {
+      return;
+    }
+
+    ev.preventDefault();
+    ev.stopPropagation();
+
+    document.querySelector('#live-preview').classList.toggle('hidden');
+  }, true);
 }
 
 

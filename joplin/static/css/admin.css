@@ -6,3 +6,4 @@
 .translation-tab .object .object-help {width: auto; opacity: 1; position: static; font-size: 1.2em;}
 .translation-tab .object fieldset {padding-top: 0.5em;}
 
+.hidden {display: none !important;}
