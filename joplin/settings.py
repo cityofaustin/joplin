@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'taggit',
     'rest_framework',
     'corsheaders',
+    'modeltranslation',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -61,6 +62,7 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -107,14 +109,18 @@ DATABASES = {
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
-
-TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
 USE_L10N = True
 
+LANGUAGE_CODE = 'en-us'
+LANGUAGES = (
+    ('en', 'English'),
+    ('pt', 'Portugese'),
+    ('es', 'Spanish'),
+    ('fr', 'French'),
+)
+
+TIME_ZONE = 'UTC'
 USE_TZ = True
 
 
