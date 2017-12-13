@@ -12,6 +12,7 @@ def editor_css():
     urls = [
         static('css/admin.css'),
         static('css/toggle.css'),
+        static('css/preview.css'),
     ]
     return format_html_join('\n', '<link rel="stylesheet" href="{}">', ((url,) for url in urls))
 
