@@ -3,13 +3,14 @@ from django.db import models
 from modelcluster.models import ClusterableModel
 
 from wagtail.api import APIField
-from wagtail.wagtailadmin.edit_handlers import FieldPanel, StreamFieldPanel
+from wagtail.wagtailadmin.edit_handlers import FieldPanel, ObjectList, StreamFieldPanel, TabbedInterface
 from wagtail.wagtailcore import blocks
 from wagtail.wagtailcore.fields import StreamField, RichTextField
 from wagtail.wagtailcore.models import Page
 from wagtail.wagtailsnippets.models import register_snippet
 
 from . import blocks as custom_blocks
+from . import forms as custom_forms
 
 
 class HomePage(Page):
@@ -41,6 +42,7 @@ class ServicePage(Page):
 
     parent_page_types = ['base.HomePage']
     subpage_types = []
+    base_form_class = custom_forms.ServicePageForm
 
     content_panels = [
         FieldPanel('theme'),
@@ -54,6 +56,20 @@ class ServicePage(Page):
         APIField('extra_content'),
         APIField('theme'),
     ]
+
+    es_panels = [
+        # TODO: This field comes from Page and django-modeltranslation complains about it
+        # FieldPanel('title_es'),
+        FieldPanel('content_es'),
+    ]
+
+    edit_handler = TabbedInterface([
+        ObjectList(content_panels, heading='Content'),
+        ObjectList(es_panels, heading='Spanish', classname='translation-tab'),
+        ObjectList(Page.promote_panels, heading='Promote'),
+        # TODO: What should we do with the fields in settings?
+        # ObjectList(Page.settings_panels, heading='Settings', classname='settings'),
+    ])
 
 
 @register_snippet
