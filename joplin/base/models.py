@@ -1,12 +1,14 @@
 from django.db import models
 
+from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
 
 from wagtail.api import APIField
-from wagtail.wagtailadmin.edit_handlers import FieldPanel, ObjectList, StreamFieldPanel, TabbedInterface
+from wagtail.wagtailadmin.edit_handlers import FieldPanel, FieldRowPanel, InlinePanel, MultiFieldPanel, ObjectList, StreamFieldPanel, TabbedInterface
 from wagtail.wagtailcore import blocks
 from wagtail.wagtailcore.fields import StreamField, RichTextField
 from wagtail.wagtailcore.models import Page
+from wagtail.wagtailsnippets.edit_handlers import SnippetChooserPanel
 from wagtail.wagtailsnippets.models import register_snippet
 
 from . import blocks as custom_blocks
@@ -34,8 +36,8 @@ class ServicePage(Page):
         ],
         verbose_name='Add any forms, maps, apps, or content that will help the resident use the service',
     )
-    theme = models.ForeignKey(
-        'base.Theme',
+    topic = models.ForeignKey(
+        'base.Topic',
         on_delete=models.PROTECT,
         related_name='+'
     )
@@ -45,16 +47,22 @@ class ServicePage(Page):
     base_form_class = custom_forms.ServicePageForm
 
     content_panels = [
-        FieldPanel('theme'),
+        FieldPanel('topic'),
         FieldPanel('title'),
         FieldPanel('content'),
         StreamFieldPanel('extra_content'),
+        MultiFieldPanel(children=[
+            InlinePanel('locations'),
+            InlinePanel('contacts'),
+        ], heading='Location & Contact Info'),
     ]
 
     api_fields = [
         APIField('content'),
         APIField('extra_content'),
-        APIField('theme'),
+        APIField('topic'),
+        APIField('locations'),
+        APIField('contacts'),
     ]
 
     es_panels = [
@@ -73,7 +81,7 @@ class ServicePage(Page):
 
 
 @register_snippet
-class Theme(ClusterableModel):
+class Topic(ClusterableModel):
     text = models.CharField(max_length=DEFAULT_MAX_LENGTH)
 
     api_fields = ['text']
@@ -97,44 +105,139 @@ class ApplicationBlock(ClusterableModel):
 
 
 @register_snippet
-class Event(ClusterableModel):
-    title = models.CharField(max_length=DEFAULT_MAX_LENGTH)
-    start_at = models.DateTimeField()
-    end_at = models.DateTimeField()
-    address = models.TextField()
-    fees = models.CharField(max_length=DEFAULT_MAX_LENGTH)
+class Location(ClusterableModel):
+    TX = 'TX'
+    STATE_CHOICES = (
+        (TX, 'Texas'),
+    )
 
+    USA = 'United States'
+    COUNTRY_CHOICES = (
+        (USA, 'United States'),
+    )
 
-@register_snippet
-class Director(ClusterableModel):
     name = models.CharField(max_length=DEFAULT_MAX_LENGTH)
-    photo = models.CharField(max_length=DEFAULT_MAX_LENGTH)
-    email = models.EmailField()
-    phone_number = models.CharField(max_length=DEFAULT_MAX_LENGTH)
+    street = models.TextField()
+    city = models.CharField(max_length=DEFAULT_MAX_LENGTH, default='Austin')
+    state = models.CharField(max_length=2, choices=STATE_CHOICES, default=TX)
+    country = models.CharField(max_length=100, choices=COUNTRY_CHOICES, default=USA)
+    zip = models.CharField(max_length=50)
 
+    panels = [
+        FieldPanel('name'),
+        MultiFieldPanel(children=[
+            FieldPanel('street'),
+            FieldPanel('city', classname='col5'),
+            FieldPanel('state', classname='col4'),
+            FieldPanel('zip', classname='col2'),
+            FieldPanel('country', classname='col5'),
+        ], heading='Location'),
+        InlinePanel('hours', label='Hours'),
+    ]
 
-@register_snippet
-class Department(ClusterableModel):
-    name = models.CharField(max_length=DEFAULT_MAX_LENGTH)
-    address = models.CharField(max_length=DEFAULT_MAX_LENGTH)
-    hours = models.CharField(max_length=DEFAULT_MAX_LENGTH)
-    phone_number = models.CharField(max_length=DEFAULT_MAX_LENGTH)
-    email = models.EmailField()
-    description = models.TextField()
+    api_fields = [
+        'name',
+        'street',
+        'city',
+        'state',
+        'country',
+        'zip',
+        'hours',
+    ]
 
     def __str__(self):
         return self.name
 
 
-@register_snippet
-class Location(ClusterableModel):
-    name = models.CharField(max_length=DEFAULT_MAX_LENGTH)
-    address = models.TextField()
-    hours = models.CharField(max_length=DEFAULT_MAX_LENGTH)
+class DayAndDuration(ClusterableModel):
+    MONDAY = 'Monday'
+    TUESDAY = 'Tuesday'
+    WEDNESDAY = 'Wednesday'
+    THURSDAY = 'Thursday'
+    FRIDAY = 'Friday'
+    SATURDAY = 'Saturday'
+    SUNDAY = 'Sunday'
+    DAY_OF_WEEK_CHOICES = (
+        (MONDAY, 'Monday'),
+        (TUESDAY, 'Tuesday'),
+        (WEDNESDAY, 'Wednesday'),
+        (THURSDAY, 'Thursday'),
+        (FRIDAY, 'Friday'),
+        (SATURDAY, 'Saturday'),
+        (SUNDAY, 'Sunday'),
+    )
+
+    day_of_week = models.CharField(max_length=20, choices=DAY_OF_WEEK_CHOICES)
+    start_time = models.TimeField()
+    end_time = models.TimeField()
+
+    content_panels = [
+        FieldPanel('day_of_week'),
+        FieldPanel('start_time'),
+        FieldPanel('end_time'),
+    ]
+
+    api_fields = [
+        'day_of_week',
+        'start_time',
+        'end_time',
+    ]
+
+    def __str__(self):
+        return f'{self.day_of_week} {self.start_time} - {self.end_time}'
+
+from wagtail.wagtailcore.models import Page, Orderable
+class LocationDayAndDuration(Orderable, DayAndDuration):
+    location = ParentalKey(Location, related_name='hours')
+
+    content_panels = [
+        SnippetChooserPanel('day_and_duration'),
+    ]
+
+
+class ServicePageLocation(ClusterableModel):
+    page = ParentalKey(ServicePage, related_name='locations')
+    location = models.ForeignKey(Location, related_name='+')
+
+    panels = [
+        SnippetChooserPanel('location'),
+    ]
+
+    api_fields = [
+        'location',
+    ]
+
+    def __str__(self):
+        return self.location.name
 
 
 @register_snippet
 class Contact(ClusterableModel):
     name = models.CharField(max_length=DEFAULT_MAX_LENGTH)
     email = models.EmailField()
-    phone_number = models.CharField(max_length=DEFAULT_MAX_LENGTH)
+    phone = models.CharField(max_length=DEFAULT_MAX_LENGTH)
+
+    api_fields = [
+        'name',
+        'email',
+        'phone',
+    ]
+
+    def __str__(self):
+        return self.name
+
+
+class ServicePageContact(ClusterableModel):
+    page = ParentalKey(ServicePage, related_name='contacts')
+    contact = models.ForeignKey(Contact, related_name='+')
+
+    panels = [
+        SnippetChooserPanel('contact'),
+    ]
+
+    api_fields = [
+        'contact',
+    ]
+
+    def __str__(self):
+        return self.contact.name
