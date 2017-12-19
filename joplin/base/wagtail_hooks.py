@@ -4,7 +4,7 @@ from django.utils.html import format_html, format_html_join
 from wagtail.contrib.modeladmin.options import ModelAdmin, ModelAdminGroup, modeladmin_register
 from wagtail.wagtailcore import hooks
 
-from base.models import ApplicationBlock, Event, Department
+from base.models import ApplicationBlock, Topic, Location, Contact
 
 
 @hooks.register('insert_editor_css')
@@ -19,7 +19,11 @@ def editor_css():
 
 @hooks.register('insert_editor_js')
 def editor_js():
-    return format_html('<script src="{}">', static('js/admin.js'))
+    urls = [
+        'https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.4/lodash.min.js',
+        static('js/admin.js'),
+    ]
+    return format_html_join('\n', '<script src="{}"></script>', ((url,) for url in urls))
 
 
 @hooks.register('before_edit_page')
@@ -35,19 +39,23 @@ class ApplicationBlockModelAdmin(ModelAdmin):
     model = ApplicationBlock
 
 
-class EventModelAdmin(ModelAdmin):
-    model = Event
+class LocationModelAdmin(ModelAdmin):
+    model = Location
+    search_fields = ('street',)
 
 
-class DepartmentModelAdmin(ModelAdmin):
-    model = Department
-    list_display = ('name', 'address')
-    search_fields = ('name',)
+class TopicModelAdmin(ModelAdmin):
+    model = Topic
+    search_fields = ('text',)
+
+
+class ContactModelAdmin(ModelAdmin):
+    model = Contact
 
 
 class ReallyAwesomeGroup(ModelAdminGroup):
     menu_label = 'Awesome Things'
-    items = (ApplicationBlockModelAdmin, EventModelAdmin, DepartmentModelAdmin)
+    items = (ApplicationBlockModelAdmin, LocationModelAdmin, TopicModelAdmin, ContactModelAdmin)
 
 
 modeladmin_register(ReallyAwesomeGroup)

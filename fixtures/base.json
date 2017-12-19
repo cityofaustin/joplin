@@ -121,12 +121,11 @@
     "pk": 13,
     "fields": {
       "app_label": "base",
-      "model": "theme"
+      "model": "topic"
     }
   },
   {
     "model": "contenttypes.contenttype",
-    "pk": 14,
     "fields": {
       "app_label": "users",
       "model": "user"
@@ -134,7 +133,6 @@
   },
   {
     "model": "contenttypes.contenttype",
-    "pk": 15,
     "fields": {
       "app_label": "wagtailforms",
       "model": "formsubmission"
@@ -142,7 +140,6 @@
   },
   {
     "model": "contenttypes.contenttype",
-    "pk": 16,
     "fields": {
       "app_label": "wagtailredirects",
       "model": "redirect"
@@ -150,7 +147,6 @@
   },
   {
     "model": "contenttypes.contenttype",
-    "pk": 17,
     "fields": {
       "app_label": "wagtailembeds",
       "model": "embed"
@@ -158,7 +154,6 @@
   },
   {
     "model": "contenttypes.contenttype",
-    "pk": 18,
     "fields": {
       "app_label": "wagtailusers",
       "model": "userprofile"
@@ -166,7 +161,6 @@
   },
   {
     "model": "contenttypes.contenttype",
-    "pk": 19,
     "fields": {
       "app_label": "wagtailimages",
       "model": "rendition"
@@ -174,7 +168,6 @@
   },
   {
     "model": "contenttypes.contenttype",
-    "pk": 20,
     "fields": {
       "app_label": "wagtailsearch",
       "model": "query"
@@ -182,7 +175,6 @@
   },
   {
     "model": "contenttypes.contenttype",
-    "pk": 21,
     "fields": {
       "app_label": "wagtailsearch",
       "model": "querydailyhits"
@@ -190,7 +182,6 @@
   },
   {
     "model": "contenttypes.contenttype",
-    "pk": 22,
     "fields": {
       "app_label": "wagtailcore",
       "model": "grouppagepermission"
@@ -198,7 +189,6 @@
   },
   {
     "model": "contenttypes.contenttype",
-    "pk": 23,
     "fields": {
       "app_label": "wagtailcore",
       "model": "pagerevision"
@@ -206,7 +196,6 @@
   },
   {
     "model": "contenttypes.contenttype",
-    "pk": 24,
     "fields": {
       "app_label": "wagtailcore",
       "model": "pageviewrestriction"
@@ -214,7 +203,6 @@
   },
   {
     "model": "contenttypes.contenttype",
-    "pk": 25,
     "fields": {
       "app_label": "wagtailcore",
       "model": "site"
@@ -222,7 +210,6 @@
   },
   {
     "model": "contenttypes.contenttype",
-    "pk": 26,
     "fields": {
       "app_label": "wagtailcore",
       "model": "collection"
@@ -230,7 +217,6 @@
   },
   {
     "model": "contenttypes.contenttype",
-    "pk": 27,
     "fields": {
       "app_label": "wagtailcore",
       "model": "groupcollectionpermission"
@@ -238,7 +224,6 @@
   },
   {
     "model": "contenttypes.contenttype",
-    "pk": 28,
     "fields": {
       "app_label": "wagtailcore",
       "model": "collectionviewrestriction"
@@ -246,7 +231,6 @@
   },
   {
     "model": "contenttypes.contenttype",
-    "pk": 29,
     "fields": {
       "app_label": "taggit",
       "model": "tag"
@@ -254,7 +238,6 @@
   },
   {
     "model": "contenttypes.contenttype",
-    "pk": 30,
     "fields": {
       "app_label": "taggit",
       "model": "taggeditem"
@@ -262,7 +245,6 @@
   },
   {
     "model": "contenttypes.contenttype",
-    "pk": 31,
     "fields": {
       "app_label": "admin",
       "model": "logentry"
@@ -270,7 +252,6 @@
   },
   {
     "model": "contenttypes.contenttype",
-    "pk": 32,
     "fields": {
       "app_label": "auth",
       "model": "permission"
@@ -278,7 +259,6 @@
   },
   {
     "model": "contenttypes.contenttype",
-    "pk": 33,
     "fields": {
       "app_label": "auth",
       "model": "group"
@@ -286,7 +266,6 @@
   },
   {
     "model": "contenttypes.contenttype",
-    "pk": 34,
     "fields": {
       "app_label": "contenttypes",
       "model": "contenttype"
@@ -294,7 +273,6 @@
   },
   {
     "model": "contenttypes.contenttype",
-    "pk": 35,
     "fields": {
       "app_label": "sessions",
       "model": "session"

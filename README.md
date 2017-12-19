@@ -14,7 +14,7 @@ Make sure you have docker installed, then run:
 ./scripts/serve-local.sh
 ```
 
-**NOTE** The first time you start the server, you'll also need to do some setup. While the server is running, open a new terminal window and run:
+**NOTE** Fixture data is automatically loaded the first time you run the server. Add `LOAD_DATA=on` if you ever need to start with a fresh copy.
 
 ```
 ./scripts/initial-setup.sh
@@ -26,7 +26,7 @@ You can access the admin at `localhost:800/admin` with the credentials `admin@au
 
 #### Access the API
 
-You can access the API at `localhost:8000/api`. You can see e.g. service pages by visiting `http://localhost:8000/api/pages/?format=json&type=base.ServicePage&fields=content,extra_content,theme(text)`.
+You can access the API at `localhost:8000/api`. You can see e.g. service pages by visiting `http://localhost:8000/api/pages/?format=json&type=base.ServicePage&fields=content,extra_content,topic(text),locations(location(name,street,city,state,zip,country,hours)),contacts(contact(name,email,phone))`.
 
 
 ## Create migrations
@@ -43,5 +43,5 @@ docker exec joplin python joplin/manage.py migrate
 Run the following to dump the latest page data. You might need to add other items from `base` or another package if you want other page types or snippets dumped.
 
 ```
-docker exec --interactive --tty joplin python joplin/manage.py dumpdata --indent 2 base.ServicePage base.HomePage wagtailcore.Page wagtailcore.PageRevision
+docker exec --interactive --tty joplin python joplin/manage.py dumpdata --indent 2 base wagtailcore.Page wagtailcore.PageRevision
 ```
