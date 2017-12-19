@@ -146,6 +146,10 @@ MEDIA_URL = '/media/'
 AUTH_USER_MODEL = 'users.User'
 
 CORS_ORIGIN_ALLOW_ALL = True
+ALLOWED_HOSTS = [
+    'localhost',
+    '.herokuapp.com',
+]
 
 
 # Wagtail settings
