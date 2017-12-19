@@ -1,6 +1,9 @@
 document.addEventListener('DOMContentLoaded', function(event) {
   // HACK: I can't find a way to override this in python
-  document.querySelector('label[for=id_title]').textContent = 'Actionable Title';
+  const title = document.querySelector('label[for=id_title]');
+  if (title) {
+    title.textContent = 'Actionable Title';
+  }
 
   // HACK: I can't find a way to configure this to be closed via python
   document.querySelectorAll('#extra_content-prependmenu:not(.stream-menu-closed)').forEach((elem) => {
@@ -8,7 +11,8 @@ document.addEventListener('DOMContentLoaded', function(event) {
   });
 
   configureTranslationToggles();
-  configureLivePreview();
+  configurePreviewWindow();
+  configurePreviewUpdates();
   navigateWithHash();
 });
 
@@ -42,7 +46,7 @@ function configureTranslationToggles() {
   });
 }
 
-function configureLivePreview() {
+function configurePreviewWindow() {
   if (!document.body.classList.contains('page-editor')) {
     return;
   }
@@ -69,6 +73,53 @@ function configureLivePreview() {
 
     document.querySelector('#live-preview').classList.toggle('hidden');
   }, true);
+}
+
+function configurePreviewUpdates() {
+  const editForm = document.querySelector('form#page-edit-form');
+  if (!editForm) {
+    return;
+  }
+
+  editForm.addEventListener('input', _.debounce(updatePreviewWindow, 800));
+}
+
+function updatePreviewWindow() {
+  let controls = document.querySelector('form#page-edit-form').elements;
+  let d = {};
+  for(let i = 0; i < controls.length; i++) {
+    let el = controls[i];
+    let elType = el.type;
+    if (!el.name || el.hidden || elType === 'submit' || el.name.endsWith('-count')) {
+      continue;
+    }
+
+    let path = el.name.split('-').reduce((accumulatedVal, key) => {
+      return accumulatedVal + (Number.isNaN(Number.parseInt(key)) ? `.${key}` : `[${key}]`)
+    });
+    console.debug(`${elType} ${el.name} = ${el.value} (path = ${path})`);
+
+    if (elType === 'select') {
+      _.set(d, path, {
+        id: el.value,
+        text: encodeURIComponent(el.options[el.selectedIndex].text),
+      })
+    }
+    else if (['text', 'textarea', 'input', 'hidden'].includes(elType)) {
+      _.set(d, path, encodeURIComponent(el.value));
+    }
+  }
+
+  console.log('Preview data', d);
+
+  let params = {
+    preview: true,
+    cache: Date.now(),
+    d: JSON.stringify(d),
+  };
+  let qs = Object.keys(params).map(key => `${key}=${params[key]}`).join('&');
+
+  document.querySelector('#live-preview iframe').src = `${window.JANIS_URL}/service/68?${qs}`;
 }
 
 
