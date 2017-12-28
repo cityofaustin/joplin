@@ -17,7 +17,7 @@ Make sure you have docker installed, then run:
 **NOTE** Fixture data is automatically loaded the first time you run the server. Add `LOAD_DATA=on` if you ever need to start with a fresh copy.
 
 ```
-./scripts/initial-setup.sh
+LOAD_DATA=on ./scripts/serve-local.sh
 ```
 
 #### Access the admin
@@ -26,7 +26,7 @@ You can access the admin at `localhost:800/admin` with the credentials `admin@au
 
 #### Access the API
 
-You can access the API at `localhost:8000/api`. You can see e.g. service pages by visiting `http://localhost:8000/api/pages/?format=json&type=base.ServicePage&fields=content,extra_content,topic(text),locations(location(name,street,city,state,zip,country,hours)),contacts(contact(name,email,phone))`.
+You can access the API at `localhost:8000/api`. You can see e.g. service pages by visiting `http://localhost:8000/api/pages/?format=json&type=base.ServicePage&fields=content,extra_content,topic(text),contacts(contact(name,email,phone,hours,location(name,street,city,state,zip,country)))`.
 
 
 ## Create migrations
