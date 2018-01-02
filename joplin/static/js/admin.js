@@ -56,12 +56,12 @@ function configurePreviewWindow() {
   <div id="live-preview" class="preview-container">
     <div class="thumbnail-container" title="Preview">
       <div class="thumbnail">
-        <iframe src="${window.JANIS_URL}/service/${pageID}" frameborder="0" onload="this.style.opacity = 1" sandbox="allow-scripts"></iframe>
+        <iframe src="" frameborder="0" onload="this.style.opacity = 1" sandbox="allow-scripts"></iframe>
       </div>
     </div>
   </div>
   `;
-  let el = document.body.insertAdjacentHTML('beforeend', previewHTMLString);
+  document.body.insertAdjacentHTML('beforeend', previewHTMLString);
 
   document.addEventListener('click', (ev) => {
     if (!ev.target.classList.contains('action-preview')) {
@@ -81,45 +81,88 @@ function configurePreviewUpdates() {
     return;
   }
 
-  editForm.addEventListener('input', _.debounce(updatePreviewWindow, 800));
+  const updateFn = _.debounce(updatePreviewViaSession, 800)
+  editForm.addEventListener('input', updateFn);
+  // This ensures we get updates for added snippets and other things the wagtail admin does that hides normal form flow
+  editForm.addEventListener('DOMSubtreeModified', updateFn);
+  updateFn();
 }
 
-function updatePreviewWindow() {
-  let controls = document.querySelector('form#page-edit-form').elements;
-  let d = {};
-  for(let i = 0; i < controls.length; i++) {
-    let el = controls[i];
-    let elType = el.type;
-    if (!el.name || el.hidden || elType === 'submit' || el.name.endsWith('-count')) {
-      continue;
-    }
+function updatePreviewViaSession() {
+  const form = document.querySelector('#page-edit-form');
+  const button = form.querySelector('.action-preview');
+  const previewURL = button.dataset.action;
 
-    let path = el.name.split('-').reduce((accumulatedVal, key) => {
-      return accumulatedVal + (Number.isNaN(Number.parseInt(key)) ? `.${key}` : `[${key}]`)
-    });
-    console.debug(`${elType} ${el.name} = ${el.value} (path = ${path})`);
-
-    if (elType === 'select') {
-      _.set(d, path, {
-        id: el.value,
-        text: encodeURIComponent(el.options[el.selectedIndex].text),
-      })
-    }
-    else if (['text', 'textarea', 'input', 'hidden'].includes(elType)) {
-      _.set(d, path, encodeURIComponent(el.value));
-    }
+  const baseOptions = {
+    method: 'POST',
+    credentials: 'same-origin',
   }
 
-  console.log('Preview data', d);
+  const pageID = 5;
+  const graphqlBody = `{
+    preview(pk: ${pageID}, showPreview: true) {
+      id
+      title
+      slug
+      topic {
+        id
+        text
+      }
+      content
+      extraContent
+      contacts {
+        edges {
+          node {
+            contact {
+              name
+              email
+              phone
+              hours {
+                edges {
+                  node {
+                    dayOfWeek
+                    startTime
+                    endTime
+                  }
+                }
+              }
+              location {
+                name
+                street
+                city
+                state
+                zip
+                country
+              }
+            }
+          }
+        }
+      }
+    }
+  }`;
 
-  let params = {
-    preview: true,
-    cache: Date.now(),
-    d: JSON.stringify(d),
-  };
-  let qs = Object.keys(params).map(key => `${key}=${params[key]}`).join('&');
-
-  document.querySelector('#live-preview iframe').src = `${window.JANIS_URL}/service/68?${qs}`;
+  fetch(previewURL, Object.assign(baseOptions, {body: new FormData(form)}))
+  .then((resp) => {
+    const body = {
+      query: graphqlBody,
+    };
+    const headers = {
+      'Content-type': 'application/json',
+    }
+    return fetch('/api/graphql/', Object.assign(baseOptions, {body: JSON.stringify(body), headers: headers}));
+  })
+  .then((resp) => {
+    return resp.json();
+  })
+  .then((json) => {
+    const params = {
+      preview: true,
+      cache: Date.now(),
+      d: JSON.stringify(json.data.preview),
+    };
+    const qs = Object.keys(params).map(key => `${key}=${encodeURIComponent(params[key])}`).join('&');
+    document.querySelector('#live-preview iframe').src = `${window.JANIS_URL}/service/68/?${qs}`;
+  })
 }
 
 
@@ -130,5 +173,3 @@ function navigateWithHash() {
     link && link.click();
   }
 }
-
-

@@ -1,18 +1,23 @@
 from django.conf import settings
 from django.conf.urls import include, url
 from django.contrib import admin
-
+from django.views.decorators.csrf import csrf_exempt
+from graphene_django.views import GraphQLView
 from wagtail.wagtailadmin import urls as wagtailadmin_urls
 from wagtail.wagtailcore import urls as wagtail_urls
 from wagtail.wagtaildocs import urls as wagtaildocs_urls
 
 from base import api
 
+
 urlpatterns = [
     url(r'^django-admin/', include(admin.site.urls)),
 
     url(r'^admin/', include(wagtailadmin_urls)),
     url(r'^documents/', include(wagtaildocs_urls)),
+
+    url(r'^api/graphql', csrf_exempt(GraphQLView.as_view())),
+    url(r'^api/graphiql', csrf_exempt(GraphQLView.as_view(graphiql=True, pretty=True))),
 
     url(r'^api/', api.api_router.urls),
 
