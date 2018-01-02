@@ -98,9 +98,9 @@ function updatePreviewViaSession() {
     credentials: 'same-origin',
   }
 
-  const pageID = 5;
+  const pageID = window.location.href.match(/pages\/(\d+)\/edit/).pop();
   const graphqlBody = `{
-    preview(pk: ${pageID}, showPreview: true) {
+    preview(pk: ${pageID}) {
       id
       title
       slug
