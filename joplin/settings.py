@@ -26,6 +26,7 @@ BASE_DIR = os.path.dirname(PROJECT_DIR)
 INSTALLED_APPS = [
     'base',
     'users',
+    'api',
 
     'wagtail.api.v2',
 
@@ -46,6 +47,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'modeltranslation',
+    'graphene_django',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -155,6 +157,7 @@ ALLOWED_HOSTS = [
 # Wagtail settings
 
 WAGTAIL_SITE_NAME = 'joplin'
+WAGTAIL_AUTO_UPDATE_PREVIEW = True
 
 # Base URL to use when referring to full URLs within the Wagtail admin backend -
 # e.g. in notification emails. Don't include '/admin' or a trailing slash
@@ -172,3 +175,10 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 
 JANIS_URL = os.getenv('JANIS_URL', 'http://localhost:3000')
+
+GRAPHENE = {
+    'SCHEMA': 'api.schema.schema',
+    'MIDDLEWARE': [
+        'graphene_django.debug.DjangoDebugMiddleware',
+    ]
+}

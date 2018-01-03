@@ -45,3 +45,10 @@ Run the following to dump the latest page data. You might need to add other item
 ```
 docker exec --interactive --tty joplin python joplin/manage.py dumpdata --indent 2 base wagtailcore.Page wagtailcore.PageRevision
 ```
+
+## Create new app
+
+```
+APP_NAME=app_name_goes_here
+docker exec joplin /bin/bash -c "mkdir -p \"$APP_NAME\" && cd joplin && python manage.py startapp \"$APP_NAME\""
+```
