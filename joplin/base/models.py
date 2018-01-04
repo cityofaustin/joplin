@@ -4,10 +4,10 @@ from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
 
 from wagtail.api import APIField
-from wagtail.wagtailadmin.edit_handlers import FieldPanel, FieldRowPanel, InlinePanel, MultiFieldPanel, ObjectList, StreamFieldPanel, TabbedInterface
+from wagtail.wagtailadmin.edit_handlers import FieldPanel, InlinePanel, MultiFieldPanel, ObjectList, StreamFieldPanel, TabbedInterface
 from wagtail.wagtailcore import blocks
 from wagtail.wagtailcore.fields import StreamField, RichTextField
-from wagtail.wagtailcore.models import Page
+from wagtail.wagtailcore.models import Page, Orderable
 from wagtail.wagtailsnippets.edit_handlers import SnippetChooserPanel
 from wagtail.wagtailsnippets.models import register_snippet
 
@@ -51,17 +51,13 @@ class ServicePage(Page):
         FieldPanel('title'),
         FieldPanel('content'),
         StreamFieldPanel('extra_content'),
-        MultiFieldPanel(children=[
-            InlinePanel('locations'),
-            InlinePanel('contacts'),
-        ], heading='Location & Contact Info'),
+        InlinePanel('contacts', label='Contacts'),
     ]
 
     api_fields = [
         APIField('content'),
         APIField('extra_content'),
         APIField('topic'),
-        APIField('locations'),
         APIField('contacts'),
     ]
 
@@ -132,7 +128,6 @@ class Location(ClusterableModel):
             FieldPanel('zip', classname='col2'),
             FieldPanel('country', classname='col5'),
         ], heading='Location'),
-        InlinePanel('hours', label='Hours'),
     ]
 
     api_fields = [
@@ -142,7 +137,6 @@ class Location(ClusterableModel):
         'state',
         'country',
         'zip',
-        'hours',
     ]
 
     def __str__(self):
@@ -186,45 +180,40 @@ class DayAndDuration(ClusterableModel):
     def __str__(self):
         return f'{self.day_of_week} {self.start_time} - {self.end_time}'
 
-from wagtail.wagtailcore.models import Page, Orderable
-class LocationDayAndDuration(Orderable, DayAndDuration):
-    location = ParentalKey(Location, related_name='hours')
-
-    content_panels = [
-        SnippetChooserPanel('day_and_duration'),
-    ]
-
-
-class ServicePageLocation(ClusterableModel):
-    page = ParentalKey(ServicePage, related_name='locations')
-    location = models.ForeignKey(Location, related_name='+')
-
-    panels = [
-        SnippetChooserPanel('location'),
-    ]
-
-    api_fields = [
-        'location',
-    ]
-
-    def __str__(self):
-        return self.location.name
-
 
 @register_snippet
 class Contact(ClusterableModel):
     name = models.CharField(max_length=DEFAULT_MAX_LENGTH)
     email = models.EmailField()
     phone = models.CharField(max_length=DEFAULT_MAX_LENGTH)
+    location = models.ForeignKey(Location, null=True, blank=True, related_name='+')
 
     api_fields = [
         'name',
         'email',
         'phone',
+        'location',
+        'hours',
+    ]
+
+    panels = [
+        FieldPanel('name'),
+        FieldPanel('email'),
+        FieldPanel('phone'),
+        SnippetChooserPanel('location'),
+        InlinePanel('hours', label='Hours'),
     ]
 
     def __str__(self):
         return self.name
+
+
+class ContactDayAndDuration(Orderable, DayAndDuration):
+    contact = ParentalKey(Contact, related_name='hours')
+
+    content_panels = [
+        SnippetChooserPanel('day_and_duration'),
+    ]
 
 
 class ServicePageContact(ClusterableModel):

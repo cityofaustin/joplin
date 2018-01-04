@@ -125,19 +125,12 @@
     }
   },
   {
-    "model": "base.locationdayandduration",
-    "pk": 1,
+    "model": "base.dayandduration",
+    "pk": 2,
     "fields": {
-      "sort_order": 0,
-      "location": 1
-    }
-  },
-  {
-    "model": "base.servicepagelocation",
-    "pk": 1,
-    "fields": {
-      "page": 5,
-      "location": 1
+      "day_of_week": "Monday",
+      "start_time": "10:00:00",
+      "end_time": "18:00:00"
     }
   },
   {
@@ -146,7 +139,16 @@
     "fields": {
       "name": "Francine Hammerschmidt",
       "email": "fran@gmail.com",
-      "phone": "5553941212"
+      "phone": "5553941212",
+      "location": 1
+    }
+  },
+  {
+    "model": "base.contactdayandduration",
+    "pk": 2,
+    "fields": {
+      "sort_order": 0,
+      "contact": 1
     }
   },
   {
