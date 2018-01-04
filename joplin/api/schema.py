@@ -34,7 +34,7 @@ class LocationNode(DjangoObjectType):
         interfaces = [graphene.Node]
 
 
-class ContacDayAndDurationtNode(DjangoObjectType):
+class ContacDayAndDurationNode(DjangoObjectType):
     class Meta:
         model = ContactDayAndDuration
         interfaces = [graphene.Node]
