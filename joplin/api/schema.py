@@ -101,13 +101,10 @@ class Query(graphene.ObjectType):
     all_service_pages = DjangoFilterConnectionField(ServicePageNode)
 
     def resolve_service_page(self, resolve_info, id=None, pk=None, slug=None, show_preview=None, language=None):
-        print(f'Specified language: {language}')
         if not language:
             request_lang = django.utils.translation.get_language_from_request(resolve_info.context)
-            print(f'Request language: {request_lang}')
             language = request_lang or Language.ENGLISH
 
-        print(f'Setting language: {language}')
         django.utils.translation.activate(language)
         resolve_info.context.LANGUAGE_CODE = django.utils.translation.get_language()
 
