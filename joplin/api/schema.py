@@ -66,6 +66,11 @@ class Language(graphene.Enum):
 
 
 class ServicePageNode(DjangoObjectType):
+    related = graphene.List('api.schema.ServicePageNode')
+
+    def resolve_related(self, resolve_info, *args, **kwargs):
+        return self.topic.services.exclude(id=self.id)
+
     class Meta:
         model = ServicePage
         filter_fields = ['id', 'slug', 'topic', 'topic__text']
