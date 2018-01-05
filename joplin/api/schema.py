@@ -25,7 +25,7 @@ def convert_stream_field(field, registry=None):
 class TopicNode(DjangoObjectType):
     class Meta:
         model = Topic
-        filter_fields = ['text']
+        filter_fields = ['id', 'text']
         interfaces = [graphene.Node]
 
 
@@ -66,6 +66,11 @@ class Language(graphene.Enum):
 
 
 class ServicePageNode(DjangoObjectType):
+    related = graphene.List('api.schema.ServicePageNode')
+
+    def resolve_related(self, resolve_info, *args, **kwargs):
+        return self.topic.services.exclude(id=self.id)
+
     class Meta:
         model = ServicePage
         filter_fields = ['id', 'slug', 'topic', 'topic__text']
@@ -99,6 +104,8 @@ class Query(graphene.ObjectType):
 
     service_page = graphene.Field(ServicePageNode, id=graphene.ID(), pk=graphene.Int(), slug=graphene.String(), show_preview=graphene.Boolean(default_value=False), language=Language())
     all_service_pages = DjangoFilterConnectionField(ServicePageNode)
+
+    all_topics = DjangoFilterConnectionField(TopicNode)
 
     def resolve_service_page(self, resolve_info, id=None, pk=None, slug=None, show_preview=None, language=None):
         if not language:
