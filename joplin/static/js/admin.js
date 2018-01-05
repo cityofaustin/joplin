@@ -100,7 +100,7 @@ function updatePreviewViaSession() {
 
   const pageID = window.location.href.match(/pages\/(\d+)\/edit/).pop();
   const graphqlBody = `{
-    pageData: servicePage(pk: ${pageID}, preview: true) {
+    pageData: servicePage(pk: ${pageID}, showPreview: true) {
       id
       title
       slug
