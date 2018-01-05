@@ -39,7 +39,7 @@ class ServicePage(Page):
     topic = models.ForeignKey(
         'base.Topic',
         on_delete=models.PROTECT,
-        related_name='+'
+        related_name='services',
     )
 
     parent_page_types = ['base.HomePage']
@@ -86,6 +86,7 @@ class ServicePage(Page):
 @register_snippet
 class Topic(ClusterableModel):
     text = models.CharField(max_length=DEFAULT_MAX_LENGTH)
+    description = models.TextField()
 
     api_fields = ['text']
 
