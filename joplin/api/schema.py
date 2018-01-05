@@ -1,3 +1,4 @@
+import django.utils.translation
 import graphene
 from graphene_django import DjangoObjectType
 from graphene_django.converter import convert_django_field
@@ -34,7 +35,7 @@ class LocationNode(DjangoObjectType):
         interfaces = [graphene.Node]
 
 
-class ContacDayAndDurationNode(DjangoObjectType):
+class ContactDayAndDurationNode(DjangoObjectType):
     class Meta:
         model = ContactDayAndDuration
         interfaces = [graphene.Node]
@@ -52,6 +53,18 @@ class ServicePageContactNode(DjangoObjectType):
         interfaces = [graphene.Node]
 
 
+class Language(graphene.Enum):
+    ENGLISH = 'en'
+    SPANISH = 'es'
+    VIETNAMESE = 'vi'
+    CHINESE_SIMPLE = 'zh-hans'
+    CHINESE_TRADITIONAL = 'zh-hant'
+    ARABIC = 'ar'
+    KOREAN = 'ko'
+    URDU = 'ur'
+    BURMESE = 'my'
+
+
 class ServicePageNode(DjangoObjectType):
     class Meta:
         model = ServicePage
@@ -66,9 +79,10 @@ def get_page_with_preview_data(page, session):
     #       or have a graphql mutation do the work
     session_key = f'wagtail-preview-{page.pk}'
     preview_data, timestamp = session.get(session_key, [None, None])
+    if not preview_data:
+        return None
 
-    if preview_data:
-        preview_data = {key: vals[0] for key, vals in preview_data.items()}
+    preview_data = {key: vals[0] for key, vals in preview_data.items()}
     parent = page.get_parent().specific
     FormKlass = page.get_edit_handler().get_form_class(page._meta.model)
 
@@ -83,19 +97,33 @@ def get_page_with_preview_data(page, session):
 class Query(graphene.ObjectType):
     debug = graphene.Field(DjangoDebug, name='__debug')
 
-    preview = graphene.Field(ServicePageNode, id=graphene.ID(), pk=graphene.Int(), show_preview=graphene.Boolean(default_value=True))
-    page = graphene.Node.Field(ServicePageNode)
-    pages = DjangoFilterConnectionField(ServicePageNode)
+    service_page = graphene.Field(ServicePageNode, id=graphene.ID(), pk=graphene.Int(), slug=graphene.String(), show_preview=graphene.Boolean(default_value=False), language=Language())
+    all_service_pages = DjangoFilterConnectionField(ServicePageNode)
 
-    def resolve_preview(self, resolve_info, id=None, pk=None, show_preview=None):
+    def resolve_service_page(self, resolve_info, id=None, pk=None, slug=None, show_preview=None, language=None):
+        print(f'Specified language: {language}')
+        if not language:
+            request_lang = django.utils.translation.get_language_from_request(resolve_info.context)
+            print(f'Request language: {request_lang}')
+            language = request_lang or Language.ENGLISH
+
+        print(f'Setting language: {language}')
+        django.utils.translation.activate(language)
+        resolve_info.context.LANGUAGE_CODE = django.utils.translation.get_language()
+
         if id:
             page = graphene.Node.get_node_from_global_id(resolve_info, id)
         elif pk:
             page = Page.objects.get(pk=pk).specific
+        elif slug:
+            page = Page.objects.get(slug=slug).specific
         else:
             raise Exception('Please provide id or pk')
 
-        return get_page_with_preview_data(page, resolve_info.context.session) if show_preview else page
+        if show_preview:
+            page = get_page_with_preview_data(page, resolve_info.context.session) or page
+
+        return page
 
 
 schema = graphene.Schema(query=Query)

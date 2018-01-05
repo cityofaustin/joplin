@@ -100,7 +100,7 @@ function updatePreviewViaSession() {
 
   const pageID = window.location.href.match(/pages\/(\d+)\/edit/).pop();
   const graphqlBody = `{
-    preview(pk: ${pageID}) {
+    pageData: servicePage(pk: ${pageID}, preview: true) {
       id
       title
       slug
@@ -158,7 +158,7 @@ function updatePreviewViaSession() {
     const params = {
       preview: true,
       cache: Date.now(),
-      d: JSON.stringify(json.data.preview),
+      d: JSON.stringify(json.data.pageData),
     };
     const qs = Object.keys(params).map(key => `${key}=${encodeURIComponent(params[key])}`).join('&');
     document.querySelector('#live-preview iframe').src = `${window.JANIS_URL}/service/68/?${qs}`;
