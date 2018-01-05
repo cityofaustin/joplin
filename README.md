@@ -34,8 +34,8 @@ You can access the API at `localhost:8000/api`. You can see e.g. service pages b
 While the server is running, run the following commands:
 
 ```
-docker exec joplin python joplin/manage.py makemigrations
-docker exec joplin python joplin/manage.py migrate
+docker exec --interactive --tty joplin python joplin/manage.py makemigrations
+docker exec --interactive --tty joplin python joplin/manage.py migrate
 ```
 
 ## Dump fixture data

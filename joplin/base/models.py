@@ -39,7 +39,7 @@ class ServicePage(Page):
     topic = models.ForeignKey(
         'base.Topic',
         on_delete=models.PROTECT,
-        related_name='+'
+        related_name='services',
     )
 
     parent_page_types = ['base.HomePage']
@@ -67,9 +67,16 @@ class ServicePage(Page):
         FieldPanel('content_es'),
     ]
 
+    vi_panels = [
+        # TODO: This field comes from Page and django-modeltranslation complains about it
+        # FieldPanel('title_es'),
+        FieldPanel('content_vi'),
+    ]
+
     edit_handler = TabbedInterface([
         ObjectList(content_panels, heading='Content'),
         ObjectList(es_panels, heading='Spanish', classname='translation-tab'),
+        ObjectList(vi_panels, heading='Vietnamese', classname='translation-tab'),
         ObjectList(Page.promote_panels, heading='Promote'),
         # TODO: What should we do with the fields in settings?
         # ObjectList(Page.settings_panels, heading='Settings', classname='settings'),
@@ -79,6 +86,7 @@ class ServicePage(Page):
 @register_snippet
 class Topic(ClusterableModel):
     text = models.CharField(max_length=DEFAULT_MAX_LENGTH)
+    description = models.TextField()
 
     api_fields = ['text']
 

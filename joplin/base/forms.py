@@ -6,3 +6,4 @@ class ServicePageForm(WagtailAdminPageForm):
         super().__init__(*args, **kwargs)
         # TODO: There should be a more elegant way to do this
         self.fields['content_es'].help_text = self.instance.content
+        self.fields['content_vi'].help_text = self.instance.content

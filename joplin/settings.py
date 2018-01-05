@@ -10,9 +10,11 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 
+from django.conf import global_settings
+
+# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
 BASE_DIR = os.path.dirname(PROJECT_DIR)
 
@@ -26,7 +28,7 @@ BASE_DIR = os.path.dirname(PROJECT_DIR)
 INSTALLED_APPS = [
     'base',
     'users',
-    'api',
+    'api.apps.APIConfig',
 
     'wagtail.api.v2',
 
@@ -116,12 +118,18 @@ USE_I18N = True
 USE_L10N = True
 
 LANGUAGE_CODE = 'en-us'
-LANGUAGES = (
-    ('en', 'English'),
-    ('pt', 'Portugese'),
-    ('es', 'Spanish'),
-    ('fr', 'French'),
+SUPPORTED_LANGS = (
+    'en',
+    'es',
+    'vi',
+    'zh-hans',
+    'zh-hant',
+    'ar',
+    'ko',
+    'ur',
+    'my',
 )
+LANGUAGES = [lang for lang in global_settings.LANGUAGES if lang[0] in SUPPORTED_LANGS]
 
 TIME_ZONE = 'UTC'
 USE_TZ = True
