@@ -8,7 +8,7 @@ from graphene.types import Scalar
 from wagtail.wagtailcore.fields import StreamField
 from wagtail.wagtailcore.models import Page
 
-from base.models import ServicePage, Topic, Contact, ServicePageContact, Location, ContactDayAndDuration
+from base.models import ServicePage, Topic, Contact, ServicePageContact, Location, ContactDayAndDuration, Department, DepartmentContact
 
 
 class StreamFieldType(Scalar):
@@ -26,6 +26,19 @@ class TopicNode(DjangoObjectType):
     class Meta:
         model = Topic
         filter_fields = ['id', 'text']
+        interfaces = [graphene.Node]
+
+
+class DepartmentNode(DjangoObjectType):
+    class Meta:
+        model = Department
+        filter_fields = ['id', 'name']
+        interfaces = [graphene.Node]
+
+
+class DepartmentContactNode(DjangoObjectType):
+    class Meta:
+        model = DepartmentContact
         interfaces = [graphene.Node]
 
 
@@ -106,6 +119,8 @@ class Query(graphene.ObjectType):
     all_service_pages = DjangoFilterConnectionField(ServicePageNode)
 
     all_topics = DjangoFilterConnectionField(TopicNode)
+
+    all_departments = DjangoFilterConnectionField(DepartmentNode)
 
     def resolve_service_page(self, resolve_info, id=None, pk=None, slug=None, show_preview=None, language=None):
         if not language:
