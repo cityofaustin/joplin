@@ -22,7 +22,7 @@ LOAD_DATA=on ./scripts/serve-local.sh
 
 #### Access the admin
 
-You can access the admin at `localhost:800/admin` with the credentials `admin@austintexas.io`/`x`
+You can access the admin at `localhost:8000/admin` with the credentials `admin@austintexas.io`/`x`
 
 #### Access the API
 
