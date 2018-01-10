@@ -238,3 +238,30 @@ class ServicePageContact(ClusterableModel):
 
     def __str__(self):
         return self.contact.name
+
+
+@register_snippet
+class Department(ClusterableModel):
+    name = models.CharField(max_length=DEFAULT_MAX_LENGTH)
+    mission = models.TextField()
+
+    panels = [
+        FieldPanel('name'),
+        FieldPanel('mission'),
+        InlinePanel('contacts', label='Contacts'),
+    ]
+
+    def __str__(self):
+        return self.name
+
+
+class DepartmentContact(ClusterableModel):
+    department = ParentalKey(Department, related_name='contacts')
+    contact = models.ForeignKey(Contact, related_name='+')
+
+    panels = [
+        SnippetChooserPanel('contact'),
+    ]
+
+    def __str__(self):
+        return self.department.name
