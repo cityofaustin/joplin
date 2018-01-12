@@ -28,6 +28,11 @@ class ServicePage(Page):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    default_actionable_title = "DEFAULT TITLE"
+
+    actionable_title = models.CharField(max_length=255, verbose_name="Actionable Title", default=default_actionable_title)
+    # title = models.CharField(max_length=255, verbose_name="Actionable Title")
+
     content = RichTextField(features=WYSIWYG_FEATURES, verbose_name='Write out the steps a resident needs to take to use the service')
     extra_content = StreamField(
         [
@@ -42,13 +47,18 @@ class ServicePage(Page):
         related_name='services',
     )
 
+    def clean(self):
+        super(ServicePage, self).clean()
+        self.title = "%s" % self.actionable_title
+
     parent_page_types = ['base.HomePage']
     subpage_types = []
     base_form_class = custom_forms.ServicePageForm
 
     content_panels = [
         FieldPanel('topic'),
-        FieldPanel('title'),
+        FieldPanel('actionable_title'),
+        # FieldPanel('title'),
         FieldPanel('content'),
         StreamFieldPanel('extra_content'),
         InlinePanel('contacts', label='Contacts'),
