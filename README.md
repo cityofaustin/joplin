@@ -43,7 +43,11 @@ docker exec --interactive --tty joplin python joplin/manage.py migrate
 Run the following to dump the latest page data. You might need to add other items from `base` or another package if you want other page types or snippets dumped.
 
 ```
-docker exec --interactive --tty joplin python joplin/manage.py dumpdata --indent 2 base wagtailcore.Page wagtailcore.PageRevision
+docker exec --interactive --tty joplin python joplin/manage.py dumpdata --indent 2 --natural-primary --natural-foreign base wagtailcore.Page wagtailcore.PageRevision > fixtures/pages.json
+```
+
+```
+docker exec --interactive --tty joplin python joplin/manage.py dumpdata --indent 2 --natural-foreign wagtailcore.site wagtailcore.collection wagtailcore.grouppagepermission wagtailcore.groupcollectionpermission contenttypes auth.group > fixtures/base.json
 ```
 
 ## Create new app

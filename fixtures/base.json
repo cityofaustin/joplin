@@ -1,7 +1,6 @@
 [
   {
     "model": "wagtailcore.site",
-    "pk": 2,
     "fields": {
       "hostname": "localhost",
       "port": 80,
@@ -22,7 +21,6 @@
   },
   {
     "model": "contenttypes.contenttype",
-    "pk": 1,
     "fields": {
       "app_label": "wagtailcore",
       "model": "page"
@@ -30,7 +28,6 @@
   },
   {
     "model": "contenttypes.contenttype",
-    "pk": 2,
     "fields": {
       "app_label": "base",
       "model": "homepage"
@@ -38,7 +35,6 @@
   },
   {
     "model": "contenttypes.contenttype",
-    "pk": 3,
     "fields": {
       "app_label": "wagtailadmin",
       "model": "admin"
@@ -46,7 +42,6 @@
   },
   {
     "model": "contenttypes.contenttype",
-    "pk": 4,
     "fields": {
       "app_label": "wagtaildocs",
       "model": "document"
@@ -54,7 +49,6 @@
   },
   {
     "model": "contenttypes.contenttype",
-    "pk": 5,
     "fields": {
       "app_label": "wagtailimages",
       "model": "image"
@@ -62,7 +56,6 @@
   },
   {
     "model": "contenttypes.contenttype",
-    "pk": 6,
     "fields": {
       "app_label": "base",
       "model": "applicationblock"
@@ -70,7 +63,6 @@
   },
   {
     "model": "contenttypes.contenttype",
-    "pk": 7,
     "fields": {
       "app_label": "base",
       "model": "contact"
@@ -78,7 +70,6 @@
   },
   {
     "model": "contenttypes.contenttype",
-    "pk": 8,
     "fields": {
       "app_label": "base",
       "model": "department"
@@ -86,7 +77,6 @@
   },
   {
     "model": "contenttypes.contenttype",
-    "pk": 9,
     "fields": {
       "app_label": "base",
       "model": "director"
@@ -94,7 +84,6 @@
   },
   {
     "model": "contenttypes.contenttype",
-    "pk": 10,
     "fields": {
       "app_label": "base",
       "model": "event"
@@ -102,7 +91,6 @@
   },
   {
     "model": "contenttypes.contenttype",
-    "pk": 11,
     "fields": {
       "app_label": "base",
       "model": "location"
@@ -110,7 +98,6 @@
   },
   {
     "model": "contenttypes.contenttype",
-    "pk": 12,
     "fields": {
       "app_label": "base",
       "model": "servicepage"
@@ -118,7 +105,6 @@
   },
   {
     "model": "contenttypes.contenttype",
-    "pk": 13,
     "fields": {
       "app_label": "base",
       "model": "topic"
@@ -279,8 +265,35 @@
     }
   },
   {
+    "model": "contenttypes.contenttype",
+    "fields": {
+      "app_label": "base",
+      "model": "dayandduration"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "fields": {
+      "app_label": "base",
+      "model": "servicepagecontact"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "fields": {
+      "app_label": "base",
+      "model": "departmentcontact"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "fields": {
+      "app_label": "base",
+      "model": "contactdayandduration"
+    }
+  },
+  {
     "model": "auth.group",
-    "pk": 1,
     "fields": {
       "name": "Moderators",
       "permissions": [
@@ -324,7 +337,6 @@
   },
   {
     "model": "auth.group",
-    "pk": 2,
     "fields": {
       "name": "Editors",
       "permissions": [
