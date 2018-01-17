@@ -69,14 +69,28 @@ class ServicePage(Page):
 
     vi_panels = [
         # TODO: This field comes from Page and django-modeltranslation complains about it
-        # FieldPanel('title_es'),
+        # FieldPanel('title_vi'),
         FieldPanel('content_vi'),
+    ]
+
+    hans_panels = [
+        # TODO: This field comes from Page and django-modeltranslation complains about it
+        # FieldPanel('title_zh_hans'),
+        FieldPanel('content_zh_hans'),
+    ]
+
+    hant_panels = [
+        # TODO: This field comes from Page and django-modeltranslation complains about it
+        # FieldPanel('title_zh_hant'),
+        FieldPanel('content_zh_hant'),
     ]
 
     edit_handler = TabbedInterface([
         ObjectList(content_panels, heading='Content'),
         ObjectList(es_panels, heading='Spanish', classname='translation-tab'),
         ObjectList(vi_panels, heading='Vietnamese', classname='translation-tab'),
+        ObjectList(hans_panels, heading='Simplified Chinese', classname='translation-tab'),
+        ObjectList(hant_panels, heading='Traditional Chinese', classname='translation-tab'),
         ObjectList(Page.promote_panels, heading='Promote'),
         # TODO: What should we do with the fields in settings?
         # ObjectList(Page.settings_panels, heading='Settings', classname='settings'),
