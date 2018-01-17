@@ -1,5 +1,7 @@
 from django.db import models
 
+from django.utils import text
+
 from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
 
@@ -28,6 +30,11 @@ class ServicePage(Page):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    # Essentially the new title for ServicePage. Actionable Title is the custom
+    # used to create the actual title in the 'clean()' method below
+    __default_actionable_title = "CHANGE ACTIONABLE TITLE HERE"
+    actionable_title = models.CharField(max_length=255, verbose_name="Actionable Title", default=__default_actionable_title)
+
     content = RichTextField(features=WYSIWYG_FEATURES, verbose_name='Write out the steps a resident needs to take to use the service')
     extra_content = StreamField(
         [
@@ -48,7 +55,8 @@ class ServicePage(Page):
 
     content_panels = [
         FieldPanel('topic'),
-        FieldPanel('title'),
+        FieldPanel('actionable_title'), # This is essentially the "title" field now.
+        # FieldPanel('title'),
         FieldPanel('content'),
         StreamFieldPanel('extra_content'),
         InlinePanel('contacts', label='Contacts'),
@@ -96,6 +104,14 @@ class ServicePage(Page):
         # ObjectList(Page.settings_panels, heading='Settings', classname='settings'),
     ])
 
+    def clean(self):
+        """ Sets Page-required title field to the actionable_title, then generates a slug for it. """
+        super(ServicePage, self).clean()
+        self.title = "%s" % self.actionable_title
+        self.slug = text.slugify(self.title)
+
+# Sets default slug value
+ServicePage._meta.get_field('slug').default='blank-slug'
 
 @register_snippet
 class Topic(ClusterableModel):
