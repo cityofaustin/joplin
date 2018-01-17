@@ -53,10 +53,10 @@ function configurePreviewWindow() {
 
   let pageID = window.location.href.split('/').find((item) => item && !isNaN(item));
   let previewHTMLString = `
-  <div id="live-preview" class="preview-container">
+  <div id="live-preview" class="preview-container hidden">
     <div class="thumbnail-container" title="Preview">
       <div class="thumbnail">
-        <iframe src="" frameborder="0" onload="this.style.opacity = 1" sandbox="allow-scripts"></iframe>
+        <iframe src="" frameborder="0" onload="this.style.opacity = 1"></iframe>
       </div>
     </div>
   </div>
