@@ -9,6 +9,7 @@ from wagtail.wagtailcore import blocks
 from wagtail.wagtailcore.fields import StreamField, RichTextField
 from wagtail.wagtailcore.models import Page, Orderable
 from wagtail.wagtailsnippets.edit_handlers import SnippetChooserPanel
+from wagtail.wagtailimages.edit_handlers import ImageChooserPanel
 from wagtail.wagtailsnippets.models import register_snippet
 
 from . import blocks as custom_blocks
@@ -41,6 +42,9 @@ class ServicePage(Page):
         on_delete=models.PROTECT,
         related_name='services',
     )
+    image = models.ForeignKey(
+        'wagtailimages.Image', null=True, on_delete=models.SET_NULL, related_name='+'
+    )
 
     parent_page_types = ['base.HomePage']
     subpage_types = []
@@ -49,16 +53,10 @@ class ServicePage(Page):
     content_panels = [
         FieldPanel('topic'),
         FieldPanel('title'),
+        ImageChooserPanel('image'),
         FieldPanel('content'),
         StreamFieldPanel('extra_content'),
         InlinePanel('contacts', label='Contacts'),
-    ]
-
-    api_fields = [
-        APIField('content'),
-        APIField('extra_content'),
-        APIField('topic'),
-        APIField('contacts'),
     ]
 
     es_panels = [
