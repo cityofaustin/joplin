@@ -61,6 +61,7 @@ class ServicePage(Page):
         APIField('extra_content'),
         APIField('topic'),
         APIField('contacts'),
+        APIField('gallery_images'),
     ]
 
     es_panels = [
