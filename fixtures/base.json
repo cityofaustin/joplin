@@ -32,13 +32,21 @@
   "model": "contenttypes.contenttype",
   "pk": 2,
   "fields": {
+    "app_label": "wagtailimages",
+    "model": "image"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 3,
+  "fields": {
     "app_label": "base",
     "model": "homepage"
   }
 },
 {
   "model": "contenttypes.contenttype",
-  "pk": 3,
+  "pk": 4,
   "fields": {
     "app_label": "wagtailadmin",
     "model": "admin"
@@ -46,18 +54,10 @@
 },
 {
   "model": "contenttypes.contenttype",
-  "pk": 4,
+  "pk": 5,
   "fields": {
     "app_label": "wagtaildocs",
     "model": "document"
-  }
-},
-{
-  "model": "contenttypes.contenttype",
-  "pk": 5,
-  "fields": {
-    "app_label": "wagtailimages",
-    "model": "image"
   }
 },
 {
@@ -144,13 +144,21 @@
   "model": "contenttypes.contenttype",
   "pk": 16,
   "fields": {
+    "app_label": "base",
+    "model": "servicepagegalleryimage"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 17,
+  "fields": {
     "app_label": "users",
     "model": "user"
   }
 },
 {
   "model": "contenttypes.contenttype",
-  "pk": 17,
+  "pk": 18,
   "fields": {
     "app_label": "wagtailforms",
     "model": "formsubmission"
@@ -158,7 +166,7 @@
 },
 {
   "model": "contenttypes.contenttype",
-  "pk": 18,
+  "pk": 19,
   "fields": {
     "app_label": "wagtailredirects",
     "model": "redirect"
@@ -166,7 +174,7 @@
 },
 {
   "model": "contenttypes.contenttype",
-  "pk": 19,
+  "pk": 20,
   "fields": {
     "app_label": "wagtailembeds",
     "model": "embed"
@@ -174,7 +182,7 @@
 },
 {
   "model": "contenttypes.contenttype",
-  "pk": 20,
+  "pk": 21,
   "fields": {
     "app_label": "wagtailusers",
     "model": "userprofile"
@@ -182,7 +190,7 @@
 },
 {
   "model": "contenttypes.contenttype",
-  "pk": 21,
+  "pk": 22,
   "fields": {
     "app_label": "wagtailimages",
     "model": "rendition"
@@ -190,7 +198,7 @@
 },
 {
   "model": "contenttypes.contenttype",
-  "pk": 22,
+  "pk": 23,
   "fields": {
     "app_label": "wagtailsearch",
     "model": "query"
@@ -198,7 +206,7 @@
 },
 {
   "model": "contenttypes.contenttype",
-  "pk": 23,
+  "pk": 24,
   "fields": {
     "app_label": "wagtailsearch",
     "model": "querydailyhits"
@@ -206,7 +214,7 @@
 },
 {
   "model": "contenttypes.contenttype",
-  "pk": 24,
+  "pk": 25,
   "fields": {
     "app_label": "wagtailcore",
     "model": "grouppagepermission"
@@ -214,7 +222,7 @@
 },
 {
   "model": "contenttypes.contenttype",
-  "pk": 25,
+  "pk": 26,
   "fields": {
     "app_label": "wagtailcore",
     "model": "pagerevision"
@@ -222,7 +230,7 @@
 },
 {
   "model": "contenttypes.contenttype",
-  "pk": 26,
+  "pk": 27,
   "fields": {
     "app_label": "wagtailcore",
     "model": "pageviewrestriction"
@@ -230,7 +238,7 @@
 },
 {
   "model": "contenttypes.contenttype",
-  "pk": 27,
+  "pk": 28,
   "fields": {
     "app_label": "wagtailcore",
     "model": "site"
@@ -238,7 +246,7 @@
 },
 {
   "model": "contenttypes.contenttype",
-  "pk": 28,
+  "pk": 29,
   "fields": {
     "app_label": "wagtailcore",
     "model": "collection"
@@ -246,7 +254,7 @@
 },
 {
   "model": "contenttypes.contenttype",
-  "pk": 29,
+  "pk": 30,
   "fields": {
     "app_label": "wagtailcore",
     "model": "groupcollectionpermission"
@@ -254,7 +262,7 @@
 },
 {
   "model": "contenttypes.contenttype",
-  "pk": 30,
+  "pk": 31,
   "fields": {
     "app_label": "wagtailcore",
     "model": "collectionviewrestriction"
@@ -262,7 +270,7 @@
 },
 {
   "model": "contenttypes.contenttype",
-  "pk": 31,
+  "pk": 32,
   "fields": {
     "app_label": "taggit",
     "model": "tag"
@@ -270,7 +278,7 @@
 },
 {
   "model": "contenttypes.contenttype",
-  "pk": 32,
+  "pk": 33,
   "fields": {
     "app_label": "taggit",
     "model": "taggeditem"
@@ -278,7 +286,7 @@
 },
 {
   "model": "contenttypes.contenttype",
-  "pk": 33,
+  "pk": 34,
   "fields": {
     "app_label": "admin",
     "model": "logentry"
@@ -286,7 +294,7 @@
 },
 {
   "model": "contenttypes.contenttype",
-  "pk": 34,
+  "pk": 35,
   "fields": {
     "app_label": "auth",
     "model": "permission"
@@ -294,7 +302,7 @@
 },
 {
   "model": "contenttypes.contenttype",
-  "pk": 35,
+  "pk": 36,
   "fields": {
     "app_label": "auth",
     "model": "group"
@@ -302,7 +310,7 @@
 },
 {
   "model": "contenttypes.contenttype",
-  "pk": 36,
+  "pk": 37,
   "fields": {
     "app_label": "contenttypes",
     "model": "contenttype"
@@ -310,26 +318,10 @@
 },
 {
   "model": "contenttypes.contenttype",
-  "pk": 37,
+  "pk": 38,
   "fields": {
     "app_label": "sessions",
     "model": "session"
-  }
-},
-{
-  "model": "contenttypes.contenttype",
-  "pk": 38,
-  "fields": {
-    "app_label": "base",
-    "model": "director"
-  }
-},
-{
-  "model": "contenttypes.contenttype",
-  "pk": 39,
-  "fields": {
-    "app_label": "base",
-    "model": "event"
   }
 },
 {
@@ -429,9 +421,9 @@
     ],
     "collection": 1,
     "permission": [
-      "add_document",
-      "wagtaildocs",
-      "document"
+      "add_image",
+      "wagtailimages",
+      "image"
     ]
   }
 },
@@ -444,9 +436,9 @@
     ],
     "collection": 1,
     "permission": [
-      "add_document",
-      "wagtaildocs",
-      "document"
+      "add_image",
+      "wagtailimages",
+      "image"
     ]
   }
 },
@@ -459,9 +451,9 @@
     ],
     "collection": 1,
     "permission": [
-      "change_document",
-      "wagtaildocs",
-      "document"
+      "change_image",
+      "wagtailimages",
+      "image"
     ]
   }
 },
@@ -474,9 +466,9 @@
     ],
     "collection": 1,
     "permission": [
-      "change_document",
-      "wagtaildocs",
-      "document"
+      "change_image",
+      "wagtailimages",
+      "image"
     ]
   }
 },
@@ -489,9 +481,9 @@
     ],
     "collection": 1,
     "permission": [
-      "add_image",
-      "wagtailimages",
-      "image"
+      "add_document",
+      "wagtaildocs",
+      "document"
     ]
   }
 },
@@ -504,9 +496,9 @@
     ],
     "collection": 1,
     "permission": [
-      "add_image",
-      "wagtailimages",
-      "image"
+      "add_document",
+      "wagtaildocs",
+      "document"
     ]
   }
 },
@@ -519,9 +511,9 @@
     ],
     "collection": 1,
     "permission": [
-      "change_image",
-      "wagtailimages",
-      "image"
+      "change_document",
+      "wagtaildocs",
+      "document"
     ]
   }
 },
@@ -534,9 +526,9 @@
     ],
     "collection": 1,
     "permission": [
-      "change_image",
-      "wagtailimages",
-      "image"
+      "change_document",
+      "wagtaildocs",
+      "document"
     ]
   }
 },
