@@ -8,7 +8,7 @@ from graphene.types import Scalar
 from wagtail.wagtailcore.fields import StreamField
 from wagtail.wagtailcore.models import Page
 
-from base.models import ServicePage, Topic, Contact, ServicePageContact, Location, ContactDayAndDuration, Department, DepartmentContact
+from base.models import ServicePage, Topic, Contact, ServicePageContact, ServicePageGalleryImage, Location, ContactDayAndDuration, Department, DepartmentContact
 
 
 class StreamFieldType(Scalar):
@@ -65,6 +65,10 @@ class ServicePageContactNode(DjangoObjectType):
         model = ServicePageContact
         interfaces = [graphene.Node]
 
+class ServicePageGalleryImageNode(DjangoObjectType):
+    class Meta:
+        model = ServicePageGalleryImage
+        interfaces = [graphene.Node]
 
 class Language(graphene.Enum):
     ENGLISH = 'en'

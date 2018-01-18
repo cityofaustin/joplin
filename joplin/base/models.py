@@ -10,6 +10,7 @@ from wagtail.wagtailcore.fields import StreamField, RichTextField
 from wagtail.wagtailcore.models import Page, Orderable
 from wagtail.wagtailsnippets.edit_handlers import SnippetChooserPanel
 from wagtail.wagtailsnippets.models import register_snippet
+from wagtail.wagtailimages.edit_handlers import ImageChooserPanel
 
 from . import blocks as custom_blocks
 from . import forms as custom_forms
@@ -47,8 +48,9 @@ class ServicePage(Page):
     base_form_class = custom_forms.ServicePageForm
 
     content_panels = [
-        FieldPanel('topic'),
         FieldPanel('title'),
+        InlinePanel('gallery_images', label="Gallery images"),
+        FieldPanel('topic'),
         FieldPanel('content'),
         StreamFieldPanel('extra_content'),
         InlinePanel('contacts', label='Contacts'),
@@ -59,6 +61,7 @@ class ServicePage(Page):
         APIField('extra_content'),
         APIField('topic'),
         APIField('contacts'),
+        APIField('gallery_images'),
     ]
 
     es_panels = [
@@ -95,6 +98,19 @@ class ServicePage(Page):
         # TODO: What should we do with the fields in settings?
         # ObjectList(Page.settings_panels, heading='Settings', classname='settings'),
     ])
+
+
+class ServicePageGalleryImage(Orderable):
+    page = ParentalKey(ServicePage, related_name='gallery_images')
+    image = models.ForeignKey(
+        'wagtailimages.Image', on_delete=models.CASCADE, related_name='+'
+    )
+    caption = models.CharField(blank=True, max_length=250)
+
+    panels = [
+        ImageChooserPanel('image'),
+        FieldPanel('caption'),
+    ]
 
 
 @register_snippet
