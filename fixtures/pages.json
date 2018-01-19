@@ -30,7 +30,7 @@
   "pk": 5,
   "fields": {
     "created_at": "2017-12-06T21:02:34.149Z",
-    "updated_at": "2018-01-19T20:53:08.051Z",
+    "updated_at": "2018-01-19T21:29:23.545Z",
     "content": "",
     "content_ar": null,
     "content_en": "<p></p><ol><li>Visit the ReUse Store in the Recycle &amp; Reuse Drop-Off Center at 2514 Business Center Dr, Austin, TX 78744.<br/></li><li>Pick from the available 3 colors of Austin ReBlend paint. The paint is free for all residents.<br/></li></ol><p></p>",
@@ -41,7 +41,7 @@
     "content_vi": "<p>This is a vietnamese version<br/></p>",
     "content_zh_hans": "",
     "content_zh_hant": "",
-    "extra_content": "[{\"type\": \"application_block\", \"value\": 4, \"id\": \"003658b6-170d-4baf-9c61-848d26511e5f\"}, {\"type\": \"content\", \"value\": \"<h2>Learn about Austin ReBlend Paint</h2><p>Austin ReBlend is a free, 100 percent flat paint made from paint dropped off at the Recycle &amp; Reuse Drop-Off Center. The paint is inspected to ensure quality, reblended into three colors and offered in 3.5 gallon containers. The available colors include:</p><ul><li><p>Texas Limestone (beige)</p></li><li><p>Balcones Canyonland (dark beige)</p></li><li><p>Barton Creek Greenbelt (dark green)</p></li></ul><h2>Pick up other free household items</h2><p>Many reusable materials are dropped off at the center. You can also pick up these items for free (availability varies):<br/></p><p></p><ul><li>Art supplies</li><li>Cleaning products</li><li>Household chemicals</li><li>Automotive fluids</li><li>Mulch*</li></ul><p>*You must load mulch yourself. Bring a pitchfork or shovel, work gloves, and containers.</p><p></p>\", \"id\": \"fff2155d-fc2b-411d-8c3a-1dcef2fff99c\"}]",
+    "extra_content": "[{\"type\": \"map_block\", \"value\": 1, \"id\": \"d2998f46-3c68-480e-af20-38c7fce43e82\"}, {\"type\": \"content\", \"value\": \"<h2>Learn about Austin ReBlend Paint</h2><p>Austin ReBlend is a free, 100 percent flat paint made from paint dropped off at the Recycle &amp; Reuse Drop-Off Center. The paint is inspected to ensure quality, reblended into three colors and offered in 3.5 gallon containers. The available colors include:</p><ul><li><p>Texas Limestone (beige)</p></li><li><p>Balcones Canyonland (dark beige)</p></li><li><p>Barton Creek Greenbelt (dark green)</p></li></ul><h2>Pick up other free household items</h2><p>Many reusable materials are dropped off at the center. You can also pick up these items for free (availability varies):<br/></p><p></p><ul><li>Art supplies</li><li>Cleaning products</li><li>Household chemicals</li><li>Automotive fluids</li><li>Mulch*</li></ul><p>*You must load mulch yourself. Bring a pitchfork or shovel, work gloves, and containers.</p><p></p>\", \"id\": \"fff2155d-fc2b-411d-8c3a-1dcef2fff99c\"}]",
     "topic": 1,
     "image": 4
   }
@@ -51,7 +51,7 @@
   "pk": 6,
   "fields": {
     "created_at": "2017-12-06T21:04:17.978Z",
-    "updated_at": "2018-01-19T20:54:15.731Z",
+    "updated_at": "2018-01-19T21:29:50.840Z",
     "content": "",
     "content_ar": null,
     "content_en": "<ol><li><p>Type your street address in the box below. If you live in a multi-family home, like a duplex or fourplex, do not include your unit number.<br/></p></li><li><p>Press the search button to view your curbside pickup days.<br/></p></li><li><p>Optional: Print a copy of your schedule or click the icon to add your pickup days to your Google, iCal, or Microsoft calendar.<br/></p></li></ol>",
@@ -62,7 +62,7 @@
     "content_vi": "",
     "content_zh_hans": "",
     "content_zh_hant": "",
-    "extra_content": "[{\"type\": \"application_block\", \"value\": 1, \"id\": \"31dfdd2f-162c-4523-a4a5-ea6dced160f8\"}, {\"type\": \"content\", \"value\": \"<h2>Trash, recycling, and compost pickup</h2><br/><p>Every week, we will pick up your trash, compost, and yard trimmings. Every other week, we will pick up recycling, clothing, and housewares. All curbside pick-ups happen on the same day of the week unless it is a holiday. </p><h2>Holiday pickup days</h2><br/>If your curbside pickup day is on Thanksgiving Day, Christmas Day, or New Year's Day\\u2014or if it is after the holiday but in the same week\\u2014your collection will be one day later than your usual pickup day that week. If the holiday falls on a Sunday or Saturday, your pickup day will not change.<p></p>\", \"id\": \"975a8966-601c-4940-a306-4a53ff01b85b\"}]",
+    "extra_content": "[{\"type\": \"collection_schedule_block\", \"value\": null, \"id\": \"5369029b-3100-4226-ae11-2127fe1c3c30\"}, {\"type\": \"content\", \"value\": \"<h2>Trash, recycling, and compost pickup</h2><br/><p>Every week, we will pick up your trash, compost, and yard trimmings. Every other week, we will pick up recycling, clothing, and housewares. All curbside pick-ups happen on the same day of the week unless it is a holiday. </p><h2>Holiday pickup days</h2><br/>If your curbside pickup day is on Thanksgiving Day, Christmas Day, or New Year's Day\\u2014or if it is after the holiday but in the same week\\u2014your collection will be one day later than your usual pickup day that week. If the holiday falls on a Sunday or Saturday, your pickup day will not change.<p></p>\", \"id\": \"975a8966-601c-4940-a306-4a53ff01b85b\"}]",
     "topic": 1,
     "image": 6
   }
@@ -147,6 +147,14 @@
   "fields": {
     "url": "https://www.google.com/maps/place/2514+Business+Center+Dr,+Austin,+TX+78744/@30.2131997,-97.739937,17z",
     "description": "Map for Hazardous Waste Dropoff Center"
+  }
+},
+{
+  "model": "base.map",
+  "pk": 1,
+  "fields": {
+    "description": "Recycle and Reuse Drop-off Center",
+    "location": 1
   }
 },
 {
@@ -395,9 +403,9 @@
     "expired": false,
     "locked": false,
     "first_published_at": "2017-12-06T21:02:34.309Z",
-    "last_published_at": "2018-01-19T20:53:08.001Z",
-    "latest_revision_created_at": "2018-01-19T20:53:07.804Z",
-    "live_revision": 46
+    "last_published_at": "2018-01-19T21:29:23.509Z",
+    "latest_revision_created_at": "2018-01-19T21:29:23.318Z",
+    "live_revision": 49
   }
 },
 {
@@ -428,9 +436,9 @@
     "expired": false,
     "locked": false,
     "first_published_at": "2017-12-06T21:04:18.098Z",
-    "last_published_at": "2018-01-19T20:54:15.675Z",
-    "latest_revision_created_at": "2018-01-19T20:54:15.464Z",
-    "live_revision": 48
+    "last_published_at": "2018-01-19T21:29:50.810Z",
+    "latest_revision_created_at": "2018-01-19T21:29:50.646Z",
+    "live_revision": 50
   }
 },
 {
@@ -1168,6 +1176,34 @@
       "admin@austintexas.io"
     ],
     "content_json": "{\"pk\": 6, \"path\": \"000100010003\", \"depth\": 3, \"numchild\": 0, \"title\": \"Look up your trash, recycling, and compost pickup days\", \"draft_title\": \"Look up your trash, recycling, and compost pickup days\", \"slug\": \"residential-curbside-collection-schedule\", \"content_type\": 10, \"live\": true, \"has_unpublished_changes\": false, \"url_path\": \"/home/residential-curbside-collection-schedule/\", \"owner\": 1, \"seo_title\": \"\", \"show_in_menus\": false, \"search_description\": \"\", \"go_live_at\": null, \"expire_at\": null, \"expired\": false, \"locked\": false, \"first_published_at\": \"2017-12-06T21:04:18.098Z\", \"last_published_at\": \"2018-01-19T20:37:36.017Z\", \"latest_revision_created_at\": \"2018-01-19T20:37:35.493Z\", \"live_revision\": 43, \"created_at\": \"2017-12-06T21:04:17.978Z\", \"updated_at\": \"2018-01-19T20:54:15.462Z\", \"content\": \"<ol><li><p>Type your street address in the box below. If you live in a multi-family home, like a duplex or fourplex, do not include your unit number.<br/></p></li><li><p>Press the search button to view your curbside pickup days.<br/></p></li><li><p>Optional: Print a copy of your schedule or click the icon to add your pickup days to your Google, iCal, or Microsoft calendar.<br/></p></li></ol>\", \"content_ar\": null, \"content_en\": \"<ol><li><p>Type your street address in the box below. If you live in a multi-family home, like a duplex or fourplex, do not include your unit number.<br/></p></li><li><p>Press the search button to view your curbside pickup days.<br/></p></li><li><p>Optional: Print a copy of your schedule or click the icon to add your pickup days to your Google, iCal, or Microsoft calendar.<br/></p></li></ol>\", \"content_es\": \"\", \"content_ko\": null, \"content_my\": null, \"content_ur\": null, \"content_vi\": \"\", \"content_zh_hans\": \"\", \"content_zh_hant\": \"\", \"extra_content\": \"[{\\\"type\\\": \\\"application_block\\\", \\\"value\\\": 1, \\\"id\\\": \\\"31dfdd2f-162c-4523-a4a5-ea6dced160f8\\\"}, {\\\"type\\\": \\\"content\\\", \\\"value\\\": \\\"<h2>Trash, recycling, and compost pickup</h2><br/><p>Every week, we will pick up your trash, compost, and yard trimmings. Every other week, we will pick up recycling, clothing, and housewares. All curbside pick-ups happen on the same day of the week unless it is a holiday. </p><h2>Holiday pickup days</h2><br/>If your curbside pickup day is on Thanksgiving Day, Christmas Day, or New Year's Day\\\\u2014or if it is after the holiday but in the same week\\\\u2014your collection will be one day later than your usual pickup day that week. If the holiday falls on a Sunday or Saturday, your pickup day will not change.<p></p>\\\", \\\"id\\\": \\\"975a8966-601c-4940-a306-4a53ff01b85b\\\"}]\", \"topic\": 1, \"image\": 6, \"contacts\": [{\"pk\": 5, \"page\": 6, \"contact\": 1}]}",
+    "approved_go_live_at": null
+  }
+},
+{
+  "model": "wagtailcore.pagerevision",
+  "pk": 49,
+  "fields": {
+    "page": 5,
+    "submitted_for_moderation": false,
+    "created_at": "2018-01-19T21:29:23.318Z",
+    "user": [
+      "admin@austintexas.io"
+    ],
+    "content_json": "{\"pk\": 5, \"path\": \"000100010002\", \"depth\": 3, \"numchild\": 0, \"title\": \"Pick up free paint and other household items\", \"draft_title\": \"Pick up free paint and other household items\", \"slug\": \"dropoff\", \"content_type\": 10, \"live\": true, \"has_unpublished_changes\": false, \"url_path\": \"/home/dropoff/\", \"owner\": 1, \"seo_title\": \"\", \"show_in_menus\": false, \"search_description\": \"\", \"go_live_at\": null, \"expire_at\": null, \"expired\": false, \"locked\": false, \"first_published_at\": \"2017-12-06T21:02:34.309Z\", \"last_published_at\": \"2018-01-19T20:53:08.001Z\", \"latest_revision_created_at\": \"2018-01-19T20:53:07.804Z\", \"live_revision\": 46, \"created_at\": \"2017-12-06T21:02:34.149Z\", \"updated_at\": \"2018-01-19T21:29:23.316Z\", \"content\": \"<p></p><ol><li>Visit the ReUse Store in the Recycle &amp; Reuse Drop-Off Center at 2514 Business Center Dr, Austin, TX 78744.<br/></li><li>Pick from the available 3 colors of Austin ReBlend paint. The paint is free for all residents.<br/></li></ol><p></p>\", \"content_ar\": null, \"content_en\": \"<p></p><ol><li>Visit the ReUse Store in the Recycle &amp; Reuse Drop-Off Center at 2514 Business Center Dr, Austin, TX 78744.<br/></li><li>Pick from the available 3 colors of Austin ReBlend paint. The paint is free for all residents.<br/></li></ol><p></p>\", \"content_es\": \"<p>This is a spanish version<br/></p>\", \"content_ko\": null, \"content_my\": null, \"content_ur\": null, \"content_vi\": \"<p>This is a vietnamese version<br/></p>\", \"content_zh_hans\": \"\", \"content_zh_hant\": \"\", \"extra_content\": \"[{\\\"type\\\": \\\"map_block\\\", \\\"value\\\": 1, \\\"id\\\": \\\"d2998f46-3c68-480e-af20-38c7fce43e82\\\"}, {\\\"type\\\": \\\"content\\\", \\\"value\\\": \\\"<h2>Learn about Austin ReBlend Paint</h2><p>Austin ReBlend is a free, 100 percent flat paint made from paint dropped off at the Recycle &amp; Reuse Drop-Off Center. The paint is inspected to ensure quality, reblended into three colors and offered in 3.5 gallon containers. The available colors include:</p><ul><li><p>Texas Limestone (beige)</p></li><li><p>Balcones Canyonland (dark beige)</p></li><li><p>Barton Creek Greenbelt (dark green)</p></li></ul><h2>Pick up other free household items</h2><p>Many reusable materials are dropped off at the center. You can also pick up these items for free (availability varies):<br/></p><p></p><ul><li>Art supplies</li><li>Cleaning products</li><li>Household chemicals</li><li>Automotive fluids</li><li>Mulch*</li></ul><p>*You must load mulch yourself. Bring a pitchfork or shovel, work gloves, and containers.</p><p></p>\\\", \\\"id\\\": \\\"fff2155d-fc2b-411d-8c3a-1dcef2fff99c\\\"}]\", \"topic\": 1, \"image\": 4, \"contacts\": [{\"pk\": 1, \"page\": 5, \"contact\": 1}]}",
+    "approved_go_live_at": null
+  }
+},
+{
+  "model": "wagtailcore.pagerevision",
+  "pk": 50,
+  "fields": {
+    "page": 6,
+    "submitted_for_moderation": false,
+    "created_at": "2018-01-19T21:29:50.646Z",
+    "user": [
+      "admin@austintexas.io"
+    ],
+    "content_json": "{\"pk\": 6, \"path\": \"000100010003\", \"depth\": 3, \"numchild\": 0, \"title\": \"Look up your trash, recycling, and compost pickup days\", \"draft_title\": \"Look up your trash, recycling, and compost pickup days\", \"slug\": \"residential-curbside-collection-schedule\", \"content_type\": 10, \"live\": true, \"has_unpublished_changes\": false, \"url_path\": \"/home/residential-curbside-collection-schedule/\", \"owner\": 1, \"seo_title\": \"\", \"show_in_menus\": false, \"search_description\": \"\", \"go_live_at\": null, \"expire_at\": null, \"expired\": false, \"locked\": false, \"first_published_at\": \"2017-12-06T21:04:18.098Z\", \"last_published_at\": \"2018-01-19T20:54:15.675Z\", \"latest_revision_created_at\": \"2018-01-19T20:54:15.464Z\", \"live_revision\": 48, \"created_at\": \"2017-12-06T21:04:17.978Z\", \"updated_at\": \"2018-01-19T21:29:50.645Z\", \"content\": \"<ol><li><p>Type your street address in the box below. If you live in a multi-family home, like a duplex or fourplex, do not include your unit number.<br/></p></li><li><p>Press the search button to view your curbside pickup days.<br/></p></li><li><p>Optional: Print a copy of your schedule or click the icon to add your pickup days to your Google, iCal, or Microsoft calendar.<br/></p></li></ol>\", \"content_ar\": null, \"content_en\": \"<ol><li><p>Type your street address in the box below. If you live in a multi-family home, like a duplex or fourplex, do not include your unit number.<br/></p></li><li><p>Press the search button to view your curbside pickup days.<br/></p></li><li><p>Optional: Print a copy of your schedule or click the icon to add your pickup days to your Google, iCal, or Microsoft calendar.<br/></p></li></ol>\", \"content_es\": \"\", \"content_ko\": null, \"content_my\": null, \"content_ur\": null, \"content_vi\": \"\", \"content_zh_hans\": \"\", \"content_zh_hant\": \"\", \"extra_content\": \"[{\\\"type\\\": \\\"collection_schedule_block\\\", \\\"value\\\": null, \\\"id\\\": \\\"5369029b-3100-4226-ae11-2127fe1c3c30\\\"}, {\\\"type\\\": \\\"content\\\", \\\"value\\\": \\\"<h2>Trash, recycling, and compost pickup</h2><br/><p>Every week, we will pick up your trash, compost, and yard trimmings. Every other week, we will pick up recycling, clothing, and housewares. All curbside pick-ups happen on the same day of the week unless it is a holiday. </p><h2>Holiday pickup days</h2><br/>If your curbside pickup day is on Thanksgiving Day, Christmas Day, or New Year's Day\\\\u2014or if it is after the holiday but in the same week\\\\u2014your collection will be one day later than your usual pickup day that week. If the holiday falls on a Sunday or Saturday, your pickup day will not change.<p></p>\\\", \\\"id\\\": \\\"975a8966-601c-4940-a306-4a53ff01b85b\\\"}]\", \"topic\": 1, \"image\": 6, \"contacts\": [{\"pk\": 5, \"page\": 6, \"contact\": 1}]}",
     "approved_go_live_at": null
   }
 },
