@@ -110,6 +110,16 @@ function updatePreviewViaSession() {
       }
       content
       extraContent
+      related {
+        id
+        slug
+        title
+      }
+      image {
+        id
+        file
+        title
+      }
       contacts {
         edges {
           node {

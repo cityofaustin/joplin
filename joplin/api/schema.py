@@ -70,7 +70,7 @@ class ImageNode(DjangoObjectType):
     class Meta:
         model = Image
         interfaces = [graphene.Node]
-        exclude_fields=['tags']
+        exclude_fields = ['tags']
 
 
 class Language(graphene.Enum):
