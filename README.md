@@ -47,7 +47,7 @@ Run the following to dump the latest page data. You might need to add other item
 To export data changed in the CMS, run the following command:
 
 ```
-docker exec --interactive --tty joplin python joplin/manage.py dumpdata --indent 2 --natural-primary --natural-foreign base wagtailcore.Page wagtailcore.PageRevision > fixtures/pages.json
+docker exec --interactive --tty joplin python joplin/manage.py dumpdata --indent 2 --natural-primary --natural-foreign base wagtailcore.Page wagtailcore.PageRevision wagtailimages > fixtures/pages.json
 ```
 
 #### To export internal data

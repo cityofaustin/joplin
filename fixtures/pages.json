@@ -22,7 +22,7 @@
     "content_zh_hant": "This is Traditional Chinese, here you go!",
     "extra_content": "[{\"type\": \"application_block\", \"value\": 3, \"id\": \"f3154cf7-22c1-4d88-89f9-ee3f834f6ec7\"}, {\"type\": \"content\", \"value\": \"<h2>What happens to the Christmas trees?</h2><p>Christmas trees dropped off at Zilker Park will be turned in mulch that will be available at the Recycle and ReUse Center. Mulch can be laid over your garden, around the base of trees, or wherever you want to add nutrients to your soil. It helps retain moisture, suppress weeds, and can help keep your plants healthy. Don\\u2019t have a garden? You can put mulch on your potted plants as well.<br/></p><h2>Free Drop-Off Locations</h2><p>Trees will be accepted free of cost at the locations listed below. However, a fee will be added to any trees with tags, decorations, and/or plastic remaining.</p><p>For specific dates and times for recycling your tree at locations other than Zilker Park, please contact the businesses directly. </p><br/><p><a href=\\\"http://www.texasdisposal.com/contact/\\\">Texas Disposal Systems</a><br/>TDS Landfill: 3016 FM 1327, Creedmoor, Texas<br/>Eco Depot: 4001 RR 620 South, Bee Cave, Texas</p><p><a href=\\\"http://www.organicsbygosh.com/drop-off-collection/\\\">Organics By Gosh</a><br/>13602 FM 969, Austin, TX 78724\\u2028 | (512) 276-1211</p><p><a href=\\\"http://www.daisyworksdirt.com/\\\">Walker Aero Environmental (JV Dirt)</a><br/>3600 FM 973 North Austin, Texas 78725</p><p><a href=\\\"http://www.989rock.com/\\\">Whittlesey Landscape Supplies</a><br/>3219 S IH 35 Round Rock, Texas 78664<br/>629 Dalton Lane, Austin, Texas 78742</p><p><a href=\\\"https://www.traviscountytx.gov/news/1212-15-recycle-tree\\\">Travis County Transfer Station</a><br/>2625 Woodall Dr. Leander, Texas 78641</p><p><a href=\\\"https://www.traviscountytx.gov/news/1212-15-recycle-tree\\\">Travis County Service Center</a><br/>6013 Blue Bluff Rd Austin, Texas 78724</p><p><a href=\\\"https://www.traviscountytx.gov/news/1212-15-recycle-tree\\\">Del Valle Softball Complex (Behind the Southwest Rural Center)</a><br/>3614 FM 973 Del Valle, Texas 78617</p><br/><h2>Drop-Off Locations with a Fee</h2><p>Locations listed below have varying fees. Call the location for more information. \\u00a0</p><p><a href=\\\"http://firewoodandmulchaustintx.com/\\\">Kinser Ranch LLC.</a><br/>Starts at $1.00/per tree to $20/per load.<br/>For more information: 512-748-0800<br/>10701 Kinser Lane, Austin, Texas 78736</p><p><a href=\\\"http://www.sidmourningtreeservice.com/\\\">Sid Mourning Tree Service</a><br/>Pricing varies.<br/>Call for fee information: 512-420-0733<br/>3810 Medical Parkway Austin, TX 78756</p><p><a href=\\\"http://www.austinwoodrecycling.com/\\\">Austin Wood Recycling</a><br/>$5.00/per tree.<br/>For more information: 512-259-7430<br/>3875 E. Whitestone Blvd., Cedar Park, TX 78613</p><p><a href=\\\"http://www.goodguystreeservice.com/\\\">Good Guys Tree Service</a><br/>Prices vary.<br/>For more information: 512-743-3909<br/>11601 Anderson Mill Rd., Austin, TX 78750</p><h1>Do you live in a house? You can recycle your Christmas tree at the curb</h1><ol><li><p>If you are a City of Austin curbside customer, and you would like to have your tree picked up, remove any ornaments, lighting, decorations, stands, netting, string, or plastic bags from your tree.<br/></p></li><li><p>Trees with flocking, or fake-snow, will not be accepted and should be set out with your trash.<br/></p></li><li><p>Cut the tree in half if it is longer than 6 feet.<br/></p></li><li><p>Set your tree out on the curb by 6:30 am on your regular collection day.</p></li><li><p>If you are interested in free mulch, you can pick it up at Zilker park on January 18, 2018. It will be available for free on a first-come, first serve basis. Be sure to bring your own tools and storage containers for loading and transporting the mulch. Your yard or garden will thank you.<br/></p></li></ol>\", \"id\": \"b748924c-4c94-4a4f-a3b2-3730684980f8\"}]",
     "topic": 1,
-    "image": 1
+    "image": null
   }
 },
 {
@@ -43,7 +43,7 @@
     "content_zh_hant": "",
     "extra_content": "[{\"type\": \"application_block\", \"value\": 4, \"id\": \"003658b6-170d-4baf-9c61-848d26511e5f\"}, {\"type\": \"content\", \"value\": \"<h2>Learn about Austin ReBlend Paint</h2><p>Austin ReBlend is a free, 100 percent flat paint made from paint dropped off at the Recycle &amp; Reuse Drop-Off Center. The paint is inspected to ensure quality, reblended into three colors and offered in 3.5 gallon containers. The available colors include:</p><ul><li><p>Texas Limestone (beige)</p></li><li><p>Balcones Canyonland (dark beige)</p></li><li><p>Barton Creek Greenbelt (dark green)</p></li></ul><h2>Pick up other free household items</h2><p>Many reusable materials are dropped off at the center. You can also pick up these items for free (availability varies):<br/></p><p></p><ul><li>Art supplies</li><li>Cleaning products</li><li>Household chemicals</li><li>Automotive fluids</li><li>Mulch*</li></ul><p>*You must load mulch yourself. Bring a pitchfork or shovel, work gloves, and containers.</p><p></p>\", \"id\": \"fff2155d-fc2b-411d-8c3a-1dcef2fff99c\"}]",
     "topic": 1,
-    "image": 3
+    "image": null
   }
 },
 {
@@ -51,7 +51,7 @@
   "pk": 6,
   "fields": {
     "created_at": "2017-12-06T21:04:17.978Z",
-    "updated_at": "2018-01-19T05:50:02.393Z",
+    "updated_at": "2018-01-19T19:58:37.144Z",
     "content": "",
     "content_ar": null,
     "content_en": "<ol><li><p>Type your street address in the box below. If you live in a multi-family home, like a duplex or fourplex, do not include your unit number.<br/></p></li><li><p>Press the search button to view your curbside pickup days.<br/></p></li><li><p>Optional: Print a copy of your schedule or click the icon to add your pickup days to your Google, iCal, or Microsoft calendar.<br/></p></li></ol>",
@@ -64,7 +64,7 @@
     "content_zh_hant": "",
     "extra_content": "[{\"type\": \"application_block\", \"value\": 1, \"id\": \"31dfdd2f-162c-4523-a4a5-ea6dced160f8\"}, {\"type\": \"content\", \"value\": \"<h2>Trash, recycling, and compost pickup</h2><br/><p>Every week, we will pick up your trash, compost, and yard trimmings. Every other week, we will pick up recycling, clothing, and housewares. All curbside pick-ups happen on the same day of the week unless it is a holiday. </p><h2>Holiday pickup days</h2><br/>If your curbside pickup day is on Thanksgiving Day, Christmas Day, or New Year's Day\\u2014or if it is after the holiday but in the same week\\u2014your collection will be one day later than your usual pickup day that week. If the holiday falls on a Sunday or Saturday, your pickup day will not change.<p></p>\", \"id\": \"975a8966-601c-4940-a306-4a53ff01b85b\"}]",
     "topic": 1,
-    "image": 5
+    "image": 1
   }
 },
 {
@@ -85,7 +85,7 @@
     "content_zh_hant": "",
     "extra_content": "[{\"type\": \"application_block\", \"value\": 2, \"id\": \"ac2d7108-e0ee-4887-b454-b0cdc4886b06\"}, {\"type\": \"application_block\", \"value\": 1, \"id\": \"cb0fc00e-5811-4117-b369-72d9222000ac\"}, {\"type\": \"content\", \"value\": \"<h2>Bulk item pickup do\\u2019s and don\\u2019ts</h2><p>Do not put bulk items in bags, boxes, or other containers. Bags will be treated as extra trash and are subject to extra trash fees.</p><p>Do not place any items under low hanging tree limbs or power lines.</p><p>Do not place items in an alley in any area in front of a vacant lot or in front of a business. Items will not be collected from these areas.</p><p>To prevent damage to your property, keep bulk items 5 feet away from your:</p><ul><li>Trash cart</li><li>Mailbox</li><li>Fences or walls</li><li>Water meter</li><li>Telephone connection box</li><li>Parked cars</li></ul>\", \"id\": \"60dacf8d-e0c9-4248-9252-d3a438ba58a3\"}]",
     "topic": 1,
-    "image": 4
+    "image": null
   }
 },
 {
@@ -106,7 +106,7 @@
     "content_zh_hant": "",
     "extra_content": "[{\"type\": \"content\", \"value\": \"<h2>Keeping your compost cart fresh</h2><p>While it is not required, there are a few things you can do to keep your compost cart from smelling bad:</p><ul><li>Line your compost cart with a paper bag or use BPI-certified compostable bags. If you don\\u2019t have a bag, you can put dry leaves, pizza boxes, or newspaper on the bottom of your cart. Sprinkling baking soda on the bottom will also help keep the smell down.</li><li>Keep your compost cart in the shade if possible, and always keep the lid closed to contain the smell and to keep bugs and animals out of your cart.</li></ul><h2>Why compost?</h2><p>When buried in a landfill, compostable materials do not break down as they would in nature or in a compost pile. Instead of going to a landfill, where they would release methane into the atmosphere, organic materials placed in the green carts are taken to a local composting facility, where they break down into compost. Compost helps soil retain water and fertilizes lawns and gardens without using chemicals.</p><h2>Save money with your green cart</h2>You will have less trash to throw away each week after putting food scraps and food-soiled paper in your green cart. This may allow you to <a href=\\\"http://www.austintexas.gov/department/residential-rates-fees\\\">downsize to a smaller, less expensive trash cart</a>. Austin Resource Recovery offers four trash cart sizes \\u2013 the smaller the cart, the less it costs each month.\", \"id\": \"67828779-33ab-4291-a727-08ebe96c4674\"}]",
     "topic": 1,
-    "image": 2
+    "image": null
   }
 },
 {
@@ -420,9 +420,9 @@
     "expired": false,
     "locked": false,
     "first_published_at": "2017-12-06T21:04:18.098Z",
-    "last_published_at": "2018-01-19T05:50:02.345Z",
-    "latest_revision_created_at": "2018-01-19T05:50:02.130Z",
-    "live_revision": 41
+    "last_published_at": "2018-01-19T19:58:37.037Z",
+    "latest_revision_created_at": "2018-01-19T19:58:36.617Z",
+    "live_revision": 42
   }
 },
 {
@@ -1063,6 +1063,52 @@
     ],
     "content_json": "{\"pk\": 6, \"path\": \"000100010003\", \"depth\": 3, \"numchild\": 0, \"title\": \"Look up your trash, recycling, and compost pickup days\", \"draft_title\": \"Look up your trash, recycling, and compost pickup days\", \"slug\": \"residential-curbside-collection-schedule\", \"content_type\": 10, \"live\": true, \"has_unpublished_changes\": false, \"url_path\": \"/home/residential-curbside-collection-schedule/\", \"owner\": 1, \"seo_title\": \"\", \"show_in_menus\": false, \"search_description\": \"\", \"go_live_at\": null, \"expire_at\": null, \"expired\": false, \"locked\": false, \"first_published_at\": \"2017-12-06T21:04:18.098Z\", \"last_published_at\": \"2018-01-16T21:14:53.386Z\", \"latest_revision_created_at\": \"2018-01-16T21:14:53.276Z\", \"live_revision\": 32, \"created_at\": \"2017-12-06T21:04:17.978Z\", \"updated_at\": \"2018-01-19T05:50:02.129Z\", \"content\": \"<ol><li><p>Type your street address in the box below. If you live in a multi-family home, like a duplex or fourplex, do not include your unit number.<br/></p></li><li><p>Press the search button to view your curbside pickup days.<br/></p></li><li><p>Optional: Print a copy of your schedule or click the icon to add your pickup days to your Google, iCal, or Microsoft calendar.<br/></p></li></ol>\", \"content_ar\": null, \"content_en\": \"<ol><li><p>Type your street address in the box below. If you live in a multi-family home, like a duplex or fourplex, do not include your unit number.<br/></p></li><li><p>Press the search button to view your curbside pickup days.<br/></p></li><li><p>Optional: Print a copy of your schedule or click the icon to add your pickup days to your Google, iCal, or Microsoft calendar.<br/></p></li></ol>\", \"content_es\": \"\", \"content_ko\": null, \"content_my\": null, \"content_ur\": null, \"content_vi\": \"\", \"content_zh_hans\": \"\", \"content_zh_hant\": \"\", \"extra_content\": \"[{\\\"type\\\": \\\"application_block\\\", \\\"value\\\": 1, \\\"id\\\": \\\"31dfdd2f-162c-4523-a4a5-ea6dced160f8\\\"}, {\\\"type\\\": \\\"content\\\", \\\"value\\\": \\\"<h2>Trash, recycling, and compost pickup</h2><br/><p>Every week, we will pick up your trash, compost, and yard trimmings. Every other week, we will pick up recycling, clothing, and housewares. All curbside pick-ups happen on the same day of the week unless it is a holiday. </p><h2>Holiday pickup days</h2><br/>If your curbside pickup day is on Thanksgiving Day, Christmas Day, or New Year's Day\\\\u2014or if it is after the holiday but in the same week\\\\u2014your collection will be one day later than your usual pickup day that week. If the holiday falls on a Sunday or Saturday, your pickup day will not change.<p></p>\\\", \\\"id\\\": \\\"975a8966-601c-4940-a306-4a53ff01b85b\\\"}]\", \"topic\": 1, \"image\": 5, \"contacts\": []}",
     "approved_go_live_at": null
+  }
+},
+{
+  "model": "wagtailcore.pagerevision",
+  "pk": 42,
+  "fields": {
+    "page": 6,
+    "submitted_for_moderation": false,
+    "created_at": "2018-01-19T19:58:36.617Z",
+    "user": [
+      "admin@austintexas.io"
+    ],
+    "content_json": "{\"pk\": 6, \"path\": \"000100010003\", \"depth\": 3, \"numchild\": 0, \"title\": \"Look up your trash, recycling, and compost pickup days\", \"draft_title\": \"Look up your trash, recycling, and compost pickup days\", \"slug\": \"residential-curbside-collection-schedule\", \"content_type\": 10, \"live\": true, \"has_unpublished_changes\": false, \"url_path\": \"/home/residential-curbside-collection-schedule/\", \"owner\": 1, \"seo_title\": \"\", \"show_in_menus\": false, \"search_description\": \"\", \"go_live_at\": null, \"expire_at\": null, \"expired\": false, \"locked\": false, \"first_published_at\": \"2017-12-06T21:04:18.098Z\", \"last_published_at\": \"2018-01-19T05:50:02.345Z\", \"latest_revision_created_at\": \"2018-01-19T05:50:02.130Z\", \"live_revision\": 41, \"created_at\": \"2017-12-06T21:04:17.978Z\", \"updated_at\": \"2018-01-19T19:58:36.616Z\", \"content\": \"<ol><li><p>Type your street address in the box below. If you live in a multi-family home, like a duplex or fourplex, do not include your unit number.<br/></p></li><li><p>Press the search button to view your curbside pickup days.<br/></p></li><li><p>Optional: Print a copy of your schedule or click the icon to add your pickup days to your Google, iCal, or Microsoft calendar.<br/></p></li></ol>\", \"content_ar\": null, \"content_en\": \"<ol><li><p>Type your street address in the box below. If you live in a multi-family home, like a duplex or fourplex, do not include your unit number.<br/></p></li><li><p>Press the search button to view your curbside pickup days.<br/></p></li><li><p>Optional: Print a copy of your schedule or click the icon to add your pickup days to your Google, iCal, or Microsoft calendar.<br/></p></li></ol>\", \"content_es\": \"\", \"content_ko\": null, \"content_my\": null, \"content_ur\": null, \"content_vi\": \"\", \"content_zh_hans\": \"\", \"content_zh_hant\": \"\", \"extra_content\": \"[{\\\"type\\\": \\\"application_block\\\", \\\"value\\\": 1, \\\"id\\\": \\\"31dfdd2f-162c-4523-a4a5-ea6dced160f8\\\"}, {\\\"type\\\": \\\"content\\\", \\\"value\\\": \\\"<h2>Trash, recycling, and compost pickup</h2><br/><p>Every week, we will pick up your trash, compost, and yard trimmings. Every other week, we will pick up recycling, clothing, and housewares. All curbside pick-ups happen on the same day of the week unless it is a holiday. </p><h2>Holiday pickup days</h2><br/>If your curbside pickup day is on Thanksgiving Day, Christmas Day, or New Year's Day\\\\u2014or if it is after the holiday but in the same week\\\\u2014your collection will be one day later than your usual pickup day that week. If the holiday falls on a Sunday or Saturday, your pickup day will not change.<p></p>\\\", \\\"id\\\": \\\"975a8966-601c-4940-a306-4a53ff01b85b\\\"}]\", \"topic\": 1, \"image\": 1, \"contacts\": []}",
+    "approved_go_live_at": null
+  }
+},
+{
+  "model": "wagtailimages.image",
+  "pk": 1,
+  "fields": {
+    "collection": 1,
+    "title": "Curbside Compost Pickup",
+    "file": "original_images/curbside-compost_QyXFIWv.jpg",
+    "width": 1600,
+    "height": 1067,
+    "created_at": "2018-01-19T19:58:09.438Z",
+    "uploaded_by_user": [
+      "admin@austintexas.io"
+    ],
+    "focal_point_x": null,
+    "focal_point_y": null,
+    "focal_point_width": null,
+    "focal_point_height": null,
+    "file_size": null
+  }
+},
+{
+  "model": "wagtailimages.rendition",
+  "pk": 1,
+  "fields": {
+    "filter_spec": "max-165x165",
+    "file": "images/curbside-compost_QyXFIWv.max-165x165.jpg",
+    "width": 165,
+    "height": 110,
+    "focal_point_key": "",
+    "image": 1
   }
 }
 ]
