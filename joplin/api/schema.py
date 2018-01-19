@@ -7,6 +7,7 @@ from graphene_django.filter import DjangoFilterConnectionField
 from graphene.types import Scalar
 from wagtail.wagtailcore.fields import StreamField
 from wagtail.wagtailcore.models import Page
+from wagtail.wagtailimages.models import Image
 
 from base.models import ServicePage, Topic, Contact, ServicePageContact, Location, ContactDayAndDuration, Department, DepartmentContact
 
@@ -64,6 +65,12 @@ class ServicePageContactNode(DjangoObjectType):
     class Meta:
         model = ServicePageContact
         interfaces = [graphene.Node]
+
+class ImageNode(DjangoObjectType):
+    class Meta:
+        model = Image
+        interfaces = [graphene.Node]
+        exclude_fields = ['tags']
 
 
 class Language(graphene.Enum):
