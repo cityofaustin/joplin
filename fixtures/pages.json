@@ -261,7 +261,17 @@
   "pk": 1,
   "fields": {
     "name": "Rhino Recovery Resources",
-    "mission": "We recover rhinos for the City of Austin. Got rhino problems? We're here to help."
+    "mission": "We recover rhinos for the City of Austin. Got rhino problems? We're here to help.",
+    "image": null
+  }
+},
+{
+  "model": "base.department",
+  "pk": 2,
+  "fields": {
+    "name": "Austin Resource Recovery",
+    "mission": "To achieve Zero Waste by providing excellent customer services that promote waste reduction, increase resource recovery and support the City of Austin\u2019s sustainability efforts.",
+    "image": 7
   }
 },
 {
@@ -270,6 +280,14 @@
   "fields": {
     "department": 1,
     "contact": 2
+  }
+},
+{
+  "model": "base.departmentcontact",
+  "pk": 2,
+  "fields": {
+    "department": 2,
+    "contact": 1
   }
 },
 {
@@ -1292,6 +1310,26 @@
   }
 },
 {
+  "model": "wagtailimages.image",
+  "pk": 7,
+  "fields": {
+    "collection": 1,
+    "title": "Austin Resource Recovery Truck",
+    "file": "original_images/arr-dept.jpg",
+    "width": 1600,
+    "height": 1066,
+    "created_at": "2018-01-20T05:22:50.080Z",
+    "uploaded_by_user": [
+      "admin@austintexas.io"
+    ],
+    "focal_point_x": null,
+    "focal_point_y": null,
+    "focal_point_width": null,
+    "focal_point_height": null,
+    "file_size": null
+  }
+},
+{
   "model": "wagtailimages.rendition",
   "pk": 1,
   "fields": {
@@ -1361,6 +1399,18 @@
     "height": 110,
     "focal_point_key": "",
     "image": 6
+  }
+},
+{
+  "model": "wagtailimages.rendition",
+  "pk": 7,
+  "fields": {
+    "filter_spec": "max-165x165",
+    "file": "images/arr-dept.max-165x165.jpg",
+    "width": 165,
+    "height": 109,
+    "focal_point_key": "",
+    "image": 7
   }
 }
 ]
