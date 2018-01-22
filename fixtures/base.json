@@ -317,6 +317,14 @@
   }
 },
 {
+  "model": "contenttypes.contenttype",
+  "pk": 38,
+  "fields": {
+    "app_label": "base",
+    "model": "map"
+  }
+},
+{
   "model": "auth.group",
   "pk": 1,
   "fields": {
