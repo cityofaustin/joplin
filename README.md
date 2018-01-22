@@ -40,22 +40,10 @@ docker exec --interactive --tty joplin python joplin/manage.py migrate
 
 ## Dump fixture data
 
-Run the following to dump the latest page data. You might need to add other items from `base` or another package if you want other page types or snippets dumped.
-
-#### To export new content
-
 To export data changed in the CMS, run the following command:
 
 ```
-docker exec --interactive --tty joplin python joplin/manage.py dumpdata --indent 2 --natural-primary --natural-foreign base wagtailcore.Page wagtailcore.PageRevision wagtailimages > fixtures/pages.json
-```
-
-#### To export internal data
-
-After you add or change a model, you might also need to export the internal CMS data. Run the above command to export content data. Then run:
-
-```
-docker exec --interactive --tty joplin python joplin/manage.py dumpdata --indent 2 --natural-foreign wagtailcore.site wagtailcore.collection wagtailcore.grouppagepermission wagtailcore.groupcollectionpermission contenttypes auth.group > fixtures/base.json
+docker exec --interactive --tty joplin python joplin/manage.py dumpdata --indent 2 --natural-primary --natural-foreign > fixtures/live.json
 ```
 
 ## Create new app
