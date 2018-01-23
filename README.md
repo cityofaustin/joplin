@@ -4,7 +4,7 @@ This is where you'll find the CMS for the City of Austin and atx.gov
 
 ## Background
 
-bla bla bla
+If you wanna do stuff in the CMS, then you will need these commands.
 
 ## Run locally
 
