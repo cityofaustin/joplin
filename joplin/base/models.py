@@ -274,11 +274,15 @@ class ServicePageContact(ClusterableModel):
 class Department(ClusterableModel):
     name = models.CharField(max_length=DEFAULT_MAX_LENGTH)
     mission = models.TextField()
+    image = models.ForeignKey(
+        'wagtailimages.Image', null=True, on_delete=models.SET_NULL, related_name='+'
+    )
 
     panels = [
         FieldPanel('name'),
         FieldPanel('mission'),
         InlinePanel('contacts', label='Contacts'),
+        ImageChooserPanel('image'),
     ]
 
     def __str__(self):
