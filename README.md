@@ -43,7 +43,7 @@ docker exec --interactive --tty joplin python joplin/manage.py migrate
 To export data changed in the CMS, run the following command:
 
 ```
-docker exec --interactive --tty joplin python joplin/manage.py dumpdata --indent 2 --natural-primary --natural-foreign > fixtures/live.json
+./scripts/dump-fixtures.sh
 ```
 
 ## Create new app
