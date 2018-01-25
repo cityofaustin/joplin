@@ -6,7 +6,7 @@ python ./joplin/manage.py migrate --noinput
 
 if [ "x$LOAD_DATA" = 'xon' ]; then
   echo "Loading initial data..."
-  python ./joplin/manage.py loaddata fixtures/base.json fixtures/users.json fixtures/applicationblocks.json fixtures/pages.json
+  python ./joplin/manage.py loaddata fixtures/live.json
 fi
 
 exec "$@"

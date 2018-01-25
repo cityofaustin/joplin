@@ -1,3 +1,4 @@
+from django import forms
 from django.db import models
 
 from modelcluster.fields import ParentalKey
@@ -33,7 +34,10 @@ class ServicePage(Page):
     extra_content = StreamField(
         [
             ('content', blocks.RichTextBlock(features=WYSIWYG_FEATURES, help_text='Write any additional content describing the service')),
-            ('application_block', custom_blocks.SnippetChooserBlockWithAPIGoodness('base.ApplicationBlock')),
+            ('application_block', custom_blocks.SnippetChooserBlockWithAPIGoodness('base.ApplicationBlock', icon='site')),
+            ('map_block', custom_blocks.SnippetChooserBlockWithAPIGoodness('base.Map', icon='site')),
+            ('what_do_i_do_with_block', custom_blocks.WhatDoIDoWithBlock()),
+            ('collection_schedule_block', custom_blocks.CollectionScheduleBlock()),
         ],
         verbose_name='Add any forms, maps, apps, or content that will help the resident use the service',
     )
@@ -118,6 +122,20 @@ class ApplicationBlock(ClusterableModel):
 
     def __str__(self):
         return self.description
+
+
+@register_snippet
+class Map(ClusterableModel):
+    description = models.TextField()
+    location = models.ForeignKey('base.Location', on_delete=models.CASCADE, related_name='+')
+
+    def __str__(self):
+        return self.description
+
+    def serializable_data(self):
+        data = super().serializable_data()
+        data['location'] = self.location.serializable_data()
+        return data
 
 
 @register_snippet
