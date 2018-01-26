@@ -13,6 +13,7 @@ COPY "$PWD/fixtures" /app/fixtures
 
 COPY "$PWD/docker-entrypoint.sh" /app/docker-entrypoint.sh
 COPY "$PWD/joplin" /app/joplin
+COPY "$PWD/media" /app/media
 
 ENV PORT ${PORT:-80}
 EXPOSE $PORT
