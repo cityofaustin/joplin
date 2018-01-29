@@ -1,0 +1,19 @@
+{
+  "name": "joplin",
+  "scripts": {},
+  "env": {
+    "JANIS_URL": {
+      "required": true
+    },
+    "LOAD_DATA": {
+      "required": true
+    }
+  },
+  "formation": {
+    "web": {
+      "quantity": 1
+    }
+  },
+  "addons": [],
+  "buildpacks": []
+}
