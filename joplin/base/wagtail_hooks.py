@@ -1,5 +1,6 @@
+from django.conf import settings
 from django.contrib.staticfiles.templatetags.staticfiles import static
-from django.utils.html import format_html, format_html_join
+from django.utils.html import format_html_join
 
 from wagtail.contrib.modeladmin.options import ModelAdmin, ModelAdminGroup, modeladmin_register
 from wagtail.wagtailcore import hooks
@@ -17,12 +18,23 @@ def editor_css():
     return format_html_join('\n', '<link rel="stylesheet" href="{}">', ((url,) for url in urls))
 
 
+@hooks.register('insert_global_admin_js')
+def global_admin_js():
+    urls = []
+
+    if settings.USE_ANALYTICS:
+        urls.append(static('js/analytics.js'))
+
+    return format_html_join('\n', '<script src="{}"></script>', ((url,) for url in urls))
+
+
 @hooks.register('insert_editor_js')
 def editor_js():
     urls = [
         'https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.4/lodash.min.js',
         static('js/admin.js'),
     ]
+
     return format_html_join('\n', '<script src="{}"></script>', ((url,) for url in urls))
 
 
