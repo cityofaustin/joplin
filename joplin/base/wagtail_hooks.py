@@ -25,7 +25,7 @@ def editor_js():
         static('js/admin.js'),
     ]
 
-    if not settings.DEBUG:
+    if not settings.USE_ANALYTICS:
         urls.append(static('js/analytics.js'))
     return format_html_join('\n', '<script src="{}"></script>', ((url,) for url in urls))
 
