@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
 import os
+from distutils.util import strtobool
 
 from django.conf import global_settings
 
@@ -175,7 +176,7 @@ BASE_URL = 'https://austintexas.io'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 MODELTRANSLATION_DEBUG = DEBUG
-USE_ANALYTICS = os.environ.get('USE_ANALYTICS', not DEBUG)
+USE_ANALYTICS = bool(strtobool(os.environ.get('USE_ANALYTICS', str(not DEBUG))))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '1iq1u6gs+xh3!bvrl-5$jqne%gpj)!wv5^h0$dc0y84xsdr-95'
