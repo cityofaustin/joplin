@@ -2,4 +2,5 @@ wagtail==1.13.1
 django-cors-headers==2.1.0
 django-filter==1.1.0
 django-modeltranslation==0.12.1
+dj-database-url==0.4.2
 graphene-django==2.0.0
