@@ -23,6 +23,11 @@ BASE_DIR = os.path.dirname(PROJECT_DIR)
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = True
+MODELTRANSLATION_DEBUG = DEBUG
+USE_ANALYTICS = bool(strtobool(os.environ.get('USE_ANALYTICS', str(not DEBUG))))
+
 
 # Application definition
 
@@ -162,6 +167,9 @@ ALLOWED_HOSTS = [
     '.herokuapp.com',
 ]
 
+if DEBUG:
+    ALLOWED_HOSTS.append('*')
+
 
 # Wagtail settings
 
@@ -171,12 +179,6 @@ WAGTAIL_AUTO_UPDATE_PREVIEW = True
 # Base URL to use when referring to full URLs within the Wagtail admin backend -
 # e.g. in notification emails. Don't include '/admin' or a trailing slash
 BASE_URL = 'https://austintexas.io'
-
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-MODELTRANSLATION_DEBUG = DEBUG
-USE_ANALYTICS = bool(strtobool(os.environ.get('USE_ANALYTICS', str(not DEBUG))))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '1iq1u6gs+xh3!bvrl-5$jqne%gpj)!wv5^h0$dc0y84xsdr-95'
