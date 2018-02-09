@@ -28,4 +28,5 @@ docker run \
     --publish 8000:80 \
     --volume "$PWD:/app" \
     --env "LOAD_DATA=$LOAD_DATA" \
+    --env "GUNICORN_CMD_ARGS=--reload --log-level=debug" \
     "$TAG" "$@"
