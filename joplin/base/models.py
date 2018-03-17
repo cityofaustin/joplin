@@ -1,54 +1,81 @@
-from django import forms
 from django.db import models
+from django.db.models.signals import post_delete
+from django.dispatch import receiver
 
 from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
 
-from wagtail.api import APIField
 from wagtail.wagtailadmin.edit_handlers import FieldPanel, InlinePanel, MultiFieldPanel, ObjectList, StreamFieldPanel, TabbedInterface
-from wagtail.wagtailcore import blocks
 from wagtail.wagtailcore.fields import StreamField, RichTextField
 from wagtail.wagtailcore.models import Page, Orderable
 from wagtail.wagtailsnippets.edit_handlers import SnippetChooserPanel
 from wagtail.wagtailimages.edit_handlers import ImageChooserPanel
+from wagtail.wagtailimages.models import Image, AbstractImage, AbstractRendition
 from wagtail.wagtailsnippets.models import register_snippet
 
 from . import blocks as custom_blocks
 from . import forms as custom_forms
 
 
+WYSIWYG_FEATURES = ['h1', 'h2', 'link', 'ul', 'ol']
+DEFAULT_MAX_LENGTH = 255
+
+
+class TranslatedImage(AbstractImage):
+    admin_form_fields = Image.admin_form_fields
+
+    def __str__(self):
+        return self.title or self.title_en
+
+
+class TranslatedImageRendition(AbstractRendition):
+    image = models.ForeignKey(TranslatedImage, related_name='renditions')
+
+    class Meta:
+        unique_together = (
+            ('image', 'filter_spec', 'focal_point_key'),
+        )
+
+
+# Delete the source image file when an image is deleted
+@receiver(post_delete, sender=TranslatedImage)
+def image_delete(sender, instance, **kwargs):
+    instance.file.delete(False)
+
+
+# Delete the rendition image file when a rendition is deleted
+@receiver(post_delete, sender=TranslatedImage)
+def rendition_delete(sender, instance, **kwargs):
+    instance.file.delete(False)
+
+
 class HomePage(Page):
     parent_page_types = []
     subpage_types = ['base.ServicePage']
 
-
-WYSIWYG_FEATURES = ['h1', 'h2', 'link', 'ul', 'ol']
-DEFAULT_MAX_LENGTH = 255
+    image = models.ForeignKey(TranslatedImage, null=True, on_delete=models.SET_NULL, related_name='+')
 
 
 class ServicePage(Page):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    content = RichTextField(features=WYSIWYG_FEATURES, verbose_name='Write out the steps a resident needs to take to use the service')
-    extra_content = StreamField(
+    steps = RichTextField(features=WYSIWYG_FEATURES, verbose_name='Write out the steps a resident needs to take to use the service')
+    dynamic_content = StreamField(
         [
-            ('content', blocks.RichTextBlock(features=WYSIWYG_FEATURES, help_text='Write any additional content describing the service')),
-            ('application_block', custom_blocks.SnippetChooserBlockWithAPIGoodness('base.ApplicationBlock', icon='site')),
             ('map_block', custom_blocks.SnippetChooserBlockWithAPIGoodness('base.Map', icon='site')),
             ('what_do_i_do_with_block', custom_blocks.WhatDoIDoWithBlock()),
             ('collection_schedule_block', custom_blocks.CollectionScheduleBlock()),
         ],
         verbose_name='Add any forms, maps, apps, or content that will help the resident use the service',
     )
+    additional_content = RichTextField(features=WYSIWYG_FEATURES, verbose_name='Write any additional content describing the service', blank=True)
     topic = models.ForeignKey(
         'base.Topic',
         on_delete=models.PROTECT,
         related_name='services',
     )
-    image = models.ForeignKey(
-        'wagtailimages.Image', null=True, on_delete=models.SET_NULL, related_name='+'
-    )
+    image = models.ForeignKey(TranslatedImage, null=True, on_delete=models.SET_NULL, related_name='+')
 
     parent_page_types = ['base.HomePage']
     subpage_types = []
@@ -58,41 +85,14 @@ class ServicePage(Page):
         FieldPanel('topic'),
         FieldPanel('title'),
         ImageChooserPanel('image'),
-        FieldPanel('content'),
-        StreamFieldPanel('extra_content'),
+        FieldPanel('steps'),
+        StreamFieldPanel('dynamic_content'),
+        FieldPanel('additional_content'),
         InlinePanel('contacts', label='Contacts'),
-    ]
-
-    es_panels = [
-        # TODO: This field comes from Page and django-modeltranslation complains about it
-        # FieldPanel('title_es'),
-        FieldPanel('content_es'),
-    ]
-
-    vi_panels = [
-        # TODO: This field comes from Page and django-modeltranslation complains about it
-        # FieldPanel('title_vi'),
-        FieldPanel('content_vi'),
-    ]
-
-    hans_panels = [
-        # TODO: This field comes from Page and django-modeltranslation complains about it
-        # FieldPanel('title_zh_hans'),
-        FieldPanel('content_zh_hans'),
-    ]
-
-    hant_panels = [
-        # TODO: This field comes from Page and django-modeltranslation complains about it
-        # FieldPanel('title_zh_hant'),
-        FieldPanel('content_zh_hant'),
     ]
 
     edit_handler = TabbedInterface([
         ObjectList(content_panels, heading='Content'),
-        ObjectList(es_panels, heading='Spanish', classname='translation-tab'),
-        ObjectList(vi_panels, heading='Vietnamese', classname='translation-tab'),
-        ObjectList(hans_panels, heading='Simplified Chinese', classname='translation-tab'),
-        ObjectList(hant_panels, heading='Traditional Chinese', classname='translation-tab'),
         ObjectList(Page.promote_panels, heading='Promote'),
         # TODO: What should we do with the fields in settings?
         # ObjectList(Page.settings_panels, heading='Settings', classname='settings'),
@@ -101,27 +101,12 @@ class ServicePage(Page):
 
 @register_snippet
 class Topic(ClusterableModel):
+    slug = models.SlugField()
     text = models.CharField(max_length=DEFAULT_MAX_LENGTH)
     description = models.TextField()
 
-    api_fields = ['text']
-
     def __str__(self):
         return self.text
-
-
-@register_snippet
-class ApplicationBlock(ClusterableModel):
-    url = models.URLField()
-    description = models.TextField()
-
-    panels = [
-        FieldPanel('url'),
-        FieldPanel('description'),
-    ]
-
-    def __str__(self):
-        return self.description
 
 
 @register_snippet

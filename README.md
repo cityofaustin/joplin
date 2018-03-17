@@ -26,7 +26,7 @@ You can access the admin at `localhost:8000/admin` with the credentials `admin@a
 
 #### Access the API
 
-You can access the API at `localhost:8000/api`. You can see e.g. service pages by visiting `http://localhost:8000/api/pages/?format=json&type=base.ServicePage&fields=content,extra_content,topic(text),contacts(contact(name,email,phone,hours,location(name,street,city,state,zip,country)))`.
+You can access a GraphQL API at `localhost:8000/api/graphiql`
 
 
 ## Create migrations
@@ -38,13 +38,6 @@ docker exec --interactive --tty joplin python joplin/manage.py makemigrations
 docker exec --interactive --tty joplin python joplin/manage.py migrate
 ```
 
-## Dump fixture data
-
-To export data changed in the CMS, run the following command:
-
-```
-./scripts/dump-fixtures.sh
-```
 
 ## Create new app
 
