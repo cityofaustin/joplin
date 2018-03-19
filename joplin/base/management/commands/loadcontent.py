@@ -44,6 +44,23 @@ def load_topic(data):
     return topic
 
 
+def ulify(listy):
+    step_list_items = []
+    for item in listy:
+        if isinstance(item, list):
+            step_list_items.append(ulify(item))
+        else:
+            step_list_items.append(f'<li>{item}</li>')
+
+    result = textwrap.dedent(f'''
+        <ul>
+            {''.join(step_list_items)}
+        </ul>
+    ''').strip()
+
+    return result
+
+
 def load_service(data):
     print(f'-  Cleaning up data...\r', end='')
     slug = data['slug']
@@ -51,14 +68,8 @@ def load_service(data):
         data.pop(k, None)
 
     for key in data:
-        if not key.startswith('steps_'):
-            continue
-        step_list_items = [f'<li>{step}</li>' for step in data[key]]
-        data[key] = textwrap.dedent(f'''
-            <ul>
-                {''.join(step_list_items)}
-            </ul>
-        ''').strip()
+        if key.startswith('steps_'):
+            data[key] = ulify(data[key])
     data['steps'] = data['steps_en']
     data['additional_content'] = data['additional_content_en']
     print('✅')
