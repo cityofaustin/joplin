@@ -24,8 +24,8 @@ BASE_DIR = os.path.dirname(PROJECT_DIR)
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+
+DEBUG = bool(strtobool(os.environ.get('DEBUG', str(False))))
 MODELTRANSLATION_DEBUG = DEBUG
 USE_ANALYTICS = bool(strtobool(os.environ.get('USE_ANALYTICS', str(not DEBUG))))
 
@@ -127,12 +127,7 @@ SUPPORTED_LANGS = (
     'en',
     'es',
     'vi',
-    'zh-hans',
-    'zh-hant',
     'ar',
-    'ko',
-    'ur',
-    'my',
 )
 LANGUAGES = [lang for lang in global_settings.LANGUAGES if lang[0] in SUPPORTED_LANGS]
 
@@ -174,6 +169,7 @@ if DEBUG:
 
 WAGTAIL_SITE_NAME = 'joplin'
 WAGTAIL_AUTO_UPDATE_PREVIEW = True
+WAGTAILIMAGES_IMAGE_MODEL = 'base.TranslatedImage'
 
 # Base URL to use when referring to full URLs within the Wagtail admin backend -
 # e.g. in notification emails. Don't include '/admin' or a trailing slash

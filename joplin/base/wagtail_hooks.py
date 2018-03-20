@@ -5,7 +5,7 @@ from django.utils.html import format_html_join
 from wagtail.contrib.modeladmin.options import ModelAdmin, ModelAdminGroup, modeladmin_register
 from wagtail.wagtailcore import hooks
 
-from base.models import ApplicationBlock, Topic, Location, Contact
+from base.models import Topic, Location, Contact
 
 
 @hooks.register('insert_editor_css')
@@ -47,10 +47,6 @@ def before_edit_page(request, page):
     print(f'BeforeEditHook {request.user.email} is in groups {[group.name for group in request.user.groups.all()]}')
 
 
-class ApplicationBlockModelAdmin(ModelAdmin):
-    model = ApplicationBlock
-
-
 class LocationModelAdmin(ModelAdmin):
     model = Location
     search_fields = ('street',)
@@ -66,8 +62,8 @@ class ContactModelAdmin(ModelAdmin):
 
 
 class ReallyAwesomeGroup(ModelAdminGroup):
-    menu_label = 'Awesome Things'
-    items = (ApplicationBlockModelAdmin, LocationModelAdmin, TopicModelAdmin, ContactModelAdmin)
+    menu_label = 'Important Snippets'
+    items = (LocationModelAdmin, TopicModelAdmin, ContactModelAdmin)
 
 
 modeladmin_register(ReallyAwesomeGroup)

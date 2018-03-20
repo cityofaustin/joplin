@@ -1,14 +1,39 @@
-from modeltranslation.translator import translator, TranslationOptions
+from modeltranslation.translator import register, TranslationOptions
+from wagtail.wagtailcore.models import Page
+from wagtail.wagtailimages.models import Image
 
-from .models import ServicePage
+from .models import Topic, ServicePage, TranslatedImage
 
 
-class ServicePageTranslationOptions(TranslationOptions):
+@register(Image)
+class ImageTranslationOptions(TranslationOptions):
+    pass
+
+
+@register(TranslatedImage)
+class TranslatedImageTranslationOptions(TranslationOptions):
     fields = (
-        # TODO: This field comes from Page and django-modeltranslation complains about it
-        # 'title',
-        'content',
+        'title',
     )
 
 
-translator.register(ServicePage, ServicePageTranslationOptions)
+@register(Topic)
+class TopicTranslationOptions(TranslationOptions):
+    fields = (
+        'text',
+        'description',
+    )
+
+
+@register(Page)
+class PageTranslationOptions(TranslationOptions):
+    pass
+
+
+@register(ServicePage)
+class ServicePageTranslationOptions(TranslationOptions):
+    fields = (
+        'title',
+        'steps',
+        'additional_content',
+    )
