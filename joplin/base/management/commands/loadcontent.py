@@ -50,7 +50,7 @@ def ulify(listy):
         if isinstance(item, list):
             step_list_items.append(ulify(item))
         else:
-            step_list_items.append(f'<li>{item}</li>')
+            step_list_items.append(f'<li><p>{item}</p></li>')
 
     result = textwrap.dedent(f'''
         <ul>
