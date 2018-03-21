@@ -7,7 +7,7 @@ from django.core.management.base import BaseCommand
 from wagtail.wagtailcore.models import Page
 from yaml import load
 
-from base.models import TranslatedImage, Topic, ServicePage
+from base.models import TranslatedImage, Topic, Department, ServicePage
 
 
 def load_images(data):
@@ -42,6 +42,26 @@ def load_topic(data):
     print(f'{"✅  Created" if created else "⭐  Updated"} {topic.slug}')
 
     return topic
+
+
+def load_departments(data):
+    for department_data in data['departments']:
+        yield load_department(department_data)
+
+
+def load_department(data):
+    contact = data.pop('contact')
+
+    image_name = data.pop('image')
+    if image_name:
+        image_regex = f'original_images/{image_name}'
+        data['image'] = TranslatedImage.objects.get(file__startswith=image_regex)
+
+    department, created = Department.objects.update_or_create(slug=data['slug'], defaults=data)
+
+    print(f'{"✅  Created" if created else "⭐  Updated"} {department.slug}')
+
+    return department
 
 
 def ulify(listy):
@@ -118,6 +138,7 @@ class Command(BaseCommand):
             'images': load_images,
             'topics': load_topics,
             'services': load_service,
+            'departments': load_departments,
         }
         for filename in options['fixtures']:
             paths = []

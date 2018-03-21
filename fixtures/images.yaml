@@ -35,3 +35,9 @@ images:
         alt_text_es:
         alt_text_vi:
         alt_text_ar:
+    -
+        filename: fixtures/images/arr-department.jpg
+        alt_text_en: Austin Resource Recovery Truck
+        alt_text_es:
+        alt_text_vi:
+        alt_text_ar:
