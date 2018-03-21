@@ -1,6 +1,6 @@
-departments:
+contacts:
     -
-        name: 311 for Austin Resource Recovery
+        name: 311
         email: help@austintexas.gov
         phone:
             default: 311

@@ -7,7 +7,7 @@ from django.core.management.base import BaseCommand
 from wagtail.wagtailcore.models import Page
 from yaml import load
 
-from base.models import TranslatedImage, Topic, Department, ServicePage
+from base.models import TranslatedImage, Topic, Department, ServicePage, Location, Contact, ServicePageContact
 
 
 def load_images(data):
@@ -64,6 +64,36 @@ def load_department(data):
     return department
 
 
+def load_locations(data):
+    for location_data in data['locations']:
+        yield load_location(location_data)
+
+
+def load_location(data):
+    location, created = Location.objects.update_or_create(name=data['name'], defaults=data)
+
+    print(f'{"✅  Created" if created else "⭐  Updated"} {location.name}')
+
+    return location
+
+
+def load_contacts(data):
+    for contact_data in data['contacts']:
+        yield load_contact(contact_data)
+
+
+def load_contact(data):
+    data['location'] = Location.objects.get(name=data['location'])
+    # TODO: Remove this when we can serialize phone as an array
+    data['phone'] = '; '.join([f'{key}: {value}' for key, value in data['phone'].items()])
+
+    contact, created = Contact.objects.update_or_create(name=data['name'], defaults=data)
+
+    print(f'{"✅  Created" if created else "⭐  Updated"} {contact.name}')
+
+    return contact
+
+
 def ulify(listy):
     step_list_items = []
     for item in listy:
@@ -109,6 +139,11 @@ def load_service(data):
     data['image'] = TranslatedImage.objects.get(file__startswith=image_regex)
     print('✅')
 
+    print(f'-  Loading contacts...\r', end='')
+    contact = data.pop('contact')
+    contact = Contact.objects.get(name=contact)
+    print('✅')
+
     print(f'-  Loading child page "{slug}"...\r', end='')
     created = False
     try:
@@ -121,6 +156,10 @@ def load_service(data):
         created = True
 
     page.save_revision().publish()
+    print(f'{"✅  Created" if created else "⭐  Updated"}')
+
+    print(f'-  Loading service contacts...\r', end='')
+    _, created = ServicePageContact.objects.get_or_create(page=page, defaults={'contact': contact})
     print(f'{"✅  Created" if created else "⭐  Updated"}')
 
     yield page
@@ -139,6 +178,8 @@ class Command(BaseCommand):
             'topics': load_topics,
             'services': load_service,
             'departments': load_departments,
+            'locations': load_locations,
+            'contacts': load_contacts,
         }
         for filename in options['fixtures']:
             paths = []
