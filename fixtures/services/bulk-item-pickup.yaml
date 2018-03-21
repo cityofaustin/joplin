@@ -112,6 +112,10 @@ additional_content_ar: |
         <li>السيارات المركونة.</li>
     </ul>
 
+dynamic_content:
+    -
+        type: collection_schedule
+
 meta_title_en:
 meta_title_es: Prepárese para la recolección de artículos grandes al borde de la acera
 meta_title_vi: Chuẩn Bị cho Bốc Rác Khối Để Lề Đường

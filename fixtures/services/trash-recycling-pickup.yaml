@@ -51,6 +51,10 @@ additional_content_ar: |
     <h2>Holiday pickup days</h2>
     <p>If your curbside pickup day is on Thanksgiving Day, Christmas Day, or New Year's Day—or if it is after the holiday but in the same week—your collection will be one day later than your usual pickup day that week. If the holiday falls on a Sunday or Saturday, your pickup day will not change.</p>
 
+dynamic_content:
+    -
+        type: collection_schedule
+
 meta_title_en:
 meta_title_es: Busque su día de recolección de basura, reciclaje y compost
 meta_title_vi: Tìm Ngày Bốc Rác Thường, Rác Tái Chế, và Rác Phân Ủ Hữu Cơ của quý vị

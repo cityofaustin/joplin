@@ -1,4 +1,3 @@
-import os
 import textwrap
 from pathlib import Path
 
@@ -7,7 +6,7 @@ from django.core.management.base import BaseCommand
 from wagtail.wagtailcore.models import Page
 from yaml import load
 
-from base.models import TranslatedImage, Topic, Department, ServicePage, Location, Contact, ServicePageContact
+from base.models import TranslatedImage, Topic, Department, ServicePage, Location, Contact, ServicePageContact, Map
 
 
 def load_images(data):
@@ -144,6 +143,24 @@ def load_service(data):
     contact = Contact.objects.get(name=contact)
     print('✅')
 
+    ddata = data.pop('dynamic_content') or []
+    dynamic_content = []
+    for d in ddata:
+        content_type = d['type']
+        print(f'-  Loading dynamic content {content_type}...\r', end='')
+        if content_type == 'map':
+            location = Location.objects.get(name=d['location'])
+            content_map, created = Map.objects.get_or_create(description=d['description'], defaults={'location': location})
+            dynamic_content.append(('map_block', content_map))
+            print(f'{"✅  Created" if created else "⭐  Updated"}')
+        elif content_type == 'what_do_i_do_with':
+            dynamic_content.append(('what_do_i_do_with_block', None))
+            print('✅')
+        elif content_type == 'collection_schedule':
+            dynamic_content.append(('collection_schedule_block', None))
+            print('✅')
+    data['dynamic_content'] = dynamic_content
+
     print(f'-  Loading child page "{slug}"...\r', end='')
     created = False
     try:
@@ -203,11 +220,3 @@ class Command(BaseCommand):
                 list(loader(data))
 
                 print(f'{"=" * self.LINE_LENGTH}\n')
-
-        # for poll_id in options['poll_id']:
-        #     try:
-        #         poll = Poll.objects.get(pk=poll_id)
-        #     except Poll.DoesNotExist:
-        #         raise CommandError('Poll "%s" does not exist' % poll_id)
-
-        #     self.stdout.write(self.style.SUCCESS('Successfully closed poll "%s"' % poll_id))
