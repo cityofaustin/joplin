@@ -6,7 +6,7 @@ from django.core.management.base import BaseCommand
 from wagtail.wagtailcore.models import Page
 from yaml import load
 
-from base.models import TranslatedImage, Topic, Department, ServicePage, Location, Contact, ServicePageContact, Map, ContactDayAndDuration
+from base.models import TranslatedImage, Topic, Department, ServicePage, Location, Contact, ServicePageContact, DepartmentContact, Map, ContactDayAndDuration
 
 
 def load_images(data):
@@ -53,12 +53,19 @@ def load_department(data):
 
     image_name = data.pop('image')
     if image_name:
+        print(f'-  Loading image {image_name}...\r', end='')
         image_regex = f'original_images/{image_name}'
         data['image'] = TranslatedImage.objects.get(file__startswith=image_regex)
+        print('✅')
 
     department, created = Department.objects.update_or_create(slug=data['slug'], defaults=data)
-
     print(f'{"✅  Created" if created else "⭐  Updated"} {department.slug}')
+
+    if contact:
+        print(f'-  Loading department contacts {contact}...\r', end='')
+        contact = Contact.objects.get(name=contact)
+        _, created = DepartmentContact.objects.get_or_create(department=department, defaults={'contact': contact})
+        print(f'{"✅  Created" if created else "✔️  Fetched"}')
 
     return department
 
