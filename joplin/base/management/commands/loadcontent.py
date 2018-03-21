@@ -48,7 +48,7 @@ def ulify(listy):
     step_list_items = []
     for item in listy:
         if isinstance(item, list):
-            step_list_items.append(ulify(item))
+            step_list_items.append(f'<li>{ulify(item)}</li>')
         else:
             step_list_items.append(f'<li><p>{item}</p></li>')
 
