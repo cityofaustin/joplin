@@ -153,15 +153,6 @@ class Location(ClusterableModel):
         ], heading='Location'),
     ]
 
-    api_fields = [
-        'name',
-        'street',
-        'city',
-        'state',
-        'country',
-        'zip',
-    ]
-
     def __str__(self):
         return self.name
 
@@ -194,12 +185,6 @@ class DayAndDuration(ClusterableModel):
         FieldPanel('end_time'),
     ]
 
-    api_fields = [
-        'day_of_week',
-        'start_time',
-        'end_time',
-    ]
-
     def __str__(self):
         return f'{self.day_of_week} {self.start_time} - {self.end_time}'
 
@@ -210,14 +195,6 @@ class Contact(ClusterableModel):
     email = models.EmailField()
     phone = models.CharField(max_length=DEFAULT_MAX_LENGTH)
     location = models.ForeignKey(Location, null=True, blank=True, related_name='+')
-
-    api_fields = [
-        'name',
-        'email',
-        'phone',
-        'location',
-        'hours',
-    ]
 
     panels = [
         FieldPanel('name'),
@@ -245,10 +222,6 @@ class ServicePageContact(ClusterableModel):
 
     panels = [
         SnippetChooserPanel('contact'),
-    ]
-
-    api_fields = [
-        'contact',
     ]
 
     def __str__(self):

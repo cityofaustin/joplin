@@ -6,7 +6,7 @@ from django.core.management.base import BaseCommand
 from wagtail.wagtailcore.models import Page
 from yaml import load
 
-from base.models import TranslatedImage, Topic, Department, ServicePage, Location, Contact, ServicePageContact, Map
+from base.models import TranslatedImage, Topic, Department, ServicePage, Location, Contact, ServicePageContact, Map, ContactDayAndDuration
 
 
 def load_images(data):
@@ -83,12 +83,20 @@ def load_contacts(data):
 
 def load_contact(data):
     data['location'] = Location.objects.get(name=data['location'])
+    hours = data.pop('hours')
     # TODO: Remove this when we can serialize phone as an array
     data['phone'] = '; '.join([f'{key}: {value}' for key, value in data['phone'].items()])
 
     contact, created = Contact.objects.update_or_create(name=data['name'], defaults=data)
-
     print(f'{"✅  Created" if created else "⭐  Updated"} {contact.name}')
+
+    for day_of_week, duration in hours.items():
+        defaults = {
+            'start_time': duration['start'],
+            'end_time': duration['end'],
+        }
+        contact_hours, created = ContactDayAndDuration.objects.update_or_create(contact=contact, day_of_week=day_of_week.title(), defaults=defaults)
+        print(f'{"✅  Created" if created else "⭐  Updated"} {day_of_week} for {contact.name}')
 
     return contact
 
@@ -150,7 +158,7 @@ def load_service(data):
         print(f'-  Loading dynamic content {content_type}...\r', end='')
         if content_type == 'map':
             location = Location.objects.get(name=d['location'])
-            content_map, created = Map.objects.get_or_create(description=d['description'], defaults={'location': location})
+            content_map, created = Map.objects.update_or_create(description=d['description'], defaults={'location': location})
             dynamic_content.append(('map_block', content_map))
             print(f'{"✅  Created" if created else "⭐  Updated"}')
         elif content_type == 'what_do_i_do_with':
@@ -177,7 +185,7 @@ def load_service(data):
 
     print(f'-  Loading service contacts...\r', end='')
     _, created = ServicePageContact.objects.get_or_create(page=page, defaults={'contact': contact})
-    print(f'{"✅  Created" if created else "⭐  Updated"}')
+    print(f'{"✅  Created" if created else "✔️  Fetched"}')
 
     yield page
 
