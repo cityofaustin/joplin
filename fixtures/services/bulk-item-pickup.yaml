@@ -2,6 +2,7 @@ slug: bulk-item-pickup
 
 topic: recycling-trash-compost
 image: bulk-items
+contact: 311
 
 title_en: Get ready for curbside bulk item pickup
 title_es: Prepárese para la recolección de artículos grandes al borde de la acera
@@ -110,6 +111,10 @@ additional_content_ar: |
         <li>صندوق الاتصال الهاتفي</li>
         <li>السيارات المركونة.</li>
     </ul>
+
+dynamic_content:
+    -
+        type: collection_schedule
 
 meta_title_en:
 meta_title_es: Prepárese para la recolección de artículos grandes al borde de la acera

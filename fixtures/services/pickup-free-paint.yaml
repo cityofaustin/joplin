@@ -2,6 +2,7 @@ slug: pickup-free-paint
 
 topic: recycling-trash-compost
 image: paint
+contact: 311
 
 title_en: Pick up free paint and other household items
 title_es: Recoja pintura y otros artículos del hogar gratis
@@ -102,6 +103,12 @@ additional_content_ar: |
         <li></li>
         <li></li>
     </ul>
+
+dynamic_content:
+    -
+        type: map
+        description: Hazardous Waste Dropoff Center
+        location: Austin Recycle and Reuse Drop-off Center
 
 meta_title_en: Pick up free paint
 meta_title_es: Recoja pintura gratis

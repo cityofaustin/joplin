@@ -257,11 +257,10 @@ class ServicePageContact(ClusterableModel):
 
 @register_snippet
 class Department(ClusterableModel):
+    slug = models.SlugField()
     name = models.CharField(max_length=DEFAULT_MAX_LENGTH)
     mission = models.TextField()
-    image = models.ForeignKey(
-        'wagtailimages.Image', null=True, on_delete=models.SET_NULL, related_name='+'
-    )
+    image = models.ForeignKey(TranslatedImage, null=True, on_delete=models.SET_NULL, related_name='+')
 
     panels = [
         FieldPanel('name'),

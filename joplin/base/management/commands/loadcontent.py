@@ -1,4 +1,3 @@
-import os
 import textwrap
 from pathlib import Path
 
@@ -7,7 +6,7 @@ from django.core.management.base import BaseCommand
 from wagtail.wagtailcore.models import Page
 from yaml import load
 
-from base.models import TranslatedImage, Topic, ServicePage
+from base.models import TranslatedImage, Topic, Department, ServicePage, Location, Contact, ServicePageContact, Map
 
 
 def load_images(data):
@@ -44,11 +43,61 @@ def load_topic(data):
     return topic
 
 
+def load_departments(data):
+    for department_data in data['departments']:
+        yield load_department(department_data)
+
+
+def load_department(data):
+    contact = data.pop('contact')
+
+    image_name = data.pop('image')
+    if image_name:
+        image_regex = f'original_images/{image_name}'
+        data['image'] = TranslatedImage.objects.get(file__startswith=image_regex)
+
+    department, created = Department.objects.update_or_create(slug=data['slug'], defaults=data)
+
+    print(f'{"✅  Created" if created else "⭐  Updated"} {department.slug}')
+
+    return department
+
+
+def load_locations(data):
+    for location_data in data['locations']:
+        yield load_location(location_data)
+
+
+def load_location(data):
+    location, created = Location.objects.update_or_create(name=data['name'], defaults=data)
+
+    print(f'{"✅  Created" if created else "⭐  Updated"} {location.name}')
+
+    return location
+
+
+def load_contacts(data):
+    for contact_data in data['contacts']:
+        yield load_contact(contact_data)
+
+
+def load_contact(data):
+    data['location'] = Location.objects.get(name=data['location'])
+    # TODO: Remove this when we can serialize phone as an array
+    data['phone'] = '; '.join([f'{key}: {value}' for key, value in data['phone'].items()])
+
+    contact, created = Contact.objects.update_or_create(name=data['name'], defaults=data)
+
+    print(f'{"✅  Created" if created else "⭐  Updated"} {contact.name}')
+
+    return contact
+
+
 def ulify(listy):
     step_list_items = []
     for item in listy:
         if isinstance(item, list):
-            step_list_items.append(ulify(item))
+            step_list_items.append(f'<li>{ulify(item)}</li>')
         else:
             step_list_items.append(f'<li><p>{item}</p></li>')
 
@@ -89,6 +138,29 @@ def load_service(data):
     data['image'] = TranslatedImage.objects.get(file__startswith=image_regex)
     print('✅')
 
+    print(f'-  Loading contacts...\r', end='')
+    contact = data.pop('contact')
+    contact = Contact.objects.get(name=contact)
+    print('✅')
+
+    ddata = data.pop('dynamic_content') or []
+    dynamic_content = []
+    for d in ddata:
+        content_type = d['type']
+        print(f'-  Loading dynamic content {content_type}...\r', end='')
+        if content_type == 'map':
+            location = Location.objects.get(name=d['location'])
+            content_map, created = Map.objects.get_or_create(description=d['description'], defaults={'location': location})
+            dynamic_content.append(('map_block', content_map))
+            print(f'{"✅  Created" if created else "⭐  Updated"}')
+        elif content_type == 'what_do_i_do_with':
+            dynamic_content.append(('what_do_i_do_with_block', None))
+            print('✅')
+        elif content_type == 'collection_schedule':
+            dynamic_content.append(('collection_schedule_block', None))
+            print('✅')
+    data['dynamic_content'] = dynamic_content
+
     print(f'-  Loading child page "{slug}"...\r', end='')
     created = False
     try:
@@ -101,6 +173,10 @@ def load_service(data):
         created = True
 
     page.save_revision().publish()
+    print(f'{"✅  Created" if created else "⭐  Updated"}')
+
+    print(f'-  Loading service contacts...\r', end='')
+    _, created = ServicePageContact.objects.get_or_create(page=page, defaults={'contact': contact})
     print(f'{"✅  Created" if created else "⭐  Updated"}')
 
     yield page
@@ -118,6 +194,9 @@ class Command(BaseCommand):
             'images': load_images,
             'topics': load_topics,
             'services': load_service,
+            'departments': load_departments,
+            'locations': load_locations,
+            'contacts': load_contacts,
         }
         for filename in options['fixtures']:
             paths = []
@@ -141,11 +220,3 @@ class Command(BaseCommand):
                 list(loader(data))
 
                 print(f'{"=" * self.LINE_LENGTH}\n')
-
-        # for poll_id in options['poll_id']:
-        #     try:
-        #         poll = Poll.objects.get(pk=poll_id)
-        #     except Poll.DoesNotExist:
-        #         raise CommandError('Poll "%s" does not exist' % poll_id)
-
-        #     self.stdout.write(self.style.SUCCESS('Successfully closed poll "%s"' % poll_id))

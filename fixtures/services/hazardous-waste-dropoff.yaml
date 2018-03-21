@@ -2,6 +2,7 @@ slug: hazardous-waste-dropoff
 
 topic: recycling-trash-compost
 image: household-hazardous-waste
+contact: 311
 
 title_en: Drop off household hazardous waste and other recyclables
 title_es: Entregue sus desechos peligrosos del hogar y otros artículos reciclables
@@ -53,6 +54,14 @@ additional_content_ar: |
     <p>ضع الحاويات الصغيرة فى وضع عمودى في صناديق قوية. إذا كانت الحاوية تسرب، صُب حبيبات القطط الماصة في حاوية أكبر وَضَعْ الحاوية التي تسرب داخل الحاوية الأكبر. سوف تمتص الحبيبات الماصة السكب.</p>
     <p>لا تخلط العناصر. لن يتم قبول الأحمال الكبيرة للشاحنات أو المقطورة بعد الساعة 4:45 مساءً.</p>
     <p>الشركات ليست مؤهلة للتخلص من النفايات الخطرة. للحصول على معلومات حول كيفية تخلص الشركات من النفايات الخطرة، اتصل على الرقم 512-974-4336.</p>
+
+dynamic_content:
+    -
+        type: what_do_i_do_with
+    -
+        type: map
+        description: Hazardous Waste Dropoff Center
+        location: Austin Recycle and Reuse Drop-off Center
 
 meta_title_en:
 meta_title_es: Entregue sus desechos peligrosos del hogar y otros artículos reciclables

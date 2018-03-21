@@ -2,6 +2,7 @@ slug: compost-pickup
 
 topic: recycling-trash-compost
 image: curbside-compost
+contact: 311
 
 title_en: Get ready for curbside compost pickup
 title_es: Prepárese para la recolección de compost
@@ -77,6 +78,8 @@ additional_content_ar: |
 
     <h2>وفّر المال مع عربتك الخضراء</h2>
     <p>سيكون لديك أقل سلة قمامة حجما تتخلص منها كل أسبوع بعد وضع فضلات الطعام والورق المتسخ بالطعام في عربتك الخضراء. وهذا قد يسمح لك بتصغير حجم عربة القمامة إلى حجم أصغر وبأقل تكلفة. توفر Austin Resource Recovery أربعة أحجام لعربة النفايات - فأصغر عربة، تكلفتها أقل.</p>
+
+dynamic_content:
 
 meta_title_en:
 meta_title_es: Recolección de compost al borde de la acera

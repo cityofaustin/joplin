@@ -12,6 +12,9 @@ if [ "x$LOAD_DATA" = 'xon' ]; then
   python ./joplin/manage.py loadcontent \
         fixtures/images.yaml \
         fixtures/topics.yaml \
+        fixtures/locations.yaml \
+        fixtures/contacts.yaml \
+        fixtures/departments.yaml \
         fixtures/services
 fi
 
