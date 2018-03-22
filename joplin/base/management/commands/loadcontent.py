@@ -1,3 +1,4 @@
+import json
 import textwrap
 from pathlib import Path
 
@@ -91,8 +92,8 @@ def load_contacts(data):
 def load_contact(data):
     data['location'] = Location.objects.get(name=data['location'])
     hours = data.pop('hours')
-    # TODO: Remove this when we can serialize phone as an array
-    data['phone'] = '; '.join([f'{key}: {value}' for key, value in data['phone'].items()])
+    # TODO: Remove this when we can serialize phone as an array/object
+    data['phone'] = json.dumps(data['phone'])
 
     contact, created = Contact.objects.update_or_create(name=data['name'], defaults=data)
     print(f'{"✅  Created" if created else "⭐  Updated"} {contact.name}')
