@@ -10,19 +10,19 @@ contacts:
         hours:
             monday:
                 start: '09:00:00'
-                end: '18:00:00'
+                end: '17:00:00'
             tuesday:
                 start: '09:00:00'
-                end: '18:00:00'
+                end: '17:00:00'
             wednesday:
                 start: '09:00:00'
-                end: '18:00:00'
+                end: '17:00:00'
             thursday:
                 start: '09:00:00'
-                end: '18:00:00'
+                end: '17:00:00'
             friday:
                 start: '09:00:00'
-                end: '18:00:00'
+                end: '17:00:00'
             saturday:
-                start: '09:00:00'
-                end: '18:00:00'
+                start: '07:00:00'
+                end: '12:00:00'
