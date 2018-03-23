@@ -60,7 +60,10 @@ dynamic_content:
         type: what_do_i_do_with
     -
         type: map
-        description: Hazardous Waste Dropoff Center
+        description_en: Hazardous Waste Dropoff Center
+        description_es: Visite la Tienda de Reúso en el Centro de Reciclaje y Reúso
+        description_vi: Ghé thăm Cửa Hàng Tái Dụng tại Trung Tâm Tái Chế & Tái Dụng
+        description_ar: تفضل بزيارة مستودع إعادة الاستخدام في مركز إعادة التدوير وإعادة الاستخدام
         location: Recycle & Reuse Drop-off Center
 
 meta_title_en:

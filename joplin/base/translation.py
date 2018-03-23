@@ -2,7 +2,7 @@ from modeltranslation.translator import register, TranslationOptions
 from wagtail.wagtailcore.models import Page
 from wagtail.wagtailimages.models import Image
 
-from .models import Topic, ServicePage, TranslatedImage, Department
+from .models import Topic, ServicePage, TranslatedImage, Department, Map
 
 
 @register(Image)
@@ -30,6 +30,13 @@ class DepartmentTranslationOptions(TranslationOptions):
     fields = (
         'name',
         'mission',
+    )
+
+
+@register(Map)
+class MapTranslationOptions(TranslationOptions):
+    fields = (
+        'description',
     )
 
 
