@@ -6,7 +6,7 @@ contacts:
             default: 512-974-2000
             n11: 311
             tty: 512-972-9848
-        location: Austin Recycle and Reuse Drop-off Center
+        location: Recycle & Reuse Drop-off Center
         hours:
             monday:
                 start: '09:00:00'
