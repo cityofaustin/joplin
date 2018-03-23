@@ -3,9 +3,9 @@ contacts:
         name: 311
         email: help@austintexas.gov
         phone:
-            default: 311
-            out-of-area: 512-974-2000
-            tdd: 512-972-9848
+            default: 512-974-2000
+            n11: 311
+            tty: 512-972-9848
         location: Recycle & Reuse Drop-off Center
         hours:
             monday:
