@@ -66,6 +66,7 @@ class ServicePage(Page):
             ('map_block', custom_blocks.SnippetChooserBlockWithAPIGoodness('base.Map', icon='site')),
             ('what_do_i_do_with_block', custom_blocks.WhatDoIDoWithBlock()),
             ('collection_schedule_block', custom_blocks.CollectionScheduleBlock()),
+            ('recollect_block', custom_blocks.RecollectBlock()),
         ],
         verbose_name='Add any forms, maps, apps, or content that will help the resident use the service',
     )
