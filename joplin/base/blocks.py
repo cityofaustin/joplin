@@ -19,3 +19,10 @@ class CollectionScheduleBlock(blocks.StaticBlock):
         icon = 'bin'
         label = 'Collection Schedule'
         admin_text = label
+
+
+class RecollectBlock(blocks.StaticBlock):
+    class Meta:
+        icon = 'bin'
+        label = 'Recollect'
+        admin_text = label
