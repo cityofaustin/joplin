@@ -117,7 +117,7 @@ additional_content_ar: |
 
 dynamic_content:
     -
-        type: recollect
+        type: collection_schedule
 
 meta_title_en:
 meta_title_es: Prepárese para la recolección de artículos grandes al borde de la acera
