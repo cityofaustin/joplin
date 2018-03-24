@@ -118,8 +118,13 @@ class Map(ClusterableModel):
         return self.description
 
     def serializable_data(self):
-        data = super().serializable_data()
-        data['location'] = self.location.serializable_data()
+        data = {
+            'location': self.location.serializable_data(),
+            'description': self.description,
+        }
+
+        data['location'].pop('pk')
+
         return data
 
 

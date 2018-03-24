@@ -113,7 +113,7 @@ def ulify(listy):
     step_list_items = []
     for item in listy:
         if isinstance(item, list):
-            step_list_items.append(f'<li>{ulify(item)}</li>')
+            step_list_items.append(ulify(item))
         else:
             step_list_items.append(f'<li><p>{item}</p></li>')
 
@@ -165,8 +165,9 @@ def load_service(data):
         content_type = d['type']
         print(f'-  Loading dynamic content {content_type}...\r', end='')
         if content_type == 'map':
-            location = Location.objects.get(name=d['location'])
-            content_map, created = Map.objects.update_or_create(description=d['description'], defaults={'location': location})
+            defaults = {k: v for k, v in d.items() if k.startswith('description')}
+            defaults['location'] = Location.objects.get(name=d['location'])
+            content_map, created = Map.objects.update_or_create(description_en=d['description_en'], defaults=defaults)
             dynamic_content.append(('map_block', content_map))
             print(f'{"✅  Created" if created else "⭐  Updated"}')
         elif content_type == 'what_do_i_do_with':

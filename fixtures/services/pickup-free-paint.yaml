@@ -59,10 +59,11 @@ additional_content_es: |
         <li>Productos de limpieza</li>
         <li>Químicos para el hogar</li>
         <li>Fluidos de automóvil</li>
-        <li>Mantillo orgánico (mulch)</li>
-        <li>El mantillo orgánico lo tiene que empacar usted mismo.</li>
-        <li>Traiga una horqueta o pala, guantes de trabajo y recipientes.</li>
+        <li>Mantillo orgánico (mulch)*</li>
     </ul>
+
+    <p>*El mantillo orgánico lo tiene que empacar usted mismo.</p>
+    <p>Traiga una horqueta o pala, guantes de trabajo y recipientes.</p>
 additional_content_vi: |
     <h2>Tìm hiểu về sơn Austin Reblend</h2>
     <p>Austin ReBlend là một sơn miễn phí, 100% sơn ánh mờ được làm từ sơn bỏ ở Trung Tâm Bỏ Đồ Tái Dụng & Tái Chế. Sơn được kiểm tra để đảm bảo chất lượng, được pha trộn lại thành 3 màu và cung cấp trong các thùng đựng 3.5 ga-lông.  Các màu hiện có bao gồm:</p>
@@ -79,10 +80,11 @@ additional_content_vi: |
         <li>Các sản phẩm tẩy rửa</li>
         <li>Các hóa chất dùng cho việc nhà</li>
         <li>Các dung dịch dùng cho xe hơi</li>
-        <li>Bổi che phủ</li>
-        <li>Quý vị phải tự bê lấy bổi che phủ.</li>
-        <li>Mang theo cây xỉa hoặc xẻng, găng tay bảo hộ, và đồ đựng.</li>
+        <li>Bổi che phủ*</li>
     </ul>
+
+    <p>*Quý vị phải tự bê lấy bổi che phủ.</p>
+    <p>Mang theo cây xỉa hoặc xẻng, găng tay bảo hộ, và đồ đựng.</p>
 additional_content_ar: |
     <h2></h2>
     <p></p>
@@ -107,7 +109,10 @@ additional_content_ar: |
 dynamic_content:
     -
         type: map
-        description: Hazardous Waste Dropoff Center
+        description_en: Hazardous Waste Dropoff Center
+        description_es: Visite la Tienda de Reúso en el Centro de Reciclaje y Reúso
+        description_vi: Ghé thăm Cửa Hàng Tái Dụng tại Trung Tâm Tái Chế & Tái Dụng
+        description_ar: تفضل بزيارة مستودع إعادة الاستخدام في مركز إعادة التدوير وإعادة الاستخدام
         location: Recycle & Reuse Drop-off Center
 
 meta_title_en: Pick up free paint
