@@ -110,6 +110,15 @@ class Topic(ClusterableModel):
     def __str__(self):
         return self.text
 
+@register_snippet
+class Theme(ClusterableModel):
+    slug = models.SlugField()
+    text = models.CharField(max_length=DEFAULT_MAX_LENGTH)
+    description = models.TextField()
+
+    def __str__(self):
+        return self.text
+
 
 @register_snippet
 class Map(ClusterableModel):

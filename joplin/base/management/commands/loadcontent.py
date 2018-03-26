@@ -31,6 +31,18 @@ def load_image(data):
     return image
 
 
+def load_themes(data):
+    for theme_data in data['themes']:
+        yield load_theme(theme_data)
+
+def load_theme(data):
+    theme, created = Topic.objects.update_or_create(slug=data['slug'], defaults=data)
+
+    print(f'{"✅  Created" if created else "⭐  Updated"} {theme.slug}')
+
+    return theme
+    
+
 def load_topics(data):
     for topic_data in data['topics']:
         yield load_topic(topic_data)
