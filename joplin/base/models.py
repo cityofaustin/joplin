@@ -105,6 +105,7 @@ class Topic(ClusterableModel):
     slug = models.SlugField()
     text = models.CharField(max_length=DEFAULT_MAX_LENGTH)
     description = models.TextField()
+    call_to_action = models.TextField(blank=True)
 
     def __str__(self):
         return self.text

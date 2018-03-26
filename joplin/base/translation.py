@@ -22,6 +22,7 @@ class TopicTranslationOptions(TranslationOptions):
     fields = (
         'text',
         'description',
+        'call_to_action',
     )
 
 
