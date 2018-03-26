@@ -170,11 +170,8 @@ def load_service(data):
             content_map, created = Map.objects.update_or_create(description_en=d['description_en'], defaults=defaults)
             dynamic_content.append(('map_block', content_map))
             print(f'{"✅  Created" if created else "⭐  Updated"}')
-        elif content_type == 'what_do_i_do_with':
-            dynamic_content.append(('what_do_i_do_with_block', None))
-            print('✅')
-        elif content_type == 'collection_schedule':
-            dynamic_content.append(('collection_schedule_block', None))
+        else:
+            dynamic_content.append((f'{content_type}_block', None))
             print('✅')
     data['dynamic_content'] = dynamic_content
 
