@@ -36,12 +36,12 @@ def load_themes(data):
         yield load_theme(theme_data)
 
 def load_theme(data):
-    theme, created = Topic.objects.update_or_create(slug=data['slug'], defaults=data)
+    theme, created = Theme.objects.update_or_create(slug=data['slug'], defaults=data)
 
     print(f'{"✅  Created" if created else "⭐  Updated"} {theme.slug}')
 
     return theme
-    
+
 
 def load_topics(data):
     for topic_data in data['topics']:
@@ -218,6 +218,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         loaders = {
             'images': load_images,
+            'themes': load_themes,
             'topics': load_topics,
             'services': load_service,
             'departments': load_departments,
