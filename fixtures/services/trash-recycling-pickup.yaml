@@ -45,11 +45,11 @@ additional_content_vi: |
     <h2>Bốc rác cho các ngày nghỉ lễ</h2>
     <p>Nếu ngày bốc rác của quý vị rơi vào ngày Lễ Tạ Ỏn, ngày Lễ Giáng Sinh, hoặc ngày Đầu Năm - hoặc sau ngày nghỉ lễ nhưng vẫn trong tuần đó - thì ngày thu rác của quý vị sẽ là một ngày muộn hơn so với lịch bốc rác thường lệ của mình trong tuần đó. Nếu ngày nghỉ lễ rơi vào Thứ Bảy hoặc Chủ Nhật, ngày bốc rác của quý vị sẽ không thay đổi.</p>
 additional_content_ar: |
-    <h2>Trash, recycling, and compost pickup</h2>
-    <p>Every week, we will pick up your trash, compost, and yard trimmings. Every other week, we will pick up recycling, clothing, and housewares. All curbside pick-ups happen on the same day of the week unless it is a holiday.</p>
+    <h2>جمع القمامة والمواد التي يُعاد تدويرها والقابلة للتسميد</h2>
+    <p>كل أسبوع، سوف نجمع القمامة والمواد القابلة للتسميد ومخلفات الحدائق التي لديك. كل أسبوعين، سوف نجمع المواد التي يُعاد تدويرها والملابس والأدوات المنزلية. جميع عمليات جمع النفايات على الرصيف تتم في نفس اليوم من الأسبوع إلا إذا كان هذا اليوم عطلة.</p>
 
-    <h2>Holiday pickup days</h2>
-    <p>If your curbside pickup day is on Thanksgiving Day, Christmas Day, or New Year's Day—or if it is after the holiday but in the same week—your collection will be one day later than your usual pickup day that week. If the holiday falls on a Sunday or Saturday, your pickup day will not change.</p>
+    <h2>أيام جمع النفايات إذا وافق عطلة</h2>
+    <p>إذا وافق يوم جمع النفايات على جانب الرصيف عطلة عيد الشكر أو عيد الميلاد أو يوم رأس السنة الميلادية، أو إذا كان بعد العطلة ولكن في نفس الأسبوع، سوف تؤجل عملية جمع النفايات خاصتك في يوم آخر غير يوم الجمع المعتاد في ذلك الأسبوع. إذا وافق يوم العطلة يوم الأحد أو السبت، لن يتغير يوم جمع النفايات خاصتك.</p>
 
 dynamic_content:
     -
