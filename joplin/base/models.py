@@ -109,6 +109,7 @@ class Topic(ClusterableModel):
     theme = models.ForeignKey(
         'base.Theme',
         on_delete=models.PROTECT,
+        related_name='topics',
     )
 
     def __str__(self):
