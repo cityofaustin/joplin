@@ -8,7 +8,7 @@ from graphene.types import Scalar
 from wagtail.wagtailcore.fields import StreamField
 from wagtail.wagtailcore.models import Page
 
-from base.models import TranslatedImage, ServicePage, Topic, Contact, ServicePageContact, Location, ContactDayAndDuration, Department, DepartmentContact
+from base.models import TranslatedImage, ServicePage, Theme, Topic, Contact, ServicePageContact, Location, ContactDayAndDuration, Department, DepartmentContact
 
 
 class StreamFieldType(Scalar):
@@ -22,10 +22,17 @@ def convert_stream_field(field, registry=None):
     return StreamFieldType(description=field.help_text, required=not field.null)
 
 
+class ThemeNode(DjangoObjectType):
+    class Meta:
+        model = Theme
+        filter_fields = ['id', 'slug', 'text']
+        interfaces = [graphene.Node]
+
+
 class TopicNode(DjangoObjectType):
     class Meta:
         model = Topic
-        filter_fields = ['id', 'text']
+        filter_fields = ['id', 'slug', 'text']
         interfaces = [graphene.Node]
 
 
@@ -93,7 +100,7 @@ class ServicePageNode(DjangoObjectType):
 
     class Meta:
         model = ServicePage
-        filter_fields = ['id', 'slug', 'topic', 'topic__text']
+        filter_fields = ['id', 'slug', 'topic', 'topic__slug']
         interfaces = [graphene.Node]
 
 
@@ -125,6 +132,7 @@ class Query(graphene.ObjectType):
     service_page = graphene.Field(ServicePageNode, id=graphene.ID(), pk=graphene.Int(), slug=graphene.String(), show_preview=graphene.Boolean(default_value=False), language=Language())
     all_service_pages = DjangoFilterConnectionField(ServicePageNode)
 
+    all_themes = DjangoFilterConnectionField(ThemeNode)
     all_topics = DjangoFilterConnectionField(TopicNode)
 
     all_departments = DjangoFilterConnectionField(DepartmentNode)
