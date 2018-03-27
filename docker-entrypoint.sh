@@ -11,6 +11,7 @@ if [ "x$LOAD_DATA" = 'xon' ]; then
   echo "Loading data..."
   python ./joplin/manage.py loadcontent \
         fixtures/images.yaml \
+        fixtures/themes.yaml \
         fixtures/topics.yaml \
         fixtures/locations.yaml \
         fixtures/contacts.yaml \
