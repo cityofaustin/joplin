@@ -38,6 +38,14 @@ docker exec --interactive --tty joplin python joplin/manage.py makemigrations
 docker exec --interactive --tty joplin python joplin/manage.py migrate
 ```
 
+## Update database from yaml file
+
+As you make edits to yamls files, you will need to run the following command while the server is running:
+
+```
+docker exec --interactive --tty python ./joplin/manage.py loadcontent
+```
+
 
 ## Create new app
 

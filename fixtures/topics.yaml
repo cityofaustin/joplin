@@ -1,11 +1,556 @@
 topics:
     -
+        slug: building-permits
+        theme: permits-tickets
+        text_en: Building permits
+        text_es:
+        text_vi:
+        text_ar:
+        description_en:
+        description_es:
+        description_vi:
+        description_ar:
+        call_to_action_en:
+        call_to_action_es:
+        call_to_action_vi:
+        call_to_action_ar:
+    -
+        slug: business-permits-licenses
+        theme: permits-tickets
+        text_en: Business permits & licenses
+        text_es:
+        text_vi:
+        text_ar:
+        description_en:
+        description_es:
+        description_vi:
+        description_ar:
+        call_to_action_en:
+        call_to_action_es:
+        call_to_action_vi:
+        call_to_action_ar:
+    -
+        slug: event-permits
+        theme: permits-tickets
+        text_en: Event permits
+        text_es:
+        text_vi:
+        text_ar:
+        description_en:
+        description_es:
+        description_vi:
+        description_ar:
+        call_to_action_en:
+        call_to_action_es:
+        call_to_action_vi:
+        call_to_action_ar:
+    -
+        slug: pay-tickets
+        theme: permits-tickets
+        text_en: Pay tickets
+        text_es:
+        text_vi:
+        text_ar:
+        description_en:
+        description_es:
+        description_vi:
+        description_ar:
+        call_to_action_en:
+        call_to_action_es:
+        call_to_action_vi:
+        call_to_action_ar:
+    -
+        slug: pay-utility-bills
+        theme: housing-utilities
+        text_en: Pay utility bills
+        text_es:
+        text_vi:
+        text_ar:
+        description_en:
+        description_es:
+        description_vi:
+        description_ar:
+        call_to_action_en:
+        call_to_action_es:
+        call_to_action_vi:
+        call_to_action_ar:
+    -
+        slug: water-electric-service
+        theme: housing-utilities
+        text_en: Water & electric service
+        text_es:
+        text_vi:
+        text_ar:
+        description_en:
+        description_es:
+        description_vi:
+        description_ar:
+        call_to_action_en:
+        call_to_action_es:
+        call_to_action_vi:
+        call_to_action_ar:
+    -
         slug: recycling-trash-compost
-        text_en: Check out recycling, trash, and compost services
-        text_es: Vea los servicios de reciclaje, basura y compostaje
-        text_vi: Kiểm điểm các dịch vụ về tái chế, rác, và phân ủ.
-        text_ar: الاطلاع على خدمات إعادة التدوير والنفايات والسماد
+        theme: housing-utilities
+        text_en: Recycling, trash, and compost
+        text_es: Reciclaje, basura y compostaje
+        text_vi: Tái chế, rác, và phân ủ
+        text_ar: إعادة التدوير والنفايات والسماد
         description_en: The City of Austin provides hundreds of services to residents to help them manage things like recycling, trash, energy, and water. This is a short list of services that will grow over time.
         description_es:
         description_vi:
         description_ar:
+        call_to_action_en: Check out recycling, trash, and compost services
+        call_to_action_es: Vea los servicios de reciclaje, basura y compostaje
+        call_to_action_vi: Kiểm điểm các dịch vụ về tái chế, rác, và phân ủ.
+        call_to_action_ar: الاطلاع على خدمات إعادة التدوير والنفايات والسماد
+    -
+        slug: housing-assistance
+        theme: housing-utilities
+        text_en: Housing assistance
+        text_es:
+        text_vi:
+        text_ar:
+        description_en:
+        description_es:
+        description_vi:
+        description_ar:
+        call_to_action_en:
+        call_to_action_es:
+        call_to_action_vi:
+        call_to_action_ar:
+    -
+        slug: pet-adoption
+        theme: pets
+        text_en: Pet adoption
+        text_es:
+        text_vi:
+        text_ar:
+        description_en:
+        description_es:
+        description_vi:
+        description_ar:
+        call_to_action_en:
+        call_to_action_es:
+        call_to_action_vi:
+        call_to_action_ar:
+    -
+        slug: foster-animal
+        theme: pets
+        text_en: Foster an animal
+        text_es:
+        text_vi:
+        text_ar:
+        description_en:
+        description_es:
+        description_vi:
+        description_ar:
+        call_to_action_en:
+        call_to_action_es:
+        call_to_action_vi:
+        call_to_action_ar:
+    -
+        slug: report-loose-animal
+        theme: pets
+        text_en: Report a loose animal
+        text_es:
+        text_vi:
+        text_ar:
+        description_en:
+        description_es:
+        description_vi:
+        description_ar:
+        call_to_action_en:
+        call_to_action_es:
+        call_to_action_vi:
+        call_to_action_ar:
+    -
+        slug: lost-found-pets
+        theme: pets
+        text_en: Lots & found pets
+        text_es:
+        text_vi:
+        text_ar:
+        description_en:
+        description_es:
+        description_vi:
+        description_ar:
+        call_to_action_en:
+        call_to_action_es:
+        call_to_action_vi:
+        call_to_action_ar:
+    -
+        slug: birth-certificates
+        theme: health-safety
+        text_en: Birth certificates
+        text_es:
+        text_vi:
+        text_ar:
+        description_en:
+        description_es:
+        description_vi:
+        description_ar:
+        call_to_action_en:
+        call_to_action_es:
+        call_to_action_vi:
+        call_to_action_ar:
+    -
+        slug: healthcare-prevention
+        theme: health-safety
+        text_en: Healthcare & prevention
+        text_es:
+        text_vi:
+        text_ar:
+        description_en:
+        description_es:
+        description_vi:
+        description_ar:
+        call_to_action_en:
+        call_to_action_es:
+        call_to_action_vi:
+        call_to_action_ar:
+    -
+        slug: find-childcare
+        theme: health-safety
+        text_en: Find childcare
+        text_es:
+        text_vi:
+        text_ar:
+        description_en:
+        description_es:
+        description_vi:
+        description_ar:
+        call_to_action_en:
+        call_to_action_es:
+        call_to_action_vi:
+        call_to_action_ar:
+    -
+        slug: child-senior-safety
+        theme: health-safety
+        text_en: Child & senior safety
+        text_es:
+        text_vi:
+        text_ar:
+        description_en:
+        description_es:
+        description_vi:
+        description_ar:
+        call_to_action_en:
+        call_to_action_es:
+        call_to_action_vi:
+        call_to_action_ar:
+    -
+        slug: disaster-safety-relief
+        theme: health-safety
+        text_en: Disaster safety & relief
+        text_es:
+        text_vi:
+        text_ar:
+        description_en:
+        description_es:
+        description_vi:
+        description_ar:
+        call_to_action_en:
+        call_to_action_es:
+        call_to_action_vi:
+        call_to_action_ar:
+    -
+        slug: police-reports-records
+        theme: health-safety
+        text_en: Police reports & records
+        text_es:
+        text_vi:
+        text_ar:
+        description_en:
+        description_es:
+        description_vi:
+        description_ar:
+        call_to_action_en:
+        call_to_action_es:
+        call_to_action_vi:
+        call_to_action_ar:
+    -
+        slug: events-classes
+        theme: explore-visit
+        text_en: Events & classes
+        text_es:
+        text_vi:
+        text_ar:
+        description_en:
+        description_es:
+        description_vi:
+        description_ar:
+        call_to_action_en:
+        call_to_action_es:
+        call_to_action_vi:
+        call_to_action_ar:
+    -
+        slug: hike-bike-swim-play
+        theme: explore-visit
+        text_en: Hike, bike, swim, & play
+        text_es:
+        text_vi:
+        text_ar:
+        description_en:
+        description_es:
+        description_vi:
+        description_ar:
+        call_to_action_en:
+        call_to_action_es:
+        call_to_action_vi:
+        call_to_action_ar:
+    -
+        slug: arts-culture
+        theme: explore-visit
+        text_en: Arts & culture
+        text_es:
+        text_vi:
+        text_ar:
+        description_en:
+        description_es:
+        description_vi:
+        description_ar:
+        call_to_action_en:
+        call_to_action_es:
+        call_to_action_vi:
+        call_to_action_ar:
+    -
+        slug: libraries
+        theme: explore-visit
+        text_en: Libraries
+        text_es:
+        text_vi:
+        text_ar:
+        description_en:
+        description_es:
+        description_vi:
+        description_ar:
+        call_to_action_en:
+        call_to_action_es:
+        call_to_action_vi:
+        call_to_action_ar:
+    -
+        slug: transportation-parking
+        theme: explore-visit
+        text_en: Transportation & parking
+        text_es:
+        text_vi:
+        text_ar:
+        description_en:
+        description_es:
+        description_vi:
+        description_ar:
+        call_to_action_en:
+        call_to_action_es:
+        call_to_action_vi:
+        call_to_action_ar:
+    -
+        slug: airport
+        theme: explore-visit
+        text_en: Airport
+        text_es:
+        text_vi:
+        text_ar:
+        description_en:
+        description_es:
+        description_vi:
+        description_ar:
+        call_to_action_en:
+        call_to_action_es:
+        call_to_action_vi:
+        call_to_action_ar:
+    -
+        slug: departments
+        theme: government-business
+        text_en: Departments
+        text_es:
+        text_vi:
+        text_ar:
+        description_en:
+        description_es:
+        description_vi:
+        description_ar:
+        call_to_action_en:
+        call_to_action_es:
+        call_to_action_vi:
+        call_to_action_ar:
+    -
+        slug: court-dates
+        theme: government-business
+        text_en: Court dates & times
+        text_es:
+        text_vi:
+        text_ar:
+        description_en:
+        description_es:
+        description_vi:
+        description_ar:
+        call_to_action_en:
+        call_to_action_es:
+        call_to_action_vi:
+        call_to_action_ar:
+    -
+        slug: business-development
+        theme: government-business
+        text_en: Business development
+        text_es:
+        text_vi:
+        text_ar:
+        description_en:
+        description_es:
+        description_vi:
+        description_ar:
+        call_to_action_en:
+        call_to_action_es:
+        call_to_action_vi:
+        call_to_action_ar:
+    -
+        slug: city-code
+        theme: government-business
+        text_en: City code & ordinance
+        text_es:
+        text_vi:
+        text_ar:
+        description_en:
+        description_es:
+        description_vi:
+        description_ar:
+        call_to_action_en:
+        call_to_action_es:
+        call_to_action_vi:
+        call_to_action_ar:
+    -
+        slug: budget-performance-open-records
+        theme: government-business
+        text_en: Budget, performance, & open records
+        text_es:
+        text_vi:
+        text_ar:
+        description_en:
+        description_es:
+        description_vi:
+        description_ar:
+        call_to_action_en:
+        call_to_action_es:
+        call_to_action_vi:
+        call_to_action_ar:
+    -
+        slug: funding-grants-rebates
+        theme: government-business
+        text_en: Fudning, grants, & rebates
+        text_es:
+        text_vi:
+        text_ar:
+        description_en:
+        description_es:
+        description_vi:
+        description_ar:
+        call_to_action_en:
+        call_to_action_es:
+        call_to_action_vi:
+        call_to_action_ar:
+    -
+        slug: resident-participation
+        theme: government-business
+        text_en: Resident participation
+        text_es:
+        text_vi:
+        text_ar:
+        description_en:
+        description_es:
+        description_vi:
+        description_ar:
+        call_to_action_en:
+        call_to_action_es:
+        call_to_action_vi:
+        call_to_action_ar:
+    -
+        slug: mayor-council
+        theme: government-business
+        text_en: Mayor & Council
+        text_es:
+        text_vi:
+        text_ar:
+        description_en:
+        description_es:
+        description_vi:
+        description_ar:
+        call_to_action_en:
+        call_to_action_es:
+        call_to_action_vi:
+        call_to_action_ar:
+    -
+        slug: job-titles-pay
+        theme: jobs
+        text_en: City job titles & pay
+        text_es:
+        text_vi:
+        text_ar:
+        description_en:
+        description_es:
+        description_vi:
+        description_ar:
+        call_to_action_en:
+        call_to_action_es:
+        call_to_action_vi:
+        call_to_action_ar:
+    -
+        slug: benefits
+        theme: jobs
+        text_en: City benefits
+        text_es:
+        text_vi:
+        text_ar:
+        description_en:
+        description_es:
+        description_vi:
+        description_ar:
+        call_to_action_en:
+        call_to_action_es:
+        call_to_action_vi:
+        call_to_action_ar:
+    -
+        slug: rando-job-1
+        theme: jobs
+        text_en: '[Job type 1]'
+        text_es:
+        text_vi:
+        text_ar:
+        description_en:
+        description_es:
+        description_vi:
+        description_ar:
+        call_to_action_en:
+        call_to_action_es:
+        call_to_action_vi:
+        call_to_action_ar:
+    -
+        slug: rando-job-2
+        theme: jobs
+        text_en:  '[Job type 2]'
+        text_es:
+        text_vi:
+        text_ar:
+        description_en:
+        description_es:
+        description_vi:
+        description_ar:
+        call_to_action_en:
+        call_to_action_es:
+        call_to_action_vi:
+        call_to_action_ar:
+    -
+        slug: all-jobs
+        theme: jobs
+        text_en: All jobs
+        text_es:
+        text_vi:
+        text_ar:
+        description_en:
+        description_es:
+        description_vi:
+        description_ar:
+        call_to_action_en:
+        call_to_action_es:
+        call_to_action_vi:
+        call_to_action_ar:

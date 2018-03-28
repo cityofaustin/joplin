@@ -1,0 +1,71 @@
+themes:
+    -
+        slug: permits-tickets
+        text_en: Permits & Tickets
+        text_es: Permisos y multas
+        text_vi: Giấy phép & Giấy phạt
+        text_ar: التصاريح والتذاكر
+        description_en:
+        description_es:
+        description_vi:
+        description_ar:
+    -
+        slug: housing-utilities
+        text_en: Housing & Utilities
+        text_es: Vivienda y servicios públicos
+        text_vi: Nhà ở & Tiện ích
+        text_ar: الإسكان والمنافع
+        description_en: Find the resources to keep your home, apartment, or condo running smoothly.
+        description_es:
+        description_vi:
+        description_ar:
+    -
+        slug: pets
+        text_en: Pets
+        text_es: Mascotas
+        text_vi: Thú vật nuôi
+        text_ar: لحيوانات الأليفة
+        description_en:
+        description_es:
+        description_vi:
+        description_ar:
+    -
+        slug: health-safety
+        text_en: Health & Safety
+        text_es: Salud y seguridad
+        text_vi: Sức khỏe $ An toàn
+        text_ar: الصحة والسلامة
+        description_en:
+        description_es:
+        description_vi:
+        description_ar:
+    -
+        slug: explore-visit
+        text_en: Explore & Visit
+        text_es: Explore y visite
+        text_vi: Khám phá $ Thăm viếng
+        text_ar: الاستكشاف والزيارة
+        description_en:
+        description_es:
+        description_vi:
+        description_ar:
+    -
+        slug: government-business
+        text_en: Government & Business
+        text_es: Gobierno y negocios
+        text_vi: Chính phủ $ Doanh nghiệp
+        text_ar: الحكومة والأعمال
+        description_en:
+        description_es:
+        description_vi:
+        description_ar:
+    -
+        slug: jobs
+        text_en: Jobs
+        text_es: Empleos
+        text_vi: Công việc
+        text_ar: الوظائف
+        description_en:
+        description_es:
+        description_vi:
+        description_ar:
