@@ -3,6 +3,8 @@ FROM python:3.6.4-slim-stretch
 COPY /deploy/requirements.txt /deploy/requirements.txt
 RUN pip install --no-cache-dir -r /deploy/requirements.txt
 
+RUN printenv
+
 ENV PYTHONUNBUFFERED=1
 ENV WEB_CONCURRENCY=4
 ENV PORT ${PORT:-80}
