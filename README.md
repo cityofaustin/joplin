@@ -43,7 +43,7 @@ docker exec --interactive --tty joplin python joplin/manage.py migrate
 As you make edits to yamls files, you will need to run the following command while the server is running:
 
 ```
-docker exec --interactive --tty python ./joplin/manage.py loadcontent
+docker exec --interactive --tty joplin python ./joplin/manage.py loadcontent fixtures/name-of-fixture.yaml
 ```
 
 
