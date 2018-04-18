@@ -2,7 +2,7 @@ from modeltranslation.translator import register, TranslationOptions
 from wagtail.wagtailcore.models import Page
 from wagtail.wagtailimages.models import Image
 
-from .models import Topic, Theme, ServicePage, TranslatedImage, Department, Map
+from .models import ThreeOneOne, Topic, Theme, ServicePage, TranslatedImage, Department, Map
 
 
 @register(Image)
@@ -17,6 +17,13 @@ class TranslatedImageTranslationOptions(TranslationOptions):
     )
 
 
+@register(ThreeOneOne)
+class ThreeOneOneTranslationOptions(TranslationOptions):
+    fields = (
+        'title',
+    )
+
+
 @register(Topic)
 class TopicTranslationOptions(TranslationOptions):
     fields = (
@@ -24,6 +31,7 @@ class TopicTranslationOptions(TranslationOptions):
         'description',
         'call_to_action',
     )
+
 
 @register(Theme)
 class ThemeTranslationOptions(TranslationOptions):

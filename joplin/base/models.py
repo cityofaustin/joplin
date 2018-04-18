@@ -49,6 +49,15 @@ def rendition_delete(sender, instance, **kwargs):
     instance.file.delete(False)
 
 
+@register_snippet
+class ThreeOneOne(ClusterableModel):
+    title = models.CharField(max_length=DEFAULT_MAX_LENGTH)
+    url = models.URLField()
+
+    def __str__(self):
+        return self.title
+
+
 class HomePage(Page):
     parent_page_types = []
     subpage_types = ['base.ServicePage']
@@ -114,6 +123,7 @@ class Topic(ClusterableModel):
 
     def __str__(self):
         return self.text
+
 
 @register_snippet
 class Theme(ClusterableModel):

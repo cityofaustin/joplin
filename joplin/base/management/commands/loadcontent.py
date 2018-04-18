@@ -7,7 +7,7 @@ from django.core.management.base import BaseCommand
 from wagtail.wagtailcore.models import Page
 from yaml import load
 
-from base.models import TranslatedImage, Theme, Topic, Department, ServicePage, Location, Contact, ServicePageContact, DepartmentContact, Map, ContactDayAndDuration
+from base.models import TranslatedImage, ThreeOneOne, Theme, Topic, Department, ServicePage, Location, Contact, ServicePageContact, DepartmentContact, Map, ContactDayAndDuration
 
 
 def load_images(data):
@@ -29,6 +29,20 @@ def load_image(data):
     print(f'{"✅  Created" if created else "⭐  Updated"} {filepath.name} => {image.file.name}')
 
     return image
+
+
+def load_311s(data):
+    for data_311 in data['311']:
+        yield load_311(data_311)
+
+
+def load_311(data):
+    data['title'] = data['title_en']
+    three_one_one, created = ThreeOneOne.objects.update_or_create(title=data['title_en'], defaults=data)
+
+    print(f'{"✅  Created" if created else "⭐  Updated"} {three_one_one.title}')
+
+    return three_one_one
 
 
 def load_themes(data):
@@ -220,6 +234,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         loaders = {
             'images': load_images,
+            '311': load_311s,
             'themes': load_themes,
             'topics': load_topics,
             'services': load_service,
