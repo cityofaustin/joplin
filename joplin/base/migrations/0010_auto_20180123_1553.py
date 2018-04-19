@@ -5,8 +5,8 @@ from __future__ import unicode_literals
 import base.blocks
 from django.db import migrations, models
 import django.db.models.deletion
-import wagtail.wagtailcore.blocks
-import wagtail.wagtailcore.fields
+import wagtail.core.blocks
+import wagtail.core.fields
 
 
 class Migration(migrations.Migration):
@@ -30,6 +30,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='servicepage',
             name='extra_content',
-            field=wagtail.wagtailcore.fields.StreamField((('content', wagtail.wagtailcore.blocks.RichTextBlock(features=['h1', 'h2', 'link', 'ul', 'ol'], help_text='Write any additional content describing the service')), ('application_block', base.blocks.SnippetChooserBlockWithAPIGoodness('base.ApplicationBlock', icon='site')), ('map_block', base.blocks.SnippetChooserBlockWithAPIGoodness('base.Map', icon='site')), ('what_do_i_do_with_block', base.blocks.WhatDoIDoWithBlock()), ('collection_schedule_block', base.blocks.CollectionScheduleBlock())), verbose_name='Add any forms, maps, apps, or content that will help the resident use the service'),
+            field=wagtail.core.fields.StreamField((('content', wagtail.core.blocks.RichTextBlock(features=['h1', 'h2', 'link', 'ul', 'ol'], help_text='Write any additional content describing the service')), ('application_block', base.blocks.SnippetChooserBlockWithAPIGoodness('base.ApplicationBlock', icon='site')), ('map_block', base.blocks.SnippetChooserBlockWithAPIGoodness('base.Map', icon='site')), ('what_do_i_do_with_block', base.blocks.WhatDoIDoWithBlock()), ('collection_schedule_block', base.blocks.CollectionScheduleBlock())), verbose_name='Add any forms, maps, apps, or content that will help the resident use the service'),
         ),
     ]

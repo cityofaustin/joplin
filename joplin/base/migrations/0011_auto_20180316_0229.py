@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 
 import base.blocks
 from django.db import migrations, models
-import wagtail.wagtailcore.fields
+import wagtail.core.fields
 
 
 class Migration(migrations.Migration):
@@ -17,7 +17,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='servicepage',
             name='additional_content',
-            field=wagtail.wagtailcore.fields.RichTextField(blank=True, verbose_name='Write any additional content describing the service'),
+            field=wagtail.core.fields.RichTextField(blank=True, verbose_name='Write any additional content describing the service'),
         ),
         migrations.RenameField(
             model_name='servicepage',
@@ -47,7 +47,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='servicepage',
             name='extra_content',
-            field=wagtail.wagtailcore.fields.StreamField((('map_block', base.blocks.SnippetChooserBlockWithAPIGoodness('base.Map', icon='site')), ('what_do_i_do_with_block', base.blocks.WhatDoIDoWithBlock()), ('collection_schedule_block', base.blocks.CollectionScheduleBlock())), verbose_name='Add any forms, maps, apps, or content that will help the resident use the service'),
+            field=wagtail.core.fields.StreamField((('map_block', base.blocks.SnippetChooserBlockWithAPIGoodness('base.Map', icon='site')), ('what_do_i_do_with_block', base.blocks.WhatDoIDoWithBlock()), ('collection_schedule_block', base.blocks.CollectionScheduleBlock())), verbose_name='Add any forms, maps, apps, or content that will help the resident use the service'),
         ),
         migrations.RenameField(
             model_name='servicepage',
@@ -97,22 +97,22 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='servicepage',
             name='additional_content_ar',
-            field=wagtail.wagtailcore.fields.RichTextField(blank=True, null=True, verbose_name='Write any additional content describing the service'),
+            field=wagtail.core.fields.RichTextField(blank=True, null=True, verbose_name='Write any additional content describing the service'),
         ),
         migrations.AddField(
             model_name='servicepage',
             name='additional_content_en',
-            field=wagtail.wagtailcore.fields.RichTextField(blank=True, null=True, verbose_name='Write any additional content describing the service'),
+            field=wagtail.core.fields.RichTextField(blank=True, null=True, verbose_name='Write any additional content describing the service'),
         ),
         migrations.AddField(
             model_name='servicepage',
             name='additional_content_es',
-            field=wagtail.wagtailcore.fields.RichTextField(blank=True, null=True, verbose_name='Write any additional content describing the service'),
+            field=wagtail.core.fields.RichTextField(blank=True, null=True, verbose_name='Write any additional content describing the service'),
         ),
         migrations.AddField(
             model_name='servicepage',
             name='additional_content_vi',
-            field=wagtail.wagtailcore.fields.RichTextField(blank=True, null=True, verbose_name='Write any additional content describing the service'),
+            field=wagtail.core.fields.RichTextField(blank=True, null=True, verbose_name='Write any additional content describing the service'),
         ),
         migrations.AddField(
             model_name='topic',

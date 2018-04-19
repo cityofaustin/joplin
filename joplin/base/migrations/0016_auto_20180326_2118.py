@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 
 import base.blocks
 from django.db import migrations, models
-import wagtail.wagtailcore.fields
+import wagtail.core.fields
 
 
 class Migration(migrations.Migration):
@@ -42,6 +42,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='servicepage',
             name='dynamic_content',
-            field=wagtail.wagtailcore.fields.StreamField((('map_block', base.blocks.SnippetChooserBlockWithAPIGoodness('base.Map', icon='site')), ('what_do_i_do_with_block', base.blocks.WhatDoIDoWithBlock()), ('collection_schedule_block', base.blocks.CollectionScheduleBlock()), ('recollect_block', base.blocks.RecollectBlock())), verbose_name='Add any forms, maps, apps, or content that will help the resident use the service'),
+            field=wagtail.core.fields.StreamField((('map_block', base.blocks.SnippetChooserBlockWithAPIGoodness('base.Map', icon='site')), ('what_do_i_do_with_block', base.blocks.WhatDoIDoWithBlock()), ('collection_schedule_block', base.blocks.CollectionScheduleBlock()), ('recollect_block', base.blocks.RecollectBlock())), verbose_name='Add any forms, maps, apps, or content that will help the resident use the service'),
         ),
     ]

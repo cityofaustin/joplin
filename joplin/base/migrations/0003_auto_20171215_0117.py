@@ -6,8 +6,8 @@ import base.blocks
 from django.db import migrations, models
 import django.db.models.deletion
 import modelcluster.fields
-import wagtail.wagtailcore.blocks
-import wagtail.wagtailcore.fields
+import wagtail.core.blocks
+import wagtail.core.fields
 
 
 class Migration(migrations.Migration):
@@ -74,12 +74,12 @@ class Migration(migrations.Migration):
                 ('page_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='wagtailcore.Page')),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
-                ('content', wagtail.wagtailcore.fields.RichTextField(verbose_name='Write out the steps a resident needs to take to use the service')),
-                ('content_en', wagtail.wagtailcore.fields.RichTextField(null=True, verbose_name='Write out the steps a resident needs to take to use the service')),
-                ('content_pt', wagtail.wagtailcore.fields.RichTextField(null=True, verbose_name='Write out the steps a resident needs to take to use the service')),
-                ('content_es', wagtail.wagtailcore.fields.RichTextField(null=True, verbose_name='Write out the steps a resident needs to take to use the service')),
-                ('content_fr', wagtail.wagtailcore.fields.RichTextField(null=True, verbose_name='Write out the steps a resident needs to take to use the service')),
-                ('extra_content', wagtail.wagtailcore.fields.StreamField((('content', wagtail.wagtailcore.blocks.RichTextBlock(features=['h1', 'h2', 'link', 'ul', 'ol'], help_text='Write any additional content describing the service')), ('application_block', base.blocks.SnippetChooserBlockWithAPIGoodness('base.ApplicationBlock'))), verbose_name='Add any forms, maps, apps, or content that will help the resident use the service')),
+                ('content', wagtail.core.fields.RichTextField(verbose_name='Write out the steps a resident needs to take to use the service')),
+                ('content_en', wagtail.core.fields.RichTextField(null=True, verbose_name='Write out the steps a resident needs to take to use the service')),
+                ('content_pt', wagtail.core.fields.RichTextField(null=True, verbose_name='Write out the steps a resident needs to take to use the service')),
+                ('content_es', wagtail.core.fields.RichTextField(null=True, verbose_name='Write out the steps a resident needs to take to use the service')),
+                ('content_fr', wagtail.core.fields.RichTextField(null=True, verbose_name='Write out the steps a resident needs to take to use the service')),
+                ('extra_content', wagtail.core.fields.StreamField((('content', wagtail.core.blocks.RichTextBlock(features=['h1', 'h2', 'link', 'ul', 'ol'], help_text='Write any additional content describing the service')), ('application_block', base.blocks.SnippetChooserBlockWithAPIGoodness('base.ApplicationBlock'))), verbose_name='Add any forms, maps, apps, or content that will help the resident use the service')),
             ],
             options={
                 'abstract': False,
