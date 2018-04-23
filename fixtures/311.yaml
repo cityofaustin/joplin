@@ -4,7 +4,7 @@
     title_es: Solicite la visita de un Funcionario del Código
     title_vi: Thỉnh cầu một cuộc thăm viếng của Nhân viên Công Lực
     title_ar: طلب زيارة ضابط تنفيذ القانون
-    url: '#'
+    url: 'http://311.austintexas.gov/reports/new?service_id=5579f3bd47199e0be40000dd'
   -
     title_en: Report a loose dog
     title_es: Reporte un perro suelto
@@ -22,7 +22,7 @@
     title_es: Reporte una queja por ruido que no sea emergencia
     title_vi: Báo cáo phàn nàn về tiếng ồn không khẩn cấp
     title_ar: الإبلاغ عن شكوى عن سماع ضوضاء في غير حالات الطوارئ
-    url: '#'
+    url: 'http://311.austintexas.gov/reports/new?service_id=5924b454cec0e9d573000007'
   -
     title_en: Request graffiti removal
     title_es: Solicite la eliminación de un grafiti
@@ -88,7 +88,7 @@
     title_es: Solicite servicios ambientales
     title_vi: Thỉnh cầu các dịch vụ môi trường
     title_ar: طلب الخدمات البيئية
-    url: '#'
+    url: 'http://311.austintexas.gov/reports/new?service_id=577d9a28d02256733800002f'
   -
     title_en: File a short term rental complaint
     title_es: Presente una queja relacionada con un alquiler a corto plazo
