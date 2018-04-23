@@ -5,13 +5,13 @@ from django.dispatch import receiver
 from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
 
-from wagtail.wagtailadmin.edit_handlers import FieldPanel, InlinePanel, MultiFieldPanel, ObjectList, StreamFieldPanel, TabbedInterface
-from wagtail.wagtailcore.fields import StreamField, RichTextField
-from wagtail.wagtailcore.models import Page, Orderable
-from wagtail.wagtailsnippets.edit_handlers import SnippetChooserPanel
-from wagtail.wagtailimages.edit_handlers import ImageChooserPanel
-from wagtail.wagtailimages.models import Image, AbstractImage, AbstractRendition
-from wagtail.wagtailsnippets.models import register_snippet
+from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, MultiFieldPanel, ObjectList, StreamFieldPanel, TabbedInterface
+from wagtail.core.fields import StreamField, RichTextField
+from wagtail.core.models import Page, Orderable
+from wagtail.snippets.edit_handlers import SnippetChooserPanel
+from wagtail.images.edit_handlers import ImageChooserPanel
+from wagtail.images.models import Image, AbstractImage, AbstractRendition
+from wagtail.snippets.models import register_snippet
 
 from . import blocks as custom_blocks
 from . import forms as custom_forms
@@ -29,7 +29,7 @@ class TranslatedImage(AbstractImage):
 
 
 class TranslatedImageRendition(AbstractRendition):
-    image = models.ForeignKey(TranslatedImage, related_name='renditions')
+    image = models.ForeignKey(TranslatedImage, related_name='renditions', on_delete=models.PROTECT)
 
     class Meta:
         unique_together = (
@@ -225,7 +225,7 @@ class Contact(ClusterableModel):
     name = models.CharField(max_length=DEFAULT_MAX_LENGTH)
     email = models.EmailField()
     phone = models.CharField(max_length=DEFAULT_MAX_LENGTH)
-    location = models.ForeignKey(Location, null=True, blank=True, related_name='+')
+    location = models.ForeignKey(Location, null=True, blank=True, related_name='+', on_delete=models.SET_NULL)
 
     panels = [
         FieldPanel('name'),
@@ -249,7 +249,7 @@ class ContactDayAndDuration(Orderable, DayAndDuration):
 
 class ServicePageContact(ClusterableModel):
     page = ParentalKey(ServicePage, related_name='contacts')
-    contact = models.ForeignKey(Contact, related_name='+')
+    contact = models.ForeignKey(Contact, related_name='+', on_delete=models.CASCADE)
 
     panels = [
         SnippetChooserPanel('contact'),
@@ -279,7 +279,7 @@ class Department(ClusterableModel):
 
 class DepartmentContact(ClusterableModel):
     department = ParentalKey(Department, related_name='contacts')
-    contact = models.ForeignKey(Contact, related_name='+')
+    contact = models.ForeignKey(Contact, related_name='+', on_delete=models.CASCADE)
 
     panels = [
         SnippetChooserPanel('contact'),

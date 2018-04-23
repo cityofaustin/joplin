@@ -1,6 +1,6 @@
 from modeltranslation.translator import register, TranslationOptions
-from wagtail.wagtailcore.models import Page
-from wagtail.wagtailimages.models import Image
+from wagtail.core.models import Page
+from wagtail.images.models import Image
 
 from .models import ThreeOneOne, Topic, Theme, ServicePage, TranslatedImage, Department, Map
 

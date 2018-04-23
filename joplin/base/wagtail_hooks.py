@@ -3,7 +3,7 @@ from django.contrib.staticfiles.templatetags.staticfiles import static
 from django.utils.html import format_html_join
 
 from wagtail.contrib.modeladmin.options import ModelAdmin, ModelAdminGroup, modeladmin_register
-from wagtail.wagtailcore import hooks
+from wagtail.core import hooks
 
 from base.models import Topic, Location, Contact
 
@@ -43,7 +43,7 @@ def before_edit_page(request, page):
     print(f'BeforeEditHook request: {request}')
     print(f'BeforeEditHook page: "{page}" of type "{type(page)}"')
 
-    assert request.user.is_authenticated()
+    assert request.user.is_authenticated
     print(f'BeforeEditHook {request.user.email} is in groups {[group.name for group in request.user.groups.all()]}')
 
 

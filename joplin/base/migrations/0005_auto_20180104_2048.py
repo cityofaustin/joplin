@@ -3,7 +3,7 @@
 from __future__ import unicode_literals
 
 from django.db import migrations
-import wagtail.wagtailcore.fields
+import wagtail.core.fields
 
 
 class Migration(migrations.Migration):
@@ -24,36 +24,36 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='servicepage',
             name='content_ar',
-            field=wagtail.wagtailcore.fields.RichTextField(null=True, verbose_name='Write out the steps a resident needs to take to use the service'),
+            field=wagtail.core.fields.RichTextField(null=True, verbose_name='Write out the steps a resident needs to take to use the service'),
         ),
         migrations.AddField(
             model_name='servicepage',
             name='content_ko',
-            field=wagtail.wagtailcore.fields.RichTextField(null=True, verbose_name='Write out the steps a resident needs to take to use the service'),
+            field=wagtail.core.fields.RichTextField(null=True, verbose_name='Write out the steps a resident needs to take to use the service'),
         ),
         migrations.AddField(
             model_name='servicepage',
             name='content_my',
-            field=wagtail.wagtailcore.fields.RichTextField(null=True, verbose_name='Write out the steps a resident needs to take to use the service'),
+            field=wagtail.core.fields.RichTextField(null=True, verbose_name='Write out the steps a resident needs to take to use the service'),
         ),
         migrations.AddField(
             model_name='servicepage',
             name='content_ur',
-            field=wagtail.wagtailcore.fields.RichTextField(null=True, verbose_name='Write out the steps a resident needs to take to use the service'),
+            field=wagtail.core.fields.RichTextField(null=True, verbose_name='Write out the steps a resident needs to take to use the service'),
         ),
         migrations.AddField(
             model_name='servicepage',
             name='content_vi',
-            field=wagtail.wagtailcore.fields.RichTextField(null=True, verbose_name='Write out the steps a resident needs to take to use the service'),
+            field=wagtail.core.fields.RichTextField(null=True, verbose_name='Write out the steps a resident needs to take to use the service'),
         ),
         migrations.AddField(
             model_name='servicepage',
             name='content_zh_hans',
-            field=wagtail.wagtailcore.fields.RichTextField(null=True, verbose_name='Write out the steps a resident needs to take to use the service'),
+            field=wagtail.core.fields.RichTextField(null=True, verbose_name='Write out the steps a resident needs to take to use the service'),
         ),
         migrations.AddField(
             model_name='servicepage',
             name='content_zh_hant',
-            field=wagtail.wagtailcore.fields.RichTextField(null=True, verbose_name='Write out the steps a resident needs to take to use the service'),
+            field=wagtail.core.fields.RichTextField(null=True, verbose_name='Write out the steps a resident needs to take to use the service'),
         ),
     ]

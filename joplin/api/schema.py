@@ -5,8 +5,8 @@ from graphene_django.converter import convert_django_field
 from graphene_django.debug import DjangoDebug
 from graphene_django.filter import DjangoFilterConnectionField
 from graphene.types import Scalar
-from wagtail.wagtailcore.fields import StreamField
-from wagtail.wagtailcore.models import Page
+from wagtail.core.fields import StreamField
+from wagtail.core.models import Page
 
 from base.models import TranslatedImage, ThreeOneOne, ServicePage, Theme, Topic, Contact, ServicePageContact, Location, ContactDayAndDuration, Department, DepartmentContact
 
