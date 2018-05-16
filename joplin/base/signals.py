@@ -1,9 +1,8 @@
 import django.dispatch
+from django.dispatch import receiver
 
 blarg = django.dispatch.Signal()
 
-from django.dispatch import receiver
-
 @receiver(blarg)
-def my_callback(sender, **kwargs):
-    print("Request finished!")
+def blarg_callback(sender, **kwargs):
+    print("BLARG HAPPENED!")

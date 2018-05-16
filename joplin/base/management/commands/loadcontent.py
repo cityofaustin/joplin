@@ -7,7 +7,7 @@ from django.core.management.base import BaseCommand
 from wagtail.core.models import Page
 from yaml import load
 
-from ...signals import *
+from ...signals import blarg
 
 from base.models import TranslatedImage, ThreeOneOne, Theme, Topic, Department, ServicePage, Location, Contact, ServicePageContact, DepartmentContact, Map, ContactDayAndDuration
 
