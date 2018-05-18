@@ -9,7 +9,9 @@ def generate_responsive_urls(sender, **kwargs):
     print("SAVE HAPPENED!")
     print(sender)
     image = kwargs['instance']
-    generate_image_url(image, 'fill-100x100')
+    url = image.get_rendition('width-320').url
+    print(url)
+    # generate_image_url(image, 'width-320')
 
 def generate_image_url(image, filter_spec):
     signature = generate_signature(image.id, filter_spec)
