@@ -13,4 +13,3 @@ def generate_responsive_images(sender, **kwargs):
     image.get_rendition('width-1440') #1440p non retina displays/720 retina displays
     image.get_rendition('width-2160') #1080p retina displays
     # TODO: get_rendition for other widths we want
-    # TODO: retina resultions
