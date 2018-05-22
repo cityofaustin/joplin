@@ -85,6 +85,7 @@ class TranslatedImageNode(DjangoObjectType):
         model = TranslatedImage
         interfaces = [graphene.Node]
         exclude_fields = ['tags']
+    filename = graphene.String()
 
 
 class Language(graphene.Enum):
