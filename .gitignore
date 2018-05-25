@@ -4,3 +4,5 @@ __pycache__/
 *.sqlite3
 .vscode/
 media
+venv
+.idea

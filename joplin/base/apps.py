@@ -6,3 +6,4 @@ class BaseConfig(AppConfig):
 
     def ready(self):
         from . import checks
+        from . import signals
