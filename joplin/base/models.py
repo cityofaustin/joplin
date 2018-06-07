@@ -131,6 +131,7 @@ class ProcessPage(Page):
         FieldPanel('title'),
         FieldPanel('description'),
         ImageChooserPanel('image'),
+        InlinePanel('process_steps', label="Process steps"),
     ]
 
     edit_handler = TabbedInterface([
@@ -139,6 +140,17 @@ class ProcessPage(Page):
         # TODO: What should we do with the fields in settings?
         # ObjectList(Page.settings_panels, heading='Settings', classname='settings'),
     ])
+
+
+class ProcessPageStep(Orderable):
+    page = ParentalKey(ProcessPage, related_name='process_steps')
+    name = models.CharField(max_length=255)
+    url = models.URLField()
+
+    panels = [
+        FieldPanel('name'),
+        FieldPanel('url'),
+    ]
 
 
 @register_snippet

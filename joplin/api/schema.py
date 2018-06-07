@@ -8,7 +8,7 @@ from graphene.types import Scalar
 from wagtail.core.fields import StreamField
 from wagtail.core.models import Page
 
-from base.models import TranslatedImage, ThreeOneOne, ServicePage, ProcessPage, Theme, Topic, Contact, ServicePageContact, Location, ContactDayAndDuration, Department, DepartmentContact
+from base.models import TranslatedImage, ThreeOneOne, ServicePage, ProcessPage, ProcessPageStep, Theme, Topic, Contact, ServicePageContact, Location, ContactDayAndDuration, Department, DepartmentContact
 
 
 class StreamFieldType(Scalar):
@@ -122,6 +122,10 @@ class ProcessPageNode(DjangoObjectType):
         filter_fields = ['id', 'slug', 'topic', 'topic__slug']
         interfaces = [graphene.Node]
 
+class ProcessPageStepNode(DjangoObjectType):
+    class Meta:
+        model = ProcessPageStep
+        interfaces = [graphene.Node]
 
 def get_page_with_preview_data(page, session):
     # Wagtail saves preview data in the session. We want to mimick what they're doing to generate the built-in preview.
