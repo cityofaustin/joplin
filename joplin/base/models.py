@@ -60,7 +60,7 @@ class ThreeOneOne(ClusterableModel):
 
 class HomePage(Page):
     parent_page_types = []
-    subpage_types = ['base.ServicePage']
+    subpage_types = ['base.ServicePage', 'base.ProcessPage']
 
     image = models.ForeignKey(TranslatedImage, null=True, on_delete=models.SET_NULL, related_name='+')
 
@@ -99,6 +99,49 @@ class ServicePage(Page):
         StreamFieldPanel('dynamic_content'),
         FieldPanel('additional_content'),
         InlinePanel('contacts', label='Contacts'),
+    ]
+
+    edit_handler = TabbedInterface([
+        ObjectList(content_panels, heading='Content'),
+        ObjectList(Page.promote_panels, heading='Promote'),
+        # TODO: What should we do with the fields in settings?
+        # ObjectList(Page.settings_panels, heading='Settings', classname='settings'),
+    ])
+
+
+class ProcessPage(Page):
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    steps = RichTextField(features=WYSIWYG_FEATURES, verbose_name='Write out the steps a resident needs to take to use the service')
+    dynamic_content = StreamField(
+        [
+            ('map_block', custom_blocks.SnippetChooserBlockWithAPIGoodness('base.Map', icon='site')),
+            ('what_do_i_do_with_block', custom_blocks.WhatDoIDoWithBlock()),
+            ('collection_schedule_block', custom_blocks.CollectionScheduleBlock()),
+            ('recollect_block', custom_blocks.RecollectBlock()),
+        ],
+        verbose_name='Add any forms, maps, apps, or content that will help the resident use the service',
+    )
+    additional_content = RichTextField(features=WYSIWYG_FEATURES, verbose_name='Write any additional content describing the service', blank=True)
+    topic = models.ForeignKey(
+        'base.Topic',
+        on_delete=models.PROTECT,
+        related_name='processes',
+    )
+    image = models.ForeignKey(TranslatedImage, null=True, on_delete=models.SET_NULL, related_name='+')
+
+    parent_page_types = ['base.HomePage']
+    subpage_types = []
+    base_form_class = custom_forms.ProcessPageForm
+
+    content_panels = [
+        FieldPanel('topic'),
+        FieldPanel('title'),
+        ImageChooserPanel('image'),
+        FieldPanel('steps'),
+        StreamFieldPanel('dynamic_content'),
+        FieldPanel('additional_content'),
     ]
 
     edit_handler = TabbedInterface([
