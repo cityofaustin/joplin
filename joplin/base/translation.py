@@ -73,6 +73,5 @@ class ServicePageTranslationOptions(TranslationOptions):
 class ProcessPageTranslationOptions(TranslationOptions):
     fields = (
         'title',
-        'steps',
-        'additional_content',
+        'description'
     )

@@ -113,23 +113,14 @@ class ProcessPage(Page):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    steps = RichTextField(features=WYSIWYG_FEATURES, verbose_name='Write out the steps a resident needs to take to use the service')
-    dynamic_content = StreamField(
-        [
-            ('map_block', custom_blocks.SnippetChooserBlockWithAPIGoodness('base.Map', icon='site')),
-            ('what_do_i_do_with_block', custom_blocks.WhatDoIDoWithBlock()),
-            ('collection_schedule_block', custom_blocks.CollectionScheduleBlock()),
-            ('recollect_block', custom_blocks.RecollectBlock()),
-        ],
-        verbose_name='Add any forms, maps, apps, or content that will help the resident use the service',
-    )
-    additional_content = RichTextField(features=WYSIWYG_FEATURES, verbose_name='Write any additional content describing the service', blank=True)
     topic = models.ForeignKey(
         'base.Topic',
         on_delete=models.PROTECT,
         related_name='processes',
     )
+    description = models.TextField()
     image = models.ForeignKey(TranslatedImage, null=True, on_delete=models.SET_NULL, related_name='+')
+    # TODO: Add images array field
 
     parent_page_types = ['base.HomePage']
     subpage_types = []
@@ -138,10 +129,8 @@ class ProcessPage(Page):
     content_panels = [
         FieldPanel('topic'),
         FieldPanel('title'),
+        FieldPanel('description'),
         ImageChooserPanel('image'),
-        FieldPanel('steps'),
-        StreamFieldPanel('dynamic_content'),
-        FieldPanel('additional_content'),
     ]
 
     edit_handler = TabbedInterface([
