@@ -57,6 +57,46 @@ def load_theme(data):
 
     return theme
 
+def load_process(data):
+    print('💩 ' + data['slug'])
+
+    slug = data['slug']
+
+    for k in ['meta_description_ar', 'meta_description_en', 'meta_description_es', 'meta_description_vi', 'meta_tags', 'meta_title_ar', 'meta_title_en', 'meta_title_es', 'meta_title_vi']:
+        data.pop(k, None)
+
+
+    print(f'-  Loading topic page...\r', end='')
+    topic_slug = data.pop('topic')
+    data['topic'] = Topic.objects.get(slug=topic_slug)
+    print('✅')
+
+    print(f'-  Loading image...\r', end='')
+    image_name = data.pop('image')
+    image_regex = f'original_images/{image_name}'
+    data['image'] = TranslatedImage.objects.get(file__startswith=image_regex)
+    print('✅')
+
+    print(f'-  Loading homepage...\r', end='')
+    home = Page.objects.get(slug='home')
+    print('✅')
+
+    print(f'-  Loading child page "{slug}"...\r', end='')
+    created = False
+    try:
+        page = ProcessPage.objects.get(slug=slug)
+        for k, v in data.items():
+            setattr(page, k, v)
+    except Exception as e:
+        page = ProcessPage(**data)
+        home.add_child(instance=page)
+        created = True
+
+    page.save_revision().publish()
+    print(f'{"✅  Created" if created else "⭐  Updated"}')
+
+    yield page
+
 
 def load_topics(data):
     for topic_data in data['topics']:
@@ -223,7 +263,6 @@ def load_service(data):
 
     yield page
 
-
 class Command(BaseCommand):
     help = 'Loads initial content'
     LINE_LENGTH = 100
@@ -239,6 +278,7 @@ class Command(BaseCommand):
             'topics': load_topics,
             'services': load_service,
             'departments': load_departments,
+            'processes': load_process,
             'locations': load_locations,
             'contacts': load_contacts,
         }
