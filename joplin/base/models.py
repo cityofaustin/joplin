@@ -131,7 +131,8 @@ class ProcessPage(Page):
         FieldPanel('title'),
         FieldPanel('description'),
         ImageChooserPanel('image'),
-        InlinePanel('process_steps', label="Process steps"),
+        # TODO: update loadcontent.py to load process_steps
+        # InlinePanel('process_steps', label="Process steps"),
     ]
 
     edit_handler = TabbedInterface([
