@@ -121,7 +121,7 @@ class ProcessPage(Page):
         on_delete=models.PROTECT,
         related_name='processes',
     )
-    description = models.TextField()
+    description = models.TextField(blank=True)
     image = models.ForeignKey(TranslatedImage, null=True, on_delete=models.SET_NULL, related_name='+')
     # TODO: Add images array field
 

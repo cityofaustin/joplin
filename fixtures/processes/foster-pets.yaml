@@ -5,85 +5,170 @@ title_es: ES Become an animal foster care provider
 title_vi: VI Become an animal foster care provider
 title_ar: AR Become an animal foster care provider
 
-topic: recycling-trash-compost
+topic: foster-animal
 
 description_en: We’re so happy you’re interested in fostering for the Austin Animal Center! There are six steps to fostering a pet from the Austin Animal Center.
-description_es: ES We’re so happy you’re interested in fostering for the Austin Animal Center! There are six steps to fostering a pet from the Austin Animal Center.
-description_vi: VI We’re so happy you’re interested in fostering for the Austin Animal Center! There are six steps to fostering a pet from the Austin Animal Center.
-description_ar: AR We’re so happy you’re interested in fostering for the Austin Animal Center! There are six steps to fostering a pet from the Austin Animal Center.
+description_es:
+description_vi:
+description_ar:
 
 image: bulk-items
 
 process_steps:
     -
-        title_en: some title here
-        title_es: some title here
+        title_en: Before you apply
+        title_es:
         title_vi:
         title_ar:
 
-        short_title_en:
+        short_title_en: Before you apply
         short_title_es:
         short_title_vi:
         short_title_ar:
 
-        link_title_en:
+        link_title_en: Go to before you apply
         link_title_es:
         link_title_vi:
         link_title_ar:
 
-        description_en:
+        description_en: Thank you for thinking about fostering an animal. It can be a wonderful experience, and you can feel good knowing you’ve made a positive difference in an animal’s life. Each animal fostered in a home opens up kennel space for us to save another animal.
         description_es:
         description_vi:
         description_ar:
 
         image: household-hazardous-waste
         overview_steps_en:
-            - Check the “What do I do with” tool below to find out what items are accepted. Some items are free to drop off and some items, like tires, require a fee.
-            - Review the Household Hazardous Waste Do’s and Don’ts below.
-            - Drop off your items at the Recycle and ReUse Center at 2514 Business Center Dr, Austin, TX 78744.
+            - Learn how to foster pets with Austin Animal Center.
+            - Learn what types of animals need fostering.
+            - Verify your current pets’ rabies vaccinations with your veterinarian.
         overview_steps_es:
-            - Use la función “What do I do with” abajo para ver los artículos aceptados. Puede entregar algunos artículos sin tener que pagar y para otros, como las llantas, debe pagar una cuota.
-            - Revise abajo lo que debe y no debe hacer con los desechos peligrosos del hogar.
-            - Entregue sus artículos en el Centro de Reciclaje y Reúso ubicado en 2514 Business Center Dr, Austin, TX 78744.
         overview_steps_vi:
-            - Kiểm tra bằng công cụ “What do I do with” dưới đây để xác định những loại nào được chấp nhận. Một số loại không phải đóng phí khi vứt bỏ trong khi một số loại khác, ví dụ như lốp xe, sẽ phải trả phí.
-            - Rà soát Những điều Nên làm và Không Nên làm với Rác thải Nguy hại của Hộ gia đình dưới đây.
-            - Bỏ các đồ thải loại của bạn tại Trung tâm Tái chế và Tái Sử dụng tại 2514 Business Center Dr, Austin, TX 78744.
         overview_steps_ar:
-            - أطلع على أداة "What do I do with" أدناه لمعرفة العناصر المقبولة. التخلص من بعض العناصر مجاني وهناك بعض العناصر، مثل التخلص من الإطارات، تتطلب رسوما.
-            - يرجى مراجعة قائمة النفايات المنزلية الخطرة التي يمكن التخلص منها والعناصر التي لا يمكن التخلص منها أدناه.
-            - تخلص من العناصر الخاصة بك في مركز إعادة التدوير وإعادة الاستخدام في 2514 Business Center Dr, Austin, TX 78744.
 
         detailed_content_en: |
-            <h2>Household Hazardous Waste Do’s and Don’ts</h2>
-            <p>Throwing household hazardous waste in the trash or pouring it down the drain is dangerous and harmful to the environment. Austin and Travis County residents can drop off up to 30 gallons of hazardous waste for free each year.</p>
-            <p>Bring products in their original containers. If the original container is larger than 5-gallons, please call the Recycle and ReUse Center at 512-974-4343 to find out how to get your products ready for drop off.</p>
-            <p>Put small containers upright in sturdy boxes. If a container is leaking, pour cat litter into a larger container and put the leaking container inside the larger. The litter will absorb the spill.</p>
-            <p>Do not mix items. Large truck or trailer loads will not be accepted after 4:45 p.m.</p>
-            <p>Businesses are not eligible to drop off hazardous waste. For information about how businesses can dispose of hazardous waste, call 512-974-4336.</p>
-        detailed_content_es: |
-            <h2>Qué debe y no debe hacer con los artículos peligrosos del hogar</h2>
-            <p>Botar desechos peligrosos del hogar en la basura o por el drenaje es peligroso y perjudicial para el medio ambiente. Los residentes del Condado de Travis pueden entregar hasta 30 galones de desechos domésticos peligrosos al año.</p>
-            <p>Traiga los productos en sus recipientes originales. Si el recipiente original es de más de 5 galones, por favor llame al Centro de Reciclaje y Reúso al 512-974-4343 para averiguar cómo preparar su producto para entregarlo.</p>
-            <p>Ponga los recipientes pequeños parados dentro de una caja resistente. Si un recipiente tiene algún escape, cubra el fondo de un recipiente más grande con una capa de arena sanitaria para gatos y coloque el recipiente que tiene la fuga dentro del recipiente más grande. La arena sanitaria para gatos absorberá el material que se bote. </p>
-            <p>No mezcle los artículos. No se aceptan cargas de camiones ni remolques grandes después de las 4:45 p.m.</p>
-            <p>Los negocios no califican para entregar desechos peligrosos. Para información sobre cómo los negocios pueden descartar sus desechos peligrosos, llame al 512-974-4336.</p>
-        detailed_content_vi: |
-            <h2>Những điều Nên làm và Không Nên làm với Rác thải Nguy hại của Hộ gia đình</h2>
-            <p>Vứt bỏ rác thải nguy hại của hộ gia đình vào thùng rác hoặc đổ trực tiếp xuống cống rãnh gây nguy hiểm và gây hại cho môi trường. Các cư dân của Hạt Travis và Austin có thể bỏ tối đa 30 ga-lông rác thải nguy hại mỗi năm mà không phải đóng phí.</p>
-            <p>Đem sản phẩm đến trong các bình chứa/thùng chứa gốc. Nếu thùng chứa gốc lớn hơn 5 ga-lông, xin vui lòng gọi Trung tâm Tái chế và Tái Sử dụng theo số 512-974-4343 để biết cách chuẩn bị sẵn sàng cho các sản phẩm của bạn trước khi vứt bỏ.</p>
-            <p>Đặt các thùng chứa nhỏ theo chiều thẳng đứng trong các hộp cứng. Nếu có thùng chứa bị rò rỉ, đổ xỉ/cát vệ sinh cho mèo vào một thùng chứa lớn hơn và đặt thùng chứa bị rò rỉ vào trong thùng chứa lớn hơn đó. Cát/xỉ vệ sinh cho mèo sẽ hút phần bị rò rỉ.</p>
-            <p>Không trộn lẫn các loại với nhau. Xe tải cỡ lớn hay xe đầu kéo rơ-móc sẽ không được vào sau 4:45 chiều.</p>
-            <p>Các cơ sở kinh doanh không được đổ bỏ rác thải nguy hại. Để có thông tin về cách thức các cơ sở kinh doanh có thể xử lý rác thải nguy hại, hãy gọi 512-974-4336.</p>
-        detailed_content_ar: |
-            <h2>قائمة النفايات المنزلية الخطرة التي يمكن التخلص منها والعناصر التي لا يمكن التخلص منها</h2>
-            <p>إلقاء النفايات المنزلية الخطرة في القمامة أو سكبها في المصارف يعد أمرا خطيرا وضارا بالبيئة. يمكن لسكان مقاطعة أوستن وترافيس التخلص من عدد يصل إلى 30 غالون من النفايات الخطرة مجانا كل عام.</p>
-            <p>أحضر المنتجات في حاوياتها الأصلية. إذا كانت الحاوية الأصلية أكبر من 5 غالونات، يرجى الاتصال بمركز إعادة التدوير وإعادة الاستخدام على رقم 512-974-4343 لمعرفة كيفية تجهيز منتجاتك للتخلص منها.</p>
-            <p>ضع الحاويات الصغيرة فى وضع عمودى في صناديق قوية. إذا كانت الحاوية تسرب، صُب حبيبات القطط الماصة في حاوية أكبر وَضَعْ الحاوية التي تسرب داخل الحاوية الأكبر. سوف تمتص الحبيبات الماصة السكب.</p>
-            <p>لا تخلط العناصر. لن يتم قبول الأحمال الكبيرة للشاحنات أو المقطورة بعد الساعة 4:45 مساءً.</p>
-            <p>الشركات ليست مؤهلة للتخلص من النفايات الخطرة. للحصول على معلومات حول كيفية تخلص الشركات من النفايات الخطرة، اتصل على الرقم 512-974-4336.</p>
+            <h2>Understanding fostering</h2>
+            <p>Fostering provides a temporary home for a homeless pet who, for whatever reason, needs to live outside of the shelter. Puppies, kittens, animals recovering from illness or injury, and animals with special behavioral challenges most often need fostering.</p>
+            <p>As a foster, you should be compassionate, caring, and patient. You will be provided with resources and information to be a successful foster parent, including your foster animal’s known history and medical and behavioral health before they are placed in your care.</p>
+            <p>Fostering can be flexible. Foster commitments range from just a couple of days to several months, so you can choose foster options that fit within your lifestyle. </p>
+            <hr />
+            <h2>Find out if you’re eligible to foster</h2>
+            <p>You must meet the following requirements to foster:</p>
+            <ul>
+                <li>Be willing to abide by the foster care agreement and other policies and procedures provided to you.</li>
+                <li>Be able to access email regularly.</li>
+                <li>Be able to provide transport to and from the animal center.</li>
+                <li>Provide some supplies and food for foster animals.</li>
+                <li>Spend time with foster pets and treat them like your own animals while they’re in your care.</li>
+                <li>Have up-to-date rabies vaccinations for all animals in the home.</li>
+            </ul>
+        detailed_content_es:
+        detailed_content_vi:
+        detailed_content_ar:
 
         quote_en:
         quote_es:
         quote_vi:
         quote_ar:
+    -
+        title_en: Fill out an application
+        title_es:
+        title_vi:
+        title_ar:
+
+        short_title_en: Fill out application
+        short_title_es:
+        short_title_vi:
+        short_title_ar:
+
+        link_title_en: Go to the foster application
+        link_title_es:
+        link_title_vi:
+        link_title_ar:
+
+        description_en: Thank you for thinking about fostering an animal. It can be a wonderful experience, and you can feel good knowing you’ve made a positive difference in an animal’s life. Each animal fostered in a home opens up kennel space for us to save another animal.
+        description_es:
+        description_vi:
+        description_ar:
+
+        overview_steps_en:
+            - Answer the questions on the following pages about yourself, availability, home, and pets.
+            - You may receive a call or email from us with questions about your application.
+            - If you are approved, you will receive an email from us about next steps.
+            - Sign and return the foster agreement attached to your approval email.
+
+    -
+        title_en: Find an animal you would like to foster
+        title_es:
+        title_vi:
+        title_ar:
+
+        short_title_en: Find a foster animal
+        short_title_es:
+        short_title_vi:
+        short_title_ar:
+
+        link_title_en: Go to find a foster animal
+        link_title_es:
+        link_title_vi:
+        link_title_ar:
+
+        description_en: Thank you for thinking about fostering an animal. It can be a wonderful experience, and you can feel good knowing you’ve made a positive difference in an animal’s life. Each animal fostered in a home opens up kennel space for us to save another animal.
+        description_es:
+        description_vi:
+        description_ar:
+
+        overview_steps_en:
+            - Sign up for GivePulse, the system we use to send you emails about available animals.
+            - Let us know when you see an animal you want to foster!
+            - We will contact you by phone or email with any questions, the animal’s availability, and a pick up time!
+
+    -
+        title_en: Attend a foster program orientation within 3 months of approval
+        title_es:
+        title_vi:
+        title_ar:
+
+        short_title_en: Attend an orientation
+        short_title_es:
+        short_title_vi:
+        short_title_ar:
+
+        link_title_en: Sign up for foster orientation
+        link_title_es:
+        link_title_vi:
+        link_title_ar:
+
+        description_en: Thank you for thinking about fostering an animal. It can be a wonderful experience, and you can feel good knowing you’ve made a positive difference in an animal’s life. Each animal fostered in a home opens up kennel space for us to save another animal.
+        description_es:
+        description_vi:
+        description_ar:
+
+        overview_steps_en:
+            - While you can get a foster animal before completing this step, you will need to attend a foster program orientation within three months of becoming approved to foster. You will learn about shelter operations and the important role that the foster program and foster care providers play.
+
+    -
+        title_en: Care for your foster animal and help find a forever home
+        title_es:
+        title_vi:
+        title_ar:
+
+        short_title_en: Care and promote
+        short_title_es:
+        short_title_vi:
+        short_title_ar:
+
+        link_title_en: Go to care and promote
+        link_title_es:
+        link_title_vi:
+        link_title_ar:
+
+        description_en: Thank you for thinking about fostering an animal. It can be a wonderful experience, and you can feel good knowing you’ve made a positive difference in an animal’s life. Each animal fostered in a home opens up kennel space for us to save another animal.
+        description_es:
+        description_vi:
+        description_ar:
+
+        overview_steps_en:
+            - Attend to basic daily care.
+            - Bring your animal to the Austin Animal Center for any medical care covered by us.
+            - Promote your foster animal online and around town!
+            - Review applications of potential adopters, set up meetings with them, and decide which home would be the best fit for the animal(s) in your care.

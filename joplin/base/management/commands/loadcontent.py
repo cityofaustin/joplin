@@ -116,20 +116,23 @@ def load_process_step(data):
     data['short_title'] = data['short_title_en']
     data['link_title'] = data['link_title_en']
     data['description'] = data['description_en']
-    data['detailed_content'] = data['detailed_content_en']
-    data['quote'] = data['quote_en']
+    if 'detailed_content_en' in data:
+        data['detailed_content'] = data['detailed_content_en']
+    if 'quote_en' in data:
+        data['quote'] = data['quote_en']
 
     for key in data:
-        if key.startswith('overview_steps_'):
+        if key.startswith('overview_steps_') and data[key]:
             data[key] = ulify(data[key])
     data['overview_steps'] = data['overview_steps_en']
     print('✅')
 
-    print(f'-  Loading image...\r', end='')
-    image_name = data.pop('image')
-    image_regex = f'original_images/{image_name}'
-    data['image'] = TranslatedImage.objects.get(file__startswith=image_regex)
-    print('✅')
+    if 'image' in data:
+        print(f'-  Loading image...\r', end='')
+        image_name = data.pop('image')
+        image_regex = f'original_images/{image_name}'
+        data['image'] = TranslatedImage.objects.get(file__startswith=image_regex)
+        print('✅')
 
     process_step = ProcessPageStep.objects.create(**data)
     print("✅  Created " + process_step.title_en)
