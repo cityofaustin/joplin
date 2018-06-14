@@ -7,7 +7,7 @@ from django.core.management.base import BaseCommand
 from wagtail.core.models import Page
 from yaml import load
 
-from base.models import TranslatedImage, ThreeOneOne, Theme, Topic, Department, ServicePage, ProcessPage, Location, Contact, ServicePageContact, DepartmentContact, Map, ContactDayAndDuration
+from base.models import TranslatedImage, ThreeOneOne, Theme, Topic, Department, ServicePage, ProcessPage, ProcessPageStep, Location, Contact, ServicePageContact, DepartmentContact, Map, ContactDayAndDuration
 
 
 def load_images(data):
@@ -58,13 +58,12 @@ def load_theme(data):
     return theme
 
 def load_process(data):
-    print('💩 ' + data['slug'])
+    print('Loading data for ' + data['slug'] + '\r', end='')
 
     slug = data['slug']
 
-    for k in ['meta_description_ar', 'meta_description_en', 'meta_description_es', 'meta_description_vi', 'meta_tags', 'meta_title_ar', 'meta_title_en', 'meta_title_es', 'meta_title_vi']:
-        data.pop(k, None)
-
+    print(f'-  Loading process steps...\r', end='')
+    process_steps = data.pop('process_steps');
 
     print(f'-  Loading topic page...\r', end='')
     topic_slug = data.pop('topic')
@@ -87,15 +86,29 @@ def load_process(data):
         page = ProcessPage.objects.get(slug=slug)
         for k, v in data.items():
             setattr(page, k, v)
+        #delete process steps
+        for step in page.process_steps.all():
+            step.delete()
+
     except Exception as e:
         page = ProcessPage(**data)
         home.add_child(instance=page)
         created = True
+    print('✅')
+
+    for process_step in process_steps:
+        process_step['page_id'] = page.id
+        load_process_step(process_step)
 
     page.save_revision().publish()
     print(f'{"✅  Created" if created else "⭐  Updated"}')
 
     yield page
+
+
+def load_process_step(data):
+    process_step = ProcessPageStep.objects.create(**data)
+    print("✅  Created " + process_step.title_en)
 
 
 def load_topics(data):

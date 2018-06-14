@@ -1,28 +1,65 @@
 slug: foster-pets
 
-topic: recycling-trash-compost
-image: bulk-items
-
 title_en: Become an animal foster care provider
 title_es: ES Become an animal foster care provider
 title_vi: VI Become an animal foster care provider
 title_ar: AR Become an animal foster care provider
 
-# process_steps:
+topic: recycling-trash-compost
 
 description_en: We’re so happy you’re interested in fostering for the Austin Animal Center! There are six steps to fostering a pet from the Austin Animal Center.
-description_es: We’re so happy you’re interested in fostering for the Austin Animal Center! There are six steps to fostering a pet from the Austin Animal Center.
-description_vi: We’re so happy you’re interested in fostering for the Austin Animal Center! There are six steps to fostering a pet from the Austin Animal Center.
-description_ar: We’re so happy you’re interested in fostering for the Austin Animal Center! There are six steps to fostering a pet from the Austin Animal Center.
+description_es: ES We’re so happy you’re interested in fostering for the Austin Animal Center! There are six steps to fostering a pet from the Austin Animal Center.
+description_vi: VI We’re so happy you’re interested in fostering for the Austin Animal Center! There are six steps to fostering a pet from the Austin Animal Center.
+description_ar: AR We’re so happy you’re interested in fostering for the Austin Animal Center! There are six steps to fostering a pet from the Austin Animal Center.
 
-meta_title_en:
-meta_title_es: Prepárese para la recolección de artículos grandes al borde de la acera
-meta_title_vi: Chuẩn Bị cho Bốc Rác Khối Để Lề Đường
-meta_title_ar: كُن على استعداد لجمع العناصر كبيرة الحجم التي يُراد التخلص منها على جانب الرصيف
+image: bulk-items
 
-meta_description_en:
-meta_description_es: Los clientes residenciales de basura y reciclaje de Austin pueden aprovechar la recolección de artículos que no caben en su bote de basura, tales como electrodomésticos, muebles y alfombras.
-meta_description_vi: Rác nhà của cư dân Austin và các khách hàng tái chế được hưởng dịch vụ bốc rác cho các đồ vật để lề đường vì chúng quá lớn cho một thùng rác, chẳng hạn như các máy móc dùng cho việc nhà, đồ đạc, và thảm.
-meta_description_ar: يمكن لعملاء أوستن التمتع بخدمة جمع العناصر كبيرة الحجم من النفايات المنزلية وإعادة التدوير التي لا تسع عربة القمامة، مثل الأجهزة والأثاث والسجاد.
+process_steps:
+    -
+        title_en: some title here
+        title_es: butts
+        title_vi:
+        title_ar:
 
-meta_tags:
+        short_title_en:
+        short_title_es:
+        short_title_vi:
+        short_title_ar:
+
+        link_title_en:
+        link_title_es:
+        link_title_vi:
+        link_title_ar:
+
+        description_en:
+        description_es:
+        description_vi:
+        description_ar:
+
+        image:
+        # overview_content_en:
+        #     -
+        #     -
+        #     -
+        # overview_content_es:
+        #     -
+        #     -
+        #     -
+        # overview_content_vi:
+        #     -
+        #     -
+        #     -
+        # overview_content_ar:
+        #     -
+        #     -
+        #     -
+
+        detailed_content_en:
+        detailed_content_es:
+        detailed_content_vi:
+        detailed_content_ar:
+
+        quote_en:
+        quote_es:
+        quote_vi:
+        quote_ar:
