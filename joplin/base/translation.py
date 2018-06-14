@@ -83,6 +83,7 @@ class ProcessPageStepTranslationOptions(TranslationOptions):
         'short_title',
         'link_title',
         'description',
+        'overview_steps',
         'detailed_content',
         'quote'
     )

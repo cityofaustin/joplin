@@ -17,8 +17,8 @@ if [ "x$LOAD_DATA" = 'xon' ]; then
         fixtures/locations.yaml \
         fixtures/contacts.yaml \
         fixtures/departments.yaml \
-        fixtures/processes \
-        fixtures/services
+        fixtures/services \
+        fixtures/processes
 fi
 
 exec "$@"

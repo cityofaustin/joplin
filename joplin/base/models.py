@@ -134,7 +134,6 @@ class ProcessPage(Page):
         FieldPanel('title'),
         FieldPanel('description'),
         ImageChooserPanel('image'),
-        # TODO: update loadcontent.py to load process_steps
         InlinePanel('process_steps', label="Process steps"),
     ]
 
@@ -153,12 +152,7 @@ class ProcessPageStep(Orderable):
     link_title = models.CharField(max_length=25)
     description = models.TextField(blank=True)
     image = models.ForeignKey(TranslatedImage, null=True, on_delete=models.SET_NULL, related_name='+')
-    overview_content = StreamField([
-            ('overview_step', ListBlock(TextBlock(label="Overview step")))
-        ],
-        verbose_name='Create brief step descriptions that will help the resident get an overview of the process',
-        blank=True
-    )
+    overview_steps = RichTextField(features=WYSIWYG_FEATURES, verbose_name='Write out the steps a resident needs to take to use the service', blank=True)
     detailed_content = RichTextField(features=WYSIWYG_FEATURES, verbose_name='Write any detailed content describing the process', blank=True)
     quote = models.TextField(blank=True)
 
@@ -168,7 +162,7 @@ class ProcessPageStep(Orderable):
         FieldPanel('link_title'),
         FieldPanel('description'),
         ImageChooserPanel('image'),
-        StreamFieldPanel('overview_content'),
+        FieldPanel('overview_steps'),
         FieldPanel('detailed_content'),
         FieldPanel('quote'),
     ]

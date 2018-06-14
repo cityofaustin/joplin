@@ -58,12 +58,16 @@ def load_theme(data):
     return theme
 
 def load_process(data):
-    print('Loading data for ' + data['slug'] + '\r', end='')
 
     slug = data['slug']
+    print(f'-  Cleaning data for {slug}...\r', end='')
+
+    data['description'] = data['description_en']
+    print('✅')
 
     print(f'-  Loading process steps...\r', end='')
     process_steps = data.pop('process_steps');
+    print('✅')
 
     print(f'-  Loading topic page...\r', end='')
     topic_slug = data.pop('topic')
@@ -86,7 +90,6 @@ def load_process(data):
         page = ProcessPage.objects.get(slug=slug)
         for k, v in data.items():
             setattr(page, k, v)
-        #delete process steps
         for step in page.process_steps.all():
             step.delete()
 
@@ -107,6 +110,27 @@ def load_process(data):
 
 
 def load_process_step(data):
+    title = data['title_en']
+    print(f'-  Cleaning data for process step {title}...\r', end='')
+    data['title'] = data['title_en']
+    data['short_title'] = data['short_title_en']
+    data['link_title'] = data['link_title_en']
+    data['description'] = data['description_en']
+    data['detailed_content'] = data['detailed_content_en']
+    data['quote'] = data['quote_en']
+
+    for key in data:
+        if key.startswith('overview_steps_'):
+            data[key] = ulify(data[key])
+    data['overview_steps'] = data['overview_steps_en']
+    print('✅')
+
+    print(f'-  Loading image...\r', end='')
+    image_name = data.pop('image')
+    image_regex = f'original_images/{image_name}'
+    data['image'] = TranslatedImage.objects.get(file__startswith=image_regex)
+    print('✅')
+
     process_step = ProcessPageStep.objects.create(**data)
     print("✅  Created " + process_step.title_en)
 
