@@ -8,10 +8,13 @@ from modelcluster.models import ClusterableModel
 from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, MultiFieldPanel, ObjectList, StreamFieldPanel, TabbedInterface
 from wagtail.core.fields import StreamField, RichTextField
 from wagtail.core.models import Page, Orderable
+from wagtail.core.blocks import BlockQuoteBlock, ListBlock, TextBlock
 from wagtail.snippets.edit_handlers import SnippetChooserPanel
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.images.models import Image, AbstractImage, AbstractRendition
 from wagtail.snippets.models import register_snippet
+
+
 
 from . import blocks as custom_blocks
 from . import forms as custom_forms
@@ -132,7 +135,7 @@ class ProcessPage(Page):
         FieldPanel('description'),
         ImageChooserPanel('image'),
         # TODO: update loadcontent.py to load process_steps
-        # InlinePanel('process_steps', label="Process steps"),
+        InlinePanel('process_steps', label="Process steps"),
     ]
 
     edit_handler = TabbedInterface([
@@ -145,14 +148,30 @@ class ProcessPage(Page):
 
 class ProcessPageStep(Orderable):
     page = ParentalKey(ProcessPage, related_name='process_steps')
-    name = models.CharField(max_length=255)
-    url = models.URLField()
+    title = models.CharField(max_length=75)
+    short_title = models.CharField(max_length=25)
+    link_title = models.CharField(max_length=25)
+    description = models.TextField(blank=True)
+    image = models.ForeignKey(TranslatedImage, null=True, on_delete=models.SET_NULL, related_name='+')
+    overview_content = StreamField([
+            ('overview_step', ListBlock(TextBlock(label="Overview step")))
+        ],
+        verbose_name='Create brief step descriptions that will help the resident get an overview of the process',
+        blank=True
+    )
+    detailed_content = RichTextField(features=WYSIWYG_FEATURES, verbose_name='Write any detailed content describing the process', blank=True)
+    quote = models.TextField(blank=True)
 
     panels = [
-        FieldPanel('name'),
-        FieldPanel('url'),
+        FieldPanel('title'),
+        FieldPanel('short_title'),
+        FieldPanel('link_title'),
+        FieldPanel('description'),
+        ImageChooserPanel('image'),
+        StreamFieldPanel('overview_content'),
+        FieldPanel('detailed_content'),
+        FieldPanel('quote'),
     ]
-
 
 @register_snippet
 class Topic(ClusterableModel):
