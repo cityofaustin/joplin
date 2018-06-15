@@ -8,7 +8,6 @@ from modelcluster.models import ClusterableModel
 from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, MultiFieldPanel, ObjectList, StreamFieldPanel, TabbedInterface
 from wagtail.core.fields import StreamField, RichTextField
 from wagtail.core.models import Page, Orderable
-from wagtail.core.blocks import BlockQuoteBlock, ListBlock, TextBlock
 from wagtail.snippets.edit_handlers import SnippetChooserPanel
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.images.models import Image, AbstractImage, AbstractRendition

@@ -112,11 +112,6 @@ class ServicePageNode(DjangoObjectType):
         interfaces = [graphene.Node]
 
 class ProcessPageNode(DjangoObjectType):
-    related = graphene.List('api.schema.ProcessPageNode')
-
-    def resolve_related(self, resolve_info, *args, **kwargs):
-        return self.topic.services.exclude(id=self.id)
-
     class Meta:
         model = ProcessPage
         filter_fields = ['id', 'slug', 'topic', 'topic__slug']
@@ -154,10 +149,7 @@ class Query(graphene.ObjectType):
 
     service_page = graphene.Field(ServicePageNode, id=graphene.ID(), pk=graphene.Int(), slug=graphene.String(), show_preview=graphene.Boolean(default_value=False), language=Language())
     all_service_pages = DjangoFilterConnectionField(ServicePageNode)
-
-    process_page = graphene.Field(ProcessPageNode, id=graphene.ID(), pk=graphene.Int(), slug=graphene.String(), show_preview=graphene.Boolean(default_value=False), language=Language())
     all_process_pages = DjangoFilterConnectionField(ProcessPageNode)
-
     all_themes = DjangoFilterConnectionField(ThemeNode)
     all_topics = DjangoFilterConnectionField(TopicNode)
     all_departments = DjangoFilterConnectionField(DepartmentNode)
