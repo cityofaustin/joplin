@@ -149,7 +149,7 @@ class Query(graphene.ObjectType):
 
     service_page = graphene.Field(ServicePageNode, id=graphene.ID(), pk=graphene.Int(), slug=graphene.String(), show_preview=graphene.Boolean(default_value=False), language=Language())
     all_service_pages = DjangoFilterConnectionField(ServicePageNode)
-    all_process_pages = DjangoFilterConnectionField(ProcessPageNode)
+    all_processes = DjangoFilterConnectionField(ProcessPageNode)
     all_themes = DjangoFilterConnectionField(ThemeNode)
     all_topics = DjangoFilterConnectionField(TopicNode)
     all_departments = DjangoFilterConnectionField(DepartmentNode)
