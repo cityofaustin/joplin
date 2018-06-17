@@ -99,8 +99,9 @@ def load_process(data):
         created = True
     print('✅')
 
-    for process_step in process_steps:
+    for i, process_step in enumerate(process_steps):
         process_step['page_id'] = page.id
+        process_step['sort_order'] = i
         load_process_step(process_step)
 
     page.save_revision().publish()
