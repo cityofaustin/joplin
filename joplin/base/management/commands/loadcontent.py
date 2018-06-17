@@ -101,7 +101,7 @@ def load_process(data):
 
     for i, process_step in enumerate(process_steps):
         process_step['page_id'] = page.id
-        process_step['sort_order'] = i
+        process_step['sort_order'] = i + 1
         load_process_step(process_step)
 
     page.save_revision().publish()
