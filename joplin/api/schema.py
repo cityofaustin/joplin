@@ -8,7 +8,7 @@ from graphene.types import Scalar
 from wagtail.core.fields import StreamField
 from wagtail.core.models import Page
 
-from base.models import TranslatedImage, ThreeOneOne, ServicePage, Theme, Topic, Contact, ServicePageContact, Location, ContactDayAndDuration, Department, DepartmentContact
+from base.models import TranslatedImage, ThreeOneOne, ServicePage, ProcessPage, ProcessPageStep, Theme, Topic, Contact, ServicePageContact, Location, ContactDayAndDuration, Department, DepartmentContact
 
 
 class StreamFieldType(Scalar):
@@ -111,6 +111,16 @@ class ServicePageNode(DjangoObjectType):
         filter_fields = ['id', 'slug', 'topic', 'topic__slug']
         interfaces = [graphene.Node]
 
+class ProcessPageNode(DjangoObjectType):
+    class Meta:
+        model = ProcessPage
+        filter_fields = ['id', 'slug', 'topic', 'topic__slug']
+        interfaces = [graphene.Node]
+
+class ProcessPageStepNode(DjangoObjectType):
+    class Meta:
+        model = ProcessPageStep
+        interfaces = [graphene.Node]
 
 def get_page_with_preview_data(page, session):
     # Wagtail saves preview data in the session. We want to mimick what they're doing to generate the built-in preview.
@@ -139,7 +149,7 @@ class Query(graphene.ObjectType):
 
     service_page = graphene.Field(ServicePageNode, id=graphene.ID(), pk=graphene.Int(), slug=graphene.String(), show_preview=graphene.Boolean(default_value=False), language=Language())
     all_service_pages = DjangoFilterConnectionField(ServicePageNode)
-
+    all_processes = DjangoFilterConnectionField(ProcessPageNode)
     all_themes = DjangoFilterConnectionField(ThemeNode)
     all_topics = DjangoFilterConnectionField(TopicNode)
     all_departments = DjangoFilterConnectionField(DepartmentNode)

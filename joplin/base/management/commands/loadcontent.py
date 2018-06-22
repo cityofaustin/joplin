@@ -7,7 +7,7 @@ from django.core.management.base import BaseCommand
 from wagtail.core.models import Page
 from yaml import load
 
-from base.models import TranslatedImage, ThreeOneOne, Theme, Topic, Department, ServicePage, Location, Contact, ServicePageContact, DepartmentContact, Map, ContactDayAndDuration
+from base.models import TranslatedImage, ThreeOneOne, Theme, Topic, Department, ServicePage, ProcessPage, ProcessPageStep, Location, Contact, ServicePageContact, DepartmentContact, Map, ContactDayAndDuration
 
 
 def load_images(data):
@@ -56,6 +56,87 @@ def load_theme(data):
     print(f'{"✅  Created" if created else "⭐  Updated"} {theme.slug}')
 
     return theme
+
+def load_process(data):
+
+    slug = data['slug']
+    print(f'-  Cleaning data for {slug}...\r', end='')
+
+    data['description'] = data['description_en']
+    print('✅')
+
+    print(f'-  Loading process steps...\r', end='')
+    process_steps = data.pop('process_steps');
+    print('✅')
+
+    print(f'-  Loading topic page...\r', end='')
+    topic_slug = data.pop('topic')
+    data['topic'] = Topic.objects.get(slug=topic_slug)
+    print('✅')
+
+    print(f'-  Loading image...\r', end='')
+    image_name = data.pop('image')
+    image_regex = f'original_images/{image_name}'
+    data['image'] = TranslatedImage.objects.get(file__startswith=image_regex)
+    print('✅')
+
+    print(f'-  Loading homepage...\r', end='')
+    home = Page.objects.get(slug='home')
+    print('✅')
+
+    print(f'-  Loading child page "{slug}"...\r', end='')
+    created = False
+    try:
+        page = ProcessPage.objects.get(slug=slug)
+        for k, v in data.items():
+            setattr(page, k, v)
+        for step in page.process_steps.all():
+            step.delete()
+
+    except Exception as e:
+        page = ProcessPage(**data)
+        home.add_child(instance=page)
+        created = True
+    print('✅')
+
+    for i, process_step in enumerate(process_steps):
+        process_step['page_id'] = page.id
+        process_step['sort_order'] = i + 1
+        load_process_step(process_step)
+
+    page.save_revision().publish()
+    print(f'{"✅  Created" if created else "⭐  Updated"}')
+
+    yield page
+
+
+def load_process_step(data):
+    title = data['title_en']
+    print(f'-  Cleaning data for process step {title}...\r', end='')
+    data['title'] = data['title_en']
+    data['short_title'] = data['short_title_en']
+    data['link_title'] = data['link_title_en']
+    data['description'] = data['description_en']
+    if 'detailed_content_en' in data:
+        data['detailed_content'] = data['detailed_content_en']
+    if 'quote_en' in data:
+        data['quote'] = data['quote_en']
+
+    for key in data:
+        if key.startswith('overview_steps_') and data[key]:
+            data[key] = ulify(data[key])
+    data['overview_steps'] = data['overview_steps_en']
+    print('✅')
+
+    if 'image' in data:
+        print(f'-  Loading image...\r', end='')
+        image_name = data.pop('image')
+        image_regex = f'original_images/{image_name}'
+        data['image'] = TranslatedImage.objects.get(file__startswith=image_regex)
+        print('✅')
+
+    process_step = ProcessPageStep.objects.create(**data)
+    print("✅  Created " + process_step.title_en)
 
 
 def load_topics(data):
@@ -223,7 +304,6 @@ def load_service(data):
 
     yield page
 
-
 class Command(BaseCommand):
     help = 'Loads initial content'
     LINE_LENGTH = 100
@@ -239,6 +319,7 @@ class Command(BaseCommand):
             'topics': load_topics,
             'services': load_service,
             'departments': load_departments,
+            'processes': load_process,
             'locations': load_locations,
             'contacts': load_contacts,
         }

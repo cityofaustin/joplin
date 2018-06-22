@@ -13,6 +13,8 @@ from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.images.models import Image, AbstractImage, AbstractRendition
 from wagtail.snippets.models import register_snippet
 
+
+
 from . import blocks as custom_blocks
 from . import forms as custom_forms
 
@@ -60,7 +62,7 @@ class ThreeOneOne(ClusterableModel):
 
 class HomePage(Page):
     parent_page_types = []
-    subpage_types = ['base.ServicePage']
+    subpage_types = ['base.ServicePage', 'base.ProcessPage']
 
     image = models.ForeignKey(TranslatedImage, null=True, on_delete=models.SET_NULL, related_name='+')
 
@@ -108,6 +110,61 @@ class ServicePage(Page):
         # ObjectList(Page.settings_panels, heading='Settings', classname='settings'),
     ])
 
+
+class ProcessPage(Page):
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    topic = models.ForeignKey(
+        'base.Topic',
+        on_delete=models.PROTECT,
+        related_name='processes',
+    )
+    description = models.TextField(blank=True)
+    image = models.ForeignKey(TranslatedImage, null=True, on_delete=models.SET_NULL, related_name='+')
+    # TODO: Add images array field
+
+    parent_page_types = ['base.HomePage']
+    subpage_types = []
+    base_form_class = custom_forms.ProcessPageForm
+
+    content_panels = [
+        FieldPanel('topic'),
+        FieldPanel('title'),
+        FieldPanel('description'),
+        ImageChooserPanel('image'),
+        InlinePanel('process_steps', label="Process steps"),
+    ]
+
+    edit_handler = TabbedInterface([
+        ObjectList(content_panels, heading='Content'),
+        ObjectList(Page.promote_panels, heading='Promote'),
+        # TODO: What should we do with the fields in settings?
+        # ObjectList(Page.settings_panels, heading='Settings', classname='settings'),
+    ])
+
+
+class ProcessPageStep(Orderable):
+    page = ParentalKey(ProcessPage, related_name='process_steps')
+    title = models.CharField(max_length=75)
+    short_title = models.CharField(max_length=25)
+    link_title = models.CharField(max_length=25)
+    description = models.TextField(blank=True)
+    image = models.ForeignKey(TranslatedImage, null=True, on_delete=models.SET_NULL, related_name='+')
+    overview_steps = RichTextField(features=WYSIWYG_FEATURES, verbose_name='Write out the steps a resident needs to take to use the service', blank=True)
+    detailed_content = RichTextField(features=WYSIWYG_FEATURES, verbose_name='Write any detailed content describing the process', blank=True)
+    quote = models.TextField(blank=True)
+
+    panels = [
+        FieldPanel('title'),
+        FieldPanel('short_title'),
+        FieldPanel('link_title'),
+        FieldPanel('description'),
+        ImageChooserPanel('image'),
+        FieldPanel('overview_steps'),
+        FieldPanel('detailed_content'),
+        FieldPanel('quote'),
+    ]
 
 @register_snippet
 class Topic(ClusterableModel):
