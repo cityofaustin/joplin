@@ -71,7 +71,7 @@ class ServicePage(Page):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    steps = RichTextField(features=WYSIWYG_FEATURES, verbose_name='Write out the steps a resident needs to take to use the service')
+    steps = RichTextField(features=WYSIWYG_FEATURES, verbose_name='Write out the steps a resident needs to take to use the service', blank=True)
     dynamic_content = StreamField(
         [
             ('map_block', custom_blocks.SnippetChooserBlockWithAPIGoodness('base.Map', icon='site')),
@@ -87,7 +87,7 @@ class ServicePage(Page):
         on_delete=models.PROTECT,
         related_name='services',
     )
-    image = models.ForeignKey(TranslatedImage, null=True, on_delete=models.SET_NULL, related_name='+')
+    image = models.ForeignKey(TranslatedImage, null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
 
     parent_page_types = ['base.HomePage']
     subpage_types = []
@@ -146,9 +146,9 @@ class ProcessPage(Page):
 
 class ProcessPageStep(Orderable):
     page = ParentalKey(ProcessPage, related_name='process_steps')
-    title = models.CharField(max_length=75)
-    short_title = models.CharField(max_length=25)
-    link_title = models.CharField(max_length=25)
+    title = models.CharField(max_length=DEFAULT_MAX_LENGTH)
+    short_title = models.CharField(max_length=DEFAULT_MAX_LENGTH)
+    link_title = models.CharField(max_length=DEFAULT_MAX_LENGTH)
     description = models.TextField(blank=True)
     image = models.ForeignKey(TranslatedImage, null=True, on_delete=models.SET_NULL, related_name='+')
     overview_steps = RichTextField(features=WYSIWYG_FEATURES, verbose_name='Write out the steps a resident needs to take to use the service', blank=True)
