@@ -7,7 +7,7 @@ from django.core.management.base import BaseCommand
 from wagtail.core.models import Page
 from yaml import load
 
-from base.models import TranslatedImage, ThreeOneOne, Theme, Topic, Department, ServicePage, ProcessPage, ProcessPageStep, Location, Contact, ServicePageContact, DepartmentContact, Map, ContactDayAndDuration
+from base.models import TranslatedImage, ThreeOneOne, Theme, Topic, Department, ServicePage, ProcessPage, ProcessPageStep, ProcessPageContact, Location, Contact, ServicePageContact, DepartmentContact, Map, ContactDayAndDuration
 
 
 def load_images(data):
@@ -80,6 +80,11 @@ def load_process(data):
     data['image'] = TranslatedImage.objects.get(file__startswith=image_regex)
     print('✅')
 
+    print(f'-  Loading contacts...\r', end='')
+    contact = data.pop('contact')
+    contact = Contact.objects.get(name=contact)
+    print('✅')
+
     print(f'-  Loading homepage...\r', end='')
     home = Page.objects.get(slug='home')
     print('✅')
@@ -106,6 +111,10 @@ def load_process(data):
 
     page.save_revision().publish()
     print(f'{"✅  Created" if created else "⭐  Updated"}')
+
+    print(f'-  Loading process contacts...\r', end='')
+    _, created = ProcessPageContact.objects.get_or_create(process=page, defaults={'contact': contact})
+    print(f'{"✅  Created" if created else "✔️  Fetched"}')
 
     yield page
 

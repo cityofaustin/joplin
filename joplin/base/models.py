@@ -133,6 +133,7 @@ class ProcessPage(Page):
         FieldPanel('title'),
         FieldPanel('description'),
         ImageChooserPanel('image'),
+        InlinePanel('contacts', label='Contacts'),
         InlinePanel('process_steps', label="Process steps"),
     ]
 
@@ -142,7 +143,6 @@ class ProcessPage(Page):
         # TODO: What should we do with the fields in settings?
         # ObjectList(Page.settings_panels, heading='Settings', classname='settings'),
     ])
-
 
 class ProcessPageStep(Orderable):
     page = ParentalKey(ProcessPage, related_name='process_steps')
@@ -303,6 +303,16 @@ class ContactDayAndDuration(Orderable, DayAndDuration):
         SnippetChooserPanel('day_and_duration'),
     ]
 
+class ProcessPageContact(ClusterableModel):
+    process = ParentalKey(ProcessPage, related_name='contacts')
+    contact = models.ForeignKey(Contact, related_name='+', on_delete=models.CASCADE)
+
+    panels = [
+        SnippetChooserPanel('contact'),
+    ]
+
+    def __str__(self):
+        return self.contact.name
 
 class ServicePageContact(ClusterableModel):
     page = ParentalKey(ServicePage, related_name='contacts')
@@ -314,7 +324,6 @@ class ServicePageContact(ClusterableModel):
 
     def __str__(self):
         return self.contact.name
-
 
 @register_snippet
 class Department(ClusterableModel):

@@ -1,0 +1,93 @@
+slug: interior-remodel
+
+title_en: Interior Remodel
+title_es: ES Interior Remodel
+title_vi: VI Interior Remodel
+title_ar: AR Interior Remodel
+
+topic: building-permits
+
+description_en: This is a preview of the permitting process for interior remodels and can be used as a checklist throughout your project. The cost for permitting an interior remodel depends on the type of work done to the home.
+description_es:
+description_vi:
+description_ar:
+
+image: permitting-residential
+
+contact: 311
+
+process_steps:
+    -
+        title_en: Define
+        title_es:
+        title_vi:
+        title_ar:
+
+        short_title_en: Define
+        short_title_es:
+        short_title_vi:
+        short_title_ar:
+
+        link_title_en: Go to Define
+        link_title_es:
+        link_title_vi:
+        link_title_ar:
+
+        description_en: The most important step toward bringing your project to life is to get a permit. Permits empower you to complete your projects in a way that meets your needs and follows the city’s code.
+        description_es:
+        description_vi:
+        description_ar:
+
+        image: permitting-residential
+
+        overview_steps_en:
+            - Define the scope of your project.
+            - Find out if you need a permit and what kind.
+            - Determine if you will need any additional permits such as a trade or tree permit.
+            - Determine if you can get a permit.
+        overview_steps_es:
+        overview_steps_vi:
+        overview_steps_ar:
+
+        detailed_content_en: |
+            <p>Before applying for any permits, it’s important to: </p>
+            <ul>
+                <li>define and describe your project</li>
+                <li>find out if you need permits, and what they are,</li>
+                <li>and collect the right information for your consultation and application</li>
+            </ul>
+
+            <p>Reviewers are also available to help you during free and paid consultations.</p>
+        detailed_content_es:
+        detailed_content_vi:
+        detailed_content_ar:
+    -
+        title_en: Consult
+        title_es:
+        title_vi:
+        title_ar:
+
+        short_title_en: Consult
+        short_title_es:
+        short_title_vi:
+        short_title_ar:
+
+        link_title_en: Go to Consult
+        link_title_es:
+        link_title_vi:
+        link_title_ar:
+
+        description_en: All consultations take place at Residential Plan Review. Reviewers provide free 20 minute in-person consultations for residents who want help with general questions about their project. Even though you can’t submit your permit application to a reviewer, having a consultation saves time and helps make the permitting process easier. For more specific issues regarding your project, consider scheduling a paid consultation.
+        description_es:
+        description_vi:
+        description_ar:
+
+        image: permitting-residential
+
+        overview_steps_en:
+            - Find out what you will need to prepare before your consultation.
+            - Determine what documents and sketches you will need to collect before your consultation.
+            - Learn how to schedule a free in-person consultation.
+
+        detailed_content_en: |
+            <h1>Some detailed content here.</h1>

@@ -41,3 +41,9 @@ images:
         alt_text_es:
         alt_text_vi:
         alt_text_ar:
+    -
+        filename: fixtures/images/permitting-residential.jpg
+        alt_text_en: Residential Permitting
+        alt_text_es:
+        alt_text_vi:
+        alt_text_ar:
