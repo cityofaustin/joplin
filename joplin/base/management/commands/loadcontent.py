@@ -7,10 +7,17 @@ from django.core.management.base import BaseCommand
 from wagtail.core.models import Page
 from yaml import load
 
-from base.models import TranslatedImage, ThreeOneOne, Theme, Topic, Department, ServicePage, ProcessPage, ProcessPageStep, ProcessPageContact, Location, Contact, ServicePageContact, DepartmentContact, Map, ContactDayAndDuration
+from base.models import TranslatedImage, TranslatedImageRendition, ThreeOneOne, Theme, Topic, Department, ServicePage, ProcessPage, ProcessPageStep, ProcessPageContact, Location, Contact, ServicePageContact, DepartmentContact, Map, ContactDayAndDuration
+
+import logging
+logging.basicConfig(level=logging.INFO)
 
 
 def load_images(data):
+    # Clear image renditions so they get regenerated
+    TranslatedImageRendition.objects.all().delete()
+    TranslatedImage.objects.all().delete()
+
     for image_data in data['images']:
         yield load_image(image_data)
 
@@ -23,8 +30,7 @@ def load_image(data):
     filepath = Path(filename)
     with open(filename, 'rb') as f:
         data['file'] = ImageFile(f, name=filepath.name)
-        image_regex = f'original_images/{filepath.stem}'
-        image, created = TranslatedImage.objects.update_or_create(file__startswith=image_regex, defaults=data)
+        image, created = TranslatedImage.objects.update_or_create(file__startswith=filepath.stem, defaults=data)
 
     print(f'{"✅  Created" if created else "⭐  Updated"} {filepath.name} => {image.file.name}')
 

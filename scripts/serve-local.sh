@@ -29,5 +29,5 @@ docker run \
     --volume "$PWD:/app" \
     --env "DEBUG=1" \
     --env "LOAD_DATA=$LOAD_DATA" \
-    --env "GUNICORN_CMD_ARGS=--reload  --reload-engine=poll --log-level=debug" \
+    --env "GUNICORN_CMD_ARGS=--reload  --reload-engine=poll" \
     "$TAG" "$@"
