@@ -13,8 +13,6 @@ from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.images.models import Image, AbstractImage, AbstractRendition
 from wagtail.snippets.models import register_snippet
 
-
-
 from . import blocks as custom_blocks
 from . import forms as custom_forms
 
@@ -37,18 +35,6 @@ class TranslatedImageRendition(AbstractRendition):
         unique_together = (
             ('image', 'filter_spec', 'focal_point_key'),
         )
-
-
-# Delete the source image file when an image is deleted
-@receiver(post_delete, sender=TranslatedImage)
-def image_delete(sender, instance, **kwargs):
-    instance.file.delete(False)
-
-
-# Delete the rendition image file when a rendition is deleted
-@receiver(post_delete, sender=TranslatedImage)
-def rendition_delete(sender, instance, **kwargs):
-    instance.file.delete(False)
 
 
 @register_snippet
