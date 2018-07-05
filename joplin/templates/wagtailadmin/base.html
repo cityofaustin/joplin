@@ -14,11 +14,24 @@
                 <span class="u-hidden@medium">{% trans "Dashboard" %}</span>
             </a>
             {% main_nav %}
+            {% topics %}
         </div>
 
     </div>
     <div class="content-wrapper">
+        <div class="content">
+            {# Always show messages div so it can be appended to by JS #}
+            <div class="messages">
+                {% if messages %}
+                    <ul>
+                        {% for message in messages %}
+                            <li class="{% message_tags message %}">{{ message|safe }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+            <div id="nav-toggle" class="nav-toggle icon text-replace">{% trans "Menu" %}</div>
             {% block content %}{% endblock %}
-            {% topics %}
+        </div>
     </div>
 {% endblock %}

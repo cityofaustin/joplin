@@ -139,7 +139,7 @@ class ProcessPage(Page):
 
     edit_handler = TabbedInterface([
         ObjectList(content_panels, heading='Content'),
-        ObjectList(Page.promote_panels, heading='Promote'),
+        #ObjectList(Page.promote_panels, heading='Promote'),
         # TODO: What should we do with the fields in settings?
         # ObjectList(Page.settings_panels, heading='Settings', classname='settings'),
     ])
