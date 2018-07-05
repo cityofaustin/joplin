@@ -7,6 +7,7 @@ from wagtail.core import hooks
 
 from base.models import Topic, Location, Contact
 from wagtail.admin.site_summary import SummaryItem, PagesSummaryItem
+from wagtail.images.wagtail_hooks import ImagesMenuItem
 
 
 from django.utils.safestring import mark_safe
@@ -42,7 +43,12 @@ def remove_summary_item(request, summary_items):
             break
 
 
-
+@hooks.register('construct_main_menu', order=6000)
+def remove_menu_item(request, menu_items):
+    print('NAME', request.user.username)
+    for item in list(menu_items):
+        if not isinstance(item, ImagesMenuItem):
+            menu_items.remove(item)
 
 
 
