@@ -8,6 +8,28 @@ from wagtail.core import hooks
 from base.models import Topic, Location, Contact
 
 
+
+from django.utils.safestring import mark_safe
+
+class WelcomePanel:
+    order = 500
+
+    def render(self):
+        return mark_safe("""
+        <section class="panel summary nice-padding">
+          <h3>No, but seriously -- Butts.</h3>
+        </section>
+        """)
+
+@hooks.register('construct_homepage_panels')
+def add_another_welcome_panel(request, panels):
+  return panels.append( WelcomePanel() )
+
+
+
+
+
+
 @hooks.register('insert_editor_css')
 def editor_css():
     urls = [
@@ -62,7 +84,7 @@ class ContactModelAdmin(ModelAdmin):
 
 
 class ReallyAwesomeGroup(ModelAdminGroup):
-    menu_label = 'Important Snippets'
+    # menu_label = 'Important Snippets'
     items = (LocationModelAdmin, TopicModelAdmin, ContactModelAdmin)
 
 
