@@ -7,3 +7,17 @@
 .translation-tab .object fieldset {padding-top: 0.5em;}
 
 .hidden {display: none !important;}
+
+.wrapper {padding-left: 60px;}
+.nav-wrapper, .nav-wrapper .inner {width: 60px;}
+
+.nav-main {position: static;}
+.nav-main a {padding-left: 10px;}
+
+.nav-main .footer {
+  bottom: 0px !important;
+  right: 0px !important;
+}
+
+
+.listing .actions {visibility: visible;}

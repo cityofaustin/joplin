@@ -1,6 +1,4 @@
 from django.db import models
-from django.db.models.signals import post_delete
-from django.dispatch import receiver
 
 from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
@@ -91,8 +89,8 @@ class ServicePage(Page):
 
     edit_handler = TabbedInterface([
         ObjectList(content_panels, heading='Content'),
-        ObjectList(Page.promote_panels, heading='Promote'),
-        # TODO: What should we do with the fields in settings?
+        # TODO: What should we do with the fields in settings & promote?
+        # ObjectList(Page.promote_panels, heading='Promote'),
         # ObjectList(Page.settings_panels, heading='Settings', classname='settings'),
     ])
 
@@ -125,10 +123,11 @@ class ProcessPage(Page):
 
     edit_handler = TabbedInterface([
         ObjectList(content_panels, heading='Content'),
-        ObjectList(Page.promote_panels, heading='Promote'),
-        # TODO: What should we do with the fields in settings?
+        # TODO: What should we do with the fields in settings & promote?
+        # ObjectList(Page.promote_panels, heading='Promote'),
         # ObjectList(Page.settings_panels, heading='Settings', classname='settings'),
     ])
+
 
 class ProcessPageStep(Orderable):
     page = ParentalKey(ProcessPage, related_name='process_steps')
@@ -151,6 +150,7 @@ class ProcessPageStep(Orderable):
         FieldPanel('detailed_content'),
         FieldPanel('quote'),
     ]
+
 
 @register_snippet
 class Topic(ClusterableModel):
@@ -289,6 +289,7 @@ class ContactDayAndDuration(Orderable, DayAndDuration):
         SnippetChooserPanel('day_and_duration'),
     ]
 
+
 class ProcessPageContact(ClusterableModel):
     process = ParentalKey(ProcessPage, related_name='contacts')
     contact = models.ForeignKey(Contact, related_name='+', on_delete=models.CASCADE)
@@ -300,6 +301,7 @@ class ProcessPageContact(ClusterableModel):
     def __str__(self):
         return self.contact.name
 
+
 class ServicePageContact(ClusterableModel):
     page = ParentalKey(ServicePage, related_name='contacts')
     contact = models.ForeignKey(Contact, related_name='+', on_delete=models.CASCADE)
@@ -310,6 +312,7 @@ class ServicePageContact(ClusterableModel):
 
     def __str__(self):
         return self.contact.name
+
 
 @register_snippet
 class Department(ClusterableModel):

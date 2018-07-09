@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'modeltranslation',
     'graphene_django',
+    'django_extensions',
 
     'django.contrib.admin',
     'django.contrib.auth',

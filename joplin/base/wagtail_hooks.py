@@ -1,18 +1,26 @@
 from django.conf import settings
 from django.contrib.staticfiles.templatetags.staticfiles import static
+from django.urls import reverse
 from django.utils.html import format_html_join
 
+from wagtail.admin.menu import MenuItem
 from wagtail.contrib.modeladmin.options import ModelAdmin, ModelAdminGroup, modeladmin_register
 from wagtail.core import hooks
 
-from base.models import Topic, Location, Contact
+from base.models import HomePage, Topic, Location, Contact
+
+
+@hooks.register('insert_global_admin_css')
+def global_css():
+    urls = [
+        static('css/admin.css'),
+    ]
+    return format_html_join('\n', '<link rel="stylesheet" href="{}">', ((url,) for url in urls))
 
 
 @hooks.register('insert_editor_css')
 def editor_css():
     urls = [
-        static('css/admin.css'),
-        static('css/toggle.css'),
         static('css/preview.css'),
     ]
     return format_html_join('\n', '<link rel="stylesheet" href="{}">', ((url,) for url in urls))
@@ -45,6 +53,27 @@ def before_edit_page(request, page):
 
     assert request.user.is_authenticated
     print(f'BeforeEditHook {request.user.email} is in groups {[group.name for group in request.user.groups.all()]}')
+
+
+@hooks.register('construct_main_menu')
+def configure_main_menu(request, menu_items):
+    new_items = []
+    for item in menu_items:
+        if item.name in ('home', 'dashboard', 'images'):
+            item.label = ''
+            new_items.append(item)
+    menu_items[:] = new_items
+
+
+@hooks.register('register_admin_menu_item')
+def register_home_menu_item():
+    return MenuItem('Dashboard', reverse('wagtailadmin_home'), classnames='icon icon-pick', order=10)
+
+
+@hooks.register('register_admin_menu_item')
+def register_page_list_menu_item():
+    home = HomePage.objects.first()
+    return MenuItem('Home', reverse('wagtailadmin_explore', args=[home.pk]), classnames='icon icon-home', order=20)
 
 
 class LocationModelAdmin(ModelAdmin):
