@@ -9,9 +9,10 @@ from wagtail.admin import urls as wagtailadmin_urls
 from wagtail.core import urls as wagtail_urls
 from wagtail.documents import urls as wagtaildocs_urls
 
+from base.models import HomePage
+
 
 def home(request):
-    from base.models import HomePage
     page = HomePage.objects.first()
     return redirect('wagtailadmin_explore', page.id)
 
