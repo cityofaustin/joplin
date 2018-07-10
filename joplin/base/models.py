@@ -63,7 +63,7 @@ class ServicePage(Page):
             ('collection_schedule_block', custom_blocks.CollectionScheduleBlock()),
             ('recollect_block', custom_blocks.RecollectBlock()),
         ],
-        verbose_name='Add any forms, maps, apps, or content that will help the resident use the service',
+        verbose_name='Add any maps or apps that will help the resident use the service',
     )
     additional_content = RichTextField(features=WYSIWYG_FEATURES, verbose_name='Write any additional content describing the service', blank=True)
     topic = models.ForeignKey(
@@ -71,16 +71,16 @@ class ServicePage(Page):
         on_delete=models.PROTECT,
         related_name='services',
     )
-    image = models.ForeignKey(TranslatedImage, null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
+    image = models.ForeignKey(TranslatedImage, null=True, blank=True, on_delete=models.SET_NULL, related_name='+', verbose_name='Choose an image for the service banner')
 
     parent_page_types = ['base.HomePage']
     subpage_types = []
     base_form_class = custom_forms.ServicePageForm
 
     content_panels = [
+        ImageChooserPanel('image'),
         FieldPanel('topic'),
         FieldPanel('title'),
-        ImageChooserPanel('image'),
         FieldPanel('steps'),
         StreamFieldPanel('dynamic_content'),
         FieldPanel('additional_content'),
@@ -89,9 +89,7 @@ class ServicePage(Page):
 
     edit_handler = TabbedInterface([
         ObjectList(content_panels, heading='Content'),
-        # TODO: What should we do with the fields in settings & promote?
-        # ObjectList(Page.promote_panels, heading='Promote'),
-        # ObjectList(Page.settings_panels, heading='Settings', classname='settings'),
+        ObjectList(Page.promote_panels, heading='SEO'),
     ])
 
 
@@ -123,9 +121,7 @@ class ProcessPage(Page):
 
     edit_handler = TabbedInterface([
         ObjectList(content_panels, heading='Content'),
-        # TODO: What should we do with the fields in settings & promote?
-        # ObjectList(Page.promote_panels, heading='Promote'),
-        # ObjectList(Page.settings_panels, heading='Settings', classname='settings'),
+        ObjectList(Page.promote_panels, heading='SEO'),
     ])
 
 

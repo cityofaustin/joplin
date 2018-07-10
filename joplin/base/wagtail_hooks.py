@@ -21,6 +21,7 @@ def global_css():
 @hooks.register('insert_editor_css')
 def editor_css():
     urls = [
+        static('css/editor.css'),
         static('css/preview.css'),
     ]
     return format_html_join('\n', '<link rel="stylesheet" href="{}">', ((url,) for url in urls))
@@ -59,21 +60,16 @@ def before_edit_page(request, page):
 def configure_main_menu(request, menu_items):
     new_items = []
     for item in menu_items:
-        if item.name in ('home', 'dashboard', 'images'):
+        if item.name in ('home', 'images'):
             item.label = ''
             new_items.append(item)
     menu_items[:] = new_items
 
 
 @hooks.register('register_admin_menu_item')
-def register_home_menu_item():
-    return MenuItem('Dashboard', reverse('wagtailadmin_home'), classnames='icon icon-pick', order=10)
-
-
-@hooks.register('register_admin_menu_item')
 def register_page_list_menu_item():
     home = HomePage.objects.first()
-    return MenuItem('Home', reverse('wagtailadmin_explore', args=[home.pk]), classnames='icon icon-home', order=20)
+    return MenuItem('Home', reverse('wagtailadmin_explore', args=[home.pk]), classnames='icon icon-home', order=10)
 
 
 class LocationModelAdmin(ModelAdmin):
