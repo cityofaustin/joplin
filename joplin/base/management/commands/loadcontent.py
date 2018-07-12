@@ -63,6 +63,7 @@ def load_theme(data):
 
     return theme
 
+
 def load_process(data):
 
     slug = data['slug']
@@ -72,7 +73,7 @@ def load_process(data):
     print('✅')
 
     print(f'-  Loading process steps...\r', end='')
-    process_steps = data.pop('process_steps');
+    process_steps = data.pop('process_steps')
     print('✅')
 
     print(f'-  Loading topic page...\r', end='')
@@ -310,6 +311,8 @@ def load_service(data):
         home.add_child(instance=page)
         created = True
 
+    page.title = data['title_en']
+
     page.save_revision().publish()
     print(f'{"✅  Created" if created else "⭐  Updated"}')
 
@@ -318,6 +321,7 @@ def load_service(data):
     print(f'{"✅  Created" if created else "✔️  Fetched"}')
 
     yield page
+
 
 class Command(BaseCommand):
     help = 'Loads initial content'
