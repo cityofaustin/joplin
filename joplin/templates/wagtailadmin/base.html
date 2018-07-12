@@ -1,9 +1,19 @@
 {% extends "wagtailadmin/base.html" %}
-{% load staticfiles %}
+{% load staticfiles wagtailadmin_tags %}
 
 {% block branding_logo %}
-    <img src="{% static 'images/logo.png' %}" alt="City of Austin" width="80" />
-    <script>
-        window.JANIS_URL = '{{ JANIS_URL }}';
-    </script>
+{% endblock %}
+
+{% block js %}
+    {{ block.super }}
+
+    <div class="header">
+        <div>
+            <img class="wagtail-logo wagtail-logo__full" src="{% static 'images/logo.svg' %}" alt="Welcome to Pearl" width="50" />
+        </div>
+        <div class="actions">
+            <div class="avatar"><img src="{% avatar_url user %}" alt="" /></div>
+            <div class="user">{{ user }}</div>
+        </div>
+    </div class="header">
 {% endblock %}

@@ -1,3 +1,5 @@
+from django.urls import path
+from django.shortcuts import redirect
 from django.conf import settings
 from django.conf.urls import include, url
 from django.contrib import admin
@@ -7,10 +9,18 @@ from wagtail.admin import urls as wagtailadmin_urls
 from wagtail.core import urls as wagtail_urls
 from wagtail.documents import urls as wagtaildocs_urls
 
+from base.models import HomePage
+
+
+def home(request):
+    page = HomePage.objects.first()
+    return redirect('wagtailadmin_explore', page.id)
+
 
 urlpatterns = [
     url(r'^django-admin/', admin.site.urls),
 
+    path('admin/', home),
     url(r'^admin/', include(wagtailadmin_urls)),
     url(r'^documents/', include(wagtaildocs_urls)),
 

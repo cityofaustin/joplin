@@ -1,6 +1,4 @@
 from django.db import models
-from django.db.models.signals import post_delete
-from django.dispatch import receiver
 
 from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
@@ -65,7 +63,7 @@ class ServicePage(Page):
             ('collection_schedule_block', custom_blocks.CollectionScheduleBlock()),
             ('recollect_block', custom_blocks.RecollectBlock()),
         ],
-        verbose_name='Add any forms, maps, apps, or content that will help the resident use the service',
+        verbose_name='Add any maps or apps that will help the resident use the service',
     )
     additional_content = RichTextField(features=WYSIWYG_FEATURES, verbose_name='Write any additional content describing the service', blank=True)
     topic = models.ForeignKey(
@@ -73,16 +71,16 @@ class ServicePage(Page):
         on_delete=models.PROTECT,
         related_name='services',
     )
-    image = models.ForeignKey(TranslatedImage, null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
+    image = models.ForeignKey(TranslatedImage, null=True, blank=True, on_delete=models.SET_NULL, related_name='+', verbose_name='Choose an image for the service banner')
 
     parent_page_types = ['base.HomePage']
     subpage_types = []
     base_form_class = custom_forms.ServicePageForm
 
     content_panels = [
+        ImageChooserPanel('image'),
         FieldPanel('topic'),
         FieldPanel('title'),
-        ImageChooserPanel('image'),
         FieldPanel('steps'),
         StreamFieldPanel('dynamic_content'),
         FieldPanel('additional_content'),
@@ -91,9 +89,7 @@ class ServicePage(Page):
 
     edit_handler = TabbedInterface([
         ObjectList(content_panels, heading='Content'),
-        ObjectList(Page.promote_panels, heading='Promote'),
-        # TODO: What should we do with the fields in settings?
-        # ObjectList(Page.settings_panels, heading='Settings', classname='settings'),
+        ObjectList(Page.promote_panels, heading='Search Info'),
     ])
 
 
@@ -125,10 +121,9 @@ class ProcessPage(Page):
 
     edit_handler = TabbedInterface([
         ObjectList(content_panels, heading='Content'),
-        ObjectList(Page.promote_panels, heading='Promote'),
-        # TODO: What should we do with the fields in settings?
-        # ObjectList(Page.settings_panels, heading='Settings', classname='settings'),
+        ObjectList(Page.promote_panels, heading='Search Info'),
     ])
+
 
 class ProcessPageStep(Orderable):
     page = ParentalKey(ProcessPage, related_name='process_steps')
@@ -151,6 +146,7 @@ class ProcessPageStep(Orderable):
         FieldPanel('detailed_content'),
         FieldPanel('quote'),
     ]
+
 
 @register_snippet
 class Topic(ClusterableModel):
@@ -289,6 +285,7 @@ class ContactDayAndDuration(Orderable, DayAndDuration):
         SnippetChooserPanel('day_and_duration'),
     ]
 
+
 class ProcessPageContact(ClusterableModel):
     process = ParentalKey(ProcessPage, related_name='contacts')
     contact = models.ForeignKey(Contact, related_name='+', on_delete=models.CASCADE)
@@ -300,6 +297,7 @@ class ProcessPageContact(ClusterableModel):
     def __str__(self):
         return self.contact.name
 
+
 class ServicePageContact(ClusterableModel):
     page = ParentalKey(ServicePage, related_name='contacts')
     contact = models.ForeignKey(Contact, related_name='+', on_delete=models.CASCADE)
@@ -310,6 +308,7 @@ class ServicePageContact(ClusterableModel):
 
     def __str__(self):
         return self.contact.name
+
 
 @register_snippet
 class Department(ClusterableModel):
