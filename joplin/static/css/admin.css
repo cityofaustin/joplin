@@ -1,4 +1,5 @@
 .full input {padding: 1em;}
+.logo {display: none;}
 
 .object fieldset, .object .field-content {width: 100%;}
 
@@ -7,7 +8,7 @@
 
 .hidden {display: none !important;}
 
-.wrapper {padding-left: 60px;}
+.wrapper {padding-left: 60px; height: inherit;}
 .nav-wrapper, .nav-wrapper .inner {width: 60px;}
 
 .nav-main {position: static; overflow: hidden;}
