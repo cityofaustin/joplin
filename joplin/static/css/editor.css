@@ -1,0 +1,7 @@
+.object h2 {background: inherit;}
+.object > h2:before, .object > h2 label:before {display: none;}
+.object {border-bottom: 1px dashed grey !important;}
+
+.tab-nav.merged {background-color: #eee;}
+
+footer {display:none;}

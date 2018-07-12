@@ -1,9 +1,26 @@
 .full input {padding: 1em;}
 
-#tab-content .object .object-help {display: none;}
 .object fieldset, .object .field-content {width: 100%;}
 
 .translation-tab .object .object-help {width: auto; opacity: 1; position: static; font-size: 1.2em;}
 .translation-tab .object fieldset {padding-top: 0.5em;}
 
 .hidden {display: none !important;}
+
+.wrapper {padding-left: 60px;}
+.nav-wrapper, .nav-wrapper .inner {width: 60px;}
+
+.nav-main {position: static; overflow: hidden;}
+.nav-main a {padding-left: 10px;}
+.nav-main .footer {display: none;}
+.nav-main .menu-item a::before {font-size: 2rem;}
+
+.listing .actions {visibility: visible;}
+
+.page-explorer header, .homepage header, .page-editor header {display:none;}
+joplinheader {display:flex; padding: 0.75rem; background: #333;}
+joplinheader.secondary {background: #EEE;}
+joplinheader .actions {display: flex; margin: auto 0 auto auto;}
+joplinheader .actions * {margin: auto 2px;}
+
+button.secondary {background-color:#999; border-color:#999;}

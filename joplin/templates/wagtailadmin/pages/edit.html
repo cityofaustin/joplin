@@ -1,0 +1,33 @@
+{% extends "wagtailadmin/pages/edit.html" %}
+
+{% block content %}
+    <joplinheader class="secondary">
+        <div>
+            <h1 class="edit_page_header">
+                Edit
+                <span class="page_type">{{ content_type.model_class.get_verbose_name }}</span>
+                <span class="page_title">{{ page.get_admin_display_title }}</span>
+            </h1>
+        </div>
+
+        <div class="actions">
+            <div>
+                <div>
+                    Last modified <span class="time">{{ page.get_latest_revision.created_at }}</span>
+                </div>
+                <div>See <a href="{% url 'wagtailadmin_pages:revisions_index' page.id %}" class="underlined">all revisions</a></div>
+            </div>
+            <div>
+                <button class="button icon icon-view secondary">Share</button>
+            </div>
+            <div>
+                <button class="button icon icon-tick secondary">Save Draft</button>
+            </div>
+            <div>
+                <button class="button icon icon-doc-empty">Publish</button>
+            </div>
+        </div>
+    </joplinheader>
+
+    {{ block.super }}
+{% endblock %}
