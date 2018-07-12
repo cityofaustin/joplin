@@ -2,7 +2,7 @@
 {% load l10n %}
 {% load wagtailadmin_tags %}
 
-<joplinheader class="secondary">
+<div class="header secondary">
     <div>
         <h1>Content</h1>
     </div>
@@ -15,10 +15,6 @@
             <input placeholder="Search">
         </div>
     </div>
-</joplinheader>
-
-<div>
-
 </div>
 
 <table class="listing {% if full_width %}full-width{% endif %} {% block table_classname %}{% endblock %}">

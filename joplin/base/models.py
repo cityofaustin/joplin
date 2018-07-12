@@ -89,7 +89,7 @@ class ServicePage(Page):
 
     edit_handler = TabbedInterface([
         ObjectList(content_panels, heading='Content'),
-        ObjectList(Page.promote_panels, heading='SEO'),
+        ObjectList(Page.promote_panels, heading='Search Info'),
     ])
 
 
@@ -121,7 +121,7 @@ class ProcessPage(Page):
 
     edit_handler = TabbedInterface([
         ObjectList(content_panels, heading='Content'),
-        ObjectList(Page.promote_panels, heading='SEO'),
+        ObjectList(Page.promote_panels, heading='Search Info'),
     ])
 
 

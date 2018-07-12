@@ -7,7 +7,7 @@
 {% block js %}
     {{ block.super }}
 
-    <joplinheader>
+    <div class="header">
         <div>
             <img class="wagtail-logo wagtail-logo__full" src="{% static 'images/logo.svg' %}" alt="Welcome to Pearl" width="50" />
         </div>
@@ -15,5 +15,5 @@
             <div class="avatar"><img src="{% avatar_url user %}" alt="" /></div>
             <div class="user">{{ user }}</div>
         </div>
-    </joplinheader>
+    </div class="header">
 {% endblock %}
