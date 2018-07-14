@@ -20,6 +20,10 @@ if [ "$LOAD_DATA" == "on" ] && [ -f "$DB_FILE" ]; then
     fi
 fi
 
+# Get the heroku key. We eat stderr because the heroku cli will warn us that these tokens
+# are short-lived. That's OK in our case because we're just running this locally.
+HEROKU_KEY=$(heroku auth:token 2> /dev/null)
+
 docker build --tag "$TAG" .
 docker run \
     --rm \
@@ -30,4 +34,6 @@ docker run \
     --env "DEBUG=1" \
     --env "LOAD_DATA=$LOAD_DATA" \
     --env "GUNICORN_CMD_ARGS=--reload  --reload-engine=poll" \
+    --env "HEROKU_KEY=$HEROKU_KEY" \
+    --env "HEROKU_JANIS_APP_NAME=$HEROKU_JANIS_APP_NAME" \
     "$TAG" "$@"
