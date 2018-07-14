@@ -1,5 +1,8 @@
 {% extends "wagtailadmin/pages/edit.html" %}
 
+{% load i18n %}
+{% load wagtailadmin_tags %}
+
 {% block content %}
     <div class="header secondary">
         <div>
@@ -18,13 +21,18 @@
                 <div>See <a href="{% url 'wagtailadmin_pages:revisions_index' page.id %}" class="underlined">all revisions</a></div>
             </div>
             <div>
-                <button class="button icon icon-view secondary">Share</button>
+                {% auto_update_preview as auto_update %}
+                <button class="button action-preview icon icon-view secondary"
+                    data-action="{% url 'wagtailadmin_pages:preview_on_edit' page.id %}{% if mode %}?mode={{ mode|urlencode }}{% endif %}"
+                    data-auto-update="{{ auto_update|yesno:'true,false' }}">
+                    Preview
+                </button>
             </div>
             <div>
-                <button class="button icon icon-tick secondary">Save Draft</button>
+                <button class="button icon icon-tick secondary js-proxy-click" data-proxy-by-class="action-save">Save Draft</button>
             </div>
             <div>
-                <button class="button icon icon-doc-empty">Publish</button>
+                <button class="button button-longrunning icon icon-doc-empty js-proxy-click" data-clicked-text="{% trans 'Publishing…' %}" data-proxy-by-name="action-publish">Publish</button>
             </div>
         </div>
     </div>
