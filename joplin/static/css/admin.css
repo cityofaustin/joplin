@@ -32,8 +32,8 @@ joplinheader .actions {display: flex; margin: auto 0 auto auto;}
 joplinheader .actions * {margin: auto 2px;}
 
 button.button:hover {background color: #00B6CC; color: white; }
-button.secondary.button-small {background-color:#fff; border-color:#3282AF;}
-button.button {background-color: #00B6CC; border-color: #00B6CC; font: color: #023654; border-radius: 0px; }
+button.secondary.button-small {background-color:#fff; border-color:#3282AF; color: #fff;}
+button.button {background-color: #00B6CC; border-color: #00B6CC; color: #023654; border-radius: 0px; }
 
 .user {color: #28E8B7;}
 h1 {font-family: lora; color: red; font-style: italic; text-transform: none;}
