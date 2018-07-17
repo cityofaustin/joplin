@@ -1,5 +1,12 @@
 {% extends "wagtailadmin/pages/edit.html" %}
 
+{% load wagtailadmin_tags %}
+{% load i18n %}
+{% load l10n %}
+{% block titletag %}{% blocktrans with title=page.get_admin_display_title page_type=content_type.model_class.get_verbose_name %}Editing {{ page_type }}: {{ title }}{% endblocktrans %}{% endblock %}
+{% block bodyclass %}page-editor {% if page.live %}page-is-live{% endif %} model-{{ content_type.model }} {% if page.locked %}page-locked{% endif %}{% endblock %}
+
+
 {% block content %}
     <div class="header secondary">
         <div>
@@ -21,7 +28,7 @@
                 <button class="button icon icon-view secondary">Share</button>
             </div>
             <div>
-                <button class="button icon icon-tick secondary">Save Draft</button>
+                <button type="submit" class="button action-save button-longrunning {% if is_revision %}warning{% endif %}" tabindex="3" data-clicked-text="{% trans 'Saving…' %}" {% if page.locked %}disabled {% endif %}><span class="icon icon-spinner"></span><em>{% if page.locked %}{% trans 'Page locked' %}{% else %}{% if is_revision %}{% trans 'Replace current draft' %}{% else %}{% trans 'Save draft' %}{% endif %}{% endif %}</em></button>
             </div>
             <div>
                 <button class="button icon icon-doc-empty">Publish</button>
