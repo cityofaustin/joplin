@@ -1,5 +1,7 @@
 from django.dispatch import receiver
 from django.db.models.signals import post_save
+from wagtail.core.signals import page_published, page_unpublished
+
 from base.models import TranslatedImage
 
 import logging
@@ -22,3 +24,13 @@ def generate_responsive_images(sender, **kwargs):
     for width in IMAGE_WIDTHS:
         logger.debug(f'Generating image rendition for {width}px')
         image.get_rendition(f'width-{width}')
+
+
+@receiver(page_published)
+def page_published_signal(sender, **kwargs):
+    print(f'page_published {sender}')
+
+
+@receiver(page_published)
+def page_unpublished_signal(sender, **kwargs):
+    print(f'page_unpublished {sender}')

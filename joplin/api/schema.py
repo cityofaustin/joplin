@@ -6,7 +6,7 @@ from graphene_django.debug import DjangoDebug
 from graphene_django.filter import DjangoFilterConnectionField
 from graphene.types import Scalar
 from wagtail.core.fields import StreamField
-from wagtail.core.models import Page
+from wagtail.core.models import Page, PageRevision
 
 from base.models import TranslatedImage, ThreeOneOne, ServicePage, ServicePageContact, ProcessPage, ProcessPageStep, ProcessPageContact, Theme, Topic, Contact, Location, ContactDayAndDuration, Department, DepartmentContact
 
@@ -117,6 +117,17 @@ class ProcessPageNode(DjangoObjectType):
         filter_fields = ['id', 'slug', 'topic', 'topic__slug']
         interfaces = [graphene.Node]
 
+class PageRevisionNode(DjangoObjectType):
+    as_service_page = graphene.NonNull(ServicePageNode)
+
+    def resolve_as_service_page(self, resolve_info, *args, **kwargs):
+        return self.as_page_object();
+
+    class Meta:
+        model = PageRevision
+        filter_fields = ['id']
+        interfaces = [graphene.Node]
+
 class ProcessPageStepNode(DjangoObjectType):
     class Meta:
         model = ProcessPageStep
@@ -155,11 +166,18 @@ class Query(graphene.ObjectType):
 
     service_page = graphene.Field(ServicePageNode, id=graphene.ID(), pk=graphene.Int(), slug=graphene.String(), show_preview=graphene.Boolean(default_value=False), language=Language())
     all_service_pages = DjangoFilterConnectionField(ServicePageNode)
+    page_revision = graphene.Field(PageRevisionNode, id=graphene.ID())
+    all_page_revisions = DjangoFilterConnectionField(PageRevisionNode)
     all_processes = DjangoFilterConnectionField(ProcessPageNode)
     all_themes = DjangoFilterConnectionField(ThemeNode)
     all_topics = DjangoFilterConnectionField(TopicNode)
     all_departments = DjangoFilterConnectionField(DepartmentNode)
     all_311 = DjangoFilterConnectionField(ThreeOneOneNode)
+
+    def resolve_page_revision(self, resolve_info, id=None):
+        revision = graphene.Node.get_node_from_global_id(resolve_info, id)
+
+        return revision
 
     def resolve_service_page(self, resolve_info, id=None, pk=None, slug=None, show_preview=None, language=None):
         if not language:

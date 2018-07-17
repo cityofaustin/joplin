@@ -1,4 +1,5 @@
 .full input {padding: 1em;}
+.logo {display: none;}
 
 .object fieldset, .object .field-content {width: 100%;}
 
@@ -6,9 +7,9 @@
 .translation-tab .object fieldset {padding-top: 0.5em;}
 
 .hidden {display: none !important;}
-.nav-wrapper, .nav-wrapper .inner {width: 60px; background: #023654; }
-.wrapper {padding-left: 60px;}
 
+.nav-wrapper, .nav-wrapper .inner {width: 60px; background: #023654;}
+.wrapper {padding-left: 60px; height: inherit;}
 
 .nav-main {position: static; overflow: hidden;}
 .nav-main a {padding-left: 10px;}
@@ -26,10 +27,10 @@
 
 .page-explorer header, .homepage header, .page-editor header {display:none;}
 
-joplinheader {display:flex; padding: 0.75rem; background: #023654; }
-joplinheader.secondary {background: #EEE;}
-joplinheader .actions {display: flex; margin: auto 0 auto auto;}
-joplinheader .actions * {margin: auto 2px;}
+.header {display:flex; padding: 0.75rem; background: #023654;}
+.header.secondary {background: #EEE;}
+.header .actions {display: flex; margin: auto 0 auto auto;}
+.header .actions * {margin: auto 2px;}
 
 button.button:hover {background color: #00B6CC; color: white; }
 button.secondary.button-small {background-color:#fff; border-color:#3282AF; color: #fff;}
