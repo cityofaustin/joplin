@@ -27,9 +27,8 @@
             </div>
             <div>
 
-            {% global_id revision=3 as revisionId %}
-            <button onclick="alert('{{revisionId}}')" class="button icon icon-view secondary">Share</button>
-
+            {% global_id revision=page.get_latest_revision as revisionId %}
+            <a href="http://localhost:8080/en/preview/service/{{revisionId}}" class="button icon icon-view secondary">Share</a>
             </div>
             <div>
                 <button type="submit" form="page-edit-form" class="button action-save button-longrunning {% if is_revision %}warning{% endif %}" data-clicked-text="{% trans 'Saving…' %}" {% if page.locked %}disabled {% endif %}><span class="icon icon-spinner"></span><em>{% if page.locked %}{% trans 'Page locked' %}{% else %}{% if is_revision %}{% trans 'Replace current draft' %}{% else %}{% trans 'Save draft' %}{% endif %}{% endif %}</em></button>
