@@ -13,14 +13,25 @@
         $(function() {
             var editform = $('#page-edit-form');
             var previewbutton = $('#page-preview-button');
+            var sharebutton = $('#page-share-preview-button');
 
             if(localStorage.previewing === 'true') {
                 window.open("{{preview_url}}", '_blank');
                 localStorage.previewing = false;
             }
 
+            if(localStorage.sharingpreview === 'true') {
+                // TODO: Don't just alert with the preview URL
+                alert("{{preview_url}}");
+                localStorage.sharingpreview = false;
+            }
+
             previewbutton.click(function() {
                 localStorage.previewing = true;
+            });
+
+            sharebutton.click(function() {
+                localStorage.sharingpreview = true;
             });
         })
     </script>
@@ -43,10 +54,7 @@
                 <div>See <a href="{% url 'wagtailadmin_pages:revisions_index' page.id %}" class="underlined">all revisions</a></div>
             </div>
             <div>
-
-            
-            <a href="{{preview_url}}" class="button icon icon-view secondary">Share</a>
-
+                <button id="page-share-preview-button" type="submit" form="page-edit-form" class="button action-save button-longrunning icon icon-view {% if is_revision %}warning{% endif %}" data-clicked-text="{% trans 'Saving…' %}" {% if page.locked %}disabled {% endif %}><span class="icon icon-spinner"></span><em>{% if page.locked %}{% trans 'Page locked' %}{% else %}{% if is_revision %}{% trans 'Replace current draft' %}{% else %}{% trans 'Share' %}{% endif %}{% endif %}</em></button>
             </div>
             <div>
                 <button id="page-preview-button" type="submit" form="page-edit-form" class="button action-save button-longrunning {% if is_revision %}warning{% endif %}" data-clicked-text="{% trans 'Saving…' %}" {% if page.locked %}disabled {% endif %}><span class="icon icon-spinner"></span><em>{% if page.locked %}{% trans 'Page locked' %}{% else %}{% if is_revision %}{% trans 'Replace current draft' %}{% else %}{% trans 'Preview' %}{% endif %}{% endif %}</em></button>
