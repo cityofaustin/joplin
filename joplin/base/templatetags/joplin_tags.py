@@ -7,11 +7,12 @@ register = template.Library()
 @register.simple_tag
 def get_preview_url(*args, **kwargs):
     revision = kwargs['revision']
+    page_type = type(revision.page).__name__
+
     # TODO: Add other page types
-    if "Service" in kwargs['page_type']:
-      page_type = "service"
-    print(page_type)
-    revision_id = revision.id
-    global_id = graphene.Node.to_global_id('PageRevisionNode', revision_id)
+    if "Service" in page_type:
+      url_page_type = "service"
+
+    global_id = graphene.Node.to_global_id('PageRevisionNode', revision.id)
     # TODO: Add other languages
-    return os.environ["JANIS_URL"] + "/en/preview/" + page_type + "/" + global_id
+    return os.environ["JANIS_URL"] + "/en/preview/" + url_page_type + "/" + global_id
