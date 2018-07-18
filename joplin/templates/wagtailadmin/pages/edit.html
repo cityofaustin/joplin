@@ -7,8 +7,25 @@
 {% block titletag %}{% blocktrans with title=page.get_admin_display_title page_type=content_type.model_class.get_verbose_name %}Editing {{ page_type }}: {{ title }}{% endblocktrans %}{% endblock %}
 {% block bodyclass %}page-editor {% if page.live %}page-is-live{% endif %} model-{{ content_type.model }} {% if page.locked %}page-locked{% endif %}{% endblock %}
 
-
 {% block content %}
+    {% get_preview_url revision=page.get_latest_revision page_type=content_type.model_class.get_verbose_name as preview_url %}
+    <script type="text/javascript">
+        $(function() {
+            var editform = $('#page-edit-form');
+            var previewbutton = $('#page-preview-button');
+
+            if(localStorage.previewing === 'true') {
+                window.open("{{preview_url}}", '_blank');
+                localStorage.previewing = false;
+            }
+
+            previewbutton.click(function() {
+                localStorage.previewing = true;
+            });
+        })
+    </script>
+
+
     <div class="header secondary">
         <div>
             <h1 class="edit_page_header">
@@ -27,8 +44,12 @@
             </div>
             <div>
 
-            {% global_id revision=page.get_latest_revision as revisionId %}
-            <a href="http://localhost:8080/en/preview/service/{{revisionId}}" class="button icon icon-view secondary">Share</a>
+            
+            <a href="{{preview_url}}" class="button icon icon-view secondary">Share</a>
+
+            </div>
+            <div>
+                <button id="page-preview-button" type="submit" form="page-edit-form" class="button action-save button-longrunning {% if is_revision %}warning{% endif %}" data-clicked-text="{% trans 'Saving…' %}" {% if page.locked %}disabled {% endif %}><span class="icon icon-spinner"></span><em>{% if page.locked %}{% trans 'Page locked' %}{% else %}{% if is_revision %}{% trans 'Replace current draft' %}{% else %}{% trans 'Preview' %}{% endif %}{% endif %}</em></button>
             </div>
             <div>
                 <button type="submit" form="page-edit-form" class="button action-save button-longrunning {% if is_revision %}warning{% endif %}" data-clicked-text="{% trans 'Saving…' %}" {% if page.locked %}disabled {% endif %}><span class="icon icon-spinner"></span><em>{% if page.locked %}{% trans 'Page locked' %}{% else %}{% if is_revision %}{% trans 'Replace current draft' %}{% else %}{% trans 'Save draft' %}{% endif %}{% endif %}</em></button>

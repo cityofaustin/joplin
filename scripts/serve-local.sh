@@ -30,4 +30,5 @@ docker run \
     --env "DEBUG=1" \
     --env "LOAD_DATA=$LOAD_DATA" \
     --env "GUNICORN_CMD_ARGS=--reload  --reload-engine=poll" \
+    --env "JANIS_URL=http://localhost:3000" \
     "$TAG" "$@"
