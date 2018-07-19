@@ -10,10 +10,41 @@
 {% block content %}
     {% get_preview_url revision=page.get_latest_revision as preview_url %}
     <script type="text/javascript">
+        function fallbackCopyTextToClipboard(text) {
+            var textArea = document.createElement("textarea");
+            textArea.value = text;
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+
+            try {
+                var successful = document.execCommand('copy');
+                var msg = successful ? 'successful' : 'unsuccessful';
+                console.log('Fallback: Copying text command was ' + msg);
+            } catch (err) {
+                console.error('Fallback: Oops, unable to copy', err);
+            }
+
+            document.body.removeChild(textArea);
+        }
+
+        function copyTextToClipboard(text) {
+            if (!navigator.clipboard) {
+                fallbackCopyTextToClipboard(text);
+                return;
+            }
+            navigator.clipboard.writeText(text).then(function() {
+                console.log('Async: Copying to clipboard was successful!');
+            }, function(err) {
+                console.error('Async: Could not copy text: ', err);
+            });
+        }
+
         $(function() {
             var editform = $('#page-edit-form');
             var previewbutton = $('#page-preview-button');
             var sharebutton = $('#page-share-preview-button');
+            var urlcopied = $('#page-share-url-copied');
 
             if(localStorage.previewing === 'true') {
                 window.open("{{preview_url}}", '_blank');
@@ -22,7 +53,9 @@
 
             if(localStorage.sharingpreview === 'true') {
                 // TODO: Don't just alert with the preview URL
-                alert("{{preview_url}}");
+                copyTextToClipboard("{{preview_url}}");
+                urlcopied.removeClass("hidden");
+                urlcopied.fadeOut(5000);
                 localStorage.sharingpreview = false;
             }
 
@@ -35,6 +68,16 @@
             });
         })
     </script>
+
+    <style type="text/css">
+        #page-share-url-copied {
+            background: white;
+            position: fixed;
+            border: solid black;
+            padding: 2px;
+            margin: 5px;
+        }
+    </style>
 
 
     <div class="header secondary">
@@ -55,6 +98,7 @@
             </div>
             <div>
                 <button id="page-share-preview-button" type="submit" form="page-edit-form" class="button action-save button-longrunning icon icon-view {% if is_revision %}warning{% endif %}" data-clicked-text="{% trans 'Saving…' %}" {% if page.locked %}disabled {% endif %}><span class="icon icon-spinner"></span><em>{% if page.locked %}{% trans 'Page locked' %}{% else %}{% if is_revision %}{% trans 'Replace current draft' %}{% else %}{% trans 'Share' %}{% endif %}{% endif %}</em></button>
+                <div id="page-share-url-copied" class="hidden">Preview URL copied to clipboard.</div>
             </div>
             <div>
                 <button id="page-preview-button" type="submit" form="page-edit-form" class="button action-save button-longrunning {% if is_revision %}warning{% endif %}" data-clicked-text="{% trans 'Saving…' %}" {% if page.locked %}disabled {% endif %}><span class="icon icon-spinner"></span><em>{% if page.locked %}{% trans 'Page locked' %}{% else %}{% if is_revision %}{% trans 'Replace current draft' %}{% else %}{% trans 'Preview' %}{% endif %}{% endif %}</em></button>
