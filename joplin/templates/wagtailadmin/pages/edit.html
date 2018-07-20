@@ -30,4 +30,16 @@
     </div>
 
     {{ block.super }}
+
+    <div class="preview-container">
+        <div class="thumbnail-container">
+            <ul class="tab-nav">
+                <li><a>Preview</a></li>
+                <li class="active"><a>Style Guide</a></li>
+            </ul>
+            <div class="thumbnail">
+                <iframe frameborder="0" onload="this.style.opacity = 1" src="https://cityofaustin.github.io/digital-services-style-guide/introduction/"></iframe>
+            </div>
+        </div>
+    </div>
 {% endblock %}
