@@ -112,5 +112,22 @@
         </div>
     </div>
 
-    {{ block.super }}
+    <div class="flex-container">
+      <div class="edit-page-form-container">
+        {{ block.super }}
+      </div>
+      <div class="sidebar-container">
+        <div class="fixed-content">          
+          <div class="thumbnail-container">
+            <div class="thumbnail">
+              <iframe frameborder="0" onload="this.style.opacity = 1" src="https://cityofaustin.github.io/digital-services-style-guide/introduction/"></iframe>
+            </div>
+          </div>
+          <ul class="tab-nav">
+            <li><a>Preview</a></li>
+            <li class="active"><a>Style Guide</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
 {% endblock %}
