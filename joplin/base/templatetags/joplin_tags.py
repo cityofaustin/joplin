@@ -11,7 +11,12 @@ def get_preview_url(*args, **kwargs):
 
     # TODO: Add other page types
     if "Service" in page_type:
-      url_page_type = "service"
+      url_page_type = "services"
+
+    if "Process" in page_type:
+      url_page_type = "processes"
+
+    print(page_type)
 
     global_id = graphene.Node.to_global_id('PageRevisionNode', revision.id)
     # TODO: Add other languages
