@@ -8,7 +8,7 @@ const anchorLinks = {
     "https://briaguya.github.io/digital-services-style-guide/writing-service-pages/#apps",
   id_additional_content:
     "https://briaguya.github.io/digital-services-style-guide/writing-service-pages/#additional",
-  "id_contacts-0-contact":
+  id_contacts:
     "https://briaguya.github.io/digital-services-style-guide/writing-service-pages/#contacts"
 };
 
@@ -16,13 +16,22 @@ document.addEventListener("DOMContentLoaded", function(event) {
   // HACK: I can't find a way to override this in python
   // Get all labels and turn them into links
   const labels = document.querySelectorAll("label");
+
   for (const label of labels) {
-    const id = label.getAttribute("for");
-    console.log(id);
-  }
-  debugger;
-  for (const label of labels) {
-    const id = label.getAttribute("for");
+    let id = label.getAttribute("for");
+    if (!id) {
+      // HACK: Only some fields actually have for attributes
+      switch (label.innerText) {
+        case "ADD ANY MAPS OR APPS THAT WILL HELP THE RESIDENT USE THE SERVICE ":
+          id = "id_apps";
+          break;
+        case "CONTACTS":
+          id = "id_contacts";
+          break;
+      }
+      debugger;
+    }
+
     if (id in anchorLinks) {
       text = document.createTextNode(label.textContent);
       label.textContent = "";
