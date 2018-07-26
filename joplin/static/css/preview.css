@@ -43,7 +43,7 @@
 .thumbnail,
 .thumbnail iframe {
   width: 100%;
-  height: calc(75vh - 45px);
+  height: 72vh;
 }
 /* This facilitates the fade-in transition instead of flicker. It also helps us maintain the illusion that this is an image, since some webpages will have a preloading animation or wait for some images to download */
 .thumbnail iframe {
@@ -73,10 +73,19 @@
   min-width: 375px;
 }
 
+.sidebar-buttons {
+  display: flex;
+}
+
+.sidebar-button-container {
+  margin: auto;
+}
+
 .fixed-content {
   position: fixed;
   box-shadow: 0 0 2px 2px #666;
-  margin-top: -55px;
+  bottom: 5px;
+  min-width: 370px;
 }
 
 .tab-nav {
