@@ -119,8 +119,12 @@ class ProcessPageNode(DjangoObjectType):
 
 class PageRevisionNode(DjangoObjectType):
     as_service_page = graphene.NonNull(ServicePageNode)
+    as_process_page = graphene.NonNull(ProcessPageNode)
 
     def resolve_as_service_page(self, resolve_info, *args, **kwargs):
+        return self.as_page_object();
+
+    def resolve_as_process_page(self, resolve_info, *args, **kwargs):
         return self.as_page_object();
 
     class Meta:
