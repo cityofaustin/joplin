@@ -29,7 +29,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
           id = "id_contacts";
           break;
       }
-      debugger;
     }
 
     if (id in anchorLinks) {

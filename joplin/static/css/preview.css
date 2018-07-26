@@ -8,11 +8,10 @@
 /* This container helps the thumbnail behave as if it were an unscaled IMG element */
 .thumbnail-container {
   width: 100%;
-  display: inline-block;
+  /*display: inline-block;*/
   overflow: hidden;
   position: relative;
   background: #f9f9f9;
-  box-shadow: 0 0 2px 2px #666;
 }
 /* Image Icon for the Background */
 .thumbnail-container::before {
@@ -44,7 +43,7 @@
 .thumbnail,
 .thumbnail iframe {
   width: 100%;
-  height: 75vh;
+  height: calc(75vh - 45px);
 }
 /* This facilitates the fade-in transition instead of flicker. It also helps us maintain the illusion that this is an image, since some webpages will have a preloading animation or wait for some images to download */
 .thumbnail iframe {
@@ -76,4 +75,11 @@
 
 .fixed-content {
   position: fixed;
+  box-shadow: 0 0 2px 2px #666;
+  margin-top: -55px;
+}
+
+.tab-nav {
+  margin-top: 0px;
+  margin-bottom: 0px;
 }
