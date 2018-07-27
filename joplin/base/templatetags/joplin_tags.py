@@ -25,7 +25,7 @@ def get_style_guide_url(*args, **kwargs):
   content_type = kwargs['content_type'].name
 
   if "service" in content_type:
-    return "https://briaguya.github.io/digital-services-style-guide/writing-service-pages/"
+    return os.environ['STYLEGUIDE_URL'] + "/writing-service-pages/"
 
   if "process" in content_type:
-    return "https://briaguya.github.io/digital-services-style-guide/writing-process-pages/"
+    return os.environ['STYLEGUIDE_URL'] + "/writing-process-pages/"

@@ -31,4 +31,5 @@ docker run \
     --env "LOAD_DATA=$LOAD_DATA" \
     --env "GUNICORN_CMD_ARGS=--reload  --reload-engine=poll" \
     --env "JANIS_URL=http://localhost:3000" \
+    --env "STYLEGUIDE_URL=https://cityofaustin.github.io/digital-services-style-guide" \
     "$TAG" "$@"
