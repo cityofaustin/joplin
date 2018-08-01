@@ -156,9 +156,10 @@
                 </button>
             </div>
             <div>
-                <button class="button button-longrunning icon icon-doc-empty js-proxy-click"
+                <button class="button button-longrunning icon icon-doc-empty"
+                  type="submit" form="page-edit-form"
                   data-clicked-text="{% trans 'Publishing…' %}"
-                  data-proxy-by-name="action-publish"
+                  name="action-publish" value="action-publish"
                 >
                   Publish
                 </button>
