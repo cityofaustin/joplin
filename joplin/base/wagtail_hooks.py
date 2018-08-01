@@ -29,7 +29,9 @@ def editor_css():
 
 @hooks.register('insert_global_admin_js')
 def global_admin_js():
-    urls = []
+    urls = [
+        static('js/admin.js'),
+    ]
 
     if settings.USE_ANALYTICS:
         urls.append(static('js/analytics.js'))
@@ -41,7 +43,7 @@ def global_admin_js():
 def editor_js():
     urls = [
         'https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.4/lodash.min.js',
-        static('js/admin.js'),
+        static('js/editor.js'),
     ]
 
     return format_html_join('\n', '<script src="{}"></script>', ((url,) for url in urls))
