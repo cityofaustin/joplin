@@ -63,3 +63,9 @@ docker exec --interactive --tty joplin python ./joplin/manage.py loadcontent fix
 APP_NAME=app_name_goes_here
 docker exec joplin /bin/bash -c "mkdir -p \"$APP_NAME\" && cd joplin && python manage.py startapp \"$APP_NAME\""
 ```
+
+
+## Design
+#### icons
+To get a full set of icons that Wagtail has available you'll need to upload [Wagtail's icomoon icon definitions](
+https://raw.githubusercontent.com/wagtail/wagtail/master/wagtail/admin/static_src/wagtailadmin/fonts/wagtail-icomoon.json) to the [icomoon web app](https://icomoon.io/app/). Make sure you're uploading the icon definitions for the version of wagtail we're using.

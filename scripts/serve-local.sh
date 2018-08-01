@@ -36,4 +36,5 @@ docker run \
     --env "GUNICORN_CMD_ARGS=--reload  --reload-engine=poll" \
     --env "HEROKU_KEY=$HEROKU_KEY" \
     --env "HEROKU_JANIS_APP_NAME=$HEROKU_JANIS_APP_NAME" \
+    --env "JANIS_URL=http://localhost:3000" \
     "$TAG" "$@"

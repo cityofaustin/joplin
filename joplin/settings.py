@@ -94,6 +94,9 @@ TEMPLATES = [
         ],
         'APP_DIRS': True,
         'OPTIONS': {
+            'builtins': [
+                'base.templatetags.joplin_tags',
+            ],
             'context_processors': [
                 'base.context_processors.settings_context',
                 'django.template.context_processors.debug',
