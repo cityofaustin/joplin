@@ -182,8 +182,7 @@ SECRET_KEY = '1iq1u6gs+xh3!bvrl-5$jqne%gpj)!wv5^h0$dc0y84xsdr-95'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-HEROKU_KEY = os.getenv('HEROKU_KEY')
-HEROKU_JANIS_APP_NAME = os.getenv('HEROKU_JANIS_APP_NAME')
+
 JANIS_URL = os.getenv('JANIS_URL', 'http://localhost:3000')
 
 GRAPHENE = {

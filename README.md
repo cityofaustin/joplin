@@ -20,16 +20,6 @@ Make sure you have docker installed, then run:
 LOAD_DATA=on ./scripts/serve-local.sh
 ```
 
-### Rebuild Janis on Heroku when new pages are published
-
-You can set environment variables to get Heroku to rebuild Janis when pages are published. For example, to rebuild `janis-staging` on heroku when a page is published locally, run things like this:
-
-```
-HEROKU_JANIS_APP_NAME=janis-staging ./scripts/serve-local.sh
-```
-
-`HEROKU_KEY` is read from the Heroku CLI. If you don't have the CLI installed or it's unconfigured, you'll need to set the `HEROKU_KEY` environment variable when running. You can check to see if you're logged in by running `heroku auth:whoami`.
-
 #### Access the admin
 
 You can access the admin at `localhost:8000/admin` with the credentials `admin@austintexas.io`/`x`
