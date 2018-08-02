@@ -37,4 +37,5 @@ docker run \
     --env "HEROKU_KEY=$HEROKU_KEY" \
     --env "HEROKU_JANIS_APP_NAME=$HEROKU_JANIS_APP_NAME" \
     --env "JANIS_URL=http://localhost:3000" \
+    --env "STYLEGUIDE_URL=https://cityofaustin.github.io/digital-services-style-guide" \
     "$TAG" "$@"
