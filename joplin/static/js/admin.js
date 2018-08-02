@@ -6,7 +6,13 @@ const anchors = {
   id_additional_content: "#additional",
   id_contacts: "#contacts",
   id_description: "#description",
-  "id_process_steps-0-title": "#step-title"
+  "id_process_steps-title": "#step-title",
+  "id_process_steps-short_title": "#step-short-title",
+  "id_process_steps-link_title": "#step-link-title",
+  "id_process_steps-description": "#step-description",
+  "id_process_steps-overview_steps": "#step-steps",
+  "id_process_steps-detailed_content": "#step-details",
+  "id_process_steps-quote": "#step-quote",
 };
 
 document.addEventListener("DOMContentLoaded", function(event) {
@@ -17,6 +23,13 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
   for (const label of labels) {
     let id = label.getAttribute("for");
+
+    // HACK: If we're dealing with subheadings in steps we need to remove the index
+    if(id && id.includes("id_process_steps")) {
+      const idTokens = id.split("-");
+      id = `${idTokens[0]}-${idTokens[2]}`;
+    }
+
     if (!id) {
       // HACK: Only some fields actually have for attributes
       switch (label.innerText) {

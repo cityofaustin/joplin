@@ -20,12 +20,13 @@ def get_preview_url(*args, **kwargs):
     # TODO: Add other languages
     return os.environ["JANIS_URL"] + "/en/preview/" + url_page_type + "/" + global_id
 
+STYLEGUIDE_PAGES = {
+  'service page': '/writing-service-pages/',
+  'process page': '/writing-process-pages/'
+}
+
 @register.simple_tag
 def get_style_guide_url(*args, **kwargs):
   content_type = kwargs['content_type'].name
 
-  if "service" in content_type:
-    return os.environ['STYLEGUIDE_URL'] + "/writing-service-pages/"
-
-  if "process" in content_type:
-    return os.environ['STYLEGUIDE_URL'] + "/writing-process-pages/"
+  return os.environ['STYLEGUIDE_URL'] + STYLEGUIDE_PAGES[content_type]
