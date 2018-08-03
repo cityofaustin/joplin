@@ -12,7 +12,7 @@ const anchors = {
   "id_process_steps-description": "#step-description",
   "id_process_steps-overview_steps": "#step-steps",
   "id_process_steps-detailed_content": "#step-details",
-  "id_process_steps-quote": "#step-quote",
+  "id_process_steps-quote": "#step-quote"
 };
 
 document.addEventListener("DOMContentLoaded", function(event) {
@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     let id = label.getAttribute("for");
 
     // HACK: If we're dealing with subheadings in steps we need to remove the index
-    if(id && id.includes("id_process_steps")) {
+    if (id && id.includes("id_process_steps")) {
       const idTokens = id.split("-");
       id = `${idTokens[0]}-${idTokens[2]}`;
     }
@@ -47,15 +47,16 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
     if (id in anchors) {
       text = document.createTextNode(label.textContent);
-      label.textContent = "";
+      // label.textContent = "";
       if (id === "id_title") {
         text = document.createTextNode("Actionable Title");
       }
-      link = document.createElement("a");
-      link.appendChild(text);
-      link.setAttribute("href", `${styleGuideUrl}/${anchors[id]}`);
-      link.setAttribute("target", "sidebar-iframe");
-      label.appendChild(link);
+      link = $("<a/>");
+      link.addClass("icon-help-inverse");
+      link.addClass("show");
+      link.attr("href", `${styleGuideUrl}/${anchors[id]}`);
+      link.attr("target", "sidebar-iframe");
+      $(label).append(link);
     }
   }
 
