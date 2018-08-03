@@ -16,13 +16,17 @@ const anchors = {
 };
 
 document.addEventListener("DOMContentLoaded", function(event) {
-  // HACK: I can't find a way to override this in python
-  // Get all labels and turn them into links
+  // Get all labels and add styleguide links
   const labels = document.querySelectorAll("label");
   const styleGuideUrl = document.getElementById("style_guide_url").value;
 
   for (const label of labels) {
     let id = label.getAttribute("for");
+
+    // HACK: I can't find a way to override this in python
+    if (id === "id_title") {
+      label.textContent = "Actionable Title";
+    }
 
     // HACK: If we're dealing with subheadings in steps we need to remove the index
     if (id && id.includes("id_process_steps")) {
@@ -46,11 +50,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
     }
 
     if (id in anchors) {
-      text = document.createTextNode(label.textContent);
-      // label.textContent = "";
-      if (id === "id_title") {
-        text = document.createTextNode("Actionable Title");
-      }
       link = $("<a/>");
       link.addClass("icon-help-inverse");
       link.addClass("show");
