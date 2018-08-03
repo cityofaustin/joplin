@@ -33,3 +33,29 @@ footer {
   display: inline;
   float: right;
 }
+
+.header {
+  position: fixed;
+  z-index: 3;
+  left: 60px;
+  width: calc(100% - 60px - 1.5rem);
+}
+
+.header.secondary {
+  top: 80px;
+  height: 100px;
+  overflow: hidden;
+}
+
+.actions {
+  margin: 0 0 0 auto !important;
+}
+
+/*.page-editor {
+  overflow: hidden;
+}
+
+.tab-content {
+  overflow-y: auto;
+}
+*/

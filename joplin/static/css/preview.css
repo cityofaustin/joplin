@@ -64,6 +64,7 @@
 /* Improving the sidebar experience with flexbox */
 .flex-container {
   display: flex;
+  margin-top: 204px;
 }
 .edit-page-form-container {
   flex: auto;
