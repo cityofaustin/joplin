@@ -1,3 +1,15 @@
 .create-content-modal {
-  
+
+}
+
+.content-modal__step--active {
+  display: block !important;
+}
+
+.content-modal__step--inactive {
+  display: none;
+}
+
+.modal-button-row {
+  display: flex;
 }

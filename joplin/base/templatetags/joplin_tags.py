@@ -1,6 +1,8 @@
 from django import template
 import graphene
 import os
+from base.models import Topic
+
 
 register = template.Library()
 
@@ -29,3 +31,12 @@ def get_style_guide_url(*args, **kwargs):
 
   if "process" in content_type:
     return os.environ['STYLEGUIDE_URL'] + "/writing-process-pages/"
+
+
+# Topic snippets
+@register.inclusion_tag('wagtailadmin/topics.html', takes_context=True)
+def topics(context):
+    return {
+        'topics': Topic.objects.all(),
+        'request': context['request'],
+    }
