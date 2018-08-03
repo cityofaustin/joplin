@@ -10,6 +10,7 @@
 {% block content %}
     {% get_preview_url revision=page.get_latest_revision as preview_url %}
     {% get_style_guide_url content_type=content_type as style_guide_url %}
+    {% page_permissions page as page_perms %}
     <script type="text/javascript">
         function fallbackCopyTextToClipboard(text) {
             var textArea = document.createElement("textarea");
@@ -89,6 +90,44 @@
                 </div>
                 <div>See <a href="{% url 'wagtailadmin_pages:revisions_index' page.id %}" class="underlined">all revisions</a></div>
             </div>
+            <div class="dropdown dropdown-button {% if is_revision %}warning{% endif %}">
+              <div>
+                  <button type="submit" form="page-edit-form"
+                    class="button action-save button-longrunning {% if is_revision %}warning{% endif %}"
+                    data-clicked-text="{% trans 'Saving…' %}"
+                    {% if page.locked %}disabled {% endif %}
+                  >
+                    <span class="icon icon-spinner"></span>
+                    <em>
+                      {% if page.locked %}
+                        {% trans 'Page locked' %}
+                      {% else %}
+                        {% if is_revision %}
+                          {% trans 'Replace current draft' %}
+                        {% else %}
+                          {% trans 'Save draft' %}
+                        {% endif %}
+                      {% endif %}
+                    </em>
+                  </button>
+              </div>
+              {% if not page.locked %}
+                  <div class="dropdown-toggle icon icon-arrow-down"></div>
+                  <ul role="menu">
+                      {% if not is_revision and page_perms.can_unpublish %}
+                          <li><a href="{% url 'wagtailadmin_pages:unpublish' page.id %}">{% trans 'Unpublish' %}</a></li>
+                      {% endif %}
+                      {% if not is_revision and page_perms.can_delete %}
+                          <li><a href="{% url 'wagtailadmin_pages:delete' page.id %}" class="shortcut">{% trans 'Delete' %}</a></li>
+                      {% endif %}
+                      {% if page_perms.can_publish %}
+                          <li>
+                              <button type="submit" name="action-publish" form="page-edit-form" value="action-publish" class="button button-longrunning {% if is_revision %}warning{% endif %}" tabindex="3" data-clicked-text="{% trans 'Publishing…' %}" {% if page.locked %}disabled {% endif %}><span class="icon icon-spinner"></span><em>{% if is_revision %}{% trans 'Publish this revision' %}{% else %}{% trans 'Publish' %}{% endif %}</em></button>
+                          </li>
+                      {% endif %}
+                  </ul>
+              {% endif %}
+            </div>
             <div>
                 <button id="page-share-preview-button" type="submit" form="page-edit-form" class="button action-save button-longrunning icon icon-view {% if is_revision %}warning{% endif %}" data-clicked-text="{% trans 'Saving…' %}" {% if page.locked %}disabled {% endif %}>
                   <span class="icon icon-spinner"></span>
@@ -126,35 +165,6 @@
                       {% endif %}
                     {% endif %}
                   </em>
-                </button>
-            </div>
-            <div>
-                <button type="submit" form="page-edit-form"
-                  class="button action-save button-longrunning {% if is_revision %}warning{% endif %}"
-                  data-clicked-text="{% trans 'Saving…' %}"
-                  {% if page.locked %}disabled {% endif %}
-                >
-                  <span class="icon icon-spinner"></span>
-                  <em>
-                    {% if page.locked %}
-                      {% trans 'Page locked' %}
-                    {% else %}
-                      {% if is_revision %}
-                        {% trans 'Replace current draft' %}
-                      {% else %}
-                        {% trans 'Save draft' %}
-                      {% endif %}
-                    {% endif %}
-                  </em>
-                </button>
-            </div>
-            <div>
-                <button class="button button-longrunning icon icon-doc-empty"
-                  type="submit" form="page-edit-form"
-                  data-clicked-text="{% trans 'Publishing…' %}"
-                  name="action-publish" value="action-publish"
-                >
-                  Publish
                 </button>
             </div>
         </div>
