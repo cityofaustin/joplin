@@ -93,3 +93,12 @@
   margin-top: 0px;
   margin-bottom: 0px;
 }
+
+#page-share-url-copied {
+  background: white;
+  position: fixed;
+  border: 1px solid black;
+  padding: 5px;
+  margin: 5px;
+  border-radius: 10px;
+}

@@ -55,3 +55,8 @@ footer {
 .tab-nav.merged {
   display: none;
 }
+
+.messages {
+  position: absolute;
+  width: 100%;
+}
