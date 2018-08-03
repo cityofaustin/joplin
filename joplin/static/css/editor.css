@@ -32,6 +32,7 @@ footer {
 .icon-help-inverse.show {
   display: inline;
   float: right;
+  margin-right: 0.4rem;
 }
 
 .header {
@@ -51,11 +52,6 @@ footer {
   margin: 0 0 0 auto !important;
 }
 
-/*.page-editor {
-  overflow: hidden;
+.tab-nav.merged {
+  display: none;
 }
-
-.tab-content {
-  overflow-y: auto;
-}
-*/
