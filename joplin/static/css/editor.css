@@ -59,3 +59,7 @@ footer {
   position: absolute;
   width: 100%;
 }
+
+.button.action-save {
+  min-width: 130px;
+}
