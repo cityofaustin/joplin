@@ -1,7 +1,12 @@
 from django import template
 import graphene
 import os
-from base.models import Topic
+from base.models import Topic, Theme
+# from base.models import Theme
+
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 register = template.Library()
@@ -33,10 +38,24 @@ def get_style_guide_url(*args, **kwargs):
     return os.environ['STYLEGUIDE_URL'] + "/writing-process-pages/"
 
 
-# Topic snippets
-@register.inclusion_tag('wagtailadmin/topics.html', takes_context=True)
-def topics(context):
+@register.inclusion_tag('wagtailadmin/themes.html', takes_context=True)
+def themes(context):
+    themes = {}
+    topics = []
+
+    for theme in Theme.objects.all():
+        themes[theme.pk] = {
+            'text': theme.text,
+            'topics': []
+        }
+
+    for topic in Topic.objects.all():
+        themes[topic.theme.id]['topics'].append({
+            'text': topic.text,
+            'id': topic.id,
+        })
+
     return {
-        'topics': Topic.objects.all(),
+        'themes': themes,
         'request': context['request'],
     }
