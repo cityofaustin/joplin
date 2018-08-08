@@ -1,3 +1,6 @@
+var BundleTracker = require("webpack-bundle-tracker");
+var path = require("path");
+
 module.exports = {
   mode: "development",
   watch: true,
@@ -22,5 +25,15 @@ module.exports = {
         ]
       }
     ]
-  }
+  },
+  output: {
+    path: path.resolve("./assets/webpack_bundles/"),
+    filename: "[name]-[hash].js"
+  },
+  plugins: [
+    new BundleTracker({
+      path: __dirname,
+      filename: "./assets/webpack-stats.json"
+    })
+  ]
 };

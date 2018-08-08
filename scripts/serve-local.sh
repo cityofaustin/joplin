@@ -26,7 +26,7 @@ fi
 HEROKU_KEY=$(heroku auth:token 2> /dev/null)
 
 docker build --tag "$ASSETSTAG" --file Dockerfile.assets .
-docker run --rm --name joplinassets "$ASSETSTAG" yarn watch
+docker run --rm --detach --name joplinassets "$ASSETSTAG" yarn watch
 
 docker build --tag "$TAG" .
 docker run \
