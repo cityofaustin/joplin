@@ -3,6 +3,7 @@
 set -o errexit
 
 TAG='joplin:local'
+ASSETSTAG='joplinassets:local'
 
 DB_FILE='./joplin/db.sqlite3'
 LOAD_DATA="$LOAD_DATA"
@@ -23,6 +24,9 @@ fi
 # Get the heroku key. We eat stderr because the heroku cli will warn us that these tokens
 # are short-lived. That's OK in our case because we're just running this locally.
 HEROKU_KEY=$(heroku auth:token 2> /dev/null)
+
+docker build --tag "$ASSETSTAG" --file Dockerfile.assets .
+docker run --rm --name joplinassets "$ASSETSTAG" yarn watch
 
 docker build --tag "$TAG" .
 docker run \
