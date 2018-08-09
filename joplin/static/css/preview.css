@@ -8,7 +8,6 @@
 /* This container helps the thumbnail behave as if it were an unscaled IMG element */
 .thumbnail-container {
   width: 100%;
-  /*display: inline-block;*/
   overflow: hidden;
   position: relative;
   background: #f9f9f9;
