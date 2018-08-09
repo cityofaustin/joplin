@@ -5,6 +5,9 @@
     "JANIS_URL": {
       "required": true
     },
+    "STYLEGUIDE_URL": {
+      "required": true
+    },
     "LOAD_DATA": {
       "required": true
     },
