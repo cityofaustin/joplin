@@ -33,9 +33,10 @@
                 }
             );
 
-            console.log('asdf')
             if(localStorage.wagtailCreateModal) {
-              debugger
+              var modalState = JSON.parse(localStorage.wagtailCreateModal);
+              $("#id_topic").val(modalState.topic);
+              $("#id_title").val(modalState.title);
               localStorage.removeItem('wagtailCreateModal');
             }
         });

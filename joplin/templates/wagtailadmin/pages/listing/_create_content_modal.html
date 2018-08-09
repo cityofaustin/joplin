@@ -48,11 +48,7 @@
             </div>
           </div>
 
-
         </div>
-        <!-- <div class="modal-footer">
-          <button type="button" class="btn btn-primary">Save changes</button>
-        </div> -->
       </div>
     </div>
   </div>
@@ -70,12 +66,12 @@
 
     var contentWizardModule = {
       init: function() {
-        console.log('setup contentWizardModule...')
-        this.registerEventHandlers()
+        console.log('setup contentWizardModule...');
+        this.registerEventHandlers();
       },
       registerEventHandlers: function() {
-        var thiz = this
-        console.log(this)
+        var thiz = this;
+        console.log(this);
 
         $('.js-page-select').click( function() {
           contentWizardState.type = $(this).data('contentType');
@@ -83,8 +79,20 @@
           console.log(contentWizardState);
         });
 
+        $('.js-select-topic').click(function(e) {
+          contentWizardState.topic = $('.js-topic-item:checked[name=topic]').val();
+          console.log(contentWizardState);
+          thiz.writeToLocalStorage();
+          window.location.href = '/admin/pages/add/base/servicepage/3/';
+        });
+
+        $('#page-title').keyup(function(e) {
+          console.log('#page-title keyup', e.target.value)
+          contentWizardState.title = e.target.value;
+        });
+
         $('.js-back').click( function(e) {
-          e.preventDefault()
+          e.preventDefault();
           console.log('js-back', contentWizardState);
           thiz.decrementActiveStep();
         });
@@ -93,21 +101,11 @@
           thiz.incrementActiveStep();
         });
 
-        $('.js-select-topic').click(function(e) {
-          contentWizardState.topic = $('.js-topic-item:checked[name=topic]').val()
-          console.log(contentWizardState);
-          thiz.writeToLocalStorage();
-          window.location.href = '/admin/pages/add/base/servicepage/3/'
-        })
       },
       selectClickHandler: function(thing) {
       },
-      // renderVisibleStep: function(index) {
-      //   debugger
-      //
-      // },
       incrementActiveStep: function(){
-        contentWizardState.activeStep++
+        contentWizardState.activeStep++;
         $('.js-wizard-step').each( function(i) {
           if (contentWizardState.activeStep === i) {
             $(this).addClass('content-modal__step--active');
@@ -120,7 +118,6 @@
       },
       decrementActiveStep: function(){
         contentWizardState.activeStep--
-        debugger
         $('.js-wizard-step').each( function(i) {
           if (contentWizardState.activeStep === i) {
             $(this).addClass('content-modal__step--active');
@@ -134,12 +131,8 @@
       writeToLocalStorage: function() {
         localStorage.wagtailCreateModal = JSON.stringify(contentWizardState)
       }
-     }
+    };
 
-    contentWizardModule.init()
-    // contentWizardModule.registerEventHandlers()
-    console.log(contentWizardState)
-
-
+    contentWizardModule.init();
   })
 </script>
