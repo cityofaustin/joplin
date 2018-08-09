@@ -2,11 +2,10 @@ var BundleTracker = require("webpack-bundle-tracker");
 var path = require("path");
 
 module.exports = {
-  mode: "development",
-  watch: true,
+  mode: "production",
   entry: {
-    admin: "./static/js/admin.js",
-    editor: "./static/js/editor.js"
+    admin: "./js/admin.js",
+    editor: "./js/editor.js"
   },
   module: {
     rules: [
