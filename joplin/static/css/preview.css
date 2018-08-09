@@ -2,7 +2,6 @@
   position: fixed;
   right: 10px;
   bottom: 0;
-  z-index: 1000;
 }
 
 /* This container helps the thumbnail behave as if it were an unscaled IMG element */
@@ -42,7 +41,7 @@
 .thumbnail,
 .thumbnail iframe {
   width: 100%;
-  height: 72vh;
+  height: calc(100vh - 242px);
 }
 /* This facilitates the fade-in transition instead of flicker. It also helps us maintain the illusion that this is an image, since some webpages will have a preloading animation or wait for some images to download */
 .thumbnail iframe {
@@ -64,16 +63,19 @@
 /* Improving the sidebar experience with flexbox */
 .flex-container {
   display: flex;
+  margin-top: 204px;
 }
 .edit-page-form-container {
   flex: auto;
 }
 .sidebar-container {
-  min-width: 375px;
+  min-width: 377px;
 }
 
 .sidebar-buttons {
   display: flex;
+  background: #eeeeee;
+  border-top: 1px solid black;
 }
 
 .sidebar-button-container {
@@ -82,12 +84,20 @@
 
 .fixed-content {
   position: fixed;
-  box-shadow: 0 0 2px 2px #666;
-  bottom: 5px;
-  min-width: 370px;
+  border-left: 2px solid black;
+  min-width: 375px;
 }
 
 .tab-nav {
   margin-top: 0px;
   margin-bottom: 0px;
+}
+
+#page-share-url-copied {
+  background: white;
+  position: fixed;
+  border: 1px solid black;
+  padding: 5px;
+  margin: 5px;
+  border-radius: 10px;
 }

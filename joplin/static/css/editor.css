@@ -1,7 +1,65 @@
-.object h2 {background: inherit;}
-.object > h2:before, .object > h2 label:before {display: none;}
-.object {border-bottom: 1px dashed grey !important;}
+.object h2 {
+  background: inherit;
+}
+.object > h2:before,
+.object > h2 label:before {
+  display: none;
+}
+.object {
+  border-bottom: 1px dashed grey !important;
+}
 
-.tab-nav.merged {background-color: #eee;}
+.tab-nav.merged {
+  background-color: #eee;
+}
 
-footer {display:none;}
+footer {
+  display: none;
+}
+
+.object-help.help {
+  opacity: 1 !important;
+  width: auto;
+  float: left;
+  position: relative;
+  padding: 0;
+}
+
+.icon-help-inverse {
+  display: none;
+}
+
+.icon-help-inverse.show {
+  display: inline;
+  float: right;
+  margin-right: 0.4rem;
+}
+
+.header {
+  position: fixed;
+  z-index: 3;
+  left: 60px;
+  width: calc(100% - 60px - 1.5rem);
+}
+
+.header.secondary {
+  top: 80px;
+  height: 100px;
+}
+
+.actions {
+  margin: 0 0 0 auto !important;
+}
+
+.tab-nav.merged {
+  display: none;
+}
+
+.messages {
+  position: absolute;
+  width: 100%;
+}
+
+.button.action-save {
+  min-width: 130px;
+}
