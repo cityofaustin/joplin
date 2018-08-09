@@ -1,6 +1,4 @@
-.create-content-modal {
-
-}
+.create-content-modal {}
 
 .content-modal__step--active {
   display: block !important;
@@ -12,5 +10,22 @@
 }
 
 .modal-button-row {
+  display: flex;
+}
+
+.content-modal__header {
+  color: #023654;
+  font-size: 22px;
+  text-align: center;
+}
+
+.content-modal__type-option {
+  width: 200px;
+  height: 200px;
+  border: 1px solid #EDEDED;
+  margin: 1px;
+}
+
+.content-modal__type-options-wrapper {
   display: flex;
 }
