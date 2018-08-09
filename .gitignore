@@ -7,3 +7,4 @@ media
 venv
 .idea
 *node_modules
+*webpack_bundles
