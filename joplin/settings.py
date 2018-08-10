@@ -154,8 +154,8 @@ STATICFILES_DIRS = [
 
 WEBPACK_LOADER = {
     'DEFAULT': {
-        'BUNDLE_DIR_NAME': 'assets/webpack_bundles/',
-        'STATS_FILE': os.path.join(BASE_DIR, 'joplin/static/assets/webpack-stats.json'),
+        'BUNDLE_DIR_NAME': 'webpack_bundles/',
+        'STATS_FILE': os.path.join(BASE_DIR, 'joplin/static/webpack-stats.json'),
     }
 }
 

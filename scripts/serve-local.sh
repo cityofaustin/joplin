@@ -27,20 +27,22 @@ HEROKU_KEY=$(heroku auth:token 2> /dev/null)
 
 docker build --tag "$ASSETSTAG" --file Dockerfile.assets .
 pwd
-docker run --rm --detach --volume "$PWD/joplin/static:/app" --name joplinassets "$ASSETSTAG" yarn watch
+docker run --rm --volume "$PWD/joplin:/app" --name joplinassets "$ASSETSTAG" sh -c "yarn; yarn watch"
+# docker run --rm --name joplinassets "$ASSETSTAG" ls #yarn watch
+# docker run --rm --detach --name joplinassets "$ASSETSTAG" yarn watch
 
-docker build --tag "$TAG" .
-docker run \
-    --rm \
-    --name joplin \
-    --tty --interactive \
-    --publish 8000:80 \
-    --volume "$PWD:/app" \
-    --env "DEBUG=1" \
-    --env "LOAD_DATA=$LOAD_DATA" \
-    --env "GUNICORN_CMD_ARGS=--reload  --reload-engine=poll" \
-    --env "HEROKU_KEY=$HEROKU_KEY" \
-    --env "HEROKU_JANIS_APP_NAME=$HEROKU_JANIS_APP_NAME" \
-    --env "JANIS_URL=http://localhost:3000" \
-    --env "STYLEGUIDE_URL=https://cityofaustin.github.io/digital-services-style-guide" \
-    "$TAG" "$@"
+# docker build --tag "$TAG" .
+# docker run \
+#     --rm \
+#     --name joplin \
+#     --tty --interactive \
+#     --publish 8000:80 \
+#     --volume "$PWD:/app" \
+#     --env "DEBUG=1" \
+#     --env "LOAD_DATA=$LOAD_DATA" \
+#     --env "GUNICORN_CMD_ARGS=--reload  --reload-engine=poll" \
+#     --env "HEROKU_KEY=$HEROKU_KEY" \
+#     --env "HEROKU_JANIS_APP_NAME=$HEROKU_JANIS_APP_NAME" \
+#     --env "JANIS_URL=http://localhost:3000" \
+#     --env "STYLEGUIDE_URL=https://cityofaustin.github.io/digital-services-style-guide" \
+#     "$TAG" "$@"

@@ -2,7 +2,10 @@ FROM node:10.8.0-slim
 
 RUN mkdir /app
 
-COPY "$PWD/joplin/static" /app
-WORKDIR /app
+COPY "$PWD/joplin" /app
+RUN ls
 
+WORKDIR /app
+RUN ls
 RUN yarn
+RUN ls
