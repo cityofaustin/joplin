@@ -1,0 +1,12 @@
+version: '3'
+services:
+  joplin:
+    build: .
+    ports:
+     - "8000:80"
+    environment:
+      LOAD_DATA: $LOAD_DATA
+  joplinassets:
+    build:
+      context: .
+      dockerfile: Dockerfile.assets

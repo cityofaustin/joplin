@@ -2,8 +2,8 @@
 
 set -o errexit
 
-TAG='joplin:local'
-ASSETSTAG='joplinassets:local'
+# TAG='joplin:local'
+# ASSETSTAG='joplinassets:local'
 
 DB_FILE='./joplin/db.sqlite3'
 LOAD_DATA="$LOAD_DATA"
@@ -25,9 +25,11 @@ fi
 # are short-lived. That's OK in our case because we're just running this locally.
 HEROKU_KEY=$(heroku auth:token 2> /dev/null)
 
-docker build --tag "$ASSETSTAG" --file Dockerfile.assets .
-pwd
-docker run --rm --volume "$PWD/joplin:/app" --name joplinassets "$ASSETSTAG" sh -c "yarn; yarn watch"
+docker-compose up
+
+# docker build --tag "$ASSETSTAG" --file Dockerfile.assets .
+# pwd
+# docker run --rm --volume "$PWD/joplin:/app" --name joplinassets "$ASSETSTAG" sh -c "yarn; yarn watch"
 # docker run --rm --name joplinassets "$ASSETSTAG" ls #yarn watch
 # docker run --rm --detach --name joplinassets "$ASSETSTAG" yarn watch
 
