@@ -4,9 +4,15 @@ services:
     build: .
     ports:
      - "8000:80"
+    volumes:
+      - ".:/app"
     environment:
       LOAD_DATA: $LOAD_DATA
+      HEROKU_KEY: $HEROKU_KEY
   joplinassets:
     build:
       context: .
       dockerfile: Dockerfile.assets
+    volumes:
+      - "./joplin:/app/joplin"
+    entrypoint: sh docker-entrypoint.watchassets.sh
