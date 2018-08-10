@@ -2,12 +2,6 @@ from django import template
 import graphene
 import os
 from base.models import Topic, Theme
-# from base.models import Theme
-
-import logging
-
-logger = logging.getLogger(__name__)
-
 
 register = template.Library()
 
