@@ -1,30 +1,34 @@
 {% load joplin_tags %}
+{% load staticfiles wagtailadmin_tags %}
 
 <!-- Modal -->
 <div class="modal fade" id="createNewContentModal" tabindex="-1" role="dialog" aria-labelledby="createNewContentModalLabel">
   <div class="js-create-content-wizard-form">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <!-- <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div> -->
+    <div class="modal-dialog create-content-modal-wrapper" role="document">
+      <div class="modal-content create-content-modal">
         <div class="modal-body">
           <div class="js-wizard-step content-modal__step--active" data-active="true">
             <h2 class="content-modal__header">Select the Content Type</h2>
-            <div class="content-modal__type-options-wrapper">              
+            <div class="content-modal__type-options-wrapper">
               <div class="content-modal__type-option js-page-select" data-content-type="service">
-                <h3>Service Page</h3>
-                <p>A step by step guide to<br/>a particular city service.</p>
+                <img class="content-modal__type-icons"
+                  src="{% static 'images/service_page_icon.svg' %}"
+                  alt="Service Page"
+                />
+                <h3 class="content-modal__type-option-header">Service Page</h3>
+                <p>A step by step guide to a particular city service.</p>
               </div>
               <div class="content-modal__type-option js-page-select" data-content-type="process">
-                <h3>Process Page</h3>
-                <p>Processes which require several<br/>steps, which may not go in order</p>
+                <img class="content-modal__type-icons"
+                  src="{% static 'images/process_page_icon.svg' %}"
+                  alt="Service Page"
+                />
+                <h3 class="content-modal__type-option-header">Process Page</h3>
+                <p>Processes which require several steps, which may not go in order</p>
               </div>
               <div class="content-modal__type-option js-page-select" data-content-type="department">
-                <h3>Department Page</h3>
-                <p>Basic information and contact<br/>details for a department.</p>
+                <h3 class="content-modal__type-option-header">Department Page</h3>
+                <p>Basic information and contact details for a department.</p>
               </div>
             </div>
           </div>
