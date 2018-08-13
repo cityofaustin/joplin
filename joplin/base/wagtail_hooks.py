@@ -14,6 +14,7 @@ from base.models import HomePage, Topic, Location, Contact
 def global_css():
     urls = [
         static('css/admin.css'),
+        static('css/create_content_modal.css'),
     ]
     return format_html_join('\n', '<link rel="stylesheet" href="{}">', ((url,) for url in urls))
 

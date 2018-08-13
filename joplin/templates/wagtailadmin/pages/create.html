@@ -1,0 +1,45 @@
+{% extends "wagtailadmin/pages/create.html" %}
+
+{% load wagtailadmin_tags %}
+{% load i18n %}
+{% load l10n %}
+
+{% block extra_js %}
+    {{ block.super }}
+    {% include "wagtailadmin/pages/_editor_js.html" %}
+
+    {% comment %}
+        Additional js from widgets media. Allows for custom widgets in admin panel.
+    {% endcomment %}
+    {{ edit_handler.form.media.js }}
+
+    {% comment %}
+        Additional HTML code that edit handlers define through 'html_declarations'. (Technically this isn't Javascript, but it will generally be data that exists for Javascript to work with...)
+    {% endcomment %}
+    {{ edit_handler.html_declarations }}
+
+    <script>
+        $(function(){
+            $('#page-edit-form .tab-content section.active input').first().trigger('focus');
+            /* Make user confirm before leaving the editor if there are unsaved changes */
+            {% trans "This page has unsaved changes." as confirmation_message %}
+            enableDirtyFormCheck(
+                '#page-edit-form',
+                {
+                    confirmationMessage: '{{ confirmation_message|escapejs }}',
+                    {% if has_unsaved_changes %}
+                        alwaysDirty: true,
+                    {% endif %}
+                }
+            );
+
+            // Populate create new page fields when a user comes from the wizard
+            if(localStorage.wagtailCreateModal) {
+              var modalState = JSON.parse(localStorage.wagtailCreateModal);
+              $("#id_topic").val(modalState.topic);
+              $("#id_title").val(modalState.title);
+              localStorage.removeItem('wagtailCreateModal');
+            }
+        });
+    </script>
+{% endblock %}

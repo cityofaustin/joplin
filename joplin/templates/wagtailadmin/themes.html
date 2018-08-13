@@ -1,0 +1,27 @@
+<h1>Themes with nested topics 💩</h1>
+  <ul>
+      {% for key, value in themes.items %}
+      <li>
+        <span>{{ value.text }}</span>
+          {% for topic in value.topics %}
+          <div class="theme-options">
+            <input type="radio" name="topic" value="{{topic.id}}" class="js-topic-item">
+            <label for="{{topic.id}}">{{ topic.text }}</label>
+          </div>
+          {% endfor %}
+      </li>
+
+      {% endfor %}
+  </ul>
+
+<style>
+.theme-options {
+  display: block;
+  width: 100%;
+  float: left;
+}
+.theme-options input,
+.theme-options label {
+  float: left;
+}
+</style>
