@@ -10,7 +10,10 @@
           <div class="js-wizard-step content-modal__step--active" data-active="true">
             <h2 class="content-modal__header">Select the Content Type</h2>
             <div class="content-modal__type-options-wrapper">
-              <div class="content-modal__type-option js-page-select" data-content-type="service">
+              <div class="content-modal__type-option js-page-select"
+                data-content-type="service"
+                data-redirecturl="/admin/pages/add/base/servicepage/3/"
+              >
                 <img class="content-modal__type-icons"
                   src="{% static 'images/service_page_icon.svg' %}"
                   alt="Service Page"
@@ -18,7 +21,10 @@
                 <h3 class="content-modal__type-option-header">Service Page</h3>
                 <p>A step by step guide to a particular city service.</p>
               </div>
-              <div class="content-modal__type-option js-page-select" data-content-type="process">
+              <div class="content-modal__type-option js-page-select"
+                data-content-type="process"
+                data-redirecturl="/admin/pages/add/base/processpage/3/"
+              >
                 <img class="content-modal__type-icons"
                   src="{% static 'images/process_page_icon.svg' %}"
                   alt="Service Page"
@@ -26,7 +32,10 @@
                 <h3 class="content-modal__type-option-header">Process Page</h3>
                 <p>Processes which require several steps, which may not go in order</p>
               </div>
-              <div class="content-modal__type-option js-page-select" data-content-type="department">
+              <div class="content-modal__type-option js-page-select"
+                data-content-type="department"
+                data-redirecturl="/admin/snippets/base/department/add/"
+              >
                 <h3 class="content-modal__type-option-header">Department Page</h3>
                 <p>Basic information and contact details for a department.</p>
               </div>
@@ -55,7 +64,7 @@
         </div>
           <div class="js-wizard-step content-modal__step--inactive" data-active="false">
             <h2>Select the topic  which best fits your content.</h2>
-            {% themes %}
+            {% themes_topics_tree %}
             <div class="modal-button-row" style="display: block;">
               <div class="button js-back">Back</div>
               <button type="button" class="button" data-dismiss="modal">Close</button>
@@ -69,85 +78,4 @@
   </div>
 </div>
 
-<script>
-  $(document).ready(function() {
-
-    var contentWizardState = {
-      type: '',
-      title: '',
-      topic: '',
-      activeStep: 0,
-    }
-
-    var contentWizardModule = {
-      init: function() {
-        console.log('setup contentWizardModule...');
-        this.registerEventHandlers();
-      },
-      registerEventHandlers: function() {
-        var thiz = this;
-        console.log(this);
-
-        $('.js-page-select').click( function() {
-          contentWizardState.type = $(this).data('contentType');
-          thiz.incrementActiveStep();
-          console.log(contentWizardState);
-        });
-
-        $('.js-select-topic').click(function(e) {
-          contentWizardState.topic = $('.js-topic-item:checked[name=topic]').val();
-          console.log(contentWizardState);
-          thiz.writeToLocalStorage();
-          window.location.href = '/admin/pages/add/base/servicepage/3/';
-        });
-
-        $('#page-title').keyup(function(e) {
-          console.log('#page-title keyup', e.target.value)
-          contentWizardState.title = e.target.value;
-        });
-
-        $('.js-back').click( function(e) {
-          e.preventDefault();
-          console.log('js-back', contentWizardState);
-          thiz.decrementActiveStep();
-        });
-
-        $('.js-continue').click( function(e) {
-          thiz.incrementActiveStep();
-        });
-
-      },
-      selectClickHandler: function(thing) {
-      },
-      incrementActiveStep: function(){
-        contentWizardState.activeStep++;
-        $('.js-wizard-step').each( function(i) {
-          if (contentWizardState.activeStep === i) {
-            $(this).addClass('content-modal__step--active');
-            $(this).removeClass('content-modal__step--inactive');
-          } else {
-            $(this).removeClass('content-modal__step--active');
-            $(this).addClass('content-modal__step--inactive');
-          }
-        });
-      },
-      decrementActiveStep: function(){
-        contentWizardState.activeStep--
-        $('.js-wizard-step').each( function(i) {
-          if (contentWizardState.activeStep === i) {
-            $(this).addClass('content-modal__step--active');
-            $(this).removeClass('content-modal__step--inactive');
-          } else {
-            $(this).removeClass('content-modal__step--active');
-            $(this).addClass('content-modal__step--inactive');
-          }
-        });
-      },
-      writeToLocalStorage: function() {
-        localStorage.wagtailCreateModal = JSON.stringify(contentWizardState)
-      }
-    };
-
-    contentWizardModule.init();
-  })
-</script>
+<script src="{% static 'js/create-content-modal.js' %}"></script>
