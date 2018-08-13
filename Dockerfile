@@ -21,6 +21,7 @@ WORKDIR /app
 
 COPY "$PWD/fixtures" /app/fixtures
 COPY "$PWD/docker-entrypoint.sh" /app/docker-entrypoint.sh
+COPY "$PWD/load-data.sh" /app/load-data.sh
 COPY "$PWD/joplin" /app/joplin
 
 ENTRYPOINT ["./docker-entrypoint.sh"]
