@@ -1,5 +1,13 @@
 FROM python:3.6.5-slim-stretch
 
+RUN apt-get update
+RUN apt-get -y install gnupg
+RUN apt-get -y install curl
+RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
+RUN apt-get update
+RUN apt-get -y install nodejs
+RUN npm install --global yarn
+
 COPY /deploy/requirements.txt /deploy/requirements.txt
 RUN pip install --no-cache-dir --disable-pip-version-check --requirement /deploy/requirements.txt
 
