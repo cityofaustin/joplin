@@ -21,4 +21,21 @@ if [ "x$LOAD_DATA" = 'xon' ]; then
         fixtures/processes
 fi
 
+if [ "x$WATCH_LOCAL" = 'xon' ]; then
+  echo "Watching using the assets container. Skipping webpack step."
+else
+  echo "Building assets with webpack..."
+  apt-get update
+  apt-get -y install gnupg
+  apt-get -y install curl
+  curl -sL https://deb.nodesource.com/setup_10.x | bash -
+  apt-get update
+  apt-get -y install nodejs
+  npm install --global yarn
+  cd joplin
+  yarn
+  yarn build
+  cd ..
+fi
+
 exec "$@"

@@ -22,4 +22,8 @@ fi
 # are short-lived. That's OK in our case because we're just running this locally.
 HEROKU_KEY=$(heroku auth:token 2> /dev/null)
 
-docker-compose -f docker-compose.local.yml up
+if [ "$REBUILD" == "on" ]; then
+    docker-compose -f docker-compose.local.yml up --build
+else
+    docker-compose -f docker-compose.local.yml up
+fi
