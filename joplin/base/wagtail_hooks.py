@@ -9,46 +9,6 @@ from wagtail.core import hooks
 
 from base.models import HomePage, Topic, Location, Contact
 
-
-@hooks.register('insert_global_admin_css')
-def global_css():
-    urls = [
-        static('css/admin.css'),
-    ]
-    return format_html_join('\n', '<link rel="stylesheet" href="{}">', ((url,) for url in urls))
-
-
-@hooks.register('insert_editor_css')
-def editor_css():
-    urls = [
-        static('css/editor.css'),
-        static('css/preview.css'),
-    ]
-    return format_html_join('\n', '<link rel="stylesheet" href="{}">', ((url,) for url in urls))
-
-
-@hooks.register('insert_global_admin_js')
-def global_admin_js():
-    urls = [
-        static('js/admin.js'),
-    ]
-
-    if settings.USE_ANALYTICS:
-        urls.append(static('js/analytics.js'))
-
-    return format_html_join('\n', '<script src="{}"></script>', ((url,) for url in urls))
-
-
-@hooks.register('insert_editor_js')
-def editor_js():
-    urls = [
-        'https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.4/lodash.min.js',
-        static('js/editor.js'),
-    ]
-
-    return format_html_join('\n', '<script src="{}"></script>', ((url,) for url in urls))
-
-
 @hooks.register('before_edit_page')
 def before_edit_page(request, page):
     print(f'BeforeEditHook request: {request}')
