@@ -67,6 +67,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'wagtail.contrib.modeladmin',
+    'webpack_loader',
 ]
 
 MIDDLEWARE = [
@@ -150,6 +151,13 @@ STATICFILES_FINDERS = [
 STATICFILES_DIRS = [
     os.path.join(PROJECT_DIR, 'static'),
 ]
+
+WEBPACK_LOADER = {
+    'DEFAULT': {
+        'BUNDLE_DIR_NAME': 'webpack_bundles/',
+        'STATS_FILE': os.path.join(BASE_DIR, 'joplin/static/webpack-stats.json'),
+    }
+}
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'

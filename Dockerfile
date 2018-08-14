@@ -1,5 +1,13 @@
 FROM python:3.6.5-slim-stretch
 
+RUN apt-get update
+RUN apt-get -y install gnupg
+RUN apt-get -y install curl
+RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
+RUN apt-get update
+RUN apt-get -y install nodejs
+RUN npm install --global yarn
+
 COPY /deploy/requirements.txt /deploy/requirements.txt
 RUN pip install --no-cache-dir --disable-pip-version-check --requirement /deploy/requirements.txt
 
@@ -12,8 +20,8 @@ RUN mkdir /app
 WORKDIR /app
 
 COPY "$PWD/fixtures" /app/fixtures
-COPY "$PWD/docker-entrypoint.sh" /app/docker-entrypoint.sh
 COPY "$PWD/joplin" /app/joplin
+COPY "$PWD/migrate-load-bundle.sh" /app/migrate-load-bundle.sh
+RUN ./migrate-load-bundle.sh
 
-ENTRYPOINT ["./docker-entrypoint.sh"]
 CMD ["gunicorn", "joplin.wsgi:application", "--pythonpath", "/app/joplin"]

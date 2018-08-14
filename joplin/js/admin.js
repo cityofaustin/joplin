@@ -1,3 +1,5 @@
+import "../css/admin.scss";
+
 // TODO: This a better way
 const anchors = {
   id_title: "#title",

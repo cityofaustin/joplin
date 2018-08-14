@@ -2,8 +2,6 @@
 
 set -o errexit
 
-TAG='joplin:local'
-
 DB_FILE='./joplin/db.sqlite3'
 LOAD_DATA="$LOAD_DATA"
 if [ -z "$LOAD_DATA" ] && [ ! -f "$DB_FILE" ]; then
@@ -24,18 +22,8 @@ fi
 # are short-lived. That's OK in our case because we're just running this locally.
 HEROKU_KEY=$(heroku auth:token 2> /dev/null)
 
-docker build --tag "$TAG" .
-docker run \
-    --rm \
-    --name joplin \
-    --tty --interactive \
-    --publish 8000:80 \
-    --volume "$PWD:/app" \
-    --env "DEBUG=1" \
-    --env "LOAD_DATA=$LOAD_DATA" \
-    --env "GUNICORN_CMD_ARGS=--reload  --reload-engine=poll" \
-    --env "HEROKU_KEY=$HEROKU_KEY" \
-    --env "HEROKU_JANIS_APP_NAME=$HEROKU_JANIS_APP_NAME" \
-    --env "JANIS_URL=http://localhost:3000" \
-    --env "STYLEGUIDE_URL=https://cityofaustin.github.io/digital-services-style-guide" \
-    "$TAG" "$@"
+if [ "$REBUILD" == "on" ]; then
+    docker-compose -f docker-compose.local.yml up --build
+else
+    docker-compose -f docker-compose.local.yml up
+fi
