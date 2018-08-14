@@ -1,3 +1,6 @@
+echo "Running migrations..."
+python ./joplin/manage.py migrate --noinput
+
 if [ "x$LOAD_DATA" = 'xon' ]; then
   echo "Loading users..."
   python ./joplin/manage.py loaddata fixtures/users.json
@@ -13,4 +16,14 @@ if [ "x$LOAD_DATA" = 'xon' ]; then
         fixtures/departments.yaml \
         fixtures/services \
         fixtures/processes
+fi
+
+if [ "x$LOCAL" = 'xon' ]; then
+  echo "Watching using the assets container. Skipping webpack step."
+else
+  echo "Building assets with webpack..."
+  cd joplin
+  yarn
+  yarn build
+  cd ..
 fi

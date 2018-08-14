@@ -13,7 +13,7 @@ services:
       GUNICORN_CMD_ARGS: "--reload  --reload-engine=poll"
       JANIS_URL: http://localhost:3000
       STYLEGUIDE_URL: https://cityofaustin.github.io/digital-services-style-guide
-      WATCH_LOCAL: "on"
+      LOCAL: "on"
   joplinassets:
     build:
       context: .
