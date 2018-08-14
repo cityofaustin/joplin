@@ -1,7 +1,9 @@
 version: '3'
 services:
   joplin:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile.local
     ports:
      - "8000:80"
     volumes:
