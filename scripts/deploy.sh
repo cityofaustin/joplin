@@ -3,6 +3,7 @@
 set -o errexit
 
 APP='joplin-staging'
+echo 'DOES THIS HAPPEN EVERY TIME?'
 
 CURRENT_CONFIG=$(heroku config --app "$APP")
 
