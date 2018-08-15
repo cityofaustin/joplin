@@ -33,7 +33,7 @@
             <div class="dropdown dropdown-button {% if is_revision %}warning{% endif %}">
               <div>
                   <button type="submit" form="page-edit-form"
-                    class="button action-save button-longrunning {% if is_revision %}warning{% endif %}"
+                    class="button action-save button-longrunning {% if is_revision %}warning{% endif %} edit-page_save-button"
                     data-clicked-text="{% trans 'Saving…' %}"
                     {% if page.locked %}disabled {% endif %}
                   >
