@@ -9,7 +9,10 @@
 
     <div class="actions">
         <div>
-            <button class="button">Create New Content</button>
+          <!-- Button trigger modal -->
+          <button type="button" class="button" data-toggle="modal" data-target="#createNewContentModal">
+            Create New Content
+          </button>
         </div>
         <div>
             <input placeholder="Search">
@@ -72,3 +75,5 @@
         {% endif %}
     </tbody>
 </table>
+
+{% include "./_create_content_modal.html" %}
