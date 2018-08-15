@@ -24,5 +24,6 @@ RUN LOAD_DATA=on ./migrate-load-data.sh
 
 WORKDIR /app/joplin
 RUN yarn; yarn build
+WORKDIR /app
 
 CMD ["gunicorn", "joplin.wsgi:application", "--pythonpath", "/app/joplin"]
