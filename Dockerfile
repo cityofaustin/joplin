@@ -12,8 +12,9 @@ RUN mkdir /app
 WORKDIR /app
 
 COPY "$PWD/fixtures" /app/fixtures
-COPY "$PWD/docker-entrypoint.sh" /app/docker-entrypoint.sh
 COPY "$PWD/joplin" /app/joplin
 
-ENTRYPOINT ["./docker-entrypoint.sh"]
+COPY "$PWD/migrate-load-data.sh" /app/migrate-load-data.sh
+RUN ./migrate-load-data.sh
+
 CMD ["gunicorn", "joplin.wsgi:application", "--pythonpath", "/app/joplin"]
