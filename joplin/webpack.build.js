@@ -26,7 +26,7 @@ module.exports = {
     ]
   },
   output: {
-    path: path.resolve(".static/webpack_bundles/"),
+    path: path.resolve("./static/webpack_bundles/"),
     filename: "[name]-[hash].js"
   },
   plugins: [
