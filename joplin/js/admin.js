@@ -1,0 +1,10 @@
+import "../css/admin.scss";
+
+$(function() {
+  // HACK: I can't find a way to configure this to be closed via python
+  document
+    .querySelectorAll("#extra_content-prependmenu:not(.stream-menu-closed)")
+    .forEach(elem => {
+      elem.click();
+    });
+});
