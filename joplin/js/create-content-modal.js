@@ -1,3 +1,5 @@
+import "../css/create_content_modal.scss";
+
 $(document).ready(function() {
 
   var contentWizardState = {

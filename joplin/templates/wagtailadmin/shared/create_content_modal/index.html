@@ -1,5 +1,8 @@
 {% load joplin_tags %}
 {% load staticfiles wagtailadmin_tags %}
+{% load render_bundle from webpack_loader %}
+
+{% render_bundle 'createContentModal' %}
 
 <!-- Modal -->
 <div class="modal fade" id="createNewContentModal" tabindex="-1" role="dialog" aria-labelledby="createNewContentModalLabel">
@@ -87,5 +90,3 @@
     </div>
   </div>
 </div>
-
-<script src="{% static 'js/create-content-modal.js' %}"></script>
