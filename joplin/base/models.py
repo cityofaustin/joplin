@@ -81,7 +81,7 @@ class ServicePage(Page):
         ImageChooserPanel('image'),
         FieldPanel('topic'),
         FieldPanel('title'),
-        FieldPanel('steps'),
+        InlinePanel('service_steps', label="Service steps"),
         StreamFieldPanel('dynamic_content'),
         FieldPanel('additional_content'),
         InlinePanel('contacts', label='Contacts'),
@@ -92,6 +92,13 @@ class ServicePage(Page):
         ObjectList(Page.promote_panels, heading='Search Info'),
     ])
 
+class ServicePageStep(Orderable):
+    page = ParentalKey(ServicePage, related_name='service_steps')
+    step_description = RichTextField(features=WYSIWYG_FEATURES, verbose_name='Step description', blank=True)
+
+    panels = [
+        FieldPanel('step_description'),
+    ]
 
 class ProcessPage(Page):
     created_at = models.DateTimeField(auto_now_add=True)

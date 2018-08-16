@@ -257,10 +257,10 @@ def load_service(data):
     for k in ['meta_description_ar', 'meta_description_en', 'meta_description_es', 'meta_description_vi', 'meta_tags', 'meta_title_ar', 'meta_title_en', 'meta_title_es', 'meta_title_vi']:
         data.pop(k, None)
 
-    for key in data:
-        if key.startswith('steps_'):
-            data[key] = ulify(data[key])
-    data['steps'] = data['steps_en']
+    # for key in data:
+    #     if key.startswith('steps_'):
+    #         data[key] = ulify(data[key])
+    # data['steps'] = data['steps_en']
     data['additional_content'] = data['additional_content_en']
     print('✅')
 
