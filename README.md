@@ -75,3 +75,6 @@ docker exec joplin /bin/bash -c "mkdir -p \"$APP_NAME\" && cd joplin && python m
 #### icons
 To get a full set of icons that Wagtail has available you'll need to upload [Wagtail's icomoon icon definitions](
 https://raw.githubusercontent.com/wagtail/wagtail/master/wagtail/admin/static_src/wagtailadmin/fonts/wagtail-icomoon.json) to the [icomoon web app](https://icomoon.io/app/). Make sure you're uploading the icon definitions for the version of wagtail we're using.
+
+#### Adding Scripts/Styles
+We're using webpack to bundle syles and scripts, and webpack_loader to include them in our templates. To create a new bundle it should be defined as an entry in `webpack.build.js` and `webpack.dev.js`, then included in a template using `{% load render_bundle from webpack_loader %}` and `{% render_bundle 'YOUR_BUNDLE_NAME_HERE' %}`.
