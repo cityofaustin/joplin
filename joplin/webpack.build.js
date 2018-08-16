@@ -21,6 +21,9 @@ module.exports = {
           },
           {
             loader: "sass-loader" // compiles Sass to CSS
+          },
+          {
+            loader: 'babel-loader', // gives us JSX for React
           }
         ]
       }
