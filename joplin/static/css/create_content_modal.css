@@ -1,5 +1,10 @@
 .create-content-modal {
   max-width: 525px;
+  padding-bottom: 0;
+}
+
+.create-content-modal > .modal-body {
+  padding-bottom: 0;
 }
 
 .create-content-modal-wrapper {
@@ -20,14 +25,74 @@
   display: none;
 }
 
-.modal-button-row {
+.content-modal__button-row {
   display: flex;
+}
+
+/* starts out hidden in step one */
+.content-modal__button-row--hidden {
+  display: none;
+}
+.content-modal__hidden,
+.content-modal__department--hidden {
+  display: none;
+}
+
+/* department header markup is hidden */
+.content-modal__header--hidden {
+  display: none;
+}
+
+.content-modal__button--reset {
+  /* reset button */
+  border: none;
+  margin: 0;
+  padding: 0;
+  width: auto;
+  overflow: visible;
+
+  background: transparent;
+
+  /* inherit font & color from ancestor */
+  color: inherit;
+  font: inherit;
+
+  /* Normalize `line-height`. Cannot be changed from `normal` in Firefox 4+. */
+  line-height: normal;
+
+  /* Corrects font smoothing for webkit */
+  -webkit-font-smoothing: inherit;
+  -moz-osx-font-smoothing: inherit;
+
+  /* Corrects inability to style clickable `input` types in iOS */
+  -webkit-appearance: none;
+}
+
+.content-modal__button {
+  width: 33.333%;
+  text-transform: uppercase;
+  padding: 20px 0;
+  color: #3282AF;
+  font-weight: bold;
+  font-size: 12px;
+  border-top: 1px solid #EDEDED;
+  border-right: 1px solid #EDEDED;
+  cursor: pointer;
+}
+
+.content-modal__button:hover {
+  background-color: #EDEDED;
+}
+
+.content-modal__button:last-child {
+  border-right: none;
 }
 
 .content-modal__header {
   color: #023654;
   font-size: 22px;
   text-align: center;
+  line-height: 30px;
 }
 
 .content-modal__type-option {
@@ -43,6 +108,42 @@
   background: #FFFFFF;
 }
 
+.content-modal__input-label {
+  display: flex;
+  width: 100%;
+  font-weight: normal;
+}
+
+.content-modal__input-label--left {
+  flex: 1;
+  width: 50%;
+  text-align: left;
+}
+
+.content-modal__input-label--right {
+  flex: 1;
+  width: 50%;
+  text-align: right;
+}
+
+.content-modal__input-help {
+  font-size: 14px;
+  font-style: italic;
+  text-align: center;
+  padding: 10px 0 30px;
+  display: block;
+}
+
+.content-modal__input-bullet-list-help {
+  padding-left: 20px;
+}
+
+.content-modal__input-bullet-list-help li {
+  font-size: 14px;
+  text-align: left;
+  list-style: disc;
+}
+
 .content-modal__type-option:hover {
   background: #EDEDED;
 }
@@ -55,10 +156,6 @@
 .content-modal__type-options-wrapper {
   display: flex;
   flex-wrap: wrap;
-}
-
-.content-modal__type-icons {
-
 }
 
 @media screen and (min-width: 50em) {

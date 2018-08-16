@@ -14,7 +14,7 @@
                 data-content-type="service"
                 data-redirecturl="/admin/pages/add/base/servicepage/3/"
               >
-                <img class="content-modal__type-icons"
+                <img
                   src="{% static 'images/service_page_icon.svg' %}"
                   alt="Service Page"
                 />
@@ -25,7 +25,7 @@
                 data-content-type="process"
                 data-redirecturl="/admin/pages/add/base/processpage/3/"
               >
-                <img class="content-modal__type-icons"
+                <img
                   src="{% static 'images/process_page_icon.svg' %}"
                   alt="Service Page"
                 />
@@ -43,35 +43,45 @@
           </div>
 
           <div class="js-wizard-step content-modal__step--inactive" data-active="false">
-            <h2>Select the Content Type</h2>
-            <small>Character limit: 54</small>
-            <label for="page-title">Page Title</label>
-            <input type="text" id="page-title">
-            <small>Example: Drop off hazardous wastes and other recyclables</small>
-            <ul>
+            <h2 class="content-modal__header">
+              <span class="js-hideable-fields" data-show-for-department='false'>
+                Write an actionable title for your  <span class="js-page-type">service</span> page, starting with a verb.
+              </span>
+              <span class="js-hideable-fields content-modal__hidden" data-show-for-department='true'>
+                Write an the full name of the department, without abrreviations or acroynms.
+              </span>
+            </h2>
+            <label for="page-title" class="content-modal__input-label">
+              <span class="content-modal__input-label--left">Page Title</span>
+              <span class="content-modal__input-label--right">Character limit: 54</span>
+            </label>
+            <input type="text" id="page-title" autofocus>
+            <span class="content-modal__input-help js-hideable-fields" data-show-for-department='false'>
+              Example: Drop off hazardous wastes and other recyclables
+            </span>
+
+            <ul class="js-hideable-fields content-modal__input-bullet-list-help" data-show-for-department='false'>
               <li>Use simple, accessible language</li>
-              <li>Use words you think residents may search to find the service</li>
+              <li>Use words you think residents may search to find the <span class="js-page-type">service</span></li>
               <li>You don’t need to worry about including your department’s name in the title</li>
             </ul>
-
-            <div class="modal-button-row">
-              <div class="button js-back">Back</div>
-              <button type="button" class="button" data-dismiss="modal">Close</button>
-              <div class="button js-continue">Continue</div>
-            </div>
           </div>
 
-        </div>
           <div class="js-wizard-step content-modal__step--inactive" data-active="false">
             <h2>Select the topic  which best fits your content.</h2>
             {% themes_topics_tree %}
-            <div class="modal-button-row" style="display: block;">
+            <!-- <div class="modal-button-row" style="display: block;">
               <div class="button js-back">Back</div>
               <button type="button" class="button" data-dismiss="modal">Close</button>
               <div class="button js-continue js-select-topic" data-dismiss="modal">Continue</div>
-            </div>
+            </div> -->
           </div>
 
+          <div id="js-content-row" class="content-modal__button-row--hidden">
+            <div class="content-modal__button js-back">Back</div>
+            <button type="button" class="content-modal__button content-modal__button--reset" data-dismiss="modal">Close</button>
+            <div class="content-modal__button js-continue">Continue</div>
+          </div>
         </div>
       </div>
     </div>
