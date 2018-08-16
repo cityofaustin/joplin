@@ -8,9 +8,6 @@
     "STYLEGUIDE_URL": {
       "required": true
     },
-    "LOAD_DATA": {
-      "required": true
-    },
     "DEBUG": {
       "required": true
     }

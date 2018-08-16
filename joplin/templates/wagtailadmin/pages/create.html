@@ -1,8 +1,64 @@
 {% extends "wagtailadmin/pages/create.html" %}
-
 {% load wagtailadmin_tags %}
 {% load i18n %}
-{% load l10n %}
+{% load render_bundle from webpack_loader %}
+
+{% block titletag %}{% blocktrans with page_type=content_type.model_class.get_verbose_name %}New {{ page_type }}{% endblocktrans %}{% endblock %}
+{% block bodyclass %}page-editor create model-{{ content_type.model }}{% endblock %}
+
+{% block content %}
+    {% render_bundle 'editor' %}
+    {% get_style_guide_url content_type=content_type as style_guide_url %}
+    <input type="hidden" id="style_guide_url" name="style_guide_url" value="{{ style_guide_url }}">
+    <div class="header secondary">
+        <div>
+            <div class="create_page_header">
+              <div class="left col9 header-title">
+                  <h1 class="icon icon-doc-empty-inverse">
+                  {% trans 'New' %} <span>{{ content_type.model_class.get_verbose_name }}</span></h1>
+              </div>
+            </div>
+        </div>
+
+        <div class="actions">
+            <div class="dropdown dropup dropdown-button match-width">
+                <button type="submit" class="button action-save button-longrunning editor__save-button" tabindex="3" data-clicked-text="{% trans 'Saving…' %}"><span class="icon icon-spinner"></span><em>{% trans 'Save draft' %}</em></button>
+                <div class="dropdown-toggle icon icon-arrow-up"></div>
+                <ul role="menu">
+                    {% if parent_page_perms.can_publish_subpage %}
+                        <li>
+                            <button type="submit" name="action-publish" value="action-publish" class="button button-longrunning" tabindex="3" data-clicked-text="{% trans 'Publishing…' %}" {% if page.locked %}disabled {% endif %}><span class="icon icon-spinner"></span><em>{% trans 'Publish' %}</em></button>
+                        </li>
+                    {% endif %}
+                    <li><input type="submit" name="action-submit" value="{% trans 'Submit for moderation' %}" class="button" /></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="flex-container">
+      <div class="edit-page-form-container">
+        {{ block.super }}
+      </div>
+      <div class="sidebar-container">
+        <div class="fixed-content">
+          <div class="thumbnail-container">
+            <div class="thumbnail">
+              <iframe name="sidebar-iframe" frameborder="0" onload="this.style.opacity = 1" src="{{style_guide_url}}"></iframe>
+            </div>
+          </div>
+          <div class="sidebar-buttons">
+            <div class="sidebar-button-container">
+              <a class="button sidebar-button" href="{{style_guide_url}}" target="sidebar-iframe">Style Guide</a>
+            </div>
+            <div class="sidebar-button-container">
+              <a class="button sidebar-button" href="{{preview_url}}" target="sidebar-iframe">Preview</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+{% endblock %}
 
 {% block extra_js %}
     {{ block.super }}
@@ -18,3 +74,5 @@
         });
     </script>
 {% endblock %}
+
+

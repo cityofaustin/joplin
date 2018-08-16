@@ -1,0 +1,10 @@
+FROM node:10.8.0-slim
+
+RUN mkdir /app
+
+COPY "$PWD/joplin" /app/joplin
+COPY "$PWD/docker-entrypoint.watchassets.sh" /app/docker-entrypoint.watchassets.sh
+
+WORKDIR /app/joplin
+RUN yarn
+WORKDIR /app
