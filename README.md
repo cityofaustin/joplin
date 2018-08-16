@@ -20,6 +20,12 @@ Make sure you have docker installed, then run:
 LOAD_DATA=on ./scripts/serve-local.sh
 ```
 
+**NOTE** The first time docker-compose runs it builds new images, every time after the images are not rebuilt. To clear the cache and rebuild add `REBUILD=on`.
+
+```
+REBUILD=on ./scripts/serve-local.sh
+```
+
 ### Rebuild Janis on Heroku when new pages are published
 
 You can set environment variables to get Heroku to rebuild Janis when pages are published. For example, to rebuild `janis-staging` on heroku when a page is published locally, run things like this:
