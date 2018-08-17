@@ -12,7 +12,7 @@ class CreateContentModal extends Component {
     super(props);
     this.state = {
       type: null,
-      title: null,
+      title: '', // React warning said: `value` prop on `input` should not be null. Consider using an empty string...
       topic: null,
       activeStep: 0,
       redirectUrl: null,
@@ -53,12 +53,19 @@ class CreateContentModal extends Component {
     this.decrementActiveStep();
   }
 
-  handleTypeSelect = (e) => {
+  handleTypeSelect = (dataObj, e) => {
     this.setState({
-      type: e.target.dataset.contentType,
-      redirectUrl: e.target.dataset.redirectUrl,
+      type: dataObj.type,
+      redirectUrl: dataObj.redirectUrl,
     });
     this.incrementActiveStep();
+  }
+
+  handleTitleInputChange = (e) => {
+    // TODO: add max character validation
+    this.setState({
+      title: e.target.value,
+    });
   }
 
 
@@ -74,7 +81,11 @@ class CreateContentModal extends Component {
                   <ChooseTypeStep handleTypeSelect={this.handleTypeSelect}/>
                 }
                 { this.state.activeStep === 1 &&
-                  <ChooseTitleStep pageType={this.state.type}/>
+                  <ChooseTitleStep
+                    pageType={this.state.type}
+                    title={this.state.title}
+                    handleTitleInputChange={this.handleTitleInputChange}
+                  />
                 }
                 { this.state.activeStep === 2 && <ChooseTopicStep/>}
 
@@ -168,10 +179,10 @@ $(document).ready(function() {
         window.location.href = contentWizardState.redirectUrl;
       });
 
-      $('#page-title').keyup(function(e) {
-        console.log('#page-title keyup', e.target.value)
-        contentWizardState.title = e.target.value;
-      });
+      // $('#page-title').keyup(function(e) {
+      //   console.log('#page-title keyup', e.target.value)
+      //   contentWizardState.title = e.target.value;
+      // });
       //
       // $('.js-back').click( function(e) {
       //   e.preventDefault();
