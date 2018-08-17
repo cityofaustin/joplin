@@ -1,6 +1,8 @@
 from django import template
 import graphene
 import os
+import json
+
 from base.models import Topic, Theme
 
 register = template.Library()
@@ -49,6 +51,5 @@ def themes_topics_tree(context):
         })
 
     return {
-        'themes': themes,
-        'request': context['request'],
+        'themes': json.dumps(themes)
     }
