@@ -10,7 +10,7 @@ module.exports = {
   entry: {
     admin: "./js/admin.js",
     editor: "./js/editor.js",
-    createContentModal: './js/create-content-modal.js'
+    createContentModal: './js/CreateContentModal.js'
   },
   module: {
     rules: [

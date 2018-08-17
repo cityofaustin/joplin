@@ -1,7 +1,13 @@
 import React from 'react';
 // import PropTypes from 'prop-types';
 
-const ChooseTitleStep = ({ pageType, title, handleTitleInputChange }) => (
+const ChooseTitleStep = ({
+  pageType,
+  title,
+  handleTitleInputChange,
+  characterCount,
+  maxCharacterCount
+}) => (
   <div className="content-modal__step">
     <h2 className="content-modal__header">
       { pageType === 'department' && (
@@ -17,7 +23,22 @@ const ChooseTitleStep = ({ pageType, title, handleTitleInputChange }) => (
     </h2>
     <label htmlFor="page-title" className="content-modal__input-label">
       <span className="content-modal__input-label--left">Page Title</span>
-      <span className="content-modal__input-label--right">Character limit: 54</span>
+      { characterCount === 0
+          ? (
+            <span className="content-modal__input-label--right">
+              Character limit: 54
+            </span>
+          ) : (
+            <span
+              className={
+                characterCount > maxCharacterCount
+                  ? "content-modal__input-label--right content-modal__input-label--red"
+                  : "content-modal__input-label--right"
+              }>
+              Characters remaining: { maxCharacterCount - characterCount }
+            </span>
+          )
+      }
     </label>
     <input
       value={title}

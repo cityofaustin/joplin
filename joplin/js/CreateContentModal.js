@@ -7,6 +7,8 @@ import ChooseTopicStep from './ChooseTopicStep.js'
 
 import "../css/create_content_modal.scss";
 
+const MAX_TITLE_LENGTH = 54;
+
 class CreateContentModal extends Component {
   constructor(props) {
     super(props);
@@ -16,6 +18,7 @@ class CreateContentModal extends Component {
       topic: null,
       activeStep: 0,
       redirectUrl: null,
+      titleCharacterCount: 0,
     }
   }
 
@@ -33,7 +36,6 @@ class CreateContentModal extends Component {
     this.setState({
       activeStep: this.state.activeStep + 1
     })
-    // this.focusInput();
     // this.toggleActiveStep();
   }
 
@@ -41,11 +43,11 @@ class CreateContentModal extends Component {
     this.setState({
       activeStep: this.state.activeStep - 1
     })
-    // this.focusInput();
     // this.toggleActiveStep();
   }
 
   handleNextButton = (e) => {
+    if (this.state.titleCharacterCount > MAX_TITLE_LENGTH) return false;
     this.incrementActiveStep();
   }
 
@@ -62,9 +64,9 @@ class CreateContentModal extends Component {
   }
 
   handleTitleInputChange = (e) => {
-    // TODO: add max character validation
     this.setState({
       title: e.target.value,
+      titleCharacterCount: e.target.value.length,
     });
   }
 
@@ -85,6 +87,8 @@ class CreateContentModal extends Component {
                     pageType={this.state.type}
                     title={this.state.title}
                     handleTitleInputChange={this.handleTitleInputChange}
+                    characterCount={this.state.titleCharacterCount}
+                    maxCharacterCount={MAX_TITLE_LENGTH}
                   />
                 }
                 { this.state.activeStep === 2 && <ChooseTopicStep/>}
@@ -194,11 +198,11 @@ $(document).ready(function() {
       //   thiz.incrementActiveStep();
       // });
     },
-    focusInput: function() {
-      if (contentWizardState.activeStep === 1) {
-        $('#page-title').get(0).focus();
-      }
-    },
+    // focusInput: function() {
+    //   if (contentWizardState.activeStep === 1) {
+    //     $('#page-title').get(0).focus();
+    //   }
+    // },
     // toggleButtonRowVisibility: function () {
     //   if (contentWizardState.activeStep === 0) {
     //     $('#js-content-row').addClass('content-modal__button-row--hidden');
@@ -208,17 +212,17 @@ $(document).ready(function() {
     //     $('#js-content-row').addClass('content-modal__button-row');
     //   }
     // },
-    toggleActiveStep: function () {
-      $('.js-wizard-step').each( function(i) {
-        if (contentWizardState.activeStep === i) {
-          $(this).addClass('content-modal__step--active');
-          $(this).removeClass('content-modal__step--inactive');
-        } else {
-          $(this).removeClass('content-modal__step--active');
-          $(this).addClass('content-modal__step--inactive');
-        }
-      });
-    },
+    // toggleActiveStep: function () {
+    //   $('.js-wizard-step').each( function(i) {
+    //     if (contentWizardState.activeStep === i) {
+    //       $(this).addClass('content-modal__step--active');
+    //       $(this).removeClass('content-modal__step--inactive');
+    //     } else {
+    //       $(this).removeClass('content-modal__step--active');
+    //       $(this).addClass('content-modal__step--inactive');
+    //     }
+    //   });
+    // },
     // incrementActiveStep: function(){
     //   contentWizardState.activeStep++;
     //   this.toggleButtonRowVisibility();
