@@ -17,8 +17,10 @@ module.exports = {
         {
             test: /\.js?$/,
             exclude: /node_modules/,
-            use: {
-              loader: "babel-loader"
+            loader: 'babel-loader',
+            query: {
+              // presets: ['react', 'es2015', 'react-hmre'],
+              plugins: ['transform-class-properties']
             }
         },
         {
