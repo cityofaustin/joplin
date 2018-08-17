@@ -16,6 +16,7 @@ from . import forms as custom_forms
 
 
 WYSIWYG_FEATURES = ['h1', 'h2', 'link', 'ul', 'ol']
+SERVICE_STEP_FEATURES = ['ul', 'link']
 DEFAULT_MAX_LENGTH = 255
 
 
@@ -55,7 +56,6 @@ class ServicePage(Page):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    steps = RichTextField(features=WYSIWYG_FEATURES, verbose_name='Write out the steps a resident needs to take to use the service', blank=True)
     dynamic_content = StreamField(
         [
             ('map_block', custom_blocks.SnippetChooserBlockWithAPIGoodness('base.Map', icon='site')),
@@ -94,7 +94,7 @@ class ServicePage(Page):
 
 class ServicePageStep(Orderable):
     page = ParentalKey(ServicePage, related_name='service_steps')
-    step_description = RichTextField(features=WYSIWYG_FEATURES, verbose_name='Step description', blank=True)
+    step_description = RichTextField(features=SERVICE_STEP_FEATURES, verbose_name='Step description', blank=True)
 
     panels = [
         FieldPanel('step_description'),

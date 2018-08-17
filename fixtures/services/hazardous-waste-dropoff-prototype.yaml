@@ -9,22 +9,22 @@ title_es: \[Prototype\] Entregue sus desechos peligrosos del hogar y otros artí
 title_vi: \[Prototype\] Bỏ đi các loại rác nhà nguy hiểm và các loại rác tái chế khác
 title_ar: التخلص من النفايات الخطرة المنزلية وغيرها من المواد القابلة للتدوير\[Prototype\]
 
-steps_en:
-    - Check the “What do I do with” tool below to find out what items are accepted. Some items are free to drop off and some items, like tires, require a fee.
-    - Review the Household Hazardous Waste Do’s and Don’ts below.
-    - Drop off your items at the Recycle and ReUse Center at 2514 Business Center Dr, Austin, TX 78744.
-steps_es:
-    - Use la función “What do I do with” abajo para ver los artículos aceptados. Puede entregar algunos artículos sin tener que pagar y para otros, como las llantas, debe pagar una cuota.
-    - Revise abajo lo que debe y no debe hacer con los desechos peligrosos del hogar.
-    - Entregue sus artículos en el Centro de Reciclaje y Reúso ubicado en 2514 Business Center Dr, Austin, TX 78744.
-steps_vi:
-    - Kiểm tra bằng công cụ “What do I do with” dưới đây để xác định những loại nào được chấp nhận. Một số loại không phải đóng phí khi vứt bỏ trong khi một số loại khác, ví dụ như lốp xe, sẽ phải trả phí.
-    - Rà soát Những điều Nên làm và Không Nên làm với Rác thải Nguy hại của Hộ gia đình dưới đây.
-    - Bỏ các đồ thải loại của bạn tại Trung tâm Tái chế và Tái Sử dụng tại 2514 Business Center Dr, Austin, TX 78744.
-steps_ar:
-    - أطلع على أداة "What do I do with" أدناه لمعرفة العناصر المقبولة. التخلص من بعض العناصر مجاني وهناك بعض العناصر، مثل التخلص من الإطارات، تتطلب رسوما.
-    - يرجى مراجعة قائمة النفايات المنزلية الخطرة التي يمكن التخلص منها والعناصر التي لا يمكن التخلص منها أدناه.
-    - تخلص من العناصر الخاصة بك في مركز إعادة التدوير وإعادة الاستخدام في 2514 Business Center Dr, Austin, TX 78744.
+# steps_en:
+#     - Check the “What do I do with” tool below to find out what items are accepted. Some items are free to drop off and some items, like tires, require a fee.
+#     - Review the Household Hazardous Waste Do’s and Don’ts below.
+#     - Drop off your items at the Recycle and ReUse Center at 2514 Business Center Dr, Austin, TX 78744.
+# steps_es:
+#     - Use la función “What do I do with” abajo para ver los artículos aceptados. Puede entregar algunos artículos sin tener que pagar y para otros, como las llantas, debe pagar una cuota.
+#     - Revise abajo lo que debe y no debe hacer con los desechos peligrosos del hogar.
+#     - Entregue sus artículos en el Centro de Reciclaje y Reúso ubicado en 2514 Business Center Dr, Austin, TX 78744.
+# steps_vi:
+#     - Kiểm tra bằng công cụ “What do I do with” dưới đây để xác định những loại nào được chấp nhận. Một số loại không phải đóng phí khi vứt bỏ trong khi một số loại khác, ví dụ như lốp xe, sẽ phải trả phí.
+#     - Rà soát Những điều Nên làm và Không Nên làm với Rác thải Nguy hại của Hộ gia đình dưới đây.
+#     - Bỏ các đồ thải loại của bạn tại Trung tâm Tái chế và Tái Sử dụng tại 2514 Business Center Dr, Austin, TX 78744.
+# steps_ar:
+#     - أطلع على أداة "What do I do with" أدناه لمعرفة العناصر المقبولة. التخلص من بعض العناصر مجاني وهناك بعض العناصر، مثل التخلص من الإطارات، تتطلب رسوما.
+#     - يرجى مراجعة قائمة النفايات المنزلية الخطرة التي يمكن التخلص منها والعناصر التي لا يمكن التخلص منها أدناه.
+#     - تخلص من العناصر الخاصة بك في مركز إعادة التدوير وإعادة الاستخدام في 2514 Business Center Dr, Austin, TX 78744.
 
 additional_content_en: |
     <h2>Household Hazardous Waste Do’s and Don’ts</h2>

@@ -9,22 +9,22 @@ title_es: Busque sus días de recolección de basura, reciclaje y compost
 title_vi: Tìm ngày bốc rác thường, rác tái chế, và rác ủ phân hữu cơ của quý vị
 title_ar: الاطلاع على أيام جمع القمامة والمواد التي يُعاد تدويرها والقابلة للتسميد
 
-steps_en:
-    - Type your street address in the box below. If you live in a multi-family home, like a duplex or fourplex, do not include your unit number.
-    - Press the search button to view your curbside pickup days.
-    - 'Optional: Print a copy of your schedule or click the icon to add your pickup days to your Google, iCal, or Microsoft calendar.'
-steps_es:
-    - Ingrese su dirección en la siguiente casilla. Si vive en una casa multifamiliar, como en un dúplex o en un edificio de cuatro apartamentos, no incluya el número de su unidad.
-    - Haga clic en el botón de búsqueda para ver sus días de recolección.
-    - 'Opcional: Imprima una copia de su calendario o haga clic en el icono para añadir sus días de recolección a su calendario de Google, iCal o Microsoft.'
-steps_vi:
-    - Đánh địa chỉ nhà quý vị vào ô dưới đây. Nếu quý vị sống trong một ngôi nhà có nhiều gia đình, như nhà hai căn hoặc nhà bốn căn, thì không cần ghi số căn hộ của mình.
-    - Nhấn nút tìm kiếm để xem các ngày bốc rác để lề đường của mình.
-    - 'Tùy chọn: In một bản lịch của quý vị hoặc nhấn vào biểu tượng để cộng thêm các ngày bốc rác vào lịch Google, iCal, hoặc Microsoft của mình.'
-steps_ar:
-    - اكتب عنوان شارعك في المربع أدناه. إذا كنت تعيش في منزل متعدد الأسر، مثل منزل مزدوج أو مكون من أربعة أقسام، لا تُدرج رقم وحدتك.
-    - اضغط على زر البحث لعرض أيام جمع القمامة على الرصيف.
-    - 'ختياري: يمكنك طباعة نسخة من جدولك أو النقر على الرمز لإضافة أيام جمع القمامة إلى تقويم Google أو iCal أو Microsoft.'
+# steps_en:
+#     - Type your street address in the box below. If you live in a multi-family home, like a duplex or fourplex, do not include your unit number.
+#     - Press the search button to view your curbside pickup days.
+#     - 'Optional: Print a copy of your schedule or click the icon to add your pickup days to your Google, iCal, or Microsoft calendar.'
+# steps_es:
+#     - Ingrese su dirección en la siguiente casilla. Si vive en una casa multifamiliar, como en un dúplex o en un edificio de cuatro apartamentos, no incluya el número de su unidad.
+#     - Haga clic en el botón de búsqueda para ver sus días de recolección.
+#     - 'Opcional: Imprima una copia de su calendario o haga clic en el icono para añadir sus días de recolección a su calendario de Google, iCal o Microsoft.'
+# steps_vi:
+#     - Đánh địa chỉ nhà quý vị vào ô dưới đây. Nếu quý vị sống trong một ngôi nhà có nhiều gia đình, như nhà hai căn hoặc nhà bốn căn, thì không cần ghi số căn hộ của mình.
+#     - Nhấn nút tìm kiếm để xem các ngày bốc rác để lề đường của mình.
+#     - 'Tùy chọn: In một bản lịch của quý vị hoặc nhấn vào biểu tượng để cộng thêm các ngày bốc rác vào lịch Google, iCal, hoặc Microsoft của mình.'
+# steps_ar:
+#     - اكتب عنوان شارعك في المربع أدناه. إذا كنت تعيش في منزل متعدد الأسر، مثل منزل مزدوج أو مكون من أربعة أقسام، لا تُدرج رقم وحدتك.
+#     - اضغط على زر البحث لعرض أيام جمع القمامة على الرصيف.
+#     - 'ختياري: يمكنك طباعة نسخة من جدولك أو النقر على الرمز لإضافة أيام جمع القمامة إلى تقويم Google أو iCal أو Microsoft.'
 
 additional_content_en: |
     <h2>Trash, recycling, and compost pickup</h2>

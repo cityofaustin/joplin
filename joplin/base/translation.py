@@ -65,7 +65,6 @@ class PageTranslationOptions(TranslationOptions):
 class ServicePageTranslationOptions(TranslationOptions):
     fields = (
         'title',
-        'steps',
         'additional_content',
     )
 
