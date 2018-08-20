@@ -113,7 +113,7 @@ class ServicePageNode(DjangoObjectType):
 
 class ServicePageStepNode(DjangoObjectType):
     class Meta:
-        model = ProcessPageStep
+        model = ServicePageStep
         interfaces = [graphene.Node]
 
 class ProcessPageNode(DjangoObjectType):
