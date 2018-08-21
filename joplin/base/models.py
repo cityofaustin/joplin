@@ -102,6 +102,7 @@ class ServicePage(Page):
         # ObjectList(Page.promote_panels, heading='Search Info'),
     ])
 
+ServicePage._meta.get_field('title').verbose_name='Write an actionable title'
 
 class ProcessPage(Page):
     created_at = models.DateTimeField(auto_now_add=True)
