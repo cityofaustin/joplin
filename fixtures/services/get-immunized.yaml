@@ -5,9 +5,9 @@ image: paint
 contact: 311
 
 title_en: Get immunizations for you and your family
-title_es: 
-title_vi: 
-title_ar:
+title_es: Get immunizations for you and your family
+title_vi: Get immunizations for you and your family
+title_ar: Get immunizations for you and your family
 
 steps_en: |
     - We provide immunization shots to uninsured children and adults and Medicaid recipients. Decide which shots you or your family members need.
@@ -36,7 +36,7 @@ steps_en: |
     - Find the clinic nearest you
        - <a href"https://www.google.com/maps/place/405+W+Stassney+Ln,+Austin,+TX+78745/@30.2070206,-97.7814319,17z/data=!3m1!4b1!4m5!3m4!1s0x8644b4a98fa1e043:0x6c9910f96b488fb8!8m2!3d30.2070206!4d-97.7792379">Far South Austin Clinic<a/>
        - <a href"https://www.google.com/maps/place/7500+Blessing+Ave,+Austin,+TX+78752/@30.3326199,-97.6955864,17z/data=!3m1!4b1!4m5!3m4!1s0x8644c988de534435:0x6d5da7b657ff877e!8m2!3d30.3326199!4d-97.6933924">St. John Clinic<a/>
-    - <a href="http://www.austintexas.gov/sites/default/files/files/Health/Immunizations/2018_S4T_BS_Flyer-_English.pdf">Find available appointment times</a>.      
+    - <a href="http://www.austintexas.gov/sites/default/files/files/Health/Immunizations/2018_S4T_BS_Flyer-_English.pdf">Find available appointment times</a>.
     - Call 512-972-5520 Monday through Friday 8 a.m. to 4:30 p.m. to make an appointment.
     - Bring the required items with you to your appointment:
         - Your shot records
@@ -49,9 +49,9 @@ steps_en: |
 
 additional_content_en: |
     <h2>Child immunizations requirements</h2>
-    
+
     The Texas Department of State Health Services requires children to get certain immunizations to attend schools and childcare facilities.
-    
+
     <a href="http://www.dshs.texas.gov/immunize/school/child-care-requirements.aspx">Learn more about child-care immunization requirements for children under the age of five here and<a/> <a href="http://www.dshs.texas.gov/immunize/school/school-requirements.aspx">immunization requirements for students K-12</a>.
 
     If you don’t have Medicaid or are already insured, you can make an appointment with a private doctor or clinic for immunizations shots.
@@ -65,8 +65,14 @@ dynamic_content:
         description_ar: تفضل بزيارة مستودع إعادة الاستخدام في مركز إعادة التدوير وإعادة الاستخدام
         location: Recycle & Reuse Drop-off Center
 
-meta_title_en:
+meta_title_en: Get immunizations for you and your family
+meta_description_es:
+meta_description_vi:
+meta_description_ar:
 
-meta_description_en: Get low-cost vaccines for you and your family. We provide immunizations to uninsured children and adults and Medicaid recipients. Decide which shots you need. 
+meta_description_en: Get low-cost vaccines for you and your family. We provide immunizations to uninsured children and adults and Medicaid recipients. Decide which shots you need.
+meta_description_es:
+meta_description_vi:
+meta_description_ar:
 
 meta_tags: Immunizations, immunization shots, vaccines, vaccinations, immunization requirements

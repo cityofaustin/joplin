@@ -5,9 +5,9 @@ image: curbside-compost
 contact: 311
 
 title_en: Keep yourself safe around bats in Austin
-title_es: 
-title_vi: 
-title_ar:
+title_es: Keep yourself safe around bats in Austin
+title_vi: Keep yourself safe around bats in Austin
+title_ar: Keep yourself safe around bats in Austin
 
 steps_en: |
     <h2>Follow these steps to keep yourself safe if you come into contact with a bat</h2>
@@ -31,8 +31,15 @@ additional_content_en: |
 
 
 meta_title_en: Keep yourself safe around bats in Austin
+meta_title_es:
+meta_title_vi:
+meta_title_ar:
 
+dynamic_content:
 
 meta_description_en: Austin is home to the largest urban bat colony in North America. And while bats contribute greatly to our ecosystem, Austin Public Health wants to remind the public how to protect themselves around these animals. Awareness is the best tool citizens have against exposure.
+meta_description_es:
+meta_description_vi:
+meta_description_ar:
 
 meta_tags: Austin bat safety, Bats and rabies in Austin, Found a bat in Austin
