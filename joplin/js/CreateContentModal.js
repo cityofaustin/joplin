@@ -9,7 +9,6 @@ import "../css/create_content_modal.scss";
 
 const MAX_TITLE_LENGTH = 54;
 const THEME_TOPIC_TREE = window.themeTopicsTree;
-delete window.themeTopicsTree;
 
 class CreateContentModal extends Component {
   constructor(props) {
@@ -47,7 +46,15 @@ class CreateContentModal extends Component {
   }
 
   handleNextButton = (e) => {
+    // Validate title max length
     if (this.state.titleCharacterCount > MAX_TITLE_LENGTH) return false;
+
+    // Skip Topic Select Step for creating a Department
+    if (this.state.type === 'department' && this.state.activeStep === 1) {
+      this.redirectToEditPage();
+      return true;
+    }
+
     this.incrementActiveStep();
   }
 
@@ -71,12 +78,15 @@ class CreateContentModal extends Component {
   }
 
   handleTopicSelect = (e) => {
-    debugger
     this.setState({
       topic: e.target.value,
     });
+    this.redirectToEditPage();
+  }
+
+  redirectToEditPage = () => {
     this.writeToLocalStorage();
-    window.location.href = contentWizardState.redirectUrl;
+    window.location.href = this.state.redirectUrl;
   }
 
   writeToLocalStorage = () => {
