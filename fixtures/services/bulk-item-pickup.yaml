@@ -9,6 +9,13 @@ title_es: Prepárese para la recolección de artículos grandes al borde de la a
 title_vi: Chuẩn bị cho việc bốc rác khối để lề đường
 title_ar: كُن على استعداد لجمع العناصر كبيرة الحجم التي يُراد التخلص منها على جانب الرصيف
 
+service_steps:
+    -
+        step_description_en: Use the <a href="http://austintexas.gov/what-do-i-do">“What do I do with” tool</a> below to see what bulk items can be picked up. Bulk items are items that are too large for your trash cart, such as appliances, furniture, and carpet.
+        step_description_es: Use la función “What do I do with”  abajo para ver los artículos grandes que califican para recolección. Los artículos grandes son los que no caben en su bote de basura, tales como electrodomésticos, muebles y alfombras.
+        step_description_vi: Sử dụng công cụ “What do I do with” dưới đây để biết những loại rác khối nào có thể được bốc đi. Những loại rác khối là các rác quá lớn để cho vào thùng rác của mình, ví dụ như các máy móc dùng cho việc nhà, đồ đạc, và thảm.
+        step_description_ar: استخدم أداة <a href="http://www.austintexas.gov/page/my-collection-schedule">"What do I do with"</a> أدناه لمعرفة العناصر كبيرة الحجم التي يمكن جمعها للتخلص منها. العناصر كبيرة الحجم هي عناصر حجمها كبير للغاية بحيث لا تسعها عربة القمامة، مثل الأجهزة والأثاث والسجاد.
+
 # steps_en:
 #     - Use the <a href="http://austintexas.gov/what-do-i-do">“What do I do with” tool</a> below to see what bulk items can be picked up. Bulk items are items that are too large for your trash cart, such as appliances, furniture, and carpet.
 #     - Consider donating your items before placing them on the curb for pickup.
