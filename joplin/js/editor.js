@@ -26,10 +26,10 @@ $(function() {
   for (const label of labels) {
     let id = label.getAttribute("for");
 
-    // HACK: I can't find a way to override this in python
-    if (id === "id_title") {
-      label.textContent = "Actionable Title";
-    }
+    // // HACK: I can't find a way to override this in python
+    // if (id === "id_title") {
+    //   label.textContent = "Actionable Title";
+    // }
 
     // HACK: If we're dealing with subheadings in steps we need to remove the index
     if (id && id.includes("id_process_steps")) {

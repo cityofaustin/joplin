@@ -55,6 +55,13 @@ class ServicePage(Page):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    seo_panels = (
+        FieldPanel('slug'),
+        FieldPanel('seo_title'),
+        FieldPanel('show_in_menus'),
+        FieldPanel('search_description'),
+    )
+
     steps = RichTextField(features=WYSIWYG_FEATURES, verbose_name='Write out the steps a resident needs to take to use the service', blank=True)
     dynamic_content = StreamField(
         [
@@ -70,7 +77,9 @@ class ServicePage(Page):
         'base.Topic',
         on_delete=models.PROTECT,
         related_name='services',
+        verbose_name='Select a topic',
     )
+
     image = models.ForeignKey(TranslatedImage, null=True, blank=True, on_delete=models.SET_NULL, related_name='+', verbose_name='Choose an image for the service banner')
 
     parent_page_types = ['base.HomePage']
@@ -85,13 +94,15 @@ class ServicePage(Page):
         StreamFieldPanel('dynamic_content'),
         FieldPanel('additional_content'),
         InlinePanel('contacts', label='Contacts'),
+        MultiFieldPanel(seo_panels, heading='Search Engine Optimization', classname='seo_panels collapsible'),
     ]
 
     edit_handler = TabbedInterface([
         ObjectList(content_panels, heading='Content'),
-        ObjectList(Page.promote_panels, heading='Search Info'),
+        # ObjectList(Page.promote_panels, heading='Search Info'),
     ])
 
+ServicePage._meta.get_field('title').verbose_name='Write an actionable title'
 
 class ProcessPage(Page):
     created_at = models.DateTimeField(auto_now_add=True)
