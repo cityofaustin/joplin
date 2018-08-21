@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import plus from '../static/images/plus.png'
 import minus from '../static/images/minus.png'
+import unselected from '../static/images/unselected.png'
+import selected from '../static/images/selected.png'
 // import PropTypes from 'prop-types';
 
 class ChooseTopicStep extends Component {
@@ -18,7 +20,6 @@ class ChooseTopicStep extends Component {
   }
 
   render() {
-    console.log(this.state.openThemeGroup)
     const themeTopicsTree = this.props.themeTopicTree;
     const arrayOfTopicsByTheme = Object.keys(themeTopicsTree);
 
@@ -41,7 +42,18 @@ class ChooseTopicStep extends Component {
                 <ul className={ isThemeGroupOpen ? `ChooseTopicStep__theme-group--open` :  `ChooseTopicStep__theme-group--closed`}>
                   {themeGroup.topics.map(topic => {
                     return (
-                      <li key={topic.id}>{topic.text}: id --- {topic.id}</li>
+                      <li key={topic.id} onClick={this.props.handleTopicSelect.bind(this, topic.id)}>
+                        <div>
+                          { this.props.topic === topic.id
+                              ? (
+                                <img src={selected} alt=""/>
+                              ) : (
+                                <img src={unselected} alt=""/>
+                              )
+                          }
+                          <span>{topic.text}</span>
+                        </div>
+                      </li>
                     )
                   })}
                 </ul>

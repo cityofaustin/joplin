@@ -55,6 +55,11 @@ class CreateContentModal extends Component {
       return true;
     }
 
+    if (this.state.activeStep === 2) {
+      this.redirectToEditPage();
+      return true;
+    }
+
     this.incrementActiveStep();
   }
 
@@ -77,11 +82,8 @@ class CreateContentModal extends Component {
     });
   }
 
-  handleTopicSelect = (e) => {
-    this.setState({
-      topic: e.target.value,
-    });
-    this.redirectToEditPage();
+  handleTopicSelect = (id) => {
+    this.setState({ topic: id });
   }
 
   redirectToEditPage = () => {
@@ -116,6 +118,7 @@ class CreateContentModal extends Component {
                 }
                 { this.state.activeStep === 2 &&
                   <ChooseTopicStep
+                    topic={this.state.topic}
                     handleTopicSelect={this.handleTopicSelect}
                     themeTopicTree={THEME_TOPIC_TREE}
                   />
