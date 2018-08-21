@@ -6,7 +6,7 @@ contact: 311
 
 title_en: Get immunizations for you and your family
 
-steps_en:
+steps_en: |
     - We provide immunization shots to uninsured children and adults and Medicaid recipients. Decide which shots you or your family members need.
       - Shots for children
           - DTaP, DT, or DTP
@@ -44,19 +44,23 @@ steps_en:
           - $20 for a TB test
           - No one is refused services if they are unable to pay.
 
-additional_content_en:
+additional_content_en: |
+    <h2>Child immunizations requirements</h2>
+    
+    The Texas Department of State Health Services requires children to get certain immunizations to attend schools and childcare facilities.
+    
+    <a href="http://www.dshs.texas.gov/immunize/school/child-care-requirements.aspx">Learn more about child-care immunization requirements for children under the age of five here and<a/> <a href="http://www.dshs.texas.gov/immunize/school/school-requirements.aspx">immunization requirements for students K-12</a>.
 
-<h2>Child immunizations requirements</h2>
-
-The Texas Department of State Health Services requires children to get certain immunizations to attend schools and childcare facilities.
-
-<a href="http://www.dshs.texas.gov/immunize/school/child-care-requirements.aspx">Learn more about child-care immunization requirements for children under the age of five here and<a/> <a href="http://www.dshs.texas.gov/immunize/school/school-requirements.aspx">immunization requirements for students K-12</a>.
-
-If you don’t have Medicaid or are already insured, you can make an appointment with a private doctor or clinic for immunizations shots.
+    If you don’t have Medicaid or are already insured, you can make an appointment with a private doctor or clinic for immunizations shots.
 
 dynamic_content:
     -
         type: map
+        description_en: Hazardous Waste Dropoff Center
+        description_es: Visite la Tienda de Reúso en el Centro de Reciclaje y Reúso
+        description_vi: Ghé thăm Cửa Hàng Tái Dụng tại Trung Tâm Tái Chế & Tái Dụng
+        description_ar: تفضل بزيارة مستودع إعادة الاستخدام في مركز إعادة التدوير وإعادة الاستخدام
+        location: Recycle & Reuse Drop-off Center
 
 meta_title_en:
 
