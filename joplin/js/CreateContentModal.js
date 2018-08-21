@@ -124,7 +124,7 @@ class CreateContentModal extends Component {
                   />
                 }
 
-                <div id="js-content-row" className={this.buttonRowClassName()}>
+                <div className={this.buttonRowClassName()}>
                   <div
                     className="content-modal__button"
                     onClick={this.handleBackButton}

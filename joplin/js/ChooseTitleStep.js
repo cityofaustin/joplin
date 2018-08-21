@@ -49,17 +49,16 @@ const ChooseTitleStep = ({
     />
 
     { pageType !== 'department' && (
-      <span className="content-modal__input-help">
-        Example: Drop off hazardous wastes and other recyclables
-      </span>
-    )}
-
-    { pageType !== 'department' && (
-      <ul className="content-modal__input-bullet-list-help">
-        <li>Use simple, accessible language</li>
-        <li>Use words you think residents may search to find the <span className="js-page-type">service</span></li>
-        <li>You don’t need to worry about including your department’s name in the title</li>
-      </ul>
+      <div>
+        <span className="content-modal__input-help">
+          Example: Drop off hazardous wastes and other recyclables
+        </span>
+        <ul className="content-modal__input-bullet-list-help">
+          <li>Use simple, accessible language</li>
+          <li>Use words you think residents may search to find the <span className="js-page-type">service</span></li>
+          <li>You don’t need to worry about including your department’s name in the title</li>
+        </ul>
+      </div>
     )}
   </div>
 

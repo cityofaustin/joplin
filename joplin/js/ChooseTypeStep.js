@@ -12,6 +12,7 @@ const ChooseTypeStep = ({ handleTypeSelect }) => (
         <div className="content-modal__type-option"
           onClick={handleTypeSelect.bind(this, {
             type: "service",
+            // TODO: These redirectUrls could come from Python instead of being hard-coded
             redirectUrl: "/admin/pages/add/base/servicepage/3/",
           })}
         >

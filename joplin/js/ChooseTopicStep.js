@@ -38,7 +38,8 @@ class ChooseTopicStep extends Component {
                     alt={ isThemeGroupOpen ? 'close theme group' : 'open theme group' }
                   />
                 </div>
-                <span>{themeGroup.text}</span>
+
+                <span>{themeGroup.text} Topics</span>
                 <ul className={ isThemeGroupOpen ? `ChooseTopicStep__theme-group--open` :  `ChooseTopicStep__theme-group--closed`}>
                   {themeGroup.topics.map(topic => {
                     return (
