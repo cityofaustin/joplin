@@ -1,12 +1,10 @@
-slug: Get-immunization-record
+slug: get-immunization-record
 
 topic: Health-records-and-certificates 
-
 contact: 311
-
 title_en: Get a copy of your or your child’s immunization record
 
-steps_en:
+steps_en: |
     - If you’ve received immunizations at a public health clinic in Austin or Travis County, you can pick them up for $5 at:
       - <a href="https://www.google.com/maps/place/405+W+Stassney+Ln,+Austin,+TX+78745/@30.2070206,-97.7814319,17z/data=!3m1!4b1!4m5!3m4!1s0x8644b4a98fa1e043:0x6c9910f96b488fb8!8m2!3d30.2070206!4d-97.7792379">Far South Austin Clinic<a/> or <a href="https://www.google.com/maps/place/7500+Blessing+Ave,+Austin,+TX+78752/@30.3326199,-97.6955864,17z/data=!3m1!4b1!4m5!3m4!1s0x8644c988de534435:0x6d5da7b657ff877e!8m2!3d30.3326199!4d-97.6933924">St. John Clinic<a/>. Records may not be available for shots given at private physicians' offices.
     - <a href="http://www.austintexas.gov/sites/default/files/files/Health/Immunizations/Medical_Release_Form_2016_English.pdf">Complete this form<a/> to agree to let us to release your medical information to you and any other people who may need it.
@@ -15,9 +13,7 @@ steps_en:
 
 additional_content_en: |
     <h2>Store your immunizations records</h2>
-    
     If you’ve never received immunizations at a public health clinic in Austin or Travis County, but you plan on visiting a clinic, we can save your shot record going forward.
-
     If you are 18 or older, <a href="http://www.austintexas.gov/sites/default/files/files/Health/Immunizations/ImmTrac_Consent_Form_Adult__English.pdf"register for ImmTrac to have your immunizations information stored</a> for free. ImmTrac safely stores your immunization records in one electronic system and remembers which vaccines you’ve had when you can’t.
 
 dynamic_content:
@@ -28,4 +24,4 @@ meta_title_en: Get a copy of your or your child’s immunization record
 
 meta_description_en: Get a copy of your immunization records so you can see what vaccines you have and what shots you still need.
 
-meta_tags:Shots, vaccines, immunizations, immunization shots, immunization shot records, shot record, vaccine records, shots record, shots records
+meta_tags: Shots, vaccines, immunizations, immunization shots, immunization shot records, shot record, vaccine records, shots record, shots records
