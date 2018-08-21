@@ -23,6 +23,11 @@ steps_en: |
 dynamic_content:
     -
         type: map
+        description_en: Hazardous Waste Dropoff Center
+        description_es: Visite la Tienda de Reúso en el Centro de Reciclaje y Reúso
+        description_vi: Ghé thăm Cửa Hàng Tái Dụng tại Trung Tâm Tái Chế & Tái Dụng
+        description_ar: تفضل بزيارة مستودع إعادة الاستخدام في مركز إعادة التدوير وإعادة الاستخدام
+        location: Recycle & Reuse Drop-off Center
 
 meta_title_en: Find free condoms and learn other ways to prevent HIV
 
