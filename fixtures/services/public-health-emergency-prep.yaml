@@ -18,7 +18,7 @@ service_steps:
     -
         step_description_en: <a href="https://www.cdc.gov/phpr/areyouprepared/plan.htm">Make a plan for where you will meet with your family during an emergency</a>.
     -
-        step_description_en: 'Sign up for emergency alerts, <a href="https://public.coderedweb.com/CNE/en-US/21C524DBEA1F:>register for the emergency notification system</a>.'
+        step_description_en: Sign up for emergency alerts, <a href="https://public.coderedweb.com/CNE/en-US/21C524DBEA1F">register for the emergency notification system</a>.
 
 additional_content_en: |
     <h2>Prepare for an emergency</h2>

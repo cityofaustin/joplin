@@ -49,8 +49,8 @@ service_steps:
         step_description_en: |
             Find the clinic nearest you
             <ul>
-              <li><a href"https://www.google.com/maps/place/405+W+Stassney+Ln,+Austin,+TX+78745/@30.2070206,-97.7814319,17z/data=!3m1!4b1!4m5!3m4!1s0x8644b4a98fa1e043:0x6c9910f96b488fb8!8m2!3d30.2070206!4d-97.7792379">Far South Austin Clinic<a/></li>
-              <li><a href"https://www.google.com/maps/place/7500+Blessing+Ave,+Austin,+TX+78752/@30.3326199,-97.6955864,17z/data=!3m1!4b1!4m5!3m4!1s0x8644c988de534435:0x6d5da7b657ff877e!8m2!3d30.3326199!4d-97.6933924">St. John Clinic<a/></li>
+              <li><a href"https://www.google.com/maps/place/405+W+Stassney+Ln,+Austin,+TX+78745/@30.2070206,-97.7814319,17z/data=!3m1!4b1!4m5!3m4!1s0x8644b4a98fa1e043:0x6c9910f96b488fb8!8m2!3d30.2070206!4d-97.7792379">Far South Austin Clinic</a></li>
+              <li><a href"https://www.google.com/maps/place/7500+Blessing+Ave,+Austin,+TX+78752/@30.3326199,-97.6955864,17z/data=!3m1!4b1!4m5!3m4!1s0x8644c988de534435:0x6d5da7b657ff877e!8m2!3d30.3326199!4d-97.6933924">St. John Clinic</a></li>
             </ul>
     -
         step_description_en: <a href="http://www.austintexas.gov/sites/default/files/files/Health/Immunizations/2018_S4T_BS_Flyer-_English.pdf">Find available appointment times</a>.
@@ -78,7 +78,7 @@ additional_content_en: |
 
     The Texas Department of State Health Services requires children to get certain immunizations to attend schools and childcare facilities.
 
-    <a href="http://www.dshs.texas.gov/immunize/school/child-care-requirements.aspx">Learn more about child-care immunization requirements for children under the age of five here and<a/> <a href="http://www.dshs.texas.gov/immunize/school/school-requirements.aspx">immunization requirements for students K-12</a>.
+    <a href="http://www.dshs.texas.gov/immunize/school/child-care-requirements.aspx">Learn more about child-care immunization requirements for children under the age of five here</a> and <a href="http://www.dshs.texas.gov/immunize/school/school-requirements.aspx">immunization requirements for students K-12</a>.
 
     If you don’t have Medicaid or are already insured, you can make an appointment with a private doctor or clinic for immunizations shots.
 
