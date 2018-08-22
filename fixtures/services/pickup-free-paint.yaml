@@ -11,23 +11,15 @@ title_ar: اختيار الدهانات وغيرها من الأدوات الم�
 
 service_steps:
     -
-        step_description_en: Use the <a href="http://austintexas.gov/what-do-i-do">“What do I do with” tool</a> below to see what bulk items can be picked up. Bulk items are items that are too large for your trash cart, such as appliances, furniture, and carpet.
-        step_description_es: Use la función “What do I do with”  abajo para ver los artículos grandes que califican para recolección. Los artículos grandes son los que no caben en su bote de basura, tales como electrodomésticos, muebles y alfombras.
-        step_description_vi: Sử dụng công cụ “What do I do with” dưới đây để biết những loại rác khối nào có thể được bốc đi. Những loại rác khối là các rác quá lớn để cho vào thùng rác của mình, ví dụ như các máy móc dùng cho việc nhà, đồ đạc, và thảm.
-        step_description_ar: استخدم أداة <a href="http://www.austintexas.gov/page/my-collection-schedule">"What do I do with"</a> أدناه لمعرفة العناصر كبيرة الحجم التي يمكن جمعها للتخلص منها. العناصر كبيرة الحجم هي عناصر حجمها كبير للغاية بحيث لا تسعها عربة القمامة، مثل الأجهزة والأثاث والسجاد.
-
-# steps_en:
-#     - Visit the ReUse Store in the Recycle &amp; Reuse Drop-Off Center at 2514 Business Center Dr, Austin, TX 78744.
-#     - Pick from the available 3 colors of Austin ReBlend paint. The paint is free for all residents.
-# steps_es:
-#     - Visite la Tienda de Reúso en el Centro de Reciclaje y Reúso ubicado en 2514 Business Center Dr, Austin, TX 78744.
-#     - Hay 3 colores disponibles para escoger de la pintura Austin ReBlend. Esta pintura es gratis para todos los residentes.
-# steps_vi:
-#     - Ghé thăm Cửa Hàng Tái Dụng tại Trung Tâm Tái Chế & Tái Dụng tại 2514 Business Center Dr, Austin, TX 78744.
-#     - Lấy 3 màu hiện có của sơn Austin ReBlend. Sơn này miễn phí cho tất cả cư dân.
-# steps_ar:
-#     - تفضل بزيارة مستودع إعادة الاستخدام ReUse Store في مركز إعادة التدوير وإعادة الاستخدام في 2514 Business Center Dr, Austin, TX 78744.
-#     - يمكنك الاختيار من الألوان الـ3 المتاحة من دهانات Austin ReBlend. الدهانات مجانية لجميع المقيمين.
+        step_description_en: Visit the ReUse Store in the Recycle &amp; Reuse Drop-Off Center at 2514 Business Center Dr, Austin, TX 78744.
+        step_description_es: Visite la Tienda de Reúso en el Centro de Reciclaje y Reúso ubicado en 2514 Business Center Dr, Austin, TX 78744.
+        step_description_vi: Ghé thăm Cửa Hàng Tái Dụng tại Trung Tâm Tái Chế & Tái Dụng tại 2514 Business Center Dr, Austin, TX 78744.
+        step_description_ar: تفضل بزيارة مستودع إعادة الاستخدام ReUse Store في مركز إعادة التدوير وإعادة الاستخدام في 2514 Business Center Dr, Austin, TX 78744.
+    -
+        step_description_en: Pick from the available 3 colors of Austin ReBlend paint. The paint is free for all residents.
+        step_description_es: Hay 3 colores disponibles para escoger de la pintura Austin ReBlend. Esta pintura es gratis para todos los residentes.
+        step_description_vi: Lấy 3 màu hiện có của sơn Austin ReBlend. Sơn này miễn phí cho tất cả cư dân.
+        step_description_ar: يمكنك الاختيار من الألوان الـ3 المتاحة من دهانات Austin ReBlend. الدهانات مجانية لجميع المقيمين.
 
 additional_content_en: |
     <h2>Learn about Austin ReBlend Paint</h2>
