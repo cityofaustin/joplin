@@ -9,14 +9,14 @@ title_es: Keep yourself safe around bats in Austin
 title_vi: Keep yourself safe around bats in Austin
 title_ar: Keep yourself safe around bats in Austin
 
-steps_en: |
-    <h2>Follow these steps to keep yourself safe if you come into contact with a bat</h2>
+steps_en:
     - If you or anyone you know could have been in contact with a bat, please call the Austin/Travis County <a href="http://www.austintexas.gov/department/epidemiology-and-disease-surveillance">Disease Surveillance Unit</a> at 512-972-5555, or call your local health care provider.
     - Do not touch the bat with bare hands.
     - If the bat is sick, injured, or dead, call Animal Control at 311.
 
 additional_content_en: |
     <h2>Tips for protecting you and your family around bats</h2>
+    <ul>
     <li>Never handle a bat- alive or dead- with your bare hands.</li>
     <li>Keep people and pets away from a sick, injured, or dead bat and call Animal Control at 311.</li>
     <li>Many bats enter homes, apartments, and businesses through unscreened windows and opened doors—particularly when the weather is nice in the fall and spring.</li>
@@ -25,6 +25,7 @@ additional_content_en: |
     <li>To encourage a bat to leave on its own, open windows, turn the lights on, and leave the room, closing the door behind you and keep children and pets out of the area.</li>
     <li>Check the area every few hours to see if the bat has departed—it may take up to 18 hours for a bat to leave a resting place.</li>
     <li>If you must remove a resting bat from a room because there’s no way to avoid contact with people or pets, wear thick leather gloves and carefully place a wide-mouthed cup, jar, or coffee can over the resting bat, slip a piece of cardboard between the opening and the resting surface, then take the container outdoors to release the bat.</li>
+    </ul>
     <h2>Rabies exposure from bats</h2>
     <p><a href="https://www.cdc.gov/rabies/">Rabies</a> exposure occurs only when a person is bitten or scratched by a potentially rabid animal, or when abrasions, open wounds, or mucous membranes are contaminated with the saliva, brain, or nervous system tissue of a potentially rabid animal. For example, if the saliva of a potentially rabid animal comes into contact with an open wound or scratch on your body, that would be considered rabies exposure. </p>
     <p>It may take several weeks or longer for people to show symptoms after being infected with rabies. The early signs of rabies can be fever or headache, but this changes quickly to nervous system signs such as confusion, sleepiness, or agitation. Once someone with a rabies infection starts having these symptoms, that person usually does not survive. This is why it is critical to talk to your doctor or health care provider right away if any animal bites you or licks any open wounds you may have, especially a wild animal.</p>
