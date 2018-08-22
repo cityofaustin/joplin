@@ -67,7 +67,7 @@ class ChooseTopicStep extends Component {
                         activeTopic={this.props.topic}
                         handleTopicSelect={this.props.handleTopicSelect}
                       />
-                    );
+                    )
                   )}
                 </ul>
               </li>

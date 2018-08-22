@@ -6,10 +6,8 @@
 <!-- Modal -->
 <div id="coa-CreateContentModal"></div>
 
-<!--
-This adds a JSON blob with topics sorted by theme to the global window. This is
-the easiest way I could think of to pass data from python to react for now.
--->
+<!-- Topics by Theme data via JSON -->
 {% themes_topics_tree %}
+
 <!-- React module -->
 {% render_bundle 'createContentModal' %}
