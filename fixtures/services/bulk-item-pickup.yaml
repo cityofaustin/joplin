@@ -37,28 +37,28 @@ service_steps:
         step_description_ar: ضع العناصر كبيرة الحجم على جانب الرصيف أمام منزلك قبل الساعة 6:30 صباحا في اليوم الأول من أسبوع الجمع المقرر الخاص بك.
     -
         step_description_en: |
-            <p>Separate items into three piles:</p>
+            Separate items into three piles:
             <ul>
                 <li>Metal - includes appliances, doors must be removed</li>
                 <li>Passenger car tires - limit of eight tires per household, rims must be removed, no truck or tractor tires</li>
                 <li>Non-metal items - includes carpeting and nail-free lumber</li>
             </ul>
         step_description_es: |
-            <p>Separe los artículos en tres grupos.</p>
+            Separe los artículos en tres grupos.
             <ul>
                 <li>Metales: incluye electrodomésticos, debe quitarles las puertas</li>
                 <li>Llantas de autos de pasajeros: límite de ocho llantas por casa, debe quitarles los rines, no se aceptan llantas de camiones ni tractores</li>
                 <li>Artículos que no son de metal: incluye alfombras y madera sin clavos</li>
             </ul>
         step_description_vi: |
-            <p>Tách các đồ vật ra thành ba đống.</p>
+            Tách các đồ vật ra thành ba đống.
             <ul>
                 <li>Kim loại - bao gồm các máy móc dùng cho việc nhà, các cánh cửa phải được tháo ra</li>
                 <li>Bánh xe hơi dân dụng - giới hạn tám bánh xe cho mỗi hộ gia đình, vành bánh xe phải được tháo bỏ, không nhận bánh xe tải hay xe ủi kéo</li>
                 <li>Đồ phi kim loại - bao gồm thảm và gỗ làm nhà không có đinh</li>
             </ul>
         step_description_ar: |
-            <p>افصل العناصر إلى ثلاثة أكوام.</p>
+            افصل العناصر إلى ثلاثة أكوام.
             <ul>
                 <li>المعادن - تشمل الأجهزة، يجب إزالة الأبواب</li>
                 <li>إطارات سيارات الركاب - أقصى عدد مسموح به ثمانية إطارات لكل أسرة، يجب إزالة الحواف، غير مسموح بإطارات الشاحنات أو الجرارات</li>
