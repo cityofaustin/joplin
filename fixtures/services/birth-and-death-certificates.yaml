@@ -9,49 +9,101 @@ title_es: Get a birth or death certificate
 title_vi: Get a birth or death certificate
 title_ar: Get a birth or death certificate
 
-steps_en: |
-    - Determine how you would like to receive your certificate based on how quickly you need it:
-        - in person to receive your certificate in about 15 minutes,
-        - online to receive your certificate in 2-5 business days,
-        - by phone to receive your certificate 3-5 business days,
-        - or by mail to receive your certificate 2-3 weeks.
-    - Make sure you have enough money for the certificate(s) you need:
-        - The cost for each birth certificate is $23.
-        - The cost for one death certificate is $21. If you order more copies at the same time, the cost for each extra one is $4.
-        - Follow the steps below for the delivery method you choose.
-
-    <h2>15 minutes in person:</h2>
-        - Bring your current, government-issued photo identification.
-        - Bring cash, a money order in the exact amount, a personal check, or a credit or debit card in your name for the certificate you need.
-        - Visit the The Office of Vital Records is at <a href="https://goo.gl/maps/5JVQ2UVCayN2">7201 Levander Loop, Building C, Austin, TX, 78702</a> between 8 am and 4:30 p.m. Monday through Friday.
-            - The last application is accepted until 4:15 p.m.
-            - Note that our office is usually busiest between 11:00 a.m. – 2:00 p.m. Customers should expect longer wait times during those hours.
-        - For faster service, download and print an application in <a href="http://austintexas.gov/sites/default/files/files/Health/VitalRecords/2018_OVR_WalkInENGLISH.pdf">English</a> or <a href="http://austintexas.gov/sites/default/files/files/Health/VitalRecords/2018_OVR_WalkInSPANISH.pdf">Spanish</a> and bring it with you.
-
-    <h2>2-5 business days online:</h2>
-        - Visit <a href="https://www.vitalchek.com/">www.VitalChek.com</a>.
-        - Follow the prompts on VitalChek to select which kind of certificate(s) you need.
-        - Verify your identity by answering the questions on VitalChek.
-            - If they cannot verify your identity with their standard questions, you will be instructed to upload a copy of your current government-issued identification and proof of shipping address before your application can be processed. This will delay the processing and delivery time.
-        - Use a credit or debit card (Visa, MasterCard, American Express, or Discover) to pay for your certificate(s).
-            - Processing and UPS shipping fees will be added.
-
-    <h2>3-5 business days by phone:</h2>
-       - Call VitalChek, our secure online agent at 1-800-457-7586
-       - Verify your identity by answering a series of questions.
-          - If VitalChek cannot verify your identity with their standard questions, you will be instructed to upload a copy of your current government-issued identification and proof of shipping address before your application can be processed. This will delay the processing and delivery time.
-       - Use a credit or debit card (Visa, MasterCard, American Express, or Discover) to pay for your certificate(s).
-          - Processing and UPS shipping fees will be added.
-
-    <h2>2-3 weeks by mail:</h2>
-         - Mail the following items to Office of Vital Records, PO Box 1088, Austin, TX 78767-1088:
-            - A completed and notarized <a href="http://austintexas.gov/sites/default/files/files/Health/VitalRecords/2018_OVR_WalkInENGLISH.pdf">certificate application in English</a> or a <a href="http://austintexas.gov/sites/default/files/files/Health/VitalRecords/2018_OVR_WalkInSPANISH.pdf>certificate application in Spanish</a>.
-            - A check or money order in the exact amount payable to the Office of Vital Records.
-                - Personal checks must be signed by the same person who signs the application.
-            - A copy of one of your <a href="http://www.dshs.texas.gov/vs/reqproc/Acceptable-IDs/">acceptable and current forms of government-issued photo identification</a>.
-                - If your home address is different than the address on your ID, also include a proof of residence like a utility bill, voter registration card, etc...
-            - A self-addressed envelope with a stamp. You may use an express mail envelope for faster return delivery. If this is not included, you will not receive the certificate.
-         - If you need the certificate quickly through the mail, use an Express form of delivery, such as FedEx, USPS, or UPS, and send your application to: Office of Vital Records, 7201 Levander Loop, Bldg. C, Austin, TX  78702.
+service_steps:
+    -
+        step_description_en: |
+            Determine how you would like to receive your certificate based on how quickly you need it:
+            <ul>
+                <li>in person to receive your certificate in about 15 minutes,</li>
+                <li>online to receive your certificate in 2-5 business days,</li>
+                <li>by phone to receive your certificate 3-5 business days,</li>
+                <li>or by mail to receive your certificate 2-3 weeks.</li>
+            </ul>
+    -
+        step_description_en: |
+            Make sure you have enough money for the certificate(s) you need:
+            <ul>
+                <li>The cost for each birth certificate is $23.</li>
+                <li>The cost for one death certificate is $21. If you order more copies at the same time, the cost for each extra one is $4.</li>
+                <li>Follow the steps below for the delivery method you choose.</li>
+            </ul>
+    -
+        step_description_en: |
+            15 minutes in person:
+            <ul>
+                <li>Bring your current, government-issued photo identification.</li>
+                <li>Bring cash, a money order in the exact amount, a personal check, or a credit or debit card in your name for the certificate you need.</li>
+                <li>
+                    Visit the The Office of Vital Records is at <a href="https://goo.gl/maps/5JVQ2UVCayN2">7201 Levander Loop, Building C, Austin, TX, 78702</a> between 8 am and 4:30 p.m. Monday through Friday.
+                    <ul>
+                        <li>The last application is accepted until 4:15 p.m.</li>
+                        <li>Note that our office is usually busiest between 11:00 a.m. – 2:00 p.m. Customers should expect longer wait times during those hours.</li>
+                    </ul>
+                </li>
+                <li>For faster service, download and print an application in <a href="http://austintexas.gov/sites/default/files/files/Health/VitalRecords/2018_OVR_WalkInENGLISH.pdf">English</a> or <a href="http://austintexas.gov/sites/default/files/files/Health/VitalRecords/2018_OVR_WalkInSPANISH.pdf">Spanish</a> and bring it with you.</li>
+            </ul>
+    -
+        step_description_en: |
+            2-5 business days online:
+            <ul>
+                <li>Visit <a href="https://www.vitalchek.com/">www.VitalChek.com</a>.</li>
+                <li>Follow the prompts on VitalChek to select which kind of certificate(s) you need.</li>
+                <li>
+                    Verify your identity by answering the questions on VitalChek.
+                    <ul>
+                        <li>If they cannot verify your identity with their standard questions, you will be instructed to upload a copy of your current government-issued identification and proof of shipping address before your application can be processed. This will delay the processing and delivery time.</li>
+                    </ul>
+                </li>
+                <li>
+                    Use a credit or debit card (Visa, MasterCard, American Express, or Discover) to pay for your certificate(s).
+                    <ul>
+                        <li>Processing and UPS shipping fees will be added.</li>
+                    </ul>
+                </li>
+            </ul>
+    -
+        step_description_en: |
+            3-5 business days by phone:
+            <ul>
+                <li>Call VitalChek, our secure online agent at 1-800-457-7586</li>
+                <li>
+                    Verify your identity by answering a series of questions.
+                    <ul>
+                        <li>If VitalChek cannot verify your identity with their standard questions, you will be instructed to upload a copy of your current government-issued identification and proof of shipping address before your application can be processed. This will delay the processing and delivery time.</li>
+                    </ul>
+                </li>
+                <li>
+                    Use a credit or debit card (Visa, MasterCard, American Express, or Discover) to pay for your certificate(s).
+                    <ul>
+                        <li>Processing and UPS shipping fees will be added.</li>
+                    </ul>
+                </li>
+                <li></li>
+            </ul>
+        step_description_en: |
+            2-3 weeks by mail:
+            <ul>
+                <li>
+                    Mail the following items to Office of Vital Records, PO Box 1088, Austin, TX 78767-1088:
+                    <ul>
+                        <li>A completed and notarized <a href="http://austintexas.gov/sites/default/files/files/Health/VitalRecords/2018_OVR_WalkInENGLISH.pdf">certificate application in English</a> or a <a href="http://austintexas.gov/sites/default/files/files/Health/VitalRecords/2018_OVR_WalkInSPANISH.pdf>certificate application in Spanish</a>.</li>
+                        <li>
+                            A check or money order in the exact amount payable to the Office of Vital Records.
+                            <ul>
+                                <li>Personal checks must be signed by the same person who signs the application.</li>
+                            </ul>
+                        </li>
+                        <li>
+                            A copy of one of your <a href="http://www.dshs.texas.gov/vs/reqproc/Acceptable-IDs/">acceptable and current forms of government-issued photo identification</a>.
+                            <ul>
+                                <li>If your home address is different than the address on your ID, also include a proof of residence like a utility bill, voter registration card, etc...</li>
+                            </ul>
+                        </li>
+                        <li>A self-addressed envelope with a stamp. You may use an express mail envelope for faster return delivery. If this is not included, you will not receive the certificate.</li>
+                    </ul>
+                </li>
+                <li>If you need the certificate quickly through the mail, use an Express form of delivery, such as FedEx, USPS, or UPS, and send your application to: Office of Vital Records, 7201 Levander Loop, Bldg. C, Austin, TX  78702.</li>
+            </ul>
 
 meta_title_en: Get a birth or death certificate
 meta_title_es:

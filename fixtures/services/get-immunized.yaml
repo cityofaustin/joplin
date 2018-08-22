@@ -9,50 +9,76 @@ title_es: Get immunizations for you and your family
 title_vi: Get immunizations for you and your family
 title_ar: Get immunizations for you and your family
 
-steps_en: |
-    - We provide immunization shots to uninsured children and adults and Medicaid recipients. Decide which shots you or your family members need.
-      - Shots for children
-          - DTaP, DT, or DTP
-          - Hepatitis A
-          - Hepatitis B
-          - HPV
-          - Polio
-          - Hib
-          - PCV
-          - Measles, Mumps, and Rubella (MMR)
-          - Varicella; the chickenpox vaccine (VAR)
-          - Meningococcal (MCV4)
-       - Shots for adults
-          - DTaP, DT, or DTP
-          - Hepatitis A
-          - Hepatitis B
-          - HPV
-          - Meningitis (through age 21)
-          - Measles, Mumps, and Rubella (MMR)
-          - Pneumonia
-          - Tdap/Td
-          - Varicella; the chickenpox vaccine (VAR)
-          - Shingles
-    - Find the clinic nearest you
-       - <a href"https://www.google.com/maps/place/405+W+Stassney+Ln,+Austin,+TX+78745/@30.2070206,-97.7814319,17z/data=!3m1!4b1!4m5!3m4!1s0x8644b4a98fa1e043:0x6c9910f96b488fb8!8m2!3d30.2070206!4d-97.7792379">Far South Austin Clinic<a/>
-       - <a href"https://www.google.com/maps/place/7500+Blessing+Ave,+Austin,+TX+78752/@30.3326199,-97.6955864,17z/data=!3m1!4b1!4m5!3m4!1s0x8644c988de534435:0x6d5da7b657ff877e!8m2!3d30.3326199!4d-97.6933924">St. John Clinic<a/>
-    - <a href="http://www.austintexas.gov/sites/default/files/files/Health/Immunizations/2018_S4T_BS_Flyer-_English.pdf">Find available appointment times</a>.
-    - Call 512-972-5520 Monday through Friday 8 a.m. to 4:30 p.m. to make an appointment.
-    - Bring the required items with you to your appointment:
-        - Your shot records
-        - Your Medicaid card if you have one
-        - Your payment
-          - $10 per dose of vaccine for children
-          - $25 per dose of vaccine for adults
-          - $20 for a TB test
-          - No one is refused services if they are unable to pay.
+service_steps:
+    -
+        step_description_en: |
+            We provide immunization shots to uninsured children and adults and Medicaid recipients. Decide which shots you or your family members need.
+            <ul>
+                <li>
+                  Shots for children
+                  <ul>
+                    <li>DTaP, DT, or DTP</li>
+                    <li>Hepatitis A</li>
+                    <li>Hepatitis B</li>
+                    <li>HPV</li>
+                    <li>Polio</li>
+                    <li>Hib</li>
+                    <li>PCV</li>
+                    <li>Measles, Mumps, and Rubella (MMR)</li>
+                    <li>Varicella; the chickenpox vaccine (VAR)</li>
+                    <li>Meningococcal (MCV4)</li>
+                  </ul>
+                </li>
+                <li>
+                  Shots for adults
+                  <ul>
+                    <li>DTaP, DT, or DTP</li>
+                    <li>Hepatitis A</li>
+                    <li>Hepatitis B</li>
+                    <li>HPV</li>
+                    <li>Meningitis (through age 21)</li>
+                    <li>Measles, Mumps, and Rubella (MMR)</li>
+                    <li>Pneumonia</li>
+                    <li>Tdap/Td</li>
+                    <li>Varicella; the chickenpox vaccine (VAR)</li>
+                    <li>Shingles</li>
+                  </ul>
+                </li>
+            </ul>
+    -
+        step_description_en: |
+            Find the clinic nearest you
+            <ul>
+              <li><a href"https://www.google.com/maps/place/405+W+Stassney+Ln,+Austin,+TX+78745/@30.2070206,-97.7814319,17z/data=!3m1!4b1!4m5!3m4!1s0x8644b4a98fa1e043:0x6c9910f96b488fb8!8m2!3d30.2070206!4d-97.7792379">Far South Austin Clinic</a></li>
+              <li><a href"https://www.google.com/maps/place/7500+Blessing+Ave,+Austin,+TX+78752/@30.3326199,-97.6955864,17z/data=!3m1!4b1!4m5!3m4!1s0x8644c988de534435:0x6d5da7b657ff877e!8m2!3d30.3326199!4d-97.6933924">St. John Clinic</a></li>
+            </ul>
+    -
+        step_description_en: <a href="http://www.austintexas.gov/sites/default/files/files/Health/Immunizations/2018_S4T_BS_Flyer-_English.pdf">Find available appointment times</a>.
+    -
+        step_description_en: Call 512-972-5520 Monday through Friday 8 a.m. to 4:30 p.m. to make an appointment.
+    -
+        step_description_en: |
+            Bring the required items with you to your appointment:
+            <ul>
+              <li>Your shot records</li>
+              <li>Your Medicaid card if you have one</li>
+              <li>
+                Your payment
+                <ul>
+                  <li>$10 per dose of vaccine for children</li>
+                  <li>$25 per dose of vaccine for adults</li>
+                  <li>$20 for a TB test</li>
+                  <li>No one is refused services if they are unable to pay.</li>
+                </ul>
+              </li>
+            </ul>
 
 additional_content_en: |
     <h2>Child immunizations requirements</h2>
 
     The Texas Department of State Health Services requires children to get certain immunizations to attend schools and childcare facilities.
 
-    <a href="http://www.dshs.texas.gov/immunize/school/child-care-requirements.aspx">Learn more about child-care immunization requirements for children under the age of five here and<a/> <a href="http://www.dshs.texas.gov/immunize/school/school-requirements.aspx">immunization requirements for students K-12</a>.
+    <a href="http://www.dshs.texas.gov/immunize/school/child-care-requirements.aspx">Learn more about child-care immunization requirements for children under the age of five here</a> and <a href="http://www.dshs.texas.gov/immunize/school/school-requirements.aspx">immunization requirements for students K-12</a>.
 
     If you don’t have Medicaid or are already insured, you can make an appointment with a private doctor or clinic for immunizations shots.
 
