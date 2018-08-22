@@ -180,13 +180,13 @@ topics:
         call_to_action_vi:
         call_to_action_ar:
     -
-        slug: birth-certificates
+        slug: records-and-certificates
         theme: health-safety
-        text_en: Birth certificates
+        text_en: Health Records & Certificates
         text_es:
         text_vi:
         text_ar:
-        description_en:
+        description_en: Find important health records and get copies of birth and death certificates.
         description_es:
         description_vi:
         description_ar:
@@ -201,7 +201,7 @@ topics:
         text_es:
         text_vi:
         text_ar:
-        description_en:
+        description_en: Find the services you need to keep you and your family healthy.
         description_es:
         description_vi:
         description_ar:

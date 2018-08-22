@@ -1,0 +1,41 @@
+slug: find-free-condoms
+
+topic: healthcare-prevention
+image: curbside-compost
+contact: 311
+
+title_en: Find free condoms and learn other ways to prevent HIV
+title_es: Find free condoms and learn other ways to prevent HIV
+title_vi: Find free condoms and learn other ways to prevent HIV
+title_ar: Find free condoms and learn other ways to prevent HIV
+
+steps_en: |
+    - Use our <a href="http://austin.maps.arcgis.com/apps/webappviewer/index.html?id=07706098076547358b7cc0c7b3d8562e%20">free condom map<a/> to find locations in the Austin giving them. Locations include:
+        - Neighborhood centers,
+        - Barber shops,
+        - Liquor stores and bars,
+        - And other easily accessible local establishments.
+    - Review steps you can take to prevent HIV.
+        - Always use latex condoms with your partner, especially if you do not know your partner’s HIV status.
+        - Don’t have sex. Abstinence is the only sure way to avoid contracting HIV.
+        - If you and your partner are both HIV negative, being faithful in your relationship removes your risk for HIV infection.
+        - Don’t share needles and syringes. Needles and syringes can expose you to HIV.
+        - Speak to a doctor about a prescription for <a href="https://www.cdc.gov/hiv/basics/prep.html">Pre-exposure prophylaxis (or PrEP)<a/>. PrEP is taken daily to lower chances of HIV infection.
+
+
+additional_content_en:
+
+dynamic_content:
+    -
+        type: map
+        description_en: Hazardous Waste Dropoff Center
+        description_es: Visite la Tienda de Reúso en el Centro de Reciclaje y Reúso
+        description_vi: Ghé thăm Cửa Hàng Tái Dụng tại Trung Tâm Tái Chế & Tái Dụng
+        description_ar: تفضل بزيارة مستودع إعادة الاستخدام في مركز إعادة التدوير وإعادة الاستخدام
+        location: Recycle & Reuse Drop-off Center
+
+meta_title_en: Find free condoms and learn other ways to prevent HIV
+
+meta_description_en: Find free condoms in locations across Austin, and learn ways to prevent HIV infection.
+
+meta_tags: HIV, condoms, HIV prevention, free condoms, free protection, HIV protection, HIV infection prevention
