@@ -11,6 +11,7 @@ from wagtail.core import hooks
 
 from base.models import HomePage, Topic, Location, Contact
 import os
+import graphene
 
 @hooks.register('before_edit_page')
 def before_edit_page(request, page):
@@ -46,9 +47,22 @@ def joplin_page_listing_buttons(page, page_perms, is_parent=False):
             priority=10
         )
     if page.has_unpublished_changes:
+        revision = page.get_latest_revision()
+
+        page_type = type(revision.page).__name__
+
+        # TODO: Add other page types
+        if "Service" in page_type:
+          url_page_type = "services"
+
+        if "Process" in page_type:
+          url_page_type = "processes"
+
+        global_id = graphene.Node.to_global_id('PageRevisionNode', revision.id)
+
         yield PageListingButton(
             _('View draft'),
-            reverse('wagtailadmin_pages:view_draft', args=[page.id]),
+            os.environ["JANIS_URL"] + "/en/preview/" + url_page_type + "/" + global_id,
             attrs={'title': _("Preview draft version of '{title}'").format(title=page.get_admin_display_title()), 'target': '_blank'},
             priority=20
         )
