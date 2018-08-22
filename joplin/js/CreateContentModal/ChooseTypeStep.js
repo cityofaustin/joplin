@@ -1,8 +1,8 @@
 import React from 'react';
 // import PropTypes from 'prop-types';
 
-import servicePageImage from '../static/images/service_page_icon.svg'
-import processPageImage from '../static/images/process_page_icon.svg'
+import servicePageImage from '../../static/images/service_page_icon.svg'
+import processPageImage from '../../static/images/process_page_icon.svg'
 
 const ChooseTypeStep = ({ handleTypeSelect }) => (
   <div className="content-modal__step">

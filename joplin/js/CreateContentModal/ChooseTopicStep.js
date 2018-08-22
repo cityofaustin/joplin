@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import plus from '../static/images/plus.png'
-import minus from '../static/images/minus.png'
-import unselected from '../static/images/unselected.png'
-import selected from '../static/images/selected.png'
+import plus from '../../static/images/plus.png'
+import minus from '../../static/images/minus.png'
+import unselected from '../../static/images/unselected.png'
+import selected from '../../static/images/selected.png'
 // import PropTypes from 'prop-types';
 
 class ChooseTopicStep extends Component {

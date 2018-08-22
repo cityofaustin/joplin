@@ -5,7 +5,7 @@ import ChooseTypeStep from './ChooseTypeStep.js'
 import ChooseTitleStep from './ChooseTitleStep.js'
 import ChooseTopicStep from './ChooseTopicStep.js'
 
-import "../css/create_content_modal.scss";
+import "../../css/create_content_modal.scss";
 
 const MAX_TITLE_LENGTH = 54;
 const THEME_TOPIC_TREE = window.themeTopicsTree;
@@ -100,7 +100,7 @@ class CreateContentModal extends Component {
     console.log(this.state)
     return (
       <div className="modal fade" id="createNewContentModal" tabIndex="-1" role="dialog" aria-labelledby="createNewContentModalLabel">
-        <div className="js-create-content-wizard-form create-content-modal-wrapper">
+        <div className="CreateContentModal__wrapper">
           <div className="modal-dialog" role="document">
             <div className="modal-content create-content-modal">
               <div className="modal-body">
