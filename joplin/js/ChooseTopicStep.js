@@ -31,29 +31,26 @@ class ChooseTopicStep extends Component {
             const themeGroup = themeTopicsTree[key]
             const isThemeGroupOpen = this.state.openThemeGroup === Number(key);
             return (
-              <li key={`theme-${key}`}>
-                <div onClick={this.handleThemeToggle.bind(this, key)}>
-                  <img
-                    src={ isThemeGroupOpen ? minus : plus }
-                    alt={ isThemeGroupOpen ? 'close theme group' : 'open theme group' }
-                  />
+              <li key={`theme-${key}`} className="ChooseTopicStep__theme-group">
+                <div onClick={this.handleThemeToggle.bind(this, key)} className="ChooseTopicStep__theme-toggle">
+                  <div className={ isThemeGroupOpen ? 'ChooseTopicStep__minus' : 'ChooseTopicStep__plus' }></div>
+                  <span className="ChooseTopicStep__topic-text">{themeGroup.text} Topics</span>
                 </div>
-
-                <span>{themeGroup.text} Topics</span>
                 <ul className={ isThemeGroupOpen ? `ChooseTopicStep__theme-group--open` :  `ChooseTopicStep__theme-group--closed`}>
                   {themeGroup.topics.map(topic => {
                     return (
-                      <li key={topic.id} onClick={this.props.handleTopicSelect.bind(this, topic.id)}>
-                        <div>
-                          { this.props.topic === topic.id
-                              ? (
-                                <img src={selected} alt=""/>
-                              ) : (
-                                <img src={unselected} alt=""/>
-                              )
+                      <li key={topic.id}
+                        onClick={this.props.handleTopicSelect.bind(this, topic.id)}
+                        className="ChooseTopicStep__topic-toggle"
+                      >
+                        <div
+                          className={
+                            this.props.topic === topic.id
+                              ? "ChooseTopicStep__topic--selected"
+                              : "ChooseTopicStep__topic--unselected"
                           }
-                          <span>{topic.text}</span>
-                        </div>
+                        ></div>
+                        <span>{topic.text}</span>
                       </li>
                     )
                   })}
