@@ -1,7 +1,7 @@
 import "../css/editor.scss";
 import "../css/preview.scss";
 
-import insertWizardData from './insertWizardData';
+import insertWizardData from './CreateContentModal/insertWizardData';
 
 $(function() {
 
@@ -26,7 +26,7 @@ $(function() {
 
   // Get all labels and add styleguide links
   const labels = document.querySelectorAll("label");
-  const styleGuideUrl = document.getElementById("style_guide_url").value;
+  // const styleGuideUrl = document.getElementById("style_guide_url").value;
 
   for (const label of labels) {
     let id = label.getAttribute("for");
@@ -61,7 +61,7 @@ $(function() {
       var link = $("<a/>");
       link.addClass("icon-help-inverse");
       link.addClass("show");
-      link.attr("href", `${styleGuideUrl}/${anchors[id]}`);
+      // link.attr("href", `${styleGuideUrl}/${anchors[id]}`);
       link.attr("target", "sidebar-iframe");
       $(label).append(link);
     }

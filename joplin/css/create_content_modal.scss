@@ -1,9 +1,11 @@
-.create-content-modal {
+// CREATE CONTENT MODAL INDEX COMPONENT
+
+.CreateContentModal {
   max-width: 525px;
   padding-bottom: 0;
 }
 
-.create-content-modal > .modal-body {
+.CreateContentModal > .modal-body {
   padding-bottom: 0;
 }
 
@@ -16,90 +18,52 @@
   text-align: center;
 }
 
-.content-modal__step {
+.modal-dialog {
+  width: auto;
+}
+
+@media screen and (min-width: 50em) {
+  .modal-dialog {
+    padding: 0 0 2em;
+  }
+}
+
+// Content Steps
+
+.CreateContentModal__step {
     padding: 0 20px 20px;
 }
 
-.content-modal__step--active {
+.CreateContentModal__step--active {
   display: block !important;
   padding: 20px;
 }
 
-.content-modal__step--inactive {
+.CreateContentModal__step--inactive {
   display: none;
 }
 
-.content-modal__button-row {
-  display: flex;
-}
-
-/* starts out hidden in step one */
-.content-modal__button-row--hidden {
-  display: none;
-}
-.content-modal__hidden,
-.content-modal__department--hidden {
-  display: none;
-}
-
-/* department header markup is hidden */
-.content-modal__header--hidden {
-  display: none;
-}
-
-.content-modal__button--reset {
-  /* reset button */
-  border: none;
-  margin: 0;
-  padding: 0;
-  width: auto;
-  overflow: visible;
-
-  background: transparent;
-
-  /* inherit font & color from ancestor */
-  color: inherit;
-  font: inherit;
-
-  /* Normalize `line-height`. Cannot be changed from `normal` in Firefox 4+. */
-  line-height: normal;
-
-  /* Corrects font smoothing for webkit */
-  -webkit-font-smoothing: inherit;
-  -moz-osx-font-smoothing: inherit;
-
-  /* Corrects inability to style clickable `input` types in iOS */
-  -webkit-appearance: none;
-}
-
-.content-modal__button {
-  width: 33.333%;
-  text-transform: uppercase;
-  padding: 20px 0;
-  color: #3282AF;
-  font-weight: bold;
-  font-size: 12px;
-  border-top: 1px solid #EDEDED;
-  border-right: 1px solid #EDEDED;
-  cursor: pointer;
-}
-
-.content-modal__button:hover {
-  background-color: #EDEDED;
-}
-
-.content-modal__button:last-child {
-  border-right: none;
-}
-
-.content-modal__header {
+.CreateContentModal__header {
   color: #023654;
   font-size: 22px;
   text-align: center;
   line-height: 30px;
 }
 
-.content-modal__type-option {
+/* department header markup is hidden */
+.CreateContentModal__header--hidden {
+  display: none;
+}
+
+
+// CHOOSE TYPE STEP Component
+
+.ChooseTypeStep__options-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.ChooseTypeStep__option {
   max-height: 200px;
   border: 1px solid #EDEDED;
   margin: 1px;
@@ -112,29 +76,41 @@
   background: #FFFFFF;
 }
 
-.content-modal__input-label {
+.ChooseTypeStep__option:hover {
+  background: #EDEDED;
+}
+
+.ChooseTypeStep__option-header {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+
+// CHOOSE TITLE STEP Component
+
+.ChooseTitleStep__input-label {
   display: flex;
   width: 100%;
   font-weight: normal;
 }
 
-.content-modal__input-label--left {
+.ChooseTitleStep__input-label--left {
   flex: 1;
   width: 50%;
   text-align: left;
 }
 
-.content-modal__input-label--right {
+.ChooseTitleStep__input-label--right {
   flex: 1;
   width: 50%;
   text-align: right;
 }
 
-.content-modal__input-label--red {
+.ChooseTitleStep__input-label--red {
   color: red;
 }
 
-.content-modal__input-help {
+.ChooseTitleStep__input-help {
   font-size: 14px;
   font-style: italic;
   text-align: center;
@@ -142,39 +118,18 @@
   display: block;
 }
 
-.content-modal__input-bullet-list-help {
+.ChooseTitleStep__bullet-list {
   padding-left: 20px;
 }
 
-.content-modal__input-bullet-list-help li {
+.ChooseTitleStep__bullet-list li {
   font-size: 14px;
   text-align: left;
   list-style: disc;
 }
 
-.content-modal__type-option:hover {
-  background: #EDEDED;
-}
 
-.content-modal__type-option-header {
-  font-size: 14px;
-  font-weight: bold;
-}
-
-.content-modal__type-options-wrapper {
-  display: flex;
-  flex-wrap: wrap;
-}
-
-@media screen and (min-width: 50em) {
-  .modal-dialog {
-    padding: 0 0 2em;
-  }
-}
-
-.modal-dialog {
-  width: auto;
-}
+// CHOOSE TOPIC STEP Component
 
 .ChooseTopicStep__theme-group--closed {
   display: none;
@@ -232,4 +187,65 @@
   width: 20px;
   margin-left: 1px;
   margin-right: 13px;
+}
+
+
+// BUTTON BAR COMPONENT
+
+.ButtonBar {
+  display: flex;
+}
+
+/* starts out hidden in step one */
+.ButtonBar--hidden {
+  display: none;
+}
+.content-modal__hidden,
+.content-modal__department--hidden {
+  display: none;
+}
+
+.ButtonBar__button--reset {
+  /* reset button */
+  border: none;
+  margin: 0;
+  padding: 0;
+  width: auto;
+  overflow: visible;
+
+  background: transparent;
+
+  /* inherit font & color from ancestor */
+  color: inherit;
+  font: inherit;
+
+  /* Normalize `line-height`. Cannot be changed from `normal` in Firefox 4+. */
+  line-height: normal;
+
+  /* Corrects font smoothing for webkit */
+  -webkit-font-smoothing: inherit;
+  -moz-osx-font-smoothing: inherit;
+
+  /* Corrects inability to style clickable `input` types in iOS */
+  -webkit-appearance: none;
+}
+
+.ButtonBar__button {
+  width: 33.333%;
+  text-transform: uppercase;
+  padding: 20px 0;
+  color: #3282AF;
+  font-weight: bold;
+  font-size: 12px;
+  border-top: 1px solid #EDEDED;
+  border-right: 1px solid #EDEDED;
+  cursor: pointer;
+}
+
+.ButtonBar__button:hover {
+  background-color: #EDEDED;
+}
+
+.ButtonBar__button:last-child {
+  border-right: none;
 }

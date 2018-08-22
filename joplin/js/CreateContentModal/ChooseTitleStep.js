@@ -1,5 +1,4 @@
 import React from 'react';
-// import PropTypes from 'prop-types';
 
 const ChooseTitleStep = ({
   pageType,
@@ -8,8 +7,8 @@ const ChooseTitleStep = ({
   characterCount,
   maxCharacterCount
 }) => (
-  <div className="content-modal__step">
-    <h2 className="content-modal__header">
+  <div className="CreateContentModal__step">
+    <h2 className="CreateContentModal__header">
       { pageType === 'department' && (
         <span>
           Write an the full name of the department, without abrreviations or acroynms.
@@ -21,19 +20,19 @@ const ChooseTitleStep = ({
         </span>
       )}
     </h2>
-    <label htmlFor="page-title" className="content-modal__input-label">
-      <span className="content-modal__input-label--left">Page Title</span>
+    <label htmlFor="page-title" className="ChooseTitleStep__input-label">
+      <span className="ChooseTitleStep__input-label--left">Page Title</span>
       { characterCount === 0
           ? (
-            <span className="content-modal__input-label--right">
+            <span className="ChooseTitleStep__input-label--right">
               Character limit: 54
             </span>
           ) : (
             <span
               className={
                 characterCount > maxCharacterCount
-                  ? "content-modal__input-label--right content-modal__input-label--red"
-                  : "content-modal__input-label--right"
+                  ? "ChooseTitleStep__input-label--right ChooseTitleStep__input-label--red"
+                  : "ChooseTitleStep__input-label--right"
               }>
               Characters remaining: { maxCharacterCount - characterCount }
             </span>
@@ -50,12 +49,12 @@ const ChooseTitleStep = ({
 
     { pageType !== 'department' && (
       <div>
-        <span className="content-modal__input-help">
+        <span className="ChooseTitleStep__input-help">
           Example: Drop off hazardous wastes and other recyclables
         </span>
-        <ul className="content-modal__input-bullet-list-help">
+        <ul className="ChooseTitleStep__bullet-list">
           <li>Use simple, accessible language</li>
-          <li>Use words you think residents may search to find the <span className="js-page-type">service</span></li>
+          <li>Use words you think residents may search to find the {pageType}</li>
           <li>You don’t need to worry about including your department’s name in the title</li>
         </ul>
       </div>
@@ -63,9 +62,5 @@ const ChooseTitleStep = ({
   </div>
 
 );
-
-// ChooseTitleStep.propTypes = {
-//   : PropTypes.
-// };
 
 export default ChooseTitleStep;

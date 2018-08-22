@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import ChooseTypeStep from './ChooseTypeStep.js'
 import ChooseTitleStep from './ChooseTitleStep.js'
 import ChooseTopicStep from './ChooseTopicStep.js'
+import ButtonBar from './ButtonBar.js'
 
 import "../../css/create_content_modal.scss";
 
@@ -20,16 +21,6 @@ class CreateContentModal extends Component {
       activeStep: 0,
       redirectUrl: null,
       titleCharacterCount: 0,
-    }
-  }
-
-  buttonRowClassName = () => {
-    const baseclass = 'content-modal__button-row';
-
-    if (this.state.activeStep > 0) {
-      return baseclass;
-    } else {
-      return `${baseclass}--hidden`;
     }
   }
 
@@ -97,12 +88,11 @@ class CreateContentModal extends Component {
 
 
   render() {
-    console.log(this.state)
     return (
       <div className="modal fade" id="createNewContentModal" tabIndex="-1" role="dialog" aria-labelledby="createNewContentModalLabel">
         <div className="CreateContentModal__wrapper">
           <div className="modal-dialog" role="document">
-            <div className="modal-content create-content-modal">
+            <div className="modal-content CreateContentModal">
               <div className="modal-body">
                 { this.state.activeStep === 0 &&
                   <ChooseTypeStep handleTypeSelect={this.handleTypeSelect}/>
@@ -123,22 +113,11 @@ class CreateContentModal extends Component {
                     themeTopicTree={THEME_TOPIC_TREE}
                   />
                 }
-
-                <div className={this.buttonRowClassName()}>
-                  <div
-                    className="content-modal__button"
-                    onClick={this.handleBackButton}
-                  >
-                    Back
-                  </div>
-                  <button type="button" className="content-modal__button content-modal__button--reset" data-dismiss="modal">Close</button>
-                  <div
-                    className="content-modal__button"
-                    onClick={this.handleNextButton}
-                  >
-                    Continue
-                  </div>
-                </div>
+                <ButtonBar
+                  handleBackButton={this.handleBackButton}
+                  handleNextButton={this.handleNextButton}
+                  activeStep={this.state.activeStep}
+                />
               </div>
             </div>
           </div>
@@ -150,5 +129,5 @@ class CreateContentModal extends Component {
 
 ReactDOM.render(
   <CreateContentModal/>,
-  document.getElementById("coa-create-content-modal")
+  document.getElementById("coa-CreateContentModal")
 );
