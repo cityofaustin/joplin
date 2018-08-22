@@ -2,9 +2,10 @@ from django import template
 import graphene
 import os
 from base.models import Topic, Theme
-# from base.models import Theme
+from wagtail.core import hooks
 
 import logging
+import itertools
 
 logger = logging.getLogger(__name__)
 
@@ -74,3 +75,13 @@ def themes(context):
         'themes': themes,
         'request': context['request'],
     }
+
+
+@register.inclusion_tag("wagtailadmin/pages/listing/_buttons.html",
+                        takes_context=True)
+def joplin_page_listing_buttons(context, page, page_perms, is_parent=False):
+    button_hooks = hooks.get_hooks('register_joplin_page_listing_buttons')
+    buttons = sorted(itertools.chain.from_iterable(
+        hook(page, page_perms, is_parent)
+        for hook in button_hooks))
+    return {'page': page, 'buttons': buttons}
