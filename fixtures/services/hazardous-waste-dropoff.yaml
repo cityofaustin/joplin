@@ -9,6 +9,13 @@ title_es: Entregue sus desechos peligrosos del hogar y otros artículos reciclab
 title_vi: Bỏ đi các loại rác nhà nguy hiểm và các loại rác tái chế khác
 title_ar: التخلص من النفايات الخطرة المنزلية وغيرها من المواد القابلة للتدوير
 
+service_steps:
+    -
+        step_description_en: Use the <a href="http://austintexas.gov/what-do-i-do">“What do I do with” tool</a> below to see what bulk items can be picked up. Bulk items are items that are too large for your trash cart, such as appliances, furniture, and carpet.
+        step_description_es: Use la función “What do I do with”  abajo para ver los artículos grandes que califican para recolección. Los artículos grandes son los que no caben en su bote de basura, tales como electrodomésticos, muebles y alfombras.
+        step_description_vi: Sử dụng công cụ “What do I do with” dưới đây để biết những loại rác khối nào có thể được bốc đi. Những loại rác khối là các rác quá lớn để cho vào thùng rác của mình, ví dụ như các máy móc dùng cho việc nhà, đồ đạc, và thảm.
+        step_description_ar: استخدم أداة <a href="http://www.austintexas.gov/page/my-collection-schedule">"What do I do with"</a> أدناه لمعرفة العناصر كبيرة الحجم التي يمكن جمعها للتخلص منها. العناصر كبيرة الحجم هي عناصر حجمها كبير للغاية بحيث لا تسعها عربة القمامة، مثل الأجهزة والأثاث والسجاد.
+
 # steps_en:
 #     - Check the “What do I do with” tool below to find out what items are accepted. Some items are free to drop off and some items, like tires, require a fee.
 #     - Review the Household Hazardous Waste Do’s and Don’ts below.
