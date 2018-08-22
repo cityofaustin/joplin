@@ -9,11 +9,16 @@ title_es: Keep yourself safe around bats in Austin
 title_vi: Keep yourself safe around bats in Austin
 title_ar: Keep yourself safe around bats in Austin
 
-steps_en: |
-    <h2>Follow these steps to keep yourself safe if you come into contact with a bat</h2>
-    - If you or anyone you know could have been in contact with a bat, please call the Austin/Travis County <a href="http://www.austintexas.gov/department/epidemiology-and-disease-surveillance">Disease Surveillance Unit</a> at 512-972-5555, or call your local health care provider.
-    - Do not touch the bat with bare hands.
-    - If the bat is sick, injured, or dead, call Animal Control at 311.
+# TODO: Make it so we can use different titles for steps (instead of just saying "steps")
+# Follow these steps to keep yourself safe if you come into contact with a bat
+
+service_steps:
+    -
+        step_description_en: If you or anyone you know could have been in contact with a bat, please call the Austin/Travis County <a href="http://www.austintexas.gov/department/epidemiology-and-disease-surveillance">Disease Surveillance Unit</a> at 512-972-5555, or call your local health care provider.
+    -
+        step_description_en: Do not touch the bat with bare hands.
+    -
+        step_description_en: If the bat is sick, injured, or dead, call Animal Control at 311.
 
 additional_content_en: |
     <h2>Tips for protecting you and your family around bats</h2>
