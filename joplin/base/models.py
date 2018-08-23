@@ -10,6 +10,7 @@ from wagtail.snippets.edit_handlers import SnippetChooserPanel
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.images.models import Image, AbstractImage, AbstractRendition
 from wagtail.snippets.models import register_snippet
+from wagtail.search import index
 
 from . import blocks as custom_blocks
 from . import forms as custom_forms
@@ -76,6 +77,13 @@ class ServicePage(Page):
     parent_page_types = ['base.HomePage']
     subpage_types = []
     base_form_class = custom_forms.ServicePageForm
+
+    search_fields = Page.search_fields + [
+        index.RelatedFields('owner', [
+            index.SearchField('last_name', partial_match=True),
+            index.FilterField('last_name'),
+        ])
+    ]
 
     content_panels = [
         ImageChooserPanel('image'),
