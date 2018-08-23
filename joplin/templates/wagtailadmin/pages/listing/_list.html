@@ -2,24 +2,6 @@
 {% load l10n %}
 {% load wagtailadmin_tags %}
 
-<div class="header secondary">
-    <div>
-        <h1>Content</h1>
-    </div>
-
-    <div class="actions">
-        <div>
-          <!-- Button trigger modal -->
-          <button type="button" class="button" data-toggle="modal" data-target="#createNewContentModal">
-            Create New Content
-          </button>
-        </div>
-        <div>
-            <input placeholder="Search">
-        </div>
-    </div>
-</div>
-
 <table class="listing {% if full_width %}full-width{% endif %} {% block table_classname %}{% endblock %}">
     {% if show_ordering_column %}
         <col width="65px" />
