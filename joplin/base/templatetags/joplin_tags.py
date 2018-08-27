@@ -1,13 +1,9 @@
 from django import template
 import graphene
 import os
+import json
+
 from base.models import Topic, Theme
-# from base.models import Theme
-
-import logging
-
-logger = logging.getLogger(__name__)
-
 
 register = template.Library()
 
@@ -37,8 +33,8 @@ def get_style_guide_url(*args, **kwargs):
   content_type = kwargs['content_type'].name
   return os.environ['STYLEGUIDE_URL'] + STYLEGUIDE_PAGES[content_type]
 
-@register.inclusion_tag('wagtailadmin/themes.html', takes_context=True)
-def themes(context):
+@register.inclusion_tag('wagtailadmin/themes_topics_tree.html', takes_context=True)
+def themes_topics_tree(context):
     themes = {}
     topics = []
 
@@ -55,6 +51,5 @@ def themes(context):
         })
 
     return {
-        'themes': themes,
-        'request': context['request'],
+        'themes': json.dumps(themes)
     }
