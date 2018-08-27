@@ -1,18 +1,13 @@
 import React from 'react';
+import classNames from 'classnames';
 
-const buttonRowClassName = (activeStep) => {
-  const baseclass = 'ButtonBar';
-
-  if (activeStep > 0) {
-    return baseclass;
-  } else {
-    return `${baseclass}--hidden`;
-  }
-}
 import './ButtonBar.scss';
 
 const ButtonBar = ({ activeStep, handleBackButton, handleNextButton }) => (
-  <div className={buttonRowClassName(activeStep)}>
+  <div className={classNames({
+    'ButtonBar': activeStep > 0,
+    'ButtonBar--hidden': activeStep === 0,
+  })}>
     <div
       className="ButtonBar__button"
       onClick={handleBackButton}
