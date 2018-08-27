@@ -112,6 +112,18 @@ TEMPLATES = [
 WSGI_APPLICATION = 'wsgi.application'
 
 
+
+# Obtain env variables
+isProduction = os.environ.get('DEPLOYMENT_MODE', 'NA') == "PRODUCTION"
+
+
+print("DEPLOYMENT_MODE {} ...".format(os.environ.get('DEPLOYMENT_MODE', 'NA')))
+print("DATABASE_NAME {} ...".format(os.environ.get('DATABASE_NAME', '')))
+print("DATABASE_USER {} ...".format(os.environ.get('DATABASE_USER', '')))
+print("DATABASE_PASSWORD {} ...".format(os.environ.get('DATABASE_PASS', '')))
+print("DATABASE_HOST {} ...".format(os.environ.get('DATABASE_HOST', '')))
+print("DATABASE_PORT {} ...".format(os.environ.get('DATABASE_PORT', '')))
+
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
@@ -119,6 +131,19 @@ default_db_url = f'sqlite:///{os.path.join(PROJECT_DIR, "db.sqlite3")}'
 DATABASES = {
     'default': dj_database_url.config(default=default_db_url),
 }
+
+
+if(isProduction):
+	DATABASES = {
+	    'default': {
+	        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+	        'NAME': os.environ.get('DATABASE_NAME', ''),
+	        'USER': os.environ.get('DATABASE_USER', ''),
+	        'PASSWORD': os.environ.get('DATABASE_PASS', ''),
+	        'HOST': os.environ.get('DATABASE_HOST', ''),
+	        'PORT': os.environ.get('DATABASE_PORT', ''),
+	    }
+	}
 
 
 # Internationalization
