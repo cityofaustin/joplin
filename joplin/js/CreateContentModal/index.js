@@ -43,12 +43,12 @@ class CreateContentModal extends Component {
     // Skip Topic Select Step for creating a Department
     if (this.state.type === 'department' && this.state.activeStep === 1) {
       this.redirectToEditPage();
-      return true;
+      return;
     }
 
     if (this.state.activeStep === 2) {
       this.redirectToEditPage();
-      return true;
+      return;
     }
 
     this.incrementActiveStep();

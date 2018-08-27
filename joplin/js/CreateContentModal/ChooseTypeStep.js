@@ -11,7 +11,7 @@ const ChooseTypeStep = ({ handleTypeSelect }) => (
       <h2 className="CreateContentModal__header">Select the Content Type</h2>
       <div className="ChooseTypeStep__options-wrapper">
         <div className="ChooseTypeStep__option"
-          onClick={handleTypeSelect.bind(this, {
+          onClick={() => handleTypeSelect({
             type: "service",
             // TODO: These redirectUrls could come from Python instead of being hard-coded
             redirectUrl: "/admin/pages/add/base/servicepage/3/",
@@ -25,7 +25,7 @@ const ChooseTypeStep = ({ handleTypeSelect }) => (
           <p>A step by step guide to a particular city service.</p>
         </div>
         <div className="ChooseTypeStep__option"
-          onClick={handleTypeSelect.bind(this, {
+          onClick={() => handleTypeSelect({
             type: "process",
             redirectUrl: "/admin/pages/add/base/processpage/3/",
           })}
@@ -38,7 +38,7 @@ const ChooseTypeStep = ({ handleTypeSelect }) => (
           <p>Processes which require several steps, which may not go in order</p>
         </div>
         <div className="ChooseTypeStep__option"
-          onClick={handleTypeSelect.bind(this, {
+          onClick={() => handleTypeSelect({
             type: "department",
             redirectUrl: "/admin/snippets/base/department/add/",
           })}

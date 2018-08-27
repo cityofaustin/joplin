@@ -13,11 +13,7 @@ const TopicItem = ({ topic, handleTopicSelect, activeTopic }) => (
     className="ChooseTopicStep__topic-toggle"
   >
     <div
-      className={
-        activeTopic === topic.id
-          ? "ChooseTopicStep__topic--selected"
-          : "ChooseTopicStep__topic--unselected"
-      }
+      className={`ChooseTopicStep__topic--${activeTopic === topic.id ? 'selected' : 'unselected'}`}
     ></div>
     <span>{topic.text}</span>
   </li>
@@ -37,7 +33,7 @@ class ChooseTopicStep extends Component {
       this.setState({
         openThemeGroup: 0,
       });
-      return true;
+      return;
     }
     this.setState({
       openThemeGroup: Number(id),
