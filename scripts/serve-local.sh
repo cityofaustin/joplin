@@ -20,7 +20,9 @@ fi
 
 # Get the heroku key. We eat stderr because the heroku cli will warn us that these tokens
 # are short-lived. That's OK in our case because we're just running this locally.
-#HEROKU_KEY=$(heroku auth:token 2> /dev/null)
+HEROKU_KEY=$(heroku auth:token 2> /dev/null)
+
+# This is a PR test by Sergio
 
 if [ "$REBUILD" == "on" ]; then
     docker build --no-cache -f Dockerfile.base -t joplin-base .
