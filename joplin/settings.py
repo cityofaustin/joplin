@@ -112,17 +112,10 @@ TEMPLATES = [
 WSGI_APPLICATION = 'wsgi.application'
 
 
-
-# Obtain env variables
-isProduction = os.environ.get('DEPLOYMENT_MODE', 'NA') == "PRODUCTION"
-
-
-print("DEPLOYMENT_MODE {} ...".format(os.environ.get('DEPLOYMENT_MODE', 'NA')))
-print("DATABASE_NAME {} ...".format(os.environ.get('DATABASE_NAME', '')))
-print("DATABASE_USER {} ...".format(os.environ.get('DATABASE_USER', '')))
-print("DATABASE_PASSWORD {} ...".format(os.environ.get('DATABASE_PASS', '')))
-print("DATABASE_HOST {} ...".format(os.environ.get('DATABASE_HOST', '')))
-print("DATABASE_PORT {} ...".format(os.environ.get('DATABASE_PORT', '')))
+# Detect whether it is a staging or production environment
+deploymentMode = os.environ.get('DEPLOYMENT_MODE', 'LOCAL')
+isProduction = deploymentMode == "PRODUCTION"
+isStaging = deploymentMode == "STAGING"
 
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
@@ -133,7 +126,7 @@ DATABASES = {
 }
 
 
-if(isProduction):
+if(isProduction or isStaging):
 	DATABASES = {
 	    'default': {
 	        'ENGINE': 'django.db.backends.postgresql_psycopg2',
