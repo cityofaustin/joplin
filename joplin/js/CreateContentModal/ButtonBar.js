@@ -9,6 +9,7 @@ const buttonRowClassName = (activeStep) => {
     return `${baseclass}--hidden`;
   }
 }
+import './ButtonBar.scss';
 
 const ButtonBar = ({ activeStep, handleBackButton, handleNextButton }) => (
   <div className={buttonRowClassName(activeStep)}>

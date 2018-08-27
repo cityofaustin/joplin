@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+
+import './ChooseTopicStep.scss';
+
 import plus from '../../static/images/plus.png';
 import minus from '../../static/images/minus.png';
 import unselected from '../../static/images/unselected.png';
@@ -47,7 +50,9 @@ class ChooseTopicStep extends Component {
 
     return (
       <div className="CreateContentModal__step">
-        <h2>Select the topic  which best fits your content.</h2>
+        <h2 className="CreateContentModal__header">
+          Select the topic  which best fits your content.
+        </h2>
         <ul>
           {arrayOfTopicsByTheme.map((key) => {
             const themeGroup = themeTopicsTree[key];

@@ -1,5 +1,7 @@
 import React from 'react';
 
+import './ChooseTitleStep.scss';
+
 const ChooseTitleStep = ({
   pageType,
   title,

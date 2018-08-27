@@ -6,9 +6,9 @@ import ChooseTitleStep from './ChooseTitleStep.js'
 import ChooseTopicStep from './ChooseTopicStep.js'
 import ButtonBar from './ButtonBar.js'
 
-import "../../css/create_content_modal.scss";
+import "./index.scss";
 
-const MAX_TITLE_LENGTH = 54;
+const MAX_TITLE_LENGTH = 58;
 const THEME_TOPIC_TREE = window.themeTopicsTree;
 
 class CreateContentModal extends Component {

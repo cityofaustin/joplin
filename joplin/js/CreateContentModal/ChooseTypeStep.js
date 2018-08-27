@@ -1,5 +1,7 @@
 import React from 'react';
 
+import './ChooseTypeStep.scss';
+
 import servicePageImage from '../../static/images/service_page_icon.svg'
 import processPageImage from '../../static/images/process_page_icon.svg'
 

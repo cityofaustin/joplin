@@ -1,0 +1,59 @@
+@import '../../css/variables';
+
+.ButtonBar {
+  display: flex;
+}
+
+/* starts out hidden in step one */
+.ButtonBar--hidden {
+  display: none;
+}
+.content-modal__hidden,
+.content-modal__department--hidden {
+  display: none;
+}
+
+.ButtonBar__button--reset {
+  /* reset button */
+  border: none;
+  margin: 0;
+  padding: 0;
+  width: auto;
+  overflow: visible;
+
+  background: transparent;
+
+  /* inherit font & color from ancestor */
+  color: inherit;
+  font: inherit;
+
+  /* Normalize `line-height`. Cannot be changed from `normal` in Firefox 4+. */
+  line-height: normal;
+
+  /* Corrects font smoothing for webkit */
+  -webkit-font-smoothing: inherit;
+  -moz-osx-font-smoothing: inherit;
+
+  /* Corrects inability to style clickable `input` types in iOS */
+  -webkit-appearance: none;
+}
+
+.ButtonBar__button {
+  width: 33.333%;
+  text-transform: uppercase;
+  padding: 20px 0;
+  color: $coa-color-light-blue;
+  font-weight: bold;
+  font-size: 12px;
+  border-top: 1px solid $coa-color-gray;
+  border-right: 1px solid $coa-color-gray;
+  cursor: pointer;
+}
+
+.ButtonBar__button:hover {
+  background-color: $coa-color-gray;
+}
+
+.ButtonBar__button:last-child {
+  border-right: none;
+}
