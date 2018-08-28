@@ -1,7 +1,12 @@
 import "../css/editor.scss";
 import "../css/preview.scss";
 
+import insertWizardData from './CreateContentModal/insertWizardData';
+
 $(function() {
+
+  insertWizardData();
+
   // TODO: This a better way
   const anchors = {
     id_title: "#title",
