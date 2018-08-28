@@ -1,5 +1,6 @@
 from django.db import models
 import os
+import graphene
 
 from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
