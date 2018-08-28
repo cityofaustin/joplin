@@ -10,8 +10,6 @@ from wagtail.admin.widgets import Button, ButtonWithDropdownFromHook, PageListin
 from wagtail.core import hooks
 
 from base.models import HomePage, Topic, Location, Contact
-import os
-import graphene
 
 @hooks.register('before_edit_page')
 def before_edit_page(request, page):
