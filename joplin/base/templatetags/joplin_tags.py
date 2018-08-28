@@ -18,16 +18,6 @@ def get_revision_preview_url(*args, **kwargs):
     # TODO: Add other languages
     return os.environ["JANIS_URL"] + "/en/preview/" + url_page_type + "/" + global_id
 
-@register.simple_tag
-def get_page_preview_url(*args, **kwargs):
-    page = kwargs['page']
-    return page.janis_preview_url()
-
-@register.simple_tag
-def get_live_url(*args, **kwargs):
-    page = kwargs['page']
-    return page.janis_url()
-
 STYLEGUIDE_PAGES = {
   'service page': '/writing-service-pages/',
   'process page': '/writing-process-pages/'

@@ -1,8 +1,5 @@
-{% load joplin_tags %}
-
 {% if page.live %}
-    {% get_live_url page=page as live_url %}
-    <a href="{{ live_url }}" target="_blank" class="status-tag primary">{{ page.status_string }}</a>
+    <a href="{{ page.janis_url }}" target="_blank" class="status-tag primary">{{ page.status_string }}</a>
 {% else %}
     <span class="status-tag">{{ page.status_string }}</span>
 {% endif %}

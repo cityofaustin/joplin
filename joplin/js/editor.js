@@ -1,10 +1,9 @@
 import "../css/editor.scss";
 import "../css/preview.scss";
 
-import insertWizardData from './CreateContentModal/insertWizardData';
+import insertWizardData from "./CreateContentModal/insertWizardData";
 
 $(function() {
-
   insertWizardData();
 
   // TODO: This a better way
@@ -131,15 +130,16 @@ $(function() {
   var sharebutton = $("#page-share-preview-button");
   var urlcopied = $("#page-share-url-copied");
   var messages = $(".messages");
+  const previewUrl = document.getElementById("preview_url").value;
 
   if (localStorage.previewing === "true") {
-    window.open("{{preview_url}}", "_blank");
+    window.open(previewUrl, "_blank");
     localStorage.previewing = false;
   }
 
   if (localStorage.sharingpreview === "true") {
     // TODO: Don't just alert with the preview URL
-    copyTextToClipboard("{{preview_url}}");
+    copyTextToClipboard(previewUrl);
     urlcopied.removeClass("hidden");
     urlcopied.fadeOut(5000);
     localStorage.sharingpreview = false;
