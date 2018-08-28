@@ -1,1 +1,1 @@
-release: LOAD_DATA=on && ./migrate-load-data.sh
+release: python ./joplin/manage.py migrate --noinput
