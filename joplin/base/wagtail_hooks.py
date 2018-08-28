@@ -67,16 +67,6 @@ def joplin_page_listing_buttons(page, page_perms, is_parent=False):
             priority=20
         )
     if page.live and page.url:
-        page_type = type(page).__name__
-        page_slug = page.slug
-
-        # TODO: Add other page types
-        if "Service" in page_type:
-          url_page_type = "services"
-
-        if "Process" in page_type:
-          url_page_type = "processes"
-
         yield PageListingButton(
             _('View live'),
             page.janis_url(),

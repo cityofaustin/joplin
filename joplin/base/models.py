@@ -55,23 +55,24 @@ class HomePage(Page):
 
 class JanisPage:
     def janis_url(self):
-        page_type = type(self).__name__
+        url_page_type = self.janis_url_page_type
         page_slug = self.slug
-
-        # TODO: Add other page types
-        if "Service" in page_type:
-          url_page_type = "services"
-
-        if "Process" in page_type:
-          url_page_type = "processes"
 
         # TODO: Add other languages
         return os.environ["JANIS_URL"] + "/en/" + url_page_type + "/" + page_slug
+
+    def janis_preview_url(self):
+        revision = self.get_latest_revision()
+        url_page_type = self.janis_url_page_type
+        global_id = graphene.Node.to_global_id('PageRevisionNode', revision.id)
+
+        return os.environ["JANIS_URL"] + "/en/preview/" + url_page_type + "/" + global_id
 
 
 class ServicePage(Page, JanisPage):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    janis_url_page_type = "services"
 
     dynamic_content = StreamField(
         [
@@ -120,6 +121,7 @@ class ServicePageStep(Orderable):
 class ProcessPage(Page, JanisPage):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    janis_url_page_type = "processes"
 
     topic = models.ForeignKey(
         'base.Topic',
