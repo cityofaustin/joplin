@@ -10,13 +10,18 @@ import itertools
 register = template.Library()
 
 @register.simple_tag
-def get_preview_url(*args, **kwargs):
+def get_revision_preview_url(*args, **kwargs):
     revision = kwargs['revision']
     url_page_type = revision.page.janis_url_page_type
 
     global_id = graphene.Node.to_global_id('PageRevisionNode', revision.id)
     # TODO: Add other languages
     return os.environ["JANIS_URL"] + "/en/preview/" + url_page_type + "/" + global_id
+
+@register.simple_tag
+def get_page_preview_url(*args, **kwargs):
+    page = kwargs['page']
+    return page.janis_preview_url()
 
 @register.simple_tag
 def get_live_url(*args, **kwargs):
