@@ -79,7 +79,7 @@ def joplin_page_listing_buttons(page, page_perms, is_parent=False):
 
         yield PageListingButton(
             _('View live'),
-            os.environ["JANIS_URL"] + "/en/" + url_page_type + "/" + page_slug,
+            page.janis_url(),
             attrs={'target': "_blank", 'title': _("View live version of '{title}'").format(title=page.get_admin_display_title())},
             priority=30
         )

@@ -1,4 +1,5 @@
 from django.db import models
+import os
 
 from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
@@ -52,7 +53,23 @@ class HomePage(Page):
     image = models.ForeignKey(TranslatedImage, null=True, on_delete=models.SET_NULL, related_name='+')
 
 
-class ServicePage(Page):
+class JanisPage:
+    def janis_url(self):
+        page_type = type(self).__name__
+        page_slug = self.slug
+
+        # TODO: Add other page types
+        if "Service" in page_type:
+          url_page_type = "services"
+
+        if "Process" in page_type:
+          url_page_type = "processes"
+
+        # TODO: Add other languages
+        return os.environ["JANIS_URL"] + "/en/" + url_page_type + "/" + page_slug
+
+
+class ServicePage(Page, JanisPage):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -100,7 +117,7 @@ class ServicePageStep(Orderable):
         FieldPanel('step_description'),
     ]
 
-class ProcessPage(Page):
+class ProcessPage(Page, JanisPage):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

@@ -28,18 +28,7 @@ def get_preview_url(*args, **kwargs):
 @register.simple_tag
 def get_live_url(*args, **kwargs):
     page = kwargs['page']
-    page_type = type(page).__name__
-    page_slug = page.slug
-
-    # TODO: Add other page types
-    if "Service" in page_type:
-      url_page_type = "services"
-
-    if "Process" in page_type:
-      url_page_type = "processes"
-
-    # TODO: Add other languages
-    return os.environ["JANIS_URL"] + "/en/" + url_page_type + "/" + page_slug
+    return page.janis_url()
 
 STYLEGUIDE_PAGES = {
   'service page': '/writing-service-pages/',
