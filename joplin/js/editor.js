@@ -130,6 +130,7 @@ $(function() {
   var sharebutton = $("#page-share-preview-button");
   var urlcopied = $("#page-share-url-copied");
   var messages = $(".messages");
+
   const previewUrl = document.getElementById("preview_url").value;
 
   if (localStorage.previewing === "true") {
