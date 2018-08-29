@@ -1,3 +1,5 @@
+@import "./variables";
+
 .full input {
   padding: 1em;
 }
@@ -59,10 +61,10 @@
 .header {
   display: flex;
   padding: 0.75rem;
-  background: #333;
+  background: $coa-color-darkest-gray;
 }
 .header.secondary {
-  background: #eee;
+  background: $coa-color-gray;
 }
 .header .actions {
   display: flex;
@@ -73,6 +75,30 @@
 }
 
 button.secondary {
-  background-color: #999;
-  border-color: #999;
+  background-color: $coa-color-dark-gray2;
+  border-color: $coa-color-dark-gray2;
+}
+
+.coa-user {
+  color: $coa-color-lightest-blue;
+  padding-left: 10px;
+  font-size: 14px;
+}
+
+
+.menu-item {
+
+}
+
+.nav-main .menu-active > a {
+  border-left-color: $coa-color-lightest-blue;
+  color: $coa-color-lightest-blue;
+}
+
+.icon-home:before {
+  content: url('../static/images/content_index.png');
+}
+
+.icon-image:before, .icon-picture:before {
+  content: url('../static/images/image-icon.png');
 }
