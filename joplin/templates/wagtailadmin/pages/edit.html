@@ -17,18 +17,14 @@
     <div class="header secondary">
         <div>
             <h1 class="edit_page_header">
-                Edit
-                <span class="page_type">{{ content_type.model_class.get_verbose_name }}</span>
-                <span class="page_title">{{ page.get_admin_display_title }}</span>
+                <span class="coa-page-action">Edit</span>
+                <span class="page_title">{{ page.draft_title }}</span>
             </h1>
         </div>
 
         <div class="actions">
             <div>
-                <div>
-                    Last modified <span class="time">{{ page.get_latest_revision.created_at }}</span>
-                </div>
-                <div>See <a href="{% url 'wagtailadmin_pages:revisions_index' page.id %}" class="underlined">all revisions</a></div>
+                <div>See <a href="{% url 'wagtailadmin_pages:revisions_index' page.id %}" class="underlined">All Revisions</a></div>
             </div>
             <div class="dropdown dropdown-button {% if is_revision %}warning{% endif %}">
               <div>
