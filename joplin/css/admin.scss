@@ -85,11 +85,6 @@ button.secondary {
   font-size: 14px;
 }
 
-
-.menu-item {
-
-}
-
 .nav-main .menu-active > a {
   border-left-color: $coa-color-lightest-blue;
   color: $coa-color-lightest-blue;
@@ -101,4 +96,10 @@ button.secondary {
 
 .icon-image:before, .icon-picture:before {
   content: url('../static/images/image-icon.png');
+}
+
+.header.secondary h1 {
+  color: $coa-color-orange;
+  text-transform: capitalize;
+  font-style: italic;
 }
