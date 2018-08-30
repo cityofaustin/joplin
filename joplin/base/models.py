@@ -1,4 +1,6 @@
 from django.db import models
+import os
+import graphene
 
 from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
@@ -52,9 +54,26 @@ class HomePage(Page):
     image = models.ForeignKey(TranslatedImage, null=True, on_delete=models.SET_NULL, related_name='+')
 
 
-class ServicePage(Page):
+class JanisPage:
+    def janis_url(self):
+        url_page_type = self.janis_url_page_type
+        page_slug = self.slug
+
+        # TODO: Add other languages
+        return os.environ["JANIS_URL"] + "/en/" + url_page_type + "/" + page_slug
+
+    def janis_preview_url(self):
+        revision = self.get_latest_revision()
+        url_page_type = self.janis_url_page_type
+        global_id = graphene.Node.to_global_id('PageRevisionNode', revision.id)
+
+        return os.environ["JANIS_URL"] + "/en/preview/" + url_page_type + "/" + global_id
+
+
+class ServicePage(Page, JanisPage):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    janis_url_page_type = "services"
 
     dynamic_content = StreamField(
         [
@@ -100,9 +119,10 @@ class ServicePageStep(Orderable):
         FieldPanel('step_description'),
     ]
 
-class ProcessPage(Page):
+class ProcessPage(Page, JanisPage):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    janis_url_page_type = "processes"
 
     topic = models.ForeignKey(
         'base.Topic',
