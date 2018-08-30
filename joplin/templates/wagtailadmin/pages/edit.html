@@ -10,10 +10,10 @@
 
 {% block content %}
     {% render_bundle 'editor' %}
-    {% get_preview_url revision=page.get_latest_revision as preview_url %}
     {% get_style_guide_url content_type=content_type as style_guide_url %}
     {% page_permissions page as page_perms %}
     <input type="hidden" id="style_guide_url" name="style_guide_url" value="{{ style_guide_url }}">
+    <input type="hidden" id="preview_url" name="preview_url" value="{{page.janis_preview_url}}">
     <div class="header secondary">
         <div>
             <h1 class="edit_page_header">
@@ -126,7 +126,7 @@
               <a class="button sidebar-button" href="{{style_guide_url}}" target="sidebar-iframe">Style Guide</a>
             </div>
             <div class="sidebar-button-container">
-              <a class="button sidebar-button" href="{{preview_url}}" target="sidebar-iframe">Preview</a>
+              <a class="button sidebar-button" href="{{page.janis_preview_url}}" target="sidebar-iframe">Preview</a>
             </div>
           </div>
         </div>
