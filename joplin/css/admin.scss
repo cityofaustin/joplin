@@ -1,5 +1,7 @@
 @import "./variables";
 
+$nav-wrapper-width: 80px;
+
 .full input {
   padding: 1em;
 }
@@ -27,12 +29,12 @@
 }
 
 .wrapper {
-  padding-left: 60px;
+  padding-left: $nav-wrapper-width;
   height: inherit;
 }
 .nav-wrapper,
 .nav-wrapper .inner {
-  width: 60px;
+  width: $nav-wrapper-width;
 }
 
 .nav-main {
@@ -60,7 +62,7 @@
 }
 .header {
   display: flex;
-  padding: 0.75rem;
+  padding: 0.75rem 1.5rem;
   background: $coa-color-darkest-gray;
 }
 .header.secondary {
@@ -90,12 +92,34 @@ button.secondary {
   color: $coa-color-lightest-blue;
 }
 
+.menu-active {
+  .icon-home:before {
+    background-image: url('../static/images/content_d1ecf1.svg');
+  }
+
+  .icon-image:before, .icon-picture:before {
+    background-image: url('../static/images/image_d1ecf1.svg');
+  }
+}
+
 .icon-home:before {
-  content: url('../static/images/content_index.png');
+  background-image: url('../static/images/content_cacaca.svg');
+  content: "";
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  background-size: 40px 40px;
+  margin: auto auto auto 8px;
 }
 
 .icon-image:before, .icon-picture:before {
-  content: url('../static/images/image-icon.png');
+  background-image: url('../static/images/image_cacaca.svg');
+  content: "";
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  background-size: 40px 40px;
+  margin: auto auto auto 8px;
 }
 
 .header.secondary h1 {
