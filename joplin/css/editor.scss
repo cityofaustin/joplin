@@ -35,18 +35,6 @@ footer {
   margin-right: 0.4rem;
 }
 
-.header {
-  position: fixed;
-  z-index: 3;
-  left: 60px;
-  width: calc(100% - 60px - 1.5rem);
-}
-
-.header.secondary {
-  top: 80px;
-  height: 100px;
-}
-
 .actions {
   margin: 0 0 0 auto !important;
 }

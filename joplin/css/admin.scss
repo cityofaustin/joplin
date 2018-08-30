@@ -1,6 +1,8 @@
 @import "./variables";
+@import "./utilities/border-box-reset";
 
 $nav-wrapper-width: 80px;
+$header-height: 89px;
 
 .full input {
   padding: 1em;
@@ -29,6 +31,7 @@ $nav-wrapper-width: 80px;
 }
 
 .wrapper {
+  padding-top: $header-height;
   padding-left: $nav-wrapper-width;
   height: inherit;
 }
@@ -60,14 +63,7 @@ $nav-wrapper-width: 80px;
 .page-editor header {
   display: none;
 }
-.header {
-  display: flex;
-  padding: 0.75rem 1.5rem;
-  background: $coa-color-darkest-gray;
-}
-.header.secondary {
-  background: $coa-color-gray;
-}
+
 .header .actions {
   display: flex;
   margin: auto 0 auto auto;
@@ -81,16 +77,46 @@ button.secondary {
   border-color: $coa-color-dark-gray2;
 }
 
+
+.nav-main .menu-active > a {
+  border-left-color: $coa-color-lightest-blue;
+  color: $coa-color-lightest-blue;
+}
+
+// COA Global Header
+
+.coa-header {
+  display: flex;
+  padding: 0.75rem 1.5rem;
+  background: $coa-color-darkest-gray;
+  position: fixed;
+  z-index: 3;
+  // left: 60px;
+  width: 100%;
+}
+
 .coa-user {
   color: $coa-color-lightest-blue;
   padding-left: 10px;
   font-size: 14px;
 }
 
-.nav-main .menu-active > a {
-  border-left-color: $coa-color-lightest-blue;
-  color: $coa-color-lightest-blue;
+// COA Secondary Header
+
+.header.secondary {
+  width: calc(100% - #{$nav-wrapper-width});
+  background: $coa-color-gray;
+  position: fixed;
+  padding: 1rem 1.5rem;
+  z-index: 3;
+  h1 {
+    color: $coa-color-orange;
+    text-transform: capitalize;
+    font-style: italic;
+  }
 }
+
+// COA Global Nav (left sidebar)
 
 .menu-active {
   .icon-home:before {
@@ -120,10 +146,4 @@ button.secondary {
   height: 40px;
   background-size: 40px 40px;
   margin: auto auto auto 8px;
-}
-
-.header.secondary h1 {
-  color: $coa-color-orange;
-  text-transform: capitalize;
-  font-style: italic;
 }
