@@ -84,11 +84,17 @@ class ServicePage(Page, JanisPage):
         ],
         verbose_name='Add any maps or apps that will help the resident use the service',
     )
-    additional_content = RichTextField(features=WYSIWYG_FEATURES, verbose_name='Additional content', help_text='Write any additional content describing the service', blank=True)
+    additional_content = RichTextField(
+        features=WYSIWYG_FEATURES, 
+        verbose_name='Write any additional content describing the service', 
+        help_text='Section header: What else do I need to know?', 
+        blank=True
+    )
     topic = models.ForeignKey(
         'base.Topic',
         on_delete=models.PROTECT,
         related_name='services',
+        verbose_name='Select a Topic',
     )
     image = models.ForeignKey(TranslatedImage, null=True, blank=True, on_delete=models.SET_NULL, related_name='+', verbose_name='Choose an image for the service banner')
 
