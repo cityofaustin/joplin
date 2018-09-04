@@ -1,0 +1,68 @@
+slug: trash-recycling-pickup-163
+
+topic: recycling-trash-compost
+image: curbside-pickup
+contact: 311
+
+title_en: blarg163
+title_es: Busque sus días de recolección de basura, reciclaje y compost
+title_vi: Tìm ngày bốc rác thường, rác tái chế, và rác ủ phân hữu cơ của quý vị
+title_ar: الاطلاع على أيام جمع القمامة والمواد التي يُعاد تدويرها والقابلة للتسميد
+
+service_steps:
+    -
+        step_description_en: Type your street address in the box below. If you live in a multi-family home, like a duplex or fourplex, do not include your unit number.
+        step_description_es: Ingrese su dirección en la siguiente casilla. Si vive en una casa multifamiliar, como en un dúplex o en un edificio de cuatro apartamentos, no incluya el número de su unidad.
+        step_description_vi: Đánh địa chỉ nhà quý vị vào ô dưới đây. Nếu quý vị sống trong một ngôi nhà có nhiều gia đình, như nhà hai căn hoặc nhà bốn căn, thì không cần ghi số căn hộ của mình.
+        step_description_ar: اكتب عنوان شارعك في المربع أدناه. إذا كنت تعيش في منزل متعدد الأسر، مثل منزل مزدوج أو مكون من أربعة أقسام، لا تُدرج رقم وحدتك.
+    -
+        step_description_en: Press the search button to view your curbside pickup days.
+        step_description_es: Haga clic en el botón de búsqueda para ver sus días de recolección.
+        step_description_vi: Nhấn nút tìm kiếm để xem các ngày bốc rác để lề đường của mình.
+        step_description_ar: اضغط على زر البحث لعرض أيام جمع القمامة على الرصيف.
+    -
+        step_description_en: 'Optional: Print a copy of your schedule or click the icon to add your pickup days to your Google, iCal, or Microsoft calendar.'
+        step_description_es: 'Opcional: Imprima una copia de su calendario o haga clic en el icono para añadir sus días de recolección a su calendario de Google, iCal o Microsoft.'
+        step_description_vi: 'Tùy chọn: In một bản lịch của quý vị hoặc nhấn vào biểu tượng để cộng thêm các ngày bốc rác vào lịch Google, iCal, hoặc Microsoft của mình.'
+        step_description_ar: 'ختياري: يمكنك طباعة نسخة من جدولك أو النقر على الرمز لإضافة أيام جمع القمامة إلى تقويم Google أو iCal أو Microsoft.'
+
+additional_content_en: |
+    <h2>Trash, recycling, and compost pickup</h2>
+    <p>Every week, we will pick up your trash, compost, and yard trimmings. Every other week, we will pick up recycling, clothing, and housewares. All curbside pick-ups happen on the same day of the week unless it is a holiday.</p>
+
+    <h2>Holiday pickup days</h2>
+    <p>If your curbside pickup day is on Thanksgiving Day, Christmas Day, or New Year's Day—or if it is after the holiday but in the same week—your collection will be one day later than your usual pickup day that week. If the holiday falls on a Sunday or Saturday, your pickup day will not change.</p>
+additional_content_es: |
+    <h2>Recolección de basura, reciclaje y compost</h2>
+    <p>Todas las semanas recogeremos su basura, compost y recortes del jardín. Una semana sí y otra no, recogeremos el reciclaje, ropa y artículos para el hogar. Toda la recolección al borde de la acera se hace el mismo día de la semana a menos que sea un día festivo. </p>
+
+    <h2>Recolección en días festivos</h2>
+    <p>Si su día de recolección es el Día de Acción de Gracias, Navidad o Año Nuevo, o si es después de uno de estos días festivos pero en la misma semana, su día de recolección será un día después de su día de recolección regular. Si el día festivo cae domingo o sábado, su día de recolección no cambiará.</p>
+additional_content_vi: |
+    <h2>Bốc rác thường, rác tái chế, và rác ủ phân hữu cơ</h2>
+    <p>Hàng tuần, chúng tôi sẽ bốc rác thường, rác ủ phân hữu cơ, và rác làm vườn. Hàng tuần, chúng tôi sẽ bốc rác tái chế, quần áo, và vật dụng trong nhà. Tất cả kỳ bốc rác ở lề đường sẽ xảy ra vào cùng ngày trong tuần, trừ khi đó là ngày lễ.</p>
+
+    <h2>Bốc rác cho các ngày nghỉ lễ</h2>
+    <p>Nếu ngày bốc rác của quý vị rơi vào ngày Lễ Tạ Ỏn, ngày Lễ Giáng Sinh, hoặc ngày Đầu Năm - hoặc sau ngày nghỉ lễ nhưng vẫn trong tuần đó - thì ngày thu rác của quý vị sẽ là một ngày muộn hơn so với lịch bốc rác thường lệ của mình trong tuần đó. Nếu ngày nghỉ lễ rơi vào Thứ Bảy hoặc Chủ Nhật, ngày bốc rác của quý vị sẽ không thay đổi.</p>
+additional_content_ar: |
+    <h2>جمع القمامة والمواد التي يُعاد تدويرها والقابلة للتسميد</h2>
+    <p>كل أسبوع، سوف نجمع القمامة والمواد القابلة للتسميد ومخلفات الحدائق التي لديك. كل أسبوعين، سوف نجمع المواد التي يُعاد تدويرها والملابس والأدوات المنزلية. جميع عمليات جمع النفايات على الرصيف تتم في نفس اليوم من الأسبوع إلا إذا كان هذا اليوم عطلة.</p>
+
+    <h2>أيام جمع النفايات إذا وافق عطلة</h2>
+    <p>إذا وافق يوم جمع النفايات على جانب الرصيف عطلة عيد الشكر أو عيد الميلاد أو يوم رأس السنة الميلادية، أو إذا كان بعد العطلة ولكن في نفس الأسبوع، سوف تؤجل عملية جمع النفايات خاصتك في يوم آخر غير يوم الجمع المعتاد في ذلك الأسبوع. إذا وافق يوم العطلة يوم الأحد أو السبت، لن يتغير يوم جمع النفايات خاصتك.</p>
+
+dynamic_content:
+    -
+        type: collection_schedule
+
+meta_title_en:
+meta_title_es: Busque su día de recolección de basura, reciclaje y compost
+meta_title_vi: Tìm Ngày Bốc Rác Thường, Rác Tái Chế, và Rác Phân Ủ Hữu Cơ của quý vị
+meta_title_ar: الاطلاع على أيام جمع القمامة والمواد التي يُعاد تدويرها والقابلة للتسميد
+
+meta_description_en:
+meta_description_es: Vea un calendario con sus días de recolección. También puede inscribirse para recibir recordatorios y alertas por mensajes de texto, correo electrónico o por teléfono.
+meta_description_vi: Xem lịch để ghi ngày thu rác để lề đường của mình. Quý vị cũng có thể đăng ký nhận lời nhắn, điện thư email hoặc điện thoại nhắc nhở và cảnh báo.
+meta_description_ar: اطلع على التقويم لمعرفة أيام جمع النفايات خاصتك. يمكنك أيضا الاشتراك في خدمة التذكير والتنبيهات لإرسال رسالة
+
+meta_tags:
