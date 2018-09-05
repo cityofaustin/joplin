@@ -26,4 +26,9 @@ WORKDIR /app/joplin
 RUN yarn; yarn build
 WORKDIR /app
 
+ENTRYPOINT ["./docker-entrypoint-prod.sh"]
+
 CMD ["gunicorn", "joplin.wsgi:application", "--pythonpath", "/app/joplin"]
+
+# Encrypt vars within Dockerfiles
+# Encrypt API keys
