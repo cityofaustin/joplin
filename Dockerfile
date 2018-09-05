@@ -26,6 +26,7 @@ WORKDIR /app/joplin
 RUN yarn; yarn build
 WORKDIR /app
 
+COPY "$PWD/docker-entrypoint-prod.sh" /app/docker-entrypoint-prod.sh
 ENTRYPOINT ["./docker-entrypoint-prod.sh"]
 
 CMD ["gunicorn", "joplin.wsgi:application", "--pythonpath", "/app/joplin"]
