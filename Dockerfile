@@ -16,6 +16,7 @@ EXPOSE $PORT
 RUN mkdir /app
 WORKDIR /app
 
+COPY "$PWD/fixtures" /app/fixtures
 COPY "$PWD/joplin" /app/joplin
 
 COPY "$PWD/migrate-load-data.sh" /app/migrate-load-data.sh
