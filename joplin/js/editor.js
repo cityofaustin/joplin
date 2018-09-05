@@ -2,9 +2,10 @@ import "../css/editor.scss";
 import "../css/preview.scss";
 
 import insertWizardData from "./CreateContentModal/insertWizardData";
-
+import menuActiveState from "./Editpage/menuActiveState";
 $(function() {
   insertWizardData();
+  menuActiveState();
 
   // TODO: This a better way
   const anchors = {
