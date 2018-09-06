@@ -1,0 +1,45 @@
+@import '../../css/variables';
+
+.CreateContentModal {
+  max-width: 525px;
+  padding-bottom: 0;
+}
+
+.CreateContentModal > .modal-body {
+  padding-bottom: 0;
+}
+
+.CreateContentModal__wrapper {
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  width: 50%;
+  margin: auto;
+  text-align: center;
+}
+
+.modal-dialog {
+  width: auto;
+}
+
+@media screen and (min-width: 50em) {
+  .modal-dialog {
+    padding: 0 0 2em;
+  }
+}
+
+.CreateContentModal__step {
+  padding: 0 20px 20px;
+}
+
+.CreateContentModal__header {
+  color: $coa-color-dark-blue;
+  font-size: 22px;
+  text-align: center;
+  line-height: 30px;
+}
+
+/* department header markup is hidden */
+.CreateContentModal__header--hidden {
+  display: none;
+}
