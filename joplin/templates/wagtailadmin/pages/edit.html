@@ -29,7 +29,11 @@
 
             <!-- SHARE -->
             <div>
-                <button id="page-share-preview-button" type="submit" form="page-edit-form" class="button action-save button-longrunning icon icon-view {% if is_revision %}warning{% endif %}" data-clicked-text="{% trans 'Saving…' %}" {% if page.locked %}disabled {% endif %}>
+                <button id="page-share-preview-button" type="submit" form="page-edit-form" 
+                  class="coa-secondary-button button action-save button-longrunning icon coa-icon-share {% if is_revision %}warning{% endif %}" 
+                  data-clicked-text="{% trans 'Saving…' %}" 
+                  {% if page.locked %}disabled {% endif %}
+                >
                   <span class="icon icon-spinner"></span>
                   <em>
                     {% if page.locked %}
@@ -51,7 +55,7 @@
             <!-- PREVIEW -->
             <div>
                 <button id="page-preview-button" type="submit" form="page-edit-form"
-                  class="button action-save button-longrunning {% if is_revision %}warning{% endif %}"
+                  class="coa-secondary-button button action-save button-longrunning icon icon-view {% if is_revision %}warning{% endif %}"
                   data-clicked-text="{% trans 'Saving…' %}"
                   {% if page.locked %}disabled {% endif %}
                 >
