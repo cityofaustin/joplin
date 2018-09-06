@@ -19,8 +19,7 @@ WORKDIR /app
 COPY "$PWD/fixtures" /app/fixtures
 COPY "$PWD/joplin" /app/joplin
 
-COPY "$PWD/migrate-load-data.sh" /app/migrate-load-data.sh
-RUN LOAD_DATA=on ./migrate-load-data.sh
+
 
 WORKDIR /app/joplin
 RUN yarn; yarn build
@@ -31,5 +30,3 @@ ENTRYPOINT ["./docker-entrypoint-prod.sh"]
 
 CMD ["gunicorn", "joplin.wsgi:application", "--pythonpath", "/app/joplin"]
 
-# Encrypt vars within Dockerfiles
-# Encrypt API keys
