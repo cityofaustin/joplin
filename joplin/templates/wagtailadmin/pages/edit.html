@@ -125,24 +125,8 @@
       <div class="edit-page-form-container">
         {{ block.super }}
       </div>
-      <div class="sidebar-container">
-        <div class="fixed-content">
-          <div class="thumbnail-container">
-            <div class="thumbnail">
-              <iframe name="sidebar-iframe" frameborder="0" onload="this.style.opacity = 1" src="{{style_guide_url}}"></iframe>
-            </div>
-          </div>
-          <div class="coa-sidebar-buttons">
-            <a class="coa-sidebar-button js-toggle-active-panel" href="{{page.janis_preview_url}}" target="sidebar-iframe">
-              <span>Mobile Preview</span>
-            </a>
-            <a class="coa-sidebar-button coa-sidebar-button--active js-toggle-active-panel" 
-              href="{{style_guide_url}}" target="sidebar-iframe"
-            >
-              <span>Style Guide</span>
-            </a>
-          </div>
-        </div>
-      </div>
+
+      {% include "wagtailadmin/shared/sidebar-preview.html" %}
+
     </div>
 {% endblock %}
