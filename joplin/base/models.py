@@ -103,9 +103,9 @@ class ServicePage(Page, JanisPage):
     base_form_class = custom_forms.ServicePageForm
 
     content_panels = [
-        ImageChooserPanel('image'),
         FieldPanel('topic'),
         FieldPanel('title'),
+        ImageChooserPanel('image'),
         InlinePanel('service_steps', label="Service steps"),
         StreamFieldPanel('dynamic_content'),
         FieldPanel('additional_content'),
