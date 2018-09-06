@@ -6,7 +6,7 @@
 @import "./buttons";
 @import "./pages/edit";
 
-// Wagtail overrides 
+// Wagtail overrides
 
 .full input {
   padding: 1em;
@@ -45,5 +45,5 @@
 }
 
 .pagination {
-  margin-top: $secondary-header-height + 50px;
+  margin-top: $secondary-header-height * 3/2;
 }
