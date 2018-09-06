@@ -9,6 +9,10 @@ from yaml import load
 
 from base.models import TranslatedImage, TranslatedImageRendition, ThreeOneOne, Theme, Topic, Department, ServicePage, ServicePageStep, ProcessPage, ProcessPageStep, ProcessPageContact, Location, Contact, ServicePageContact, DepartmentContact, Map, ContactDayAndDuration
 
+from django.contrib.auth import get_user_model
+User = get_user_model()
+
+
 import logging
 logging.basicConfig(level=logging.INFO)
 
@@ -90,6 +94,10 @@ def load_process(data):
     print(f'-  Loading contacts...\r', end='')
     contact = data.pop('contact')
     contact = Contact.objects.get(name=contact)
+    print('✅')
+
+    print(f'-  Loading user...\r', end='')
+    data['owner'] = User.objects.get(id='1')
     print('✅')
 
     print(f'-  Loading homepage...\r', end='')
@@ -262,6 +270,10 @@ def load_service(data):
     print('✅')
 
     data['additional_content'] = data['additional_content_en']
+    print('✅')
+
+    print(f'-  Loading user...\r', end='')
+    data['owner'] = User.objects.get(id='1')
     print('✅')
 
     print(f'-  Loading homepage...\r', end='')
