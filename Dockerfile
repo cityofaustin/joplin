@@ -19,7 +19,8 @@ WORKDIR /app
 COPY "$PWD/fixtures" /app/fixtures
 COPY "$PWD/joplin" /app/joplin
 
-
+#COPY "$PWD/migrate-load-data.sh" /app/migrate-load-data.sh
+#RUN LOAD_DATA=on ./migrate-load-data.sh
 
 WORKDIR /app/joplin
 RUN yarn; yarn build
@@ -29,4 +30,3 @@ COPY "$PWD/docker-entrypoint-prod.sh" /app/docker-entrypoint-prod.sh
 ENTRYPOINT ["./docker-entrypoint-prod.sh"]
 
 CMD ["gunicorn", "joplin.wsgi:application", "--pythonpath", "/app/joplin"]
-
