@@ -1,1 +1,1 @@
-release: python ./joplin/manage.py migrate --noinput
+release: ./app/docker-entrypoint-prod.sh

@@ -17,7 +17,7 @@ RUN mkdir /app
 WORKDIR /app
 
 COPY "$PWD/fixtures" /app/fixtures
-COPY "$PWD/joplin" /app/joplinss
+COPY "$PWD/joplin" /app/joplin
 
 WORKDIR /app/joplin
 RUN yarn; yarn build
