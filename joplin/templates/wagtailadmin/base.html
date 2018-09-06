@@ -9,16 +9,16 @@
     {{ block.super }}
     {% render_bundle 'admin' %}
 
-    <div class="header">
+    <div class="header coa-header">
         <div>
             <img class="wagtail-logo wagtail-logo__full"
               src="{% static 'images/coa_seal_transparent_white.png' %}"
               alt="Welcome to Wagtail CMS" width="60"
             />
         </div>
-        <div class="actions">
-            <div class="avatar"><img src="{% avatar_url user %}" alt="" /></div>
+        <div class="actions coa-user-actions">
+            <div class="avatar"><img src="{% avatar_url user %}" alt="avatar" /></div>
             <div class="user coa-user">{{ user }}</div>
         </div>
-    </div class="header">
+    </div>
 {% endblock %}

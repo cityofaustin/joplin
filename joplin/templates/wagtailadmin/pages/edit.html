@@ -17,59 +17,23 @@
     <div class="header secondary">
         <div>
             <h1 class="edit_page_header">
-                Edit
-                <span class="page_type">{{ content_type.model_class.get_verbose_name }}</span>
-                <span class="page_title">{{ page.get_admin_display_title }}</span>
+                <span class="coa-page-action">Edit</span>
+                <span class="page_title">{{ page.draft_title }}</span>
             </h1>
         </div>
 
         <div class="actions">
             <div>
-                <div>
-                    Last modified <span class="time">{{ page.get_latest_revision.created_at }}</span>
-                </div>
-                <div>See <a href="{% url 'wagtailadmin_pages:revisions_index' page.id %}" class="underlined">all revisions</a></div>
+                <div>See <a href="{% url 'wagtailadmin_pages:revisions_index' page.id %}" class="underlined">All Revisions</a></div>
             </div>
-            <div class="dropdown dropdown-button {% if is_revision %}warning{% endif %}">
-              <div>
-                  <button type="submit" form="page-edit-form"
-                    class="button action-save button-longrunning {% if is_revision %}warning{% endif %} editor__save-button"
-                    data-clicked-text="{% trans 'Saving…' %}"
-                    {% if page.locked %}disabled {% endif %}
-                  >
-                    <span class="icon icon-spinner"></span>
-                    <em>
-                      {% if page.locked %}
-                        {% trans 'Page locked' %}
-                      {% else %}
-                        {% if is_revision %}
-                          {% trans 'Replace current draft' %}
-                        {% else %}
-                          {% trans 'Save draft' %}
-                        {% endif %}
-                      {% endif %}
-                    </em>
-                  </button>
-              </div>
-              {% if not page.locked %}
-                  <div class="dropdown-toggle icon icon-arrow-down"></div>
-                  <ul role="menu">
-                      {% if page_perms.can_publish %}
-                        <li>
-                          <button type="submit" name="action-publish" form="page-edit-form" value="action-publish" class="button button-longrunning {% if is_revision %}warning{% endif %}" tabindex="3" data-clicked-text="{% trans 'Publishing…' %}" {% if page.locked %}disabled {% endif %}><span class="icon icon-spinner"></span><em>{% if is_revision %}{% trans 'Publish this revision' %}{% else %}{% trans 'Publish' %}{% endif %}</em></button>
-                        </li>
-                      {% endif %}
-                      {% if not is_revision and page_perms.can_delete %}
-                        <li><a href="{% url 'wagtailadmin_pages:delete' page.id %}" class="shortcut">{% trans 'Delete' %}</a></li>
-                      {% endif %}
-                      {% if not is_revision and page_perms.can_unpublish %}
-                        <li><a href="{% url 'wagtailadmin_pages:unpublish' page.id %}">{% trans 'Unpublish' %}</a></li>
-                      {% endif %}
-                  </ul>
-              {% endif %}
-            </div>
+
+            <!-- SHARE -->
             <div>
-                <button id="page-share-preview-button" type="submit" form="page-edit-form" class="button action-save button-longrunning icon icon-view {% if is_revision %}warning{% endif %}" data-clicked-text="{% trans 'Saving…' %}" {% if page.locked %}disabled {% endif %}>
+                <button id="page-share-preview-button" type="submit" form="page-edit-form" 
+                  class="coa-secondary-button button action-save button-longrunning icon coa-icon-share {% if is_revision %}warning{% endif %}" 
+                  data-clicked-text="{% trans 'Saving…' %}" 
+                  {% if page.locked %}disabled {% endif %}
+                >
                   <span class="icon icon-spinner"></span>
                   <em>
                     {% if page.locked %}
@@ -87,9 +51,11 @@
                   Preview URL copied to clipboard.
                 </div>
             </div>
+
+            <!-- PREVIEW -->
             <div>
                 <button id="page-preview-button" type="submit" form="page-edit-form"
-                  class="button action-save button-longrunning {% if is_revision %}warning{% endif %}"
+                  class="coa-secondary-button button action-save button-longrunning icon icon-view {% if is_revision %}warning{% endif %}"
                   data-clicked-text="{% trans 'Saving…' %}"
                   {% if page.locked %}disabled {% endif %}
                 >
@@ -107,6 +73,51 @@
                   </em>
                 </button>
             </div>
+
+
+            <!-- SAVE DRAFT -->
+            <div class="dropdown dropdown-button {% if is_revision %}warning{% endif %}">
+              <div>
+                <button type="submit" form="page-edit-form" class="button action-save button-longrunning {% if is_revision %}warning{% endif %} editor__save-button"
+                  data-clicked-text="{% trans 'Saving…' %}" {% if page.locked %}disabled {% endif %}>
+                  <span class="icon icon-spinner"></span>
+                  <em>
+                    {% if page.locked %} 
+                      {% trans 'Page locked' %} 
+                    {% else %} 
+                      {% if is_revision %} 
+                        {% trans 'Replace current draft' %} 
+                      {% else %} 
+                        {% trans 'Save draft' %} 
+                      {% endif %} 
+                    {% endif %}
+                  </em>
+                </button>
+              </div>
+
+              {% if not page.locked %}
+              <div class="dropdown-toggle icon icon-arrow-down"></div>
+              <ul role="menu">
+                {% if page_perms.can_publish %}
+                <li>
+                  <button type="submit" name="action-publish" form="page-edit-form" value="action-publish" class="button button-longrunning {% if is_revision %}warning{% endif %}"
+                    tabindex="3" data-clicked-text="{% trans 'Publishing…' %}" {% if page.locked %}disabled {% endif %}>
+                    <span class="icon icon-spinner"></span>
+                    <em>{% if is_revision %}{% trans 'Publish this revision' %}{% else %}{% trans 'Publish' %}{% endif %}</em>
+                  </button>
+                </li>
+                {% endif %} {% if not is_revision and page_perms.can_delete %}
+                <li>
+                  <a href="{% url 'wagtailadmin_pages:delete' page.id %}" class="shortcut">{% trans 'Delete' %}</a>
+                </li>
+                {% endif %} {% if not is_revision and page_perms.can_unpublish %}
+                <li>
+                  <a href="{% url 'wagtailadmin_pages:unpublish' page.id %}">{% trans 'Unpublish' %}</a>
+                </li>
+                {% endif %}
+              </ul>
+              {% endif %}
+            </div>
         </div>
     </div>
 
@@ -114,22 +125,8 @@
       <div class="edit-page-form-container">
         {{ block.super }}
       </div>
-      <div class="sidebar-container">
-        <div class="fixed-content">
-          <div class="thumbnail-container">
-            <div class="thumbnail">
-              <iframe name="sidebar-iframe" frameborder="0" onload="this.style.opacity = 1" src="{{style_guide_url}}"></iframe>
-            </div>
-          </div>
-          <div class="sidebar-buttons">
-            <div class="sidebar-button-container">
-              <a class="button sidebar-button" href="{{style_guide_url}}" target="sidebar-iframe">Style Guide</a>
-            </div>
-            <div class="sidebar-button-container">
-              <a class="button sidebar-button" href="{{page.janis_preview_url}}" target="sidebar-iframe">Preview</a>
-            </div>
-          </div>
-        </div>
-      </div>
+
+      {% include "wagtailadmin/shared/sidebar-preview.html" %}
+
     </div>
 {% endblock %}

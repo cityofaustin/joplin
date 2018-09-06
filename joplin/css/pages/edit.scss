@@ -1,0 +1,31 @@
+.coa-page-action {
+    color: $coa-color-dark-gray;
+    font-style: normal;
+    font-weight: bold;
+}
+
+.coa-secondary-button {
+    background: $coa-color-white;
+    color: $wagtail-turquoise;
+    font-weight: bold;
+}
+
+.coa-icon-share {
+    &:before {
+        background-image: url('../static/images/share.svg');
+        content: "";
+        width: 22px;
+        height: 31px;
+        background-size: 22px 31px;
+        display: inline-block;
+        font-style: normal;
+        font-variant: normal;
+        text-rendering: auto;
+        -webkit-font-smoothing: antialiased;
+    }
+    &:hover {
+        &:before {
+            background-image: url('../static/images/share_white.svg');
+        }
+    }
+}
