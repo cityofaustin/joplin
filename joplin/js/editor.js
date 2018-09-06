@@ -3,9 +3,12 @@ import "../css/preview.scss";
 
 import insertWizardData from "./CreateContentModal/insertWizardData";
 import menuActiveState from "./Editpage/menuActiveState";
+import toggleActivePanel from "./SidebarPreview/toggleActivePanel";
+
 $(function() {
   insertWizardData();
   menuActiveState();
+  toggleActivePanel();
 
   // TODO: This a better way
   const anchors = {

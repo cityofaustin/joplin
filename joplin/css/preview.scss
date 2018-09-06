@@ -1,3 +1,5 @@
+@import "./variables";
+
 $flexcontainer-margin: 100px;
 $preview-height: calc(100vh - #{$flexcontainer-margin});
 $fixedcontent-width: 375px;
@@ -66,14 +68,41 @@ $sidebar-width: 377px;
   min-width: $sidebar-width;
 }
 
-.sidebar-buttons {
+.coa-sidebar-buttons {
   display: flex;
   background: #eeeeee;
   border-top: 1px solid black;
+  z-index: 1;
+  position: absolute;
+  bottom: 0;
+  height: 130px;
+  width: 100%;
 }
 
-.sidebar-button-container {
-  margin: auto;
+.coa-sidebar-button {
+  flex: 1;
+  font-size: 12px;
+  font-weight: bold;
+  text-align: center;
+  color: $coa-color-white;
+  background: $coa-color-dark-gray;
+  bottom: 89px;
+  height: 42px;
+  span {
+    padding: 10px 0;
+    display: inline-block;
+  }
+  &:hover {
+    color: $coa-color-lightest-blue;
+  }
+}
+
+.coa-sidebar-button--active {
+  background: $coa-color-lightest-blue;
+  color: $coa-color-darkest-gray;
+  &:hover {
+    color:$coa-color-light-blue;
+  }
 }
 
 .fixed-content {
