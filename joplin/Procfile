@@ -1,2 +1,0 @@
-release: echo "Bucket ID: ${AWS_S3_KEYID}" && python manage.py migrate --noinput
-web: gunicorn joplin.wsgi:application --pythonpath /app/joplin

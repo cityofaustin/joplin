@@ -9,6 +9,6 @@ python ./joplin/manage.py migrate --noinput
 # Skipping static file deployments for now.
 # Heroku enforces a maximum of 60 seconds for boot time
 # This process can be done from a Dyno shell
-python ./joplin/manage.py collectstatic --noinput
+#python ./joplin/manage.py collectstatic --noinput
 
 exec "$@"
