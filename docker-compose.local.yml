@@ -7,7 +7,6 @@ services:
     environment:
       POSTGRES_DB: 'joplin'
       POSTGRES_USER: 'joplin'
-      POSTGRES_PASSWORD: '39h3zd3j9Pc57mH3QsiS6sb4'
   joplin:
     build:
       context: .
@@ -25,7 +24,7 @@ services:
       JANIS_URL: http://localhost:3000
       STYLEGUIDE_URL: https://cityofaustin.github.io/digital-services-style-guide
       DEPLOYMENT_MODE: "LOCAL"
-      DATABASE_URL: "postgres://joplin:39h3zd3j9Pc57mH3QsiS6sb4@localhost:5432/joplin"
+      DATABASE_URL: "postgres://joplin@localhost:5432/joplin"
     depends_on:
      - "joplindb"
   joplinassets:
