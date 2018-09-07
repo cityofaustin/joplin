@@ -79,10 +79,14 @@ class JanisPage(Page):
 
     @cached_classmethod
     def get_edit_handler(cls):
+        if hasattr(cls, 'edit_handler'):
+            return cls.edit_handler.bind_to_model(cls)
+
         edit_handler = TabbedInterface([
             ObjectList(cls.content_panels, heading='Content'),
             ObjectList(Page.promote_panels + cls.promote_panels, heading='Search Info')
         ])
+
         return edit_handler.bind_to_model(cls)
 
     def janis_url(self):
