@@ -4,5 +4,4 @@ build:
 release:
   command:
     - ./migrate-load-data.sh
-  image: worker
 
