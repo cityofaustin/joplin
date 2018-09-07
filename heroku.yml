@@ -1,8 +1,5 @@
 build:
   docker:
     web: Dockerfile
-release:
-  image: web
-  command:
-    - python /app/joplin/manage.py migrate --noinput
-    - python /app/joplin/manage.py collectstatic --noinput
+
+

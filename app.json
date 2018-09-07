@@ -1,6 +1,8 @@
 {
   "name": "joplin",
-  "scripts": {},
+  "scripts": {
+    "postdeploy": "/app/migrate-load-data.sh"
+  },
   "env": {
     "JANIS_URL": {
       "required": true
