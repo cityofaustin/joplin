@@ -4,4 +4,5 @@ build:
 release:
   image: web
   command:
-    - /app/migrate-load-data.sh
+    - python /app/joplin/manage.py migrate --noinput
+    - python /app/joplin/manage.py collectstatic --noinput
