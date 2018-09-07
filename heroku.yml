@@ -4,4 +4,4 @@ build:
 release:
   image: web
   command:
-    - ./migrate-load-data.sh
+    - /app/migrate-load-data.sh
