@@ -4,4 +4,4 @@ build:
 release:
   image: web
   command:
-    - ./echosomething.sh
+    - ./etest.sh
