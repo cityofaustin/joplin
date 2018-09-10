@@ -11,7 +11,6 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.local
-    network_mode: "host"
     ports:
      - "8000:80"
     volumes:
@@ -24,7 +23,7 @@ services:
       JANIS_URL: http://localhost:3000
       STYLEGUIDE_URL: https://cityofaustin.github.io/digital-services-style-guide
       DEPLOYMENT_MODE: "LOCAL"
-      DATABASE_URL: "postgres://joplin@localhost:5432/joplin"
+      DATABASE_URL: "postgres://joplin@joplindb:5432/joplin"
     depends_on:
      - "joplindb"
   joplinassets:

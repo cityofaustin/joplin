@@ -23,6 +23,8 @@ WORKDIR /app/joplin
 RUN yarn; yarn build
 WORKDIR /app
 
+
+COPY "$PWD/echosomething.sh" /app/echosomething.sh
 COPY "$PWD/migrate-load-data.sh" /app/migrate-load-data.sh
 COPY "$PWD/docker-entrypoint-prod.sh" /app/docker-entrypoint-prod.sh
 ENTRYPOINT ["./docker-entrypoint-prod.sh"]

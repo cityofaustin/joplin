@@ -4,4 +4,4 @@ build:
 release:
   image: web
   command:
-    - /app/migrate-load-data.sh
+    - /app/echosomething.sh
