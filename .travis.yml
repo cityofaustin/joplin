@@ -15,6 +15,7 @@ jobs:
   - stage: Testing Phase
     script:
     - echo "Heroku Login:$HEROKU_LOGIN"
+    - echo "Deployment Details ( branch=$TRAVIS_BRANCH, PR=$TRAVIS_PULL_REQUEST )"
   - stage: Building Image & Deployment to Registry
     script:
     - docker login --username=$HEROKU_LOGIN --password=$HEROKU_API_KEY registry.heroku.com
