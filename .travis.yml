@@ -1,5 +1,4 @@
-language: generic
-dist: xenial
+dist: trusty
 services:
 - docker
 sudo: required
@@ -12,7 +11,7 @@ jobs:
   - stage: Installing Heroku CLI
     script:
     - curl https://cli-assets.heroku.com/install-ubuntu.sh | sh
-  - stage: Testing Phase
+  - stage: Testing Stage
     script:
     - echo "Heroku Login:$HEROKU_LOGIN"
     - echo "Deployment Details ( TRAVIS_BRANCH=$TRAVIS_BRANCH, PR=$PR, BRANCH=$BRANCH, MESSAGE=$TRAVIS_COMMIT_MESSAGE )"
@@ -22,9 +21,9 @@ jobs:
     - docker build -t joplin-base .
     - docker tag joplin-base registry.heroku.com/joplin-personal/web
     - docker push registry.heroku.com/joplin-personal/web
-  - stage: Releasing Image
-    script:
-    - heroku container:release web
-  - stage: Data Migration
-    script:
-    - heroku run -a joplin-personal -- /app/migrate-load-data.sh
+#  - stage: Releasing Image
+#    script:
+#    - heroku container:release web
+#  - stage: Data Migration
+#    script:
+#    - heroku run -a joplin-personal -- /app/migrate-load-data.sh
