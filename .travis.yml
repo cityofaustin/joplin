@@ -13,6 +13,7 @@ jobs:
     - echo "We're good as gold"
   - stage: Building Image & Deployment to Registry
     script:
+    - echo "Heroku Login: $HEROKU_LOGIN"
     - docker login --username=$HEROKU_LOGIN --password=$HEROKU_API_KEY registry.heroku.com
     - docker build --rm=false -t registry.heroku.com/joplin-personal/web .
     - docker push registry.heroku.com/joplin-personal/web:latest
