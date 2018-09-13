@@ -1,9 +1,7 @@
 build:
   docker:
     web: Dockerfile
-
-run:
-  worker:
-    command:
-      - /app/migrate-load-data.sh
-    image: web
+release:
+  image: web
+  command:
+    - /app/migrate-load-data.sh
