@@ -2,6 +2,13 @@
 # Travis CI Deployment Pipeline Configuration
 #
 
+language: sh
+services:
+  - docker
+
+sudo: required
+
+
 deploy:
   provider: heroku
   api_key:
