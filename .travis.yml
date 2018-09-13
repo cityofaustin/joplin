@@ -1,5 +1,5 @@
 #
-# Using Generic, Travis CI defaults to Ruby and Python can slow down process.
+# Using Generic, Travis CI defaults to Ruby and Python can slow down the process.
 #
 
 language: generic
@@ -29,7 +29,7 @@ jobs:
   - stage: Build and release stage
     script:
     - source ./.travis/heroku-helper.sh
-    - docker login --username=$HEROKU_LOGIN --password=$HEROKU_API_KEY registry.heroku.com
+    - docker login --username=_ --password=$HEROKU_API_KEY registry.heroku.com
     - docker build -t $JOPLIN_IMAGE_NAME .
     - docker tag $JOPLIN_IMAGE_NAME registry.heroku.com/$JOPLIN_TARGET/web
     - docker push registry.heroku.com/$JOPLIN_TARGET/web
