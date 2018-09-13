@@ -1,34 +1,41 @@
 #
+# Using Generic, Travis CI defaults to Ruby and Python can slow down process.
 #
-# Using Python to avoid confusion since Travis CI assumes ruby on startup. Trusty is lightweight,
-#
-language: python
+language: generic
 dist: trusty
 services:
 - docker
 sudo: required
 env:
   global:
+  - $JOPLIN_TARGET: joplin-personal
+  - $JOPLIN_IMAGE_NAME: joplin-base
   - secure: Of6GPjrSBoMheoYiOX4dpRPrQPlEbQTIg1pMIJYUWi/kQIEFEInXssAtVKnFDGD4wWovLhbroCr1GQmGTOXcdd1mBxoKrnyx2aOAhX5I/MJMk68cElm+4N7b7CtXv9ejOOC0WoPObxmRZM4pNSNL12he3T+c7BCktqrLFhdzfKsmQIPd8JC4BdizJw2VCvs10MnjL5xWfCNj6a5KR1gzjA4sK5HKHHEHii3TRegLSk3bpQ5PAcUiMXtQEXgmr3lp+wQtM+JsdddBZo81OG09E2HnDBBdYEXIJ7Rt4pBN2bcoHqLGCC6SECcmvvHFCrmHIPNyp4isiwxPaclclHASLRCm9OpzysV6COXXXw2FI3yTPXEQ/7a5zcHUadCdjHwkzUCcbRW7/qREkIVbFeraJF+uzyb3i96g3UgmrimXzLCX0b8uouiY3YYZrijp2ho6id9hmpJ2dfYpS5Zhkh5tnLnCLyvHXiIMejECwDapUpNbPg2Bo04HMOqMmKtX/5G8oj8YrDOperE/KslwjURRuAcppuV10UY1FAHW0dJu823IY9eucQtBqu+DTToAw7eBVDZnZiRPr3yE1Zoc+v8Uuk10lOd5Lj+NW9QCdCzEzl4ZN/g4q9AYjmDhwccgVW2URyas64bzmwmsTpcQGP90hC+HASaaJH0lCqX/lBBbi4M=
   - secure: HxZgzJWGv9rPlxmHwJJ1wo+OvMD8fcDm7x5LpytwyjhagxMKSiYFEb0brMN7DHtTrogqITfD7HNe8W2dGiAdlg0PxkFHXl5gpe4iCaZ5bLtjFrojBu9Jne9bAHqf4eqZI9mILX0F/M/JLX+Jyt0tSxIGG+L4jZSWJ63+aHeddyrHjHPDPQu4mps7Xw4yjBPp83TERBRfWUVONT1fpy5Eo7g2nv0ESp0WtqOCLWKoOKDYi5tEv3jBchcsVG6/v43PY4JtgLepJKRa67eaWueWXujpC2p+SsANExoLdygaBzXO4ccdluQoI6uvernb/4FKLAAP6Sa8u0JSI4Tz6lylALBr2a0jbfWru01CAmSmW/YWjvmetkU+/JewjhaWyaVTLH4umeS+C4KKqwG4zWcMq740jxXHClyMOkrz9LN0RpFOAdF2g2Xu5SH2w468on4sKGlrlL9nxXO9qxLg/lxA5uc5TAHpTxVV2QXRGccegB4s62Ol7p4JEYCiaGiviYd3SkMFLHfteQIXS1Bt2ZchqkZM0AR/ED+A/WFOqNgwjIn8AVE6dnaGCa72C2h96SuohonE6woYAvOIgRsiGuaKQU+PVQgZAmKkWLYT7o2cElw7CJ3+4dNCZTHBzuOqktyNBQ1eVcsmhL4wffTTNFXNVESaCmop4i9y+y5cpkYc1UY=
+#
+# Deployment Process
+#
 jobs:
   include:
-  - stage: Installing Heroku CLI
+  - stage: Dependencies stage
     script:
     - curl https://cli-assets.heroku.com/install-ubuntu.sh | sh
-  - stage: Testing Stage
+  - stage: Testing stage
     script:
     - echo "Heroku Login:$HEROKU_LOGIN"
     - echo "Deployment Details ( TRAVIS_BRANCH=$TRAVIS_BRANCH, PR=$TRAVIS_PULL_REQUEST, BRANCH=$TRAVIS_PULL_REQUEST_BRANCH, MESSAGE=$TRAVIS_COMMIT_MESSAGE )"
-  - stage: Building Image & Deployment to Registry
+  - stage: Build stage
     script:
     - docker login --username=$HEROKU_LOGIN --password=$HEROKU_API_KEY registry.heroku.com
-    - docker build -t joplin-base .
-    - docker tag joplin-base registry.heroku.com/joplin-personal/web
-    - docker push registry.heroku.com/joplin-personal/web
-  - stage: Releasing Image
+    - docker build -t $JOPLIN_IMAGE_NAME .
+    - docker tag $JOPLIN_IMAGE_NAME registry.heroku.com/$JOPLIN_TARGET/web
+    - docker push registry.heroku.com/$JOPLIN_TARGET/web
+    - WEB_DOCKER_IMAGE_ID=$(docker inspect $JOPLIN_IMAGE_NAME --format={{.Id}})
+    - echo "Image ID ( $JOPLIN_IMAGE_NAME )"
+    - "curl -n -X PATCH https://api.heroku.com/apps/$JOPLIN_TARGET/formation -d '{ \"updates\": [{\"type\": \"web\", \"docker_image\": \"$WEB_DOCKER_IMAGE_ID\"}, ]}' -H \"Content-Type: application/json\" -H \"Accept: application/vnd.heroku+json; version=3.docker-releases\""
+  - stage: Release stage
     script:
-    - heroku container:release web
-  - stage: Data Migration
+    - echo "Image ID ( $JOPLIN_IMAGE_NAME ) Testing for environment variable"
+  - stage: Data migration stage
     script:
     - heroku run -a joplin-personal -- /app/migrate-load-data.sh
