@@ -11,7 +11,7 @@ jobs:
   include:
   - stage: Installing Heroku CLI
     script:
-    - snap install --classic heroku
+    - sudo snap install --classic heroku
   - stage: Testing Phase
     script:
     - echo "Heroku Login:$HEROKU_LOGIN"
