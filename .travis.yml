@@ -1,3 +1,8 @@
+#
+#
+# Using Python to avoid confusion since Travis CI assumes ruby on startup. Trusty is lightweight,
+#
+language: python
 dist: trusty
 services:
 - docker
@@ -14,16 +19,16 @@ jobs:
   - stage: Testing Stage
     script:
     - echo "Heroku Login:$HEROKU_LOGIN"
-    - echo "Deployment Details ( TRAVIS_BRANCH=$TRAVIS_BRANCH, PR=$PR, BRANCH=$BRANCH, MESSAGE=$TRAVIS_COMMIT_MESSAGE )"
+    - echo "Deployment Details ( TRAVIS_BRANCH=$TRAVIS_BRANCH, PR=$TRAVIS_PULL_REQUEST, BRANCH=$TRAVIS_PULL_REQUEST_BRANCH, MESSAGE=$TRAVIS_COMMIT_MESSAGE )"
   - stage: Building Image & Deployment to Registry
     script:
     - docker login --username=$HEROKU_LOGIN --password=$HEROKU_API_KEY registry.heroku.com
     - docker build -t joplin-base .
     - docker tag joplin-base registry.heroku.com/joplin-personal/web
     - docker push registry.heroku.com/joplin-personal/web
-#  - stage: Releasing Image
-#    script:
-#    - heroku container:release web
-#  - stage: Data Migration
-#    script:
-#    - heroku run -a joplin-personal -- /app/migrate-load-data.sh
+  - stage: Releasing Image
+    script:
+    - heroku container:release web
+  - stage: Data Migration
+    script:
+    - heroku run -a joplin-personal -- /app/migrate-load-data.sh
