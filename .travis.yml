@@ -20,9 +20,7 @@ jobs:
   include:
   - stage: Dependencies stage
     script:
-    - sudo apt-get update
-    - sudo apt-get install snapd
-    - sudo snap install --classic heroku
+    - sudo sh -c "curl https://cli-assets.heroku.com/install-ubuntu.sh | sh"
   - stage: Testing stage
     script:
     - echo "Heroku Login:$HEROKU_LOGIN"
@@ -34,14 +32,13 @@ jobs:
     - docker build -t $JOPLIN_IMAGE_NAME .
     - docker tag $JOPLIN_IMAGE_NAME registry.heroku.com/$JOPLIN_TARGET/web
     - docker push registry.heroku.com/$JOPLIN_TARGET/web
-#    - WEB_DOCKER_IMAGE_ID=$(docker inspect $JOPLIN_IMAGE_NAME --format={{.Id}})
-#    - echo "Image ID ( $WEB_DOCKER_IMAGE_ID )"
-#    - "curl -n -X PATCH https://api.heroku.com/apps/$JOPLIN_TARGET/formation -d '{ \"updates\": [{\"type\": \"web\", \"docker_image\": \"$WEB_DOCKER_IMAGE_ID\"}, ]}' -H \"Content-Type: application/json\" -H \"Accept: application/vnd.heroku+json; version=3.docker-releases\""
+    - WEB_DOCKER_IMAGE_ID=$(docker inspect $JOPLIN_IMAGE_NAME --format={{.Id}})
+    - echo "Image ID ( $WEB_DOCKER_IMAGE_ID )"
+    - "curl -n -X PATCH https://api.heroku.com/apps/$JOPLIN_TARGET/formation -d '{ \"updates\": [{\"type\": \"web\", \"docker_image\": \"$WEB_DOCKER_IMAGE_ID\"}, ]}' -H \"Content-Type: application/json\" -H \"Accept: application/vnd.heroku+json; version=3.docker-releases\""
   - stage: Release stage
     script:
-#    - echo "Image ID ( $WEB_DOCKER_IMAGE_ID ) Testing for environment variable"
     - heroku container:login
-    - heroku container:release web
+    - heroku container:release web --app $JOPLIN_TARGET
   - stage: Data migration stage
     script:
     - heroku run -a joplin-personal -- /app/migrate-load-data.sh
