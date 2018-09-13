@@ -2,7 +2,7 @@
 # Using Generic, Travis CI defaults to Ruby and Python can slow down process.
 #
 language: generic
-dist: bionic
+dist: xenial
 services:
 - docker
 sudo: required
@@ -20,7 +20,7 @@ jobs:
   include:
   - stage: Dependencies stage
     script:
-    - curl https://cli-assets.heroku.com/install-ubuntu.sh | sh
+    - curl https://cli-assets.heroku.com/install.sh | sh
   - stage: Testing stage
     script:
     - echo "Heroku Login:$HEROKU_LOGIN"
