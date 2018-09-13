@@ -20,8 +20,7 @@ jobs:
   include:
   - stage: Dependencies stage
     script:
-    - sudo apt-get install base64
-    - sudo sh -c "curl https://cli-assets.heroku.com/install-ubuntu.sh | sh"
+    - curl https://cli-assets.heroku.com/install-ubuntu.sh | sh
   - stage: Testing stage
     script:
     - echo "Heroku Login:$HEROKU_LOGIN"
@@ -35,7 +34,7 @@ jobs:
     - docker tag $JOPLIN_IMAGE_NAME registry.heroku.com/$JOPLIN_TARGET/web
     - docker push registry.heroku.com/$JOPLIN_TARGET/web
     - WEB_DOCKER_IMAGE_ID=$(docker inspect $JOPLIN_IMAGE_NAME --format={{.Id}})
-    - heroku_release_token $JOPLIN_TARGET $WEB_DOCKER_IMAGE_ID
+    - heroku_release $JOPLIN_TARGET $WEB_DOCKER_IMAGE_ID
   - stage: Post-release stage
     script:
     - heroku run -a $JOPLIN_TARGET -- /app/migrate-load-data.sh
