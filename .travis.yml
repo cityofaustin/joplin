@@ -35,7 +35,7 @@ jobs:
     - docker push registry.heroku.com/$JOPLIN_TARGET/web
     - WEB_DOCKER_IMAGE_ID=$(docker images -q $JOPLIN_IMAGE_NAME)
     - echo $WEB_DOCKER_IMAGE_ID
-    - heroku_release $JOPLIN_TARGET $JOPLIN_IMAGE_NAME
+    - heroku_release $JOPLIN_TARGET $WEB_DOCKER_IMAGE_ID
   - stage: Post-release stage
     script:
     - heroku run -a $JOPLIN_TARGET -- /app/migrate-load-data.sh
