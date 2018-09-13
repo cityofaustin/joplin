@@ -21,7 +21,7 @@ jobs:
   - stage: Dependencies stage
     script:
     - sudo apt-get update
-    - sudo apt-get install snap
+    - sudo apt-get install snapd
     - sudo snap install --classic heroku
   - stage: Testing stage
     script:
