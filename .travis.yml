@@ -1,4 +1,4 @@
-language: python
+language: generic
 dist: xenial
 services:
 - docker
@@ -11,7 +11,7 @@ jobs:
   include:
   - stage: Installing Heroku CLI
     script:
-    - sudo snap install --classic heroku
+    - curl https://cli-assets.heroku.com/install-ubuntu.sh | sh
   - stage: Testing Phase
     script:
     - echo "Heroku Login:$HEROKU_LOGIN"
