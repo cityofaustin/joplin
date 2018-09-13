@@ -20,8 +20,8 @@ jobs:
   include:
   - stage: Dependencies stage
     script:
-    - apt-get update
-    - apt-get install snap
+    - sudo apt-get update
+    - sudo apt-get install snap
     - sudo snap install --classic heroku
   - stage: Testing stage
     script:
@@ -40,6 +40,7 @@ jobs:
   - stage: Release stage
     script:
 #    - echo "Image ID ( $WEB_DOCKER_IMAGE_ID ) Testing for environment variable"
+    - heroku container:login
     - heroku container:release web
   - stage: Data migration stage
     script:
