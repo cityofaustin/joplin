@@ -10,8 +10,8 @@ env:
 jobs:
   include:
   - stage: Installing Heroku CLI
-      script:
-      - wget -qO- https://toolbelt.heroku.com/install-ubuntu.sh | sh
+    script:
+    - wget -qO- https://toolbelt.heroku.com/install-ubuntu.sh | sh
   - stage: Testing Phase
     script:
     - echo "Heroku Login:$HEROKU_LOGIN"
