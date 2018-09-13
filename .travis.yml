@@ -2,15 +2,6 @@
 # Travis CI Deployment Pipeline Configuration
 #
 
-
-
-
-
-#
-# Deployment Stage
-# - It needs to deploy to heroku
-#
-
 deploy:
   provider: heroku
   api_key:
