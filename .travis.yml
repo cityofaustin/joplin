@@ -15,6 +15,7 @@ deploy:
     secure: QJeEG45/JCwm2PIr5QkOTz2uMtN5fijBtQVdUpDhBKjrYO3P8izasP9S0GebXclX/JYT450S5eAsWifo8Ju7W5U33mteBQ879TqrryPx8thDnSB/ZH0oyA+1fzdANwjOfXU5YBr4yoNELhDFS7THX9PLC9khYo6OT+bk2BuO1CmSUcC2Nz9qoJnsdlCYkoqIkDqRjTDT1l9Hftr0qshzvwogS7vtEFuXGr2dBfNVjW9cVVglU/PMItvih3SPCvfA2d3HvgYgml5h49ZWpWBjQnyrxaBROGk6tNoSBxYfYQOR2lT6ciuOzk9X0nyl6eU9NRPH63sZMGd3I/aodmwpq69y+ay6kivC5J8xbLGV0mKMLGCw21MCN4q9ISuyPiS3gvPEUfr+TxtDyZBXzR4O/ECt54jV3RZWZkSBDpg300hPLD4+EtrczCwkWZbDry84rAL85Z1eKtRFpkgbb0n1kFsmVMYwt9L9TH6JyCRlEcqc9cI9SIBcN4Z3gO/MAN0xC42+DzSadZf44L2bDVrdCeu3zyLFk2yz0NVBm1+beWEyQVrLCuucc53ec5UBCialprtYarM3QNhRJ0S2Ob3xVrThLJ+2sArQ0A14+o6ficOg1fqAg0MNYJ8vSqqJ6fK/72XTnQrVq8KEolvMxqzzEia++R3DUo7WHkvC1etRhZY=
   app: joplin-personal
   on: sergiotest
+  strategy: git
   run:
     - "python /app/joplin/manage.py migrate --noinput"
     - "python /app/joplin/manage.py collectstatic --noinput"
