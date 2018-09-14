@@ -3,7 +3,7 @@ FROM heroku/heroku:18
 
 RUN apt-get update; apt-get -y install gnupg; apt-get -y install curl
 RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
-RUN apt-get update; apt-get -y install nodejs
+RUN apt-get update; apt-get -y install nodejs python3-pip
 RUN npm install --global yarn
 
 COPY /deploy/requirements.txt /deploy/requirements.txt
