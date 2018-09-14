@@ -1,4 +1,5 @@
 language: python
+cache: pip
 python:
 - '3.6'
 dist: trusty
@@ -18,7 +19,7 @@ jobs:
   include:
   - stage: Dependencies stage
     script:
-    - sudo apt-get install awscli
+    - pip install awscli
     - curl https://cli-assets.heroku.com/install-ubuntu.sh | sh
   - stage: Testing stage
     script:
