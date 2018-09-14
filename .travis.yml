@@ -30,6 +30,7 @@ jobs:
       TRAVIS_COMMIT=$TRAVIS_COMMIT, TRAVIS_COMMIT_RANGE=$TRAVIS_COMMIT_RANGE, TRAVIS_EVENT_TYPE=$TRAVIS_EVENT_TYPE,
       TRAVIS_JOB_ID=$TRAVIS_JOB_ID, TRAVIS_JOB_NUMBER=$TRAVIS_JOB_NUMBER, TRAVIS_TAG=$TRAVIS_TAG )"
   - stage: Database backup stage
+    script:
     - aws s3api list-buckets --query "Buckets[].Name"
     - aws s3 ls s3://$AWS_BUCKET_BACKUPS/backups/database/
   - stage: Build and release stage
