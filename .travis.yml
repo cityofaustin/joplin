@@ -18,7 +18,7 @@ jobs:
   include:
   - stage: Dependencies stage
     script:
-    - pip install awscli --upgrade --user
+    - pip install awscli
     - curl https://cli-assets.heroku.com/install-ubuntu.sh | sh
   - stage: Testing stage
     script:
