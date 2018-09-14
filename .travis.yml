@@ -7,6 +7,7 @@ services:
 sudo: required
 env:
   global:
+  - PATH=$HOME/.local/bin:$PATH
   - AWS_DEFAULT_REGION: us-east-1
   - AWS_BUCKET_BACKUPS: joplin-austin-gov-archive
   - JOPLIN_TARGET: joplin-personal
@@ -14,12 +15,13 @@ env:
   - secure: ff2pKZbz5sgBZj+LBezVatSNgLuhafO18kGqZpVelb6wPXF0E1KZpbC0/i1IpZql2rtJY3Y+Y/7mla5B2q+lj8biFrg7NmkfVVtmDIPFpxw88RRpqRZ+ig9btE6qIpYGlV3PNAHETdGN7NrTK9qG2bQZAuWDZwBdfrl+WMKTbZplJL8ZJcIMtehDcAwtNuWJI9hh7RA+W5mwmd8pO2CwhoF2dvOG5REadNhAG87E4XE7kO4jhqacY2nbAr5ElbYXvdkwChkmsFuZkMtobAE62/JzMYY2bMQV8sie6WsivMkWVeATo/9pozJnrjp4Ohfk+MOmLAxUk8tymaN3QkrAM6VVvLDaA4wz9sAeh9sZLJYiX1jOHcGsJUbsC++YER/Dpm4GoZiP6zWFhcx7Mu7xazCuDrpMRs+ApTv+7gZT3MbjyVFkzWnoz2KBirQ+KgNHokC9fuZJeYu8TjuM8Sv8u/36qxhkj2IoA2PAhcFgfZfrgFTObV3Rk/IQWJRZ4NOnqrWajN2aaztcNeqpbk23dEH2PVwsLTHDOtPKMMCp/Uu58fdNfD5DSORU/AQdQ4SdVeTPoOGImhvlwMDc6Wwcm4ecNIYohJQW7hMGp07bksVyaBkUBnMRlvqlL7Qlh2Bkx65lTi3U78zogNIGGgcPBxGVFvWjEfVYTDFW2dI3T7E=
   - secure: rNKb41YYEbof1a6RoyCCe6Jr9t4qlR3qC6/Eb9BgTqPDniQoWIthPJcfQuvGZN3O0kWsBWWdiLnm2T/iljGUcJYzZYc0d5HGIyMiRpiVxWYVaaUZLTuZGwS6nFtqasvVmqwtsoKFB3TL+4jkHQ3sUmGNLDgLJxiaGODWLG7SFu6RzeKyOIWamGDdgePYw5d3xtnY+WmX5z38w7B0pjhFUTwrgc+M8ZlMUyGNeuPyLdBfehWkLPkV1Tygs/Vfh55pBjaEVNUPECt3y9kFXzpAuLw4lZJKPkPTKy3MiNUUguAS7OdbEwf/4XA71mZZr+0joF/YXh2E8Rnkt3bbmtZJrkuVnrK5wZbjMwNbMDVgBNlYXHPFbvBVr8p9cdt59xXUmBVjS/gbbIk4PTTp2pXUKgpFST/iyNFEshBOVK5nQbcJ6i1W5GFe44olXxwAhFiUoup13str1KQFYAr47Kf2Xh8OFpEoOlHV1mWbcXdJskJ9PCdgAD5zJvWNbv/BcR9j23blXJeSuZF9pv0xMBCvqtMxW8L1UWjfRowW7JttKrK/4iMRtUwXxM4Voi9Wg6M2jTvuuBFPJxRwCdbpSgxCXgtDJiBzPQcLobt1WSEemomRlgriMdWQ1jqZhqr3ei+jnJUNlCQ5nenAanrhYIcyTdTb33+OPwHKILQcuw99OZY=
   - secure: YKP4nqWOUbCSKfrs8DYLzB1wMyWsrbZu4BGAGQdchT/BEeUZ1GlhS5fv1dK0dqd9NhRBEgauXEmeEODNxtKwaH971qjMNycRDgvCsEuu+QW0LVRJwvWY9WkQuGnKxZvfSq8QdliIhyPglwBifrXPx3Pa+QBrjXxOukVoponF1tPErdHkX3PDQUAuj/ZJIBAO1FSuhWJtg+8zhKj9MxsH4DH0rXRMRjbdsUMwNJRN6UQX/CF+Fg3VpevzBzjAx9VGjoutbUs64WY3JOOg13siWLktTlgponaj+2VjpWLKjI3AC61e5hd/z9p0fhJtusKezKe0WAOF/3wkuYMT2KEZI/bAdCQqpQ5W4vnkKJ+L/r5bDjZ7qHWnhIIhiq3KnWcnRTatLAKRMzOhXbADyb7zrDF0ed80EawiBJp/RYzk2IHBST7GzM9+0wBorOc0mABN3vNgdx/yEpjYm4UGiVHKSEg+SZHau2HmUYuce+9BSuSRfiXgbKJqXZ7PfugnVKhNghf021cSxgYDk+/PQp6w5hr9Niuf8W1CfGUceYrYpSdugRSZvN+17lq7/PKYJmbPlfNImNgIZbROvhposyI3ccjPDmxFQjmQFG+2Awo6tyITDTMNMv+Qe1Z86eg7gfyibKJ1QCZw0kmxjoJfU8y0HpF6RHku7jRR2GKeFeH31Lk=
+before_install:
+  # set up awscli packages as described in their documentation
+  # https://docs.travis-ci.com/user/build-stages/share-files-s3/
+  - pip install --user awscli
+  - curl https://cli-assets.heroku.com/install-ubuntu.sh | sh
 jobs:
   include:
-  - stage: Dependencies stage
-    script:
-    - sudo pip install awscli
-    - curl https://cli-assets.heroku.com/install-ubuntu.sh | sh
   - stage: Testing stage
     script:
     - echo "Deployment Details ( TRAVIS_BRANCH=$TRAVIS_BRANCH, PR=$TRAVIS_PULL_REQUEST,
@@ -29,9 +31,11 @@ jobs:
       TRAVIS_BUILD_ID=$TRAVIS_BUILD_ID, TRAVIS_BUILD_NUMBER=$TRAVIS_BUILD_NUMBER,
       TRAVIS_COMMIT=$TRAVIS_COMMIT, TRAVIS_COMMIT_RANGE=$TRAVIS_COMMIT_RANGE, TRAVIS_EVENT_TYPE=$TRAVIS_EVENT_TYPE,
       TRAVIS_JOB_ID=$TRAVIS_JOB_ID, TRAVIS_JOB_NUMBER=$TRAVIS_JOB_NUMBER, TRAVIS_TAG=$TRAVIS_TAG )"
+    - echo "Testing AWS Command"
+    - aws s3api list-buckets --query "Buckets[].Name"
+    - aws s3 ls s3://$AWS_BUCKET_BACKUPS/backups/database/
   - stage: Database backup stage
     script:
-    - aws s3api list-buckets --query "Buckets[].Name"
     - aws s3 ls s3://$AWS_BUCKET_BACKUPS/backups/database/
   - stage: Build and release stage
     script:
@@ -40,6 +44,7 @@ jobs:
     - docker build -t $JOPLIN_IMAGE_NAME .
     - docker tag $JOPLIN_IMAGE_NAME registry.heroku.com/$JOPLIN_TARGET/web
     - docker push registry.heroku.com/$JOPLIN_TARGET/web
+    after_success:
     - heroku_release_beta $JOPLIN_TARGET
   - stage: Post-release stage
     script:
