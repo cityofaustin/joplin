@@ -31,11 +31,9 @@ jobs:
       TRAVIS_JOB_ID=$TRAVIS_JOB_ID, TRAVIS_JOB_NUMBER=$TRAVIS_JOB_NUMBER, TRAVIS_TAG=$TRAVIS_TAG )"
     - aws --version
     - aws s3api list-buckets --query "Buckets[].Name"
-    - aws s3 ls s3://$AWS_BUCKET_BACKUPS/backups/database/
   - stage: Database backup stage
     script:
     - aws s3api list-buckets --query "Buckets[].Name"
-    - aws s3 ls s3://$AWS_BUCKET_BACKUPS/backups/database/
   - stage: Build and release stage
     script:
     - source ./.travis/heroku-helper.sh
