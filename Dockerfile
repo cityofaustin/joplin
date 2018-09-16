@@ -1,13 +1,17 @@
-# Ubuntu 18 has python 3 by default
+### FROM python:3.6.5-slim-stretch
 FROM heroku/heroku:18
 
-RUN apt-get update; apt-get -y install gnupg; apt-get -y install curl
+ENV PYTHONIOENCODING "utf-8"
+
+RUN apt-get update; apt-get -y install gnupg curl python3.6 python3-pip && \
+    rm /usr/bin/python && ln -s python3 /usr/bin/python && ln -s pip /usr/bin/pip
+
 RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
-RUN apt-get update; apt-get -y install nodejs python3-pip
+RUN apt-get update; apt-get -y install nodejs
 RUN npm install --global yarn
 
 COPY /deploy/requirements.txt /deploy/requirements.txt
-RUN pip install --no-cache-dir --disable-pip-version-check --requirement /deploy/requirements.txt
+RUN pip3 install --no-cache-dir --disable-pip-version-check --requirement /deploy/requirements.txt
 
 ENV PYTHONUNBUFFERED=1
 ENV WEB_CONCURRENCY=4

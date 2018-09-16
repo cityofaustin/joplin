@@ -2,7 +2,7 @@
 set -o errexit
 
 #
-# Docker Container Entry Point
+# Docker Container Entry Point (Local)
 # This script sets the command and parameters that will be executed first when a container is started.
 #
 
@@ -21,6 +21,7 @@ else
     echo "Running on production, start migration immediately."
 fi
 
-# Any additional instructions can go here
-./migrate-load-data.sh
+# Run Data Migrations Only (Static files can remain local)
+python ./joplin/manage.py migrate --noinput
+
 exec "$@"
