@@ -3,27 +3,40 @@
 #
 # heroku_release - Calls the release function for a specific image to a specific application
 #
-# $1: The name of the application
-# $2: The docker image id
+# $1 (string) The name of the application (ie. "joplin-staging", "joplin-personal")
+# Example: $ heroku_release joplin-personal
 #
 
 function heroku_release() {
-  curl -n -X PATCH https://api.heroku.com/apps/$1/formation \
-  -d '{ "updates": [{ "type": "web", "docker_image": "$2"}]}' \
-  -H "Content-Type: application/json" \
-  -H "Accept: application/vnd.heroku+json; version=3.docker-releases" \
-  -H "Authorization: Bearer ${HEROKU_API_KEY}"
-}
 
-
-function heroku_release_beta() {
-
-    imageId=$(docker inspect registry.heroku.com/$1/web --format={{.Id}})
-    payload='{"updates":[{"type":"web","docker_image":"'"$imageId"'"}]}'
+    DOCKER_IMAGE_ID=$(docker inspect registry.heroku.com/$1/web --format={{.Id}})
+    JSON_PAYLOAD='{"updates":[{"type":"web","docker_image":"'"${DOCKER_IMAGE_ID}"'"}]}'
 
     curl -n -X PATCH https://api.heroku.com/apps/$1/formation \
-    -d "$payload" \
+    -d "${JSON_PAYLOAD}" \
     -H "Content-Type: application/json" \
     -H "Accept: application/vnd.heroku+json; version=3.docker-releases" \
     -H "Authorization: Bearer ${HEROKU_API_KEY}"
+}
+
+
+#
+# backup_psql - Creates a datanase backup of a running heroku app (as long as it as a PostgreSQL db attached to it)
+#
+# $1 (string) The name of the application (ie. "joplin-staging", "joplin-personal")
+# Example: $ backup_sql joplin-personal
+#
+
+function backup_psql() {
+
+    CONNECTION_STRING=$(heroku config:get DATABASE_URL -a $1)
+    DB_NAME=$(echo -n $CONNECTION_STRING | cut -d "/" -f 4)
+    DB_TIMESTAMP=$(date '+%Y-%m-%d--%H-%M-%S')
+
+    echo "----- Performing Database Backup"
+    echo "-- Date Timestamp: ${DB_TIMESTAMP}"
+    echo "-- DB Nmae: ${DB_NAME}"
+
+    # postgres pg_dump -Z 9 -v DB_NAME | aws s3 cp - s3://$AWS_BUCKET_BACKUPS/$TRAVIS_BRANCH/joplin.psqldb.gz
+    # wget -O - 'https://S3-URL/BUCKET/DB_NAME.psql.gz' | zcat | sudo -u postgres psql DB_NAME
 }

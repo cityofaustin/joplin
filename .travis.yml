@@ -16,6 +16,8 @@ env:
   - secure: rNKb41YYEbof1a6RoyCCe6Jr9t4qlR3qC6/Eb9BgTqPDniQoWIthPJcfQuvGZN3O0kWsBWWdiLnm2T/iljGUcJYzZYc0d5HGIyMiRpiVxWYVaaUZLTuZGwS6nFtqasvVmqwtsoKFB3TL+4jkHQ3sUmGNLDgLJxiaGODWLG7SFu6RzeKyOIWamGDdgePYw5d3xtnY+WmX5z38w7B0pjhFUTwrgc+M8ZlMUyGNeuPyLdBfehWkLPkV1Tygs/Vfh55pBjaEVNUPECt3y9kFXzpAuLw4lZJKPkPTKy3MiNUUguAS7OdbEwf/4XA71mZZr+0joF/YXh2E8Rnkt3bbmtZJrkuVnrK5wZbjMwNbMDVgBNlYXHPFbvBVr8p9cdt59xXUmBVjS/gbbIk4PTTp2pXUKgpFST/iyNFEshBOVK5nQbcJ6i1W5GFe44olXxwAhFiUoup13str1KQFYAr47Kf2Xh8OFpEoOlHV1mWbcXdJskJ9PCdgAD5zJvWNbv/BcR9j23blXJeSuZF9pv0xMBCvqtMxW8L1UWjfRowW7JttKrK/4iMRtUwXxM4Voi9Wg6M2jTvuuBFPJxRwCdbpSgxCXgtDJiBzPQcLobt1WSEemomRlgriMdWQ1jqZhqr3ei+jnJUNlCQ5nenAanrhYIcyTdTb33+OPwHKILQcuw99OZY=
   - secure: YKP4nqWOUbCSKfrs8DYLzB1wMyWsrbZu4BGAGQdchT/BEeUZ1GlhS5fv1dK0dqd9NhRBEgauXEmeEODNxtKwaH971qjMNycRDgvCsEuu+QW0LVRJwvWY9WkQuGnKxZvfSq8QdliIhyPglwBifrXPx3Pa+QBrjXxOukVoponF1tPErdHkX3PDQUAuj/ZJIBAO1FSuhWJtg+8zhKj9MxsH4DH0rXRMRjbdsUMwNJRN6UQX/CF+Fg3VpevzBzjAx9VGjoutbUs64WY3JOOg13siWLktTlgponaj+2VjpWLKjI3AC61e5hd/z9p0fhJtusKezKe0WAOF/3wkuYMT2KEZI/bAdCQqpQ5W4vnkKJ+L/r5bDjZ7qHWnhIIhiq3KnWcnRTatLAKRMzOhXbADyb7zrDF0ed80EawiBJp/RYzk2IHBST7GzM9+0wBorOc0mABN3vNgdx/yEpjYm4UGiVHKSEg+SZHau2HmUYuce+9BSuSRfiXgbKJqXZ7PfugnVKhNghf021cSxgYDk+/PQp6w5hr9Niuf8W1CfGUceYrYpSdugRSZvN+17lq7/PKYJmbPlfNImNgIZbROvhposyI3ccjPDmxFQjmQFG+2Awo6tyITDTMNMv+Qe1Z86eg7gfyibKJ1QCZw0kmxjoJfU8y0HpF6RHku7jRR2GKeFeH31Lk=
 before_install:
+    - source ./.travis/heroku-helper.sh
+    - apt-get install postgresql postgresql-contrib
     - sudo pip install awscli
     - curl https://cli-assets.heroku.com/install-ubuntu.sh | sh
 jobs:
@@ -33,10 +35,10 @@ jobs:
     - aws s3api list-buckets --query "Buckets[].Name"
   - stage: Database backup stage
     script:
+    - backup_psql $JOPLIN_TARGET
     - aws s3api list-buckets --query "Buckets[].Name"
   - stage: Build and release stage
     script:
-    - source ./.travis/heroku-helper.sh
     - docker login --username=_ --password=$HEROKU_API_KEY registry.heroku.com
     - docker build -t $JOPLIN_IMAGE_NAME .
     - docker tag $JOPLIN_IMAGE_NAME registry.heroku.com/$JOPLIN_TARGET/web
