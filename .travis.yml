@@ -33,7 +33,7 @@ before_script:
     - sudo sed -i 's/port = 5433/port = 5432/' /etc/postgresql/10/main/postgresql.conf
     # Use 9.6 auth config:
     - sudo cp /etc/postgresql/{9.6,10}/main/pg_hba.conf
-    - sudo service postgresql restar
+    - sudo service postgresql restart
 jobs:
   include:
   - stage: Testing stage
