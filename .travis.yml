@@ -17,7 +17,7 @@ env:
   - secure: YKP4nqWOUbCSKfrs8DYLzB1wMyWsrbZu4BGAGQdchT/BEeUZ1GlhS5fv1dK0dqd9NhRBEgauXEmeEODNxtKwaH971qjMNycRDgvCsEuu+QW0LVRJwvWY9WkQuGnKxZvfSq8QdliIhyPglwBifrXPx3Pa+QBrjXxOukVoponF1tPErdHkX3PDQUAuj/ZJIBAO1FSuhWJtg+8zhKj9MxsH4DH0rXRMRjbdsUMwNJRN6UQX/CF+Fg3VpevzBzjAx9VGjoutbUs64WY3JOOg13siWLktTlgponaj+2VjpWLKjI3AC61e5hd/z9p0fhJtusKezKe0WAOF/3wkuYMT2KEZI/bAdCQqpQ5W4vnkKJ+L/r5bDjZ7qHWnhIIhiq3KnWcnRTatLAKRMzOhXbADyb7zrDF0ed80EawiBJp/RYzk2IHBST7GzM9+0wBorOc0mABN3vNgdx/yEpjYm4UGiVHKSEg+SZHau2HmUYuce+9BSuSRfiXgbKJqXZ7PfugnVKhNghf021cSxgYDk+/PQp6w5hr9Niuf8W1CfGUceYrYpSdugRSZvN+17lq7/PKYJmbPlfNImNgIZbROvhposyI3ccjPDmxFQjmQFG+2Awo6tyITDTMNMv+Qe1Z86eg7gfyibKJ1QCZw0kmxjoJfU8y0HpF6RHku7jRR2GKeFeH31Lk=
 before_install:
     - source ./.travis/heroku-helper.sh
-    - sudo apt-get install postgres-xc
+    - sudo apt-get install -f postgres-xc postgres-xc-client
     - sudo pip install awscli
     - curl https://cli-assets.heroku.com/install-ubuntu.sh | sh
 jobs:
