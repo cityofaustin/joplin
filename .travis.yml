@@ -6,7 +6,7 @@ services:
 - docker
 sudo: required
 addons:
-  postgresql: "9.5"
+  postgresql: "10.5"
 env:
   global:
   - PATH=$HOME/.local/bin:$PATH
