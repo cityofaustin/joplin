@@ -28,7 +28,6 @@ function heroku_release() {
 #
 
 function backup_psql() {
-
     CONNECTION_STRING=$(heroku config:get DATABASE_URL -a $1)
     DB_NAME=$(echo -n $CONNECTION_STRING | cut -d "/" -f 4)
     DB_TIMESTAMP=$(date '+%Y-%m-%d--%H-%M-%S')
@@ -36,7 +35,7 @@ function backup_psql() {
     echo "----- Performing Database Backup"
     echo "-- Date Timestamp: ${DB_TIMESTAMP}"
     echo "-- DB Nmae: ${DB_NAME}"
+    echo "-- Performing copy, please wait..."
 
-    postgres pg_dump -Z 9 -v $DB_NAME | aws s3 cp - s3://$AWS_BUCKET_BACKUPS/$TRAVIS_BRANCH/joplin.$DB_TIMESTAMP.psqldb.gz
-    # wget -O - 'https://S3-URL/BUCKET/DB_NAME.psql.gz' | zcat | sudo -u postgres psql DB_NAME
+    pg_dump $DB_NAME | gzip | aws s3 cp - s3://$AWS_BUCKET_BACKUPS/$TRAVIS_BRANCH/$1.$DB_TIMESTAMP.psql.gz
 }
