@@ -37,5 +37,5 @@ function backup_psql() {
     echo "-- DB Name: ${DB_NAME}"
     echo "-- Performing copy, please wait..."
 
-    postgres pg_dump $CONNECTION_STRING | gzip | aws s3 cp - s3://$AWS_BUCKET_BACKUPS/$TRAVIS_BRANCH/$1.$DB_TIMESTAMP.psql.gz
+    pg_dump $CONNECTION_STRING | gzip | aws s3 cp - s3://$AWS_BUCKET_BACKUPS/$TRAVIS_BRANCH/$1.$DB_TIMESTAMP.psql.gz
 }
