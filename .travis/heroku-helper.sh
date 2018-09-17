@@ -37,6 +37,6 @@ function backup_psql() {
     echo "-- Date Timestamp: ${DB_TIMESTAMP}"
     echo "-- DB Nmae: ${DB_NAME}"
 
-    # postgres pg_dump -Z 9 -v DB_NAME | aws s3 cp - s3://$AWS_BUCKET_BACKUPS/$TRAVIS_BRANCH/joplin.psqldb.gz
+    postgres pg_dump -Z 9 -v $DB_NAME | aws s3 cp - s3://$AWS_BUCKET_BACKUPS/$TRAVIS_BRANCH/joplin.$DB_TIMESTAMP.psqldb.gz
     # wget -O - 'https://S3-URL/BUCKET/DB_NAME.psql.gz' | zcat | sudo -u postgres psql DB_NAME
 }
