@@ -21,6 +21,7 @@ before_install:
     - source ./.travis/heroku-helper.sh
     - sudo pip install awscli
     - curl https://cli-assets.heroku.com/install-ubuntu.sh | sh
+    - sudo apt-get purge -y postgresql && sudo apt-get install postgresql-10 postgresql-client-10
 jobs:
   include:
   - stage: Testing stage
