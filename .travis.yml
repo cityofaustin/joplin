@@ -6,7 +6,7 @@ services:
 - docker
 sudo: required
 addons:
-  postgresql: "10.5"
+  postgresql: "9.6"
 env:
   global:
   - PATH=$HOME/.local/bin:$PATH
@@ -21,9 +21,20 @@ before_install:
     - source ./.travis/heroku-helper.sh
     - sudo pip install awscli
     - curl https://cli-assets.heroku.com/install-ubuntu.sh | sh
-    - wget -q https://www.postgresql.org/media/keys/ACCC4CF8.asc -O - | sudo apt-key add -
-    - sudo apt-get update && sudo apt-get install postgresql postgresql-contrib
-    #- sudo apt-get purge -y postgresql && sudo apt-get install postgresql-10 postgresql-client-10
+    # postgres stop old version
+    - sudo /etc/init.d/postgresql stop
+    # it appears postgres 10 uses a different port?
+    - export PGPORT=5433
+    # add postgresql 10 repository
+    - wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+    - sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs 2>/dev/null)-pgdg main" >> /etc/apt/sources.list.d/postgresql.list'
+    # install new version
+    - sudo apt-get update -qq
+    - sudo apt-get install -qq postgresql-10 postgresql-client-10
+    # clone auth config (might need to fix source path for another version)
+    - sudo cp /etc/postgresql/9.6/main/pg_hba.conf /etc/postgresql/10/main/pg_hba.conf
+    # start new version
+    - sudo /etc/init.d/postgresql restart
 jobs:
   include:
   - stage: Testing stage
