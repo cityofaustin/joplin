@@ -26,21 +26,15 @@ const ChooseTitleStep = ({
     </h2>
     <label htmlFor="page-title" className="ChooseTitleStep__input-label">
       <span className="ChooseTitleStep__input-label--left">Page Title</span>
-      {characterCount === 0 ? (
-        <span className="ChooseTitleStep__input-label--right">
-          Character limit: 54
-        </span>
-      ) : (
-        <span
-          className={
-            characterCount > maxCharacterCount
-              ? "ChooseTitleStep__input-label--right ChooseTitleStep__input-label--red"
-              : "ChooseTitleStep__input-label--right"
-          }
-        >
-          Characters remaining: {maxCharacterCount - characterCount}
-        </span>
-      )}
+      <span
+        className={
+          characterCount > maxCharacterCount
+            ? "ChooseTitleStep__input-label--right ChooseTitleStep__input-label--red"
+            : "ChooseTitleStep__input-label--right"
+        }
+      >
+        Characters remaining: {maxCharacterCount - characterCount}
+      </span>
     </label>
     <input
       value={title}
