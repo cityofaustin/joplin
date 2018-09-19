@@ -7,6 +7,7 @@ branches:
   only:
   - master
   - staging
+  - sergiotest
 # We will need these services:
 services:
 - docker
