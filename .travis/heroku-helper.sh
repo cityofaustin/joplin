@@ -33,48 +33,6 @@ function heroku_resolve_appname {
 }
 
 #
-# Calls the release function for a specific image to a specific application
-# $1 (string) The name of the branch (ie. "staging", "production", "pr-160")
-# Example: $ heroku_release staging
-#
-
-function heroku_release {
-
-    # Show message if this is an internal test
-    if [ "$1" = "travis-ci-internal-test" ]; then
-        echo "heroku_release(): Ready to execute.";
-        return 0
-    fi;
-
-    # Output error if no branch is specified.
-    if [ "$1" = "" ]; then
-        echo "heroku_release(): Branch name required (ie: '$ heroku_release staging'). Returning Error."
-        exit 1
-    fi;
-
-    # Retrieve App Name
-    APPNAME=$(heroku_resolve_appname $1);
-
-    # Output results for logging
-    echo "heroku_release() Branch Name: ${TRAVIS_BRANCH}"
-    echo "heroku_release() App name: ${APPNAME}"
-
-    # Determine image id to push
-    DOCKER_IMAGE_ID=$(docker inspect registry.heroku.com/$1/web --format={{.Id}})
-
-    # Gemerate json payload to upload via API
-    JSON_PAYLOAD='{"updates":[{"type":"web","docker_image":"'"${DOCKER_IMAGE_ID}"'"}]}'
-
-    # Make 'Release' API Call
-    curl -n -X PATCH https://api.heroku.com/apps/$1/formation \
-    -d "${JSON_PAYLOAD}" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/vnd.heroku+json; version=3.docker-releases" \
-    -H "Authorization: Bearer ${HEROKU_API_KEY}"
-
-}
-
-#
 # retrieve_latest_django_mid - Searches the jopling migrations directory
 # and gets the file name of the latest migration id.
 #
@@ -110,12 +68,8 @@ function heroku_backup_database {
     # Retrieve App Name
     APPNAME=$(heroku_resolve_appname $1);
 
-    # Output results for logging
-    echo "heroku_backup_database() Branch Name: ${TRAVIS_BRANCH}"
-    echo "heroku_backup_database() App name: ${APPNAME}"
-
     # Gather connection string from heroku api
-    CONNECTION_STRING=$(heroku config:get DATABASE_URL -a $1);
+    CONNECTION_STRING=$(heroku config:get DATABASE_URL -a $APPNAME);
     DB_NAME=$(echo -n $CONNECTION_STRING | cut -d "/" -f 4);
     DB_TIMESTAMP=$(date '+%Y-%m-%d--%H-%M-%S');
     DJANGO_MID=$(retrieve_latest_django_mid);
@@ -125,7 +79,7 @@ function heroku_backup_database {
     echo "heroku_backup_database() -- DB Name: ${DB_NAME}";
     echo "heroku_backup_database() -- Performing copy, please wait...";
 
-    pg_dump $CONNECTION_STRING | gzip | aws s3 cp - s3://$AWS_BUCKET_BACKUPS/backups/database/$TRAVIS_BRANCH/$1.$DB_TIMESTAMP.$TRAVIS_COMMIT.$DJANGO_MID.psql.gz;
+    pg_dump $CONNECTION_STRING | gzip | aws s3 cp - s3://$AWS_BUCKET_BACKUPS/backups/database/$TRAVIS_BRANCH/$APPNAME.$DB_TIMESTAMP.$TRAVIS_COMMIT.$DJANGO_MID.psql.gz;
     echo "heroku_backup_database()----- Finished Performing Database Backup";
 }
 
@@ -148,17 +102,13 @@ function heroku_build {
     if [ "$1" = "" ]; then
         echo "heroku_build(): Branch name required (ie: '$ backup_psql staging'). Returning Error."
         exit 1;
-    fi;
+    fi; unnecessary
 
     # Retrieve App Name
     APPNAME=$(heroku_resolve_appname $1);
 
-    # Output results for logging
-    echo "heroku_build() Branch Name: ${TRAVIS_BRANCH}"
-    echo "heroku_build() App name: ${APPNAME}"
-
     # Gather connection string from heroku api
-    CONNECTION_STRING=$(heroku config:get DATABASE_URL -a $1);
+    CONNECTION_STRING=$(heroku config:get DATABASE_URL -a $APPNAME);
     DB_NAME=$(echo -n $CONNECTION_STRING | cut -d "/" -f 4);
     DB_TIMESTAMP=$(date '+%Y-%m-%d--%H-%M-%S');
 
@@ -168,10 +118,49 @@ function heroku_build {
     echo "heroku_build() -- Building";
     docker build -t $JOPLIN_IMAGE_NAME .
     echo "heroku_build() -- Tagging Image";
-    docker tag $JOPLIN_IMAGE_NAME registry.heroku.com/$JOPLIN_TARGET/web
+    docker tag $JOPLIN_IMAGE_NAME registry.heroku.com/$APPNAME/web
     echo "heroku_build() -- Pushing to Heroku Repository";
-    docker push registry.heroku.com/$JOPLIN_TARGET/web
-    echo "heroku_build()----- Finished Performing Database Backup";
+    docker push registry.heroku.com/$APPNAME/web
+    echo "heroku_build()----- Finished Building Container";
+}
+
+
+#
+# Calls the release function for a specific image to a specific application
+# $1 (string) The name of the branch (ie. "staging", "production", "pr-160")
+# Example: $ heroku_release staging
+#
+
+function heroku_release {
+
+    # Show message if this is an internal test
+    if [ "$1" = "travis-ci-internal-test" ]; then
+        echo "heroku_release(): Ready to execute.";
+        return 0
+    fi;
+
+    # Output error if no branch is specified.
+    if [ "$1" = "" ]; then
+        echo "heroku_release(): Branch name required (ie: '$ heroku_release staging'). Returning Error."
+        exit 1
+    fi;
+
+    # Retrieve App Name
+    APPNAME=$(heroku_resolve_appname $1);
+
+    # Determine image id to push
+    DOCKER_IMAGE_ID=$(docker inspect registry.heroku.com/$APPNAME/web --format={{.Id}})
+
+    # Gemerate json payload to upload via API
+    JSON_PAYLOAD='{"updates":[{"type":"web","docker_image":"'"${DOCKER_IMAGE_ID}"'"}]}'
+
+    # Make 'Release' API Call
+    curl -n -X PATCH https://api.heroku.com/apps/$APPNAME/formation \
+    -d "${JSON_PAYLOAD}" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/vnd.heroku+json; version=3.docker-releases" \
+    -H "Authorization: Bearer ${HEROKU_API_KEY}"
+
 }
 
 
@@ -182,12 +171,12 @@ function heroku_build {
 
 function helper_test {
     echo "helper_test() ----- Heroku Helper Test Initialized"
-    echo "helper_test() ----- Test tag: #{TRAVIS_CI_TEST_TAG}";
+    echo "helper_test() ----- Test tag: ${TRAVIS_CI_TEST_TAG}";
 
     echo "helper_test() ----- Testing 'heroku_release' is ready: ";
     heroku_release "travis-ci-internal-test";
 
-    echo "helper_test() ----- Testing 'backup_psql' is ready: ";
+    echo "helper_test() ----- Testing 'heroku_backup_database' is ready: ";
     heroku_backup_database "travis-ci-internal-test";
 
     echo "helper_test() ----- Testing django migration id: ";
