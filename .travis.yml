@@ -5,13 +5,15 @@ dist: trusty
 # We're going to ignore all branches except:
 branches:
   only:
-  - master
-  - staging
+#  - master
+#  - production
   - sergiotest
+
 # We will need these services:
 services:
 - docker
 - postgresql
+
 sudo: required
 
 # We need PostgreSQL 10 installed
@@ -70,16 +72,13 @@ jobs:
     - helper_test
   - stage: Creating backup and upload to S3
     script:
-    - backup_psql $JOPLIN_TARGET
     - aws s3api list-buckets --query "Buckets[].Name"
+    - heroku_backup_database $TRAVIS_BRANCH
   - stage: Building container and upload to Heroku
     script:
-    - docker login --username=_ --password=$HEROKU_API_KEY registry.heroku.com
-    - docker build -t $JOPLIN_IMAGE_NAME .
-    - docker tag $JOPLIN_IMAGE_NAME registry.heroku.com/$JOPLIN_TARGET/web
-    - docker push registry.heroku.com/$JOPLIN_TARGET/web
+    - heroku_build $TRAVIS_BRANCH
     after_success:
-    - heroku_release $JOPLIN_TARGET
+    - heroku_release $TRAVIS_BRANCH
   - stage: Run Migration and post-release functions
     script:
     - heroku run -a $JOPLIN_TARGET -- /app/migrate-load-data.sh

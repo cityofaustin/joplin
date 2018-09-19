@@ -81,18 +81,9 @@ function heroku_release {
 
 function retrieve_latest_django_mid {
     # Get a list of all files, orders by ascending numeric order of column 1, 3, 4 (using underscore as separator)
-    echo "retrieve_latest_django_mid() Testing retrieve_latest_django_mid";
-
-    echo $TRAVIS_BUILD_DIR/joplin/base/migrations;
-    ls $TRAVIS_BUILD_DIR/joplin/base/migrations;
-    ls $TRAVIS_BUILD_DIR/joplin/base/migrations | sort -n -t _ -k 1 -k 3 -k 4 | tail -1;
-    echo "retrieve_latest_django_mid() Done testing, running script.";
-
     FILENAME=$(ls $TRAVIS_BUILD_DIR/joplin/base/migrations | sort -n -t _ -k 1 -k 3 -k 4 | tail -1)
     DJMID=$(echo -n $FILENAME | cut -d "." -f 1)
-
-    echo "retrieve_latest_django_mid() Result:"
-    echo $DJMID
+    echo "${DJMID}"
 }
 
 #
@@ -127,61 +118,16 @@ function heroku_backup_database {
     CONNECTION_STRING=$(heroku config:get DATABASE_URL -a $1);
     DB_NAME=$(echo -n $CONNECTION_STRING | cut -d "/" -f 4);
     DB_TIMESTAMP=$(date '+%Y-%m-%d--%H-%M-%S');
+    DJANGO_MID=$(retrieve_latest_django_mid);
 
     echo "heroku_backup_database() ----- Performing Database Backup";
     echo "heroku_backup_database() -- Date Timestamp: ${DB_TIMESTAMP}";
     echo "heroku_backup_database() -- DB Name: ${DB_NAME}";
     echo "heroku_backup_database() -- Performing copy, please wait...";
 
-    pg_dump $CONNECTION_STRING | gzip | aws s3 cp - s3://$AWS_BUCKET_BACKUPS/backups/database/$TRAVIS_BRANCH/$1.$DB_TIMESTAMP.$TRAVIS_COMMIT.$.psql.gz;
+    pg_dump $CONNECTION_STRING | gzip | aws s3 cp - s3://$AWS_BUCKET_BACKUPS/backups/database/$TRAVIS_BRANCH/$1.$DB_TIMESTAMP.$TRAVIS_COMMIT.$DJANGO_MID.psql.gz;
     echo "heroku_backup_database()----- Finished Performing Database Backup";
 }
-
-
-#
-# Creates a database backup of a running heroku app (as long as it as a PostgreSQL db attached to it)
-#
-# $1 (string) The name of the branch (ie. "joplin-staging", "joplin-personal")
-# Example: $ backup_sql staging
-#
-
-function backup_psql {
-
-    # Show message if this is an internal test
-    if [ "$1" = "travis-ci-internal-test" ]; then
-        echo "backup_psql(): Ready to execute.";
-        return 0
-    fi;
-
-    # Output error if no branch is specified.
-    if [ "$1" = "" ]; then
-        echo "backup_psql(): Branch name required (ie: '$ backup_psql staging'). Returning Error."
-        exit 1;
-    fi;
-
-    # Retrieve App Name
-    APPNAME=$(heroku_resolve_appname $1);
-
-    # Output results for logging
-    echo "backup_psql() Branch Name: ${TRAVIS_BRANCH}"
-    echo "backup_psql() App name: ${APPNAME}"
-
-    # Gather connection string from heroku api
-    CONNECTION_STRING=$(heroku config:get DATABASE_URL -a $1);
-    DB_NAME=$(echo -n $CONNECTION_STRING | cut -d "/" -f 4);
-    DB_TIMESTAMP=$(date '+%Y-%m-%d--%H-%M-%S');
-
-    echo "backup_psql() ----- Performing Database Backup";
-    echo "backup_psql() -- Date Timestamp: ${DB_TIMESTAMP}";
-    echo "backup_psql() -- DB Name: ${DB_NAME}";
-    echo "backup_psql() -- Performing copy, please wait...";
-
-    pg_dump $CONNECTION_STRING | gzip | aws s3 cp - s3://$AWS_BUCKET_BACKUPS/backups/database/$TRAVIS_BRANCH/$1.$DB_TIMESTAMP.$TRAVIS_COMMIT.$.psql.gz;
-    echo "backup_psql()----- Finished Performing Database Backup";
-}
-
-
-
 
 #
 # Creates a database backup of a running heroku app (as long as it as a PostgreSQL db attached to it)
