@@ -79,11 +79,11 @@ def joplin_page_listing_more_buttons(page, page_perms, is_parent=False):
             attrs={'title': _("Copy page '{title}'").format(title=page.get_admin_display_title())},
             priority=20
         )
-    if page_perms.can_delete():
+    if not page.live:
         yield Button(
-            _('Delete'),
-            reverse('wagtailadmin_pages:delete', args=[page.id]),
-            attrs={'title': _("Delete page '{title}'").format(title=page.get_admin_display_title())},
+            _('Archive'),
+            "#TODO-archive",
+            attrs={'title': _("Archive page '{title}'").format(title=page.get_admin_display_title())},
             priority=30
         )
     if page_perms.can_unpublish():
@@ -93,12 +93,19 @@ def joplin_page_listing_more_buttons(page, page_perms, is_parent=False):
             attrs={'title': _("Unpublish page '{title}'").format(title=page.get_admin_display_title())},
             priority=40
         )
+    if page_perms.can_publish() and page.has_unpublished_changes:
+        yield Button(
+            _('Publish'),
+            "#TODO-publish",
+            attrs={'title': _("Publish page '{title}'").format(title=page.get_admin_display_title())},
+            priority=50
+        )
     if not page.is_root():
         yield Button(
             _('Revisions'),
             reverse('wagtailadmin_pages:revisions_index', args=[page.id]),
             attrs={'title': _("View revision history for '{title}'").format(title=page.get_admin_display_title())},
-            priority=50
+            priority=60
         )
 
 
