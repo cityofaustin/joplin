@@ -79,13 +79,13 @@ def joplin_page_listing_more_buttons(page, page_perms, is_parent=False):
             attrs={'title': _("Copy page '{title}'").format(title=page.get_admin_display_title())},
             priority=20
         )
-    if not page.live:
-        yield Button(
-            _('Archive'),
-            "#TODO-archive",
-            attrs={'title': _("Archive page '{title}'").format(title=page.get_admin_display_title())},
-            priority=30
-        )
+    # if not page.live:
+    #     yield Button(
+    #         _('Archive'),
+    #         "#TODO-archive",
+    #         attrs={'title': _("Archive page '{title}'").format(title=page.get_admin_display_title())},
+    #         priority=30
+    #     )
     if page_perms.can_unpublish():
         yield Button(
             _('Unpublish'),
