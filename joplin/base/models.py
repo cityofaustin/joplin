@@ -65,6 +65,7 @@ class JanisPage(Page):
             index.FilterField('last_name'),
         ])
     ]
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     topic = models.ForeignKey(
@@ -72,10 +73,6 @@ class JanisPage(Page):
         on_delete=models.PROTECT,
         verbose_name='Select a Topic',
     )
-    content_panels = [
-        FieldPanel('topic'),
-        FieldPanel('title'),
-    ]
 
     @cached_classmethod
     def get_edit_handler(cls):
@@ -83,7 +80,10 @@ class JanisPage(Page):
             return cls.edit_handler.bind_to_model(cls)
 
         edit_handler = TabbedInterface([
-            ObjectList(cls.content_panels, heading='Content'),
+            ObjectList([
+                FieldPanel('topic'),
+                FieldPanel('title')
+            ] + cls.content_panels, heading='Content'),
             ObjectList(Page.promote_panels + cls.promote_panels, heading='Search Info')
         ])
 
@@ -131,7 +131,7 @@ class ServicePage(JanisPage):
 
     base_form_class = custom_forms.ServicePageForm
 
-    content_panels = JanisPage.content_panels + [
+    content_panels = [
         ImageChooserPanel('image'),
         InlinePanel('service_steps', label="Service steps"),
         StreamFieldPanel('dynamic_content'),
@@ -156,7 +156,7 @@ class ProcessPage(JanisPage):
 
     base_form_class = custom_forms.ProcessPageForm
 
-    content_panels = JanisPage.content_panels + [
+    content_panels = [
         FieldPanel('description'),
         ImageChooserPanel('image'),
         InlinePanel('contacts', label='Contacts'),
