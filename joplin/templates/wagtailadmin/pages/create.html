@@ -12,27 +12,14 @@
     <input type="hidden" id="style_guide_url" name="style_guide_url" value="{{ style_guide_url }}">
     <div class="header secondary coa-header--secondary">
         <div>
-            <div class="create_page_header">
-              <div class="left col9 header-title">
-                  <h1 class="icon icon-doc-empty-inverse">
-                  {% trans 'New' %} <span>{{ content_type.model_class.get_verbose_name }}</span></h1>
-              </div>
-            </div>
+            <h1 class="create_page_header">
+                <span class="coa-page-action">New</span>
+                <span class="page_title">{{ content_type.model_class.get_verbose_name }}</span>
+            </h1>
         </div>
 
         <div class="actions">
-            <div class="dropdown dropup dropdown-button match-width">
-                <button type="submit" class="button action-save button-longrunning editor__save-button" tabindex="3" data-clicked-text="{% trans 'Saving…' %}"><span class="icon icon-spinner"></span><em>{% trans 'Save draft' %}</em></button>
-                <div class="dropdown-toggle icon icon-arrow-up"></div>
-                <ul role="menu">
-                    {% if parent_page_perms.can_publish_subpage %}
-                        <li>
-                            <button type="submit" name="action-publish" value="action-publish" class="button button-longrunning" tabindex="3" data-clicked-text="{% trans 'Publishing…' %}" {% if page.locked %}disabled {% endif %}><span class="icon icon-spinner"></span><em>{% trans 'Publish' %}</em></button>
-                        </li>
-                    {% endif %}
-                    <li><input type="submit" name="action-submit" value="{% trans 'Submit for moderation' %}" class="button" /></li>
-                </ul>
-            </div>
+          <button type="submit" form="page-edit-form" class="button action-save button-longrunning editor__save-button" tabindex="3" data-clicked-text="{% trans 'Saving…' %}"><span class="icon icon-spinner"></span><em>{% trans 'Save draft' %}</em></button>
         </div>
     </div>
 
