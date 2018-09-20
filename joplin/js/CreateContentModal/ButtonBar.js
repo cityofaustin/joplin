@@ -1,18 +1,18 @@
-import React from "react";
-import classNames from "classnames";
+import React from 'react';
+import classNames from 'classnames';
 
-import "./ButtonBar.scss";
+import './ButtonBar.scss';
 
 const ButtonBar = ({
   activeStep,
   handleBackButton,
   handleNextButton,
-  handleCloseButton
+  handleCloseButton,
 }) => (
   <div
     className={classNames({
       ButtonBar: activeStep > 0,
-      "ButtonBar--hidden": activeStep === 0
+      'ButtonBar--hidden': activeStep === 0,
     })}
   >
     <div className="ButtonBar__button" onClick={handleBackButton}>

@@ -1,23 +1,23 @@
-import React from "react";
+import React from 'react';
 
-import "./ChooseTitleStep.scss";
+import './ChooseTitleStep.scss';
 
 const ChooseTitleStep = ({
   pageType,
   title,
   handleTitleInputChange,
   characterCount,
-  maxCharacterCount
+  maxCharacterCount,
 }) => (
   <div className="CreateContentModal__step">
     <h2 className="CreateContentModal__header">
-      {pageType === "department" && (
+      {pageType === 'department' && (
         <span>
           Write the full name of the department without abbreviations or
           acronyms.
         </span>
       )}
-      {pageType !== "department" && (
+      {pageType !== 'department' && (
         <span>
           Write an actionable title for your  {pageType} page, starting with a
           verb.
@@ -29,8 +29,8 @@ const ChooseTitleStep = ({
       <span
         className={
           characterCount > maxCharacterCount
-            ? "ChooseTitleStep__input-label--right ChooseTitleStep__input-label--red"
-            : "ChooseTitleStep__input-label--right"
+            ? 'ChooseTitleStep__input-label--right ChooseTitleStep__input-label--red'
+            : 'ChooseTitleStep__input-label--right'
         }
       >
         Characters remaining: {maxCharacterCount - characterCount}
@@ -44,7 +44,7 @@ const ChooseTitleStep = ({
       onChange={handleTitleInputChange}
     />
 
-    {pageType !== "department" && (
+    {pageType !== 'department' && (
       <div>
         <span className="ChooseTitleStep__input-help">
           Example: Drop off hazardous wastes and other recyclables
