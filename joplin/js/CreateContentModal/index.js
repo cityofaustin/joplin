@@ -1,12 +1,12 @@
-import ReactDOM from "react-dom";
-import React, { Component } from "react";
+import ReactDOM from 'react-dom';
+import React, { Component } from 'react';
 
-import ChooseTypeStep from "./ChooseTypeStep.js";
-import ChooseTitleStep from "./ChooseTitleStep.js";
-import ChooseTopicStep from "./ChooseTopicStep.js";
-import ButtonBar from "./ButtonBar.js";
+import ChooseTypeStep from './ChooseTypeStep.js';
+import ChooseTitleStep from './ChooseTitleStep.js';
+import ChooseTopicStep from './ChooseTopicStep.js';
+import ButtonBar from './ButtonBar.js';
 
-import "./index.scss";
+import './index.scss';
 
 const MAX_TITLE_LENGTH = 58;
 const THEME_TOPIC_TREE = window.themeTopicsTree;
@@ -16,23 +16,23 @@ class CreateContentModal extends Component {
     super(props);
     this.state = {
       type: null,
-      title: "", // React warning said: `value` prop on `input` should not be null. Consider using an empty string...
+      title: '', // React warning said: `value` prop on `input` should not be null. Consider using an empty string...
       topic: null,
       activeStep: 0,
       redirectUrl: null,
-      titleCharacterCount: 0
+      titleCharacterCount: 0,
     };
   }
 
   incrementActiveStep = () => {
     this.setState({
-      activeStep: this.state.activeStep + 1
+      activeStep: this.state.activeStep + 1,
     });
   };
 
   decrementActiveStep = () => {
     this.setState({
-      activeStep: this.state.activeStep - 1
+      activeStep: this.state.activeStep - 1,
     });
   };
 
@@ -41,7 +41,7 @@ class CreateContentModal extends Component {
     if (this.state.titleCharacterCount > MAX_TITLE_LENGTH) return false;
 
     // Skip Topic Select Step for creating a Department
-    if (this.state.type === "department" && this.state.activeStep === 1) {
+    if (this.state.type === 'department' && this.state.activeStep === 1) {
       this.redirectToEditPage();
       return;
     }
@@ -61,7 +61,7 @@ class CreateContentModal extends Component {
   handleTypeSelect = (dataObj, e) => {
     this.setState({
       type: dataObj.type,
-      redirectUrl: dataObj.redirectUrl
+      redirectUrl: dataObj.redirectUrl,
     });
     this.incrementActiveStep();
   };
@@ -69,7 +69,7 @@ class CreateContentModal extends Component {
   handleTitleInputChange = e => {
     this.setState({
       title: e.target.value,
-      titleCharacterCount: e.target.value.length
+      titleCharacterCount: e.target.value.length,
     });
   };
 
@@ -89,11 +89,11 @@ class CreateContentModal extends Component {
   handleCloseButton = e => {
     this.setState({
       type: null,
-      title: "", // React warning said: `value` prop on `input` should not be null. Consider using an empty string...
+      title: '', // React warning said: `value` prop on `input` should not be null. Consider using an empty string...
       topic: null,
       activeStep: 0,
       redirectUrl: null,
-      titleCharacterCount: 0
+      titleCharacterCount: 0,
     });
   };
 
@@ -146,5 +146,5 @@ class CreateContentModal extends Component {
 
 ReactDOM.render(
   <CreateContentModal />,
-  document.getElementById("coa-CreateContentModal")
+  document.getElementById('coa-CreateContentModal'),
 );
