@@ -32,19 +32,7 @@ footer {
 .icon-help-inverse.show {
   display: inline;
   float: right;
-  margin-right: 0.4rem;
-}
-
-.header {
-  position: fixed;
-  z-index: 3;
-  left: 60px;
-  width: calc(100% - 60px - 1.5rem);
-}
-
-.header.secondary {
-  top: 80px;
-  height: 100px;
+  margin: .5rem 4rem 0 0;
 }
 
 .actions {

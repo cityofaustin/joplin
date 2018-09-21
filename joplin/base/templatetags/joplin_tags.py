@@ -1,27 +1,18 @@
 from django import template
 import graphene
 import os
+import json
+
 from base.models import Topic, Theme
-# from base.models import Theme
-
-import logging
-
-logger = logging.getLogger(__name__)
-
+from wagtail.core import hooks
+import itertools
 
 register = template.Library()
 
 @register.simple_tag
-def get_preview_url(*args, **kwargs):
+def get_revision_preview_url(*args, **kwargs):
     revision = kwargs['revision']
-    page_type = type(revision.page).__name__
-
-    # TODO: Add other page types
-    if "Service" in page_type:
-      url_page_type = "services"
-
-    if "Process" in page_type:
-      url_page_type = "processes"
+    url_page_type = revision.page.janis_url_page_type
 
     global_id = graphene.Node.to_global_id('PageRevisionNode', revision.id)
     # TODO: Add other languages
@@ -37,8 +28,8 @@ def get_style_guide_url(*args, **kwargs):
   content_type = kwargs['content_type'].name
   return os.environ['STYLEGUIDE_URL'] + STYLEGUIDE_PAGES[content_type]
 
-@register.inclusion_tag('wagtailadmin/themes.html', takes_context=True)
-def themes(context):
+@register.inclusion_tag('wagtailadmin/themes_topics_tree.html', takes_context=True)
+def themes_topics_tree(context):
     themes = {}
     topics = []
 
@@ -55,6 +46,15 @@ def themes(context):
         })
 
     return {
-        'themes': themes,
-        'request': context['request'],
+        'themes': json.dumps(themes)
     }
+
+
+@register.inclusion_tag("wagtailadmin/pages/listing/_buttons.html",
+                        takes_context=True)
+def joplin_page_listing_buttons(context, page, page_perms, is_parent=False):
+    button_hooks = hooks.get_hooks('register_joplin_page_listing_buttons')
+    buttons = sorted(itertools.chain.from_iterable(
+        hook(page, page_perms, is_parent)
+        for hook in button_hooks))
+    return {'page': page, 'buttons': buttons}

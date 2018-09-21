@@ -1,7 +1,15 @@
 import "../css/editor.scss";
 import "../css/preview.scss";
 
+import insertWizardData from "./CreateContentModal/insertWizardData";
+import menuActiveState from "./EditPage/menuActiveState";
+import toggleActivePanel from "./SidebarPreview/toggleActivePanel";
+
 $(function() {
+  insertWizardData();
+  menuActiveState();
+  toggleActivePanel();
+
   // TODO: This a better way
   const anchors = {
     id_title: "#title",
@@ -25,11 +33,6 @@ $(function() {
 
   for (const label of labels) {
     let id = label.getAttribute("for");
-
-    // HACK: I can't find a way to override this in python
-    if (id === "id_title") {
-      label.textContent = "Actionable Title";
-    }
 
     // HACK: If we're dealing with subheadings in steps we need to remove the index
     if (id && id.includes("id_process_steps")) {
@@ -127,14 +130,16 @@ $(function() {
   var urlcopied = $("#page-share-url-copied");
   var messages = $(".messages");
 
+  const previewUrl = document.getElementById("preview_url").value;
+
   if (localStorage.previewing === "true") {
-    window.open("{{preview_url}}", "_blank");
+    window.open(previewUrl, "_blank");
     localStorage.previewing = false;
   }
 
   if (localStorage.sharingpreview === "true") {
     // TODO: Don't just alert with the preview URL
-    copyTextToClipboard("{{preview_url}}");
+    copyTextToClipboard(previewUrl);
     urlcopied.removeClass("hidden");
     urlcopied.fadeOut(5000);
     localStorage.sharingpreview = false;

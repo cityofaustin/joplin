@@ -1,0 +1,13 @@
+{% load joplin_tags %}
+{% load staticfiles wagtailadmin_tags %}
+{% load render_bundle from webpack_loader %}
+
+
+<!-- Modal -->
+<div id="coa-CreateContentModal"></div>
+
+<!-- Topics by Theme data via JSON -->
+{% themes_topics_tree %}
+
+<!-- React module -->
+{% render_bundle 'createContentModal' %}

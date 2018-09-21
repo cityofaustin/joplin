@@ -9,11 +9,16 @@ title_es: Prepare for public health emergencies
 title_vi: Prepare for public health emergencies
 title_ar: Prepare for public health emergencies
 
-steps_en: |
-    <h2>Follow these steps to be prepared for an emergency</h2>
-    - <a href="https://www.cdc.gov/phpr/areyouprepared/kit.htm">Pack an emergency preparedness kit</a>. Make sure you have enough food and water, medication, and anything else you and your family need for 3 or more days.
-    - <a href="https://www.cdc.gov/phpr/areyouprepared/plan.htm">Make a plan for where you will meet with your family during an emergency</a>.
-    - Sign up for emergency alerts, <a href="https://public.coderedweb.com/CNE/en-US/21C524DBEA1F:>register for the emergency notification system</a>.
+# TODO: Make it so we can use different titles for steps (instead of just saying "steps")
+# Follow these steps to be prepared for an emergency
+
+service_steps:
+    -
+        step_description_en: <a href="https://www.cdc.gov/phpr/areyouprepared/kit.htm">Pack an emergency preparedness kit</a>. Make sure you have enough food and water, medication, and anything else you and your family need for 3 or more days.
+    -
+        step_description_en: <a href="https://www.cdc.gov/phpr/areyouprepared/plan.htm">Make a plan for where you will meet with your family during an emergency</a>.
+    -
+        step_description_en: Sign up for emergency alerts, <a href="https://public.coderedweb.com/CNE/en-US/21C524DBEA1F">register for the emergency notification system</a>.
 
 additional_content_en: |
     <h2>Prepare for an emergency</h2>

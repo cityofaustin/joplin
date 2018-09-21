@@ -1,0 +1,13 @@
+{{ message }}
+
+{% if buttons %}
+    <span class="buttons">
+        {% for button in buttons %}
+          {% if button.1 != 'View live' %}
+            <a href="{{ button.0 }}" class="button button-small button-secondary"{% if button.2 %} target="_blank"{% endif %}>{{ button.1 }}</a>
+          {% endif %}
+        {% endfor %}
+    </span>
+{% endif %}
+
+{{ detail }}

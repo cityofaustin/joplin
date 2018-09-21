@@ -7,7 +7,11 @@ from django.core.management.base import BaseCommand
 from wagtail.core.models import Page
 from yaml import load
 
-from base.models import TranslatedImage, TranslatedImageRendition, ThreeOneOne, Theme, Topic, Department, ServicePage, ProcessPage, ProcessPageStep, ProcessPageContact, Location, Contact, ServicePageContact, DepartmentContact, Map, ContactDayAndDuration
+from base.models import TranslatedImage, TranslatedImageRendition, ThreeOneOne, Theme, Topic, Department, ServicePage, ServicePageStep, ProcessPage, ProcessPageStep, ProcessPageContact, Location, Contact, ServicePageContact, DepartmentContact, Map, ContactDayAndDuration
+
+from django.contrib.auth import get_user_model
+User = get_user_model()
+
 
 import logging
 logging.basicConfig(level=logging.INFO)
@@ -90,6 +94,10 @@ def load_process(data):
     print(f'-  Loading contacts...\r', end='')
     contact = data.pop('contact')
     contact = Contact.objects.get(name=contact)
+    print('✅')
+
+    print(f'-  Loading user...\r', end='')
+    data['owner'] = User.objects.get(id='1')
     print('✅')
 
     print(f'-  Loading homepage...\r', end='')
@@ -257,11 +265,15 @@ def load_service(data):
     for k in ['meta_description_ar', 'meta_description_en', 'meta_description_es', 'meta_description_vi', 'meta_tags', 'meta_title_ar', 'meta_title_en', 'meta_title_es', 'meta_title_vi']:
         data.pop(k, None)
 
-    for key in data:
-        if key.startswith('steps_'):
-            data[key] = ulify(data[key])
-    data['steps'] = data['steps_en']
+    print(f'-  Loading service steps...\r', end='')
+    service_steps = data.pop('service_steps')
+    print('✅')
+
     data['additional_content'] = data['additional_content_en']
+    print('✅')
+
+    print(f'-  Loading user...\r', end='')
+    data['owner'] = User.objects.get(id='1')
     print('✅')
 
     print(f'-  Loading homepage...\r', end='')
@@ -306,12 +318,20 @@ def load_service(data):
         page = ServicePage.objects.get(slug=slug)
         for k, v in data.items():
             setattr(page, k, v)
+        for step in page.service_steps.all():
+            step.delete()
     except Exception as e:
         page = ServicePage(**data)
         home.add_child(instance=page)
         created = True
 
     page.title = data['title_en']
+
+    for i, service_step in enumerate(service_steps):
+        print(service_step)
+        service_step['page_id'] = page.id
+        service_step['sort_order'] = i + 1
+        load_service_step(service_step)
 
     page.save_revision().publish()
     print(f'{"✅  Created" if created else "⭐  Updated"}')
@@ -321,6 +341,12 @@ def load_service(data):
     print(f'{"✅  Created" if created else "✔️  Fetched"}')
 
     yield page
+
+
+def load_service_step(data):
+    data['step_description'] = data['step_description_en']
+    service_step = ServicePageStep.objects.create(**data)
+    print("✅  Created service step")
 
 
 class Command(BaseCommand):

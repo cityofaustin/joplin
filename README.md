@@ -22,6 +22,9 @@ LOAD_DATA=on ./scripts/serve-local.sh
 
 **NOTE** The first time docker-compose runs it builds new images, every time after the images are not rebuilt. To clear the cache and rebuild add `REBUILD=on`.
 
+**NOTE** You may encounter issues with the script exiting prematurely if you haven't installed the [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli#download-and-install) and run `heroku login`.
+
+
 ```
 REBUILD=on ./scripts/serve-local.sh
 ```

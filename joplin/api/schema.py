@@ -8,7 +8,7 @@ from graphene.types import Scalar
 from wagtail.core.fields import StreamField
 from wagtail.core.models import Page, PageRevision
 
-from base.models import TranslatedImage, ThreeOneOne, ServicePage, ServicePageContact, ProcessPage, ProcessPageStep, ProcessPageContact, Theme, Topic, Contact, Location, ContactDayAndDuration, Department, DepartmentContact
+from base.models import TranslatedImage, ThreeOneOne, ServicePage, ServicePageStep, ServicePageContact, ProcessPage, ProcessPageStep, ProcessPageContact, Theme, Topic, Contact, Location, ContactDayAndDuration, Department, DepartmentContact
 
 
 class StreamFieldType(Scalar):
@@ -104,11 +104,16 @@ class ServicePageNode(DjangoObjectType):
     related = graphene.List('api.schema.ServicePageNode')
 
     def resolve_related(self, resolve_info, *args, **kwargs):
-        return self.topic.services.exclude(id=self.id)
+        return self.topic.servicepage_set.exclude(id=self.id)
 
     class Meta:
         model = ServicePage
         filter_fields = ['id', 'slug', 'topic', 'topic__slug']
+        interfaces = [graphene.Node]
+
+class ServicePageStepNode(DjangoObjectType):
+    class Meta:
+        model = ServicePageStep
         interfaces = [graphene.Node]
 
 class ProcessPageNode(DjangoObjectType):

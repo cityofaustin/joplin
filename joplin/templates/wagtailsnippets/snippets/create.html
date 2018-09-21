@@ -1,0 +1,7 @@
+{% extends "wagtailsnippets/snippets/create.html" %}
+{% load render_bundle from webpack_loader %}
+
+{% block extra_js %}
+  {{ block.super }}
+  {% render_bundle 'editor' %}
+{% endblock %}
