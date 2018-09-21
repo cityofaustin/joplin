@@ -160,7 +160,7 @@ class CreateContentModal extends Component {
                   handleBackButton={this.handleBackButton}
                   handleNextButton={this.handleNextButton}
                   handleCloseButton={this.handleCloseButton}
-                  activeStep={this.state.activeStep}
+                  hidden={this.state.activeStep === 0}
                   onLastStep={this.onLastStep()}
                 />
               </div>

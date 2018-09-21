@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import './ButtonBar.scss';
 
 const ButtonBar = ({
-  activeStep,
+  hidden,
   handleBackButton,
   handleNextButton,
   handleCloseButton,
@@ -12,8 +12,8 @@ const ButtonBar = ({
 }) => (
   <div
     className={classNames({
-      ButtonBar: activeStep > 0,
-      'ButtonBar--hidden': activeStep === 0,
+      ButtonBar: !hidden,
+      'ButtonBar--hidden': hidden,
     })}
   >
     <div className="ButtonBar__button" onClick={handleBackButton}>
