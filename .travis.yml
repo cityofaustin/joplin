@@ -81,4 +81,4 @@ jobs:
     - heroku_release $TRAVIS_BRANCH
   - stage: Run Migration and post-release functions
     script:
-    - heroku run -a $JOPLIN_TARGET -- /app/migrate-load-data.sh
+    - heroku_migrate $TRAVIS_BRANCH

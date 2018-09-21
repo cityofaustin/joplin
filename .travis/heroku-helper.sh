@@ -91,9 +91,9 @@ function heroku_backup_upload_check {
     FILECOUNT=$(aws s3 ls $1 | wc -l)
 
     if [ "$FILECOUNT" = "1" ]; then
-        echo "The backup was uploaded successfully.";
+        echo "heroku_backup_upload_check() ----- The backup was uploaded successfully.";
     else
-        echo "ERROR, THE DATABASE CANNOT BE FOUND ON THE S3 BUCKET"
+        echo "heroku_backup_upload_check() ----- ERROR, THE DATABASE CANNOT BE FOUND ON THE S3 BUCKET"
         echo "S3 URL: $1";
         # exit 1
     fi;
@@ -124,7 +124,7 @@ function heroku_backup_database {
 
         S3_BUCKET_FILE_URL="s3://${AWS_BUCKET_BACKUPS}/backups/database/${TRAVIS_BRANCH}/${APPNAME}.${DB_TIMESTAMP}.${TRAVIS_COMMIT}.${DJANGO_MID}.psql.gz"
 
-        echo "heroku_backup_database() ----- Performing Database Backup";
+        echo "heroku_backup_database() ----- Performing Database Backup for Branch: $1, App: $APPNAME";
         echo "heroku_backup_database() -- App Name: ${APPNAME}";
         echo "heroku_backup_database() -- Date Timestamp: ${DB_TIMESTAMP}";
         echo "heroku_backup_database() -- Latest Django Migration ID: ${DJANGO_MID}";
@@ -168,7 +168,7 @@ function heroku_build {
         echo "heroku_build() ----- Building Docker Container";
         echo "heroku_build() -- Logging in to Services";
         docker login --username=_ --password=$HEROKU_API_KEY registry.heroku.com
-        echo "heroku_build() -- Building: '${JOPLIN_IMAGE_NAME}'  for App: '${APPNAME}'";
+        echo "heroku_build() -- Building: '${JOPLIN_IMAGE_NAME}' for Branch: $1, App: $APPNAME";
         docker build -t $JOPLIN_IMAGE_NAME .
         echo "heroku_build() -- Tagging Image";
         docker tag $JOPLIN_IMAGE_NAME registry.heroku.com/$APPNAME/web
@@ -198,6 +198,9 @@ function heroku_release {
         # Determine image id to push
         DOCKER_IMAGE_ID=$(docker inspect registry.heroku.com/$APPNAME/web --format={{.Id}})
 
+        echo "heroku_release() ----- Releasing Build for Branch: $1, App: $APPNAME";
+        echo "heroku_release() ----- Docker Image Id: $DOCKER_IMAGE_ID";
+
         # Gemerate json payload to upload via API
         JSON_PAYLOAD='{"updates":[{"type":"web","docker_image":"'"${DOCKER_IMAGE_ID}"'"}]}'
 
@@ -209,6 +212,29 @@ function heroku_release {
         -H "Authorization: Bearer ${HEROKU_API_KEY}"
     fi;
 
+}
+
+
+#
+# Runs a migration process in a heroku dyno on the target application
+# $1 (string) The name of the branch (ie. "master", "production", "pr-160")
+# Example: $ heroku_migrate staging
+#
+
+function heroku_migrate {
+
+    # Validate Branch Name (or halt deployment if no branch specified)
+    helper_internal_validation ${FUNCNAME[0]} $1
+
+    # Not a test, and not an error
+    if [ "$?" = "0" ]; then
+        # Retrieve App Name
+        APPNAME=$(heroku_resolve_appname $1);
+
+        echo "heroku_migrate() ----- Migrating data for Branch: $1, App: $APPNAME";
+        heroku run -a $APPNAME -- /app/migrate-load-data.sh
+        echo "heroku_migrate() ----- Migration process finished.";
+    fi;
 }
 
 
@@ -232,6 +258,9 @@ function helper_test {
 
     echo "helper_test() ----- Testing 'heroku_build' is ready: ";
     heroku_build $TRAVIS_CI_TEST_TAG;
+
+    echo "heroku_migrate() ----- Testing 'heroku_migrate' is ready: ";
+    heroku_migrate $TRAVIS_CI_TEST_TAG;
 
     echo "helper_test() ----- Heroku Helper Test finished.";
 }
