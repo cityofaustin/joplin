@@ -27,6 +27,7 @@ class CreateContentModal extends Component {
 
   onLastStep = () => {
     return (
+      // Skip Topic Select Step for creating a Department
       (this.state.type === 'department' && this.state.activeStep === 1) ||
       this.state.activeStep === 2
     );
@@ -48,7 +49,12 @@ class CreateContentModal extends Component {
     // Validate title max length
     if (this.state.titleCharacterCount > MAX_TITLE_LENGTH) return false;
 
-    // Skip Topic Select Step for creating a Department
+    // Validate title min length
+    if (this.state.titleCharacterCount <= 0) return false;
+
+    // If we're on the topic select step we need a topic selected
+    if (this.state.activeStep === 2 && this.state.topic === null) return false;
+
     if (this.onLastStep()) {
       this.createPage();
       return;
