@@ -115,6 +115,7 @@ WSGI_APPLICATION = 'wsgi.application'
 # Detect whether it is a staging or production environment
 DEPLOYMENT_MODE = os.environ.get('DEPLOYMENT_MODE', 'LOCAL')
 ISPRODUCTION = DEPLOYMENT_MODE == "PRODUCTION"
+ISSTAGING = DEPLOYMENT_MODE == "STAGING"
 
 
 # Database
@@ -217,7 +218,7 @@ GRAPHENE = {
 }
 
 
-if(ISPRODUCTION):
+if(ISPRODUCTION or ISSTAGING):
     #
     # AWS Buckets only if not local.
     #

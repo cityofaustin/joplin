@@ -4,7 +4,9 @@
 TRAVIS_CI_TEST_TAG="travis-ci-internal-test"
 
 #
-# Stops deployment by returing exit 1
+# Prints error message and stops deployment by returing exit 1
+# $1 (string) - Error message to display
+# Example: helper_halt_deployment "File not found"
 #
 
 function helper_halt_deployment {
@@ -15,6 +17,7 @@ function helper_halt_deployment {
 # Helps validate branch name (or stops deployment if no branch specified)
 # $1 (string) The name of the function callling this method
 # $2 (string) the name of the branch
+# Example: helper_internal_validation "heroku_test" "production"
 #
 
 function helper_internal_validation {
@@ -78,6 +81,25 @@ function retrieve_latest_django_mid {
 }
 
 #
+# Halts Deployment if the backup cannot be found in the S3 bucket
+# $1 (string) The S3 url that is going to be checked
+# Example: heroku_backup_upload_check "s3://bucketname/backups/database/branchname/application-name.2018-09-21--18-52-21.5e1398dcecc15b66fa7ba4ddf19cdf23e6a6ac44.0025_auto_20180828_1807.psql.gz"
+#
+
+function heroku_backup_upload_check {
+    # Count the number of lines for a specific url, it should be only 1, hence assigns value of "1" to FILECOUNT
+    FILECOUNT=$(aws s3 ls $1 | wc -l)
+
+    if [ "$FILECOUNT" = "1" ]; then
+        echo "The backup was uploaded successfully.";
+    else
+        echo "ERROR, THE DATABASE CANNOT BE FOUND ON THE S3 BUCKET"
+        echo "S3 URL: $1";
+        # exit 1
+    fi;
+}
+
+#
 # Creates a database backup of a running heroku app (as long as it as a PostgreSQL db attached to it)
 #
 # $1 (string) The name of the application (ie. "master", "production")
@@ -111,9 +133,15 @@ function heroku_backup_database {
         echo "heroku_backup_database() -- Performing copy, please wait...";
 
         pg_dump $CONNECTION_STRING | gzip | aws s3 cp - $S3_BUCKET_FILE_URL;
-        echo "heroku_backup_database()----- Finished Performing Database Backup";
+        echo "heroku_backup_database()----- Finished creating and uploading database to s3";
+
+        echo "heroku_backup_database()----- Validating the backup has been created and is available on S3";
+        heroku_backup_upload_check $S3_BUCKET_FILE_URL
+        echo "heroku_backup_database()----- Validation finished, backup process finished.";
     fi;
 }
+
+
 
 #
 # Creates a database backup of a running heroku app (as long as it as a PostgreSQL db attached to it)
