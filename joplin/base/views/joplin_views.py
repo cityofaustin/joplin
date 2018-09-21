@@ -58,6 +58,7 @@ def new_page_from_modal(request):
 
         # Save our draft
         page.save_revision()
+        page.unpublish() # Not sure why it seems to go live by default
 
         # Respond with the id of the new page
         response = HttpResponse(json.dumps({'id': page.id}), content_type="application/json")
