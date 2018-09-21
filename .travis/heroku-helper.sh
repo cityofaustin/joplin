@@ -160,11 +160,6 @@ function heroku_build {
         # Retrieve App Name
         APPNAME=$(heroku_resolve_appname $1);
 
-        # Gather connection string from heroku api
-        CONNECTION_STRING=$(heroku config:get DATABASE_URL -a $APPNAME);
-        DB_NAME=$(echo -n $CONNECTION_STRING | cut -d "/" -f 4);
-        DB_TIMESTAMP=$(date '+%Y-%m-%d--%H-%M-%S');
-
         echo "heroku_build() ----- Building Docker Container";
         echo "heroku_build() -- Logging in to Services";
         docker login --username=_ --password=$HEROKU_API_KEY registry.heroku.com
