@@ -5,6 +5,7 @@ import graphene
 from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
 
+from wagtail.utils.decorators import cached_classmethod
 from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, MultiFieldPanel, ObjectList, StreamFieldPanel, TabbedInterface
 from wagtail.core.fields import StreamField, RichTextField
 from wagtail.core.models import Page, Orderable
@@ -55,7 +56,39 @@ class HomePage(Page):
     image = models.ForeignKey(TranslatedImage, null=True, on_delete=models.SET_NULL, related_name='+')
 
 
-class JanisPage:
+class JanisPage(Page):
+    parent_page_types = ['base.HomePage']
+    subpage_types = []
+    search_fields = Page.search_fields + [
+        index.RelatedFields('owner', [
+            index.SearchField('last_name', partial_match=True),
+            index.FilterField('last_name'),
+        ])
+    ]
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    topic = models.ForeignKey(
+        'base.Topic',
+        on_delete=models.PROTECT,
+        verbose_name='Select a Topic',
+    )
+
+    @cached_classmethod
+    def get_edit_handler(cls):
+        if hasattr(cls, 'edit_handler'):
+            return cls.edit_handler.bind_to_model(cls)
+
+        edit_handler = TabbedInterface([
+            ObjectList([
+                FieldPanel('topic'),
+                FieldPanel('title')
+            ] + cls.content_panels, heading='Content'),
+            ObjectList(Page.promote_panels + cls.promote_panels, heading='Search Info')
+        ])
+
+        return edit_handler.bind_to_model(cls)
+
     def janis_url(self):
         url_page_type = self.janis_url_page_type
         page_slug = self.slug
@@ -70,10 +103,12 @@ class JanisPage:
 
         return os.environ["JANIS_URL"] + "/en/preview/" + url_page_type + "/" + global_id
 
+    class Meta:
+        abstract = True
 
-class ServicePage(Page, JanisPage):
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+JanisPage._meta.get_field('title').verbose_name='Write an actionable title'
+
+class ServicePage(JanisPage):
     janis_url_page_type = "services"
 
     dynamic_content = StreamField(
@@ -87,44 +122,23 @@ class ServicePage(Page, JanisPage):
         blank=True
     )
     additional_content = RichTextField(
-        features=WYSIWYG_FEATURES, 
-        verbose_name='Write any additional content describing the service', 
-        help_text='Section header: What else do I need to know?', 
+        features=WYSIWYG_FEATURES,
+        verbose_name='Write any additional content describing the service',
+        help_text='Section header: What else do I need to know?',
         blank=True
     )
-    topic = models.ForeignKey(
-        'base.Topic',
-        on_delete=models.PROTECT,
-        related_name='services',
-        verbose_name='Select a Topic',
-    )
+
     image = models.ForeignKey(TranslatedImage, null=True, blank=True, on_delete=models.SET_NULL, related_name='+', verbose_name='Choose an image for the service banner')
 
-    parent_page_types = ['base.HomePage']
-    subpage_types = []
     base_form_class = custom_forms.ServicePageForm
 
-    search_fields = Page.search_fields + [
-        index.RelatedFields('owner', [
-            index.SearchField('last_name', partial_match=True),
-            index.FilterField('last_name'),
-        ])
-    ]
-
     content_panels = [
-        FieldPanel('topic'),
-        FieldPanel('title'),
         ImageChooserPanel('image'),
         InlinePanel('service_steps', label="Service steps"),
         StreamFieldPanel('dynamic_content'),
         FieldPanel('additional_content'),
         InlinePanel('contacts', label='Contacts'),
     ]
-
-    edit_handler = TabbedInterface([
-        ObjectList(content_panels, heading='Content'),
-        ObjectList(Page.promote_panels, heading='Search Info'),
-    ])
 
 class ServicePageStep(Orderable):
     page = ParentalKey(ServicePage, related_name='service_steps')
@@ -134,38 +148,21 @@ class ServicePageStep(Orderable):
         FieldPanel('step_description'),
     ]
 
-class ProcessPage(Page, JanisPage):
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+class ProcessPage(JanisPage):
     janis_url_page_type = "processes"
 
-    topic = models.ForeignKey(
-        'base.Topic',
-        on_delete=models.PROTECT,
-        related_name='processes',
-    )
     description = models.TextField(blank=True)
     image = models.ForeignKey(TranslatedImage, null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
     # TODO: Add images array field
 
-    parent_page_types = ['base.HomePage']
-    subpage_types = []
     base_form_class = custom_forms.ProcessPageForm
 
     content_panels = [
-        FieldPanel('topic'),
-        FieldPanel('title'),
         FieldPanel('description'),
         ImageChooserPanel('image'),
         InlinePanel('contacts', label='Contacts'),
         InlinePanel('process_steps', label="Process steps"),
     ]
-
-    edit_handler = TabbedInterface([
-        ObjectList(content_panels, heading='Content'),
-        ObjectList(Page.promote_panels, heading='Search Info'),
-    ])
-
 
 class ProcessPageStep(Orderable):
     page = ParentalKey(ProcessPage, related_name='process_steps')
@@ -188,7 +185,6 @@ class ProcessPageStep(Orderable):
         FieldPanel('detailed_content'),
         FieldPanel('quote'),
     ]
-
 
 @register_snippet
 class Topic(ClusterableModel):

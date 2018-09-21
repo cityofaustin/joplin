@@ -104,7 +104,7 @@ class ServicePageNode(DjangoObjectType):
     related = graphene.List('api.schema.ServicePageNode')
 
     def resolve_related(self, resolve_info, *args, **kwargs):
-        return self.topic.services.exclude(id=self.id)
+        return self.topic.servicepage_set.exclude(id=self.id)
 
     class Meta:
         model = ServicePage
