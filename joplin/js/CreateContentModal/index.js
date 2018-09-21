@@ -109,10 +109,6 @@ class CreateContentModal extends Component {
       .bind(this);
   };
 
-  writeToLocalStorage = () => {
-    localStorage.wagtailCreateModal = JSON.stringify(this.state);
-  };
-
   handleCloseButton = e => {
     this.setState({
       type: null,
