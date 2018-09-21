@@ -87,7 +87,9 @@ class CreateContentModal extends Component {
       .post(
         '/admin/pages/new_from_modal/',
         {
-          blarg: 'blarg',
+          type: this.state.type,
+          title: this.state.title,
+          topic: this.state.topic,
         },
         { headers: { 'X-CSRFToken': Cookies.get('csrftoken') } },
       )
