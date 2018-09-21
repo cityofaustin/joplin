@@ -21,7 +21,6 @@ class CreateContentModal extends Component {
       title: '', // React warning said: `value` prop on `input` should not be null. Consider using an empty string...
       topic: null,
       activeStep: 0,
-      redirectUrl: null,
       titleCharacterCount: 0,
     };
   }
@@ -61,7 +60,6 @@ class CreateContentModal extends Component {
   handleTypeSelect = (dataObj, e) => {
     this.setState({
       type: dataObj.type,
-      redirectUrl: dataObj.redirectUrl,
     });
     this.incrementActiveStep();
   };
@@ -77,9 +75,8 @@ class CreateContentModal extends Component {
     this.setState({ topic: id });
   };
 
-  redirectToEditPage = () => {
-    this.writeToLocalStorage();
-    window.location.href = this.state.redirectUrl;
+  redirectToEditPage = id => {
+    window.location.href = `/admin/pages/${id}/edit/`;
   };
 
   createPage = () => {
@@ -93,12 +90,13 @@ class CreateContentModal extends Component {
         },
         { headers: { 'X-CSRFToken': Cookies.get('csrftoken') } },
       )
-      .then(function(response) {
-        console.log(response);
+      .then(response => {
+        this.redirectToEditPage(response.data.id);
       })
-      .catch(function(error) {
+      .catch(error => {
         console.log(error);
-      });
+      })
+      .bind(this);
   };
 
   writeToLocalStorage = () => {
