@@ -1,5 +1,7 @@
 import ReactDOM from 'react-dom';
 import React, { Component } from 'react';
+import axios from 'axios';
+import Cookies from 'js-cookie';
 
 import ChooseTypeStep from './ChooseTypeStep.js';
 import ChooseTitleStep from './ChooseTitleStep.js';
@@ -41,13 +43,11 @@ class CreateContentModal extends Component {
     if (this.state.titleCharacterCount > MAX_TITLE_LENGTH) return false;
 
     // Skip Topic Select Step for creating a Department
-    if (this.state.type === 'department' && this.state.activeStep === 1) {
-      this.redirectToEditPage();
-      return;
-    }
-
-    if (this.state.activeStep === 2) {
-      this.redirectToEditPage();
+    if (
+      (this.state.type === 'department' && this.state.activeStep === 1) ||
+      this.state.activeStep === 2
+    ) {
+      this.createPage();
       return;
     }
 
@@ -80,6 +80,23 @@ class CreateContentModal extends Component {
   redirectToEditPage = () => {
     this.writeToLocalStorage();
     window.location.href = this.state.redirectUrl;
+  };
+
+  createPage = () => {
+    axios
+      .post(
+        '/admin/pages/new_from_modal/',
+        {
+          blarg: 'blarg',
+        },
+        { headers: { 'X-CSRFToken': Cookies.get('csrftoken') } },
+      )
+      .then(function(response) {
+        console.log(response);
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
   };
 
   writeToLocalStorage = () => {
