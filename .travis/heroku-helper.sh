@@ -95,7 +95,7 @@ function heroku_backup_upload_check {
     else
         echo "heroku_backup_upload_check() ----- ERROR, THE DATABASE CANNOT BE FOUND ON THE S3 BUCKET"
         echo "S3 URL: $1";
-        # exit 1
+        exit 1
     fi;
 }
 

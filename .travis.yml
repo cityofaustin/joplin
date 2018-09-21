@@ -5,9 +5,9 @@ dist: trusty
 # We're going to ignore all branches except:
 branches:
   only:
-#  - master
-#  - production
+  - master
   - sergiotest
+  - production
 
 # We will need these services:
 services:
