@@ -8,6 +8,7 @@ const ButtonBar = ({
   handleBackButton,
   handleNextButton,
   handleCloseButton,
+  onLastStep,
 }) => (
   <div
     className={classNames({
@@ -27,7 +28,7 @@ const ButtonBar = ({
       Close
     </button>
     <div className="ButtonBar__button" onClick={handleNextButton}>
-      Continue
+      {onLastStep ? 'Create' : 'Continue'}
     </div>
   </div>
 );

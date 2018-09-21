@@ -25,6 +25,13 @@ class CreateContentModal extends Component {
     };
   }
 
+  onLastStep = () => {
+    return (
+      (this.state.type === 'department' && this.state.activeStep === 1) ||
+      this.state.activeStep === 2
+    );
+  };
+
   incrementActiveStep = () => {
     this.setState({
       activeStep: this.state.activeStep + 1,
@@ -42,10 +49,7 @@ class CreateContentModal extends Component {
     if (this.state.titleCharacterCount > MAX_TITLE_LENGTH) return false;
 
     // Skip Topic Select Step for creating a Department
-    if (
-      (this.state.type === 'department' && this.state.activeStep === 1) ||
-      this.state.activeStep === 2
-    ) {
+    if (this.onLastStep()) {
       this.createPage();
       return;
     }
@@ -151,6 +155,7 @@ class CreateContentModal extends Component {
                   handleNextButton={this.handleNextButton}
                   handleCloseButton={this.handleCloseButton}
                   activeStep={this.state.activeStep}
+                  onLastStep={this.onLastStep()}
                 />
               </div>
             </div>
