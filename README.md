@@ -65,6 +65,36 @@ As you make edits to yamls files, you will need to run the following command whi
 docker exec --interactive --tty joplin python ./joplin/manage.py loadcontent fixtures/name-of-fixture.yaml
 ```
 
+## Update: New deployment pipeline
+
+The team is currently working on a new deployment pipeline using best practices for continuous integration, backups, data persistence and deployment accountability. As of this moment only the local, staging and production environments have data persistence, while PR (review) apps are still using Heroku's (non-persisted) pipeline until new updates are made in the next few weeks.
+
+Locally, the latest version of the application no longer uses SQLite. Instead, it initializes a separate container with a PostgreSQL server where the data is saved, this is to maintain our development environment as identical as possible to the production environments. Before you launch the build command, be sure to clean up older docker images and containers and rebuild the new application if necessary:
+
+```
+# Assuming you only have joplin containers running, remove all containers first:
+docker rm $(docker container ls -aq);
+
+# Delete orphan (dangling) images only:
+docker rmi $(docker image ls -aq -f "dangling=true");
+
+# Then Rebuild (be sure to have the heroku cli installed in your machine)
+REBUILD=on ./scripts/serve-local.sh
+```
+
+The new build process will create a service (group) of containers:
+
+1. joplindb (PostgreSQL)
+2. joplinassets (assets)
+3. joplin (backend)
+
+The database defaults to version 10 (latest) of postgres. No password is set up, since there is no security needed for a local environment. To connect, use the localhost at the standard PostgreSQL (5432)  port where the container is mapped to listen for connections all without a password, the user and database name is 'joplin'. To manage the database, you should be able to use your favorite DB admin tool (ie. TablePlus, DBeaver, DataGrip, etc). Be sure you are not running a local PostgreSQL server prior to building the containers. Example connection string: `postgres://joplin@localhost:5432/joplin`
+
+The master branch (staging app, joplin-staging.herokuapp.com) and production branch (production app, joplin-production.herokuapp.com) upload static files to an S3 bucket (both share the same bucket), but have separate databases.  
+
+Note: The containers are not built uniformly; for this purpose, joplin will wait and display a 'database not available' message in a loop until the database is up and ready. This is because the DB container takes a little longer to build and set up locally, and jopling has to wait before it can run the django migrations locally.
+
+
 
 ## Create new app
 
