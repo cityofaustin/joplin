@@ -2129,7 +2129,7 @@ def add_processes(apps, schema_editor):
 class Migration(migrations.Migration):
     """ Defines the dependencies and seed data methods in the proper order. """
     dependencies = [
-        ('base', '0028_merge_20180827_2354'),
+        ('base', '0029_auto_20180919_0355'),
     ]
 
     """ Insertion operations sequence. To avoid dependency errors, do not alter the order in which these are currently set up. """
