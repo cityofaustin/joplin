@@ -6,12 +6,17 @@ from django.db import migrations
 import json
 import textwrap
 from pathlib import Path
+
 from django.db import migrations
 from django.conf import settings
 from django.core.files.images import ImageFile
+from django.contrib.auth.models import User
 
+from django.core.management.base import BaseCommand
 from wagtail.core.models import Page
-from base.models import TranslatedImage, TranslatedImageRendition, ThreeOneOne, Theme, Topic, Department, ServicePage, ProcessPage, ProcessPageStep, ProcessPageContact, Location, Contact, ServicePageContact, DepartmentContact, Map, ContactDayAndDuration
+from base.models import TranslatedImage, TranslatedImageRendition, ThreeOneOne, Theme, Topic, Department, ServicePage, ServicePageStep, ProcessPage, ProcessPageStep, ProcessPageContact, Location, Contact, ServicePageContact, DepartmentContact, Map, ContactDayAndDuration
+
+from django.contrib.auth import get_user_model
 
 import logging
 logging.basicConfig(level=logging.INFO)
@@ -29,8 +34,9 @@ def add_admin_user(apps, schema_editor):
     print("\nAdding admin user ...")
 
     # Find and initialize the User object, then persist it on the database.
-    User = apps.get_model(*settings.AUTH_USER_MODEL.split('.'))
+    User = get_user_model()
     User.objects.update_or_create(
+        id=1,
         password="pbkdf2_sha256$36000$AbkvF6MxbbIw$X6FN3p6ip0wZNmDmXk7nwdy7mIFaZZ5iY0p/eXbQs5Y=",
         last_login="2018-03-16T02:55:07.675Z",
         is_superuser=True,
@@ -1109,14 +1115,14 @@ def load_locations(data):
 def add_locations(apps, schema_editor):
     """ Provides seed data for the locations table and executes insertion methods."""
     data = {
-        'locations': [{
-            'name': 'Recycle & Reuse Drop-off Center',
-            'street': '2514 Business Center Dr',
-            'city': 'Austin',
-            'state': 'TX',
-            'zip': 78744,
-            'country': 'United States'
-        }]
+        'locations': [
+            {'name': 'Recycle & Reuse Drop-off Center', 'street': '2514Business Center Dr', 'city': 'Austin',
+             'state': 'TX', 'zip': 78744, 'country': 'United States'},
+            {'name': 'Far South Austin Clinic', 'street': '405 West Stassney', 'city': 'Austin', 'state': 'TX',
+             'zip': 78745, 'country': 'United States'},
+            {'name': "St. John's WIC Clinic", 'street': '7500 Blessing Avenue', 'city': 'Austin', 'state': 'TX',
+             'zip': 78752, 'country': 'United States'}
+        ]
     }
 
     # Pass data object and execute insertion methods.
@@ -1224,6 +1230,8 @@ def ulify(listy):
 
     return result
 
+
+
 def load_servicepage(data):
     """ Inserts a single service page from a data object. See add_servicepages  """
     print(f'-  Cleaning up data...\r', end='')
@@ -1235,7 +1243,7 @@ def load_servicepage(data):
     for key in data:
         if key.startswith('steps_'):
             data[key] = ulify(data[key])
-    data['steps'] = data['steps_en']
+    #data['steps'] = data['steps_en']
     data['additional_content'] = data['additional_content_en']
     print('✅')
 
@@ -1284,8 +1292,7 @@ def load_servicepage(data):
         for k, v in data.items():
             setattr(page, k, v)
     except Exception as e:
-        #page = ServicePage(**data)
-        page, created = ServicePage.objects.get_or_create(defaults=data)
+        page = ServicePage(**data)
         home.add_child(instance=page)
         created = True
 
@@ -1298,322 +1305,527 @@ def load_servicepage(data):
     _, created = ServicePageContact.objects.get_or_create(page=page, defaults={'contact': contact})
     print(f'{"✅  Created" if created else "✔️  Fetched"}')
 
+
+def load_service(data):
+    print(f'-  Cleaning up data...\r', end='')
+    slug = data['slug']
+    for k in ['meta_description_ar', 'meta_description_en', 'meta_description_es', 'meta_description_vi', 'meta_tags', 'meta_title_ar', 'meta_title_en', 'meta_title_es', 'meta_title_vi']:
+        data.pop(k, None)
+
+    print(f'-  Loading service steps...\r', end='')
+    service_steps = data.pop('service_steps')
+    print('✅')
+
+    data['additional_content'] = data['additional_content_en']
+    print('✅')
+
+    print(f'-  Loading user...\r', end='')
+    User = get_user_model()
+    data['owner'] = User.objects.get(id='1')
+    print('✅')
+
+    print(f'-  Loading homepage...\r', end='')
+    home = Page.objects.get(slug='home')
+    print('✅')
+
+    print(f'-  Loading topic page...\r', end='')
+    topic_slug = data.pop('topic')
+    data['topic'] = Topic.objects.get(slug=topic_slug)
+    print('✅')
+
+    print(f'-  Loading image...\r', end='')
+    image_name = data.pop('image')
+    image_regex = f'original_images/{image_name}'
+    data['image'] = TranslatedImage.objects.get(file__startswith=image_regex)
+    print('✅')
+
+    print(f'-  Loading contacts...\r', end='')
+    contact = data.pop('contact')
+    contact = Contact.objects.get(name=contact)
+    print('✅')
+
+    ddata = data.pop('dynamic_content') or []
+    dynamic_content = []
+    for d in ddata:
+        content_type = d['type']
+        print(f'-  Loading dynamic content {content_type}...\r', end='')
+        if content_type == 'map':
+            defaults = {k: v for k, v in d.items() if k.startswith('description')}
+            defaults['location'] = Location.objects.get(name=d['location'])
+            content_map, created = Map.objects.update_or_create(description_en=d['description_en'], defaults=defaults)
+            dynamic_content.append(('map_block', content_map))
+            print(f'{"✅  Created" if created else "⭐  Updated"}')
+        else:
+            dynamic_content.append((f'{content_type}_block', None))
+            print('✅')
+    data['dynamic_content'] = dynamic_content
+
+    print(f'-  Loading child page "{slug}"...\r', end='')
+    created = False
+    try:
+        page = ServicePage.objects.get(slug=slug)
+        for k, v in data.items():
+            setattr(page, k, v)
+        for step in page.service_steps.all():
+            step.delete()
+    except Exception as e:
+        page = ServicePage(**data)
+        home.add_child(instance=page)
+        created = True
+
+    page.title = data['title_en']
+
+    for i, service_step in enumerate(service_steps):
+        print(service_step)
+        service_step['page_id'] = page.id
+        service_step['sort_order'] = i + 1
+        load_service_step(service_step)
+
+    page.save_revision().publish()
+    print(f'{"✅  Created" if created else "⭐  Updated"}')
+
+    print(f'-  Loading service contacts...\r', end='')
+    _, created = ServicePageContact.objects.get_or_create(page=page, defaults={'contact': contact})
+    print(f'{"✅  Created" if created else "✔️  Fetched"}')
+
+
+def load_service_step(data):
+    data['step_description'] = data['step_description_en']
+    service_step = ServicePageStep.objects.create(**data)
+    print("✅  Created service step")
+
+
 def load_servicepages(data):
     """ Iterates through each individual service page and executes insertion method. """
     for service_page in data:
-        load_servicepage(service_page)
+        #load_servicepage(service_page)
+        load_service(service_page)
+
+
 
 def add_servicepages(apps, schema_editor):
+
+    print(f">>> Working on Service pages")
     """ Provides seed data for service pages and executes insertion methods. """
-    data = [{'slug': 'bat-safety', 'topic': 'healthcare-prevention', 'image': 'curbside-compost', 'contact': 311,
-             'title_en': 'Keep yourself safe around bats in Austin',
-             'title_es': 'Keep yourself safe around bats in Austin',
-             'title_vi': 'Keep yourself safe around bats in Austin',
-             'title_ar': 'Keep yourself safe around bats in Austin',
-             'steps_en': '<h2>Follow these steps to keep yourself safe if you come into contact with a bat</h2>\n- If you or anyone you know could have been in contact with a bat, please call the Austin/Travis County <a href="http://www.austintexas.gov/department/epidemiology-and-disease-surveillance">Disease Surveillance Unit</a> at 512-972-5555, or call your local health care provider.\n- Do not touch the bat with bare hands.\n- If the bat is sick, injured, or dead, call Animal Control at 311.\n',
-             'additional_content_en': '<h2>Tips for protecting you and your family around bats</h2>\n<li>Never handle a bat- alive or dead- with your bare hands.</li>\n<li>Keep people and pets away from a sick, injured, or dead bat and call Animal Control at 311.</li>\n<li>Many bats enter homes, apartments, and businesses through unscreened windows and opened doors—particularly when the weather is nice in the fall and spring.</li>\n<li>Bats will generally leave a building on their own, given the chance.</li>\n<li> If you find a bat in a room, do not try to catch it (unless testing is necessary because a person or pet has been sleeping in the room while the bat was present).</li>\n<li>To encourage a bat to leave on its own, open windows, turn the lights on, and leave the room, closing the door behind you and keep children and pets out of the area.</li>\n<li>Check the area every few hours to see if the bat has departed—it may take up to 18 hours for a bat to leave a resting place.</li>\n<li>If you must remove a resting bat from a room because there’s no way to avoid contact with people or pets, wear thick leather gloves and carefully place a wide-mouthed cup, jar, or coffee can over the resting bat, slip a piece of cardboard between the opening and the resting surface, then take the container outdoors to release the bat.</li>\n<h2>Rabies exposure from bats</h2>\n<p><a href="https://www.cdc.gov/rabies/">Rabies</a> exposure occurs only when a person is bitten or scratched by a potentially rabid animal, or when abrasions, open wounds, or mucous membranes are contaminated with the saliva, brain, or nervous system tissue of a potentially rabid animal. For example, if the saliva of a potentially rabid animal comes into contact with an open wound or scratch on your body, that would be considered rabies exposure. </p>\n<p>It may take several weeks or longer for people to show symptoms after being infected with rabies. The early signs of rabies can be fever or headache, but this changes quickly to nervous system signs such as confusion, sleepiness, or agitation. Once someone with a rabies infection starts having these symptoms, that person usually does not survive. This is why it is critical to talk to your doctor or health care provider right away if any animal bites you or licks any open wounds you may have, especially a wild animal.</p>\n',
-             'meta_title_en': 'Keep yourself safe around bats in Austin', 'meta_title_es': None, 'meta_title_vi': None,
-             'meta_title_ar': None, 'dynamic_content': None,
-             'meta_description_en': 'Austin is home to the largest urban bat colony in North America. And while bats contribute greatly to our ecosystem, Austin Public Health wants to remind the public how to protect themselves around these animals. Awareness is the best tool citizens have against exposure.',
-             'meta_description_es': None, 'meta_description_vi': None, 'meta_description_ar': None,
-             'meta_tags': 'Austin bat safety, Bats and rabies in Austin, Found a bat in Austin'},
-            {'slug': 'birth-and-death-certificates', 'topic': 'records-and-certificates', 'contact': 311,
-             'image': 'curbside-compost', 'title_en': 'Get a birth or death certificate',
-             'title_es': 'Get a birth or death certificate', 'title_vi': 'Get a birth or death certificate',
-             'title_ar': 'Get a birth or death certificate',
-             'steps_en': '- Determine how you would like to receive your certificate based on how quickly you need it:\n    - in person to receive your certificate in about 15 minutes,\n    - online to receive your certificate in 2-5 business days,\n    - by phone to receive your certificate 3-5 business days,\n    - or by mail to receive your certificate 2-3 weeks.\n- Make sure you have enough money for the certificate(s) you need:\n    - The cost for each birth certificate is $23.\n    - The cost for one death certificate is $21. If you order more copies at the same time, the cost for each extra one is $4.\n    - Follow the steps below for the delivery method you choose.\n\n<h2>15 minutes in person:</h2>\n    - Bring your current, government-issued photo identification.\n    - Bring cash, a money order in the exact amount, a personal check, or a credit or debit card in your name for the certificate you need.\n    - Visit the The Office of Vital Records is at <a href="https://goo.gl/maps/5JVQ2UVCayN2">7201 Levander Loop, Building C, Austin, TX, 78702</a> between 8 am and 4:30 p.m. Monday through Friday.\n        - The last application is accepted until 4:15 p.m.\n        - Note that our office is usually busiest between 11:00 a.m. – 2:00 p.m. Customers should expect longer wait times during those hours.\n    - For faster service, download and print an application in <a href="http://austintexas.gov/sites/default/files/files/Health/VitalRecords/2018_OVR_WalkInENGLISH.pdf">English</a> or <a href="http://austintexas.gov/sites/default/files/files/Health/VitalRecords/2018_OVR_WalkInSPANISH.pdf">Spanish</a> and bring it with you.\n\n<h2>2-5 business days online:</h2>\n    - Visit <a href="https://www.vitalchek.com/">www.VitalChek.com</a>.\n    - Follow the prompts on VitalChek to select which kind of certificate(s) you need.\n    - Verify your identity by answering the questions on VitalChek.\n        - If they cannot verify your identity with their standard questions, you will be instructed to upload a copy of your current government-issued identification and proof of shipping address before your application can be processed. This will delay the processing and delivery time.\n    - Use a credit or debit card (Visa, MasterCard, American Express, or Discover) to pay for your certificate(s).\n        - Processing and UPS shipping fees will be added.\n\n<h2>3-5 business days by phone:</h2>\n   - Call VitalChek, our secure online agent at 1-800-457-7586\n   - Verify your identity by answering a series of questions.\n      - If VitalChek cannot verify your identity with their standard questions, you will be instructed to upload a copy of your current government-issued identification and proof of shipping address before your application can be processed. This will delay the processing and delivery time.\n   - Use a credit or debit card (Visa, MasterCard, American Express, or Discover) to pay for your certificate(s).\n      - Processing and UPS shipping fees will be added.\n\n<h2>2-3 weeks by mail:</h2>\n     - Mail the following items to Office of Vital Records, PO Box 1088, Austin, TX 78767-1088:\n        - A completed and notarized <a href="http://austintexas.gov/sites/default/files/files/Health/VitalRecords/2018_OVR_WalkInENGLISH.pdf">certificate application in English</a> or a <a href="http://austintexas.gov/sites/default/files/files/Health/VitalRecords/2018_OVR_WalkInSPANISH.pdf>certificate application in Spanish</a>.\n        - A check or money order in the exact amount payable to the Office of Vital Records.\n            - Personal checks must be signed by the same person who signs the application.\n        - A copy of one of your <a href="http://www.dshs.texas.gov/vs/reqproc/Acceptable-IDs/">acceptable and current forms of government-issued photo identification</a>.\n            - If your home address is different than the address on your ID, also include a proof of residence like a utility bill, voter registration card, etc...\n        - A self-addressed envelope with a stamp. You may use an express mail envelope for faster return delivery. If this is not included, you will not receive the certificate.\n     - If you need the certificate quickly through the mail, use an Express form of delivery, such as FedEx, USPS, or UPS, and send your application to: Office of Vital Records, 7201 Levander Loop, Bldg. C, Austin, TX  78702.\n',
-             'meta_title_en': 'Get a birth or death certificate', 'meta_title_es': None, 'meta_title_vi': None,
-             'meta_title_ar': None, 'dynamic_content': None, 'additional_content_en': '',
-             'meta_description_en': 'Find out how to order a birth or death certificate in person, online, by phone, or through the mail.',
-             'meta_description_es': None, 'meta_description_vi': None, 'meta_description_ar': None},
-            {'slug': 'bulk-item-pickup', 'topic': 'recycling-trash-compost', 'image': 'bulk-items', 'contact': 311,
-             'title_en': 'Get ready for curbside bulk item pickup',
-             'title_es': 'Prepárese para la recolección de artículos grandes al borde de la acera',
-             'title_vi': 'Chuẩn bị cho việc bốc rác khối để lề đường',
-             'title_ar': 'كُن على استعداد لجمع العناصر كبيرة الحجم التي يُراد التخلص منها على جانب الرصيف',
-             'steps_en': [
-                 'Use the <a href="http://austintexas.gov/what-do-i-do">“What do I do with” tool</a> below to see what bulk items can be picked up. Bulk items are items that are too large for your trash cart, such as appliances, furniture, and carpet.',
-                 'Consider donating your items before placing them on the curb for pickup.',
-                 'Look up your bulk pickup weeks with <a href="http://www.austintexas.gov/page/my-collection-schedule">My Collection Schedule</a> tool below. We only collect bulk items from Austin residential trash and recycling customers twice a year, and customers have different pickup weeks.',
-                 'Review the bulk item pickup do’s and don’ts below.',
-                 'Place bulk items at the curb in front of your house by 6:30 a.m. on the first day of your scheduled collection week.',
-                 'Separate items into three piles:', ['Metal - includes appliances, doors must be removed',
-                                                      'Passenger car tires - limit of eight tires per household, rims must be removed, no truck or tractor tires',
-                                                      'Non-metal items - includes carpeting and nail-free lumber'],
-                 'The three separate piles are collected by different trucks and may be collected at different times throughout the week.'],
-             'steps_es': [
-                 'Use la función “What do I do with”  abajo para ver los artículos grandes que califican para recolección. Los artículos grandes son los que no caben en su bote de basura, tales como electrodomésticos, muebles y alfombras.',
-                 'Antes de colocarlos al borde de la acera para ser recogidos, considere primero donarlos.',
-                 'Use la función My Collection Schedule abajo para buscar las semanas en que recogemos artículos grandes por su casa. Solo recogemos artículos grandes de los clientes residenciales de basura y reciclaje de Austin dos veces al año, y las semanas en que recogemos varían por cliente.',
-                 'Revise abajo lo que debe y no debe hacer con los artículos grandes.',
-                 'Coloque los artículos grandes al borde de la acera frente a su casa antes de las 6:30 a.m. el primer día de la semana de recolección programada para su casa.',
-                 'Separe los artículos en tres grupos.',
-                 ['Metales: incluye electrodomésticos, debe quitarles las puertas',
-                  'Llantas de autos de pasajeros: límite de ocho llantas por casa, debe quitarles los rines, no se aceptan llantas de camiones ni tractores',
-                  'Artículos que no son de metal: incluye alfombras y madera sin clavos'],
-                 'Los camiones que recogen estos tres grupos por separado son distintos y podrían pasar en momentos diferentes durante esa semana.'],
-             'steps_vi': [
-                 'Sử dụng công cụ “What do I do with” dưới đây để biết những loại rác khối nào có thể được bốc đi. Những loại rác khối là các rác quá lớn để cho vào thùng rác của mình, ví dụ như các máy móc dùng cho việc nhà, đồ đạc, và thảm.',
-                 'Cân nhắc giải pháp cho tặng các đồ vật của mình trước khi để chúng trên lề đường để được bốc đi.',
-                 'Tìm các tuần lễ bốc rác khối của mình bằng công cụ <a href="http://www.austintexas.gov/page/my-collection-schedule">My Collection Schedule</a> dưới đây. Chúng tôi chỉ thu những rác khối từ rác nhà của cư dân Austin và các khách hàng tái chế cho hai lần một năm, và các khách hàng có các tuần bốc rác khác nhau.',
-                 'Kiểm lại Những Điều Nên Làm và Không Nên Làm về Bốc Rác Khối dưới đây.',
-                 'Để các rác khối ở lề đường phía trước nhà quý vị trước lúc 6:30 sáng vào ngày đầu trong tuần theo lịch thu rác của mình.',
-                 'Tách các đồ vật ra thành ba đống.',
-                 ['Kim loại - bao gồm các máy móc dùng cho việc nhà, các cánh cửa phải được tháo ra',
-                  'Bánh xe hơi dân dụng - giới hạn tám bánh xe cho mỗi hộ gia đình, vành bánh xe phải được tháo bỏ, không nhận bánh xe tải hay xe ủi kéo',
-                  'Đồ phi kim loại - bao gồm thảm và gỗ làm nhà không có đinh'],
-                 'Ba đống đồ riêng biệt này được thu bởi các xe tải khác nhau và có thể được thu vào các thời điểm khác nhau trong tuần.'],
-             'steps_ar': [
-                 'استخدم أداة <a href="http://www.austintexas.gov/page/my-collection-schedule">"What do I do with"</a> أدناه لمعرفة العناصر كبيرة الحجم التي يمكن جمعها للتخلص منها. العناصر كبيرة الحجم هي عناصر حجمها كبير للغاية بحيث لا تسعها عربة القمامة، مثل الأجهزة والأثاث والسجاد.',
-                 'فكّر في التبرع بالعناصر الخاصة بك التي تُريد التخلص منها قبل وضعها على الرصيف لجمعها.',
-                 'ابحث عن أسابيع جمع العناصر التي تُريد التخلص منها عن طريق أداة  My Collection Schedule أدناه. نحن نجمع فقط من عملاء أوستن العناصر كبيرة الحجم من النفايات المنزلية وإعادة التدوير مرتين في السنة، ولدى العملاء أسابيع مختلفة لعملية الجمع.',
-                 'يرجى مراجعة قائمة العناصر كبيرة الحجم التي يمكن جمعها والعناصر التي لا يمكن جمعها أدناه.',
-                 'ضع العناصر كبيرة الحجم على جانب الرصيف أمام منزلك قبل الساعة 6:30 صباحا في اليوم الأول من أسبوع الجمع المقرر الخاص بك.',
-                 'افصل العناصر إلى ثلاثة أكوام.', ['المعادن - تشمل الأجهزة، يجب إزالة الأبواب',
-                                                   'إطارات سيارات الركاب - أقصى عدد مسموح به ثمانية إطارات لكل أسرة، يجب إزالة الحواف، غير مسموح بإطارات الشاحنات أو الجرارات',
-                                                   'العناصر غير المعدنية - تشمل السجاد والأخشاب الخالية من المسامير'],
-                 'يتم جمع الأكوام الثلاثة المنفصلة بواسطة شاحنات مختلفة ويمكن جمعها في أوقات مختلفة على مدار الأسبوع.'],
-             'additional_content_en': '<h2>Bulk item pickup do’s and don’ts</h2>\n<p>Do not put bulk items in bags, boxes, or other containers. Bags will be treated as extra trash and are subject to extra trash fees.</p>\n<p>Do not place any items under low hanging tree limbs or power lines.</p>\n<p>Do not place items in an alley in any area in front of a vacant lot or in front of a business. Items will not be collected from these areas.</p>\n<p>To prevent damage to your property, keep bulk items 5 feet away from your:</p>\n<ul>\n    <li>Trash cart</li>\n    <li>Mailbox</li>\n    <li>Fences or walls</li>\n    <li>Water meter</li>\n    <li>Telephone connection box</li>\n    <li>Parked cars</li>\n</ul>\n',
-             'additional_content_es': '<h2>Qué debe y no debe hacer para la recolección de artículos grandes</h2>\n<p>No meta los artículos grandes en bolsas, cajas ni otros recipientes. Las bolsas se consideran basura adicional y están sujetas a cuotas de basura adicionales.</p>\n<p>No coloque ningún artículo debajo de árboles con ramas bajas ni cables del tendido eléctrico bajos.</p>\n<p>No coloque artículos en callejones en ningún área frente a terrenos baldíos ni negocios. No recogeremos artículos en esas áreas.</p>\n<p>Para evitar el daño a su propiedad y la de otros, mantenga los artículos grandes a 5 pies de distancia de su:</p>\n<ul>\n    <li>Bote de basura</li>\n    <li>Buzón</li>\n    <li>Cerca o pared</li>\n    <li>Medidor de agua</li>\n    <li>Caja de conexión telefónica</li>\n    <li>Autos estacionados</li>\n</ul>\n',
-             'additional_content_vi': '<h2>Những Điều Nên Làm và Không Nên Làm về Bốc Rác Khối</h2>\n<p>Không để các rác khối vào trong túi, hộp, hay các thùng đựng khác. Các túi đựng sẽ được xem là rác phụ trội và phải chịu lệ phí rác phụ trội.</p>\n<p>Không để bất kỳ đồ vật nào dưới các cành cây lơ lửng ở tầm thấp hoặc dưới các đường dây điện.</p>\n<p>Không để các đồ vật ở đường hẻm tại bất kỳ khu vực nào phía trước một khu đất trống hoặc trước một cơ sở kinh doanh.  Các đồ vật ở các chỗ này sẽ không được thu đi.</p>\n<p>Để tránh gây thiệt hại cho tài sản của quý vị hoặc của người khác, hãy để các rác khối cách xa 5 feet (1 mét rưỡi) từ các chỗ sau đây của mình:</p>\n<ul>\n    <li>Thùng xe rác</li>\n    <li>Hộp thư</li>\n    <li>Hàng rào và tường rào</li>\n    <li>Đồng hồ đo nước</li>\n    <li>Hộp đấu nối điện thoại</li>\n    <li>Xe hơi đậu.</li>\n</ul>\n',
-             'additional_content_ar': '<h2>قائمة العناصر كبيرة الحجم التي يمكن جمعها والعناصر التي لا يمكن جمعها</h2>\n<p>لا تضع العناصر كبيرة الحجم في أكياس، أو صناديق، أو غير ذلك من الحاويات. سيتم التعامل مع الأكياس على أنها قمامة إضافية وتخضع لرسوم إضافية لجمع القمامة.</p>\n<p>لا تضع أي عناصر تحت فروع شجر أو أسلاك كهرباء متدل بارتفاع منخفض.</p>\n<p>لا تضع العناصر في ممر في أي منطقة أمام قطعة أرض شاغرة أو أمام شركة. لن يتم التقاط العناصر من هذه المناطق.</p>\n<p>لمنع الأضرار التي يمكن أن تلحق بعقارك أو عقار الآخرين، اجعل العناصر كبيرة الحجم على بُعد 5 أقدام من:</p>\n<ul>\n    <li>عربة القمامة</li>\n    <li>صندوق البريد</li>\n    <li>السياج أو الجدران</li>\n    <li>عداد المياه</li>\n    <li>صندوق الاتصال الهاتفي</li>\n    <li>السيارات المركونة.</li>\n</ul>\n',
-             'dynamic_content': [{'type': 'recollect'}], 'meta_title_en': None,
-             'meta_title_es': 'Prepárese para la recolección de artículos grandes al borde de la acera',
-             'meta_title_vi': 'Chuẩn Bị cho Bốc Rác Khối Để Lề Đường',
-             'meta_title_ar': 'كُن على استعداد لجمع العناصر كبيرة الحجم التي يُراد التخلص منها على جانب الرصيف',
-             'meta_description_en': None,
-             'meta_description_es': 'Los clientes residenciales de basura y reciclaje de Austin pueden aprovechar la recolección de artículos que no caben en su bote de basura, tales como electrodomésticos, muebles y alfombras.',
-             'meta_description_vi': 'Rác nhà của cư dân Austin và các khách hàng tái chế được hưởng dịch vụ bốc rác cho các đồ vật để lề đường vì chúng quá lớn cho một thùng rác, chẳng hạn như các máy móc dùng cho việc nhà, đồ đạc, và thảm.',
-             'meta_description_ar': 'يمكن لعملاء أوستن التمتع بخدمة جمع العناصر كبيرة الحجم من النفايات المنزلية وإعادة التدوير التي لا تسع عربة القمامة، مثل الأجهزة والأثاث والسجاد.',
-             'meta_tags': None},
-            {'slug': 'compost-pickup', 'topic': 'recycling-trash-compost', 'image': 'curbside-compost', 'contact': 311,
-             'title_en': 'Get ready for curbside compost pickup',
-             'title_es': 'Prepárese para la recolección de compost',
-             'title_vi': 'Chuẩn bị cho việc bốc rác phân ủ hữu cơ thường lệ',
-             'title_ar': 'كُن على استعداد لخدمة جمع السماد على جانب الرصيف', 'steps_en': [
-                'Look for your home on this map to see if you are in the Curbside Composting service area: <a href="https://austintexas.gov/sites/default/files/files/Resource_Recovery/curbside_composting_map_for_web_11x17.pdf">Curbside Compost Service Area</a>.',
-                'If you are in the composting service area, place food scraps, yard trimmings, pizza boxes, food-soiled paper products, and other compostable items into your green compost cart. Use the "What do I do with" tool below to find out what you can compost. We like to say, if it grows, it goes.',
-                'Roll the green cart out to your curb before 6:30 a.m. on your regular pickup day.'], 'steps_es': [
-                'Busque su casa en este mapa para ver si está en el área de servicio de recolección de compost: <a href="https://austintexas.gov/sites/default/files/files/Resource_Recovery/curbside_composting_map_for_web_11x17.pdf">Curbside Compost Service Area</a>',
-                'Si está en el área de servicio de compost, coloque los restos de comida, recortes del jardín, cajas de pizza, papeles manchados con comida y otros artículos compostables en su bote verde para compostaje. Use la función “What do I do with" (vea el enlace abajo) para ver lo que puede compostar. Como decimos nosotros: ¡si crece, lo puede agregar!',
-                'Coloque su bote al lado de la acera frente a su casa antes de las 6:30 a.m. en su día de recolección regular.'],
-             'steps_vi': [
-                 'Tìm nhà quý vị trên bản đồ để xem nếu mình ở khu vực có dịch vụ Rác Ủ Phân Hữu Cơ. <a href="https://austintexas.gov/sites/default/files/files/Resource_Recovery/curbside_composting_map_for_web_11x17.pdf">Curbside Compost Service Area</a>',
-                 'Nếu quý vị ở trong khu vực có dịch vụ rác ủ phân hữu cơ, hãy để các đồ thực phẩm thừa bỏ, rác làm vườn, các hộp pizza, các loại giấy bọc đồ ăn, và các thứ có thể phân hủy khác vào trong thùng rác ủ phân hữu cơ màu xanh lá cây của mình.  Sử dụng công cụ “Tôi cần làm gì với (liên kết đến ứng dụng dưới)” để biết những loại gì quý vị có thể làm phân ủ hữu cơ. Chúng tôi muốn nói là: nếu nó mọc đươc, nó ủ được!',
-                 'Lăn thùng xe màu xanh lá cây ra lề đường trước 6:30 sáng vào ngày bốc rác thường lệ của mình.'],
-             'steps_ar': [
-                 'ابحث عن منزلك على هذه الخريطة لمعرفة ما إذا كنت في منطقة خدمة جمع السماد على جانب الرصيف. <a href="https://austintexas.gov/sites/default/files/files/Resource_Recovery/curbside_composting_map_for_web_11x17.pdf">Curbside Compost Service Area</a>',
-                 'إذا كنت في منطقة خدمة التسميد، ضع فضلات الطعام ومخلفات الحدائق وصناديق البيتزا ومنتجات الورق المتسخ بالطعام وغيرها من العناصر القابلة للتسميد في عربة التسميد الخضراء خاصتك. استخدم أداة "What do I do with (رابط التطبيق أدناه)" لمعرفة ما يمكنك تحويله إلى سماد. نود أن نقول، ضع كل صنف من المواد على حدة.',
-                 'انقل العربة الخضراء إلى جانب رصيفك قبل الساعة 6:30 صباحا في يومك العادي لجمع العربات.'],
-             'additional_content_en': '<h2>Keeping your compost cart fresh</h2>\n<p>While it is not required, there are a few things you can do to keep your compost cart from smelling bad:</p>\n<ul>\n    <li>Line your compost cart with a paper bag or use BPI-certified compostable bags. If you don’t have a bag, you can put dry leaves, pizza boxes, or newspaper on the bottom of your cart. Sprinkling baking soda on the bottom will also help keep the smell down.</li>\n    <li>Keep your compost cart in the shade if possible, and always keep the lid closed to contain the smell and to keep bugs and animals out of your cart.</li>\n</ul>\n\n<h2>Why compost?</h2>\n<p>When buried in a landfill, compostable materials do not break down as they would in nature or in a compost pile. Instead of going to a landfill, where they would release methane into the atmosphere, organic materials placed in the green carts are taken to a local composting facility, where they break down into compost. Compost helps soil retain water and fertilizes lawns and gardens without using chemicals.</p>\n\n<h2>Save money with your green cart</h2>\n<p>You will have less trash to throw away each week after putting food scraps and food-soiled paper in your green cart. This may allow you to <a href="http://www.austintexas.gov/department/residential-rates-fees">downsize to a smaller, less expensive trash cart</a>. Austin Resource Recovery offers four trash cart sizes – the smaller the cart, the less it costs each month.</p>\n',
-             'additional_content_es': '<h2>Cómo mantener su bote de compost fresco</h2>\n<p>Aunque no es necesario, estas son algunas cosas que puede hacer para evitar que su bote de compostaje huela mal:</p>\n<ul>\n    <li>Coloque una bolsa de papel dentro del bote de compostaje o use bolsas de compostaje certificadas por BPI. Si no tiene una bolsa, puede colocar hojas secas, cajas de pizza o periódico en el fondo del bote. Espolvorear bicarbonato de soda en el fondo del bote también controlará el olor.</li>\n    <li>Mantenga su bote de compostaje en la sombra si es posible y siempre cerrado para contener el olor y evitar que le entren insectos y animales.</li>\n</ul>\n\n<h2>¿Por qué es bueno hacer compost?</h2>\n<p>Cuando se entierran en un vertedero de basura, los materiales para compostaje no se descomponen como lo harían en la naturaleza o en una pila de compost. En lugar de ir al vertedero, donde expulsarían gas metano a la atmósfera, los materiales orgánicos colocados en los botes verdes son llevados al centro de compostaje local donde se descomponen para formar compost. El compost ayuda a la tierra a retener el agua y sirve como fertilizante para el césped y jardines sin necesidad de químicos.</p>\n\n<h2>¡El bote verde le ahorra dinero!</h2>\n<p>Después de poner los restos de comida y los papeles que se hayan ensuciado con alimentos en su bote verde, tendrá menos basura que tirar cada semana. Esto podría permitirle <a href="http://www.austintexas.gov/department/residential-rates-fees">cambiarse a un bote de basura más pequeño y más barato</a>. Austin Resource Recovery ofrece cuatro tamaños de botes de basura y, mientras más pequeño, menos le cuesta al mes.</p>\n',
-             'additional_content_vi': '<h2>Giữ thùng xe rác ủ phân hữu cơ của mình tươi sạch:</h2>\n<p>Cho dù không bắt buộc, vẫn có một số điều quý vị có thể làm để giữ cho thùng rác ủ phân hữu cơ của mình không bị bốc mùi khó chịu:</p>\n<ul>\n    <li>Lót thùng đựng rác ủ phân hữu cơ bằng túi giấy hoặc dùng túi có thể phân hủy và được chứng nhận bởi BPI. Nếu quý vị không có túi, quý vị có thể lót đáy thùng bằng lá khô, hộp pizza, hoặc giấy báo. Rắc thuốc muối ở dưới đáy cũng sẽ giúp giảm bốc mùi.</li>\n    <li>Nếu có thể hãy để thùng rác đựng phân ủ hữu cơ dưới bóng mát, và luôn đậy nắp kín để giữ mùi hôi và khiến cho các loại sâu bọ cũng như thú vật không vào thùng của mình.</li>\n</ul>\n\n<h2>Tại sao lại ủ phân hữu cơ?</h2>\n<p>Khi bị chôn ở một bãi chôn rác, các chất khi thường thì tự phân hủy sẽ không tan rã như khi chúng ở trong thiên nhiên hoặc ở trong một đống rác ủ phân hữu cơ. Thay vì cho ra bãi chôn rác, nơi mà chúng sẽ thải khí mê-than (methanol) vào trong không khí, các vật liệu hữu cơ này được đặt trong các thùng xe rác màu xanh lá cây để được đưa đến một cơ sở ủ phân hữu cơ ở địa phương, ở đó chúng phân hủy thành phân ủ hữu cơ. Phân ủ hữu cơ giúp cho đất giữ dược nước và làm phân bón cho bãi cỏ và vườn tược mà không phải sử dụng hóa chất.</p>\n\n<h2>Tiết kiệm tiền với thùng xe rác xanh lá cây</h2>\n<p>Quý vị sẽ có ít đi số rác phải vứt bỏ mỗi tuần sau khi cho các đồ ăn thừa và giấy bọc thực phẩm đã bẩn vào trong thùng xe rác màu xanh lá cây của mình. Điều này có thể cho phép quý <a href="http://www.austintexas.gov/department/residential-rates-fees">vị giảm kích thước thùng xe rác xuống loại nhỏ hơn, đỡ tốn kém hơn</a>. Sở Phục Hồi Nguồn Lực Austin cung cấp bốn cỡ thùng xe rác – xe nhỏ hơn, thì chi phí ít hơn mỗi tháng.</p>\n',
-             'additional_content_ar': '<h2>الحفاظ على عربة التسميد خاصتك من الروائح الكريهة</h2>\n<p>في حين أن هذا الإجراء ليس مطلوبا، إلا أن هناك القليل من الأشياء التي يمكنك القيام بها للحفاظ على عربة التسميد خاصتك من الروائح الكريهة:</p>\n<ul>\n    <li>ضع داخل عربة التسميد بالأسفل بطانة من الأكياس الورقية أو الأكياس المعتمدة من قبل BPI القابلة للتسميد. إذا لم يكن لديك أكياس، يمكنك وضع أوراق الشجر الجافة أو صناديق البيتزا أو ورق الجرائد داخل الجزء السفلي من عربتك. سيساعد أيضا رش بيكربونات الصودا في القاع على طرد الروائح الكريهة.</li>\n    <li>احتفظ بعربة التسميد خاصتك في الظل إن أمكن، واحرص دائما على إغلاق الغطاء لعدم انتشار أي روائح وإبعاد الحشرات والحيوانات عن عربتك.</li>\n</ul>\n\n<h2>لماذا السماد؟</h2>\n<p>عند دفن المواد القابلة للتسميد في مكب النفايات، فإنها لا تتحلل كما تتحلل في الطبيعة أو في كومة السماد. فبدلا من الذهاب بها إلى مكب النفايات حيث قد تطلق غاز الميثان في الغلاف الجوي، تؤخذ المواد العضوية الموضوعة في العربات الخضراء إلى المنشأة المحلية للتسميد، حيث تتحلل هناك إلى سماد. يساعد السماد التربة على الاحتفاظ بالماء وتخصيب المروج والحدائق دون استخدام المواد الكيميائية.</p>\n\n<h2>وفّر المال مع عربتك الخضراء</h2>\n<p>سيكون لديك أقل سلة قمامة حجما تتخلص منها كل أسبوع بعد وضع فضلات الطعام والورق المتسخ بالطعام في عربتك الخضراء. وهذا قد يسمح لك بتصغير حجم عربة القمامة إلى حجم أصغر وبأقل تكلفة. توفر Austin Resource Recovery أربعة أحجام لعربة النفايات - فأصغر عربة، تكلفتها أقل.</p>\n',
-             'dynamic_content': [{'type': 'what_do_i_do_with'}], 'meta_title_en': None,
-             'meta_title_es': 'Recolección de compost al borde de la acera', 'meta_title_vi': 'Bốc Rác Phân Ủ Hữu Cơ',
-             'meta_title_ar': 'خدمة جمع السماد على جانب الرصيف', 'meta_description_en': None,
-             'meta_description_es': 'Prepárese para la recolección de compost en Austin con estos pasos útiles. Use nuestra herramienta para ver lo que puede compostar en Austin.',
-             'meta_description_vi': 'Chuẩn bị cho việc bốc râc phân ủ hữu cơ ở Austin với những bước hữu ích sau đây. Dùng công cụ của chúng tôi để biết những gì quý vị có thể làm phân ủ hữu cơ ở Austin.',
-             'meta_description_ar': 'كُن على استعداد لخدمة جمع السماد على جانب الرصيف في أوستن بمساعدة هذه الخطوات المفيدة. استخدام أداتنا لمعرفة ما يمكنك تحويله إلى سماد في أوستن.',
-             'meta_tags': None},
-            {'slug': 'find-free-condoms', 'topic': 'healthcare-prevention', 'image': 'curbside-compost', 'contact': 311,
-             'title_en': 'Find free condoms and learn other ways to prevent HIV',
-             'title_es': 'Find free condoms and learn other ways to prevent HIV',
-             'title_vi': 'Find free condoms and learn other ways to prevent HIV',
-             'title_ar': 'Find free condoms and learn other ways to prevent HIV',
-             'steps_en': '- Use our <a href="http://austin.maps.arcgis.com/apps/webappviewer/index.html?id=07706098076547358b7cc0c7b3d8562e%20">free condom map<a/> to find locations in the Austin giving them. Locations include:\n    - Neighborhood centers,\n    - Barber shops,\n    - Liquor stores and bars,\n    - And other easily accessible local establishments.\n- Review steps you can take to prevent HIV.\n    - Always use latex condoms with your partner, especially if you do not know your partner’s HIV status.\n    - Don’t have sex. Abstinence is the only sure way to avoid contracting HIV.\n    - If you and your partner are both HIV negative, being faithful in your relationship removes your risk for HIV infection.\n    - Don’t share needles and syringes. Needles and syringes can expose you to HIV.\n    - Speak to a doctor about a prescription for <a href="https://www.cdc.gov/hiv/basics/prep.html">Pre-exposure prophylaxis (or PrEP)<a/>. PrEP is taken daily to lower chances of HIV infection.\n',
-             'additional_content_en': None, 'dynamic_content': [
-                {'type': 'map', 'description_en': 'Hazardous Waste Dropoff Center',
-                 'description_es': 'Visite la Tienda de Reúso en el Centro de Reciclaje y Reúso',
-                 'description_vi': 'Ghé thăm Cửa Hàng Tái Dụng tại Trung Tâm Tái Chế & Tái Dụng',
-                 'description_ar': 'تفضل بزيارة مستودع إعادة الاستخدام في مركز إعادة التدوير وإعادة الاستخدام',
-                 'location': 'Recycle & Reuse Drop-off Center'}],
-             'meta_title_en': 'Find free condoms and learn other ways to prevent HIV',
-             'meta_description_en': 'Find free condoms in locations across Austin, and learn ways to prevent HIV infection.',
-             'meta_tags': 'HIV, condoms, HIV prevention, free condoms, free protection, HIV protection, HIV infection prevention'},
-            {'slug': 'get-immunization-record', 'topic': 'records-and-certificates', 'image': 'curbside-compost',
-             'contact': 311, 'title_en': 'Get a copy of your or your child’s immunization record',
-             'title_es': 'Get a copy of your or your child’s immunization record',
-             'title_vi': 'Get a copy of your or your child’s immunization record',
-             'title_ar': 'Get a copy of your or your child’s immunization record',
-             'steps_en': '- If you’ve received immunizations at a public health clinic in Austin or Travis County, you can pick them up for $5 at:\n  - <a href="https://www.google.com/maps/place/405+W+Stassney+Ln,+Austin,+TX+78745/@30.2070206,-97.7814319,17z/data=!3m1!4b1!4m5!3m4!1s0x8644b4a98fa1e043:0x6c9910f96b488fb8!8m2!3d30.2070206!4d-97.7792379">Far South Austin Clinic<a/> or <a href="https://www.google.com/maps/place/7500+Blessing+Ave,+Austin,+TX+78752/@30.3326199,-97.6955864,17z/data=!3m1!4b1!4m5!3m4!1s0x8644c988de534435:0x6d5da7b657ff877e!8m2!3d30.3326199!4d-97.6933924">St. John Clinic<a/>. Records may not be available for shots given at private physicians\' offices.\n- <a href="http://www.austintexas.gov/sites/default/files/files/Health/Immunizations/Medical_Release_Form_2016_English.pdf">Complete this form<a/> to agree to let us to release your medical information to you and any other people who may need it.\n- A parent or guardian may only pick up immunization records for their child if their child is under the age of 18.\n',
-             'additional_content_en': '<h2>Store your immunizations records</h2>\nIf you’ve never received immunizations at a public health clinic in Austin or Travis County, but you plan on visiting a clinic, we can save your shot record going forward.\nIf you are 18 or older, <a href="http://www.austintexas.gov/sites/default/files/files/Health/Immunizations/ImmTrac_Consent_Form_Adult__English.pdf"register for ImmTrac to have your immunizations information stored</a> for free. ImmTrac safely stores your immunization records in one electronic system and remembers which vaccines you’ve had when you can’t.\n',
-             'dynamic_content': [{'type': 'map', 'description_en': 'Hazardous Waste Dropoff Center',
-                                  'description_es': 'Visite la Tienda de Reúso en el Centro de Reciclaje y Reúso',
-                                  'description_vi': 'Ghé thăm Cửa Hàng Tái Dụng tại Trung Tâm Tái Chế & Tái Dụng',
-                                  'description_ar': 'تفضل بزيارة مستودع إعادة الاستخدام في مركز إعادة التدوير وإعادة الاستخدام',
-                                  'location': 'Recycle & Reuse Drop-off Center'}],
-             'meta_title_en': 'Get a copy of your or your child’s immunization record',
-             'meta_description_en': 'Get a copy of your immunization records so you can see what vaccines you have and what shots you still need.',
-             'meta_tags': 'Shots, vaccines, immunizations, immunization shots, immunization shot records, shot record, vaccine records, shots record, shots records'},
-            {'slug': 'get-immunized', 'topic': 'healthcare-prevention', 'image': 'paint', 'contact': 311,
-             'title_en': 'Get immunizations for you and your family',
-             'title_es': 'Get immunizations for you and your family',
-             'title_vi': 'Get immunizations for you and your family',
-             'title_ar': 'Get immunizations for you and your family',
-             'steps_en': '- We provide immunization shots to uninsured children and adults and Medicaid recipients. Decide which shots you or your family members need.\n  - Shots for children\n      - DTaP, DT, or DTP\n      - Hepatitis A\n      - Hepatitis B\n      - HPV\n      - Polio\n      - Hib\n      - PCV\n      - Measles, Mumps, and Rubella (MMR)\n      - Varicella; the chickenpox vaccine (VAR)\n      - Meningococcal (MCV4)\n   - Shots for adults\n      - DTaP, DT, or DTP\n      - Hepatitis A\n      - Hepatitis B\n      - HPV\n      - Meningitis (through age 21)\n      - Measles, Mumps, and Rubella (MMR)\n      - Pneumonia\n      - Tdap/Td\n      - Varicella; the chickenpox vaccine (VAR)\n      - Shingles\n- Find the clinic nearest you\n   - <a href"https://www.google.com/maps/place/405+W+Stassney+Ln,+Austin,+TX+78745/@30.2070206,-97.7814319,17z/data=!3m1!4b1!4m5!3m4!1s0x8644b4a98fa1e043:0x6c9910f96b488fb8!8m2!3d30.2070206!4d-97.7792379">Far South Austin Clinic<a/>\n   - <a href"https://www.google.com/maps/place/7500+Blessing+Ave,+Austin,+TX+78752/@30.3326199,-97.6955864,17z/data=!3m1!4b1!4m5!3m4!1s0x8644c988de534435:0x6d5da7b657ff877e!8m2!3d30.3326199!4d-97.6933924">St. John Clinic<a/>\n- <a href="http://www.austintexas.gov/sites/default/files/files/Health/Immunizations/2018_S4T_BS_Flyer-_English.pdf">Find available appointment times</a>.\n- Call 512-972-5520 Monday through Friday 8 a.m. to 4:30 p.m. to make an appointment.\n- Bring the required items with you to your appointment:\n    - Your shot records\n    - Your Medicaid card if you have one\n    - Your payment\n      - $10 per dose of vaccine for children\n      - $25 per dose of vaccine for adults\n      - $20 for a TB test\n      - No one is refused services if they are unable to pay.\n',
-             'additional_content_en': '<h2>Child immunizations requirements</h2>\n\nThe Texas Department of State Health Services requires children to get certain immunizations to attend schools and childcare facilities.\n\n<a href="http://www.dshs.texas.gov/immunize/school/child-care-requirements.aspx">Learn more about child-care immunization requirements for children under the age of five here and<a/> <a href="http://www.dshs.texas.gov/immunize/school/school-requirements.aspx">immunization requirements for students K-12</a>.\n\nIf you don’t have Medicaid or are already insured, you can make an appointment with a private doctor or clinic for immunizations shots.\n',
-             'dynamic_content': [{'type': 'map', 'description_en': 'Hazardous Waste Dropoff Center',
-                                  'description_es': 'Visite la Tienda de Reúso en el Centro de Reciclaje y Reúso',
-                                  'description_vi': 'Ghé thăm Cửa Hàng Tái Dụng tại Trung Tâm Tái Chế & Tái Dụng',
-                                  'description_ar': 'تفضل بزيارة مستودع إعادة الاستخدام في مركز إعادة التدوير وإعادة الاستخدام',
-                                  'location': 'Recycle & Reuse Drop-off Center'}],
-             'meta_title_en': 'Get immunizations for you and your family', 'meta_description_es': None,
-             'meta_description_vi': None, 'meta_description_ar': None,
-             'meta_description_en': 'Get low-cost vaccines for you and your family. We provide immunizations to uninsured children and adults and Medicaid recipients. Decide which shots you need.',
-             'meta_tags': 'Immunizations, immunization shots, vaccines, vaccinations, immunization requirements'},
-            {'slug': 'hazardous-waste-dropoff-prototype', 'topic': 'recycling-trash-compost',
-             'image': 'household-hazardous-waste', 'contact': 311,
-             'title_en': '\\[Prototype\\] Drop off household hazardous waste and other recyclables',
-             'title_es': '\\[Prototype\\] Entregue sus desechos peligrosos del hogar y otros artículos reciclables',
-             'title_vi': '\\[Prototype\\] Bỏ đi các loại rác nhà nguy hiểm và các loại rác tái chế khác',
-             'title_ar': 'التخلص من النفايات الخطرة المنزلية وغيرها من المواد القابلة للتدوير\\[Prototype\\]',
-             'steps_en': [
-                 'Check the “What do I do with” tool below to find out what items are accepted. Some items are free to drop off and some items, like tires, require a fee.',
-                 'Review the Household Hazardous Waste Do’s and Don’ts below.',
-                 'Drop off your items at the Recycle and ReUse Center at 2514 Business Center Dr, Austin, TX 78744.'],
-             'steps_es': [
-                 'Use la función “What do I do with” abajo para ver los artículos aceptados. Puede entregar algunos artículos sin tener que pagar y para otros, como las llantas, debe pagar una cuota.',
-                 'Revise abajo lo que debe y no debe hacer con los desechos peligrosos del hogar.',
-                 'Entregue sus artículos en el Centro de Reciclaje y Reúso ubicado en 2514 Business Center Dr, Austin, TX 78744.'],
-             'steps_vi': [
-                 'Kiểm tra bằng công cụ “What do I do with” dưới đây để xác định những loại nào được chấp nhận. Một số loại không phải đóng phí khi vứt bỏ trong khi một số loại khác, ví dụ như lốp xe, sẽ phải trả phí.',
-                 'Rà soát Những điều Nên làm và Không Nên làm với Rác thải Nguy hại của Hộ gia đình dưới đây.',
-                 'Bỏ các đồ thải loại của bạn tại Trung tâm Tái chế và Tái Sử dụng tại 2514 Business Center Dr, Austin, TX 78744.'],
-             'steps_ar': [
-                 'أطلع على أداة "What do I do with" أدناه لمعرفة العناصر المقبولة. التخلص من بعض العناصر مجاني وهناك بعض العناصر، مثل التخلص من الإطارات، تتطلب رسوما.',
-                 'يرجى مراجعة قائمة النفايات المنزلية الخطرة التي يمكن التخلص منها والعناصر التي لا يمكن التخلص منها أدناه.',
-                 'تخلص من العناصر الخاصة بك في مركز إعادة التدوير وإعادة الاستخدام في 2514 Business Center Dr, Austin, TX 78744.'],
-             'additional_content_en': '<h2>Household Hazardous Waste Do’s and Don’ts</h2>\n<p>Throwing household hazardous waste in the trash or pouring it down the drain is dangerous and harmful to the environment. Austin and Travis County residents can drop off up to 30 gallons of hazardous waste for free each year.</p>\n<p>Bring products in their original containers. If the original container is larger than 5-gallons, please call the Recycle and ReUse Center at 512-974-4343 to find out how to get your products ready for drop off.</p>\n<p>Put small containers upright in sturdy boxes. If a container is leaking, pour cat litter into a larger container and put the leaking container inside the larger. The litter will absorb the spill.</p>\n<p>Do not mix items. Large truck or trailer loads will not be accepted after 4:45 p.m.</p>\n<p>Businesses are not eligible to drop off hazardous waste. For information about how businesses can dispose of hazardous waste, call 512-974-4336.</p>\n',
-             'additional_content_es': '<h2>Qué debe y no debe hacer con los artículos peligrosos del hogar</h2>\n<p>Botar desechos peligrosos del hogar en la basura o por el drenaje es peligroso y perjudicial para el medio ambiente. Los residentes del Condado de Travis pueden entregar hasta 30 galones de desechos domésticos peligrosos al año.</p>\n<p>Traiga los productos en sus recipientes originales. Si el recipiente original es de más de 5 galones, por favor llame al Centro de Reciclaje y Reúso al 512-974-4343 para averiguar cómo preparar su producto para entregarlo.</p>\n<p>Ponga los recipientes pequeños parados dentro de una caja resistente. Si un recipiente tiene algún escape, cubra el fondo de un recipiente más grande con una capa de arena sanitaria para gatos y coloque el recipiente que tiene la fuga dentro del recipiente más grande. La arena sanitaria para gatos absorberá el material que se bote. </p>\n<p>No mezcle los artículos. No se aceptan cargas de camiones ni remolques grandes después de las 4:45 p.m.</p>\n<p>Los negocios no califican para entregar desechos peligrosos. Para información sobre cómo los negocios pueden descartar sus desechos peligrosos, llame al 512-974-4336.</p>\n',
-             'additional_content_vi': '<h2>Những điều Nên làm và Không Nên làm với Rác thải Nguy hại của Hộ gia đình</h2>\n<p>Vứt bỏ rác thải nguy hại của hộ gia đình vào thùng rác hoặc đổ trực tiếp xuống cống rãnh gây nguy hiểm và gây hại cho môi trường. Các cư dân của Hạt Travis và Austin có thể bỏ tối đa 30 ga-lông rác thải nguy hại mỗi năm mà không phải đóng phí.</p>\n<p>Đem sản phẩm đến trong các bình chứa/thùng chứa gốc. Nếu thùng chứa gốc lớn hơn 5 ga-lông, xin vui lòng gọi Trung tâm Tái chế và Tái Sử dụng theo số 512-974-4343 để biết cách chuẩn bị sẵn sàng cho các sản phẩm của bạn trước khi vứt bỏ.</p>\n<p>Đặt các thùng chứa nhỏ theo chiều thẳng đứng trong các hộp cứng. Nếu có thùng chứa bị rò rỉ, đổ xỉ/cát vệ sinh cho mèo vào một thùng chứa lớn hơn và đặt thùng chứa bị rò rỉ vào trong thùng chứa lớn hơn đó. Cát/xỉ vệ sinh cho mèo sẽ hút phần bị rò rỉ.</p>\n<p>Không trộn lẫn các loại với nhau. Xe tải cỡ lớn hay xe đầu kéo rơ-móc sẽ không được vào sau 4:45 chiều.</p>\n<p>Các cơ sở kinh doanh không được đổ bỏ rác thải nguy hại. Để có thông tin về cách thức các cơ sở kinh doanh có thể xử lý rác thải nguy hại, hãy gọi 512-974-4336.</p>\n',
-             'additional_content_ar': '<h2>قائمة النفايات المنزلية الخطرة التي يمكن التخلص منها والعناصر التي لا يمكن التخلص منها</h2>\n<p>إلقاء النفايات المنزلية الخطرة في القمامة أو سكبها في المصارف يعد أمرا خطيرا وضارا بالبيئة. يمكن لسكان مقاطعة أوستن وترافيس التخلص من عدد يصل إلى 30 غالون من النفايات الخطرة مجانا كل عام.</p>\n<p>أحضر المنتجات في حاوياتها الأصلية. إذا كانت الحاوية الأصلية أكبر من 5 غالونات، يرجى الاتصال بمركز إعادة التدوير وإعادة الاستخدام على رقم 512-974-4343 لمعرفة كيفية تجهيز منتجاتك للتخلص منها.</p>\n<p>ضع الحاويات الصغيرة فى وضع عمودى في صناديق قوية. إذا كانت الحاوية تسرب، صُب حبيبات القطط الماصة في حاوية أكبر وَضَعْ الحاوية التي تسرب داخل الحاوية الأكبر. سوف تمتص الحبيبات الماصة السكب.</p>\n<p>لا تخلط العناصر. لن يتم قبول الأحمال الكبيرة للشاحنات أو المقطورة بعد الساعة 4:45 مساءً.</p>\n<p>الشركات ليست مؤهلة للتخلص من النفايات الخطرة. للحصول على معلومات حول كيفية تخلص الشركات من النفايات الخطرة، اتصل على الرقم 512-974-4336.</p>\n',
-             'dynamic_content': [{'type': 'map', 'description_en': 'Hazardous Waste Dropoff Center',
-                                  'description_es': 'Visite la Tienda de Reúso en el Centro de Reciclaje y Reúso',
-                                  'description_vi': 'Ghé thăm Cửa Hàng Tái Dụng tại Trung Tâm Tái Chế & Tái Dụng',
-                                  'description_ar': 'تفضل بزيارة مستودع إعادة الاستخدام في مركز إعادة التدوير وإعادة الاستخدام',
-                                  'location': 'Recycle & Reuse Drop-off Center'}], 'meta_title_en': None,
-             'meta_title_es': 'Entregue sus desechos peligrosos del hogar y otros artículos reciclables',
-             'meta_title_vi': 'Hãy bỏ Rác thải Nguy hại của Hộ gia đình và Các loại Có thể Tái chế Khác',
-             'meta_title_ar': 'التخلص من النفايات الخطرة المنزلية وغيرها من المواد القابلة للتدوير',
-             'meta_description_en': None,
-             'meta_description_es': 'Los residentes de Austin y el Condado de Travis pueden entregar sus desechos peligrosos del hogar y otros artículos reciclables en el Centro de Reciclaje y Reúso. Pueden entregar algunos artículos sin tener que pagar y para otros, como las llantas, deben pagar una cuota.',
-             'meta_description_vi': 'Các cư dân của Hạt Travis và Austin có thể bỏ rác thải nguy hại và các loại có thể tái chế khác tại Trung tâm Tái chế và Tái Sử dụng. Một số loại không phải đóng phí khi vứt bỏ trong khi một số loại khác, ví dụ như lốp xe, sẽ phải trả phí.',
-             'meta_description_ar': 'يمكن لسكان مقاطعة أوستن وترافيس التخلص من النفايات الخطرة والمواد الأخرى القابلة لإعادة التدوير في مركز إعادة التدوير وإعادة الاستخدام. التخلص من بعض العناصر مجاني وهناك بعض العناصر، مثل التخلص من الإطارات، تتطلب رسوما.',
-             'meta_tags': None},
-            {'slug': 'hazardous-waste-dropoff', 'topic': 'recycling-trash-compost',
-             'image': 'household-hazardous-waste',
-             'contact': 311, 'title_en': 'Drop off household hazardous waste and other recyclables',
-             'title_es': 'Entregue sus desechos peligrosos del hogar y otros artículos reciclables',
-             'title_vi': 'Bỏ đi các loại rác nhà nguy hiểm và các loại rác tái chế khác',
-             'title_ar': 'التخلص من النفايات الخطرة المنزلية وغيرها من المواد القابلة للتدوير', 'steps_en': [
-                'Check the “What do I do with” tool below to find out what items are accepted. Some items are free to drop off and some items, like tires, require a fee.',
-                'Review the Household Hazardous Waste Do’s and Don’ts below.',
-                'Drop off your items at the Recycle and ReUse Center at 2514 Business Center Dr, Austin, TX 78744.'],
-             'steps_es': [
-                 'Use la función “What do I do with” abajo para ver los artículos aceptados. Puede entregar algunos artículos sin tener que pagar y para otros, como las llantas, debe pagar una cuota.',
-                 'Revise abajo lo que debe y no debe hacer con los desechos peligrosos del hogar.',
-                 'Entregue sus artículos en el Centro de Reciclaje y Reúso ubicado en 2514 Business Center Dr, Austin, TX 78744.'],
-             'steps_vi': [
-                 'Kiểm tra bằng công cụ “What do I do with” dưới đây để xác định những loại nào được chấp nhận. Một số loại không phải đóng phí khi vứt bỏ trong khi một số loại khác, ví dụ như lốp xe, sẽ phải trả phí.',
-                 'Rà soát Những điều Nên làm và Không Nên làm với Rác thải Nguy hại của Hộ gia đình dưới đây.',
-                 'Bỏ các đồ thải loại của bạn tại Trung tâm Tái chế và Tái Sử dụng tại 2514 Business Center Dr, Austin, TX 78744.'],
-             'steps_ar': [
-                 'أطلع على أداة "What do I do with" أدناه لمعرفة العناصر المقبولة. التخلص من بعض العناصر مجاني وهناك بعض العناصر، مثل التخلص من الإطارات، تتطلب رسوما.',
-                 'يرجى مراجعة قائمة النفايات المنزلية الخطرة التي يمكن التخلص منها والعناصر التي لا يمكن التخلص منها أدناه.',
-                 'تخلص من العناصر الخاصة بك في مركز إعادة التدوير وإعادة الاستخدام في 2514 Business Center Dr, Austin, TX 78744.'],
-             'additional_content_en': '<h2>Household Hazardous Waste Do’s and Don’ts</h2>\n<p>Throwing household hazardous waste in the trash or pouring it down the drain is dangerous and harmful to the environment. Austin and Travis County residents can drop off up to 30 gallons of hazardous waste for free each year.</p>\n<p>Bring products in their original containers. If the original container is larger than 5-gallons, please call the Recycle and ReUse Center at 512-974-4343 to find out how to get your products ready for drop off.</p>\n<p>Put small containers upright in sturdy boxes. If a container is leaking, pour cat litter into a larger container and put the leaking container inside the larger. The litter will absorb the spill.</p>\n<p>Do not mix items. Large truck or trailer loads will not be accepted after 4:45 p.m.</p>\n<p>Businesses are not eligible to drop off hazardous waste. For information about how businesses can dispose of hazardous waste, call 512-974-4336.</p>\n',
-             'additional_content_es': '<h2>Qué debe y no debe hacer con los artículos peligrosos del hogar</h2>\n<p>Botar desechos peligrosos del hogar en la basura o por el drenaje es peligroso y perjudicial para el medio ambiente. Los residentes del Condado de Travis pueden entregar hasta 30 galones de desechos domésticos peligrosos al año.</p>\n<p>Traiga los productos en sus recipientes originales. Si el recipiente original es de más de 5 galones, por favor llame al Centro de Reciclaje y Reúso al 512-974-4343 para averiguar cómo preparar su producto para entregarlo.</p>\n<p>Ponga los recipientes pequeños parados dentro de una caja resistente. Si un recipiente tiene algún escape, cubra el fondo de un recipiente más grande con una capa de arena sanitaria para gatos y coloque el recipiente que tiene la fuga dentro del recipiente más grande. La arena sanitaria para gatos absorberá el material que se bote. </p>\n<p>No mezcle los artículos. No se aceptan cargas de camiones ni remolques grandes después de las 4:45 p.m.</p>\n<p>Los negocios no califican para entregar desechos peligrosos. Para información sobre cómo los negocios pueden descartar sus desechos peligrosos, llame al 512-974-4336.</p>\n',
-             'additional_content_vi': '<h2>Những điều Nên làm và Không Nên làm với Rác thải Nguy hại của Hộ gia đình</h2>\n<p>Vứt bỏ rác thải nguy hại của hộ gia đình vào thùng rác hoặc đổ trực tiếp xuống cống rãnh gây nguy hiểm và gây hại cho môi trường. Các cư dân của Hạt Travis và Austin có thể bỏ tối đa 30 ga-lông rác thải nguy hại mỗi năm mà không phải đóng phí.</p>\n<p>Đem sản phẩm đến trong các bình chứa/thùng chứa gốc. Nếu thùng chứa gốc lớn hơn 5 ga-lông, xin vui lòng gọi Trung tâm Tái chế và Tái Sử dụng theo số 512-974-4343 để biết cách chuẩn bị sẵn sàng cho các sản phẩm của bạn trước khi vứt bỏ.</p>\n<p>Đặt các thùng chứa nhỏ theo chiều thẳng đứng trong các hộp cứng. Nếu có thùng chứa bị rò rỉ, đổ xỉ/cát vệ sinh cho mèo vào một thùng chứa lớn hơn và đặt thùng chứa bị rò rỉ vào trong thùng chứa lớn hơn đó. Cát/xỉ vệ sinh cho mèo sẽ hút phần bị rò rỉ.</p>\n<p>Không trộn lẫn các loại với nhau. Xe tải cỡ lớn hay xe đầu kéo rơ-móc sẽ không được vào sau 4:45 chiều.</p>\n<p>Các cơ sở kinh doanh không được đổ bỏ rác thải nguy hại. Để có thông tin về cách thức các cơ sở kinh doanh có thể xử lý rác thải nguy hại, hãy gọi 512-974-4336.</p>\n',
-             'additional_content_ar': '<h2>قائمة النفايات المنزلية الخطرة التي يمكن التخلص منها والعناصر التي لا يمكن التخلص منها</h2>\n<p>إلقاء النفايات المنزلية الخطرة في القمامة أو سكبها في المصارف يعد أمرا خطيرا وضارا بالبيئة. يمكن لسكان مقاطعة أوستن وترافيس التخلص من عدد يصل إلى 30 غالون من النفايات الخطرة مجانا كل عام.</p>\n<p>أحضر المنتجات في حاوياتها الأصلية. إذا كانت الحاوية الأصلية أكبر من 5 غالونات، يرجى الاتصال بمركز إعادة التدوير وإعادة الاستخدام على رقم 512-974-4343 لمعرفة كيفية تجهيز منتجاتك للتخلص منها.</p>\n<p>ضع الحاويات الصغيرة فى وضع عمودى في صناديق قوية. إذا كانت الحاوية تسرب، صُب حبيبات القطط الماصة في حاوية أكبر وَضَعْ الحاوية التي تسرب داخل الحاوية الأكبر. سوف تمتص الحبيبات الماصة السكب.</p>\n<p>لا تخلط العناصر. لن يتم قبول الأحمال الكبيرة للشاحنات أو المقطورة بعد الساعة 4:45 مساءً.</p>\n<p>الشركات ليست مؤهلة للتخلص من النفايات الخطرة. للحصول على معلومات حول كيفية تخلص الشركات من النفايات الخطرة، اتصل على الرقم 512-974-4336.</p>\n',
-             'dynamic_content': [{'type': 'what_do_i_do_with'},
-                                 {'type': 'map', 'description_en': 'Hazardous Waste Dropoff Center',
-                                  'description_es': 'Visite la Tienda de Reúso en el Centro de Reciclaje y Reúso',
-                                  'description_vi': 'Ghé thăm Cửa Hàng Tái Dụng tại Trung Tâm Tái Chế & Tái Dụng',
-                                  'description_ar': 'تفضل بزيارة مستودع إعادة الاستخدام في مركز إعادة التدوير وإعادة الاستخدام',
-                                  'location': 'Recycle & Reuse Drop-off Center'}], 'meta_title_en': None,
-             'meta_title_es': 'Entregue sus desechos peligrosos del hogar y otros artículos reciclables',
-             'meta_title_vi': 'Hãy bỏ Rác thải Nguy hại của Hộ gia đình và Các loại Có thể Tái chế Khác',
-             'meta_title_ar': 'التخلص من النفايات الخطرة المنزلية وغيرها من المواد القابلة للتدوير',
-             'meta_description_en': None,
-             'meta_description_es': 'Los residentes de Austin y el Condado de Travis pueden entregar sus desechos peligrosos del hogar y otros artículos reciclables en el Centro de Reciclaje y Reúso. Pueden entregar algunos artículos sin tener que pagar y para otros, como las llantas, deben pagar una cuota.',
-             'meta_description_vi': 'Các cư dân của Hạt Travis và Austin có thể bỏ rác thải nguy hại và các loại có thể tái chế khác tại Trung tâm Tái chế và Tái Sử dụng. Một số loại không phải đóng phí khi vứt bỏ trong khi một số loại khác, ví dụ như lốp xe, sẽ phải trả phí.',
-             'meta_description_ar': 'يمكن لسكان مقاطعة أوستن وترافيس التخلص من النفايات الخطرة والمواد الأخرى القابلة لإعادة التدوير في مركز إعادة التدوير وإعادة الاستخدام. التخلص من بعض العناصر مجاني وهناك بعض العناصر، مثل التخلص من الإطارات، تتطلب رسوما.',
-             'meta_tags': None},
-            {'slug': 'pickup-free-paint', 'topic': 'recycling-trash-compost', 'image': 'paint', 'contact': 311,
-             'title_en': 'Pick up free paint and other household items',
-             'title_es': 'Recoja pintura y otros artículos del hogar gratis',
-             'title_vi': 'Lấy miễn phí sơn và các đồ dùng cho việc nhà khác',
-             'title_ar': 'اختيار الدهانات وغيرها من الأدوات المنزلية مجانا', 'steps_en': [
-                'Visit the ReUse Store in the Recycle &amp; Reuse Drop-Off Center at 2514 Business Center Dr, Austin, TX 78744.',
-                'Pick from the available 3 colors of Austin ReBlend paint. The paint is free for all residents.'],
-             'steps_es': [
-                 'Visite la Tienda de Reúso en el Centro de Reciclaje y Reúso ubicado en 2514 Business Center Dr, Austin, TX 78744.',
-                 'Hay 3 colores disponibles para escoger de la pintura Austin ReBlend. Esta pintura es gratis para todos los residentes.'],
-             'steps_vi': [
-                 'Ghé thăm Cửa Hàng Tái Dụng tại Trung Tâm Tái Chế & Tái Dụng tại 2514 Business Center Dr, Austin, TX 78744.',
-                 'Lấy 3 màu hiện có của sơn Austin ReBlend. Sơn này miễn phí cho tất cả cư dân.'], 'steps_ar': [
-                'تفضل بزيارة مستودع إعادة الاستخدام ReUse Store في مركز إعادة التدوير وإعادة الاستخدام في 2514 Business Center Dr, Austin, TX 78744.',
-                'يمكنك الاختيار من الألوان الـ3 المتاحة من دهانات Austin ReBlend. الدهانات مجانية لجميع المقيمين.'],
-             'additional_content_en': '<h2>Learn about Austin ReBlend Paint</h2>\n<p>Austin ReBlend is a free, 100 percent flat paint made from paint dropped off at the Recycle &amp; Reuse Drop-Off Center. The paint is inspected to ensure quality, reblended into three colors and offered in 3.5 gallon containers. The available colors include:</p>\n<ul>\n    <li>Texas Limestone (beige)</li>\n    <li>Balcones Canyonland (dark beige)</li>\n    <li>Barton Creek Greenbelt (dark green)</li>\n</ul>\n\n<h2>Pick up other free household items</h2>\n<p>Many reusable materials are dropped off at the center. You can also pick up these items for free (availability varies):</p>\n<ul>\n    <li>Art supplies</li>\n    <li>Cleaning products</li>\n    <li>Household chemicals</li>\n    <li>Automotive fluids</li>\n    <li>Mulch*</li>\n</ul>\n\n<p>*You must load mulch yourself. Bring a pitchfork or shovel, work gloves, and containers.</p>\n<p>Need to drop off items to be recycled? <a id=\\"9\\" linktype=\\"page\\">See how to drop off at the Recycle and ReUse Center.</a></p>\n',
-             'additional_content_es': '<h2>Aprenda más sobre la pintura Austin ReBlend</h2>\n<p>Austin ReBlend es una pintura gratis, 100 por ciento sin brillo hecha de la pintura entregada en el Centro de Reciclaje y Reúso. La pintura pasa por una inspección para garantizar su calidad y se mezcla en tres colores en botes de 3.5 galones. Los colores disponibles incluyen:</p>\n<ul>\n    <li>Texas Limestone (crema)</li>\n    <li>Balcones Canyonland (crema oscuro)</li>\n    <li>Barton Creek Greenbelt (verde oscuro)</li>\n</ul>\n\n<h2>Artículos para el hogar gratis</h2>\n<p>El centro recibe muchos materiales reusables. También puede recoger estos artículos gratis (la disponibilidad varía):</p>\n<ul>\n    <li>Materiales para arte</li>\n    <li>Productos de limpieza</li>\n    <li>Químicos para el hogar</li>\n    <li>Fluidos de automóvil</li>\n    <li>Mantillo orgánico (mulch)*</li>\n</ul>\n\n<p>*El mantillo orgánico lo tiene que empacar usted mismo.</p>\n<p>Traiga una horqueta o pala, guantes de trabajo y recipientes.</p>\n',
-             'additional_content_vi': '<h2>Tìm hiểu về sơn Austin Reblend</h2>\n<p>Austin ReBlend là một sơn miễn phí, 100% sơn ánh mờ được làm từ sơn bỏ ở Trung Tâm Bỏ Đồ Tái Dụng & Tái Chế. Sơn được kiểm tra để đảm bảo chất lượng, được pha trộn lại thành 3 màu và cung cấp trong các thùng đựng 3.5 ga-lông. Các màu hiện có bao gồm:</p>\n<ul>\n    <li>Texas Limestone (màu be)</li>\n    <li>Balcones Canyonland (màu be đậm)</li>\n    <li>Barton Creek Greenbelt (màu xanh lá cây đậm)</li>\n</ul>\n\n<h2>Lầy miễn phí các đồ dùng cho việc nhà khác</h2>\n<p>Nhiều vật dụng có thể tái sử dụng được bỏ ở trung tâm. Quý vị cũng có thể lấy những đồ này miễn phí (có nhiều loại khác nhau):</p>\n<ul>\n    <li>Các đồ nghệ thuật</li>\n    <li>Các sản phẩm tẩy rửa</li>\n    <li>Các hóa chất dùng cho việc nhà</li>\n    <li>Các dung dịch dùng cho xe hơi</li>\n    <li>Bổi che phủ*</li>\n</ul>\n\n<p>*Quý vị phải tự bê lấy bổi che phủ.</p>\n<p>Mang theo cây xỉa hoặc xẻng, găng tay bảo hộ, và đồ đựng.</p>\n',
-             'additional_content_ar': '<h2>تعرّف على دهانات Austin ReBlend</h2>\n<p>Austin ReBlend هي عبارة عن دهانات مجانية غير لامعة بنسبة 100٪ مصنوعة من دهانات تم تسليمها في مركز إعادة التدوير وإعادة الاستخدام. تُفحص الدهانات لضمان الجودة، ويُعاد مزجها إلى ثلاثة ألوان وتُوفر في حاويات 3.5 جالون. تشمل الألوان المتاحة:</p>\n<ul>\n    <li>Texas Limestone (البيج)</li>\n    <li>Balcones Canyonland (البيج الداكن)</li>\n    <li>Barton Creek Greenbelt (الأخضر الداكن)</li>\n</ul>\n\n<h2>يمكنك اختيار غير ذلك من الأدوات المنزلية مجانا</h2>\n<p>يتم تسليم العديد من المواد القابلة لإعادة الاستخدام في المركز. يمكنك أيضا اختيار هذه العناصر مجانا (تختلف حسب التوفر):</p>\n<ul>\n    <li>الأدوات الفنية</li>\n    <li>مستحضرات التنظيف</li>\n    <li>المواد الكيميائية المنزلية</li>\n    <li>سوائل السيارات</li>\n    <li>النشارة*</li>\n</ul>\n\n<p>عليك تعبئة النشارة بنفسك.</p>\n<p> احضر معك مذارة أو مجرفة، وقفازات عمل، وحاويات.</p>\n',
-             'dynamic_content': [{'type': 'map', 'description_en': 'Hazardous Waste Dropoff Center',
-                                  'description_es': 'Visite la Tienda de Reúso en el Centro de Reciclaje y Reúso',
-                                  'description_vi': 'Ghé thăm Cửa Hàng Tái Dụng tại Trung Tâm Tái Chế & Tái Dụng',
-                                  'description_ar': 'تفضل بزيارة مستودع إعادة الاستخدام في مركز إعادة التدوير وإعادة الاستخدام',
-                                  'location': 'Recycle & Reuse Drop-off Center'}],
-             'meta_title_en': 'Pick up free paint',
-             'meta_title_es': 'Recoja pintura gratis', 'meta_title_vi': 'Lấy Sơn Miễn Phí',
-             'meta_title_ar': 'اختيار الدهانات مجانا', 'meta_description_en': None,
-             'meta_description_es': 'La Ciudad de Austin les ofrece a sus residentes pintura sin brillo gratis en la Tienda de Reúso en el Centro de Reciclaje y Reúso. La pintura pasa por una inspección para garantizar su calidad y se mezcla en color crema, crema oscuro y verde oscuro en botes de 3.5 galones.',
-             'meta_description_vi': 'Thành phố Austin cung cấp sơn miễn phí cho các cư dân tại Cửa Hàng Tái Dụng ở Trung Tâm Bỏ Đồ Tái Dụng & Tái Chế. Sơn này được kiểm tra để đảm bảo chất lượng, được pha trộn lại thành màu be, be đậm, hoặc xanh lá cây đậm và cho vào các thùng đựng 3.5 ga-lông.',
-             'meta_description_ar': 'توفر مدينة أوستن للمقيمين دهانات مجانية غير لامعة بمستودع إعادة الاستخدام ReUse Store في مركز إعادة التدوير وإعادة الاستخدام. تُفحص الدهانات لضمان الجودة، ويُعاد مزجها إلى ثلاثة ألوان البيج أو البيج الداكن أو الأخضر الداكن وتُوضع في حاويات 3.5 جالون.',
-             'meta_tags': 'flat paint, free paint, recycled paint, house paint, wall paint'},
-            {'slug': 'public-health-emergency-prep', 'topic': 'healthcare-prevention', 'image': 'curbside-compost',
-             'contact': 311, 'title_en': 'Prepare for public health emergencies',
-             'title_es': 'Prepare for public health emergencies', 'title_vi': 'Prepare for public health emergencies',
-             'title_ar': 'Prepare for public health emergencies',
-             'steps_en': '<h2>Follow these steps to be prepared for an emergency</h2>\n- <a href="https://www.cdc.gov/phpr/areyouprepared/kit.htm">Pack an emergency preparedness kit</a>. Make sure you have enough food and water, medication, and anything else you and your family need for 3 or more days.\n- <a href="https://www.cdc.gov/phpr/areyouprepared/plan.htm">Make a plan for where you will meet with your family during an emergency</a>.\n- Sign up for emergency alerts, <a href="https://public.coderedweb.com/CNE/en-US/21C524DBEA1F:>register for the emergency notification system</a>.\n',
-             'additional_content_en': '<h2>Prepare for an emergency</h2>\nPreparing for public health emergencies is critical to protect everyone’s health and wellbeing. Public health emergencies include natural disasters, disease outbreaks like pandemic flu, as well as those related to homeland security, such as a biological or chemical terrorist attack.\n\nWe work closely with other local, state, and federal emergency management authorities to plan and prepare for any emergency that affects the health of the public. For emergency conditions and information on disaster preparedness, visit the <a href="http://www.austintexas.gov/hsem">City of Austin Office of Homeland Security and Emergency Management</a>.\n\n<h2>Have a plan to stay safe in an emergency</h2>\nWhen disaster hits, Austinites need to be ready. Use the online resources from the <a href="https://www.texasprepares.org/default.htm">Texas Department of State Health Services</a> to build your plan -- including family strategies, handy checklists, and special needs considerations for people with disabilities, the elderly, and pets.\n',
-             'dynamic_content': None, 'meta_title_en': 'Prepare for public health emergencies',
-             'meta_description_en': 'Find out what you need to do in order to be ready for public health emergencies like natural disasters and disease outbreaks. Be sure you pack an emergency kit, make a plan, and stay informed.',
-             'meta_tags': 'Emergency plan Austin, What to do in an emergency in Austin, How to prepare for an emergency'},
-            {'slug': 'trash-recycling-pickup', 'topic': 'recycling-trash-compost', 'image': 'curbside-pickup',
-             'contact': 311,
-             'title_en': 'Look up your trash, recycling, and compost pickup days',
-             'title_es': 'Busque sus días de recolección de basura, reciclaje y compost',
-             'title_vi': 'Tìm ngày bốc rác thường, rác tái chế, và rác ủ phân hữu cơ của quý vị',
-             'title_ar': 'الاطلاع على أيام جمع القمامة والمواد التي يُعاد تدويرها والقابلة للتسميد', 'steps_en': [
-                'Type your street address in the box below. If you live in a multi-family home, like a duplex or fourplex, do not include your unit number.',
-                'Press the search button to view your curbside pickup days.',
-                'Optional: Print a copy of your schedule or click the icon to add your pickup days to your Google, iCal, or Microsoft calendar.'],
-             'steps_es': [
-                 'Ingrese su dirección en la siguiente casilla. Si vive en una casa multifamiliar, como en un dúplex o en un edificio de cuatro apartamentos, no incluya el número de su unidad.',
-                 'Haga clic en el botón de búsqueda para ver sus días de recolección.',
-                 'Opcional: Imprima una copia de su calendario o haga clic en el icono para añadir sus días de recolección a su calendario de Google, iCal o Microsoft.'],
-             'steps_vi': [
-                 'Đánh địa chỉ nhà quý vị vào ô dưới đây. Nếu quý vị sống trong một ngôi nhà có nhiều gia đình, như nhà hai căn hoặc nhà bốn căn, thì không cần ghi số căn hộ của mình.',
-                 'Nhấn nút tìm kiếm để xem các ngày bốc rác để lề đường của mình.',
-                 'Tùy chọn: In một bản lịch của quý vị hoặc nhấn vào biểu tượng để cộng thêm các ngày bốc rác vào lịch Google, iCal, hoặc Microsoft của mình.'],
-             'steps_ar': [
-                 'اكتب عنوان شارعك في المربع أدناه. إذا كنت تعيش في منزل متعدد الأسر، مثل منزل مزدوج أو مكون من أربعة أقسام، لا تُدرج رقم وحدتك.',
-                 'اضغط على زر البحث لعرض أيام جمع القمامة على الرصيف.',
-                 'ختياري: يمكنك طباعة نسخة من جدولك أو النقر على الرمز لإضافة أيام جمع القمامة إلى تقويم Google أو iCal أو Microsoft.'],
-             'additional_content_en': "<h2>Trash, recycling, and compost pickup</h2>\n<p>Every week, we will pick up your trash, compost, and yard trimmings. Every other week, we will pick up recycling, clothing, and housewares. All curbside pick-ups happen on the same day of the week unless it is a holiday.</p>\n\n<h2>Holiday pickup days</h2>\n<p>If your curbside pickup day is on Thanksgiving Day, Christmas Day, or New Year's Day—or if it is after the holiday but in the same week—your collection will be one day later than your usual pickup day that week. If the holiday falls on a Sunday or Saturday, your pickup day will not change.</p>\n",
-             'additional_content_es': '<h2>Recolección de basura, reciclaje y compost</h2>\n<p>Todas las semanas recogeremos su basura, compost y recortes del jardín. Una semana sí y otra no, recogeremos el reciclaje, ropa y artículos para el hogar. Toda la recolección al borde de la acera se hace el mismo día de la semana a menos que sea un día festivo. </p>\n\n<h2>Recolección en días festivos</h2>\n<p>Si su día de recolección es el Día de Acción de Gracias, Navidad o Año Nuevo, o si es después de uno de estos días festivos pero en la misma semana, su día de recolección será un día después de su día de recolección regular. Si el día festivo cae domingo o sábado, su día de recolección no cambiará.</p>\n',
-             'additional_content_vi': '<h2>Bốc rác thường, rác tái chế, và rác ủ phân hữu cơ</h2>\n<p>Hàng tuần, chúng tôi sẽ bốc rác thường, rác ủ phân hữu cơ, và rác làm vườn. Hàng tuần, chúng tôi sẽ bốc rác tái chế, quần áo, và vật dụng trong nhà. Tất cả kỳ bốc rác ở lề đường sẽ xảy ra vào cùng ngày trong tuần, trừ khi đó là ngày lễ.</p>\n\n<h2>Bốc rác cho các ngày nghỉ lễ</h2>\n<p>Nếu ngày bốc rác của quý vị rơi vào ngày Lễ Tạ Ỏn, ngày Lễ Giáng Sinh, hoặc ngày Đầu Năm - hoặc sau ngày nghỉ lễ nhưng vẫn trong tuần đó - thì ngày thu rác của quý vị sẽ là một ngày muộn hơn so với lịch bốc rác thường lệ của mình trong tuần đó. Nếu ngày nghỉ lễ rơi vào Thứ Bảy hoặc Chủ Nhật, ngày bốc rác của quý vị sẽ không thay đổi.</p>\n',
-             'additional_content_ar': '<h2>جمع القمامة والمواد التي يُعاد تدويرها والقابلة للتسميد</h2>\n<p>كل أسبوع، سوف نجمع القمامة والمواد القابلة للتسميد ومخلفات الحدائق التي لديك. كل أسبوعين، سوف نجمع المواد التي يُعاد تدويرها والملابس والأدوات المنزلية. جميع عمليات جمع النفايات على الرصيف تتم في نفس اليوم من الأسبوع إلا إذا كان هذا اليوم عطلة.</p>\n\n<h2>أيام جمع النفايات إذا وافق عطلة</h2>\n<p>إذا وافق يوم جمع النفايات على جانب الرصيف عطلة عيد الشكر أو عيد الميلاد أو يوم رأس السنة الميلادية، أو إذا كان بعد العطلة ولكن في نفس الأسبوع، سوف تؤجل عملية جمع النفايات خاصتك في يوم آخر غير يوم الجمع المعتاد في ذلك الأسبوع. إذا وافق يوم العطلة يوم الأحد أو السبت، لن يتغير يوم جمع النفايات خاصتك.</p>\n',
-             'dynamic_content': [{'type': 'collection_schedule'}], 'meta_title_en': None,
-             'meta_title_es': 'Busque su día de recolección de basura, reciclaje y compost',
-             'meta_title_vi': 'Tìm Ngày Bốc Rác Thường, Rác Tái Chế, và Rác Phân Ủ Hữu Cơ của quý vị',
-             'meta_title_ar': 'الاطلاع على أيام جمع القمامة والمواد التي يُعاد تدويرها والقابلة للتسميد',
-             'meta_description_en': None,
-             'meta_description_es': 'Vea un calendario con sus días de recolección. También puede inscribirse para recibir recordatorios y alertas por mensajes de texto, correo electrónico o por teléfono.',
-             'meta_description_vi': 'Xem lịch để ghi ngày thu rác để lề đường của mình. Quý vị cũng có thể đăng ký nhận lời nhắn, điện thư email hoặc điện thoại nhắc nhở và cảnh báo.',
-             'meta_description_ar': 'اطلع على التقويم لمعرفة أيام جمع النفايات خاصتك. يمكنك أيضا الاشتراك في خدمة التذكير والتنبيهات لإرسال رسالة',
-             'meta_tags': None}]
+    data = [{
+        'slug': 'birth-and-death-certificates',
+        'topic': 'records-and-certificates',
+        'contact': 311,
+        'image': 'curbside-compost',
+        'title_en': 'Get a birth or death certificate',
+        'title_es': 'Get a birth or death certificate',
+        'title_vi': 'Get a birth or death certificate',
+        'title_ar': 'Get a birth or death certificate',
+        'service_steps': [{
+            'step_description_en': 'Determine how you would like to receive your certificate based on how quickly you need it:\n<ul>\n    <li>in person to receive your certificate in about 15 minutes,</li>\n    <li>online to receive your certificate in 2-5 business days,</li>\n    <li>by phone to receive your certificate 3-5 business days,</li>\n    <li>or by mail to receive your certificate 2-3 weeks.</li>\n</ul>\n'
+        }, {
+            'step_description_en': 'Make sure you have enough money for the certificate(s) you need:\n<ul>\n    <li>The cost for each birth certificate is $23.</li>\n    <li>The cost for one death certificate is $21. If you order more copies at the same time, the cost for each extra one is $4.</li>\n    <li>Follow the steps below for the delivery method you choose.</li>\n</ul>\n'
+        }, {
+            'step_description_en': '15 minutes in person:\n<ul>\n    <li>Bring your current, government-issued photo identification.</li>\n    <li>Bring cash, a money order in the exact amount, a personal check, or a credit or debit card in your name for the certificate you need.</li>\n    <li>\n        Visit the The Office of Vital Records is at <a href="https://goo.gl/maps/5JVQ2UVCayN2">7201 Levander Loop, Building C, Austin, TX, 78702</a> between 8 am and 4:30 p.m. Monday through Friday.\n        <ul>\n            <li>The last application is accepted until 4:15 p.m.</li>\n            <li>Note that our office is usually busiest between 11:00 a.m. – 2:00 p.m. Customers should expect longer wait times during those hours.</li>\n        </ul>\n    </li>\n    <li>For faster service, download and print an application in <a href="http://austintexas.gov/sites/default/files/files/Health/VitalRecords/2018_OVR_WalkInENGLISH.pdf">English</a> or <a href="http://austintexas.gov/sites/default/files/files/Health/VitalRecords/2018_OVR_WalkInSPANISH.pdf">Spanish</a> and bring it with you.</li>\n</ul>\n'
+        }, {
+            'step_description_en': '2-5 business days online:\n<ul>\n    <li>Visit <a href="https://www.vitalchek.com/">www.VitalChek.com</a>.</li>\n    <li>Follow the prompts on VitalChek to select which kind of certificate(s) you need.</li>\n    <li>\n        Verify your identity by answering the questions on VitalChek.\n        <ul>\n            <li>If they cannot verify your identity with their standard questions, you will be instructed to upload a copy of your current government-issued identification and proof of shipping address before your application can be processed. This will delay the processing and delivery time.</li>\n        </ul>\n    </li>\n    <li>\n        Use a credit or debit card (Visa, MasterCard, American Express, or Discover) to pay for your certificate(s).\n        <ul>\n            <li>Processing and UPS shipping fees will be added.</li>\n        </ul>\n    </li>\n</ul>\n'
+        }, {
+            'step_description_en': '2-3 weeks by mail:\n<ul>\n    <li>\n        Mail the following items to Office of Vital Records, PO Box 1088, Austin, TX 78767-1088:\n        <ul>\n            <li>A completed and notarized <a href="http://austintexas.gov/sites/default/files/files/Health/VitalRecords/2018_OVR_WalkInENGLISH.pdf">certificate application in English</a> or a <a href="http://austintexas.gov/sites/default/files/files/Health/VitalRecords/2018_OVR_WalkInSPANISH.pdf>certificate application in Spanish</a>.</li>\n            <li>\n                A check or money order in the exact amount payable to the Office of Vital Records.\n                <ul>\n                    <li>Personal checks must be signed by the same person who signs the application.</li>\n                </ul>\n            </li>\n            <li>\n                A copy of one of your <a href="http://www.dshs.texas.gov/vs/reqproc/Acceptable-IDs/">acceptable and current forms of government-issued photo identification</a>.\n                <ul>\n                    <li>If your home address is different than the address on your ID, also include a proof of residence like a utility bill, voter registration card, etc...</li>\n                </ul>\n            </li>\n            <li>A self-addressed envelope with a stamp. You may use an express mail envelope for faster return delivery. If this is not included, you will not receive the certificate.</li>\n        </ul>\n    </li>\n    <li>If you need the certificate quickly through the mail, use an Express form of delivery, such as FedEx, USPS, or UPS, and send your application to: Office of Vital Records, 7201 Levander Loop, Bldg. C, Austin, TX  78702.</li>\n</ul>\n'
+        }],
+        'meta_title_en': 'Get a birth or death certificate',
+        'meta_title_es': None,
+        'meta_title_vi': None,
+        'meta_title_ar': None,
+        'dynamic_content': None,
+        'additional_content_en': '',
+        'meta_description_en': 'Find out how to order a birth or death certificate in person, online, by phone, or through the mail.',
+        'meta_description_es': None,
+        'meta_description_vi': None,
+        'meta_description_ar': None
+    }, {
+        'slug': 'bulk-item-pickup',
+        'topic': 'recycling-trash-compost',
+        'image': 'bulk-items',
+        'contact': 311,
+        'title_en': 'Get ready for curbside bulk item pickup',
+        'title_es': 'Prepárese para la recolección de artículos grandes al borde de la acera',
+        'title_vi': 'Chuẩn bị cho việc bốc rác khối để lề đường',
+        'title_ar': 'كُن على استعداد لجمع العناصر كبيرة الحجم التي يُراد التخلص منها على جانب الرصيف',
+        'service_steps': [{
+            'step_description_en': 'Use the <a href="http://austintexas.gov/what-do-i-do">“What do I do with” tool</a> below to see what bulk items can be picked up. Bulk items are items that are too large for your trash cart, such as appliances, furniture, and carpet.',
+            'step_description_es': 'Use la función “What do I do with”  abajo para ver los artículos grandes que califican para recolección. Los artículos grandes son los que no caben en su bote de basura, tales como electrodomésticos, muebles y alfombras.',
+            'step_description_vi': 'Sử dụng công cụ “What do I do with” dưới đây để biết những loại rác khối nào có thể được bốc đi. Những loại rác khối là các rác quá lớn để cho vào thùng rác của mình, ví dụ như các máy móc dùng cho việc nhà, đồ đạc, và thảm.',
+            'step_description_ar': 'استخدم أداة <a href="http://www.austintexas.gov/page/my-collection-schedule">"What do I do with"</a> أدناه لمعرفة العناصر كبيرة الحجم التي يمكن جمعها للتخلص منها. العناصر كبيرة الحجم هي عناصر حجمها كبير للغاية بحيث لا تسعها عربة القمامة، مثل الأجهزة والأثاث والسجاد.'
+        }, {
+            'step_description_en': 'Consider donating your items before placing them on the curb for pickup.',
+            'step_description_es': 'Antes de colocarlos al borde de la acera para ser recogidos, considere primero donarlos.',
+            'step_description_vi': 'Cân nhắc giải pháp cho tặng các đồ vật của mình trước khi để chúng trên lề đường để được bốc đi.',
+            'step_description_ar': 'فكّر في التبرع بالعناصر الخاصة بك التي تُريد التخلص منها قبل وضعها على الرصيف لجمعها.'
+        }, {
+            'step_description_en': 'Look up your bulk pickup weeks with <a href="http://www.austintexas.gov/page/my-collection-schedule">My Collection Schedule</a> tool below. We only collect bulk items from Austin residential trash and recycling customers twice a year, and customers have different pickup weeks.',
+            'step_description_es': 'Use la función My Collection Schedule abajo para buscar las semanas en que recogemos artículos grandes por su casa. Solo recogemos artículos grandes de los clientes residenciales de basura y reciclaje de Austin dos veces al año, y las semanas en que recogemos varían por cliente.',
+            'step_description_vi': 'Tìm các tuần lễ bốc rác khối của mình bằng công cụ <a href="http://www.austintexas.gov/page/my-collection-schedule">My Collection Schedule</a> dưới đây. Chúng tôi chỉ thu những rác khối từ rác nhà của cư dân Austin và các khách hàng tái chế cho hai lần một năm, và các khách hàng có các tuần bốc rác khác nhau.',
+            'step_description_ar': 'ابحث عن أسابيع جمع العناصر التي تُريد التخلص منها عن طريق أداة  My Collection Schedule أدناه. نحن نجمع فقط من عملاء أوستن العناصر كبيرة الحجم من النفايات المنزلية وإعادة التدوير مرتين في السنة، ولدى العملاء أسابيع مختلفة لعملية الجمع.'
+        }, {
+            'step_description_en': 'Review the bulk item pickup do’s and don’ts below.',
+            'step_description_es': 'Revise abajo lo que debe y no debe hacer con los artículos grandes.',
+            'step_description_vi': 'Kiểm lại Những Điều Nên Làm và Không Nên Làm về Bốc Rác Khối dưới đây.',
+            'step_description_ar': 'يرجى مراجعة قائمة العناصر كبيرة الحجم التي يمكن جمعها والعناصر التي لا يمكن جمعها أدناه.'
+        }, {
+            'step_description_en': 'Place bulk items at the curb in front of your house by 6:30 a.m. on the first day of your scheduled collection week.',
+            'step_description_es': 'Coloque los artículos grandes al borde de la acera frente a su casa antes de las 6:30 a.m. el primer día de la semana de recolección programada para su casa.',
+            'step_description_vi': 'Để các rác khối ở lề đường phía trước nhà quý vị trước lúc 6:30 sáng vào ngày đầu trong tuần theo lịch thu rác của mình.',
+            'step_description_ar': 'ضع العناصر كبيرة الحجم على جانب الرصيف أمام منزلك قبل الساعة 6:30 صباحا في اليوم الأول من أسبوع الجمع المقرر الخاص بك.'
+        }, {
+            'step_description_en': 'Separate items into three piles:\n<ul>\n    <li>Metal - includes appliances, doors must be removed</li>\n    <li>Passenger car tires - limit of eight tires per household, rims must be removed, no truck or tractor tires</li>\n    <li>Non-metal items - includes carpeting and nail-free lumber</li>\n</ul>\n',
+            'step_description_es': 'Separe los artículos en tres grupos.\n<ul>\n    <li>Metales: incluye electrodomésticos, debe quitarles las puertas</li>\n    <li>Llantas de autos de pasajeros: límite de ocho llantas por casa, debe quitarles los rines, no se aceptan llantas de camiones ni tractores</li>\n    <li>Artículos que no son de metal: incluye alfombras y madera sin clavos</li>\n</ul>\n',
+            'step_description_vi': 'Tách các đồ vật ra thành ba đống.\n<ul>\n    <li>Kim loại - bao gồm các máy móc dùng cho việc nhà, các cánh cửa phải được tháo ra</li>\n    <li>Bánh xe hơi dân dụng - giới hạn tám bánh xe cho mỗi hộ gia đình, vành bánh xe phải được tháo bỏ, không nhận bánh xe tải hay xe ủi kéo</li>\n    <li>Đồ phi kim loại - bao gồm thảm và gỗ làm nhà không có đinh</li>\n</ul>\n',
+            'step_description_ar': 'افصل العناصر إلى ثلاثة أكوام.\n<ul>\n    <li>المعادن - تشمل الأجهزة، يجب إزالة الأبواب</li>\n    <li>إطارات سيارات الركاب - أقصى عدد مسموح به ثمانية إطارات لكل أسرة، يجب إزالة الحواف، غير مسموح بإطارات الشاحنات أو الجرارات</li>\n    <li>العناصر غير المعدنية - تشمل السجاد والأخشاب الخالية من المسامير</li>\n</ul>\n'
+        }, {
+            'step_description_en': 'The three separate piles are collected by different trucks and may be collected at different times throughout the week.',
+            'step_description_es': 'Los camiones que recogen estos tres grupos por separado son distintos y podrían pasar en momentos diferentes durante esa semana.',
+            'step_description_vi': 'Ba đống đồ riêng biệt này được thu bởi các xe tải khác nhau và có thể được thu vào các thời điểm khác nhau trong tuần.',
+            'step_description_ar': 'يتم جمع الأكوام الثلاثة المنفصلة بواسطة شاحنات مختلفة ويمكن جمعها في أوقات مختلفة على مدار الأسبوع.'
+        }],
+        'additional_content_en': '<h2>Bulk item pickup do’s and don’ts</h2>\n<p>Do not put bulk items in bags, boxes, or other containers. Bags will be treated as extra trash and are subject to extra trash fees.</p>\n<p>Do not place any items under low hanging tree limbs or power lines.</p>\n<p>Do not place items in an alley in any area in front of a vacant lot or in front of a business. Items will not be collected from these areas.</p>\n<p>To prevent damage to your property, keep bulk items 5 feet away from your:</p>\n<ul>\n    <li>Trash cart</li>\n    <li>Mailbox</li>\n    <li>Fences or walls</li>\n    <li>Water meter</li>\n    <li>Telephone connection box</li>\n    <li>Parked cars</li>\n</ul>\n',
+        'additional_content_es': '<h2>Qué debe y no debe hacer para la recolección de artículos grandes</h2>\n<p>No meta los artículos grandes en bolsas, cajas ni otros recipientes. Las bolsas se consideran basura adicional y están sujetas a cuotas de basura adicionales.</p>\n<p>No coloque ningún artículo debajo de árboles con ramas bajas ni cables del tendido eléctrico bajos.</p>\n<p>No coloque artículos en callejones en ningún área frente a terrenos baldíos ni negocios. No recogeremos artículos en esas áreas.</p>\n<p>Para evitar el daño a su propiedad y la de otros, mantenga los artículos grandes a 5 pies de distancia de su:</p>\n<ul>\n    <li>Bote de basura</li>\n    <li>Buzón</li>\n    <li>Cerca o pared</li>\n    <li>Medidor de agua</li>\n    <li>Caja de conexión telefónica</li>\n    <li>Autos estacionados</li>\n</ul>\n',
+        'additional_content_vi': '<h2>Những Điều Nên Làm và Không Nên Làm về Bốc Rác Khối</h2>\n<p>Không để các rác khối vào trong túi, hộp, hay các thùng đựng khác. Các túi đựng sẽ được xem là rác phụ trội và phải chịu lệ phí rác phụ trội.</p>\n<p>Không để bất kỳ đồ vật nào dưới các cành cây lơ lửng ở tầm thấp hoặc dưới các đường dây điện.</p>\n<p>Không để các đồ vật ở đường hẻm tại bất kỳ khu vực nào phía trước một khu đất trống hoặc trước một cơ sở kinh doanh.  Các đồ vật ở các chỗ này sẽ không được thu đi.</p>\n<p>Để tránh gây thiệt hại cho tài sản của quý vị hoặc của người khác, hãy để các rác khối cách xa 5 feet (1 mét rưỡi) từ các chỗ sau đây của mình:</p>\n<ul>\n    <li>Thùng xe rác</li>\n    <li>Hộp thư</li>\n    <li>Hàng rào và tường rào</li>\n    <li>Đồng hồ đo nước</li>\n    <li>Hộp đấu nối điện thoại</li>\n    <li>Xe hơi đậu.</li>\n</ul>\n',
+        'additional_content_ar': '<h2>قائمة العناصر كبيرة الحجم التي يمكن جمعها والعناصر التي لا يمكن جمعها</h2>\n<p>لا تضع العناصر كبيرة الحجم في أكياس، أو صناديق، أو غير ذلك من الحاويات. سيتم التعامل مع الأكياس على أنها قمامة إضافية وتخضع لرسوم إضافية لجمع القمامة.</p>\n<p>لا تضع أي عناصر تحت فروع شجر أو أسلاك كهرباء متدل بارتفاع منخفض.</p>\n<p>لا تضع العناصر في ممر في أي منطقة أمام قطعة أرض شاغرة أو أمام شركة. لن يتم التقاط العناصر من هذه المناطق.</p>\n<p>لمنع الأضرار التي يمكن أن تلحق بعقارك أو عقار الآخرين، اجعل العناصر كبيرة الحجم على بُعد 5 أقدام من:</p>\n<ul>\n    <li>عربة القمامة</li>\n    <li>صندوق البريد</li>\n    <li>السياج أو الجدران</li>\n    <li>عداد المياه</li>\n    <li>صندوق الاتصال الهاتفي</li>\n    <li>السيارات المركونة.</li>\n</ul>\n',
+        'dynamic_content': [{
+            'type': 'recollect'
+        }],
+        'meta_title_en': None,
+        'meta_title_es': 'Prepárese para la recolección de artículos grandes al borde de la acera',
+        'meta_title_vi': 'Chuẩn Bị cho Bốc Rác Khối Để Lề Đường',
+        'meta_title_ar': 'كُن على استعداد لجمع العناصر كبيرة الحجم التي يُراد التخلص منها على جانب الرصيف',
+        'meta_description_en': None,
+        'meta_description_es': 'Los clientes residenciales de basura y reciclaje de Austin pueden aprovechar la recolección de artículos que no caben en su bote de basura, tales como electrodomésticos, muebles y alfombras.',
+        'meta_description_vi': 'Rác nhà của cư dân Austin và các khách hàng tái chế được hưởng dịch vụ bốc rác cho các đồ vật để lề đường vì chúng quá lớn cho một thùng rác, chẳng hạn như các máy móc dùng cho việc nhà, đồ đạc, và thảm.',
+        'meta_description_ar': 'يمكن لعملاء أوستن التمتع بخدمة جمع العناصر كبيرة الحجم من النفايات المنزلية وإعادة التدوير التي لا تسع عربة القمامة، مثل الأجهزة والأثاث والسجاد.',
+        'meta_tags': None
+    }, {
+        'slug': 'compost-pickup',
+        'topic': 'recycling-trash-compost',
+        'image': 'curbside-compost',
+        'contact': 311,
+        'title_en': 'Get ready for curbside compost pickup',
+        'title_es': 'Prepárese para la recolección de compost',
+        'title_vi': 'Chuẩn bị cho việc bốc rác phân ủ hữu cơ thường lệ',
+        'title_ar': 'كُن على استعداد لخدمة جمع السماد على جانب الرصيف',
+        'service_steps': [{
+            'step_description_en': 'Look for your home on this map to see if you are in the Curbside Composting service area: <a href="https://austintexas.gov/sites/default/files/files/Resource_Recovery/curbside_composting_map_for_web_11x17.pdf">Curbside Compost Service Area</a>.',
+            'step_description_es': 'Busque su casa en este mapa para ver si está en el área de servicio de recolección de compost: <a href="https://austintexas.gov/sites/default/files/files/Resource_Recovery/curbside_composting_map_for_web_11x17.pdf">Curbside Compost Service Area</a>',
+            'step_description_vi': 'Tìm nhà quý vị trên bản đồ để xem nếu mình ở khu vực có dịch vụ Rác Ủ Phân Hữu Cơ. <a href="https://austintexas.gov/sites/default/files/files/Resource_Recovery/curbside_composting_map_for_web_11x17.pdf">Curbside Compost Service Area</a>',
+            'step_description_ar': 'ابحث عن منزلك على هذه الخريطة لمعرفة ما إذا كنت في منطقة خدمة جمع السماد على جانب الرصيف. <a href="https://austintexas.gov/sites/default/files/files/Resource_Recovery/curbside_composting_map_for_web_11x17.pdf">Curbside Compost Service Area</a>'
+        }, {
+            'step_description_en': 'If you are in the composting service area, place food scraps, yard trimmings, pizza boxes, food-soiled paper products, and other compostable items into your green compost cart. Use the "What do I do with" tool below to find out what you can compost. We like to say, if it grows, it goes.',
+            'step_description_es': 'Si está en el área de servicio de compost, coloque los restos de comida, recortes del jardín, cajas de pizza, papeles manchados con comida y otros artículos compostables en su bote verde para compostaje. Use la función “What do I do with" (vea el enlace abajo) para ver lo que puede compostar. Como decimos nosotros: ¡si crece, lo puede agregar!',
+            'step_description_vi': 'Nếu quý vị ở trong khu vực có dịch vụ rác ủ phân hữu cơ, hãy để các đồ thực phẩm thừa bỏ, rác làm vườn, các hộp pizza, các loại giấy bọc đồ ăn, và các thứ có thể phân hủy khác vào trong thùng rác ủ phân hữu cơ màu xanh lá cây của mình.  Sử dụng công cụ “Tôi cần làm gì với (liên kết đến ứng dụng dưới)” để biết những loại gì quý vị có thể làm phân ủ hữu cơ. Chúng tôi muốn nói là: nếu nó mọc đươc, nó ủ được!',
+            'step_description_ar': 'إذا كنت في منطقة خدمة التسميد، ضع فضلات الطعام ومخلفات الحدائق وصناديق البيتزا ومنتجات الورق المتسخ بالطعام وغيرها من العناصر القابلة للتسميد في عربة التسميد الخضراء خاصتك. استخدم أداة "What do I do with (رابط التطبيق أدناه)" لمعرفة ما يمكنك تحويله إلى سماد. نود أن نقول، ضع كل صنف من المواد على حدة.'
+        }, {
+            'step_description_en': 'Roll the green cart out to your curb before 6:30 a.m. on your regular pickup day.',
+            'step_description_es': 'Coloque su bote al lado de la acera frente a su casa antes de las 6:30 a.m. en su día de recolección regular.',
+            'step_description_vi': 'Lăn thùng xe màu xanh lá cây ra lề đường trước 6:30 sáng vào ngày bốc rác thường lệ của mình.',
+            'step_description_ar': 'انقل العربة الخضراء إلى جانب رصيفك قبل الساعة 6:30 صباحا في يومك العادي لجمع العربات.'
+        }],
+        'additional_content_en': '<h2>Keeping your compost cart fresh</h2>\n<p>While it is not required, there are a few things you can do to keep your compost cart from smelling bad:</p>\n<ul>\n    <li>Line your compost cart with a paper bag or use BPI-certified compostable bags. If you don’t have a bag, you can put dry leaves, pizza boxes, or newspaper on the bottom of your cart. Sprinkling baking soda on the bottom will also help keep the smell down.</li>\n    <li>Keep your compost cart in the shade if possible, and always keep the lid closed to contain the smell and to keep bugs and animals out of your cart.</li>\n</ul>\n\n<h2>Why compost?</h2>\n<p>When buried in a landfill, compostable materials do not break down as they would in nature or in a compost pile. Instead of going to a landfill, where they would release methane into the atmosphere, organic materials placed in the green carts are taken to a local composting facility, where they break down into compost. Compost helps soil retain water and fertilizes lawns and gardens without using chemicals.</p>\n\n<h2>Save money with your green cart</h2>\n<p>You will have less trash to throw away each week after putting food scraps and food-soiled paper in your green cart. This may allow you to <a href="http://www.austintexas.gov/department/residential-rates-fees">downsize to a smaller, less expensive trash cart</a>. Austin Resource Recovery offers four trash cart sizes – the smaller the cart, the less it costs each month.</p>\n',
+        'additional_content_es': '<h2>Cómo mantener su bote de compost fresco</h2>\n<p>Aunque no es necesario, estas son algunas cosas que puede hacer para evitar que su bote de compostaje huela mal:</p>\n<ul>\n    <li>Coloque una bolsa de papel dentro del bote de compostaje o use bolsas de compostaje certificadas por BPI. Si no tiene una bolsa, puede colocar hojas secas, cajas de pizza o periódico en el fondo del bote. Espolvorear bicarbonato de soda en el fondo del bote también controlará el olor.</li>\n    <li>Mantenga su bote de compostaje en la sombra si es posible y siempre cerrado para contener el olor y evitar que le entren insectos y animales.</li>\n</ul>\n\n<h2>¿Por qué es bueno hacer compost?</h2>\n<p>Cuando se entierran en un vertedero de basura, los materiales para compostaje no se descomponen como lo harían en la naturaleza o en una pila de compost. En lugar de ir al vertedero, donde expulsarían gas metano a la atmósfera, los materiales orgánicos colocados en los botes verdes son llevados al centro de compostaje local donde se descomponen para formar compost. El compost ayuda a la tierra a retener el agua y sirve como fertilizante para el césped y jardines sin necesidad de químicos.</p>\n\n<h2>¡El bote verde le ahorra dinero!</h2>\n<p>Después de poner los restos de comida y los papeles que se hayan ensuciado con alimentos en su bote verde, tendrá menos basura que tirar cada semana. Esto podría permitirle <a href="http://www.austintexas.gov/department/residential-rates-fees">cambiarse a un bote de basura más pequeño y más barato</a>. Austin Resource Recovery ofrece cuatro tamaños de botes de basura y, mientras más pequeño, menos le cuesta al mes.</p>\n',
+        'additional_content_vi': '<h2>Giữ thùng xe rác ủ phân hữu cơ của mình tươi sạch:</h2>\n<p>Cho dù không bắt buộc, vẫn có một số điều quý vị có thể làm để giữ cho thùng rác ủ phân hữu cơ của mình không bị bốc mùi khó chịu:</p>\n<ul>\n    <li>Lót thùng đựng rác ủ phân hữu cơ bằng túi giấy hoặc dùng túi có thể phân hủy và được chứng nhận bởi BPI. Nếu quý vị không có túi, quý vị có thể lót đáy thùng bằng lá khô, hộp pizza, hoặc giấy báo. Rắc thuốc muối ở dưới đáy cũng sẽ giúp giảm bốc mùi.</li>\n    <li>Nếu có thể hãy để thùng rác đựng phân ủ hữu cơ dưới bóng mát, và luôn đậy nắp kín để giữ mùi hôi và khiến cho các loại sâu bọ cũng như thú vật không vào thùng của mình.</li>\n</ul>\n\n<h2>Tại sao lại ủ phân hữu cơ?</h2>\n<p>Khi bị chôn ở một bãi chôn rác, các chất khi thường thì tự phân hủy sẽ không tan rã như khi chúng ở trong thiên nhiên hoặc ở trong một đống rác ủ phân hữu cơ. Thay vì cho ra bãi chôn rác, nơi mà chúng sẽ thải khí mê-than (methanol) vào trong không khí, các vật liệu hữu cơ này được đặt trong các thùng xe rác màu xanh lá cây để được đưa đến một cơ sở ủ phân hữu cơ ở địa phương, ở đó chúng phân hủy thành phân ủ hữu cơ. Phân ủ hữu cơ giúp cho đất giữ dược nước và làm phân bón cho bãi cỏ và vườn tược mà không phải sử dụng hóa chất.</p>\n\n<h2>Tiết kiệm tiền với thùng xe rác xanh lá cây</h2>\n<p>Quý vị sẽ có ít đi số rác phải vứt bỏ mỗi tuần sau khi cho các đồ ăn thừa và giấy bọc thực phẩm đã bẩn vào trong thùng xe rác màu xanh lá cây của mình. Điều này có thể cho phép quý <a href="http://www.austintexas.gov/department/residential-rates-fees">vị giảm kích thước thùng xe rác xuống loại nhỏ hơn, đỡ tốn kém hơn</a>. Sở Phục Hồi Nguồn Lực Austin cung cấp bốn cỡ thùng xe rác – xe nhỏ hơn, thì chi phí ít hơn mỗi tháng.</p>\n',
+        'additional_content_ar': '<h2>الحفاظ على عربة التسميد خاصتك من الروائح الكريهة</h2>\n<p>في حين أن هذا الإجراء ليس مطلوبا، إلا أن هناك القليل من الأشياء التي يمكنك القيام بها للحفاظ على عربة التسميد خاصتك من الروائح الكريهة:</p>\n<ul>\n    <li>ضع داخل عربة التسميد بالأسفل بطانة من الأكياس الورقية أو الأكياس المعتمدة من قبل BPI القابلة للتسميد. إذا لم يكن لديك أكياس، يمكنك وضع أوراق الشجر الجافة أو صناديق البيتزا أو ورق الجرائد داخل الجزء السفلي من عربتك. سيساعد أيضا رش بيكربونات الصودا في القاع على طرد الروائح الكريهة.</li>\n    <li>احتفظ بعربة التسميد خاصتك في الظل إن أمكن، واحرص دائما على إغلاق الغطاء لعدم انتشار أي روائح وإبعاد الحشرات والحيوانات عن عربتك.</li>\n</ul>\n\n<h2>لماذا السماد؟</h2>\n<p>عند دفن المواد القابلة للتسميد في مكب النفايات، فإنها لا تتحلل كما تتحلل في الطبيعة أو في كومة السماد. فبدلا من الذهاب بها إلى مكب النفايات حيث قد تطلق غاز الميثان في الغلاف الجوي، تؤخذ المواد العضوية الموضوعة في العربات الخضراء إلى المنشأة المحلية للتسميد، حيث تتحلل هناك إلى سماد. يساعد السماد التربة على الاحتفاظ بالماء وتخصيب المروج والحدائق دون استخدام المواد الكيميائية.</p>\n\n<h2>وفّر المال مع عربتك الخضراء</h2>\n<p>سيكون لديك أقل سلة قمامة حجما تتخلص منها كل أسبوع بعد وضع فضلات الطعام والورق المتسخ بالطعام في عربتك الخضراء. وهذا قد يسمح لك بتصغير حجم عربة القمامة إلى حجم أصغر وبأقل تكلفة. توفر Austin Resource Recovery أربعة أحجام لعربة النفايات - فأصغر عربة، تكلفتها أقل.</p>\n',
+        'dynamic_content': [{
+            'type': 'what_do_i_do_with'
+        }],
+        'meta_title_en': None,
+        'meta_title_es': 'Recolección de compost al borde de la acera',
+        'meta_title_vi': 'Bốc Rác Phân Ủ Hữu Cơ',
+        'meta_title_ar': 'خدمة جمع السماد على جانب الرصيف',
+        'meta_description_en': None,
+        'meta_description_es': 'Prepárese para la recolección de compost en Austin con estos pasos útiles. Use nuestra herramienta para ver lo que puede compostar en Austin.',
+        'meta_description_vi': 'Chuẩn bị cho việc bốc râc phân ủ hữu cơ ở Austin với những bước hữu ích sau đây. Dùng công cụ của chúng tôi để biết những gì quý vị có thể làm phân ủ hữu cơ ở Austin.',
+        'meta_description_ar': 'كُن على استعداد لخدمة جمع السماد على جانب الرصيف في أوستن بمساعدة هذه الخطوات المفيدة. استخدام أداتنا لمعرفة ما يمكنك تحويله إلى سماد في أوستن.',
+        'meta_tags': None
+    }, {
+        'slug': 'find-free-condoms',
+        'topic': 'healthcare-prevention',
+        'image': 'curbside-compost',
+        'contact': 311,
+        'title_en': 'Find free condoms and learn other ways to prevent HIV',
+        'title_es': 'Find free condoms and learn other ways to prevent HIV',
+        'title_vi': 'Find free condoms and learn other ways to prevent HIV',
+        'title_ar': 'Find free condoms and learn other ways to prevent HIV',
+        'service_steps': [{
+            'step_description_en': 'Use our <a href="http://austin.maps.arcgis.com/apps/webappviewer/index.html?id=07706098076547358b7cc0c7b3d8562e%20">free condom map</a> to find locations in the Austin giving them. Locations include:\n<ul>\n    <li>Neighborhood centers,</li>\n    <li>Barber shops,</li>\n    <li>Liquor stores and bars,</li>\n    <li>And other easily accessible local establishments.</li>\n</ul>\n'
+        }, {
+            'step_description_en': 'Review steps you can take to prevent HIV.\n<ul>\n    <li>Always use latex condoms with your partner, especially if you do not know your partner’s HIV status.</li>\n    <li>Don’t have sex. Abstinence is the only sure way to avoid contracting HIV.</li>\n    <li>If you and your partner are both HIV negative, being faithful in your relationship removes your risk for HIV infection.</li>\n    <li>Don’t share needles and syringes. Needles and syringes can expose you to HIV.</li>\n    <li>Speak to a doctor about a prescription for <a href="https://www.cdc.gov/hiv/basics/prep.html">Pre-exposure prophylaxis (or PrEP)</a>. PrEP is taken daily to lower chances of HIV infection.</li>\n</ul>\n'
+        }],
+        'additional_content_en': None,
+        'dynamic_content': [{
+            'type': 'map',
+            'description_en': 'Hazardous Waste Dropoff Center',
+            'description_es': 'Visite la Tienda de Reúso en el Centro de Reciclaje y Reúso',
+            'description_vi': 'Ghé thăm Cửa Hàng Tái Dụng tại Trung Tâm Tái Chế & Tái Dụng',
+            'description_ar': 'تفضل بزيارة مستودع إعادة الاستخدام في مركز إعادة التدوير وإعادة الاستخدام',
+            'location': 'Recycle & Reuse Drop-off Center'
+        }],
+        'meta_title_en': 'Find free condoms and learn other ways to prevent HIV',
+        'meta_description_en': 'Find free condoms in locations across Austin, and learn ways to prevent HIV infection.',
+        'meta_tags': 'HIV, condoms, HIV prevention, free condoms, free protection, HIV protection, HIV infection prevention'
+    }, {
+        'slug': 'get-immunization-record',
+        'topic': 'records-and-certificates',
+        'image': 'curbside-compost',
+        'contact': 311,
+        'title_en': 'Get a copy of your or your child’s immunization record',
+        'title_es': 'Get a copy of your or your child’s immunization record',
+        'title_vi': 'Get a copy of your or your child’s immunization record',
+        'title_ar': 'Get a copy of your or your child’s immunization record',
+        'service_steps': [{
+            'step_description_en': 'If you’ve received immunizations at a public health clinic in Austin or Travis County, you can pick them up for $5 at:\n<ul>\n    <li><a href="https://www.google.com/maps/place/405+W+Stassney+Ln,+Austin,+TX+78745/@30.2070206,-97.7814319,17z/data=!3m1!4b1!4m5!3m4!1s0x8644b4a98fa1e043:0x6c9910f96b488fb8!8m2!3d30.2070206!4d-97.7792379">Far South Austin Clinic</a> or <a href="https://www.google.com/maps/place/7500+Blessing+Ave,+Austin,+TX+78752/@30.3326199,-97.6955864,17z/data=!3m1!4b1!4m5!3m4!1s0x8644c988de534435:0x6d5da7b657ff877e!8m2!3d30.3326199!4d-97.6933924">St. John Clinic</a>. Records may not be available for shots given at private physicians\' offices.</li>\n</ul>\n'
+        }, {
+            'step_description_en': '<a href="http://www.austintexas.gov/sites/default/files/files/Health/Immunizations/Medical_Release_Form_2016_English.pdf">Complete this form</a> to agree to let us to release your medical information to you and any other people who may need it.'
+        }, {
+            'step_description_en': 'A parent or guardian may only pick up immunization records for their child if their child is under the age of 18.'
+        }],
+        'additional_content_en': '<h2>Store your immunizations records</h2>\nIf you’ve never received immunizations at a public health clinic in Austin or Travis County, but you plan on visiting a clinic, we can save your shot record going forward.\nIf you are 18 or older, <a href="http://www.austintexas.gov/sites/default/files/files/Health/Immunizations/ImmTrac_Consent_Form_Adult__English.pdf"register for ImmTrac to have your immunizations information stored</a> for free. ImmTrac safely stores your immunization records in one electronic system and remembers which vaccines you’ve had when you can’t.\n',
+        'dynamic_content': [{
+            'type': 'map',
+            'description_en': 'Hazardous Waste Dropoff Center',
+            'description_es': 'Visite la Tienda de Reúso en el Centro de Reciclaje y Reúso',
+            'description_vi': 'Ghé thăm Cửa Hàng Tái Dụng tại Trung Tâm Tái Chế & Tái Dụng',
+            'description_ar': 'تفضل بزيارة مستودع إعادة الاستخدام في مركز إعادة التدوير وإعادة الاستخدام',
+            'location': 'Recycle & Reuse Drop-off Center'
+        }],
+        'meta_title_en': 'Get a copy of your or your child’s immunization record',
+        'meta_description_en': 'Get a copy of your immunization records so you can see what vaccines you have and what shots you still need.',
+        'meta_tags': 'Shots, vaccines, immunizations, immunization shots, immunization shot records, shot record, vaccine records, shots record, shots records'
+    }, {
+        'slug': 'get-immunized',
+        'topic': 'healthcare-prevention',
+        'image': 'paint',
+        'contact': 311,
+        'title_en': 'Get immunizations for you and your family',
+        'title_es': 'Get immunizations for you and your family',
+        'title_vi': 'Get immunizations for you and your family',
+        'title_ar': 'Get immunizations for you and your family',
+        'service_steps': [{
+            'step_description_en': 'We provide immunization shots to uninsured children and adults and Medicaid recipients. Decide which shots you or your family members need.\n<ul>\n    <li>\n      Shots for children\n      <ul>\n        <li>DTaP, DT, or DTP</li>\n        <li>Hepatitis A</li>\n        <li>Hepatitis B</li>\n        <li>HPV</li>\n        <li>Polio</li>\n        <li>Hib</li>\n        <li>PCV</li>\n        <li>Measles, Mumps, and Rubella (MMR)</li>\n        <li>Varicella; the chickenpox vaccine (VAR)</li>\n        <li>Meningococcal (MCV4)</li>\n      </ul>\n    </li>\n    <li>\n      Shots for adults\n      <ul>\n        <li>DTaP, DT, or DTP</li>\n        <li>Hepatitis A</li>\n        <li>Hepatitis B</li>\n        <li>HPV</li>\n        <li>Meningitis (through age 21)</li>\n        <li>Measles, Mumps, and Rubella (MMR)</li>\n        <li>Pneumonia</li>\n        <li>Tdap/Td</li>\n        <li>Varicella; the chickenpox vaccine (VAR)</li>\n        <li>Shingles</li>\n      </ul>\n    </li>\n</ul>\n'
+        }, {
+            'step_description_en': 'Find the clinic nearest you\n<ul>\n  <li><a href"https://www.google.com/maps/place/405+W+Stassney+Ln,+Austin,+TX+78745/@30.2070206,-97.7814319,17z/data=!3m1!4b1!4m5!3m4!1s0x8644b4a98fa1e043:0x6c9910f96b488fb8!8m2!3d30.2070206!4d-97.7792379">Far South Austin Clinic</a></li>\n  <li><a href"https://www.google.com/maps/place/7500+Blessing+Ave,+Austin,+TX+78752/@30.3326199,-97.6955864,17z/data=!3m1!4b1!4m5!3m4!1s0x8644c988de534435:0x6d5da7b657ff877e!8m2!3d30.3326199!4d-97.6933924">St. John Clinic</a></li>\n</ul>\n'
+        }, {
+            'step_description_en': '<a href="http://www.austintexas.gov/sites/default/files/files/Health/Immunizations/2018_S4T_BS_Flyer-_English.pdf">Find available appointment times</a>.'
+        }, {
+            'step_description_en': 'Call 512-972-5520 Monday through Friday 8 a.m. to 4:30 p.m. to make an appointment.'
+        }, {
+            'step_description_en': 'Bring the required items with you to your appointment:\n<ul>\n  <li>Your shot records</li>\n  <li>Your Medicaid card if you have one</li>\n  <li>\n    Your payment\n    <ul>\n      <li>$10 per dose of vaccine for children</li>\n      <li>$25 per dose of vaccine for adults</li>\n      <li>$20 for a TB test</li>\n      <li>No one is refused services if they are unable to pay.</li>\n    </ul>\n  </li>\n</ul>\n'
+        }],
+        'additional_content_en': '<h2>Child immunizations requirements</h2>\n\nThe Texas Department of State Health Services requires children to get certain immunizations to attend schools and childcare facilities.\n\n<a href="http://www.dshs.texas.gov/immunize/school/child-care-requirements.aspx">Learn more about child-care immunization requirements for children under the age of five here</a> and <a href="http://www.dshs.texas.gov/immunize/school/school-requirements.aspx">immunization requirements for students K-12</a>.\n\nIf you don’t have Medicaid or are already insured, you can make an appointment with a private doctor or clinic for immunizations shots.\n',
+        'dynamic_content': [{
+            'type': 'map',
+            'description_en': 'Hazardous Waste Dropoff Center',
+            'description_es': 'Visite la Tienda de Reúso en el Centro de Reciclaje y Reúso',
+            'description_vi': 'Ghé thăm Cửa Hàng Tái Dụng tại Trung Tâm Tái Chế & Tái Dụng',
+            'description_ar': 'تفضل بزيارة مستودع إعادة الاستخدام في مركز إعادة التدوير وإعادة الاستخدام',
+            'location': 'Recycle & Reuse Drop-off Center'
+        }],
+        'meta_title_en': 'Get immunizations for you and your family',
+        'meta_description_es': None,
+        'meta_description_vi': None,
+        'meta_description_ar': None,
+        'meta_description_en': 'Get low-cost vaccines for you and your family. We provide immunizations to uninsured children and adults and Medicaid recipients. Decide which shots you need.',
+        'meta_tags': 'Immunizations, immunization shots, vaccines, vaccinations, immunization requirements'
+    }, {
+        'slug': 'hazardous-waste-dropoff-prototype',
+        'topic': 'recycling-trash-compost',
+        'image': 'household-hazardous-waste',
+        'contact': 311,
+        'title_en': '\\[Prototype\\] Drop off household hazardous waste and other recyclables',
+        'title_es': '\\[Prototype\\] Entregue sus desechos peligrosos del hogar y otros artículos reciclables',
+        'title_vi': '\\[Prototype\\] Bỏ đi các loại rác nhà nguy hiểm và các loại rác tái chế khác',
+        'title_ar': 'التخلص من النفايات الخطرة المنزلية وغيرها من المواد القابلة للتدوير\\[Prototype\\]',
+        'service_steps': [{
+            'step_description_en': 'Check the “What do I do with” tool below to find out what items are accepted. Some items are free to drop off and some items, like tires, require a fee.',
+            'step_description_es': 'Use la función “What do I do with” abajo para ver los artículos aceptados. Puede entregar algunos artículos sin tener que pagar y para otros, como las llantas, debe pagar una cuota.',
+            'step_description_vi': 'Kiểm tra bằng công cụ “What do I do with” dưới đây để xác định những loại nào được chấp nhận. Một số loại không phải đóng phí khi vứt bỏ trong khi một số loại khác, ví dụ như lốp xe, sẽ phải trả phí.',
+            'step_description_ar': 'أطلع على أداة "What do I do with" أدناه لمعرفة العناصر المقبولة. التخلص من بعض العناصر مجاني وهناك بعض العناصر، مثل التخلص من الإطارات، تتطلب رسوما.'
+        }, {
+            'step_description_en': 'Review the Household Hazardous Waste Do’s and Don’ts below.',
+            'step_description_es': 'Revise abajo lo que debe y no debe hacer con los desechos peligrosos del hogar.',
+            'step_description_vi': 'Rà soát Những điều Nên làm và Không Nên làm với Rác thải Nguy hại của Hộ gia đình dưới đây.',
+            'step_description_ar': 'يرجى مراجعة قائمة النفايات المنزلية الخطرة التي يمكن التخلص منها والعناصر التي لا يمكن التخلص منها أدناه.'
+        }, {
+            'step_description_en': 'Drop off your items at the Recycle and ReUse Center at 2514 Business Center Dr, Austin, TX 78744.',
+            'step_description_es': 'Entregue sus artículos en el Centro de Reciclaje y Reúso ubicado en 2514 Business Center Dr, Austin, TX 78744.',
+            'step_description_vi': 'Bỏ các đồ thải loại của bạn tại Trung tâm Tái chế và Tái Sử dụng tại 2514 Business Center Dr, Austin, TX 78744.',
+            'step_description_ar': 'تخلص من العناصر الخاصة بك في مركز إعادة التدوير وإعادة الاستخدام في 2514 Business Center Dr, Austin, TX 78744.'
+        }],
+        'additional_content_en': '<h2>Household Hazardous Waste Do’s and Don’ts</h2>\n<p>Throwing household hazardous waste in the trash or pouring it down the drain is dangerous and harmful to the environment. Austin and Travis County residents can drop off up to 30 gallons of hazardous waste for free each year.</p>\n<p>Bring products in their original containers. If the original container is larger than 5-gallons, please call the Recycle and ReUse Center at 512-974-4343 to find out how to get your products ready for drop off.</p>\n<p>Put small containers upright in sturdy boxes. If a container is leaking, pour cat litter into a larger container and put the leaking container inside the larger. The litter will absorb the spill.</p>\n<p>Do not mix items. Large truck or trailer loads will not be accepted after 4:45 p.m.</p>\n<p>Businesses are not eligible to drop off hazardous waste. For information about how businesses can dispose of hazardous waste, call 512-974-4336.</p>\n',
+        'additional_content_es': '<h2>Qué debe y no debe hacer con los artículos peligrosos del hogar</h2>\n<p>Botar desechos peligrosos del hogar en la basura o por el drenaje es peligroso y perjudicial para el medio ambiente. Los residentes del Condado de Travis pueden entregar hasta 30 galones de desechos domésticos peligrosos al año.</p>\n<p>Traiga los productos en sus recipientes originales. Si el recipiente original es de más de 5 galones, por favor llame al Centro de Reciclaje y Reúso al 512-974-4343 para averiguar cómo preparar su producto para entregarlo.</p>\n<p>Ponga los recipientes pequeños parados dentro de una caja resistente. Si un recipiente tiene algún escape, cubra el fondo de un recipiente más grande con una capa de arena sanitaria para gatos y coloque el recipiente que tiene la fuga dentro del recipiente más grande. La arena sanitaria para gatos absorberá el material que se bote. </p>\n<p>No mezcle los artículos. No se aceptan cargas de camiones ni remolques grandes después de las 4:45 p.m.</p>\n<p>Los negocios no califican para entregar desechos peligrosos. Para información sobre cómo los negocios pueden descartar sus desechos peligrosos, llame al 512-974-4336.</p>\n',
+        'additional_content_vi': '<h2>Những điều Nên làm và Không Nên làm với Rác thải Nguy hại của Hộ gia đình</h2>\n<p>Vứt bỏ rác thải nguy hại của hộ gia đình vào thùng rác hoặc đổ trực tiếp xuống cống rãnh gây nguy hiểm và gây hại cho môi trường. Các cư dân của Hạt Travis và Austin có thể bỏ tối đa 30 ga-lông rác thải nguy hại mỗi năm mà không phải đóng phí.</p>\n<p>Đem sản phẩm đến trong các bình chứa/thùng chứa gốc. Nếu thùng chứa gốc lớn hơn 5 ga-lông, xin vui lòng gọi Trung tâm Tái chế và Tái Sử dụng theo số 512-974-4343 để biết cách chuẩn bị sẵn sàng cho các sản phẩm của bạn trước khi vứt bỏ.</p>\n<p>Đặt các thùng chứa nhỏ theo chiều thẳng đứng trong các hộp cứng. Nếu có thùng chứa bị rò rỉ, đổ xỉ/cát vệ sinh cho mèo vào một thùng chứa lớn hơn và đặt thùng chứa bị rò rỉ vào trong thùng chứa lớn hơn đó. Cát/xỉ vệ sinh cho mèo sẽ hút phần bị rò rỉ.</p>\n<p>Không trộn lẫn các loại với nhau. Xe tải cỡ lớn hay xe đầu kéo rơ-móc sẽ không được vào sau 4:45 chiều.</p>\n<p>Các cơ sở kinh doanh không được đổ bỏ rác thải nguy hại. Để có thông tin về cách thức các cơ sở kinh doanh có thể xử lý rác thải nguy hại, hãy gọi 512-974-4336.</p>\n',
+        'additional_content_ar': '<h2>قائمة النفايات المنزلية الخطرة التي يمكن التخلص منها والعناصر التي لا يمكن التخلص منها</h2>\n<p>إلقاء النفايات المنزلية الخطرة في القمامة أو سكبها في المصارف يعد أمرا خطيرا وضارا بالبيئة. يمكن لسكان مقاطعة أوستن وترافيس التخلص من عدد يصل إلى 30 غالون من النفايات الخطرة مجانا كل عام.</p>\n<p>أحضر المنتجات في حاوياتها الأصلية. إذا كانت الحاوية الأصلية أكبر من 5 غالونات، يرجى الاتصال بمركز إعادة التدوير وإعادة الاستخدام على رقم 512-974-4343 لمعرفة كيفية تجهيز منتجاتك للتخلص منها.</p>\n<p>ضع الحاويات الصغيرة فى وضع عمودى في صناديق قوية. إذا كانت الحاوية تسرب، صُب حبيبات القطط الماصة في حاوية أكبر وَضَعْ الحاوية التي تسرب داخل الحاوية الأكبر. سوف تمتص الحبيبات الماصة السكب.</p>\n<p>لا تخلط العناصر. لن يتم قبول الأحمال الكبيرة للشاحنات أو المقطورة بعد الساعة 4:45 مساءً.</p>\n<p>الشركات ليست مؤهلة للتخلص من النفايات الخطرة. للحصول على معلومات حول كيفية تخلص الشركات من النفايات الخطرة، اتصل على الرقم 512-974-4336.</p>\n',
+        'dynamic_content': [{
+            'type': 'map',
+            'description_en': 'Hazardous Waste Dropoff Center',
+            'description_es': 'Visite la Tienda de Reúso en el Centro de Reciclaje y Reúso',
+            'description_vi': 'Ghé thăm Cửa Hàng Tái Dụng tại Trung Tâm Tái Chế & Tái Dụng',
+            'description_ar': 'تفضل بزيارة مستودع إعادة الاستخدام في مركز إعادة التدوير وإعادة الاستخدام',
+            'location': 'Recycle & Reuse Drop-off Center'
+        }],
+        'meta_title_en': None,
+        'meta_title_es': 'Entregue sus desechos peligrosos del hogar y otros artículos reciclables',
+        'meta_title_vi': 'Hãy bỏ Rác thải Nguy hại của Hộ gia đình và Các loại Có thể Tái chế Khác',
+        'meta_title_ar': 'التخلص من النفايات الخطرة المنزلية وغيرها من المواد القابلة للتدوير',
+        'meta_description_en': None,
+        'meta_description_es': 'Los residentes de Austin y el Condado de Travis pueden entregar sus desechos peligrosos del hogar y otros artículos reciclables en el Centro de Reciclaje y Reúso. Pueden entregar algunos artículos sin tener que pagar y para otros, como las llantas, deben pagar una cuota.',
+        'meta_description_vi': 'Các cư dân của Hạt Travis và Austin có thể bỏ rác thải nguy hại và các loại có thể tái chế khác tại Trung tâm Tái chế và Tái Sử dụng. Một số loại không phải đóng phí khi vứt bỏ trong khi một số loại khác, ví dụ như lốp xe, sẽ phải trả phí.',
+        'meta_description_ar': 'يمكن لسكان مقاطعة أوستن وترافيس التخلص من النفايات الخطرة والمواد الأخرى القابلة لإعادة التدوير في مركز إعادة التدوير وإعادة الاستخدام. التخلص من بعض العناصر مجاني وهناك بعض العناصر، مثل التخلص من الإطارات، تتطلب رسوما.',
+        'meta_tags': None
+    }, {
+        'slug': 'hazardous-waste-dropoff',
+        'topic': 'recycling-trash-compost',
+        'image': 'household-hazardous-waste',
+        'contact': 311,
+        'title_en': 'Drop off household hazardous waste and other recyclables',
+        'title_es': 'Entregue sus desechos peligrosos del hogar y otros artículos reciclables',
+        'title_vi': 'Bỏ đi các loại rác nhà nguy hiểm và các loại rác tái chế khác',
+        'title_ar': 'التخلص من النفايات الخطرة المنزلية وغيرها من المواد القابلة للتدوير',
+        'service_steps': [{
+            'step_description_en': 'Check the “What do I do with” tool below to find out what items are accepted. Some items are free to drop off and some items, like tires, require a fee.',
+            'step_description_es': 'Use la función “What do I do with” abajo para ver los artículos aceptados. Puede entregar algunos artículos sin tener que pagar y para otros, como las llantas, debe pagar una cuota.',
+            'step_description_vi': 'Kiểm tra bằng công cụ “What do I do with” dưới đây để xác định những loại nào được chấp nhận. Một số loại không phải đóng phí khi vứt bỏ trong khi một số loại khác, ví dụ như lốp xe, sẽ phải trả phí.',
+            'step_description_ar': 'أطلع على أداة "What do I do with" أدناه لمعرفة العناصر المقبولة. التخلص من بعض العناصر مجاني وهناك بعض العناصر، مثل التخلص من الإطارات، تتطلب رسوما.'
+        }, {
+            'step_description_en': 'Review the Household Hazardous Waste Do’s and Don’ts below.',
+            'step_description_es': 'Revise abajo lo que debe y no debe hacer con los desechos peligrosos del hogar.',
+            'step_description_vi': 'Rà soát Những điều Nên làm và Không Nên làm với Rác thải Nguy hại của Hộ gia đình dưới đây.',
+            'step_description_ar': 'يرجى مراجعة قائمة النفايات المنزلية الخطرة التي يمكن التخلص منها والعناصر التي لا يمكن التخلص منها أدناه.'
+        }, {
+            'step_description_en': 'Drop off your items at the Recycle and ReUse Center at 2514 Business Center Dr, Austin, TX 78744.',
+            'step_description_es': 'Entregue sus artículos en el Centro de Reciclaje y Reúso ubicado en 2514 Business Center Dr, Austin, TX 78744.',
+            'step_description_vi': 'Bỏ các đồ thải loại của bạn tại Trung tâm Tái chế và Tái Sử dụng tại 2514 Business Center Dr, Austin, TX 78744.',
+            'step_description_ar': 'تخلص من العناصر الخاصة بك في مركز إعادة التدوير وإعادة الاستخدام في 2514 Business Center Dr, Austin, TX 78744.'
+        }],
+        'additional_content_en': '<h2>Household Hazardous Waste Do’s and Don’ts</h2>\n<p>Throwing household hazardous waste in the trash or pouring it down the drain is dangerous and harmful to the environment. Austin and Travis County residents can drop off up to 30 gallons of hazardous waste for free each year.</p>\n<p>Bring products in their original containers. If the original container is larger than 5-gallons, please call the Recycle and ReUse Center at 512-974-4343 to find out how to get your products ready for drop off.</p>\n<p>Put small containers upright in sturdy boxes. If a container is leaking, pour cat litter into a larger container and put the leaking container inside the larger. The litter will absorb the spill.</p>\n<p>Do not mix items. Large truck or trailer loads will not be accepted after 4:45 p.m.</p>\n<p>Businesses are not eligible to drop off hazardous waste. For information about how businesses can dispose of hazardous waste, call 512-974-4336.</p>\n',
+        'additional_content_es': '<h2>Qué debe y no debe hacer con los artículos peligrosos del hogar</h2>\n<p>Botar desechos peligrosos del hogar en la basura o por el drenaje es peligroso y perjudicial para el medio ambiente. Los residentes del Condado de Travis pueden entregar hasta 30 galones de desechos domésticos peligrosos al año.</p>\n<p>Traiga los productos en sus recipientes originales. Si el recipiente original es de más de 5 galones, por favor llame al Centro de Reciclaje y Reúso al 512-974-4343 para averiguar cómo preparar su producto para entregarlo.</p>\n<p>Ponga los recipientes pequeños parados dentro de una caja resistente. Si un recipiente tiene algún escape, cubra el fondo de un recipiente más grande con una capa de arena sanitaria para gatos y coloque el recipiente que tiene la fuga dentro del recipiente más grande. La arena sanitaria para gatos absorberá el material que se bote. </p>\n<p>No mezcle los artículos. No se aceptan cargas de camiones ni remolques grandes después de las 4:45 p.m.</p>\n<p>Los negocios no califican para entregar desechos peligrosos. Para información sobre cómo los negocios pueden descartar sus desechos peligrosos, llame al 512-974-4336.</p>\n',
+        'additional_content_vi': '<h2>Những điều Nên làm và Không Nên làm với Rác thải Nguy hại của Hộ gia đình</h2>\n<p>Vứt bỏ rác thải nguy hại của hộ gia đình vào thùng rác hoặc đổ trực tiếp xuống cống rãnh gây nguy hiểm và gây hại cho môi trường. Các cư dân của Hạt Travis và Austin có thể bỏ tối đa 30 ga-lông rác thải nguy hại mỗi năm mà không phải đóng phí.</p>\n<p>Đem sản phẩm đến trong các bình chứa/thùng chứa gốc. Nếu thùng chứa gốc lớn hơn 5 ga-lông, xin vui lòng gọi Trung tâm Tái chế và Tái Sử dụng theo số 512-974-4343 để biết cách chuẩn bị sẵn sàng cho các sản phẩm của bạn trước khi vứt bỏ.</p>\n<p>Đặt các thùng chứa nhỏ theo chiều thẳng đứng trong các hộp cứng. Nếu có thùng chứa bị rò rỉ, đổ xỉ/cát vệ sinh cho mèo vào một thùng chứa lớn hơn và đặt thùng chứa bị rò rỉ vào trong thùng chứa lớn hơn đó. Cát/xỉ vệ sinh cho mèo sẽ hút phần bị rò rỉ.</p>\n<p>Không trộn lẫn các loại với nhau. Xe tải cỡ lớn hay xe đầu kéo rơ-móc sẽ không được vào sau 4:45 chiều.</p>\n<p>Các cơ sở kinh doanh không được đổ bỏ rác thải nguy hại. Để có thông tin về cách thức các cơ sở kinh doanh có thể xử lý rác thải nguy hại, hãy gọi 512-974-4336.</p>\n',
+        'additional_content_ar': '<h2>قائمة النفايات المنزلية الخطرة التي يمكن التخلص منها والعناصر التي لا يمكن التخلص منها</h2>\n<p>إلقاء النفايات المنزلية الخطرة في القمامة أو سكبها في المصارف يعد أمرا خطيرا وضارا بالبيئة. يمكن لسكان مقاطعة أوستن وترافيس التخلص من عدد يصل إلى 30 غالون من النفايات الخطرة مجانا كل عام.</p>\n<p>أحضر المنتجات في حاوياتها الأصلية. إذا كانت الحاوية الأصلية أكبر من 5 غالونات، يرجى الاتصال بمركز إعادة التدوير وإعادة الاستخدام على رقم 512-974-4343 لمعرفة كيفية تجهيز منتجاتك للتخلص منها.</p>\n<p>ضع الحاويات الصغيرة فى وضع عمودى في صناديق قوية. إذا كانت الحاوية تسرب، صُب حبيبات القطط الماصة في حاوية أكبر وَضَعْ الحاوية التي تسرب داخل الحاوية الأكبر. سوف تمتص الحبيبات الماصة السكب.</p>\n<p>لا تخلط العناصر. لن يتم قبول الأحمال الكبيرة للشاحنات أو المقطورة بعد الساعة 4:45 مساءً.</p>\n<p>الشركات ليست مؤهلة للتخلص من النفايات الخطرة. للحصول على معلومات حول كيفية تخلص الشركات من النفايات الخطرة، اتصل على الرقم 512-974-4336.</p>\n',
+        'dynamic_content': [{
+            'type': 'what_do_i_do_with'
+        }, {
+            'type': 'map',
+            'description_en': 'Hazardous Waste Dropoff Center',
+            'description_es': 'Visite la Tienda de Reúso en el Centro de Reciclaje y Reúso',
+            'description_vi': 'Ghé thăm Cửa Hàng Tái Dụng tại Trung Tâm Tái Chế & Tái Dụng',
+            'description_ar': 'تفضل بزيارة مستودع إعادة الاستخدام في مركز إعادة التدوير وإعادة الاستخدام',
+            'location': 'Recycle & Reuse Drop-off Center'
+        }],
+        'meta_title_en': None,
+        'meta_title_es': 'Entregue sus desechos peligrosos del hogar y otros artículos reciclables',
+        'meta_title_vi': 'Hãy bỏ Rác thải Nguy hại của Hộ gia đình và Các loại Có thể Tái chế Khác',
+        'meta_title_ar': 'التخلص من النفايات الخطرة المنزلية وغيرها من المواد القابلة للتدوير',
+        'meta_description_en': None,
+        'meta_description_es': 'Los residentes de Austin y el Condado de Travis pueden entregar sus desechos peligrosos del hogar y otros artículos reciclables en el Centro de Reciclaje y Reúso. Pueden entregar algunos artículos sin tener que pagar y para otros, como las llantas, deben pagar una cuota.',
+        'meta_description_vi': 'Các cư dân của Hạt Travis và Austin có thể bỏ rác thải nguy hại và các loại có thể tái chế khác tại Trung tâm Tái chế và Tái Sử dụng. Một số loại không phải đóng phí khi vứt bỏ trong khi một số loại khác, ví dụ như lốp xe, sẽ phải trả phí.',
+        'meta_description_ar': 'يمكن لسكان مقاطعة أوستن وترافيس التخلص من النفايات الخطرة والمواد الأخرى القابلة لإعادة التدوير في مركز إعادة التدوير وإعادة الاستخدام. التخلص من بعض العناصر مجاني وهناك بعض العناصر، مثل التخلص من الإطارات، تتطلب رسوما.',
+        'meta_tags': None
+    }, {
+        'slug': 'pickup-free-paint',
+        'topic': 'recycling-trash-compost',
+        'image': 'paint',
+        'contact': 311,
+        'title_en': 'Pick up free paint and other household items',
+        'title_es': 'Recoja pintura y otros artículos del hogar gratis',
+        'title_vi': 'Lấy miễn phí sơn và các đồ dùng cho việc nhà khác',
+        'title_ar': 'اختيار الدهانات وغيرها من الأدوات المنزلية مجانا',
+        'service_steps': [{
+            'step_description_en': 'Visit the ReUse Store in the Recycle &amp; Reuse Drop-Off Center at 2514 Business Center Dr, Austin, TX 78744.',
+            'step_description_es': 'Visite la Tienda de Reúso en el Centro de Reciclaje y Reúso ubicado en 2514 Business Center Dr, Austin, TX 78744.',
+            'step_description_vi': 'Ghé thăm Cửa Hàng Tái Dụng tại Trung Tâm Tái Chế & Tái Dụng tại 2514 Business Center Dr, Austin, TX 78744.',
+            'step_description_ar': 'تفضل بزيارة مستودع إعادة الاستخدام ReUse Store في مركز إعادة التدوير وإعادة الاستخدام في 2514 Business Center Dr, Austin, TX 78744.'
+        }, {
+            'step_description_en': 'Pick from the available 3 colors of Austin ReBlend paint. The paint is free for all residents.',
+            'step_description_es': 'Hay 3 colores disponibles para escoger de la pintura Austin ReBlend. Esta pintura es gratis para todos los residentes.',
+            'step_description_vi': 'Lấy 3 màu hiện có của sơn Austin ReBlend. Sơn này miễn phí cho tất cả cư dân.',
+            'step_description_ar': 'يمكنك الاختيار من الألوان الـ3 المتاحة من دهانات Austin ReBlend. الدهانات مجانية لجميع المقيمين.'
+        }],
+        'additional_content_en': '<h2>Learn about Austin ReBlend Paint</h2>\n<p>Austin ReBlend is a free, 100 percent flat paint made from paint dropped off at the Recycle &amp; Reuse Drop-Off Center. The paint is inspected to ensure quality, reblended into three colors and offered in 3.5 gallon containers. The available colors include:</p>\n<ul>\n    <li>Texas Limestone (beige)</li>\n    <li>Balcones Canyonland (dark beige)</li>\n    <li>Barton Creek Greenbelt (dark green)</li>\n</ul>\n\n<h2>Pick up other free household items</h2>\n<p>Many reusable materials are dropped off at the center. You can also pick up these items for free (availability varies):</p>\n<ul>\n    <li>Art supplies</li>\n    <li>Cleaning products</li>\n    <li>Household chemicals</li>\n    <li>Automotive fluids</li>\n    <li>Mulch*</li>\n</ul>\n\n<p>*You must load mulch yourself. Bring a pitchfork or shovel, work gloves, and containers.</p>\n<p>Need to drop off items to be recycled? <a id=\\"9\\" linktype=\\"page\\">See how to drop off at the Recycle and ReUse Center.</a></p>\n',
+        'additional_content_es': '<h2>Aprenda más sobre la pintura Austin ReBlend</h2>\n<p>Austin ReBlend es una pintura gratis, 100 por ciento sin brillo hecha de la pintura entregada en el Centro de Reciclaje y Reúso. La pintura pasa por una inspección para garantizar su calidad y se mezcla en tres colores en botes de 3.5 galones. Los colores disponibles incluyen:</p>\n<ul>\n    <li>Texas Limestone (crema)</li>\n    <li>Balcones Canyonland (crema oscuro)</li>\n    <li>Barton Creek Greenbelt (verde oscuro)</li>\n</ul>\n\n<h2>Artículos para el hogar gratis</h2>\n<p>El centro recibe muchos materiales reusables. También puede recoger estos artículos gratis (la disponibilidad varía):</p>\n<ul>\n    <li>Materiales para arte</li>\n    <li>Productos de limpieza</li>\n    <li>Químicos para el hogar</li>\n    <li>Fluidos de automóvil</li>\n    <li>Mantillo orgánico (mulch)*</li>\n</ul>\n\n<p>*El mantillo orgánico lo tiene que empacar usted mismo.</p>\n<p>Traiga una horqueta o pala, guantes de trabajo y recipientes.</p>\n',
+        'additional_content_vi': '<h2>Tìm hiểu về sơn Austin Reblend</h2>\n<p>Austin ReBlend là một sơn miễn phí, 100% sơn ánh mờ được làm từ sơn bỏ ở Trung Tâm Bỏ Đồ Tái Dụng & Tái Chế. Sơn được kiểm tra để đảm bảo chất lượng, được pha trộn lại thành 3 màu và cung cấp trong các thùng đựng 3.5 ga-lông. Các màu hiện có bao gồm:</p>\n<ul>\n    <li>Texas Limestone (màu be)</li>\n    <li>Balcones Canyonland (màu be đậm)</li>\n    <li>Barton Creek Greenbelt (màu xanh lá cây đậm)</li>\n</ul>\n\n<h2>Lầy miễn phí các đồ dùng cho việc nhà khác</h2>\n<p>Nhiều vật dụng có thể tái sử dụng được bỏ ở trung tâm. Quý vị cũng có thể lấy những đồ này miễn phí (có nhiều loại khác nhau):</p>\n<ul>\n    <li>Các đồ nghệ thuật</li>\n    <li>Các sản phẩm tẩy rửa</li>\n    <li>Các hóa chất dùng cho việc nhà</li>\n    <li>Các dung dịch dùng cho xe hơi</li>\n    <li>Bổi che phủ*</li>\n</ul>\n\n<p>*Quý vị phải tự bê lấy bổi che phủ.</p>\n<p>Mang theo cây xỉa hoặc xẻng, găng tay bảo hộ, và đồ đựng.</p>\n',
+        'additional_content_ar': '<h2>تعرّف على دهانات Austin ReBlend</h2>\n<p>Austin ReBlend هي عبارة عن دهانات مجانية غير لامعة بنسبة 100٪ مصنوعة من دهانات تم تسليمها في مركز إعادة التدوير وإعادة الاستخدام. تُفحص الدهانات لضمان الجودة، ويُعاد مزجها إلى ثلاثة ألوان وتُوفر في حاويات 3.5 جالون. تشمل الألوان المتاحة:</p>\n<ul>\n    <li>Texas Limestone (البيج)</li>\n    <li>Balcones Canyonland (البيج الداكن)</li>\n    <li>Barton Creek Greenbelt (الأخضر الداكن)</li>\n</ul>\n\n<h2>يمكنك اختيار غير ذلك من الأدوات المنزلية مجانا</h2>\n<p>يتم تسليم العديد من المواد القابلة لإعادة الاستخدام في المركز. يمكنك أيضا اختيار هذه العناصر مجانا (تختلف حسب التوفر):</p>\n<ul>\n    <li>الأدوات الفنية</li>\n    <li>مستحضرات التنظيف</li>\n    <li>المواد الكيميائية المنزلية</li>\n    <li>سوائل السيارات</li>\n    <li>النشارة*</li>\n</ul>\n\n<p>عليك تعبئة النشارة بنفسك.</p>\n<p> احضر معك مذارة أو مجرفة، وقفازات عمل، وحاويات.</p>\n',
+        'dynamic_content': [{
+            'type': 'map',
+            'description_en': 'Hazardous Waste Dropoff Center',
+            'description_es': 'Visite la Tienda de Reúso en el Centro de Reciclaje y Reúso',
+            'description_vi': 'Ghé thăm Cửa Hàng Tái Dụng tại Trung Tâm Tái Chế & Tái Dụng',
+            'description_ar': 'تفضل بزيارة مستودع إعادة الاستخدام في مركز إعادة التدوير وإعادة الاستخدام',
+            'location': 'Recycle & Reuse Drop-off Center'
+        }],
+        'meta_title_en': 'Pick up free paint',
+        'meta_title_es': 'Recoja pintura gratis',
+        'meta_title_vi': 'Lấy Sơn Miễn Phí',
+        'meta_title_ar': 'اختيار الدهانات مجانا',
+        'meta_description_en': None,
+        'meta_description_es': 'La Ciudad de Austin les ofrece a sus residentes pintura sin brillo gratis en la Tienda de Reúso en el Centro de Reciclaje y Reúso. La pintura pasa por una inspección para garantizar su calidad y se mezcla en color crema, crema oscuro y verde oscuro en botes de 3.5 galones.',
+        'meta_description_vi': 'Thành phố Austin cung cấp sơn miễn phí cho các cư dân tại Cửa Hàng Tái Dụng ở Trung Tâm Bỏ Đồ Tái Dụng & Tái Chế. Sơn này được kiểm tra để đảm bảo chất lượng, được pha trộn lại thành màu be, be đậm, hoặc xanh lá cây đậm và cho vào các thùng đựng 3.5 ga-lông.',
+        'meta_description_ar': 'توفر مدينة أوستن للمقيمين دهانات مجانية غير لامعة بمستودع إعادة الاستخدام ReUse Store في مركز إعادة التدوير وإعادة الاستخدام. تُفحص الدهانات لضمان الجودة، ويُعاد مزجها إلى ثلاثة ألوان البيج أو البيج الداكن أو الأخضر الداكن وتُوضع في حاويات 3.5 جالون.',
+        'meta_tags': 'flat paint, free paint, recycled paint, house paint, wall paint'
+    }, {
+        'slug': 'public-health-emergency-prep',
+        'topic': 'healthcare-prevention',
+        'image': 'curbside-compost',
+        'contact': 311,
+        'title_en': 'Prepare for public health emergencies',
+        'title_es': 'Prepare for public health emergencies',
+        'title_vi': 'Prepare for public health emergencies',
+        'title_ar': 'Prepare for public health emergencies',
+        'service_steps': [{
+            'step_description_en': '<a href="https://www.cdc.gov/phpr/areyouprepared/kit.htm">Pack an emergency preparedness kit</a>. Make sure you have enough food and water, medication, and anything else you and your family need for 3 or more days.'
+        }, {
+            'step_description_en': '<a href="https://www.cdc.gov/phpr/areyouprepared/plan.htm">Make a plan for where you will meet with your family during an emergency</a>.'
+        }, {
+            'step_description_en': 'Sign up for emergency alerts, <a href="https://public.coderedweb.com/CNE/en-US/21C524DBEA1F">register for the emergency notification system</a>.'
+        }],
+        'additional_content_en': '<h2>Prepare for an emergency</h2>\nPreparing for public health emergencies is critical to protect everyone’s health and wellbeing. Public health emergencies include natural disasters, disease outbreaks like pandemic flu, as well as those related to homeland security, such as a biological or chemical terrorist attack.\n\nWe work closely with other local, state, and federal emergency management authorities to plan and prepare for any emergency that affects the health of the public. For emergency conditions and information on disaster preparedness, visit the <a href="http://www.austintexas.gov/hsem">City of Austin Office of Homeland Security and Emergency Management</a>.\n\n<h2>Have a plan to stay safe in an emergency</h2>\nWhen disaster hits, Austinites need to be ready. Use the online resources from the <a href="https://www.texasprepares.org/default.htm">Texas Department of State Health Services</a> to build your plan -- including family strategies, handy checklists, and special needs considerations for people with disabilities, the elderly, and pets.\n',
+        'dynamic_content': None,
+        'meta_title_en': 'Prepare for public health emergencies',
+        'meta_description_en': 'Find out what you need to do in order to be ready for public health emergencies like natural disasters and disease outbreaks. Be sure you pack an emergency kit, make a plan, and stay informed.',
+        'meta_tags': 'Emergency plan Austin, What to do in an emergency in Austin, How to prepare for an emergency'
+    }, {
+        'slug': 'trash-recycling-pickup',
+        'topic': 'recycling-trash-compost',
+        'image': 'curbside-pickup',
+        'contact': 311,
+        'title_en': 'Look up your trash, recycling, and compost pickup days',
+        'title_es': 'Busque sus días de recolección de basura, reciclaje y compost',
+        'title_vi': 'Tìm ngày bốc rác thường, rác tái chế, và rác ủ phân hữu cơ của quý vị',
+        'title_ar': 'الاطلاع على أيام جمع القمامة والمواد التي يُعاد تدويرها والقابلة للتسميد',
+        'service_steps': [{
+            'step_description_en': 'Type your street address in the box below. If you live in a multi-family home, like a duplex or fourplex, do not include your unit number.',
+            'step_description_es': 'Ingrese su dirección en la siguiente casilla. Si vive en una casa multifamiliar, como en un dúplex o en un edificio de cuatro apartamentos, no incluya el número de su unidad.',
+            'step_description_vi': 'Đánh địa chỉ nhà quý vị vào ô dưới đây. Nếu quý vị sống trong một ngôi nhà có nhiều gia đình, như nhà hai căn hoặc nhà bốn căn, thì không cần ghi số căn hộ của mình.',
+            'step_description_ar': 'اكتب عنوان شارعك في المربع أدناه. إذا كنت تعيش في منزل متعدد الأسر، مثل منزل مزدوج أو مكون من أربعة أقسام، لا تُدرج رقم وحدتك.'
+        }, {
+            'step_description_en': 'Press the search button to view your curbside pickup days.',
+            'step_description_es': 'Haga clic en el botón de búsqueda para ver sus días de recolección.',
+            'step_description_vi': 'Nhấn nút tìm kiếm để xem các ngày bốc rác để lề đường của mình.',
+            'step_description_ar': 'اضغط على زر البحث لعرض أيام جمع القمامة على الرصيف.'
+        }, {
+            'step_description_en': 'Optional: Print a copy of your schedule or click the icon to add your pickup days to your Google, iCal, or Microsoft calendar.',
+            'step_description_es': 'Opcional: Imprima una copia de su calendario o haga clic en el icono para añadir sus días de recolección a su calendario de Google, iCal o Microsoft.',
+            'step_description_vi': 'Tùy chọn: In một bản lịch của quý vị hoặc nhấn vào biểu tượng để cộng thêm các ngày bốc rác vào lịch Google, iCal, hoặc Microsoft của mình.',
+            'step_description_ar': 'ختياري: يمكنك طباعة نسخة من جدولك أو النقر على الرمز لإضافة أيام جمع القمامة إلى تقويم Google أو iCal أو Microsoft.'
+        }],
+        'additional_content_en': "<h2>Trash, recycling, and compost pickup</h2>\n<p>Every week, we will pick up your trash, compost, and yard trimmings. Every other week, we will pick up recycling, clothing, and housewares. All curbside pick-ups happen on the same day of the week unless it is a holiday.</p>\n\n<h2>Holiday pickup days</h2>\n<p>If your curbside pickup day is on Thanksgiving Day, Christmas Day, or New Year's Day—or if it is after the holiday but in the same week—your collection will be one day later than your usual pickup day that week. If the holiday falls on a Sunday or Saturday, your pickup day will not change.</p>\n",
+        'additional_content_es': '<h2>Recolección de basura, reciclaje y compost</h2>\n<p>Todas las semanas recogeremos su basura, compost y recortes del jardín. Una semana sí y otra no, recogeremos el reciclaje, ropa y artículos para el hogar. Toda la recolección al borde de la acera se hace el mismo día de la semana a menos que sea un día festivo. </p>\n\n<h2>Recolección en días festivos</h2>\n<p>Si su día de recolección es el Día de Acción de Gracias, Navidad o Año Nuevo, o si es después de uno de estos días festivos pero en la misma semana, su día de recolección será un día después de su día de recolección regular. Si el día festivo cae domingo o sábado, su día de recolección no cambiará.</p>\n',
+        'additional_content_vi': '<h2>Bốc rác thường, rác tái chế, và rác ủ phân hữu cơ</h2>\n<p>Hàng tuần, chúng tôi sẽ bốc rác thường, rác ủ phân hữu cơ, và rác làm vườn. Hàng tuần, chúng tôi sẽ bốc rác tái chế, quần áo, và vật dụng trong nhà. Tất cả kỳ bốc rác ở lề đường sẽ xảy ra vào cùng ngày trong tuần, trừ khi đó là ngày lễ.</p>\n\n<h2>Bốc rác cho các ngày nghỉ lễ</h2>\n<p>Nếu ngày bốc rác của quý vị rơi vào ngày Lễ Tạ Ỏn, ngày Lễ Giáng Sinh, hoặc ngày Đầu Năm - hoặc sau ngày nghỉ lễ nhưng vẫn trong tuần đó - thì ngày thu rác của quý vị sẽ là một ngày muộn hơn so với lịch bốc rác thường lệ của mình trong tuần đó. Nếu ngày nghỉ lễ rơi vào Thứ Bảy hoặc Chủ Nhật, ngày bốc rác của quý vị sẽ không thay đổi.</p>\n',
+        'additional_content_ar': '<h2>جمع القمامة والمواد التي يُعاد تدويرها والقابلة للتسميد</h2>\n<p>كل أسبوع، سوف نجمع القمامة والمواد القابلة للتسميد ومخلفات الحدائق التي لديك. كل أسبوعين، سوف نجمع المواد التي يُعاد تدويرها والملابس والأدوات المنزلية. جميع عمليات جمع النفايات على الرصيف تتم في نفس اليوم من الأسبوع إلا إذا كان هذا اليوم عطلة.</p>\n\n<h2>أيام جمع النفايات إذا وافق عطلة</h2>\n<p>إذا وافق يوم جمع النفايات على جانب الرصيف عطلة عيد الشكر أو عيد الميلاد أو يوم رأس السنة الميلادية، أو إذا كان بعد العطلة ولكن في نفس الأسبوع، سوف تؤجل عملية جمع النفايات خاصتك في يوم آخر غير يوم الجمع المعتاد في ذلك الأسبوع. إذا وافق يوم العطلة يوم الأحد أو السبت، لن يتغير يوم جمع النفايات خاصتك.</p>\n',
+        'dynamic_content': [{
+            'type': 'collection_schedule'
+        }],
+        'meta_title_en': None,
+        'meta_title_es': 'Busque su día de recolección de basura, reciclaje y compost',
+        'meta_title_vi': 'Tìm Ngày Bốc Rác Thường, Rác Tái Chế, và Rác Phân Ủ Hữu Cơ của quý vị',
+        'meta_title_ar': 'الاطلاع على أيام جمع القمامة والمواد التي يُعاد تدويرها والقابلة للتسميد',
+        'meta_description_en': None,
+        'meta_description_es': 'Vea un calendario con sus días de recolección. También puede inscribirse para recibir recordatorios y alertas por mensajes de texto, correo electrónico o por teléfono.',
+        'meta_description_vi': 'Xem lịch để ghi ngày thu rác để lề đường của mình. Quý vị cũng có thể đăng ký nhận lời nhắn, điện thư email hoặc điện thoại nhắc nhở và cảnh báo.',
+        'meta_description_ar': 'اطلع على التقويم لمعرفة أيام جمع النفايات خاصتك. يمكنك أيضا الاشتراك في خدمة التذكير والتنبيهات لإرسال رسالة',
+        'meta_tags': None
+    }]
 
     # Pass data and execute insertion methods.
     load_servicepages(data)
@@ -1722,88 +1934,183 @@ def load_processes(data):
 
 def add_processes(apps, schema_editor):
     """ Provides seed data for process pages and executes insertion methods. """
-    data = [{'slug': 'foster-pets', 'title_en': 'Become an animal foster care provider',
-      'title_es': 'ES Become an animal foster care provider', 'title_vi': 'VI Become an animal foster care provider',
-      'title_ar': 'AR Become an animal foster care provider', 'topic': 'foster-animal',
-      'description_en': 'We’re so happy you’re interested in fostering for the Austin Animal Center! There are six steps to fostering a pet from the Austin Animal Center.',
-      'description_es': None, 'description_vi': None, 'description_ar': None, 'image': 'bulk-items', 'contact': 311,
-      'process_steps': [{'title_en': 'Before you apply', 'title_es': None, 'title_vi': None, 'title_ar': None,
-                         'short_title_en': 'Before you apply', 'short_title_es': None, 'short_title_vi': None,
-                         'short_title_ar': None, 'link_title_en': 'Go to before you apply', 'link_title_es': None,
-                         'link_title_vi': None, 'link_title_ar': None,
-                         'description_en': 'Thank you for thinking about fostering an animal. It can be a wonderful experience, and you can feel good knowing you’ve made a positive difference in an animal’s life. Each animal fostered in a home opens up kennel space for us to save another animal.',
-                         'description_es': None, 'description_vi': None, 'description_ar': None,
-                         'image': 'household-hazardous-waste',
-                         'overview_steps_en': ['Learn how to foster pets with Austin Animal Center.',
-                                               'Learn what types of animals need fostering.',
-                                               'Verify your current pets’ rabies vaccinations with your veterinarian.'],
-                         'overview_steps_es': None, 'overview_steps_vi': None, 'overview_steps_ar': None,
-                         'detailed_content_en': '<h2>Understanding fostering</h2>\n<p>Fostering provides a temporary home for a homeless pet who, for whatever reason, needs to live outside of the shelter. Puppies, kittens, animals recovering from illness or injury, and animals with special behavioral challenges most often need fostering.</p>\n<p>As a foster, you should be compassionate, caring, and patient. You will be provided with resources and information to be a successful foster parent, including your foster animal’s known history and medical and behavioral health before they are placed in your care.</p>\n<p>Fostering can be flexible. Foster commitments range from just a couple of days to several months, so you can choose foster options that fit within your lifestyle. </p>\n<hr />\n<h2>Find out if you’re eligible to foster</h2>\n<p>You must meet the following requirements to foster:</p>\n<ul>\n    <li>Be willing to abide by the foster care agreement and other policies and procedures provided to you.</li>\n    <li>Be able to access email regularly.</li>\n    <li>Be able to provide transport to and from the animal center.</li>\n    <li>Provide some supplies and food for foster animals.</li>\n    <li>Spend time with foster pets and treat them like your own animals while they’re in your care.</li>\n    <li>Have up-to-date rabies vaccinations for all animals in the home.</li>\n</ul>\n',
-                         'detailed_content_es': None, 'detailed_content_vi': None, 'detailed_content_ar': None,
-                         'quote_en': None, 'quote_es': None, 'quote_vi': None, 'quote_ar': None},
-                        {'title_en': 'Fill out an application', 'title_es': None, 'title_vi': None, 'title_ar': None,
-                         'short_title_en': 'Fill out application', 'short_title_es': None, 'short_title_vi': None,
-                         'short_title_ar': None, 'link_title_en': 'Go to the foster application', 'link_title_es': None,
-                         'link_title_vi': None, 'link_title_ar': None,
-                         'description_en': 'Thank you for thinking about fostering an animal. It can be a wonderful experience, and you can feel good knowing you’ve made a positive difference in an animal’s life. Each animal fostered in a home opens up kennel space for us to save another animal.',
-                         'description_es': None, 'description_vi': None, 'description_ar': None, 'overview_steps_en': [
-                            'Answer the questions on the following pages about yourself, availability, home, and pets.',
-                            'You may receive a call or email from us with questions about your application.',
-                            'If you are approved, you will receive an email from us about next steps.',
-                            'Sign and return the foster agreement attached to your approval email.']},
-                        {'title_en': 'Find an animal you would like to foster', 'title_es': None, 'title_vi': None,
-                         'title_ar': None, 'short_title_en': 'Find a foster animal', 'short_title_es': None,
-                         'short_title_vi': None, 'short_title_ar': None, 'link_title_en': 'Go to find a foster animal',
-                         'link_title_es': None, 'link_title_vi': None, 'link_title_ar': None,
-                         'description_en': 'Thank you for thinking about fostering an animal. It can be a wonderful experience, and you can feel good knowing you’ve made a positive difference in an animal’s life. Each animal fostered in a home opens up kennel space for us to save another animal.',
-                         'description_es': None, 'description_vi': None, 'description_ar': None, 'overview_steps_en': [
-                            'Sign up for GivePulse, the system we use to send you emails about available animals.',
-                            'Let us know when you see an animal you want to foster!',
-                            'We will contact you by phone or email with any questions, the animal’s availability, and a pick up time!']},
-                        {'title_en': 'Attend a foster program orientation within 3 months of approval',
-                         'title_es': None, 'title_vi': None, 'title_ar': None,
-                         'short_title_en': 'Attend an orientation', 'short_title_es': None, 'short_title_vi': None,
-                         'short_title_ar': None, 'link_title_en': 'Sign up for foster orientation',
-                         'link_title_es': None, 'link_title_vi': None, 'link_title_ar': None,
-                         'description_en': 'Thank you for thinking about fostering an animal. It can be a wonderful experience, and you can feel good knowing you’ve made a positive difference in an animal’s life. Each animal fostered in a home opens up kennel space for us to save another animal.',
-                         'description_es': None, 'description_vi': None, 'description_ar': None, 'overview_steps_en': [
-                            'While you can get a foster animal before completing this step, you will need to attend a foster program orientation within three months of becoming approved to foster. You will learn about shelter operations and the important role that the foster program and foster care providers play.']},
-                        {'title_en': 'Care for your foster animal and help find a forever home', 'title_es': None,
-                         'title_vi': None, 'title_ar': None, 'short_title_en': 'Care and promote',
-                         'short_title_es': None, 'short_title_vi': None, 'short_title_ar': None,
-                         'link_title_en': 'Go to care and promote', 'link_title_es': None, 'link_title_vi': None,
-                         'link_title_ar': None,
-                         'description_en': 'Thank you for thinking about fostering an animal. It can be a wonderful experience, and you can feel good knowing you’ve made a positive difference in an animal’s life. Each animal fostered in a home opens up kennel space for us to save another animal.',
-                         'description_es': None, 'description_vi': None, 'description_ar': None,
-                         'overview_steps_en': ['Attend to basic daily care.',
-                                               'Bring your animal to the Austin Animal Center for any medical care covered by us.',
-                                               'Promote your foster animal online and around town!',
-                                               'Review applications of potential adopters, set up meetings with them, and decide which home would be the best fit for the animal(s) in your care.']}]},
-     {'slug': 'interior-remodel', 'title_en': 'Interior Remodel', 'title_es': 'ES Interior Remodel',
-      'title_vi': 'VI Interior Remodel', 'title_ar': 'AR Interior Remodel', 'topic': 'building-permits',
-      'description_en': 'This is a preview of the permitting process for interior remodels and can be used as a checklist throughout your project. The cost for permitting an interior remodel depends on the type of work done to the home.',
-      'description_es': None, 'description_vi': None, 'description_ar': None, 'image': 'permitting-residential',
-      'contact': 311, 'process_steps': [
-         {'title_en': 'Define', 'title_es': None, 'title_vi': None, 'title_ar': None, 'short_title_en': 'Define',
-          'short_title_es': None, 'short_title_vi': None, 'short_title_ar': None, 'link_title_en': 'Go to Define',
-          'link_title_es': None, 'link_title_vi': None, 'link_title_ar': None,
-          'description_en': 'The most important step toward bringing your project to life is to get a permit. Permits empower you to complete your projects in a way that meets your needs and follows the city’s code.',
-          'description_es': None, 'description_vi': None, 'description_ar': None, 'image': 'permitting-residential',
-          'overview_steps_en': ['Define the scope of your project.', 'Find out if you need a permit and what kind.',
-                                'Determine if you will need any additional permits such as a trade or tree permit.',
-                                'Determine if you can get a permit.'], 'overview_steps_es': None,
-          'overview_steps_vi': None, 'overview_steps_ar': None,
-          'detailed_content_en': '<p>Before applying for any permits, it’s important to: </p>\n<ul>\n    <li>define and describe your project</li>\n    <li>find out if you need permits, and what they are,</li>\n    <li>and collect the right information for your consultation and application</li>\n</ul>\n\n<p>Reviewers are also available to help you during free and paid consultations.</p>\n',
-          'detailed_content_es': None, 'detailed_content_vi': None, 'detailed_content_ar': None},
-         {'title_en': 'Consult', 'title_es': None, 'title_vi': None, 'title_ar': None, 'short_title_en': 'Consult',
-          'short_title_es': None, 'short_title_vi': None, 'short_title_ar': None, 'link_title_en': 'Go to Consult',
-          'link_title_es': None, 'link_title_vi': None, 'link_title_ar': None,
-          'description_en': 'All consultations take place at Residential Plan Review. Reviewers provide free 20 minute in-person consultations for residents who want help with general questions about their project. Even though you can’t submit your permit application to a reviewer, having a consultation saves time and helps make the permitting process easier. For more specific issues regarding your project, consider scheduling a paid consultation.',
-          'description_es': None, 'description_vi': None, 'description_ar': None, 'image': 'permitting-residential',
-          'overview_steps_en': ['Find out what you will need to prepare before your consultation.',
-                                'Determine what documents and sketches you will need to collect before your consultation.',
-                                'Learn how to schedule a free in-person consultation.'],
-          'detailed_content_en': '<h1>Some detailed content here.</h1>\n'}]}]
+    data = [{
+        'slug': 'foster-pets',
+        'title_en': 'Become an animal foster care provider',
+        'title_es': 'ES Become an animal foster care provider',
+        'title_vi': 'VI Become an animal foster care provider',
+        'title_ar': 'AR Become an animal foster care provider',
+        'topic': 'foster-animal',
+        'description_en': 'We’re so happy you’re interested in fostering for the Austin Animal Center! There are six steps to fostering a pet from the Austin Animal Center.',
+        'description_es': None,
+        'description_vi': None,
+        'description_ar': None,
+        'image': 'bulk-items',
+        'contact': 311,
+        'process_steps': [{
+            'title_en': 'Before you apply',
+            'title_es': None,
+            'title_vi': None,
+            'title_ar': None,
+            'short_title_en': 'Before you apply',
+            'short_title_es': None,
+            'short_title_vi': None,
+            'short_title_ar': None,
+            'link_title_en': 'Go to before you apply',
+            'link_title_es': None,
+            'link_title_vi': None,
+            'link_title_ar': None,
+            'description_en': 'Thank you for thinking about fostering an animal. It can be a wonderful experience, and you can feel good knowing you’ve made a positive difference in an animal’s life. Each animal fostered in a home opens up kennel space for us to save another animal.',
+            'description_es': None,
+            'description_vi': None,
+            'description_ar': None,
+            'image': 'household-hazardous-waste',
+            'overview_steps_en': ['Learn how to foster pets with Austin Animal Center.', 'Learn what types of animals need fostering.', 'Verify your current pets’ rabies vaccinations with your veterinarian.'],
+            'overview_steps_es': None,
+            'overview_steps_vi': None,
+            'overview_steps_ar': None,
+            'detailed_content_en': '<h2>Understanding fostering</h2>\n<p>Fostering provides a temporary home for a homeless pet who, for whatever reason, needs to live outside of the shelter. Puppies, kittens, animals recovering from illness or injury, and animals with special behavioral challenges most often need fostering.</p>\n<p>As a foster, you should be compassionate, caring, and patient. You will be provided with resources and information to be a successful foster parent, including your foster animal’s known history and medical and behavioral health before they are placed in your care.</p>\n<p>Fostering can be flexible. Foster commitments range from just a couple of days to several months, so you can choose foster options that fit within your lifestyle. </p>\n<hr />\n<h2>Find out if you’re eligible to foster</h2>\n<p>You must meet the following requirements to foster:</p>\n<ul>\n    <li>Be willing to abide by the foster care agreement and other policies and procedures provided to you.</li>\n    <li>Be able to access email regularly.</li>\n    <li>Be able to provide transport to and from the animal center.</li>\n    <li>Provide some supplies and food for foster animals.</li>\n    <li>Spend time with foster pets and treat them like your own animals while they’re in your care.</li>\n    <li>Have up-to-date rabies vaccinations for all animals in the home.</li>\n</ul>\n',
+            'detailed_content_es': None,
+            'detailed_content_vi': None,
+            'detailed_content_ar': None,
+            'quote_en': None,
+            'quote_es': None,
+            'quote_vi': None,
+            'quote_ar': None
+        }, {
+            'title_en': 'Fill out an application',
+            'title_es': None,
+            'title_vi': None,
+            'title_ar': None,
+            'short_title_en': 'Fill out application',
+            'short_title_es': None,
+            'short_title_vi': None,
+            'short_title_ar': None,
+            'link_title_en': 'Go to the foster application',
+            'link_title_es': None,
+            'link_title_vi': None,
+            'link_title_ar': None,
+            'description_en': 'Thank you for thinking about fostering an animal. It can be a wonderful experience, and you can feel good knowing you’ve made a positive difference in an animal’s life. Each animal fostered in a home opens up kennel space for us to save another animal.',
+            'description_es': None,
+            'description_vi': None,
+            'description_ar': None,
+            'overview_steps_en': ['Answer the questions on the following pages about yourself, availability, home, and pets.', 'You may receive a call or email from us with questions about your application.', 'If you are approved, you will receive an email from us about next steps.', 'Sign and return the foster agreement attached to your approval email.']
+        }, {
+            'title_en': 'Find an animal you would like to foster',
+            'title_es': None,
+            'title_vi': None,
+            'title_ar': None,
+            'short_title_en': 'Find a foster animal',
+            'short_title_es': None,
+            'short_title_vi': None,
+            'short_title_ar': None,
+            'link_title_en': 'Go to find a foster animal',
+            'link_title_es': None,
+            'link_title_vi': None,
+            'link_title_ar': None,
+            'description_en': 'Thank you for thinking about fostering an animal. It can be a wonderful experience, and you can feel good knowing you’ve made a positive difference in an animal’s life. Each animal fostered in a home opens up kennel space for us to save another animal.',
+            'description_es': None,
+            'description_vi': None,
+            'description_ar': None,
+            'overview_steps_en': ['Sign up for GivePulse, the system we use to send you emails about available animals.', 'Let us know when you see an animal you want to foster!', 'We will contact you by phone or email with any questions, the animal’s availability, and a pick up time!']
+        }, {
+            'title_en': 'Attend a foster program orientation within 3 months of approval',
+            'title_es': None,
+            'title_vi': None,
+            'title_ar': None,
+            'short_title_en': 'Attend an orientation',
+            'short_title_es': None,
+            'short_title_vi': None,
+            'short_title_ar': None,
+            'link_title_en': 'Sign up for foster orientation',
+            'link_title_es': None,
+            'link_title_vi': None,
+            'link_title_ar': None,
+            'description_en': 'Thank you for thinking about fostering an animal. It can be a wonderful experience, and you can feel good knowing you’ve made a positive difference in an animal’s life. Each animal fostered in a home opens up kennel space for us to save another animal.',
+            'description_es': None,
+            'description_vi': None,
+            'description_ar': None,
+            'overview_steps_en': ['While you can get a foster animal before completing this step, you will need to attend a foster program orientation within three months of becoming approved to foster. You will learn about shelter operations and the important role that the foster program and foster care providers play.']
+        }, {
+            'title_en': 'Care for your foster animal and help find a forever home',
+            'title_es': None,
+            'title_vi': None,
+            'title_ar': None,
+            'short_title_en': 'Care and promote',
+            'short_title_es': None,
+            'short_title_vi': None,
+            'short_title_ar': None,
+            'link_title_en': 'Go to care and promote',
+            'link_title_es': None,
+            'link_title_vi': None,
+            'link_title_ar': None,
+            'description_en': 'Thank you for thinking about fostering an animal. It can be a wonderful experience, and you can feel good knowing you’ve made a positive difference in an animal’s life. Each animal fostered in a home opens up kennel space for us to save another animal.',
+            'description_es': None,
+            'description_vi': None,
+            'description_ar': None,
+            'overview_steps_en': ['Attend to basic daily care.', 'Bring your animal to the Austin Animal Center for any medical care covered by us.', 'Promote your foster animal online and around town!', 'Review applications of potential adopters, set up meetings with them, and decide which home would be the best fit for the animal(s) in your care.']
+        }]
+    }, {
+        'slug': 'interior-remodel',
+        'title_en': 'Interior Remodel',
+        'title_es': 'ES Interior Remodel',
+        'title_vi': 'VI Interior Remodel',
+        'title_ar': 'AR Interior Remodel',
+        'topic': 'building-permits',
+        'description_en': 'This is a preview of the permitting process for interior remodels and can be used as a checklist throughout your project. The cost for permitting an interior remodel depends on the type of work done to the home.',
+        'description_es': None,
+        'description_vi': None,
+        'description_ar': None,
+        'image': 'permitting-residential',
+        'contact': 311,
+        'process_steps': [{
+            'title_en': 'Define',
+            'title_es': None,
+            'title_vi': None,
+            'title_ar': None,
+            'short_title_en': 'Define',
+            'short_title_es': None,
+            'short_title_vi': None,
+            'short_title_ar': None,
+            'link_title_en': 'Go to Define',
+            'link_title_es': None,
+            'link_title_vi': None,
+            'link_title_ar': None,
+            'description_en': 'The most important step toward bringing your project to life is to get a permit. Permits empower you to complete your projects in a way that meets your needs and follows the city’s code.',
+            'description_es': None,
+            'description_vi': None,
+            'description_ar': None,
+            'image': 'permitting-residential',
+            'overview_steps_en': ['Define the scope of your project.', 'Find out if you need a permit and what kind.', 'Determine if you will need any additional permits such as a trade or tree permit.', 'Determine if you can get a permit.'],
+            'overview_steps_es': None,
+            'overview_steps_vi': None,
+            'overview_steps_ar': None,
+            'detailed_content_en': '<p>Before applying for any permits, it’s important to: </p>\n<ul>\n    <li>define and describe your project</li>\n    <li>find out if you need permits, and what they are,</li>\n    <li>and collect the right information for your consultation and application</li>\n</ul>\n\n<p>Reviewers are also available to help you during free and paid consultations.</p>\n',
+            'detailed_content_es': None,
+            'detailed_content_vi': None,
+            'detailed_content_ar': None
+        }, {
+            'title_en': 'Consult',
+            'title_es': None,
+            'title_vi': None,
+            'title_ar': None,
+            'short_title_en': 'Consult',
+            'short_title_es': None,
+            'short_title_vi': None,
+            'short_title_ar': None,
+            'link_title_en': 'Go to Consult',
+            'link_title_es': None,
+            'link_title_vi': None,
+            'link_title_ar': None,
+            'description_en': 'All consultations take place at Residential Plan Review. Reviewers provide free 20 minute in-person consultations for residents who want help with general questions about their project. Even though you can’t submit your permit application to a reviewer, having a consultation saves time and helps make the permitting process easier. For more specific issues regarding your project, consider scheduling a paid consultation.',
+            'description_es': None,
+            'description_vi': None,
+            'description_ar': None,
+            'image': 'permitting-residential',
+            'overview_steps_en': ['Find out what you will need to prepare before your consultation.', 'Determine what documents and sketches you will need to collect before your consultation.', 'Learn how to schedule a free in-person consultation.'],
+            'detailed_content_en': '<h1>Some detailed content here.</h1>\n'
+        }]
+    }]
 
     # Pass data and execute insertion methods.
     load_processes(data)
@@ -1829,7 +2136,7 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.RunPython(add_admin_user),
-        # migrations.RunPython(add_images),
+        migrations.RunPython(add_images),
         migrations.RunPython(add_three_one_one),
         migrations.RunPython(add_themes),
         migrations.RunPython(add_topics),
