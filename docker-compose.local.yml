@@ -1,5 +1,12 @@
 version: '3'
 services:
+  joplindb:
+    image: postgres
+    ports:
+     - "5432:5432"
+    environment:
+      POSTGRES_DB: 'joplin'
+      POSTGRES_USER: 'joplin'
   joplin:
     build:
       context: .
@@ -7,7 +14,7 @@ services:
     ports:
      - "8000:80"
     volumes:
-      - ".:/app"
+     - ".:/app"
     environment:
       LOAD_DATA: $LOAD_DATA
       HEROKU_KEY: $HEROKU_KEY
@@ -15,6 +22,10 @@ services:
       GUNICORN_CMD_ARGS: "--reload  --reload-engine=poll"
       JANIS_URL: http://localhost:3000
       STYLEGUIDE_URL: https://cityofaustin.github.io/digital-services-style-guide
+      DEPLOYMENT_MODE: "LOCAL"
+      DATABASE_URL: "postgres://joplin@joplindb:5432/joplin"
+    depends_on:
+     - "joplindb"
   joplinassets:
     build:
       context: .

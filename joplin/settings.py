@@ -112,9 +112,19 @@ TEMPLATES = [
 WSGI_APPLICATION = 'wsgi.application'
 
 
+# Detect whether it is a staging or production environment
+DEPLOYMENT_MODE = os.environ.get('DEPLOYMENT_MODE', 'LOCAL')
+ISPRODUCTION = DEPLOYMENT_MODE == "PRODUCTION"
+ISSTAGING = DEPLOYMENT_MODE == "STAGING"
+
+
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
-
+#
+# dj_database_url should detect the environment variable 'DATABASE_URL',
+# this is provided by Heroku in production, or locally via Dockerfile.local,
+# if it does not, then assume SQLite.
+#
 default_db_url = f'sqlite:///{os.path.join(PROJECT_DIR, "db.sqlite3")}'
 DATABASES = {
     'default': dj_database_url.config(default=default_db_url),
@@ -138,6 +148,9 @@ LANGUAGES = [lang for lang in global_settings.LANGUAGES if lang[0] in SUPPORTED_
 
 TIME_ZONE = 'UTC'
 USE_TZ = True
+
+MODELTRANSLATION_DEFAULT_LANGUAGE = 'en'
+
 
 
 # Static files (CSS, JavaScript, Images)
@@ -203,3 +216,24 @@ GRAPHENE = {
         'graphene_django.debug.DjangoDebugMiddleware',
     ]
 }
+
+
+if(ISPRODUCTION or ISSTAGING):
+    #
+    # AWS Buckets only if not local.
+    #
+
+    AWS_ACCESS_KEY_ID = os.getenv('AWS_S3_KEYID')
+    AWS_SECRET_ACCESS_KEY = os.getenv('AWS_S3_ACCESSKEY')
+    AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_S3_BUCKET')
+    AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+
+    AWS_S3_OBJECT_PARAMETERS = {
+        'CacheControl': 'max-age=86400',
+    }
+
+
+    STATICFILES_LOCATION = 'static'
+    STATICFILES_STORAGE = 'custom_storages.StaticStorage'
+    MEDIAFILES_LOCATION = 'media'
+    DEFAULT_FILE_STORAGE = 'custom_storages.MediaStorage'
