@@ -119,6 +119,7 @@ class ServicePage(JanisPage):
             ('recollect_block', custom_blocks.RecollectBlock()),
         ],
         verbose_name='Add any maps or apps that will help the resident use the service',
+        blank=True
     )
     additional_content = RichTextField(
         features=WYSIWYG_FEATURES,
