@@ -30,23 +30,25 @@ logging.basicConfig(level=logging.INFO)
 
 def add_admin_user(apps, schema_editor):
     """ Inserts the default user 'admin@austintexas.io' and the default password 'x' (encrypted). See add_images for reference."""
-
-    print("\nAdding admin user ...")
-
     # Find and initialize the User object, then persist it on the database.
+    print("\nAdding admin user ...")
     User = get_user_model()
-    User.objects.update_or_create(
-        id=1,
-        password="pbkdf2_sha256$36000$AbkvF6MxbbIw$X6FN3p6ip0wZNmDmXk7nwdy7mIFaZZ5iY0p/eXbQs5Y=",
-        last_login="2018-03-16T02:55:07.675Z",
-        is_superuser=True,
-        first_name = "Austin", # Cannot use '\ud83d\ude39', Error message: "UnicodeEncodeError: 'utf-8' codec can't encode characters in position 0-1: surrogates not allowed"
-        last_name = "Pantherpants",
-        is_staff = True,
-        is_active = True,
-        date_joined = "2017-12-06T16:13:48.662Z",
-        email = "admin@austintexas.io"
-    )
+    num_results = User.objects.filter(id=1).count()
+    if(num_results == 0):
+        User.objects.update_or_create(
+            id=1,
+            password="pbkdf2_sha256$36000$AbkvF6MxbbIw$X6FN3p6ip0wZNmDmXk7nwdy7mIFaZZ5iY0p/eXbQs5Y=",
+            last_login="2018-03-16T02:55:07.675Z",
+            is_superuser=True,
+            first_name = "Austin", # Cannot use '\ud83d\ude39', Error message: "UnicodeEncodeError: 'utf-8' codec can't encode characters in position 0-1: surrogates not allowed"
+            last_name = "Pantherpants",
+            is_staff = True,
+            is_active = True,
+            date_joined = "2017-12-06T16:13:48.662Z",
+            email = "admin@austintexas.io"
+        )
+    else:
+        print(f"    > User already exists, skipping ...")
 
 
 #
