@@ -152,7 +152,7 @@ class ProcessPage(JanisPage):
     janis_url_page_type = "processes"
 
     description = models.TextField(blank=True)
-    image = models.ForeignKey(TranslatedImage, null=True, on_delete=models.SET_NULL, related_name='+')
+    image = models.ForeignKey(TranslatedImage, null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
     # TODO: Add images array field
 
     base_form_class = custom_forms.ProcessPageForm

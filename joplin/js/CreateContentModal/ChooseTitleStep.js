@@ -1,4 +1,5 @@
 import React from 'react';
+import classNames from 'classnames';
 
 import './ChooseTitleStep.scss';
 
@@ -27,11 +28,10 @@ const ChooseTitleStep = ({
     <label htmlFor="page-title" className="ChooseTitleStep__input-label">
       <span className="ChooseTitleStep__input-label--left">Page Title</span>
       <span
-        className={
-          characterCount > maxCharacterCount
-            ? 'ChooseTitleStep__input-label--right ChooseTitleStep__input-label--red'
-            : 'ChooseTitleStep__input-label--right'
-        }
+        className={classNames('ChooseTitleStep__input-label--right', {
+          'ChooseTitleStep__input-label--red':
+            characterCount > maxCharacterCount,
+        })}
       >
         Characters remaining: {maxCharacterCount - characterCount}
       </span>
