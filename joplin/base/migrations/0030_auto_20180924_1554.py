@@ -14,7 +14,7 @@ from django.contrib.auth.models import User
 
 from django.core.management.base import BaseCommand
 from wagtail.core.models import Page
-from base.models import TranslatedImage, TranslatedImageRendition, ThreeOneOne, Theme, Topic, Department, ServicePage, ServicePageStep, ProcessPage, ProcessPageStep, ProcessPageContact, Location, Contact, ServicePageContact, DepartmentContact, Map, ContactDayAndDuration
+from base.models import TranslatedImage, TranslatedImageRendition, ThreeOneOne, Theme, Topic, Department, ServicePage, ProcessPage, ProcessPageStep, ProcessPageContact, Location, Contact, ServicePageContact, DepartmentContact, Map, ContactDayAndDuration
 
 from django.contrib.auth import get_user_model
 
@@ -1314,9 +1314,9 @@ def load_service(data):
     for k in ['meta_description_ar', 'meta_description_en', 'meta_description_es', 'meta_description_vi', 'meta_tags', 'meta_title_ar', 'meta_title_en', 'meta_title_es', 'meta_title_vi']:
         data.pop(k, None)
 
-    print(f'-  Loading service steps...\r', end='')
-    service_steps = data.pop('service_steps')
-    print('✅')
+    # print(f'-  Loading service steps...\r', end='')
+    # service_steps = data.pop('service_steps')
+    # print('✅')
 
     data['additional_content'] = data['additional_content_en']
     print('✅')
@@ -1377,11 +1377,11 @@ def load_service(data):
 
     page.title = data['title_en']
 
-    for i, service_step in enumerate(service_steps):
-        print(service_step)
-        service_step['page_id'] = page.id
-        service_step['sort_order'] = i + 1
-        load_service_step(service_step)
+    # for i, service_step in enumerate(service_steps):
+    #     print(service_step)
+    #     service_step['page_id'] = page.id
+    #     service_step['sort_order'] = i + 1
+    #     load_service_step(service_step)
 
     page.save_revision().publish()
     print(f'{"✅  Created" if created else "⭐  Updated"}')
@@ -1391,10 +1391,10 @@ def load_service(data):
     print(f'{"✅  Created" if created else "✔️  Fetched"}')
 
 
-def load_service_step(data):
-    data['step_description'] = data['step_description_en']
-    service_step = ServicePageStep.objects.create(**data)
-    print("✅  Created service step")
+# def load_service_step(data):
+    # data['step_description'] = data['step_description_en']
+    # service_step = ServicePageStep.objects.create(**data)
+    # print("✅  Created service step")
 
 
 def load_servicepages(data):
