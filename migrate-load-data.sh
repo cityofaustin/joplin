@@ -1,19 +1,10 @@
-echo "Running migrations..."
+#!/usr/bin/env bash
+
+echo "Running migrations: (${DEPLOYMENT_MODE}) ..."
 python ./joplin/manage.py migrate --noinput
 
-if [ "x$LOAD_DATA" = 'xon' ]; then
-  echo "Loading users..."
-  python ./joplin/manage.py loaddata fixtures/users.json
-
-  echo "Loading data..."
-  python ./joplin/manage.py loadcontent \
-        fixtures/images.yaml \
-        fixtures/311.yaml \
-        fixtures/themes.yaml \
-        fixtures/topics.yaml \
-        fixtures/locations.yaml \
-        fixtures/contacts.yaml \
-        fixtures/departments.yaml \
-        fixtures/services \
-        fixtures/processes
-fi
+if [ "${DEPLOYMENT_MODE}" = "PRODUCTION" ] || [  "${DEPLOYMENT_MODE}" = "STAGING"  ]; then
+    python ./joplin/manage.py collectstatic --noinput
+else
+    echo "Static files are only collected on STAGING or PRODUCTION, current environment: ${DEPLOYMENT_MODE}"
+fi;

@@ -1,0 +1,83 @@
+language: python
+python:
+- '3.6'
+dist: trusty
+# We're going to ignore all branches except:
+branches:
+  only:
+  - master
+  - production
+
+# We will need these services:
+services:
+- docker
+- postgresql
+
+sudo: required
+
+# We need PostgreSQL 10 installed
+addons:
+  postgresql: "10"
+  apt:
+    packages:
+      - postgresql-10
+      - postgresql-client-10
+
+# Environment Vars
+env:
+  global:
+  - PATH=$HOME/.local/bin:$PATH
+  - AWS_DEFAULT_REGION: us-east-1
+  - AWS_BUCKET_BACKUPS: joplin-austin-gov-archive
+  - JOPLIN_TARGET: joplin-personal
+  - JOPLIN_IMAGE_NAME: joplin-base
+  - secure: ff2pKZbz5sgBZj+LBezVatSNgLuhafO18kGqZpVelb6wPXF0E1KZpbC0/i1IpZql2rtJY3Y+Y/7mla5B2q+lj8biFrg7NmkfVVtmDIPFpxw88RRpqRZ+ig9btE6qIpYGlV3PNAHETdGN7NrTK9qG2bQZAuWDZwBdfrl+WMKTbZplJL8ZJcIMtehDcAwtNuWJI9hh7RA+W5mwmd8pO2CwhoF2dvOG5REadNhAG87E4XE7kO4jhqacY2nbAr5ElbYXvdkwChkmsFuZkMtobAE62/JzMYY2bMQV8sie6WsivMkWVeATo/9pozJnrjp4Ohfk+MOmLAxUk8tymaN3QkrAM6VVvLDaA4wz9sAeh9sZLJYiX1jOHcGsJUbsC++YER/Dpm4GoZiP6zWFhcx7Mu7xazCuDrpMRs+ApTv+7gZT3MbjyVFkzWnoz2KBirQ+KgNHokC9fuZJeYu8TjuM8Sv8u/36qxhkj2IoA2PAhcFgfZfrgFTObV3Rk/IQWJRZ4NOnqrWajN2aaztcNeqpbk23dEH2PVwsLTHDOtPKMMCp/Uu58fdNfD5DSORU/AQdQ4SdVeTPoOGImhvlwMDc6Wwcm4ecNIYohJQW7hMGp07bksVyaBkUBnMRlvqlL7Qlh2Bkx65lTi3U78zogNIGGgcPBxGVFvWjEfVYTDFW2dI3T7E=
+  - secure: rNKb41YYEbof1a6RoyCCe6Jr9t4qlR3qC6/Eb9BgTqPDniQoWIthPJcfQuvGZN3O0kWsBWWdiLnm2T/iljGUcJYzZYc0d5HGIyMiRpiVxWYVaaUZLTuZGwS6nFtqasvVmqwtsoKFB3TL+4jkHQ3sUmGNLDgLJxiaGODWLG7SFu6RzeKyOIWamGDdgePYw5d3xtnY+WmX5z38w7B0pjhFUTwrgc+M8ZlMUyGNeuPyLdBfehWkLPkV1Tygs/Vfh55pBjaEVNUPECt3y9kFXzpAuLw4lZJKPkPTKy3MiNUUguAS7OdbEwf/4XA71mZZr+0joF/YXh2E8Rnkt3bbmtZJrkuVnrK5wZbjMwNbMDVgBNlYXHPFbvBVr8p9cdt59xXUmBVjS/gbbIk4PTTp2pXUKgpFST/iyNFEshBOVK5nQbcJ6i1W5GFe44olXxwAhFiUoup13str1KQFYAr47Kf2Xh8OFpEoOlHV1mWbcXdJskJ9PCdgAD5zJvWNbv/BcR9j23blXJeSuZF9pv0xMBCvqtMxW8L1UWjfRowW7JttKrK/4iMRtUwXxM4Voi9Wg6M2jTvuuBFPJxRwCdbpSgxCXgtDJiBzPQcLobt1WSEemomRlgriMdWQ1jqZhqr3ei+jnJUNlCQ5nenAanrhYIcyTdTb33+OPwHKILQcuw99OZY=
+  - secure: YKP4nqWOUbCSKfrs8DYLzB1wMyWsrbZu4BGAGQdchT/BEeUZ1GlhS5fv1dK0dqd9NhRBEgauXEmeEODNxtKwaH971qjMNycRDgvCsEuu+QW0LVRJwvWY9WkQuGnKxZvfSq8QdliIhyPglwBifrXPx3Pa+QBrjXxOukVoponF1tPErdHkX3PDQUAuj/ZJIBAO1FSuhWJtg+8zhKj9MxsH4DH0rXRMRjbdsUMwNJRN6UQX/CF+Fg3VpevzBzjAx9VGjoutbUs64WY3JOOg13siWLktTlgponaj+2VjpWLKjI3AC61e5hd/z9p0fhJtusKezKe0WAOF/3wkuYMT2KEZI/bAdCQqpQ5W4vnkKJ+L/r5bDjZ7qHWnhIIhiq3KnWcnRTatLAKRMzOhXbADyb7zrDF0ed80EawiBJp/RYzk2IHBST7GzM9+0wBorOc0mABN3vNgdx/yEpjYm4UGiVHKSEg+SZHau2HmUYuce+9BSuSRfiXgbKJqXZ7PfugnVKhNghf021cSxgYDk+/PQp6w5hr9Niuf8W1CfGUceYrYpSdugRSZvN+17lq7/PKYJmbPlfNImNgIZbROvhposyI3ccjPDmxFQjmQFG+2Awo6tyITDTMNMv+Qe1Z86eg7gfyibKJ1QCZw0kmxjoJfU8y0HpF6RHku7jRR2GKeFeH31Lk=
+
+# We are going to install AWS Cli, Heroku Cli and source our helper scripts
+before_install:
+    - source ./.travis/heroku-helper.sh
+    - sudo pip install awscli
+    - curl https://cli-assets.heroku.com/install-ubuntu.sh | sh
+
+# We are going to run a few commands to help transition from PostgreSQL 9 (default) to PostgreSQL 10
+before_script:
+    # Use default port
+    - sudo sed -i 's/port = 5433/port = 5432/' /etc/postgresql/10/main/postgresql.conf
+    # Use 9.6 auth config:
+    - sudo cp /etc/postgresql/{9.6,10}/main/pg_hba.conf
+    - sudo service postgresql restart
+
+# Jobs
+jobs:
+  include:
+  - stage: Running Tests
+    script:
+    - echo "Deployment Details ( TRAVIS_BRANCH=$TRAVIS_BRANCH, PR=$TRAVIS_PULL_REQUEST,
+      TRAVIS_PULL_REQUEST_BRANCH=$TRAVIS_PULL_REQUEST_BRANCH, MESSAGE=$TRAVIS_COMMIT_MESSAGE,
+      TRAVIS_REPO_SLUG=$TRAVIS_REPO_SLUG, TRAVIS_PULL_REQUEST_SLUG=$TRAVIS_PULL_REQUEST_SLUG,
+      TRAVIS_PULL_REQUEST_SHA=$TRAVIS_PULL_REQUEST_SHA, TRAVIS_BUILD_DIR=$TRAVIS_BUILD_DIR,
+      TRAVIS_BUILD_ID=$TRAVIS_BUILD_ID, TRAVIS_BUILD_NUMBER=$TRAVIS_BUILD_NUMBER,
+      TRAVIS_COMMIT=$TRAVIS_COMMIT, TRAVIS_COMMIT_RANGE=$TRAVIS_COMMIT_RANGE, TRAVIS_EVENT_TYPE=$TRAVIS_EVENT_TYPE,
+      TRAVIS_JOB_ID=$TRAVIS_JOB_ID, TRAVIS_JOB_NUMBER=$TRAVIS_JOB_NUMBER, TRAVIS_TAG=$TRAVIS_TAG )"
+    - echo "Testing AWS CLI is installed"
+    - aws --version
+    - echo "Testing AWS has access to the buckets list"
+    - aws s3api list-buckets --query "Buckets[].Name"
+    - echo "Testing the Heroku CLI is installed"
+    - heroku --version
+    - echo "Testing Helper Functions"
+    - helper_test
+  - stage: Creating backup and upload to S3
+    script:
+    - aws s3api list-buckets --query "Buckets[].Name"
+    - heroku_backup_database $TRAVIS_BRANCH
+  - stage: Building container and upload to Heroku
+    script:
+    - heroku_build $TRAVIS_BRANCH
+    after_success:
+    - heroku_release $TRAVIS_BRANCH
+  - stage: Run Migration and post-release functions
+    script:
+    - heroku_migrate $TRAVIS_BRANCH

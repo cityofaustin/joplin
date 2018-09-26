@@ -10,3 +10,5 @@ heroku3==3.3.0
 psycopg2-binary==2.7.4
 pyyaml==3.12
 django-webpack-loader==0.6.0
+boto3==1.8.2
+django-storages==1.6.6
