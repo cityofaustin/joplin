@@ -6,19 +6,9 @@ from wagtail.core.blocks.stream_block import StreamValue
 
 def better_steps(apps, schema_editor):
     '''
-    We can't import the ServicePage model directly as it may be a newer
-    version than this migration expects. We use the historical version.
+    We can't import the models directly as they may be a newer
+    version than this migration expects. We use the historical versions.
     '''
-
-# StreamValue.StreamChild(
-#                 id=None,
-#                 block=AccordionItemBlock(),
-#                 value={
-#                         'title': 'Title goes here',
-#                         'text': RichText('Testing!'),
-#                 }
-#             )
-
     ServicePage = apps.get_model('base', 'ServicePage')
     ServicePageStep = apps.get_model('base', 'ServicePageStep')
 
@@ -35,22 +25,6 @@ def better_steps(apps, schema_editor):
       page.steps = StreamValue(stream_block, pageSteps, is_lazy=True)
       page.save()
 
-    # page = ServicePage.objects.get(pk=13)
-    # pprint(vars(page.steps))
-    # for sstep in page.steps:
-    #   pprint(vars(sstep))
-
-    
-    # for step in ServicePageStep.objects.all():
-    #     # print(page.service_steps)
-    #     if step.page_id == 13:
-    #       pprint(vars(step))
-        # for step in page.service_steps:
-        #   print(step)
-
-        # post.slug = slugify(post.title)
-        # post.save()
-    raise Exception('I know Python!')
 
 class Migration(migrations.Migration):
 
