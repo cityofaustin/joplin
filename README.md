@@ -57,6 +57,15 @@ docker exec --interactive --tty joplin python joplin/manage.py makemigrations
 docker exec --interactive --tty joplin python joplin/manage.py migrate
 ```
 
+### Update DB Backups
+
+While the server is running, after running migrations, run the following command:
+
+```
+docker exec --interactive --tty joplin python joplin/manage.py dbbackup
+```
+
+
 ## Update database from yaml file
 
 As you make edits to yamls files, you will need to run the following command while the server is running:

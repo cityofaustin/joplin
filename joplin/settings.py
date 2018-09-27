@@ -68,6 +68,7 @@ INSTALLED_APPS = [
 
     'wagtail.contrib.modeladmin',
     'webpack_loader',
+    'dbbackup',
 ]
 
 MIDDLEWARE = [
@@ -217,6 +218,8 @@ GRAPHENE = {
     ]
 }
 
+DBBACKUP_STORAGE = 'django.core.files.storage.FileSystemStorage'
+DBBACKUP_STORAGE_OPTIONS = {'location': '/app/joplin/db/backups'}
 
 if(ISPRODUCTION or ISSTAGING):
     #
