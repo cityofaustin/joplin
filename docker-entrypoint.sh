@@ -21,13 +21,12 @@ else
     echo "Running on production, start migration immediately."
 fi
 
+# Run Data Migrations Only (Static files can remain local)
+python ./joplin/manage.py migrate --noinput
+
 if [ "$LOAD_DATA" == "on" ]; then
     echo "Loading data from backup."
     python ./joplin/manage.py dbrestore --noinput
 fi
-
-
-# Run Data Migrations Only (Static files can remain local)
-python ./joplin/manage.py migrate --noinput
 
 exec "$@"
