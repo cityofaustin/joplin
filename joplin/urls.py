@@ -23,6 +23,7 @@ urlpatterns = [
 
     path('admin/', home),
     url(r'admin/pages/(\d+)/publish/$', joplin_views.publish, name='publish'),
+    url(r'admin/pages/new_from_modal/$', joplin_views.new_page_from_modal, name='new_page_from_modal'),
     url(r'^admin/', include(wagtailadmin_urls)),
     url(r'^documents/', include(wagtaildocs_urls)),
 
