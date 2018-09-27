@@ -22,7 +22,7 @@ from . import forms as custom_forms
 WYSIWYG_GENERAL = ['h1', 'h2', 'link', 'ul', 'ol']
 WYSIWYG_SERVICE_STEP = ['ul', 'ol', 'link']
 DEFAULT_MAX_LENGTH = 255
-
+SERVICE_STEP_FEATURES = ['ul', 'link']
 
 class TranslatedImage(AbstractImage):
     admin_form_fields = Image.admin_form_fields
@@ -163,11 +163,21 @@ class ServicePage(JanisPage):
 
     content_panels = [
         ImageChooserPanel('image'),
+        InlinePanel('service_steps', label="Service steps"),
         StreamFieldPanel('steps'),
         StreamFieldPanel('dynamic_content'),
         FieldPanel('additional_content'),
         InlinePanel('contacts', label='Contacts'),
     ]
+
+class ServicePageStep(Orderable):
+    page = ParentalKey(ServicePage, related_name='service_steps')
+    step_description = RichTextField(features=SERVICE_STEP_FEATURES, verbose_name='Step description', blank=True)
+
+    panels = [
+        FieldPanel('step_description'),
+    ]
+
 
 class ProcessPage(JanisPage):
     janis_url_page_type = "processes"
