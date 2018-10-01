@@ -18,7 +18,38 @@ PIPELINE_PULL_REQUEST=""
 # Deployment app is our target application
 PIPELINE_DEPLOYMENT_APP=""
 
+#
+# Prints error message and stops deployment by returing exit 1
+# $1 (string) - Error message to display
+# Example: helper_halt_deployment "File not found"
+#
 
+function helper_halt_deployment {
+    echo "$1" && exit 1;
+}
+
+#
+# Helps validate branch name (or stops deployment if no branch specified)
+# $1 (string) The name of the function callling this method
+# $2 (string) the name of the branch
+# Example: helper_internal_validation "heroku_test" "production"
+#
+
+function helper_internal_validation {
+    # Show message if this is an internal test
+    if [ "$2" = "${TRAVIS_CI_TEST_TAG}" ]; then
+        echo "  > $1(): Ready to execute.";
+        return 1
+    fi;
+
+    # Output error if no branch is specified.
+    if [ "$2" = "" ]; then
+        helper_halt_deployment "$1(): Branch name required (ie: '$1 staging'). Halting deployment.";
+    fi;
+
+    joplin_log $1 1 "We have a working branch: $2";
+    return 0
+}
 
 #
 # Simply builds a noticeable header when parsing logs.
@@ -57,6 +88,20 @@ function joplin_log {
     echo -n "${1}() "
     awk -v ORS=  "BEGIN { for (i = 1; i <= ${RANGE}; ++i) print \"-\" }" # leave ORS empty please
     echo " ${3}"
+}
+
+#
+# Returns "true" if $1 is a numeric value, otherwise returns "false".
+# $1 (string) - The string to be tested as numeric.
+#
+
+function joplin_is_numeric {
+    REGEX_NUMERIC='^[0-9]+$'
+    if ! [[ "${1}" =~ $REGEX_NUMERIC ]] ; then
+        echo "false";    # Not a number
+    else
+        echo "true";    # We have a number
+    fi
 }
 
 
@@ -143,37 +188,40 @@ function joplin_parse_commit_message {
 
 
 
-#
-# Resolves the PR number for a branch.
-# Requires no arguments, gets them from Travis environment.
-#
 
-#function joplin_branch_to_prnumber_deprecated {
-#    # Gathers the initial branch id
-#    BRANCH_ID=$(git rev-parse $TRAVIS_BRANCH)
-#    # Now we cross-match the BRANCH ID with PR History
-#    BRANCH_PR_DATA=$(git ls-remote origin 'pull/*/head' | grep $BRANCH_ID)
-#    # Extract the PR Number from data
-#    BRANCH_PR_NUMBER=$(echo -n $BRANCH_PR_DATA | cut -d '/' -f 3)
-#    # Output Result
-#    echo $BRANCH_PR_NUMBER;
-#}
 
 
 #
 # Get PR Number for a specific branch in Joplin, using GitHub's API. (Rrequires curl and jq to be installed)
-# curl -X GET -s https://api.github.com/repos/cityofaustin/joplin/pulls | jq -r '.[] | "\(.head.ref):\(.number)"'
 # Requires no arguments, gets the branch number from Travis' environment.
 #
 
 function joplin_branch_to_prnumber {
-	BRANCH_NAME=$TRAVIS_BRANCH
-	if [ "${BRANCH_NAME}" = "" ]; then
-	    echo "";
+	# Try getting the PR number
+	PR_NUMBER=$(curl -X GET -s https://api.github.com/repos/cityofaustin/joplin/pulls | jq -r '.[] | "\(.head.ref):\(.number)"' | grep "${TRAVIS_BRANCH}" | cut -d ":" -f 2);
+
+    IS_RESPONSE_NUMERIC=$(joplin_is_numeric $PR_NUMBER);
+    IS_PIPELINE_PR_NUMERIC=$(joplin_is_numeric $PIPELINE_PULL_REQUEST);
+
+
+    joplin_log ${FUNCNAME[0]} 0 "GitHub Response: ${PR_NUMBER}"
+    joplin_log ${FUNCNAME[0]} 0 "TRAVIS_PULL_REQUEST: ${TRAVIS_PULL_REQUEST}."
+    joplin_log ${FUNCNAME[0]} 0 "PIPELINE_PULL_REQUEST: ${PIPELINE_PULL_REQUEST}."
+    joplin_log ${FUNCNAME[0]} 2 "IS_PIPELINE_PR_NUMERIC: ${IS_PIPELINE_PR_NUMERIC}."
+    joplin_log ${FUNCNAME[0]} 2 "IS_RESPONSE_NUMERIC: ${IS_RESPONSE_NUMERIC}."
+
+    if [ "${IS_PIPELINE_PR_NUMERIC}" = "true" ]; then
+        # It has been defined in our pipeline (this takes precedence over GitHub because we use it to force a pr number)
+        echo "${PIPELINE_PULL_REQUEST}"
+    elif [ "${IS_RESPONSE_NUMERIC}" = "true" ]; then
+        # We are happy with our response from GitHub
+        echo "${PR_NUMBER}";
     else
-        PR_NUMBER=$(curl -X GET -s https://api.github.com/repos/cityofaustin/joplin/pulls | jq -r '.[] | "\(.head.ref):\(.number)"' | grep "${BRANCH_NAME}" | cut -d ":" -f 2)
-        echo "${PR_NUMBER}"
-	fi;
+        # We definitely do not have a working PR number, we need to stop the deployment.
+        joplin_log ${FUNCNAME[0]} 0 "The branch name '${TRAVIS_BRANCH}' does not appear to have a PR number, this will cause a problem. Stopping deployment process."
+        helper_halt_deployment
+        exit 1;
+    fi;
 }
 
 
@@ -203,12 +251,7 @@ function joplin_get_env_prnum {
 function joplin_generate_app_name {
 
     # Get PR Number, if none given, then resolve.
-    if [ "$1" = "" ]; then
-        BRANCH_PR_NUMBER=$(joplin_branch_to_prnumber $TRAVIS_BRANCH)
-     else
-        BRANCH_PR_NUMBER=$1
-    fi;
-
+    BRANCH_PR_NUMBER=$(joplin_branch_to_prnumber $TRAVIS_BRANCH)
     echo "joplin-staging-pr-${BRANCH_PR_NUMBER}"
 }
 
@@ -348,38 +391,7 @@ function joplin_create_pr_app {
 
 
 
-#
-# Prints error message and stops deployment by returing exit 1
-# $1 (string) - Error message to display
-# Example: helper_halt_deployment "File not found"
-#
 
-function helper_halt_deployment {
-    echo "$1" && exit 1;
-}
-
-#
-# Helps validate branch name (or stops deployment if no branch specified)
-# $1 (string) The name of the function callling this method
-# $2 (string) the name of the branch
-# Example: helper_internal_validation "heroku_test" "production"
-#
-
-function helper_internal_validation {
-    # Show message if this is an internal test
-    if [ "$2" = "${TRAVIS_CI_TEST_TAG}" ]; then
-        echo "  > $1(): Ready to execute.";
-        return 1
-    fi;
-
-    # Output error if no branch is specified.
-    if [ "$2" = "" ]; then
-        helper_halt_deployment "$1(): Branch name required (ie: '$1 staging'). Halting deployment.";
-    fi;
-
-    joplin_log $1 1 "We have a working branch: $2";
-    return 0
-}
 
 #
 # Turn the branch name into the app name in Heroku
