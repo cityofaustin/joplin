@@ -3,13 +3,6 @@
 # Tag used for testing
 TRAVIS_CI_TEST_TAG="travis-ci-internal-test"
 
-export PIPELINE_NAME_DEFAULT=devops-joplin-pipeline-testing
-export AWS_BUCKET_BACKUPS=joplin-austin-gov-archive
-export AWS_BUCKET_DEFAULT=joplin-austin-gov
-export AWS_DEFAULT_REGION=us-east-1
-export AWS_BUCKET_REVIEWAPPS=joplin-austin-gov-prs3
-export PIPELINE_TEAM_DEFAULT=innovation-fellowship-program
-
 #
 # Pipeline Variables
 # These determine the exact pipeline in the heroku account where new PR (review apps) are created.
@@ -460,18 +453,47 @@ function joplin_backup_database {
     # Validate Branch Name (or halt deployment if no branch specified)
     helper_internal_validation ${FUNCNAME[0]} $1
 
-    echo "This is where we are: $?"
 
     # First check if this is a brand new PR, skip backup if it is.
     if [ "${TRAVIS_PULL_REQUEST}" != "false" ]; then
         joplin_log ${FUNCNAME[0]} 1 "This is a brand-new pull request, since there is no database, there will be no backup.";
         joplin_log ${FUNCNAME[0]} 1 "Skipping Backup Process.";
-        return 1;
-    fi;
+    else
 
 
-    echo "This is where we are now: $?"
+        # Not a new PR, not a test, and not an error
+        if [ "$?" = "0" ]; then
 
+            # Retrieve App Name
+            joplin_build_header "Creating Database Backup in S3"
+
+            APPNAME=$(joplin_resolve_heroku_appname $1);
+
+            # Gather connection string from heroku api
+            CONNECTION_STRING=$(heroku config:get DATABASE_URL -a $APPNAME);
+            DB_NAME=$(echo -n $CONNECTION_STRING | cut -d "/" -f 4);
+            DB_TIMESTAMP=$(date '+%Y-%m-%d--%H-%M-%S');
+            DJANGO_MID=$(retrieve_latest_django_mid);
+
+            S3_BUCKET_FILE_URL="s3://${AWS_BUCKET_BACKUPS}/backups/database/${TRAVIS_BRANCH}/${APPNAME}.${DB_TIMESTAMP}.${TRAVIS_COMMIT}.${DJANGO_MID}.psql.gz"
+
+            echo "joplin_backup_database() ----- Performing Database Backup for Branch: $1, App: $APPNAME";
+            echo "joplin_backup_database() -- App Name: ${APPNAME}";
+            echo "joplin_backup_database() -- Date Timestamp: ${DB_TIMESTAMP}";
+            echo "joplin_backup_database() -- Latest Django Migration ID: ${DJANGO_MID}";
+            echo "joplin_backup_database() -- DB Name: ${DB_NAME}";
+            echo "joplin_backup_database() -- S3 File URL: ${S3_BUCKET_FILE_URL}";
+            echo "joplin_backup_database() -- Performing copy, please wait...";
+
+            pg_dump $CONNECTION_STRING | gzip | aws s3 cp - $S3_BUCKET_FILE_URL;
+            echo "joplin_backup_database()----- Finished creating and uploading database to s3";
+
+            echo "joplin_backup_database()----- Validating the backup has been created and is available on S3";
+            heroku_backup_upload_check $S3_BUCKET_FILE_URL
+            echo "joplin_backup_database()----- Validation finished, backup process finished.";
+        fi;
+
+     fi;
 }
 
 
@@ -487,9 +509,6 @@ function joplin_build {
 
     # Validate Branch Name (or halt deployment if no branch specified)
     helper_internal_validation ${FUNCNAME[0]} $1
-
-
-
 
     # Not a test, and not an error
     if [ "$?" = "0" ]; then
@@ -510,6 +529,7 @@ function joplin_build {
         echo "joplin_build()----- Finished Building Container";
     fi;
 }
+
 
 
 #
