@@ -18,8 +18,10 @@ sudo: required
 # We need PostgreSQL 10 installed
 addons:
   postgresql: 9.6
-#  apt:
-#    packages:
+  apt:
+    packages:
+      - jq
+      - curl
 #      - postgresql-10
 #      - postgresql-client-10
 
@@ -27,8 +29,9 @@ addons:
 env:
   global:
   - PATH=$HOME/.local/bin:$PATH
-  - AWS_DEFAULT_REGION: us-east-1
-  - AWS_BUCKET_BACKUPS: joplin-austin-gov-archive
+#  - AWS_DEFAULT_REGION: us-east-1
+#   AWS_BUCKET_NAME
+#  - AWS_BUCKET_BACKUPS: joplin-austin-gov-archive
 #  - JOPLIN_TARGET: joplin-personal
   - JOPLIN_IMAGE_NAME: joplin-base
   # HEROKU_API_KEY="..."

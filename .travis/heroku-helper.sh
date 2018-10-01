@@ -11,9 +11,9 @@ TRAVIS_CI_TEST_TAG="travis-ci-internal-test"
 
 
 # The team name (a sort of sub-account in heroku)
-PIPELINE_TEAM="innovation-fellowship-program"
+PIPELINE_TEAM=$PIPELINE_TEAM_DEFAULT
 # The name of the pipeline in the team account.
-PIPELINE_NAME="devops-joplin-pipeline-testing"
+PIPELINE_NAME=$PIPELINE_NAME_DEFAULT
 # Pull Request holds the PR number, initially it remains empty, copies from TRAVIS and gets modified.
 PIPELINE_PULL_REQUEST=""
 # Deployment app is our target application
@@ -33,7 +33,10 @@ function joplin_build_header {
     echo "--------------------------------------------------------------"
     echo "   $1"
     echo "--------------------------------------------------------------"
-    echo "  Branch: $TRAVIS_BRANCH, PR: $TRAVIS_PULL_REQUEST"
+    echo "  TRAVIS_BRANCH:          ${TRAVIS_BRANCH}"
+    echo "  TRAVIS_PULL_REQUEST:    ${TRAVIS_PULL_REQUEST}"
+    echo "  PIPELINE_TEAM:          ${PIPELINE_TEAM}"
+    echo "  PIPELINE_NAME:          ${PIPELINE_NAME}"
     echo ""
 }
 
@@ -146,15 +149,28 @@ function joplin_parse_commit_message {
 # Requires no arguments, gets them from Travis environment.
 #
 
+#function joplin_branch_to_prnumber_deprecated {
+#    # Gathers the initial branch id
+#    BRANCH_ID=$(git rev-parse $TRAVIS_BRANCH)
+#    # Now we cross-match the BRANCH ID with PR History
+#    BRANCH_PR_DATA=$(git ls-remote origin 'pull/*/head' | grep $BRANCH_ID)
+#    # Extract the PR Number from data
+#    BRANCH_PR_NUMBER=$(echo -n $BRANCH_PR_DATA | cut -d '/' -f 3)
+#    # Output Result
+#    echo $BRANCH_PR_NUMBER;
+#}
+
+
+#
+# Get PR Number for a specific branch in Joplin, using GitHub's API. (Rrequires curl and jq to be installed)
+# curl -X GET -s https://api.github.com/repos/cityofaustin/joplin/pulls | jq -r '.[] | "\(.head.ref):\(.number)"'
+# Requires no arguments, gets the branch number from Travis' environment.
+#
+
 function joplin_branch_to_prnumber {
-    # Gathers the initial branch id
-    BRANCH_ID=$(git rev-parse $TRAVIS_BRANCH)
-    # Now we cross-match the BRANCH ID with PR History
-    BRANCH_PR_DATA=$(git ls-remote origin 'pull/*/head' | grep $BRANCH_ID)
-    # Extract the PR Number from data
-    BRANCH_PR_NUMBER=$(echo -n $BRANCH_PR_DATA | cut -d '/' -f 3)
-    # Output Result
-    echo $BRANCH_PR_NUMBER;
+	BRANCH_NAME=$TRAVIS_BRANCH
+	PR_NUMBER=$(curl -X GET -s https://api.github.com/repos/cityofaustin/joplin/pulls | jq -r '.[] | "\(.head.ref):\(.number)"' | grep "${BRANCH_NAME}" | cut -d ":" -f 2)
+	echo "${PR_NUMBER}"
 }
 
 
@@ -431,7 +447,14 @@ function joplin_backup_database {
     # Validate Branch Name (or halt deployment if no branch specified)
     helper_internal_validation ${FUNCNAME[0]} $1
 
-    # Not a test, and not an error
+    # First check if this is a brand new PR, skip backup if it is.
+    if [ "${TRAVIS_PULL_REQUEST}" != "false" ]; then
+        echo "This is a brand-new pull request, since there is no database, there will be no backup.";
+        echo "Skipping backup process.";
+        return 0;
+    fi;
+
+    # Not a new PR, not a test, and not an error
     if [ "$?" = "0" ]; then
         # Retrieve App Name
         APPNAME=$(joplin_resolve_heroku_appname $1);
@@ -476,6 +499,9 @@ function joplin_build {
 
     # Validate Branch Name (or halt deployment if no branch specified)
     helper_internal_validation ${FUNCNAME[0]} $1
+
+
+    helper_halt_deployment # Halt we do not need to deploy atm
 
     # Not a test, and not an error
     if [ "$?" = "0" ]; then
@@ -563,6 +589,8 @@ function joplin_migrate {
 function helper_test {
     echo "helper_test() ----- Heroku Helper Test Initialized"
     echo "helper_test() ----- Test tag: ${TRAVIS_CI_TEST_TAG}";
+
+    joplin_build_header "Heroku Helper Testing"
 
     echo "helper_test() ----- Testing 'joplin_release' is ready: ";
     joplin_release $TRAVIS_CI_TEST_TAG;
