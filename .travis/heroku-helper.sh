@@ -33,7 +33,7 @@ function joplin_build_header {
     echo "   $1"
     echo "--------------------------------------------------------------"
     echo "  TRAVIS_BRANCH:          ${TRAVIS_BRANCH}"
-    echo "  TRAVIS_PULL_REQUEST:    ${TRAVIS_PULL_REQUEST}"
+    echo "  TRAVIS_PULL_REQUEST:    ${PIPELINE_PULL_REQUEST}"
     echo "  PIPELINE_TEAM:          ${PIPELINE_TEAM}"
     echo "  PIPELINE_NAME:          ${PIPELINE_NAME}"
     echo ""
@@ -167,7 +167,7 @@ function joplin_parse_commit_message {
 #
 
 function joplin_branch_to_prnumber {
-	BRANCH_NAME=$TRAVIS_BRANCH
+	BRANCH_NAME=$PIPELINE_PULL_REQUEST
 	if [ "${BRANCH_NAME}" = "" ]; then
 	    echo "";
     else
@@ -178,18 +178,18 @@ function joplin_branch_to_prnumber {
 
 
 #
-# Returns the PR number, first it tries from the TRAVIS_PULL_REQUEST variable
+# Returns the PR number, first it tries from the PIPELINE_PULL_REQUEST variable
 # if that fails, then it tries to resolve it from the GitHub branch history.
 #
 
 function joplin_get_env_prnum {
     # If Travis CI does not have a pull request number, then resolve it.
-    if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then
+    if [ "${PIPELINE_PULL_REQUEST}" = "false" ]; then
         PRNUM=$(joplin_branch_to_prnumber $TRAVIS_BRANCH);
         echo "${PRNUM}";
     # If we do have it, then use that instead (faster)
     else
-        echo "${TRAVIS_PULL_REQUEST}";
+        echo "${PIPELINE_PULL_REQUEST}";
     fi;
 }
 
@@ -244,17 +244,17 @@ function joplin_create_heroku_preview_app {
     joplin_log ${FUNCNAME[0]} 1 "Creating new app on heroku: ${HEROKU_NEW_APP_NAME}  and attaching to pipeline: ${PIPELINE_NAME}"
 
     # Create app with specified name
-    #heroku create $NEW_APP_NAME
+    heroku create $NEW_APP_NAME
 
     # Add postgresql to the new app.
-    #heroku addons:create heroku-postgresql:hobby-dev --version=9.6 --app $HEROKU_NEW_APP_NAME
+    heroku addons:create heroku-postgresql:hobby-dev --version=10 --app $HEROKU_NEW_APP_NAME
 
     # Set Environment Variables
     # PR Review Apps do not get access to S3 Buckets
-    #heroku config:set   DEPLOYMENT_MODE=REVIEW  --app $HEROKU_NEW_APP_NAME;
+    heroku config:set   DEPLOYMENT_MODE=REVIEW  --app $HEROKU_NEW_APP_NAME;
 
     # Couple New app to pipeline (assign review (PR) stage):
-    #heroku pipelines:add $PIPELINE_NAME --app $HEROKU_NEW_APP_NAME --stage review
+    heroku pipelines:add $PIPELINE_NAME --app $HEROKU_NEW_APP_NAME --stage review
 }
 
 
