@@ -368,9 +368,11 @@ function helper_internal_validation {
 
     # Output error if no branch is specified.
     if [ "$2" = "" ]; then
-        helper_halt_deployment "$1(): Branch name required (ie: '$1 staging'). Halting deployment."
+        helper_halt_deployment "$1(): Branch name required (ie: '$1 staging'). Halting deployment.";
     fi;
 
+
+    joplin_log ${FUNCNAME[0]} 1 "We have a working branch: $2, proceeding with backup.";
     return 0
 }
 
@@ -439,7 +441,7 @@ function heroku_backup_upload_check {
 # Creates a database backup of a running heroku app (as long as it as a PostgreSQL db attached to it)
 #
 # $1 (string) The name of the application (ie. "master", "production")
-# Example: $ backup_sql master
+# Example: $ joplin_backup_database master
 #
 
 function joplin_backup_database {
@@ -457,6 +459,9 @@ function joplin_backup_database {
     # Not a new PR, not a test, and not an error
     if [ "$?" = "0" ]; then
         # Retrieve App Name
+        echo "Well, we need to stop it for now."
+        exit 1;
+
         APPNAME=$(joplin_resolve_heroku_appname $1);
 
         # Gather connection string from heroku api
