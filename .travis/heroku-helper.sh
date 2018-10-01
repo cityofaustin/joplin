@@ -271,9 +271,9 @@ function joplin_create_pr_app {
     # Validate Branch Name (or halt deployment if no branch specified)
     helper_internal_validation ${FUNCNAME[0]} $1
 
-    #if [ "$?" = "0" ]; then
+    if [ "$?" = "0" ]; then
         # We should stop right here!
-    #    exit 1;
+        exit 1;
 
         # Build Header,
         joplin_build_header "Build PR Application"
@@ -344,7 +344,7 @@ function joplin_create_pr_app {
         fi;
 
         joplin_log ${FUNCNAME[0]} 0 "Done Building App"
-    #fi;
+    fi;
 }
 
 
