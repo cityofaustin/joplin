@@ -272,8 +272,6 @@ function joplin_create_pr_app {
     helper_internal_validation ${FUNCNAME[0]} $1
 
     if [ "$?" = "0" ]; then
-        # We should stop right here!
-        exit 1;
 
         # Build Header,
         joplin_build_header "Build PR Application"
@@ -458,11 +456,9 @@ function joplin_backup_database {
     joplin_log ${FUNCNAME[0]} 0 "Beginning database backup process.";
 
     # First check if this is a brand new PR, skip backup if it is.
-    if [ "${TRAVIS_PULL_REQUEST}" != "false" ]; then
+    if [ "${PIPELINE_PULL_REQUEST}" != "false" ]; then
         joplin_log ${FUNCNAME[0]} 1 "This is a brand-new pull request, since there is no database, there will be no backup.";
-        joplin_log ${FUNCNAME[0]} 1 "Skipping Backup Process.";
     else
-
         # Not a new PR, not a test, and not an error
         if [ "$?" = "0" ]; then
 
