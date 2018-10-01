@@ -379,8 +379,7 @@ function helper_internal_validation {
         helper_halt_deployment "$1(): Branch name required (ie: '$1 staging'). Halting deployment.";
     fi;
 
-
-    joplin_log ${FUNCNAME[0]} 1 "We have a working branch: $2";
+    joplin_log $1 1 "We have a working branch: $2";
     return 0
 }
 
@@ -456,7 +455,7 @@ function joplin_backup_database {
 
     # Validate Branch Name (or halt deployment if no branch specified)
     helper_internal_validation ${FUNCNAME[0]} $1
-
+    joplin_log ${FUNCNAME[0]} 0 "Beginning database backup process.";
 
     # First check if this is a brand new PR, skip backup if it is.
     if [ "${TRAVIS_PULL_REQUEST}" != "false" ]; then
@@ -480,23 +479,27 @@ function joplin_backup_database {
 
             S3_BUCKET_FILE_URL="s3://${AWS_BUCKET_BACKUPS}/backups/database/${TRAVIS_BRANCH}/${APPNAME}.${DB_TIMESTAMP}.${TRAVIS_COMMIT}.${DJANGO_MID}.psql.gz"
 
-            echo "joplin_backup_database() ----- Performing Database Backup for Branch: $1, App: $APPNAME";
-            echo "joplin_backup_database() -- App Name: ${APPNAME}";
-            echo "joplin_backup_database() -- Date Timestamp: ${DB_TIMESTAMP}";
-            echo "joplin_backup_database() -- Latest Django Migration ID: ${DJANGO_MID}";
-            echo "joplin_backup_database() -- DB Name: ${DB_NAME}";
-            echo "joplin_backup_database() -- S3 File URL: ${S3_BUCKET_FILE_URL}";
-            echo "joplin_backup_database() -- Performing copy, please wait...";
+            joplin_log ${FUNCNAME[0]} 1 "Performing Database Backup for Branch: $1, App: $APPNAME.";
+            joplin_log ${FUNCNAME[0]} 2 "App Name: ${APPNAME}.";
+            joplin_log ${FUNCNAME[0]} 2 "Date Timestamp: ${DB_TIMESTAMP}.";
+            joplin_log ${FUNCNAME[0]} 2 "Latest Django Migration ID: ${DJANGO_MID}.";
+            joplin_log ${FUNCNAME[0]} 2 "DB Name: ${DB_NAME}.";
+            joplin_log ${FUNCNAME[0]} 2 "S3 File URL: ${S3_BUCKET_FILE_URL}";
+            joplin_log ${FUNCNAME[0]} 2 "Beginning database backup process.";
+            joplin_log ${FUNCNAME[0]} 1 "Performing copy, please wait...";
+
 
             pg_dump $CONNECTION_STRING | gzip | aws s3 cp - $S3_BUCKET_FILE_URL;
-            echo "joplin_backup_database()----- Finished creating and uploading database to s3";
+            joplin_log ${FUNCNAME[0]} 1 "Finished creating and uploading database to s3.";
 
-            echo "joplin_backup_database()----- Validating the backup has been created and is available on S3";
+            joplin_log ${FUNCNAME[0]} 1 "Validating the backup has been created and is available on S3.";
             heroku_backup_upload_check $S3_BUCKET_FILE_URL
-            echo "joplin_backup_database()----- Validation finished, backup process finished.";
+            joplin_log ${FUNCNAME[0]} 1 "Validation finished, backup process finished.";
         fi;
 
      fi;
+
+     joplin_log ${FUNCNAME[0]} 0 "Database backup process finished.";
 }
 
 
