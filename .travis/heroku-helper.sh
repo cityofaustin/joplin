@@ -189,29 +189,42 @@ function joplin_parse_commit_message {
 
 
 
+
+
 #
 # Get PR Number for a specific branch in Joplin, using GitHub's API. (Rrequires curl and jq to be installed)
 # Requires no arguments, gets the branch number from Travis' environment.
 #
 
 function joplin_branch_to_prnumber {
-	# Try getting the PR number
-	PR_NUMBER=$(curl -X GET -s https://api.github.com/repos/cityofaustin/joplin/pulls | jq -r '.[] | "\(.head.ref):\(.number)"' | grep "${TRAVIS_BRANCH}" | cut -d ":" -f 2);
 
+    # Try getting the PR number
+	PR_NUMBER=$(curl -X GET -s https://api.github.com/repos/cityofaustin/joplin/pulls | jq -r '.[] | "\(.head.ref):\(.number)"' | grep "${TRAVIS_BRANCH}" | cut -d ":" -f 2);
     IS_RESPONSE_NUMERIC=$(joplin_is_numeric $PR_NUMBER);
     IS_PIPELINE_PR_NUMERIC=$(joplin_is_numeric $PIPELINE_PULL_REQUEST);
 
-    if [ "${IS_PIPELINE_PR_NUMERIC}" = "true" ]; then
-        # It has been defined in our pipeline (this takes precedence over GitHub because we use it to force a pr number)
-        echo "${PIPELINE_PULL_REQUEST}"
-    elif [ "${IS_RESPONSE_NUMERIC}" = "true" ]; then
-        # We are happy with our response from GitHub
-        echo "${PR_NUMBER}";
+    # Check if this is a test
+    if [ "${1}" = "${TRAVIS_CI_TEST_TAG}" ]; then
+        joplin_log ${FUNCNAME[0]} 0 "GitHub Response: ${PR_NUMBER}"
+        joplin_log ${FUNCNAME[0]} 0 "TRAVIS_PULL_REQUEST: ${TRAVIS_PULL_REQUEST}."
+        joplin_log ${FUNCNAME[0]} 0 "PIPELINE_PULL_REQUEST: ${PIPELINE_PULL_REQUEST}."
+        joplin_log ${FUNCNAME[0]} 2 "IS_PIPELINE_PR_NUMERIC: ${IS_PIPELINE_PR_NUMERIC}."
+        joplin_log ${FUNCNAME[0]} 2 "IS_RESPONSE_NUMERIC: ${IS_RESPONSE_NUMERIC}."
     else
-        # We definitely do not have a working PR number, we need to stop the deployment.
-        joplin_log ${FUNCNAME[0]} 0 "The branch name '${TRAVIS_BRANCH}' does not appear to have a PR number, this will cause a problem. Stopping deployment process."
-        helper_halt_deployment
-        exit 1;
+
+        # Time to check the output
+        if [ "${IS_PIPELINE_PR_NUMERIC}" = "true" ]; then
+            # It has been defined in our pipeline (this takes precedence over GitHub because we use it to force a pr number)
+            echo "${PIPELINE_PULL_REQUEST}"
+        elif [ "${IS_RESPONSE_NUMERIC}" = "true" ]; then
+            # We are happy with our response from GitHub
+            echo "${PR_NUMBER}";
+        else
+            # We definitely do not have a working PR number, we need to stop the deployment.
+            joplin_log ${FUNCNAME[0]} 0 "The branch name '${TRAVIS_BRANCH}' does not appear to have a PR number, this will cause a problem. Stopping deployment process."
+            helper_halt_deployment
+            exit 1;
+        fi;
     fi;
 }
 
@@ -602,30 +615,34 @@ function joplin_migrate {
 #
 
 function helper_test {
-    echo "helper_test() ----- Heroku Helper Test Initialized"
-    echo "helper_test() ----- Test tag: ${TRAVIS_CI_TEST_TAG}";
-
     joplin_build_header "Heroku Helper Testing"
 
-    echo "helper_test() ----- Testing 'joplin_release' is ready: ";
+    joplin_log ${FUNCNAME[0]} 0 "Heroku Helper Test Initialized: ";
+    joplin_log ${FUNCNAME[0]} 0 "Test tag: '${TRAVIS_CI_TEST_TAG}': ";
+
+    joplin_log ${FUNCNAME[0]} 1 "Testing 'joplin_release' is ready: ";
     joplin_release $TRAVIS_CI_TEST_TAG;
 
-    echo "helper_test() ----- Testing 'joplin_backup_database' is ready: ";
+    joplin_log ${FUNCNAME[0]} 1 "Testing 'joplin_release' is ready: ";
     joplin_backup_database $TRAVIS_CI_TEST_TAG;
 
-    echo "helper_test() ----- Testing django migration id: ";
+    joplin_log ${FUNCNAME[0]} 1 " Testing django migration id: ";
     retrieve_latest_django_mid;
 
-    echo "helper_test() ----- Testing 'joplin_build' is ready: ";
+    joplin_log ${FUNCNAME[0]} 1 "Testing 'joplin_build' is ready: ";
     joplin_build $TRAVIS_CI_TEST_TAG;
 
-    echo "joplin_migrate() ----- Testing 'joplin_migrate' is ready: ";
+    joplin_log ${FUNCNAME[0]} 1 "Testing 'joplin_migrate' is ready: ";
     joplin_migrate $TRAVIS_CI_TEST_TAG;
 
-    echo "joplin_migrate() ----- Testing 'joplin_create_pr_app' is ready: ";
+    joplin_log ${FUNCNAME[0]} 1 "Testing 'joplin_create_pr_app' is ready: ";
     joplin_create_pr_app $TRAVIS_CI_TEST_TAG;
 
-    echo "helper_test() ----- Heroku Helper Test finished.";
+
+    joplin_log ${FUNCNAME[0]} 1 "Testing 'joplin_branch_to_prnumber' is ready: ";
+    joplin_branch_to_prnumber $TRAVIS_CI_TEST_TAG;
+
+    joplin_log ${FUNCNAME[0]} 0 "Heroku Helper Test finished: ";
 }
 
 
