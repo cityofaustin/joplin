@@ -167,7 +167,7 @@ function joplin_parse_commit_message {
 #
 
 function joplin_branch_to_prnumber {
-	BRANCH_NAME=$PIPELINE_PULL_REQUEST
+	BRANCH_NAME=$TRAVIS_BRANCH
 	if [ "${BRANCH_NAME}" = "" ]; then
 	    echo "";
     else
@@ -244,13 +244,13 @@ function joplin_create_heroku_preview_app {
     joplin_log ${FUNCNAME[0]} 1 "Creating new app on heroku: ${HEROKU_NEW_APP_NAME}  and attaching to pipeline: ${PIPELINE_NAME}"
 
     # Create app with specified name
-    heroku create $HEROKU_NEW_APP_NAME
+    heroku create $HEROKU_NEW_APP_NAME --team $PIPELINE_TEAM
 
     # Add postgresql to the new app.
     heroku addons:create heroku-postgresql:hobby-dev --version=10 --app $HEROKU_NEW_APP_NAME
 
     # Set Environment Variables
-    # PR Review Apps do not get access to S3 Buckets
+    # PR Review Apps do not get access to S3 Buckets, only if deployment mode is REVIEWS3
     heroku config:set   DEPLOYMENT_MODE=REVIEW  --app $HEROKU_NEW_APP_NAME;
 
     # Couple New app to pipeline (assign review (PR) stage):
