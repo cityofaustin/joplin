@@ -276,7 +276,7 @@ function joplin_create_pr_app {
     #    exit 1;
 
         # Build Header,
-        joplin_build_header "Build PR Application Stage"
+        joplin_build_header "Build PR Application"
 
         #
         # First, parse commit message into environment variables.
