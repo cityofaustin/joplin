@@ -9,7 +9,6 @@ TRAVIS_CI_TEST_TAG="travis-ci-internal-test"
 # It also determines which "team" group will be used.
 #
 
-
 # The team name (a sort of sub-account in heroku)
 PIPELINE_TEAM=$PIPELINE_TEAM_DEFAULT
 # The name of the pipeline in the team account.
@@ -269,78 +268,83 @@ function joplin_create_heroku_preview_app {
 
 function joplin_create_pr_app {
 
-    # Build Header,
-    joplin_build_header "Build PR Application Stage"
-
     # Validate Branch Name (or halt deployment if no branch specified)
     helper_internal_validation ${FUNCNAME[0]} $1
 
-    #
-    # First, parse commit message into environment variables.
-    #
-    joplin_parse_commit_message;
+    #if [ "$?" = "0" ]; then
+        # We should stop right here!
+    #    exit 1;
 
-    # We need a Pull request number that can be altered if necessary: PIPELINE_PULL_REQUEST
-    # If empty, then copy the value from TRAVIS_PULL_REQUEST
-    # If not empty, then we take PIPELINE_PULL_REQUEST over TRAVIS_PULL_REQUEST
+        # Build Header,
+        joplin_build_header "Build PR Application Stage"
 
-    ## If empty, assume TRAVIS_PULL_REQUEST
-    if [ "${PIPELINE_PULL_REQUEST}" = "" ]; then
-        PIPELINE_PULL_REQUEST=$TRAVIS_PULL_REQUEST;
-    ## else, we proceed with whatever value is in PIPELINE_PULL_REQUEST
-    fi;
+        #
+        # First, parse commit message into environment variables.
+        #
+        joplin_parse_commit_message;
 
-    joplin_log ${FUNCNAME[0]} 0 "Beginning PR app creation process (PIPELINE_PULL_REQUEST: ${PIPELINE_PULL_REQUEST})"
+        # We need a Pull request number that can be altered if necessary: PIPELINE_PULL_REQUEST
+        # If empty, then copy the value from TRAVIS_PULL_REQUEST
+        # If not empty, then we take PIPELINE_PULL_REQUEST over TRAVIS_PULL_REQUEST
 
-    # If this is not a PR request, then move on to a regular deployment.
-    if [ "${PIPELINE_PULL_REQUEST}" = "false" ]; then
-        # This is not a new pr branch
-        joplin_log ${FUNCNAME[0]} 0 "This is not a new PR branch: (PIPELINE_PULL_REQUEST: ${PIPELINE_PULL_REQUEST}, TRAVIS_PULL_REQUEST: ${TRAVIS_PULL_REQUEST})."
-        joplin_log ${FUNCNAME[0]} 0 "Moving on, nothing to do here."
-
-    # Else, we need to create a new PR review app.
-    else
-        # We have a legitimate pull request, so print out some details for logging.
-        joplin_log ${FUNCNAME[0]} 1 ">>> NEW PR REQUEST"
-        joplin_log ${FUNCNAME[0]} 1 "PIPELINE_PULL_REQUEST: ${PIPELINE_PULL_REQUEST}"
-        joplin_log ${FUNCNAME[0]} 1 "TRAVIS_PULL_REQUEST:   ${TRAVIS_PULL_REQUEST}"
-
-        # Resolve GIT PR Number (for logging), and print.
-        GIT_PR_NUM=$(joplin_branch_to_prnumber $TRAVIS_BRANCH)
-        joplin_log ${FUNCNAME[0]} 1 "GIT PULL REQUEST NUM:  ${GIT_PR_NUM}"
-
-        # If no name specified for the new app in the commit message command,
-        # then generate a new name automatically.
-        if [ "${PIPELINE_DEPLOYMENT_APP}" = "" ]; then
-            PIPELINE_DEPLOYMENT_APP=$(joplin_generate_app_name $PIPELINE_PULL_REQUEST)
+        ## If empty, assume TRAVIS_PULL_REQUEST
+        if [ "${PIPELINE_PULL_REQUEST}" = "" ]; then
+            PIPELINE_PULL_REQUEST=$TRAVIS_PULL_REQUEST;
+        ## else, we proceed with whatever value is in PIPELINE_PULL_REQUEST
         fi;
 
-        # Show current values
-        joplin_log ${FUNCNAME[0]} 1 ">>> Deployment details:"
-        joplin_log ${FUNCNAME[0]} 1 "Deploying new app:         ${PIPELINE_DEPLOYMENT_APP}"
-        joplin_log ${FUNCNAME[0]} 1 "Into Pipeline:             ${PIPELINE_NAME}"
+        joplin_log ${FUNCNAME[0]} 0 "Beginning PR app creation process (PIPELINE_PULL_REQUEST: ${PIPELINE_PULL_REQUEST})"
 
+        # If this is not a PR request, then move on to a regular deployment.
+        if [ "${PIPELINE_PULL_REQUEST}" = "false" ]; then
+            # This is not a new pr branch
+            joplin_log ${FUNCNAME[0]} 0 "This is not a new PR branch: (PIPELINE_PULL_REQUEST: ${PIPELINE_PULL_REQUEST}, TRAVIS_PULL_REQUEST: ${TRAVIS_PULL_REQUEST})."
+            joplin_log ${FUNCNAME[0]} 0 "Moving on, nothing to do here."
 
-        # We now must check if the current PR already exists.
-        joplin_log ${FUNCNAME[0]} 1 "Checking if review app already exists";
-        APP_EXISTS=$(joplin_app_exists $PIPELINE_DEPLOYMENT_APP)
-
-        # If the review app exists, we have to skip deployment
-        if [ "$APP_EXISTS" = "true" ]; then
-            joplin_log ${FUNCNAME[0]} 2 "App ${PIPELINE_DEPLOYMENT_APP} already exists, skipping deployment.";
-
-
-        # Let's go ahead and build the new review app with the new name
+        # Else, we need to create a new PR review app.
         else
-            joplin_log ${FUNCNAME[0]} 2 "Creating app ${PIPELINE_DEPLOYMENT_APP} one moment.";
+            # We have a legitimate pull request, so print out some details for logging.
+            joplin_log ${FUNCNAME[0]} 1 ">>> NEW PR REQUEST"
+            joplin_log ${FUNCNAME[0]} 1 "PIPELINE_PULL_REQUEST: ${PIPELINE_PULL_REQUEST}"
+            joplin_log ${FUNCNAME[0]} 1 "TRAVIS_PULL_REQUEST:   ${TRAVIS_PULL_REQUEST}"
 
-            joplin_create_heroku_preview_app $PIPELINE_DEPLOYMENT_APP
+            # Resolve GIT PR Number (for logging), and print.
+            GIT_PR_NUM=$(joplin_branch_to_prnumber $TRAVIS_BRANCH)
+            joplin_log ${FUNCNAME[0]} 1 "GIT PULL REQUEST NUM:  ${GIT_PR_NUM}"
+
+            # If no name specified for the new app in the commit message command,
+            # then generate a new name automatically.
+            if [ "${PIPELINE_DEPLOYMENT_APP}" = "" ]; then
+                PIPELINE_DEPLOYMENT_APP=$(joplin_generate_app_name $PIPELINE_PULL_REQUEST)
+            fi;
+
+            # Show current values
+            joplin_log ${FUNCNAME[0]} 1 ">>> Deployment details:"
+            joplin_log ${FUNCNAME[0]} 1 "Deploying new app:         ${PIPELINE_DEPLOYMENT_APP}"
+            joplin_log ${FUNCNAME[0]} 1 "Into Pipeline:             ${PIPELINE_NAME}"
+
+
+            # We now must check if the current PR already exists.
+            joplin_log ${FUNCNAME[0]} 1 "Checking if review app already exists";
+            APP_EXISTS=$(joplin_app_exists $PIPELINE_DEPLOYMENT_APP)
+
+            # If the review app exists, we have to skip deployment
+            if [ "$APP_EXISTS" = "true" ]; then
+                joplin_log ${FUNCNAME[0]} 2 "App ${PIPELINE_DEPLOYMENT_APP} already exists, skipping deployment.";
+
+
+            # Let's go ahead and build the new review app with the new name
+            else
+                joplin_log ${FUNCNAME[0]} 2 "Creating app ${PIPELINE_DEPLOYMENT_APP} one moment.";
+
+                joplin_create_heroku_preview_app $PIPELINE_DEPLOYMENT_APP
+            fi;
+
+            joplin_log ${FUNCNAME[0]} 1 "Done Creating PR Review App"
         fi;
 
-        joplin_log ${FUNCNAME[0]} 1 "Done Creating PR Review App"
-    fi;
-
-    joplin_log ${FUNCNAME[0]} 0 "Beginning PR app creation process"
+        joplin_log ${FUNCNAME[0]} 0 "Done Building App"
+    #fi;
 }
 
 
@@ -459,7 +463,6 @@ function joplin_backup_database {
         joplin_log ${FUNCNAME[0]} 1 "This is a brand-new pull request, since there is no database, there will be no backup.";
         joplin_log ${FUNCNAME[0]} 1 "Skipping Backup Process.";
     else
-
 
         # Not a new PR, not a test, and not an error
         if [ "$?" = "0" ]; then
@@ -616,6 +619,9 @@ function helper_test {
 
     echo "joplin_migrate() ----- Testing 'joplin_migrate' is ready: ";
     joplin_migrate $TRAVIS_CI_TEST_TAG;
+
+    echo "joplin_migrate() ----- Testing 'joplin_create_pr_app' is ready: ";
+    joplin_create_pr_app $TRAVIS_CI_TEST_TAG;
 
     echo "helper_test() ----- Heroku Helper Test finished.";
 }
