@@ -453,7 +453,7 @@ function joplin_backup_database {
     if [ "${TRAVIS_PULL_REQUEST}" != "false" ]; then
         echo "This is a brand-new pull request, since there is no database, there will be no backup.";
         echo "Skipping backup process.";
-        return 0;
+        return 1;
     fi;
 
     # Not a new PR, not a test, and not an error
