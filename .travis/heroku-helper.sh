@@ -372,7 +372,7 @@ function helper_internal_validation {
     fi;
 
 
-    joplin_log ${FUNCNAME[0]} 1 "We have a working branch: $2, proceeding with backup.";
+    joplin_log ${FUNCNAME[0]} 1 "We have a working branch: $2";
     return 0
 }
 
@@ -451,16 +451,15 @@ function joplin_backup_database {
 
     # First check if this is a brand new PR, skip backup if it is.
     if [ "${TRAVIS_PULL_REQUEST}" != "false" ]; then
-        echo "This is a brand-new pull request, since there is no database, there will be no backup.";
-        echo "Skipping backup process.";
+        joplin_log ${FUNCNAME[0]} 1 "This is a brand-new pull request, since there is no database, there will be no backup.";
+        joplin_log ${FUNCNAME[0]} 1 "Skipping Backup Process.";
         return 1;
     fi;
 
     # Not a new PR, not a test, and not an error
     if [ "$?" = "0" ]; then
         # Retrieve App Name
-        echo "Well, we need to stop it for now."
-        exit 1;
+        joplin_build_header "Creating Database Backup in S3"
 
         APPNAME=$(joplin_resolve_heroku_appname $1);
 
@@ -500,16 +499,16 @@ function joplin_backup_database {
 
 function joplin_build {
 
-    joplin_build_header "Building Joplin"
-
     # Validate Branch Name (or halt deployment if no branch specified)
     helper_internal_validation ${FUNCNAME[0]} $1
 
 
-    helper_halt_deployment # Halt we do not need to deploy atm
+
 
     # Not a test, and not an error
     if [ "$?" = "0" ]; then
+        joplin_build_header "Building Joplin"
+
         # Retrieve App Name
         APPNAME=$(joplin_resolve_heroku_appname $1);
 
@@ -614,9 +613,5 @@ function helper_test {
 
     echo "helper_test() ----- Heroku Helper Test finished.";
 }
-
-
-
-
 
 
