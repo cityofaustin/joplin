@@ -189,8 +189,6 @@ function joplin_parse_commit_message {
 
 
 
-
-
 #
 # Get PR Number for a specific branch in Joplin, using GitHub's API. (Rrequires curl and jq to be installed)
 # Requires no arguments, gets the branch number from Travis' environment.
@@ -202,13 +200,6 @@ function joplin_branch_to_prnumber {
 
     IS_RESPONSE_NUMERIC=$(joplin_is_numeric $PR_NUMBER);
     IS_PIPELINE_PR_NUMERIC=$(joplin_is_numeric $PIPELINE_PULL_REQUEST);
-
-
-    joplin_log ${FUNCNAME[0]} 0 "GitHub Response: ${PR_NUMBER}"
-    joplin_log ${FUNCNAME[0]} 0 "TRAVIS_PULL_REQUEST: ${TRAVIS_PULL_REQUEST}."
-    joplin_log ${FUNCNAME[0]} 0 "PIPELINE_PULL_REQUEST: ${PIPELINE_PULL_REQUEST}."
-    joplin_log ${FUNCNAME[0]} 2 "IS_PIPELINE_PR_NUMERIC: ${IS_PIPELINE_PR_NUMERIC}."
-    joplin_log ${FUNCNAME[0]} 2 "IS_RESPONSE_NUMERIC: ${IS_RESPONSE_NUMERIC}."
 
     if [ "${IS_PIPELINE_PR_NUMERIC}" = "true" ]; then
         # It has been defined in our pipeline (this takes precedence over GitHub because we use it to force a pr number)
