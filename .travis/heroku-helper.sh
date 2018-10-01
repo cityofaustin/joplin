@@ -449,6 +449,8 @@ function joplin_backup_database {
     # Validate Branch Name (or halt deployment if no branch specified)
     helper_internal_validation ${FUNCNAME[0]} $1
 
+    echo "This is where we are: $?"
+
     # First check if this is a brand new PR, skip backup if it is.
     if [ "${TRAVIS_PULL_REQUEST}" != "false" ]; then
         joplin_log ${FUNCNAME[0]} 1 "This is a brand-new pull request, since there is no database, there will be no backup.";
@@ -456,8 +458,12 @@ function joplin_backup_database {
         return 1;
     fi;
 
+
+    echo "This is where we are now: $?"
+
     # Not a new PR, not a test, and not an error
     if [ "$?" = "0" ]; then
+        exit 1;
         # Retrieve App Name
         joplin_build_header "Creating Database Backup in S3"
 
