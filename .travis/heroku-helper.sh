@@ -244,7 +244,7 @@ function joplin_create_heroku_preview_app {
     joplin_log ${FUNCNAME[0]} 1 "Creating new app on heroku: ${HEROKU_NEW_APP_NAME}  and attaching to pipeline: ${PIPELINE_NAME}"
 
     # Create app with specified name
-    heroku create $NEW_APP_NAME
+    heroku create $HEROKU_NEW_APP_NAME
 
     # Add postgresql to the new app.
     heroku addons:create heroku-postgresql:hobby-dev --version=10 --app $HEROKU_NEW_APP_NAME
