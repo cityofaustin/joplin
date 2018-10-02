@@ -206,10 +206,14 @@ function joplin_branch_to_prnumber {
     # Check if this is a test
     if [ "${1}" = "${TRAVIS_CI_TEST_TAG}" ]; then
 
+        # Parse the message and get monitor
+        joplin_log ${FUNCNAME[0]} 0 "Parsing Message Command: ${TRAVIS_MESSAGE}"
+        joplin_parse_commit_message;
+
         # Output status of variables so we can monitor
-        joplin_log ${FUNCNAME[0]} 0 "GitHub Response: ${PR_NUMBER}"
-        joplin_log ${FUNCNAME[0]} 0 "TRAVIS_PULL_REQUEST: ${TRAVIS_PULL_REQUEST}."
-        joplin_log ${FUNCNAME[0]} 0 "PIPELINE_PULL_REQUEST: ${PIPELINE_PULL_REQUEST}."
+        joplin_log ${FUNCNAME[0]} 1 "GitHub Response: ${PR_NUMBER}"
+        joplin_log ${FUNCNAME[0]} 1 "TRAVIS_PULL_REQUEST: ${TRAVIS_PULL_REQUEST}."
+        joplin_log ${FUNCNAME[0]} 1 "PIPELINE_PULL_REQUEST: ${PIPELINE_PULL_REQUEST}."
         joplin_log ${FUNCNAME[0]} 2 "IS_PIPELINE_PR_NUMERIC: ${IS_PIPELINE_PR_NUMERIC}."
         joplin_log ${FUNCNAME[0]} 2 "IS_RESPONSE_NUMERIC: ${IS_RESPONSE_NUMERIC}."
 
@@ -304,9 +308,15 @@ function joplin_create_heroku_preview_app {
     # PR Review Apps do not get access to S3 Buckets, only if deployment mode is REVIEWS3
     heroku config:set   \
             DEPLOYMENT_MODE=REVIEW \
+            AWS_S3_USER=$AWS_S3_USER_DEFAULT \
             AWS_S3_KEYID=$AWS_ACCESS_KEY_ID \
             AWS_S3_ACCESSKEY=$AWS_SECRET_ACCESS_KEY \
             AWS_S3_BUCKET=$AWS_BUCKET_REVIEWAPPS \
+            DEBUG=1 \
+            HEROKU_JANIS_APP_NAME=$HEROKU_NEW_APP_NAME \
+            JANIS_URL="https://${HEROKU_NEW_APP_NAME}.herokuapp.com"
+            LOAD_DATA="on"
+            STYLEGUIDE_URL="https://cityofaustin.github.io/digital-services-style-guide" \
             --app $HEROKU_NEW_APP_NAME;
 
     # Couple New app to pipeline (assign review (PR) stage):
