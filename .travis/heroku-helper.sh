@@ -57,7 +57,7 @@ function helper_internal_validation {
 # and what branch is being affected by current deployment.
 #
 
-function joplin_build_header {
+function joplin_print_header {
     echo ""
     echo ""
     echo "--------------------------------------------------------------"
@@ -314,6 +314,10 @@ function joplin_create_heroku_preview_app {
 #
 
 function joplin_create_pr_app {
+    #
+    # First, parse commit message into environment variables.
+    #
+    joplin_parse_commit_message;
 
     # Validate Branch Name (or halt deployment if no branch specified)
     helper_internal_validation ${FUNCNAME[0]} $1
@@ -321,12 +325,8 @@ function joplin_create_pr_app {
     if [ "$?" = "0" ]; then
 
         # Build Header,
-        joplin_build_header "Build PR Application"
+        joplin_print_header "Build PR Application"
 
-        #
-        # First, parse commit message into environment variables.
-        #
-        joplin_parse_commit_message;
 
         # We need a Pull request number that can be altered if necessary: PIPELINE_PULL_REQUEST
         # If empty, then copy the value from TRAVIS_PULL_REQUEST
@@ -479,7 +479,7 @@ function joplin_backup_database {
         if [ "$?" = "0" ]; then
 
             # Retrieve App Name
-            joplin_build_header "Creating Database Backup in S3"
+            joplin_print_header "Creating Database Backup in S3"
 
             APPNAME=$(joplin_resolve_heroku_appname $1);
 
@@ -530,7 +530,7 @@ function joplin_build {
 
     # Not a test, and not an error
     if [ "$?" = "0" ]; then
-        joplin_build_header "Building Joplin"
+        joplin_print_header "Building Joplin"
 
         # Retrieve App Name
         APPNAME=$(joplin_resolve_heroku_appname $1);
@@ -582,7 +582,6 @@ function joplin_release {
         -H "Accept: application/vnd.heroku+json; version=3.docker-releases" \
         -H "Authorization: Bearer ${HEROKU_API_KEY}"
     fi;
-
 }
 
 
@@ -596,6 +595,8 @@ function joplin_migrate {
 
     # Validate Branch Name (or halt deployment if no branch specified)
     helper_internal_validation ${FUNCNAME[0]} $1
+
+    joplin_print_header "Running Database Migration"
 
     # Not a test, and not an error
     if [ "$?" = "0" ]; then
@@ -615,7 +616,7 @@ function joplin_migrate {
 #
 
 function helper_test {
-    joplin_build_header "Heroku Helper Testing"
+    joplin_print_header "Heroku Helper Testing"
 
     joplin_log ${FUNCNAME[0]} 0 "Heroku Helper Test Initialized: ";
     joplin_log ${FUNCNAME[0]} 0 "Test tag: '${TRAVIS_CI_TEST_TAG}': ";
