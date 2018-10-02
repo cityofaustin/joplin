@@ -605,15 +605,14 @@ function joplin_release {
 #
 
 function joplin_migrate {
-
     # Validate Branch Name (or halt deployment if no branch specified)
     helper_internal_validation ${FUNCNAME[0]} $1
 
-    # Parse the Message (in case we are forcing a PR number or other settings)
-    joplin_parse_commit_message
-
     # Not a test, and not an error
     if [ "$?" = "0" ]; then
+        # Parse the Message (in case we are forcing a PR number or other settings)
+        joplin_parse_commit_message
+
         # Print a nice header
         joplin_print_header "Running Database Migration"
 
