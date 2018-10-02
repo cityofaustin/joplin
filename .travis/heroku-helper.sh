@@ -313,8 +313,8 @@ function joplin_create_heroku_preview_app {
             AWS_S3_ACCESSKEY=$AWS_SECRET_ACCESS_KEY \
             AWS_S3_BUCKET=$AWS_BUCKET_REVIEWAPPS \
             DEBUG=1 \
-            HEROKU_JANIS_APP_NAME=$HEROKU_NEW_APP_NAME \
-            JANIS_URL="https://${HEROKU_NEW_APP_NAME}.herokuapp.com"
+            HEROKU_JANIS_APP_NAME="janis-staging" \
+            JANIS_URL="https://janis-staging.herokuapp.com"
             LOAD_DATA="on"
             STYLEGUIDE_URL="https://cityofaustin.github.io/digital-services-style-guide" \
             --app $HEROKU_NEW_APP_NAME;
