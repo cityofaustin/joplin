@@ -64,7 +64,7 @@ function joplin_print_header {
     echo "   $1"
     echo "--------------------------------------------------------------"
     echo "  TRAVIS_BRANCH:          ${TRAVIS_BRANCH}"
-    echo "  TRAVIS_PULL_REQUEST:    ${PIPELINE_PULL_REQUEST}"
+    echo "  PIPELINE_PULL_REQUEST:  ${PIPELINE_PULL_REQUEST}"
     echo "  PIPELINE_TEAM:          ${PIPELINE_TEAM}"
     echo "  PIPELINE_NAME:          ${PIPELINE_NAME}"
     echo ""
@@ -190,7 +190,6 @@ function joplin_parse_commit_message {
 
 
 
-
 #
 # Get PR Number for a specific branch in Joplin, using GitHub's API. (Rrequires curl and jq to be installed)
 # Requires no arguments, gets the branch number from Travis' environment.
@@ -205,13 +204,15 @@ function joplin_branch_to_prnumber {
 
     # Check if this is a test
     if [ "${1}" = "${TRAVIS_CI_TEST_TAG}" ]; then
+
+        # Output status of variables so we can monitor
         joplin_log ${FUNCNAME[0]} 0 "GitHub Response: ${PR_NUMBER}"
         joplin_log ${FUNCNAME[0]} 0 "TRAVIS_PULL_REQUEST: ${TRAVIS_PULL_REQUEST}."
         joplin_log ${FUNCNAME[0]} 0 "PIPELINE_PULL_REQUEST: ${PIPELINE_PULL_REQUEST}."
         joplin_log ${FUNCNAME[0]} 2 "IS_PIPELINE_PR_NUMERIC: ${IS_PIPELINE_PR_NUMERIC}."
         joplin_log ${FUNCNAME[0]} 2 "IS_RESPONSE_NUMERIC: ${IS_RESPONSE_NUMERIC}."
-    else
 
+    else
         # Time to check the output
         if [ "${IS_PIPELINE_PR_NUMERIC}" = "true" ]; then
             # It has been defined in our pipeline (this takes precedence over GitHub because we use it to force a pr number)
@@ -221,7 +222,9 @@ function joplin_branch_to_prnumber {
             echo "${PR_NUMBER}";
         else
             # We definitely do not have a working PR number, we need to stop the deployment.
+            echo "\n"
             joplin_log ${FUNCNAME[0]} 0 "The branch name '${TRAVIS_BRANCH}' does not appear to have a PR number, this will cause a problem. Stopping deployment process."
+            echo "\n"
             helper_halt_deployment
             exit 1;
         fi;
@@ -596,6 +599,10 @@ function joplin_migrate {
     # Validate Branch Name (or halt deployment if no branch specified)
     helper_internal_validation ${FUNCNAME[0]} $1
 
+    # Parse the Message
+    joplin_parse_commit_message
+
+    # Print a nice header
     joplin_print_header "Running Database Migration"
 
     # Not a test, and not an error
@@ -603,9 +610,9 @@ function joplin_migrate {
         # Retrieve App Name
         APPNAME=$(joplin_resolve_heroku_appname $1);
 
-        echo "joplin_migrate() ----- Migrating data for Branch: $1, App: $APPNAME";
+        echo "\njoplin_migrate() ----- Migrating data for Branch: $1, App: $APPNAME \n";
         heroku run -a $APPNAME -- /app/migrate-load-data.sh
-        echo "joplin_migrate() ----- Migration process finished.";
+        echo "\njoplin_migrate() ----- Migration process finished.\n";
     fi;
 }
 
@@ -638,7 +645,6 @@ function helper_test {
 
     joplin_log ${FUNCNAME[0]} 1 "Testing 'joplin_create_pr_app' is ready: ";
     joplin_create_pr_app $TRAVIS_CI_TEST_TAG;
-
 
     joplin_log ${FUNCNAME[0]} 1 "Testing 'joplin_branch_to_prnumber' is ready: ";
     joplin_branch_to_prnumber $TRAVIS_CI_TEST_TAG;
