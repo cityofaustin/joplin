@@ -327,15 +327,14 @@ function joplin_create_heroku_preview_app {
 #
 
 function joplin_create_pr_app {
-    #
-    # First, parse commit message into environment variables.
-    #
-    joplin_parse_commit_message;
-
     # Validate Branch Name (or halt deployment if no branch specified)
     helper_internal_validation ${FUNCNAME[0]} $1
 
     if [ "$?" = "0" ]; then
+        #
+        # First, parse commit message into environment variables.
+        #
+        joplin_parse_commit_message;
 
         # Build Header,
         joplin_print_header "Build PR Application"
@@ -619,9 +618,9 @@ function joplin_migrate {
         # Retrieve App Name
         APPNAME=$(joplin_resolve_heroku_appname $1);
 
-        echo "\njoplin_migrate() ----- Migrating data for Branch: $1, App: $APPNAME \n";
+        echo -e "\njoplin_migrate() ----- Migrating data for Branch: ${1}, App: ${APPNAME} \n";
         heroku run -a $APPNAME -- /app/migrate-load-data.sh
-        echo "\njoplin_migrate() ----- Migration process finished.\n";
+        echo -e "\njoplin_migrate() ----- Migration process finished.\n";
     fi;
 }
 
