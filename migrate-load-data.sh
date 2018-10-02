@@ -14,7 +14,7 @@ case "${DEPLOYMENT_MODE}" in
 
     *)
         # We are running locally
-        echo "Static files are only collected on STAGING or PRODUCTION, current environment: ${DEPLOYMENT_MODE}";
+        echo "Static files are only collected on STAGING, PRODUCTION or REVIEW, current environment: ${DEPLOYMENT_MODE}";
     ;;
 
 esac;
