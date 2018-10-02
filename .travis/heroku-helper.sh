@@ -25,7 +25,8 @@ PIPELINE_DEPLOYMENT_APP=""
 #
 
 function helper_halt_deployment {
-    echo "$1" && exit 1;
+    echo "$1";
+    travis_terminate 1;
 }
 
 #
@@ -301,13 +302,22 @@ function joplin_create_heroku_preview_app {
 
     # Set Environment Variables
     # PR Review Apps do not get access to S3 Buckets, only if deployment mode is REVIEWS3
-    heroku config:set   DEPLOYMENT_MODE=REVIEW  --app $HEROKU_NEW_APP_NAME;
+    heroku config:set   \
+            DEPLOYMENT_MODE=REVIEW \
+            AWS_S3_KEYID=$AWS_ACCESS_KEY_ID \
+            AWS_S3_ACCESSKEY=$AWS_SECRET_ACCESS_KEY \
+            AWS_S3_BUCKET=$AWS_BUCKET_REVIEWAPPS \
+            --app $HEROKU_NEW_APP_NAME;
 
     # Couple New app to pipeline (assign review (PR) stage):
     heroku pipelines:add $PIPELINE_NAME --app $HEROKU_NEW_APP_NAME --stage review
 }
 
-
+#
+#    AWS_ACCESS_KEY_ID = os.getenv('AWS_S3_KEYID')
+#    AWS_SECRET_ACCESS_KEY = os.getenv('AWS_S3_ACCESSKEY')
+#    AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_S3_BUCKET')
+#
 
 
 
@@ -599,14 +609,14 @@ function joplin_migrate {
     # Validate Branch Name (or halt deployment if no branch specified)
     helper_internal_validation ${FUNCNAME[0]} $1
 
-    # Parse the Message
+    # Parse the Message (in case we are forcing a PR number or other settings)
     joplin_parse_commit_message
-
-    # Print a nice header
-    joplin_print_header "Running Database Migration"
 
     # Not a test, and not an error
     if [ "$?" = "0" ]; then
+        # Print a nice header
+        joplin_print_header "Running Database Migration"
+
         # Retrieve App Name
         APPNAME=$(joplin_resolve_heroku_appname $1);
 
