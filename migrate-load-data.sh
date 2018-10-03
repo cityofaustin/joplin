@@ -19,6 +19,7 @@ case "${DEPLOYMENT_MODE}" in
 
 esac;
 
+# Trying a fixture import instead of a migration...
 
 if [ "${DEPLOYMENT_MODE}" = "REVIEW" ]; then
     python ./joplin/manage.py loadcontent \
