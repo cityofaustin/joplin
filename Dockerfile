@@ -1,5 +1,6 @@
 FROM python:3.6.5-slim-stretch
 
+RUN rm /bin/sh && ln -s /bin/bash /bin/sh
 RUN apt-get update; apt-get -y install gnupg; apt-get -y install curl
 RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
 RUN apt-get update; apt-get -y install nodejs
@@ -16,6 +17,7 @@ EXPOSE $PORT
 RUN mkdir /app
 WORKDIR /app
 
+COPY "$PWD/.profile.d" /app/.profile.d
 COPY "$PWD/fixtures" /app/fixtures
 COPY "$PWD/joplin" /app/joplin
 
