@@ -3,8 +3,8 @@ FROM python:3.6.5-slim-stretch
 # Make Bash our default shell
 RUN rm /bin/sh && ln -s /bin/bash /bin/sh
 
-# GnuPG, Curl, and OpenSSH
-RUN apt-get update && apt-get install -y gnupg curl openssh-server
+# GnuPG, Curl, and OpenSSH, iproute2
+RUN apt-get update && apt-get install -y gnupg curl openssh-server iproute2
 
 # PostgreSQL 10
 RUN echo 'deb http://apt.postgresql.org/pub/repos/apt/ stretch-pgdg main' >  /etc/apt/sources.list.d/pgdg.list \
