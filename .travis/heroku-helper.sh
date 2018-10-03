@@ -261,7 +261,6 @@ function joplin_get_env_prnum {
 #
 
 function joplin_generate_app_name {
-
     # Get PR Number, if none given, then resolve.
     BRANCH_PR_NUMBER=$(joplin_branch_to_prnumber $TRAVIS_BRANCH)
     echo "joplin-staging-pr-${BRANCH_PR_NUMBER}"
@@ -275,7 +274,6 @@ function joplin_generate_app_name {
 #
 
 function joplin_app_exists {
-
     HEROKU_TEAM_APPS=$(heroku apps --team $PIPELINE_TEAM | grep $1)
 
     if [ "${HEROKU_TEAM_APPS}" != "" ]; then
@@ -314,8 +312,8 @@ function joplin_create_heroku_preview_app {
             AWS_S3_BUCKET=$AWS_BUCKET_REVIEWAPPS \
             DEBUG=1 \
             HEROKU_JANIS_APP_NAME="janis-staging" \
-            JANIS_URL="https://janis-staging.herokuapp.com"
-            LOAD_DATA="on"
+            JANIS_URL="https://janis-staging.herokuapp.com" \
+            LOAD_DATA="on" \
             STYLEGUIDE_URL="https://cityofaustin.github.io/digital-services-style-guide" \
             --app $HEROKU_NEW_APP_NAME;
 
