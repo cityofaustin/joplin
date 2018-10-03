@@ -17,7 +17,6 @@ EXPOSE $PORT
 RUN mkdir /app
 WORKDIR /app
 
-COPY "$PWD/.profile.d" /app/.profile.d
 COPY "$PWD/fixtures" /app/fixtures
 COPY "$PWD/joplin" /app/joplin
 
@@ -29,5 +28,4 @@ COPY "$PWD/migrate-load-data.sh" /app/migrate-load-data.sh
 COPY "$PWD/docker-entrypoint-prod.sh" /app/docker-entrypoint-prod.sh
 ENTRYPOINT ["./docker-entrypoint-prod.sh"]
 
-#CMD ["gunicorn", "joplin.wsgi:application", "--pythonpath", "/app/joplin"]
-CMD bash heroku-exec.sh && gunicorn joplin.wsgi:application --pythonpath /app/joplin
+CMD ["gunicorn", "joplin.wsgi:application", "--pythonpath", "/app/joplin"]
