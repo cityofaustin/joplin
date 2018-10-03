@@ -1,6 +1,5 @@
 FROM python:3.6.5-slim-stretch
 
-RUN rm /bin/sh && ln -s /bin/bash /bin/sh
 RUN apt-get update; apt-get -y install gnupg; apt-get -y install curl
 RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
 RUN apt-get update; apt-get -y install nodejs
