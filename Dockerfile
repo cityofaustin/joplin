@@ -1,6 +1,16 @@
 FROM python:3.6.5-slim-stretch
 
-RUN apt-get update; apt-get -y install gnupg; apt-get -y install curl
+# Make Bash our default shell
+RUN rm /bin/sh && ln -s /bin/bash /bin/sh
+
+# GnuPG, Curl, and OpenSSH
+RUN apt-get update && apt-get install -y gnupg curl openssh-server
+
+# PostgreSQL 10
+RUN echo 'deb http://apt.postgresql.org/pub/repos/apt/ stretch-pgdg main' >  /etc/apt/sources.list.d/pgdg.list \
+    && curl -s https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \
+    && apt-get update && apt-get install -y postgresql-client
+
 RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
 RUN apt-get update; apt-get -y install nodejs
 RUN npm install --global yarn
@@ -16,6 +26,9 @@ EXPOSE $PORT
 RUN mkdir /app
 WORKDIR /app
 
+# .profile.d is necessary for heroku-exec (ps:exec) methods (SSH tunneling)
+#  https://devcenter.heroku.com/articles/exec#enabling-docker-support
+COPY "$PWD/.profile.d" /app/.profile.d
 COPY "$PWD/fixtures" /app/fixtures
 COPY "$PWD/joplin" /app/joplin
 

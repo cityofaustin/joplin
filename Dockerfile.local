@@ -2,14 +2,7 @@ FROM joplin-base
 
 ENV DEPLOYMENT_MODE "LOCAL"
 
-
-RUN apt-get update \
-    && mkdir -p /usr/share/man/man1 \
-    && mkdir -p /usr/share/man/man7 \
-    && apt-get install -y --no-install-recommends postgresql-client \
-    && rm -rf /var/lib/apt/lists/* \
-    && apt-get clean
-
 ENTRYPOINT ["./docker-entrypoint.sh"]
 
-CMD ["gunicorn", "joplin.wsgi:application", "--pythonpath", "/app/joplin"]
+# CMD ["gunicorn", "joplin.wsgi:application", "--pythonpath", "/app/joplin"]
+CMD bash /app/.profile.d/heroku-exec.sh &&  gunicorn joplin.wsgi:application --pythonpath /app/joplin
