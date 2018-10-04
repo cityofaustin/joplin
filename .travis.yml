@@ -4,7 +4,7 @@ python:
 dist: trusty
 # Only Master or Production, or a pull request if build tag is present or comment contains "[joplin:build]":
 if: |
-  branch IN (master, production)
+  (branch IN (master, production) AND type = push)
 
 # We will need these services:
 services:
