@@ -3,7 +3,6 @@ __pycache__/
 *.pyc
 *.sqlite3
 .vscode/
-media
 venv
 .idea
 *node_modules
