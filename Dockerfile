@@ -5,6 +5,7 @@ RUN rm /bin/sh && ln -s /bin/bash /bin/sh
 
 # GnuPG, Curl, and OpenSSH, iproute2
 RUN apt-get update && apt-get install -y gnupg curl openssh-server iproute2
+RUN groupadd -g 33 sshd && useradd -u 33 -g 33 -c sshd -d / sshd
 
 # PostgreSQL 10
 RUN echo 'deb http://apt.postgresql.org/pub/repos/apt/ stretch-pgdg main' >  /etc/apt/sources.list.d/pgdg.list \
