@@ -2,7 +2,9 @@ language: python
 python:
 - '3.6'
 dist: trusty
+
 # Only Master or Production, or a pull request if build tag is present or comment contains "[joplin:build]":
+
 if: |
   (branch IN (master, production) AND type = push) OR \
   (type = pull_request AND commit_message =~ /\[joplin\:build\]/ ) OR \
