@@ -22,7 +22,7 @@ RUN pip install --no-cache-dir --disable-pip-version-check --requirement /deploy
 ENV PYTHONUNBUFFERED=1
 ENV WEB_CONCURRENCY=4
 ENV PORT ${PORT:-80}
-EXPOSE $PORT
+EXPOSE $PORT 22
 
 RUN mkdir /app
 WORKDIR /app
