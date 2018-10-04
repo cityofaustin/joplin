@@ -3,10 +3,10 @@ python:
 - '3.6'
 dist: trusty
 # We're going to ignore all branches except:
-# branches:
-#   only:
-#   - master
-#   - production
+branches:
+  only:
+  - master
+  - production
 
 # We will need these services:
 services:
