@@ -191,7 +191,7 @@ class ProcessPageStep(Orderable):
     short_title = models.CharField(max_length=DEFAULT_MAX_LENGTH)
     link_title = models.CharField(max_length=DEFAULT_MAX_LENGTH)
     description = models.TextField(blank=True)
-    image = models.ForeignKey(TranslatedImage, null=True, on_delete=models.SET_NULL, related_name='+')
+    image = models.ForeignKey(TranslatedImage, null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
     overview_steps = RichTextField(features=WYSIWYG_GENERAL, verbose_name='Write out the steps a resident needs to take to use the service', blank=True)
     detailed_content = RichTextField(features=WYSIWYG_GENERAL, verbose_name='Write any detailed content describing the process', blank=True)
     quote = models.TextField(blank=True)
