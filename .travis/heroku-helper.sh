@@ -29,6 +29,7 @@ function helper_halt_deployment {
     travis_terminate 1;
 }
 
+
 #
 # Helps validate branch name (or stops deployment if no branch specified)
 # $1 (string) The name of the function callling this method
@@ -39,7 +40,7 @@ function helper_halt_deployment {
 function helper_internal_validation {
     # Show message if this is an internal test
     if [ "$2" = "${TRAVIS_CI_TEST_TAG}" ]; then
-        echo "  > $1(): Ready to execute.";
+        echo "  > $1(): Ready tgit o execute.";
         return 1
     fi;
 
@@ -667,5 +668,4 @@ function helper_test {
 
     joplin_log ${FUNCNAME[0]} 0 "Heroku Helper Test finished: ";
 }
-
 

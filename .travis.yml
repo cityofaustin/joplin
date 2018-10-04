@@ -3,10 +3,10 @@ python:
 - '3.6'
 dist: trusty
 # We should now be able to build on all branches:
-# branches:
-#  only:
-#  - master
-#  - production
+if: |
+  branch IN ("master", "production") OR \
+  (type = pull_request AND commit_message =~ /\[joplin\:build\]/ ) OR \
+  (type = pull_request AND tag =~ /^(build)/)
 
 # We will need these services:
 services:

@@ -4,5 +4,4 @@ ENV DEPLOYMENT_MODE "LOCAL"
 
 ENTRYPOINT ["./docker-entrypoint.sh"]
 
-# CMD ["gunicorn", "joplin.wsgi:application", "--pythonpath", "/app/joplin"]
-CMD bash /app/.profile.d/heroku-exec.sh &&  gunicorn joplin.wsgi:application --pythonpath /app/joplin
+CMD ["gunicorn", "joplin.wsgi:application", "--pythonpath", "/app/joplin"]
