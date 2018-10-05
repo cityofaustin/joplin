@@ -7,7 +7,7 @@ dist: trusty
 if: |
   (branch IN (master, production) AND type = push) OR \
   (type = pull_request AND commit_message =~ /\[joplin\:build\]/ ) OR \
-  (type = pull_request AND env(PR_AUTOBUILD) =~ /env(TRAVIS_PULL_REQUEST_BRANCH)/ )
+  (type = pull_request AND env(PR_AUTOBUILD) IN (true, enabled, on) )
 
 # We will need these services:
 services:
