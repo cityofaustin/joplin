@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-
 # Tag used for testing
 TRAVIS_CI_TEST_TAG="travis-ci-internal-test"
 
