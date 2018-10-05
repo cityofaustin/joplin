@@ -6,7 +6,7 @@ dist: trusty
 if: |
   (branch IN (master, production) AND type = push) OR \
   (type = pull_request AND commit_message =~ /\[joplin\:build\]/ ) OR \
-  (type = pull_request AND tag =~ /^(build)/)
+  (type = pull_request AND tag IN ("build"))
 
 # We will need these services:
 services:
