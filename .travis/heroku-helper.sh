@@ -40,7 +40,7 @@ function helper_halt_deployment {
 function helper_internal_validation {
     # Show message if this is an internal test
     if [ "$2" = "${TRAVIS_CI_TEST_TAG}" ]; then
-        echo "  > $1(): Ready tgit o execute.";
+        echo "  > $1(): Ready git o execute.";
         return 1
     fi;
 
@@ -65,10 +65,12 @@ function joplin_print_header {
     echo "--------------------------------------------------------------"
     echo "   $1"
     echo "--------------------------------------------------------------"
-    echo "  TRAVIS_BRANCH:          ${TRAVIS_BRANCH}"
-    echo "  PIPELINE_PULL_REQUEST:  ${PIPELINE_PULL_REQUEST}"
-    echo "  PIPELINE_TEAM:          ${PIPELINE_TEAM}"
-    echo "  PIPELINE_NAME:          ${PIPELINE_NAME}"
+    echo "  TRAVIS_BRANCH:              ${TRAVIS_BRANCH}"
+    echo "  TRAVIS_PULL_REQUEST:        ${TRAVIS_PULL_REQUEST}"
+    echo "  TRAVIS_PULL_REQUEST_BRANCH: ${TRAVIS_PULL_REQUEST_BRANCH}"
+    echo "  PIPELINE_PULL_REQUEST:      ${PIPELINE_PULL_REQUEST}"
+    echo "  PIPELINE_TEAM:              ${PIPELINE_TEAM}"
+    echo "  PIPELINE_NAME:              ${PIPELINE_NAME}"
     echo ""
 }
 
@@ -323,14 +325,6 @@ function joplin_create_heroku_preview_app {
 }
 
 #
-#    AWS_ACCESS_KEY_ID = os.getenv('AWS_S3_KEYID')
-#    AWS_SECRET_ACCESS_KEY = os.getenv('AWS_S3_ACCESSKEY')
-#    AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_S3_BUCKET')
-#
-
-
-
-#
 # Creates a pull request application and puts it in the specified pipeline.
 # Requires no input variables.
 #
@@ -538,10 +532,8 @@ function joplin_backup_database {
 
 
 #
-# Creates a database backup of a running heroku app (as long as it as a PostgreSQL db attached to it)
-#
-# $1 (string) The name of the branch (ie. "master", "production")
-# Example: $ joplin_build master
+# Builds the docker container and pushes the image to the heroku repository
+# where it can be tagged to an app and released.
 #
 
 function joplin_build {
@@ -554,18 +546,31 @@ function joplin_build {
         joplin_print_header "Building Joplin"
 
         # Retrieve App Name
-        APPNAME=$(joplin_resolve_heroku_appname $1);
+        joplin_log ${FUNCNAME[0]} 1 "Resolving App Name for branch: $TRAVIS_BRANCH";
+        APPNAME=$(joplin_resolve_heroku_appname $TRAVIS_BRANCH);
+        joplin_log ${FUNCNAME[0]} 2 "App name resolved: ${APPNAME}";
 
-        echo "joplin_build() ----- Building Docker Container";
-        echo "joplin_build() -- Logging in to Services";
+
+        joplin_log ${FUNCNAME[0]} 1 "Logging in to Services ...";
         docker login --username=_ --password=$HEROKU_API_KEY registry.heroku.com
-        echo "joplin_build() -- Building: '${JOPLIN_IMAGE_NAME}' for Branch: $1, App: $APPNAME";
+
+        joplin_log ${FUNCNAME[0]} 1 "Building:"
+        joplin_log ${FUNCNAME[0]} 2 "Image Name:        ${JOPLIN_IMAGE_NAME}"
+        joplin_log ${FUNCNAME[0]} 2 "Branch:            ${TRAVIS_BRANCH} (PR=${TRAVIS_PULL_REQUEST}, PRBRANCH=${TRAVIS_PULL_REQUEST_BRANCH})"
+        joplin_log ${FUNCNAME[0]} 2 "Application Name:  ${APPNAME}"
+
+        joplin_log ${FUNCNAME[0]} 2 "docker build -t $JOPLIN_IMAGE_NAME ."
         docker build -t $JOPLIN_IMAGE_NAME .
-        echo "joplin_build() -- Tagging Image";
-        docker tag $JOPLIN_IMAGE_NAME registry.heroku.com/$APPNAME/web
-        echo "joplin_build() -- Pushing to Heroku Repository";
+
+        joplin_log ${FUNCNAME[0]} 1 "Tagging Image"
+        joplin_log ${FUNCNAME[0]} 1 "docker tag $JOPLIN_IMAGE_NAME registry.heroku.com/$APPNAME/web"
+
+
+        joplin_log ${FUNCNAME[0]} 1 "Pushing to Heroku Repository"
+        joplin_log ${FUNCNAME[0]} 1 "docker push registry.heroku.com/$APPNAME/web"
         docker push registry.heroku.com/$APPNAME/web
-        echo "joplin_build()----- Finished Building Container";
+
+        joplin_log ${FUNCNAME[0]} 0 "Finished Building Container:";
     fi;
 }
 
