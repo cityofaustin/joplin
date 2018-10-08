@@ -594,7 +594,7 @@ function joplin_create_pr_app {
             if [ "$APP_EXISTS" = "true" ]; then
                 joplin_log ${FUNCNAME[0]} 2 "App ${PIPELINE_DEPLOYMENT_APP} already exists, checking if database exists.";
 
-                APP_DB_EXISTS=$(joplin_app_database_attached $APPNAME)
+                APP_DB_EXISTS=$(joplin_app_database_attached $PIPELINE_DEPLOYMENT_APP)
 
                 if [ "${APP_DB_EXISTS}" = "false" ]; then
                     joplin_log ${FUNCNAME[0]} 3 "No database detected, attaching new database to ${PIPELINE_DEPLOYMENT_APP}.";
