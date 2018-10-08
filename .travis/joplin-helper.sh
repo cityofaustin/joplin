@@ -556,6 +556,7 @@ function joplin_create_pr_app {
         ## If empty, assume TRAVIS_PULL_REQUEST
         if [ "${PIPELINE_PULL_REQUEST}" = "" ]; then
             PIPELINE_PULL_REQUEST=$TRAVIS_PULL_REQUEST;
+
         ## else, we proceed with whatever value is in PIPELINE_PULL_REQUEST
         fi;
 
@@ -570,7 +571,7 @@ function joplin_create_pr_app {
         # Else, we need to create a new PR review app.
         else
             # We have a legitimate pull request, so print out some details for logging.
-            joplin_log ${FUNCNAME[0]} 1 ">>> NEW PR REQUEST"
+            joplin_log ${FUNCNAME[0]} 1 ">>> PR REQUEST"
 
 
             # If no name specified for the new app in the commit message command,
@@ -596,17 +597,16 @@ function joplin_create_pr_app {
                 APP_DB_EXISTS=$(joplin_app_database_attached $APPNAME)
 
                 if [ "${APP_DB_EXISTS}" = "false" ]; then
-                    joplin_log ${FUNCNAME[0]} 2 "No database detected, attaching new database to ${PIPELINE_DEPLOYMENT_APP}.";
-                    helper_halt_deployment "We stop here intentionally(0)."
+                    joplin_log ${FUNCNAME[0]} 3 "No database detected, attaching new database to ${PIPELINE_DEPLOYMENT_APP}.";
+
                     joplin_attach_heroku_database  $PIPELINE_DEPLOYMENT_APP
+
+                    joplin_log ${FUNCNAME[0]} 3 "Done.";
 
                 fi;
 
-                helper_halt_deployment "We stop here intentionally (1)."
             # Let's go ahead and build the new review app with the new name
             else
-                helper_halt_deployment "We stop here intentionally (2)."
-
                 joplin_log ${FUNCNAME[0]} 2 "Creating app ${PIPELINE_DEPLOYMENT_APP} one moment.";
 
                 joplin_create_heroku_preview_app $PIPELINE_DEPLOYMENT_APP
