@@ -25,3 +25,5 @@ fi
 python ./joplin/manage.py migrate --noinput
 
 exec "$@"
+
+
