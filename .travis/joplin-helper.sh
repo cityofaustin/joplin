@@ -320,13 +320,20 @@ function joplin_backup_database {
             joplin_log ${FUNCNAME[0]} 2 "DB Name: ${DB_NAME}.";
             joplin_log ${FUNCNAME[0]} 2 "S3 File URL: ${S3_BUCKET_FILE_URL}";
             joplin_log ${FUNCNAME[0]} 2 "Beginning database backup process.";
-            joplin_log ${FUNCNAME[0]} 1 "Performing copy, please wait...";
+
+            joplin_log ${FUNCNAME[0]} 3 "Checking Connection.";
 
 
-            if [[ $(pg_isready -d $CONNECTION_STRING) == *"accepting"* ]]; then
+            #if [ "${CONNECTION_STRING}" = "" ]; then
+            #    helper_halt_deployment "Database connection string is empty, halting deployment. Check app ${APPNAME} has a postgres add-on."
+            #fi;
+
+
+            if [[ $(pg_isready -d apokasdpojasd:5432) == *"accepting"* ]]; then
+                joplin_log ${FUNCNAME[0]} 1 "Performing copy, please wait...";
                 pg_dump $CONNECTION_STRING | gzip | aws s3 cp - $S3_BUCKET_FILE_URL ;
              else
-                helper_halt_deployment;
+                helper_halt_deployment "Database is not accepting connections.";
             fi;
 
 

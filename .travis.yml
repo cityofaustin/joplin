@@ -24,8 +24,8 @@ addons:
     packages:
       - jq
       - curl
-#      - postgresql-10
-#      - postgresql-client-10
+      - postgresql-10
+      - postgresql-client-10
 
 # Environment Vars
 env:
