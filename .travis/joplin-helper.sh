@@ -267,8 +267,6 @@ function heroku_backup_upload_check {
 }
 
 
-
-
 #
 # Creates a database backup of a running heroku app (as long as it as a PostgreSQL db attached to it)
 #
@@ -292,8 +290,9 @@ function joplin_backup_database {
         # If this is a new PR, the DB does not exist yet, so we can exit.
         #
         APPNAME=$(joplin_resolve_heroku_appname);
-        APP_DB_EXISTS=$(joplin_app_exists $APPNAME)
+        #APP_DB_EXISTS=$(joplin_app_database_attached $APPNAME)
 
+        APP_DB_EXISTS="true" # For testing
         if [ "${APP_DB_EXISTS}" = "false" ]; then
             joplin_log ${FUNCNAME[0]} 0 "Database in PR Does not exist.";
             return 0
@@ -310,7 +309,9 @@ function joplin_backup_database {
             DB_TIMESTAMP=$(date '+%Y-%m-%d--%H-%M-%S');
             DJANGO_MID=$(retrieve_latest_django_mid);
 
-            S3_BUCKET_FILE_URL="s3://${AWS_BUCKET_BACKUPS}/backups/database/${TRAVIS_BRANCH}/${APPNAME}.${DB_TIMESTAMP}.${TRAVIS_COMMIT}.${DJANGO_MID}.psql.gz"
+
+            S3_FILENAME="${APPNAME}.${DB_TIMESTAMP}.${TRAVIS_COMMIT}.${DJANGO_MID}.psql.gz"
+            S3_BUCKET_FILE_URL="s3://${AWS_BUCKET_BACKUPS}/backups/database/${TRAVIS_BRANCH}/${S3_FILENAME}"
 
             joplin_log ${FUNCNAME[0]} 1 "Performing Database Backup for Branch: $1, App: $APPNAME.";
             joplin_log ${FUNCNAME[0]} 2 "App Name: ${APPNAME}.";
@@ -322,11 +323,21 @@ function joplin_backup_database {
             joplin_log ${FUNCNAME[0]} 1 "Performing copy, please wait...";
 
 
-            pg_dump $CONNECTION_STRING | gzip | aws s3 cp - $S3_BUCKET_FILE_URL;
+            if [[ $(pg_isready -d $CONNECTION_STRING) == *"accepting"* ]]; then
+                pg_dump $CONNECTION_STRING | gzip | aws s3 cp - $S3_BUCKET_FILE_URL ;
+             else
+                helper_halt_deployment;
+            fi;
+
+
+
             joplin_log ${FUNCNAME[0]} 1 "Finished creating and uploading database to s3.";
 
+
             joplin_log ${FUNCNAME[0]} 1 "Validating the backup has been created and is available on S3.";
+
             heroku_backup_upload_check $S3_BUCKET_FILE_URL
+
             joplin_log ${FUNCNAME[0]} 1 "Validation finished, backup process finished.";
         fi;
 
@@ -334,6 +345,8 @@ function joplin_backup_database {
 
     joplin_log ${FUNCNAME[0]} 0 "Database backup process finished.";
 }
+
+
 
 
 
