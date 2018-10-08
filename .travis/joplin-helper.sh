@@ -403,6 +403,9 @@ function retrieve_latest_django_mid {
 
 
 
+
+
+
 #
 # Halts Deployment if the backup cannot be found in the S3 bucket
 # $1 (string) The S3 url that is going to be checked
@@ -420,6 +423,9 @@ function heroku_backup_upload_check {
         helper_halt_deployment "ERROR, THE DATABASE CANNOT BE FOUND ON THE S3 BUCKET, HALTING DEPLOYMENT"
     fi;
 }
+
+
+
 
 
 
@@ -680,7 +686,13 @@ function joplin_build {
 
         joplin_log ${FUNCNAME[0]} 1 "Tagging Image"
         joplin_log ${FUNCNAME[0]} 1 "docker tag $JOPLIN_IMAGE_NAME registry.heroku.com/$APPNAME/web"
+        docker tag $JOPLIN_IMAGE_NAME registry.heroku.com/$APPNAME/web
 
+        joplin_log ${FUNCNAME[0]} 2 "Output Status: $?"
+
+        if [ "$?" = "1" ]; then
+            helper_halt_deployment "Could not tag docker image for '${APPNAME}' "
+        fi;
 
         joplin_log ${FUNCNAME[0]} 1 "Pushing to Heroku Repository"
         joplin_log ${FUNCNAME[0]} 1 "docker push registry.heroku.com/$APPNAME/web"
