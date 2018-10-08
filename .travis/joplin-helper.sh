@@ -660,6 +660,10 @@ function joplin_build {
 
         joplin_log ${FUNCNAME[0]} 2 "Output Status: $?"
 
+        if [ "$?" = "1" ]; then
+            helper_halt_deployment "Could not log in to heroky registry for '${APPNAME}' "
+        fi;
+
         joplin_log ${FUNCNAME[0]} 1 "Building:"
         joplin_log ${FUNCNAME[0]} 2 "Image Name:        ${JOPLIN_IMAGE_NAME}"
         joplin_log ${FUNCNAME[0]} 2 "Branch:            ${TRAVIS_BRANCH} (PR=${TRAVIS_PULL_REQUEST}, PRBRANCH=${TRAVIS_PULL_REQUEST_BRANCH})"
@@ -670,6 +674,10 @@ function joplin_build {
 
         joplin_log ${FUNCNAME[0]} 2 "Output Status: $?"
 
+        if [ "$?" = "1" ]; then
+            helper_halt_deployment "Could not build docker image for '${APPNAME}' "
+        fi;
+
         joplin_log ${FUNCNAME[0]} 1 "Tagging Image"
         joplin_log ${FUNCNAME[0]} 1 "docker tag $JOPLIN_IMAGE_NAME registry.heroku.com/$APPNAME/web"
 
@@ -679,6 +687,12 @@ function joplin_build {
         docker push registry.heroku.com/$APPNAME/web
 
         joplin_log ${FUNCNAME[0]} 2 "Output Status: $?"
+
+        if [ "$?" = "1" ]; then
+            helper_halt_deployment "Could not push docker image to Heroku registry for '${APPNAME}'."
+        fi;
+
+
 
         joplin_log ${FUNCNAME[0]} 0 "Finished Building Container:";
     fi;
@@ -709,6 +723,15 @@ function joplin_release {
 
         # Determine image id to push
         DOCKER_IMAGE_ID=$(docker inspect registry.heroku.com/$APPNAME/web --format={{.Id}})
+
+        if [ "$?" = "1" ]; then
+            helper_halt_deployment "An error happened when trying to determine docker image id for '${APPNAME}'."
+        fi;
+
+
+        if [ "${DOCKER_IMAGE_ID}" = "" ]; then
+            helper_halt_deployment "Could not determine image id to push for '${APPNAME}'."
+        fi;
 
         joplin_log ${FUNCNAME[0]} 0 "Releasing Build for Branch: $TRAVIS_BRANCH, App: $APPNAME";
         joplin_log ${FUNCNAME[0]} 0 "Docker Image Id: $DOCKER_IMAGE_ID";
