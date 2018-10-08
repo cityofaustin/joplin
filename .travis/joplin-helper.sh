@@ -602,6 +602,9 @@ function joplin_create_pr_app {
                     joplin_attach_heroku_database  $PIPELINE_DEPLOYMENT_APP
 
                     joplin_log ${FUNCNAME[0]} 3 "Done.";
+                else
+
+                    joplin_log ${FUNCNAME[0]} 2 "The database already exists.";
 
                 fi;
 
@@ -655,6 +658,8 @@ function joplin_build {
         joplin_log ${FUNCNAME[0]} 1 "Logging in to Services ...";
         docker login --username=_ --password=$HEROKU_API_KEY registry.heroku.com
 
+        joplin_log ${FUNCNAME[0]} 2 "Output Status: $?"
+
         joplin_log ${FUNCNAME[0]} 1 "Building:"
         joplin_log ${FUNCNAME[0]} 2 "Image Name:        ${JOPLIN_IMAGE_NAME}"
         joplin_log ${FUNCNAME[0]} 2 "Branch:            ${TRAVIS_BRANCH} (PR=${TRAVIS_PULL_REQUEST}, PRBRANCH=${TRAVIS_PULL_REQUEST_BRANCH})"
@@ -663,6 +668,8 @@ function joplin_build {
         joplin_log ${FUNCNAME[0]} 2 "docker build -t $JOPLIN_IMAGE_NAME ."
         docker build -t $JOPLIN_IMAGE_NAME .
 
+        joplin_log ${FUNCNAME[0]} 2 "Output Status: $?"
+
         joplin_log ${FUNCNAME[0]} 1 "Tagging Image"
         joplin_log ${FUNCNAME[0]} 1 "docker tag $JOPLIN_IMAGE_NAME registry.heroku.com/$APPNAME/web"
 
@@ -670,6 +677,8 @@ function joplin_build {
         joplin_log ${FUNCNAME[0]} 1 "Pushing to Heroku Repository"
         joplin_log ${FUNCNAME[0]} 1 "docker push registry.heroku.com/$APPNAME/web"
         docker push registry.heroku.com/$APPNAME/web
+
+        joplin_log ${FUNCNAME[0]} 2 "Output Status: $?"
 
         joplin_log ${FUNCNAME[0]} 0 "Finished Building Container:";
     fi;
