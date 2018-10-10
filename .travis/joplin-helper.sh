@@ -417,7 +417,7 @@ function heroku_backup_upload_check {
     FILECOUNT=$(aws s3 ls $1 | wc -l)
 
     if [ "$FILECOUNT" = "1" ]; then
-        joplin_log ${FUNCNAME[0]} 1 " The backup was uploaded successfully.";
+        joplin_log ${FUNCNAME[0]} 1 " The backup was uploaded successfully, total count: ${FILECOUNT}";
     else
         joplin_log ${FUNCNAME[0]} 1 " Database not found: $1"
         helper_halt_deployment "ERROR, THE DATABASE CANNOT BE FOUND ON THE S3 BUCKET, HALTING DEPLOYMENT"
@@ -479,9 +479,15 @@ function joplin_backup_database {
             DB_TIMESTAMP=$(date '+%Y-%m-%d--%H-%M-%S');
             DJANGO_MID=$(retrieve_latest_django_mid);
 
+            if [ "${TRAVIS_PULL_REQUEST}" != "false" ]; then
+                WORKING_BRANCH="${TRAVIS_PULL_REQUEST_BRANCH}"
+            else
+                WORKING_BRANCH="${TRAVIS_BRANCH}"
+            fi;
 
-            S3_FILENAME="${APPNAME}.${DB_TIMESTAMP}.${TRAVIS_COMMIT}.${DJANGO_MID}.psql.gz"
-            S3_BUCKET_FILE_URL="s3://${AWS_BUCKET_BACKUPS}/backups/database/${TRAVIS_BRANCH}/${S3_FILENAME}"
+
+            S3_FILENAME="${APPNAME}.${WORKING_BRANCH}.${DB_TIMESTAMP}.${TRAVIS_COMMIT}.${DJANGO_MID}.psql.gz"
+            S3_BUCKET_FILE_URL="s3://${AWS_BUCKET_BACKUPS}/deployment-backups/database/${APPNAME}/${S3_FILENAME}"
 
             joplin_log ${FUNCNAME[0]} 1 "Performing Database Backup for Branch: $1, App: $APPNAME.";
             joplin_log ${FUNCNAME[0]} 2 "App Name: ${APPNAME}.";

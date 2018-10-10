@@ -1,10 +1,7 @@
 FROM python:3.6.5-slim-stretch
 
-# Make Bash our default shell
-RUN rm /bin/sh && ln -s /bin/bash /bin/sh
-
-# GnuPG, Curl, and OpenSSH, iproute2
-RUN apt-get update && apt-get install -y gnupg curl openssh-server iproute2
+# GnuPG, Curl
+RUN apt-get update && apt-get install -y gnupg curl
 
 # PostgreSQL 10
 RUN echo 'deb http://apt.postgresql.org/pub/repos/apt/ stretch-pgdg main' >  /etc/apt/sources.list.d/pgdg.list \
@@ -21,13 +18,10 @@ RUN pip install --no-cache-dir --disable-pip-version-check --requirement /deploy
 ENV PYTHONUNBUFFERED=1
 ENV WEB_CONCURRENCY=4
 ENV PORT ${PORT:-80}
-EXPOSE $PORT 22
 
 RUN mkdir /app
 WORKDIR /app
 
-# .profile.d is necessary for heroku-exec (ps:exec) methods (SSH tunneling)
-#  https://devcenter.heroku.com/articles/exec#enabling-docker-support
 COPY "$PWD/fixtures" /app/fixtures
 COPY "$PWD/joplin" /app/joplin
 

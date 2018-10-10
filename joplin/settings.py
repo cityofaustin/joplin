@@ -68,6 +68,7 @@ INSTALLED_APPS = [
 
     'wagtail.contrib.modeladmin',
     'webpack_loader',
+    'dbbackup',
 ]
 
 MIDDLEWARE = [
@@ -116,6 +117,7 @@ WSGI_APPLICATION = 'wsgi.application'
 DEPLOYMENT_MODE = os.environ.get('DEPLOYMENT_MODE', 'LOCAL')
 ISPRODUCTION = DEPLOYMENT_MODE == "PRODUCTION"
 ISSTAGING = DEPLOYMENT_MODE == "STAGING"
+ISREVIEWAPP = DEPLOYMENT_MODE == "REVIEW"
 
 
 # Database
@@ -218,22 +220,47 @@ GRAPHENE = {
 }
 
 
-if(ISPRODUCTION or ISSTAGING):
+# Assume DB default settings for LOCAL env
+DBBACKUP_STORAGE = 'django.core.files.storage.FileSystemStorage'
+DBBACKUP_STORAGE_OPTIONS = {'location': '/app/joplin/db/backups'}
+
+# Production, Staging & Review Apps
+if(DEPLOYMENT_MODE != "LOCAL"):
     #
     # AWS Buckets only if not local.
     #
-
+    APPLICATION_NAME = os.getenv('APPLICATION_NAME')
     AWS_ACCESS_KEY_ID = os.getenv('AWS_S3_KEYID')
     AWS_SECRET_ACCESS_KEY = os.getenv('AWS_S3_ACCESSKEY')
     AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_S3_BUCKET')
+    AWS_ARCHIVE_BUCKET_NAME = os.getenv('AWS_S3_BUCKET_ARCHIVE')
+    AWS_BACKUPS_LOCATION = os.getenv('AWS_S3_BUCKET_ARCHIVE_LOCATION')
     AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
 
     AWS_S3_OBJECT_PARAMETERS = {
         'CacheControl': 'max-age=86400',
     }
 
+    # This could be changed to DEPLOYMENT_MODE == "REVIEW"
+    if(DEPLOYMENT_MODE == "REVIEW"):
+        STATICFILES_LOCATION = APPLICATION_NAME + '/static'
+        MEDIAFILES_LOCATION = APPLICATION_NAME + '/media'
 
-    STATICFILES_LOCATION = 'static'
+    else:
+        STATICFILES_LOCATION = 'static'
+        MEDIAFILES_LOCATION = 'media'
+
+
+    # We now change the backups directory
+    DBBACKUP_STORAGE_OPTIONS = {
+        'access_key': AWS_ACCESS_KEY_ID,
+        'secret_key': AWS_SECRET_ACCESS_KEY,
+        'bucket_name': AWS_ARCHIVE_BUCKET_NAME,
+        'host': "s3.amazonaws.com",
+        'location': AWS_BACKUPS_LOCATION + "/" + APPLICATION_NAME
+    }
+
+    # We now change the storage mode to S3 via Boto for default, static and dbbackup
     STATICFILES_STORAGE = 'custom_storages.StaticStorage'
-    MEDIAFILES_LOCATION = 'media'
     DEFAULT_FILE_STORAGE = 'custom_storages.MediaStorage'
+    DBBACKUP_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
