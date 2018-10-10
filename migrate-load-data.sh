@@ -4,6 +4,10 @@ echo "Running migrations: (${DEPLOYMENT_MODE}) ..."
 python ./joplin/manage.py migrate --noinput
 
 
+if [ "${DEPLOYMENT_MODE}" = "PREVIEW" ]; then
+    python ./joplin/manage.py dbrestore
+fi;
+
 case "${DEPLOYMENT_MODE}" in
 
     # Determine if we are running in a cloud instance...
@@ -18,3 +22,4 @@ case "${DEPLOYMENT_MODE}" in
     ;;
 
 esac;
+

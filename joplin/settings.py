@@ -225,7 +225,7 @@ DBBACKUP_STORAGE = 'django.core.files.storage.FileSystemStorage'
 DBBACKUP_STORAGE_OPTIONS = {'location': '/app/joplin/db/backups'}
 
 # Production, Staging & Review Apps
-if(DEPLOYMENT_MODE != "LOCAL"):
+if(ISPRODUCTION or ISSTAGING):
     #
     # AWS Buckets only if not local.
     #
@@ -241,16 +241,6 @@ if(DEPLOYMENT_MODE != "LOCAL"):
         'CacheControl': 'max-age=86400',
     }
 
-    # This could be changed to DEPLOYMENT_MODE == "REVIEW"
-    if(DEPLOYMENT_MODE == "REVIEW"):
-        STATICFILES_LOCATION = APPLICATION_NAME + '/static'
-        MEDIAFILES_LOCATION = APPLICATION_NAME + '/media'
-
-    else:
-        STATICFILES_LOCATION = 'static'
-        MEDIAFILES_LOCATION = 'media'
-
-
     # We now change the backups directory
     DBBACKUP_STORAGE_OPTIONS = {
         'access_key': AWS_ACCESS_KEY_ID,
@@ -264,3 +254,4 @@ if(DEPLOYMENT_MODE != "LOCAL"):
     STATICFILES_STORAGE = 'custom_storages.StaticStorage'
     DEFAULT_FILE_STORAGE = 'custom_storages.MediaStorage'
     DBBACKUP_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+

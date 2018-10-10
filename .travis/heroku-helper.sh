@@ -13,10 +13,14 @@ TRAVIS_CI_TEST_TAG="travis-ci-internal-test"
 PIPELINE_TEAM=$PIPELINE_TEAM_DEFAULT
 # The name of the pipeline in the team account.
 PIPELINE_NAME=$PIPELINE_NAME_DEFAULT
-# Pull Request holds the PR number, initially it remains empty, copies from TRAVIS and gets modified.
-PIPELINE_PULL_REQUEST=""
-# Deployment app is our target application
-PIPELINE_DEPLOYMENT_APP=""
+
+#
+# Colors
+#
+
+    RED='\033[0;31m'
+    NC='\033[0m' # No Color
+
 
 #
 # Prints error message and stops deployment by returing exit 1
@@ -25,9 +29,18 @@ PIPELINE_DEPLOYMENT_APP=""
 #
 
 function helper_halt_deployment {
-    echo "$1";
+    echo -e "--------------------------------------------------------------"
+    echo -e "${RED}FATAL ERROR:${NC}"
+    echo -e "${1}"
+    echo -e "--------------------------------------------------------------"
     travis_terminate 1;
 }
+
+
+
+
+
+
 
 
 #
@@ -53,6 +66,11 @@ function helper_internal_validation {
     return 0
 }
 
+
+
+
+
+
 #
 # Simply builds a noticeable header when parsing logs.
 # This should help determine when our commands begin execution,
@@ -68,11 +86,55 @@ function joplin_print_header {
     echo "  TRAVIS_BRANCH:              ${TRAVIS_BRANCH}"
     echo "  TRAVIS_PULL_REQUEST:        ${TRAVIS_PULL_REQUEST}"
     echo "  TRAVIS_PULL_REQUEST_BRANCH: ${TRAVIS_PULL_REQUEST_BRANCH}"
-    echo "  PIPELINE_PULL_REQUEST:      ${PIPELINE_PULL_REQUEST}"
     echo "  PIPELINE_TEAM:              ${PIPELINE_TEAM}"
     echo "  PIPELINE_NAME:              ${PIPELINE_NAME}"
     echo ""
 }
+
+
+
+
+
+
+
+#
+# Returns "True" if a given app name exists in heroku.
+# $1 (string) The name of the app (ie. joplin-staging, joplin-pr-160)
+#
+
+function joplin_app_exists {
+    HEROKU_TEAM_APPS=$(heroku apps --team $PIPELINE_TEAM | grep $1)
+
+    if [ "${HEROKU_TEAM_APPS}" != "" ]; then
+        echo "true";
+    else
+        echo "false"
+    fi;
+}
+
+
+
+
+
+
+
+
+#
+# Returns "True" if a given app name has a postgresql db attached to it.
+#
+
+function joplin_app_database_attached {
+    HEROKU_APP_DB_ATTACHED=$(heroku addons --app $1 | grep postgresql)
+
+    if [ "${HEROKU_APP_DB_ATTACHED}" != "" ]; then
+        echo "true";
+    else
+        echo "false"
+    fi;
+}
+
+
+
 
 
 
@@ -91,8 +153,14 @@ function joplin_log {
     RANGE=$(awk "BEGIN { print 5*${2} }")
     echo -n "${1}() "
     awk -v ORS=  "BEGIN { for (i = 1; i <= ${RANGE}; ++i) print \"-\" }" # leave ORS empty please
-    echo " ${3}"
+    echo -e " ${3}"
 }
+
+
+
+
+
+
 
 #
 # Returns "true" if $1 is a numeric value, otherwise returns "false".
@@ -107,6 +175,15 @@ function joplin_is_numeric {
         echo "true";    # We have a number
     fi
 }
+
+
+
+
+
+
+
+
+
 
 
 #
@@ -192,99 +269,22 @@ function joplin_parse_commit_message {
 
 
 
-
-
 #
-# Get PR Number for a specific branch in Joplin, using GitHub's API. (Rrequires curl and jq to be installed)
-# Requires no arguments, gets the branch number from Travis' environment.
-#
-
-function joplin_branch_to_prnumber {
-
-    # Try getting the PR number
-	PR_NUMBER=$(curl -X GET -s https://api.github.com/repos/cityofaustin/joplin/pulls | jq -r '.[] | "\(.head.ref):\(.number)"' | grep "${TRAVIS_BRANCH}" | cut -d ":" -f 2);
-    IS_RESPONSE_NUMERIC=$(joplin_is_numeric $PR_NUMBER);
-    IS_PIPELINE_PR_NUMERIC=$(joplin_is_numeric $PIPELINE_PULL_REQUEST);
-
-    # Check if this is a test
-    if [ "${1}" = "${TRAVIS_CI_TEST_TAG}" ]; then
-
-        # Parse the message and get monitor
-        joplin_log ${FUNCNAME[0]} 0 "Parsing Message Command: ${TRAVIS_MESSAGE}"
-        joplin_parse_commit_message;
-
-        # Output status of variables so we can monitor
-        joplin_log ${FUNCNAME[0]} 1 "GitHub Response: ${PR_NUMBER}"
-        joplin_log ${FUNCNAME[0]} 1 "TRAVIS_PULL_REQUEST: ${TRAVIS_PULL_REQUEST}."
-        joplin_log ${FUNCNAME[0]} 1 "PIPELINE_PULL_REQUEST: ${PIPELINE_PULL_REQUEST}."
-        joplin_log ${FUNCNAME[0]} 2 "IS_PIPELINE_PR_NUMERIC: ${IS_PIPELINE_PR_NUMERIC}."
-        joplin_log ${FUNCNAME[0]} 2 "IS_RESPONSE_NUMERIC: ${IS_RESPONSE_NUMERIC}."
-
-    else
-        # Time to check the output
-        if [ "${IS_PIPELINE_PR_NUMERIC}" = "true" ]; then
-            # It has been defined in our pipeline (this takes precedence over GitHub because we use it to force a pr number)
-            echo "${PIPELINE_PULL_REQUEST}"
-        elif [ "${IS_RESPONSE_NUMERIC}" = "true" ]; then
-            # We are happy with our response from GitHub
-            echo "${PR_NUMBER}";
-        else
-            # We definitely do not have a working PR number, we need to stop the deployment.
-            echo "\n"
-            joplin_log ${FUNCNAME[0]} 0 "The branch name '${TRAVIS_BRANCH}' does not appear to have a PR number, this will cause a problem. Stopping deployment process."
-            echo "\n"
-            helper_halt_deployment
-            exit 1;
-        fi;
-    fi;
-}
-
-
-#
-# Returns the PR number, first it tries from the PIPELINE_PULL_REQUEST variable
-# if that fails, then it tries to resolve it from the GitHub branch history.
+# Attaches a database to an application.
+# $1 (string) The name of the app to create.
+# $2 (string) The name of the pipeline
 #
 
-function joplin_get_env_prnum {
-    # If Travis CI does not have a pull request number, then resolve it.
-    if [ "${PIPELINE_PULL_REQUEST}" = "false" ]; then
-        PRNUM=$(joplin_branch_to_prnumber $TRAVIS_BRANCH);
-        echo "${PRNUM}";
-    # If we do have it, then use that instead (faster)
-    else
-        echo "${PIPELINE_PULL_REQUEST}";
-    fi;
-}
+function joplin_attach_heroku_database {
+    # The new app name
+    HEROKU_NEW_APP_NAME=$1
 
-
-#
-# Generates the app name for an app based on a nomenclature and PR number
-# if a PR number is not given, then it will try to resolve it using the branch name
-# $1 (int, string) The PR Number
-#
-
-function joplin_generate_app_name {
-    # Get PR Number, if none given, then resolve.
-    BRANCH_PR_NUMBER=$(joplin_branch_to_prnumber $TRAVIS_BRANCH)
-    echo "joplin-staging-pr-${BRANCH_PR_NUMBER}"
+    # Add postgresql to the new app.
+    heroku addons:create heroku-postgresql:hobby-dev --version=10 --app $HEROKU_NEW_APP_NAME
 }
 
 
 
-#
-# Returns "True" if a given app name exists in heroku.
-# $1 (string) The name of the app (ie. joplin-staging, joplin-pr-160)
-#
-
-function joplin_app_exists {
-    HEROKU_TEAM_APPS=$(heroku apps --team $PIPELINE_TEAM | grep $1)
-
-    if [ "${HEROKU_TEAM_APPS}" != "" ]; then
-        echo "true";
-    else
-        echo "false"
-    fi;
-}
 
 
 #
@@ -303,16 +303,19 @@ function joplin_create_heroku_preview_app {
     heroku create $HEROKU_NEW_APP_NAME --team $PIPELINE_TEAM
 
     # Add postgresql to the new app.
-    heroku addons:create heroku-postgresql:hobby-dev --version=10 --app $HEROKU_NEW_APP_NAME
+    joplin_attach_heroku_database $HEROKU_NEW_APP_NAME
 
     # Set Environment Variables
     # PR Review Apps do not get access to S3 Buckets, only if deployment mode is REVIEWS3
     heroku config:set   \
             DEPLOYMENT_MODE=REVIEW \
+            APPLICATION_NAME=$HEROKU_NEW_APP_NAME \
             AWS_S3_USER=$AWS_S3_USER_DEFAULT \
             AWS_S3_KEYID=$AWS_ACCESS_KEY_ID \
             AWS_S3_ACCESSKEY=$AWS_SECRET_ACCESS_KEY \
             AWS_S3_BUCKET=$AWS_BUCKET_REVIEWAPPS \
+            AWS_S3_BUCKET_ARCHIVE=$AWS_S3_BUCKET_ARCHIVE_DEFAULT \
+            AWS_S3_BUCKET_ARCHIVE_LOCATION=$AWS_S3_BUCKET_ARCHIVE_LOCATION_DEFAULT \
             DEBUG=1 \
             HEROKU_JANIS_APP_NAME="janis-staging" \
             JANIS_URL="https://janis-staging.herokuapp.com" \
@@ -323,6 +326,219 @@ function joplin_create_heroku_preview_app {
     # Couple New app to pipeline (assign review (PR) stage):
     heroku pipelines:add $PIPELINE_NAME --app $HEROKU_NEW_APP_NAME --stage review
 }
+
+
+
+
+
+
+
+
+
+#
+# Turn the branch name into the app name in Heroku
+#
+
+function joplin_resolve_heroku_appname {
+
+    # Turn the branch name into the application name we need
+    # production:   joplin
+    # master:       joplin-staging
+
+    # If there is a pull request number, then it must be a PR branch
+
+    if [ "${TRAVIS_PULL_REQUEST}" != "false" ]; then
+        APPNAME="joplin-staging-pr-${TRAVIS_PULL_REQUEST}"
+
+    # If not, then proceed with the regular branch name (master, production)
+    else
+        case $TRAVIS_BRANCH in
+            production)
+                APPNAME="joplin"
+                ;;
+            master)
+                APPNAME="joplin-staging"
+                ;;
+            *)
+                helper_halt_deployment "The app name could not be resolved for branch: '${TRAVIS_BRANCH}'"
+            ;;
+        esac
+    fi;
+
+    # Output results for logging
+    echo "${APPNAME}"
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#
+# retrieve_latest_django_mid - Searches the jopling migrations directory
+# and gets the file name of the latest migration id.
+#
+
+function retrieve_latest_django_mid {
+    # Get a list of all files, orders by ascending numeric order of column 1, 3, 4 (using underscore as separator)
+    FILENAME=$(ls $TRAVIS_BUILD_DIR/joplin/base/migrations | sort -n -t _ -k 1 -k 3 -k 4 | tail -1)
+    DJMID=$(echo -n $FILENAME | cut -d "." -f 1)
+    echo "${DJMID}"
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#
+# Halts Deployment if the backup cannot be found in the S3 bucket
+# $1 (string) The S3 url that is going to be checked
+# Example: heroku_backup_upload_check "s3://bucketname/backups/database/branchname/application-name.2018-09-21--18-52-21.5e1398dcecc15b66fa7ba4ddf19cdf23e6a6ac44.0025_auto_20180828_1807.psql.gz"
+#
+
+function heroku_backup_upload_check {
+    # Count the number of lines for a specific url, it should be only 1, hence assigns value of "1" to FILECOUNT
+    FILECOUNT=$(aws s3 ls $1 | wc -l)
+
+    if [ "$FILECOUNT" = "1" ]; then
+        joplin_log ${FUNCNAME[0]} 1 " The backup was uploaded successfully, total count: ${FILECOUNT}";
+    else
+        joplin_log ${FUNCNAME[0]} 1 " Database not found: $1"
+        helper_halt_deployment "ERROR, THE DATABASE CANNOT BE FOUND ON THE S3 BUCKET, HALTING DEPLOYMENT"
+    fi;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#
+# Creates a database backup of a running heroku app (as long as it as a PostgreSQL db attached to it)
+#
+# $1 (string) The name of the application (ie. "master", "production")
+# Example: $ joplin_backup_database master
+#
+
+function joplin_backup_database {
+
+    # Validate Branch Name (or halt deployment if no branch specified)
+    helper_internal_validation ${FUNCNAME[0]} $1
+
+    # Not a new PR, not a test, and not an error
+    if [ "$?" = "0" ]; then
+
+        # Retrieve App Name
+        joplin_print_header "Creating Database Backup in S3"
+
+        #
+        # First we have to check if this database exists.
+        # If this is a new PR, the DB does not exist yet, so we can exit.
+        #
+        APPNAME=$(joplin_resolve_heroku_appname);
+        APP_DB_EXISTS=$(joplin_app_database_attached $APPNAME)
+
+        if [ "${APP_DB_EXISTS}" = "false" ]; then
+            joplin_log ${FUNCNAME[0]} 0 "Application ${APPNAME} does not have a database add-on. Skipping database backup.";
+            return 0
+
+        #
+        # We are going to continue the build process normally
+        #
+
+        else
+
+            # Gather connection string from heroku api
+            CONNECTION_STRING=$(heroku config:get DATABASE_URL -a $APPNAME);
+            DB_NAME=$(echo -n $CONNECTION_STRING | cut -d "/" -f 4);
+            DB_TIMESTAMP=$(date '+%Y-%m-%d--%H-%M-%S');
+            DJANGO_MID=$(retrieve_latest_django_mid);
+
+            if [ "${TRAVIS_PULL_REQUEST}" != "false" ]; then
+                WORKING_BRANCH="${TRAVIS_PULL_REQUEST_BRANCH}"
+            else
+                WORKING_BRANCH="${TRAVIS_BRANCH}"
+            fi;
+
+
+            S3_FILENAME="${APPNAME}.${WORKING_BRANCH}.${DB_TIMESTAMP}.${TRAVIS_COMMIT}.${DJANGO_MID}.psql.gz"
+            S3_BUCKET_FILE_URL="s3://${AWS_BUCKET_BACKUPS}/deployment-backups/database/${APPNAME}/${S3_FILENAME}"
+
+            joplin_log ${FUNCNAME[0]} 1 "Performing Database Backup for Branch: $1, App: $APPNAME.";
+            joplin_log ${FUNCNAME[0]} 2 "App Name: ${APPNAME}.";
+            joplin_log ${FUNCNAME[0]} 2 "Date Timestamp: ${DB_TIMESTAMP}.";
+            joplin_log ${FUNCNAME[0]} 2 "Latest Django Migration ID: ${DJANGO_MID}.";
+            joplin_log ${FUNCNAME[0]} 2 "DB Name: ${DB_NAME}.";
+            joplin_log ${FUNCNAME[0]} 2 "S3 File URL: ${S3_BUCKET_FILE_URL}";
+            joplin_log ${FUNCNAME[0]} 2 "Beginning database backup process.";
+
+            joplin_log ${FUNCNAME[0]} 3 "Checking Connection.";
+
+
+            if [ "${CONNECTION_STRING}" = "" ]; then
+                helper_halt_deployment "Database connection string is empty, halting deployment. Check app ${APPNAME} has a postgres add-on."
+            fi;
+
+
+            if [[ $(pg_isready -d $CONNECTION_STRING) == *"accepting"* ]]; then
+                joplin_log ${FUNCNAME[0]} 1 "Performing copy, please wait...";
+                pg_dump $CONNECTION_STRING | gzip | aws s3 cp - $S3_BUCKET_FILE_URL ;
+             else
+                helper_halt_deployment "Database is not accepting connections.";
+            fi;
+
+
+
+            joplin_log ${FUNCNAME[0]} 1 "Finished creating and uploading database to s3.";
+
+
+            joplin_log ${FUNCNAME[0]} 1 "Validating the backup has been created and is available on S3.";
+
+            heroku_backup_upload_check $S3_BUCKET_FILE_URL
+
+            joplin_log ${FUNCNAME[0]} 1 "Validation finished, backup process finished.";
+        fi;
+
+    fi;
+
+    joplin_log ${FUNCNAME[0]} 0 "Database backup process finished.";
+}
+
+
+
+
+
+
+
+
 
 
 
@@ -355,6 +571,7 @@ function joplin_create_pr_app {
         ## If empty, assume TRAVIS_PULL_REQUEST
         if [ "${PIPELINE_PULL_REQUEST}" = "" ]; then
             PIPELINE_PULL_REQUEST=$TRAVIS_PULL_REQUEST;
+
         ## else, we proceed with whatever value is in PIPELINE_PULL_REQUEST
         fi;
 
@@ -369,18 +586,13 @@ function joplin_create_pr_app {
         # Else, we need to create a new PR review app.
         else
             # We have a legitimate pull request, so print out some details for logging.
-            joplin_log ${FUNCNAME[0]} 1 ">>> NEW PR REQUEST"
-            joplin_log ${FUNCNAME[0]} 1 "PIPELINE_PULL_REQUEST: ${PIPELINE_PULL_REQUEST}"
-            joplin_log ${FUNCNAME[0]} 1 "TRAVIS_PULL_REQUEST:   ${TRAVIS_PULL_REQUEST}"
+            joplin_log ${FUNCNAME[0]} 1 ">>> PR REQUEST"
 
-            # Resolve GIT PR Number (for logging), and print.
-            GIT_PR_NUM=$(joplin_branch_to_prnumber $TRAVIS_BRANCH)
-            joplin_log ${FUNCNAME[0]} 1 "GIT PULL REQUEST NUM:  ${GIT_PR_NUM}"
 
             # If no name specified for the new app in the commit message command,
             # then generate a new name automatically.
             if [ "${PIPELINE_DEPLOYMENT_APP}" = "" ]; then
-                PIPELINE_DEPLOYMENT_APP=$(joplin_generate_app_name $PIPELINE_PULL_REQUEST)
+                PIPELINE_DEPLOYMENT_APP="joplin-staging-pr-${PIPELINE_PULL_REQUEST}"
             fi;
 
             # Show current values
@@ -393,10 +605,23 @@ function joplin_create_pr_app {
             joplin_log ${FUNCNAME[0]} 1 "Checking if review app already exists";
             APP_EXISTS=$(joplin_app_exists $PIPELINE_DEPLOYMENT_APP)
 
-            # If the review app exists, we have to skip deployment
+            # If the review app exists, then check
             if [ "$APP_EXISTS" = "true" ]; then
-                joplin_log ${FUNCNAME[0]} 2 "App ${PIPELINE_DEPLOYMENT_APP} already exists, skipping deployment.";
+                joplin_log ${FUNCNAME[0]} 2 "App ${PIPELINE_DEPLOYMENT_APP} already exists, checking if database exists.";
 
+                APP_DB_EXISTS=$(joplin_app_database_attached $PIPELINE_DEPLOYMENT_APP)
+
+                if [ "${APP_DB_EXISTS}" = "false" ]; then
+                    joplin_log ${FUNCNAME[0]} 3 "No database detected, attaching new database to ${PIPELINE_DEPLOYMENT_APP}.";
+
+                    joplin_attach_heroku_database  $PIPELINE_DEPLOYMENT_APP
+
+                    joplin_log ${FUNCNAME[0]} 3 "Done.";
+                else
+
+                    joplin_log ${FUNCNAME[0]} 2 "The database already exists.";
+
+                fi;
 
             # Let's go ahead and build the new review app with the new name
             else
@@ -417,122 +642,10 @@ function joplin_create_pr_app {
 
 
 
-#
-# Turn the branch name into the app name in Heroku
-# $1 (string) The name of the branch (ie. "master", "production", "pr-160")
-#
-
-function joplin_resolve_heroku_appname {
-
-    # Turn the branch name into the application name we need
-    # production:   joplin
-    # master:       joplin-staging
-    # sergiotest:   joplin-personal
-    # anyother:     anyother
-
-    case $1 in
-        production)
-            APPNAME="joplin"
-            ;;
-        master)
-            APPNAME="joplin-staging"
-            ;;
-        *)
-            APPNAME=$(joplin_generate_app_name)
-            ;;
-    esac
-
-    # Output results for logging
-    echo "${APPNAME}"
-}
 
 
-#
-# retrieve_latest_django_mid - Searches the jopling migrations directory
-# and gets the file name of the latest migration id.
-#
-
-function retrieve_latest_django_mid {
-    # Get a list of all files, orders by ascending numeric order of column 1, 3, 4 (using underscore as separator)
-    FILENAME=$(ls $TRAVIS_BUILD_DIR/joplin/base/migrations | sort -n -t _ -k 1 -k 3 -k 4 | tail -1)
-    DJMID=$(echo -n $FILENAME | cut -d "." -f 1)
-    echo "${DJMID}"
-}
-
-#
-# Halts Deployment if the backup cannot be found in the S3 bucket
-# $1 (string) The S3 url that is going to be checked
-# Example: heroku_backup_upload_check "s3://bucketname/backups/database/branchname/application-name.2018-09-21--18-52-21.5e1398dcecc15b66fa7ba4ddf19cdf23e6a6ac44.0025_auto_20180828_1807.psql.gz"
-#
-
-function heroku_backup_upload_check {
-    # Count the number of lines for a specific url, it should be only 1, hence assigns value of "1" to FILECOUNT
-    FILECOUNT=$(aws s3 ls $1 | wc -l)
-
-    if [ "$FILECOUNT" = "1" ]; then
-        echo "heroku_backup_upload_check() ----- The backup was uploaded successfully.";
-    else
-        echo "heroku_backup_upload_check() ----- ERROR, THE DATABASE CANNOT BE FOUND ON THE S3 BUCKET"
-        echo "S3 URL: $1";
-        exit 1
-    fi;
-}
-
-#
-# Creates a database backup of a running heroku app (as long as it as a PostgreSQL db attached to it)
-#
-# $1 (string) The name of the application (ie. "master", "production")
-# Example: $ joplin_backup_database master
-#
-
-function joplin_backup_database {
-
-    # Validate Branch Name (or halt deployment if no branch specified)
-    helper_internal_validation ${FUNCNAME[0]} $1
-    joplin_log ${FUNCNAME[0]} 0 "Beginning database backup process.";
-
-    # First check if this is a brand new PR, skip backup if it is.
-    if [ "${PIPELINE_PULL_REQUEST}" != "false" ]; then
-        joplin_log ${FUNCNAME[0]} 1 "This is a brand-new pull request, since there is no database, there will be no backup.";
-    else
-        # Not a new PR, not a test, and not an error
-        if [ "$?" = "0" ]; then
-
-            # Retrieve App Name
-            joplin_print_header "Creating Database Backup in S3"
-
-            APPNAME=$(joplin_resolve_heroku_appname $1);
-
-            # Gather connection string from heroku api
-            CONNECTION_STRING=$(heroku config:get DATABASE_URL -a $APPNAME);
-            DB_NAME=$(echo -n $CONNECTION_STRING | cut -d "/" -f 4);
-            DB_TIMESTAMP=$(date '+%Y-%m-%d--%H-%M-%S');
-            DJANGO_MID=$(retrieve_latest_django_mid);
-
-            S3_BUCKET_FILE_URL="s3://${AWS_BUCKET_BACKUPS}/backups/database/${TRAVIS_BRANCH}/${APPNAME}.${DB_TIMESTAMP}.${TRAVIS_COMMIT}.${DJANGO_MID}.psql.gz"
-
-            joplin_log ${FUNCNAME[0]} 1 "Performing Database Backup for Branch: $1, App: $APPNAME.";
-            joplin_log ${FUNCNAME[0]} 2 "App Name: ${APPNAME}.";
-            joplin_log ${FUNCNAME[0]} 2 "Date Timestamp: ${DB_TIMESTAMP}.";
-            joplin_log ${FUNCNAME[0]} 2 "Latest Django Migration ID: ${DJANGO_MID}.";
-            joplin_log ${FUNCNAME[0]} 2 "DB Name: ${DB_NAME}.";
-            joplin_log ${FUNCNAME[0]} 2 "S3 File URL: ${S3_BUCKET_FILE_URL}";
-            joplin_log ${FUNCNAME[0]} 2 "Beginning database backup process.";
-            joplin_log ${FUNCNAME[0]} 1 "Performing copy, please wait...";
 
 
-            pg_dump $CONNECTION_STRING | gzip | aws s3 cp - $S3_BUCKET_FILE_URL;
-            joplin_log ${FUNCNAME[0]} 1 "Finished creating and uploading database to s3.";
-
-            joplin_log ${FUNCNAME[0]} 1 "Validating the backup has been created and is available on S3.";
-            heroku_backup_upload_check $S3_BUCKET_FILE_URL
-            joplin_log ${FUNCNAME[0]} 1 "Validation finished, backup process finished.";
-        fi;
-
-     fi;
-
-     joplin_log ${FUNCNAME[0]} 0 "Database backup process finished.";
-}
 
 
 
@@ -540,6 +653,7 @@ function joplin_backup_database {
 # Builds the docker container and pushes the image to the heroku repository
 # where it can be tagged to an app and released.
 #
+
 
 function joplin_build {
 
@@ -559,6 +673,12 @@ function joplin_build {
         joplin_log ${FUNCNAME[0]} 1 "Logging in to Services ...";
         docker login --username=_ --password=$HEROKU_API_KEY registry.heroku.com
 
+        joplin_log ${FUNCNAME[0]} 2 "Output Status: $?"
+
+        if [ "$?" = "1" ]; then
+            helper_halt_deployment "Could not log in to heroky registry for '${APPNAME}' "
+        fi;
+
         joplin_log ${FUNCNAME[0]} 1 "Building:"
         joplin_log ${FUNCNAME[0]} 2 "Image Name:        ${JOPLIN_IMAGE_NAME}"
         joplin_log ${FUNCNAME[0]} 2 "Branch:            ${TRAVIS_BRANCH} (PR=${TRAVIS_PULL_REQUEST}, PRBRANCH=${TRAVIS_PULL_REQUEST_BRANCH})"
@@ -567,24 +687,46 @@ function joplin_build {
         joplin_log ${FUNCNAME[0]} 2 "docker build -t $JOPLIN_IMAGE_NAME ."
         docker build -t $JOPLIN_IMAGE_NAME .
 
+        joplin_log ${FUNCNAME[0]} 2 "Output Status: $?"
+
+        if [ "$?" = "1" ]; then
+            helper_halt_deployment "Could not build docker image for '${APPNAME}' "
+        fi;
+
         joplin_log ${FUNCNAME[0]} 1 "Tagging Image"
         joplin_log ${FUNCNAME[0]} 1 "docker tag $JOPLIN_IMAGE_NAME registry.heroku.com/$APPNAME/web"
+        docker tag $JOPLIN_IMAGE_NAME registry.heroku.com/$APPNAME/web
 
+        joplin_log ${FUNCNAME[0]} 2 "Output Status: $?"
+
+        if [ "$?" = "1" ]; then
+            helper_halt_deployment "Could not tag docker image for '${APPNAME}' "
+        fi;
 
         joplin_log ${FUNCNAME[0]} 1 "Pushing to Heroku Repository"
         joplin_log ${FUNCNAME[0]} 1 "docker push registry.heroku.com/$APPNAME/web"
         docker push registry.heroku.com/$APPNAME/web
 
-        joplin_log ${FUNCNAME[0]} 0 "Finished Building Container:";
+        joplin_log ${FUNCNAME[0]} 2 "Output Status: $?"
+
+        if [ "$?" = "1" ]; then
+            helper_halt_deployment "Could not push docker image to Heroku registry for '${APPNAME}'."
+        fi;
+
+
+
+        joplin_log ${FUNCNAME[0]} 0 "Finished Building Container";
     fi;
 }
 
 
 
+
+
+
+
 #
 # Calls the release function for a specific image to a specific application
-# $1 (string) The name of the branch (ie. "master", "production", "pr-160")
-# Example: $ joplin_release master
 #
 
 function joplin_release {
@@ -594,32 +736,51 @@ function joplin_release {
 
     # Not a test, and not an error
     if [ "$?" = "0" ]; then
+
+        joplin_print_header "Releasing Image"
+
         # Retrieve App Name
-        APPNAME=$(joplin_resolve_heroku_appname $1);
+        APPNAME=$(joplin_resolve_heroku_appname);
 
         # Determine image id to push
         DOCKER_IMAGE_ID=$(docker inspect registry.heroku.com/$APPNAME/web --format={{.Id}})
 
-        echo "joplin_release() ----- Releasing Build for Branch: $1, App: $APPNAME";
-        echo "joplin_release() ----- Docker Image Id: $DOCKER_IMAGE_ID";
+        if [ "$?" = "1" ]; then
+            helper_halt_deployment "An error happened when trying to determine docker image id for '${APPNAME}'."
+        fi;
+
+
+        if [ "${DOCKER_IMAGE_ID}" = "" ]; then
+            helper_halt_deployment "Could not determine image id to push for '${APPNAME}'."
+        fi;
+
+        joplin_log ${FUNCNAME[0]} 0 "Releasing Build for Branch: $TRAVIS_BRANCH, App: $APPNAME";
+        joplin_log ${FUNCNAME[0]} 0 "Docker Image Id: $DOCKER_IMAGE_ID";
 
         # Gemerate json payload to upload via API
         JSON_PAYLOAD='{"updates":[{"type":"web","docker_image":"'"${DOCKER_IMAGE_ID}"'"}]}'
 
         # Make 'Release' API Call
         curl -n -X PATCH https://api.heroku.com/apps/$APPNAME/formation \
-        -d "${JSON_PAYLOAD}" \
-        -H "Content-Type: application/json" \
-        -H "Accept: application/vnd.heroku+json; version=3.docker-releases" \
-        -H "Authorization: Bearer ${HEROKU_API_KEY}"
+            -d "${JSON_PAYLOAD}" \
+            -H "Content-Type: application/json" \
+            -H "Accept: application/vnd.heroku+json; version=3.docker-releases" \
+            -H "Authorization: Bearer ${HEROKU_API_KEY}"
+
+        joplin_log ${FUNCNAME[0]} 0 "Release process finished";
     fi;
 }
 
 
+
+
+
+
+
+
+
 #
 # Runs a migration process in a heroku dyno on the target application
-# $1 (string) The name of the branch (ie. "master", "production", "pr-160")
-# Example: $ joplin_migrate staging
 #
 
 function joplin_migrate {
@@ -628,20 +789,25 @@ function joplin_migrate {
 
     # Not a test, and not an error
     if [ "$?" = "0" ]; then
-        # Parse the Message (in case we are forcing a PR number or other settings)
-        joplin_parse_commit_message
-
         # Print a nice header
         joplin_print_header "Running Database Migration"
 
         # Retrieve App Name
-        APPNAME=$(joplin_resolve_heroku_appname $1);
+        APPNAME=$(joplin_resolve_heroku_appname);
 
-        echo -e "\njoplin_migrate() ----- Migrating data for Branch: ${1}, App: ${APPNAME} \n";
+        echo -e "\n"
+        joplin_log ${FUNCNAME[0]} 0 "Migrating data for Branch: ${TRAVIS_BRANCH}, App: ${APPNAME}";
         heroku run -a $APPNAME -- /app/migrate-load-data.sh
-        echo -e "\njoplin_migrate() ----- Migration process finished.\n";
+        echo -e "\n"
+        joplin_log ${FUNCNAME[0]} 0 "Migration process finished \n";
     fi;
 }
+
+
+
+
+
+
 
 
 #
@@ -656,26 +822,25 @@ function helper_test {
     joplin_log ${FUNCNAME[0]} 0 "Test tag: '${TRAVIS_CI_TEST_TAG}': ";
 
     joplin_log ${FUNCNAME[0]} 1 "Testing 'joplin_release' is ready: ";
-    joplin_release $TRAVIS_CI_TEST_TAG;
+    #joplin_release $TRAVIS_CI_TEST_TAG;
 
     joplin_log ${FUNCNAME[0]} 1 "Testing 'joplin_release' is ready: ";
-    joplin_backup_database $TRAVIS_CI_TEST_TAG;
+    #joplin_backup_database $TRAVIS_CI_TEST_TAG;
 
     joplin_log ${FUNCNAME[0]} 1 " Testing django migration id: ";
     retrieve_latest_django_mid;
 
     joplin_log ${FUNCNAME[0]} 1 "Testing 'joplin_build' is ready: ";
-    joplin_build $TRAVIS_CI_TEST_TAG;
+    #joplin_build $TRAVIS_CI_TEST_TAG;
 
     joplin_log ${FUNCNAME[0]} 1 "Testing 'joplin_migrate' is ready: ";
-    joplin_migrate $TRAVIS_CI_TEST_TAG;
+    #joplin_migrate $TRAVIS_CI_TEST_TAG;
 
     joplin_log ${FUNCNAME[0]} 1 "Testing 'joplin_create_pr_app' is ready: ";
-    joplin_create_pr_app $TRAVIS_CI_TEST_TAG;
+    #joplin_create_pr_app $TRAVIS_CI_TEST_TAG;
 
     joplin_log ${FUNCNAME[0]} 1 "Testing 'joplin_branch_to_prnumber' is ready: ";
-    joplin_branch_to_prnumber $TRAVIS_CI_TEST_TAG;
+    #joplin_branch_to_prnumber $TRAVIS_CI_TEST_TAG;
 
     joplin_log ${FUNCNAME[0]} 0 "Heroku Helper Test finished: ";
 }
-

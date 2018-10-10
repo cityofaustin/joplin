@@ -41,7 +41,7 @@ env:
 
 # We are going to install AWS Cli, Heroku Cli and source our helper scripts
 before_install:
-    - source ./.travis/joplin-helper.sh
+    - source ./.travis/heroku-helper.sh
     - sudo pip install awscli
     - curl https://cli-assets.heroku.com/install-ubuntu.sh | sh
 
