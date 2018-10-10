@@ -309,10 +309,13 @@ function joplin_create_heroku_preview_app {
     # PR Review Apps do not get access to S3 Buckets, only if deployment mode is REVIEWS3
     heroku config:set   \
             DEPLOYMENT_MODE=REVIEW \
+            APPLICATION_NAME=$HEROKU_NEW_APP_NAME \
             AWS_S3_USER=$AWS_S3_USER_DEFAULT \
             AWS_S3_KEYID=$AWS_ACCESS_KEY_ID \
             AWS_S3_ACCESSKEY=$AWS_SECRET_ACCESS_KEY \
             AWS_S3_BUCKET=$AWS_BUCKET_REVIEWAPPS \
+            AWS_S3_BUCKET_ARCHIVE=$AWS_S3_BUCKET_ARCHIVE_DEFAULT \
+            AWS_S3_BUCKET_ARCHIVE_LOCATION=$AWS_S3_BUCKET_ARCHIVE_LOCATION_DEFAULT \
             DEBUG=1 \
             HEROKU_JANIS_APP_NAME="janis-staging" \
             JANIS_URL="https://janis-staging.herokuapp.com" \
