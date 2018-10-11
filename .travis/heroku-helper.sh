@@ -429,8 +429,35 @@ function heroku_backup_upload_check {
 
 
 
+#
+# Copies the local database files (obtained from github) into the S3 for use in the migration process.
+#
 
+function joplin_copy_local_restorepoint_backups {
 
+    # Validate Branch Name (or halt deployment if no branch specified)
+    helper_internal_validation ${FUNCNAME[0]} $1
+
+    # We're good to go!
+    if [ "$?" = "0" ]; then
+        joplin_print_header "Copying Database Files to Bucket"
+
+        APPNAME=$(joplin_resolve_heroku_appname)
+        S3_BUCKET_FILE_URL="s3://${AWS_BUCKET_BACKUPS_ARCHIVE}/${AWS_BUCKET_BACKUPS_ARCHIVE_LOCATION}/${APPNAME}"
+
+        joplin_log ${FUNCNAME[0]} 0 "Current app:       '${APPNAME}'";
+        joplin_log ${FUNCNAME[0]} 0 "Path Generated:    '${S3_BUCKET_FILE_URL}'";
+
+        joplin_log ${FUNCNAME[0]} 0 "Copying files, please wait a few moments.'";
+        aws s3 cp ./joplin/db/backups $S3_BUCKET_FILE_URL --recursive
+
+        if [ "$?" != "0" ]; then
+            helper_halt_deployment "There seems to have been a problem copying the files to the S3 bucket."
+        fi;
+
+        joplin_log ${FUNCNAME[0]} 0 "Process complete.'";
+  	fi;
+}
 
 
 
@@ -808,8 +835,6 @@ function joplin_migrate {
 
 
 
-
-
 #
 # helper_test - Tests the helper has been initialized properly and ready to run
 # Runs the functions without parameters forcing error output.
@@ -822,25 +847,25 @@ function helper_test {
     joplin_log ${FUNCNAME[0]} 0 "Test tag: '${TRAVIS_CI_TEST_TAG}': ";
 
     joplin_log ${FUNCNAME[0]} 1 "Testing 'joplin_release' is ready: ";
-    #joplin_release $TRAVIS_CI_TEST_TAG;
+    joplin_release $TRAVIS_CI_TEST_TAG;
 
     joplin_log ${FUNCNAME[0]} 1 "Testing 'joplin_release' is ready: ";
-    #joplin_backup_database $TRAVIS_CI_TEST_TAG;
+    joplin_backup_database $TRAVIS_CI_TEST_TAG;
+
+    joplin_log ${FUNCNAME[0]} 1 "Testing 'joplin_copy_local_restorepoint_backups' is ready: ";
+    joplin_copy_local_restorepoint_backups $TRAVIS_CI_TEST_TAG;
 
     joplin_log ${FUNCNAME[0]} 1 " Testing django migration id: ";
     retrieve_latest_django_mid;
 
     joplin_log ${FUNCNAME[0]} 1 "Testing 'joplin_build' is ready: ";
-    #joplin_build $TRAVIS_CI_TEST_TAG;
+    joplin_build $TRAVIS_CI_TEST_TAG;
 
     joplin_log ${FUNCNAME[0]} 1 "Testing 'joplin_migrate' is ready: ";
-    #joplin_migrate $TRAVIS_CI_TEST_TAG;
+    joplin_migrate $TRAVIS_CI_TEST_TAG;
 
     joplin_log ${FUNCNAME[0]} 1 "Testing 'joplin_create_pr_app' is ready: ";
-    #joplin_create_pr_app $TRAVIS_CI_TEST_TAG;
-
-    joplin_log ${FUNCNAME[0]} 1 "Testing 'joplin_branch_to_prnumber' is ready: ";
-    #joplin_branch_to_prnumber $TRAVIS_CI_TEST_TAG;
+    joplin_create_pr_app $TRAVIS_CI_TEST_TAG;
 
     joplin_log ${FUNCNAME[0]} 0 "Heroku Helper Test finished: ";
 }
