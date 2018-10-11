@@ -41,7 +41,7 @@ addons:
 # Environment Vars
 env:
   global:
-  - PR_AUTODEPLOY: "true"
+  - PR_AUTOBUILD: "true"
   - PATH=$HOME/.local/bin:$PATH
   - JOPLIN_IMAGE_NAME: joplin-base
   # HEROKU_API_KEY="..."
