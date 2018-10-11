@@ -22,7 +22,6 @@ ENV PORT ${PORT:-80}
 RUN mkdir /app
 WORKDIR /app
 
-COPY "$PWD/fixtures" /app/fixtures
 COPY "$PWD/joplin" /app/joplin
 
 WORKDIR /app/joplin

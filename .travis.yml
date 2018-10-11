@@ -2,11 +2,22 @@ language: python
 python:
 - '3.6'
 dist: trusty
-# Only Master or Production, or a pull request if build tag is present or comment contains "[joplin:build]":
+
+# Deploy only if:
+#     - it's regular push to the master or production branches
+#     - It's a pull request and:
+#       - PR_AUTOBUILD env. variable is set to "true" or
+#       - the name of the PR branch (head name) is contained in PR_AUTODEPLOY env. variable or
+#       - git commit message contains "[joplin:build]"
+#
+#   Note: PR_AUTOBUILD or PR_AUTODEPLOY variables can be set either in Travis > Settings or
+#   at the env: global: section of this configuration file.
+#
 
 if: |
   (branch IN (master, production) AND type = push) OR \
   (type = pull_request AND env(PR_AUTOBUILD) IN (true, enabled, on)) OR \
+  (type = pull_request AND env(PR_AUTODEPLOY) =~ concat(head_branch) ) OR \
   (type = pull_request AND commit_message =~ /\[joplin\:build\]/ )
 
 
@@ -30,6 +41,7 @@ addons:
 # Environment Vars
 env:
   global:
+  - PR_AUTODEPLOY: "true"
   - PATH=$HOME/.local/bin:$PATH
   - JOPLIN_IMAGE_NAME: joplin-base
   # HEROKU_API_KEY="..."
@@ -44,14 +56,6 @@ before_install:
     - source ./.travis/heroku-helper.sh
     - sudo pip install awscli
     - curl https://cli-assets.heroku.com/install-ubuntu.sh | sh
-
-# We are going to run a few commands to help transition from PostgreSQL 9 (default) to PostgreSQL 10
-#before_script:
-    # Use default port
-#    - sudo sed -i 's/port = 5433/port = 5432/' /etc/postgresql/10/main/postgresql.conf
-    # Use 9.6 auth config:
-#    - sudo cp /etc/postgresql/{9.6,10}/main/pg_hba.conf
-#    - sudo service postgresql restart
 
 # Jobs
 jobs:
@@ -75,7 +79,6 @@ jobs:
     - helper_test
   - stage: Creating backup and upload to S3
     script:
-    - aws s3api list-buckets --query "Buckets[].Name"
     - joplin_backup_database $TRAVIS_BRANCH
   - stage: Building container and upload to Heroku
     script:

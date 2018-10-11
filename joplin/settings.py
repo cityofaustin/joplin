@@ -254,4 +254,3 @@ if(ISPRODUCTION or ISSTAGING):
     STATICFILES_STORAGE = 'custom_storages.StaticStorage'
     DEFAULT_FILE_STORAGE = 'custom_storages.MediaStorage'
     DBBACKUP_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-
