@@ -53,7 +53,7 @@ function helper_halt_deployment {
 function helper_internal_validation {
     # Show message if this is an internal test
     if [ "$2" = "${TRAVIS_CI_TEST_TAG}" ]; then
-        echo "  > $1(): Ready git o execute.";
+        echo "  > $1(): Ready to execute.";
         return 1
     fi;
 
@@ -443,7 +443,7 @@ function joplin_copy_local_restorepoint_backups {
         joplin_print_header "Copying Database Files to Bucket"
 
         APPNAME=$(joplin_resolve_heroku_appname)
-        S3_BUCKET_FILE_URL="s3://${AWS_BUCKET_BACKUPS_ARCHIVE}/${AWS_BUCKET_BACKUPS_ARCHIVE_LOCATION}/${APPNAME}"
+        S3_BUCKET_FILE_URL="s3://${AWS_S3_BUCKET_ARCHIVE_DEFAULT}/${AWS_S3_BUCKET_ARCHIVE_LOCATION_DEFAULT}/${APPNAME}"
 
         joplin_log ${FUNCNAME[0]} 0 "Current app:       '${APPNAME}'";
         joplin_log ${FUNCNAME[0]} 0 "Path Generated:    '${S3_BUCKET_FILE_URL}'";
