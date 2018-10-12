@@ -468,12 +468,12 @@ function joplin_reset_db_backups_owner {
             joplin_log ${FUNCNAME[0]} 1 "The count is looking good, checking actual owner ...";
 
             joplin_log ${FUNCNAME[0]} 1 "Correct Owner:         '${NEW_OWNER_ID}'";
-            joplin_log ${FUNCNAME[0]} 1 "Current Owner(:        '${CURRENT_OWNERS}'";
+            joplin_log ${FUNCNAME[0]} 1 "Current Owner:        '${CURRENT_OWNERS}'";
 
             if [ "${CURRENT_OWNERS}" != "${NEW_OWNER_ID}" ]; then
                 helper_halt_deployment "The owner has not been reset. Halting deployment."
             else
-                joplin_log ${FUNCNAME[0]} 1 "Ownership looks good, test passed and moving on.";
+                joplin_log ${FUNCNAME[0]} 0 "Ownership looks good, test passed and moving on.";
             fi;
 
         else
@@ -591,7 +591,7 @@ function joplin_backup_database {
 
 
             if [[ $(pg_isready -d $CONNECTION_STRING) == *"accepting"* ]]; then
-                joplin_log ${FUNCNAME[0]} 1 "Performing copy, please wait...";
+                joplin_log ${FUNCNAME[0]} 3 "Performing copy, please wait...";
                 pg_dump $CONNECTION_STRING | gzip | aws s3 cp - $S3_BUCKET_FILE_URL ;
              else
                 helper_halt_deployment "Database is not accepting connections.";
@@ -599,10 +599,10 @@ function joplin_backup_database {
 
 
 
-            joplin_log ${FUNCNAME[0]} 1 "Finished creating and uploading database to s3.";
+            joplin_log ${FUNCNAME[0]} 2 "Finished creating and uploading database to s3.";
 
 
-            joplin_log ${FUNCNAME[0]} 1 "Validating the backup has been created and is available on S3.";
+            joplin_log ${FUNCNAME[0]} 2 "Validating the backup has been created and is available on S3.";
 
             heroku_backup_upload_check $S3_BUCKET_FILE_URL
 
@@ -747,9 +747,9 @@ function joplin_build {
         joplin_print_header "Building Joplin"
 
         # Retrieve App Name
-        joplin_log ${FUNCNAME[0]} 1 "Resolving App Name for branch: $TRAVIS_BRANCH";
+        joplin_log ${FUNCNAME[0]} 0 "Resolving App Name for branch: $TRAVIS_BRANCH";
         APPNAME=$(joplin_resolve_heroku_appname $TRAVIS_BRANCH);
-        joplin_log ${FUNCNAME[0]} 2 "App name resolved: ${APPNAME}";
+        joplin_log ${FUNCNAME[0]} 1 "App name resolved: ${APPNAME}";
 
 
         joplin_log ${FUNCNAME[0]} 1 "Logging in to Services ...";
