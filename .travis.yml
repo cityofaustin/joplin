@@ -80,11 +80,10 @@ jobs:
   - stage: Creating backup and upload to S3
     script:
     - joplin_backup_database $TRAVIS_BRANCH
-    - joplin_reset_db_backups_owner $TRAVIS_BRANCH
-    - joplin_copy_local_restorepoint_backups $TRAVIS_BRANCH
   - stage: Building container and upload to Heroku
     script:
     - joplin_reset_db_backups_owner $TRAVIS_BRANCH
+    - joplin_copy_local_restorepoint_backups $TRAVIS_BRANCH
     - joplin_create_pr_app $TRAVIS_BRANCH
     - joplin_build $TRAVIS_BRANCH
     after_success:

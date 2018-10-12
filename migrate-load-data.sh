@@ -5,6 +5,7 @@ python ./joplin/manage.py migrate --noinput
 
 
 if [ "${DEPLOYMENT_MODE}" = "PREVIEW" ]; then
+    echo "Running DB restore for PR Review..."
     python ./joplin/manage.py dbrestore --noinput
 fi;
 
