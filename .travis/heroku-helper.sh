@@ -428,6 +428,61 @@ function heroku_backup_upload_check {
 }
 
 
+#
+# Retrieves correct DB Owner ID and Resets ALTER TABLE lines to OWNER TO '<CORRECT OWNER HERE>';
+#
+
+function joplin_reset_db_backups_owner {
+
+    # Validate Branch Name (or halt deployment if no branch specified)
+    helper_internal_validation ${FUNCNAME[0]} $1
+
+    # We're good to go!
+    if [ "$?" = "0" ]; then
+        joplin_print_header "Resetting DB Backups Owner Name"
+
+
+	    APPNAME=$(joplin_resolve_heroku_appname)
+
+	    DB_BACKUPS_PATH="./joplin/db/backups/"
+	    NEW_OWNER_ID=$(heroku config:get DATABASE_URL --app $APPNAME | grep -oP "postgres://\K[[:alnum:]]*")
+	    CURRENT_OWNERS=$(grep -oP "OWNER TO \K[[:alnum:]]*" $DB_BACKUPS_PATH/*.psql | cut -d ":" -f 2 | uniq)
+
+	    joplin_log ${FUNCNAME[0]} 0 "Current app:           '${APPNAME}'";
+	    joplin_log ${FUNCNAME[0]} 0 "Current Backups Path:  '${DB_BACKUPS_PATH}'";
+	    joplin_log ${FUNCNAME[0]} 0 "Correct Owner:         '${NEW_OWNER_ID}'";
+        joplin_log ${FUNCNAME[0]} 0 "Current Owner(s):      '${CURRENT_OWNERS}'";
+
+        joplin_log ${FUNCNAME[0]} 0 "Resetting, one moment ...";
+
+	    find $DB_BACKUPS_PATH -type f -exec sed -i -E "s/OWNER TO (.+);/OWNER TO ${NEW_OWNER_ID};/g" {} \;
+
+	    joplin_log ${FUNCNAME[0]} 0 "Finished resetting owner, performing owner check ...";
+
+	    CURRENT_OWNERS=$(grep -oP "OWNER TO \K[[:alnum:]]*" $DB_BACKUPS_PATH/*.psql | cut -d ":" -f 2 | uniq)
+	    CURRENT_OWNERS_COUNT=$(echo $CURRENT_OWNERS | wc -l)
+
+        if [ "${CURRENT_OWNERS_COUNT}" = "0" ]; then
+            helper_halt_deployment "Could not determine db backup ownership, it should be '${NEW_OWNER_ID}' but none could be found."
+        elif [ "${CURRENT_OWNERS_COUNT}" = "1" ]; then
+            joplin_log ${FUNCNAME[0]} 1 "The count is looking good, checking actual owner ...";
+
+            joplin_log ${FUNCNAME[0]} 1 "Correct Owner:         '${NEW_OWNER_ID}'";
+            joplin_log ${FUNCNAME[0]} 1 "Current Owner(:        '${CURRENT_OWNERS}'";
+
+            if [ "${CURRENT_OWNERS}" != "${NEW_OWNER_ID}" ]; then
+                helper_halt_deployment "The owner has not been reset. Halting deployment."
+            else
+                joplin_log ${FUNCNAME[0]} 1 "Ownership looks good, test passed and moving on.";
+            fi;
+
+        else
+            helper_halt_deployment "There seems to be more than one owner, there should be only one:'${NEW_OWNER_ID}', these are the owners found."
+        fi;
+    fi;
+}
+
+
 
 #
 # Copies the local database files (obtained from github) into the S3 for use in the migration process.
@@ -455,7 +510,7 @@ function joplin_copy_local_restorepoint_backups {
             helper_halt_deployment "There seems to have been a problem copying the files to the S3 bucket."
         fi;
 
-        joplin_log ${FUNCNAME[0]} 0 "Process complete.'";
+        joplin_log ${FUNCNAME[0]} 0 "Process complete.";
   	fi;
 }
 
@@ -851,6 +906,9 @@ function helper_test {
 
     joplin_log ${FUNCNAME[0]} 1 "Testing 'joplin_release' is ready: ";
     joplin_backup_database $TRAVIS_CI_TEST_TAG;
+
+    joplin_log ${FUNCNAME[0]} 1 "Testing 'joplin_reset_db_backups_owner' is ready: ";
+    joplin_reset_db_backups_owner $TRAVIS_CI_TEST_TAG
 
     joplin_log ${FUNCNAME[0]} 1 "Testing 'joplin_copy_local_restorepoint_backups' is ready: ";
     joplin_copy_local_restorepoint_backups $TRAVIS_CI_TEST_TAG;
