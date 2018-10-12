@@ -483,6 +483,11 @@ function joplin_reset_db_backups_owner {
 }
 
 
+function joplin_remove_db_ownership {
+    joplin_print_header "Removing DB Backup Ownership lines"
+	find $DB_BACKUPS_PATH -type f -exec sed -i '/OWNER TO/d' {} \;
+}
+
 
 #
 # Copies the local database files (obtained from github) into the S3 for use in the migration process.
