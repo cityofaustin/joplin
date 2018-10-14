@@ -130,6 +130,7 @@ ISREVIEWAPP = DEPLOYMENT_MODE == "REVIEW"
 default_db_url = f'sqlite:///{os.path.join(PROJECT_DIR, "db.sqlite3")}'
 DATABASES = {
     'default': dj_database_url.config(default=default_db_url),
+    'PASSWORD':  os.getenv('PGPASSWORD')
 }
 
 
