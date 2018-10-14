@@ -134,20 +134,6 @@ DATABASES = {
 }
 
 
-if(DEPLOYMENT_MODE != "LOCAL"):
-    DB_JOPLIN = urlparse(os.getenv("DATABASE_URL"))
-
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': DB_JOPLIN.path[1:],  # We need to remove the first character
-            'PASSWORD': DB_JOPLIN.password,
-            'USER': DB_JOPLIN.username,
-            'HOST': DB_JOPLIN.hostname,
-        }
-    }
-
-
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
 
@@ -240,6 +226,13 @@ DBBACKUP_STORAGE = 'django.core.files.storage.FileSystemStorage'
 DBBACKUP_STORAGE_OPTIONS = {'location': '/app/joplin/db/backups'}
 
 
+if(DEPLOYMENT_MODE != "LOCAL"):
+
+    DBBACKUP_CONNECTORS = {
+        'default': {
+            'RESTORE_PREFIX': "$DATABASE_URL"
+        }
+    }
 
 
 
