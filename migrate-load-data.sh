@@ -4,7 +4,7 @@ echo "Running migrations: (${DEPLOYMENT_MODE}) ..."
 python ./joplin/manage.py migrate --noinput
 
 
-if [ "${DEPLOYMENT_MODE}" = "PREVIEW" ]; then
+if [ "${DEPLOYMENT_MODE}" = "REVIEW" ]; then
     echo "Running DB restore for PR Review..."
     python ./joplin/manage.py dbrestore --noinput
 fi;

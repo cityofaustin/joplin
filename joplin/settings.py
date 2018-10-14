@@ -229,15 +229,14 @@ DBBACKUP_STORAGE_OPTIONS = {'location': '/app/joplin/db/backups'}
 if(DEPLOYMENT_MODE != "LOCAL"):
     DB_JOPLIN = urlparse(os.getenv("DATABASE_URL"))
 
-    DBBACKUP_CONNECTORS = {
+    DATABASES = {
         'default': {
+            'NAME': DB_JOPLIN.path[1:],  # We need to remove the first character
+            'PASSWORD': DB_JOPLIN.password,
             'USER': DB_JOPLIN.username,
             'HOST': DB_JOPLIN.hostname,
-            'PASSWORD': DB_JOPLIN.password,
-            'NAME': DB_JOPLIN.path[1:]  # We need to remove the first character
         }
     }
-
 
 
 
