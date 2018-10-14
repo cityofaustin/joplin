@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 
 import os
 from distutils.util import strtobool
+from urllib.parse import urlparse
 
 import dj_database_url
 from django.conf import global_settings
@@ -130,7 +131,6 @@ ISREVIEWAPP = DEPLOYMENT_MODE == "REVIEW"
 default_db_url = f'sqlite:///{os.path.join(PROJECT_DIR, "db.sqlite3")}'
 DATABASES = {
     'default': dj_database_url.config(default=default_db_url),
-    'PASSWORD':  os.getenv('PGPASSWORD')
 }
 
 
@@ -224,6 +224,22 @@ GRAPHENE = {
 # Assume DB default settings for LOCAL env
 DBBACKUP_STORAGE = 'django.core.files.storage.FileSystemStorage'
 DBBACKUP_STORAGE_OPTIONS = {'location': '/app/joplin/db/backups'}
+
+
+if(DEPLOYMENT_MODE != "LOCAL"):
+    DB_JOPLIN = urlparse(os.getenv("DATABASE_URL"))
+
+    DBBACKUP_CONNECTORS = {
+        'default': {
+            'USER': DB_JOPLIN.username,
+            'HOST': DB_JOPLIN.hostname,
+            'PASSWORD': DB_JOPLIN.password,
+            'NAME': DB_JOPLIN.path[1:]  # We need to remove the first character
+        }
+    }
+
+
+
 
 # Production, Staging & Review Apps
 if(ISPRODUCTION or ISSTAGING):
