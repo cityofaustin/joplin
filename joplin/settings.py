@@ -230,10 +230,9 @@ if(DEPLOYMENT_MODE != "LOCAL"):
 
     DBBACKUP_CONNECTORS = {
         'default': {
-            'RESTORE_PREFIX': "$DATABASE_URL"
+            'RESTORE_SUFFIX': "--no-owner"
         }
     }
-
 
 
 
