@@ -24,13 +24,9 @@ fi
 # Run Data Migrations Only (Static files can remain local)
 python ./joplin/manage.py migrate --noinput
 
-# DB Restore if load data is
 if [ "$LOAD_DATA" == "on" ]; then
     echo "Loading data from backup."
     python ./joplin/manage.py dbrestore --noinput
 fi
 
-
 exec "$@"
-
-
