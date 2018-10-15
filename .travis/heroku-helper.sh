@@ -485,7 +485,7 @@ function joplin_reset_db_backups_owner {
 
 function joplin_remove_db_ownership {
     joplin_print_header "Removing DB Backup Ownership lines"
-	find $DB_BACKUPS_PATH -type f -exec sed -i '/OWNER TO/d' {} \;
+	find $DB_BACKUPS_PATH -type f -exec sed -i "/\(OWNER TO\|COMMENT ON EXTENSION plpgsql\|CREATE EXTENSION IF NOT EXISTS plpgsql\|DROP EXTENSION plpgsql\)/d" {} \;
 }
 
 
