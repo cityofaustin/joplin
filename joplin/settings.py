@@ -226,13 +226,14 @@ DBBACKUP_STORAGE = 'django.core.files.storage.FileSystemStorage'
 DBBACKUP_STORAGE_OPTIONS = {'location': '/app/joplin/db/backups'}
 
 
-if(DEPLOYMENT_MODE != "LOCAL"):
 
-    DBBACKUP_CONNECTORS = {
-        'default': {
-            'RESTORE_SUFFIX': "--no-owner"
-        }
+
+# Avoid exporting owner settings
+DBBACKUP_CONNECTORS = {
+    'default': {
+        'DUMP_SUFFIX': '--no-owner'
     }
+}
 
 
 
