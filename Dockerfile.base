@@ -1,7 +1,15 @@
 FROM python:3.6.5-slim-stretch
 
+RUN apt-get update && apt-get install -y gnupg curl
+
+RUN echo 'deb http://apt.postgresql.org/pub/repos/apt/ stretch-pgdg main' >  /etc/apt/sources.list.d/pgdg.list \
+    && curl -s https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \
+    && apt-get update && apt-get install -y postgresql-client
+
+
 COPY /deploy/requirements.txt /deploy/requirements.txt
 RUN pip install --no-cache-dir --disable-pip-version-check --requirement /deploy/requirements.txt
+
 
 ENV PYTHONUNBUFFERED=1
 ENV WEB_CONCURRENCY=4
