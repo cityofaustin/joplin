@@ -24,6 +24,7 @@ RUN mkdir /app
 WORKDIR /app
 
 COPY "$PWD/joplin" /app/joplin
+COPY "$PWD/media" /app/media
 
 WORKDIR /app/joplin
 RUN yarn; yarn build
