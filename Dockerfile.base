@@ -22,3 +22,4 @@ WORKDIR /app
 COPY "$PWD/docker-entrypoint.sh" /app/docker-entrypoint.sh
 COPY "$PWD/migrate-load-data.sh" /app/migrate-load-data.sh
 COPY "$PWD/joplin" /app/joplin
+COPY "$PWD/media" /app

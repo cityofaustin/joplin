@@ -220,9 +220,6 @@ GRAPHENE = {
     ]
 }
 
-DBBACKUP_STORAGE = 'django.core.files.storage.FileSystemStorage'
-DBBACKUP_STORAGE_OPTIONS = {'location': '/app/joplin/db/backups'}
-
 # Assume DB default settings for LOCAL env
 DBBACKUP_STORAGE = 'django.core.files.storage.FileSystemStorage'
 DBBACKUP_STORAGE_OPTIONS = {'location': '/app/joplin/db/backups'}
