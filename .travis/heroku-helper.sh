@@ -484,8 +484,15 @@ function joplin_reset_db_backups_owner {
 
 
 function joplin_remove_db_ownership {
-    joplin_print_header "Removing DB Backup Ownership lines"
-	find $DB_BACKUPS_PATH -type f -exec sed -i "/\(OWNER TO\|COMMENT ON EXTENSION plpgsql\|CREATE EXTENSION IF NOT EXISTS plpgsql\|DROP EXTENSION plpgsql\)/d" {} \;
+    # Validate Branch Name (or halt deployment if no branch specified)
+    helper_internal_validation ${FUNCNAME[0]} $1
+
+    # We're good to go!
+    if [ "$?" = "0" ]; then
+        joplin_print_header "Removing DB Backup Ownership & Extension Lines"
+
+        find $DB_BACKUPS_PATH -type f -exec sed -i "/\(OWNER TO\|COMMENT ON EXTENSION plpgsql\|CREATE EXTENSION IF NOT EXISTS plpgsql\|DROP EXTENSION plpgsql\)/d" {} \;
+    fi;
 }
 
 
@@ -884,7 +891,7 @@ function joplin_migrate {
 
         echo -e "\n"
         joplin_log ${FUNCNAME[0]} 0 "Migrating data for Branch: ${TRAVIS_BRANCH}, App: ${APPNAME}";
-        heroku run -a $APPNAME -- /app/migrate-load-data.sh
+        heroku run --app $APPNAME -- /app/migrate-load-data.sh
         echo -e "\n"
         joplin_log ${FUNCNAME[0]} 0 "Migration process finished \n";
     fi;
@@ -914,6 +921,9 @@ function helper_test {
 
     joplin_log ${FUNCNAME[0]} 1 "Testing 'joplin_reset_db_backups_owner' is ready: ";
     joplin_reset_db_backups_owner $TRAVIS_CI_TEST_TAG
+
+    joplin_log ${FUNCNAME[0]} 1 "Testing 'joplin_remove_db_ownership' is ready: ";
+    joplin_remove_db_ownership $TRAVIS_CI_TEST_TAG
 
     joplin_log ${FUNCNAME[0]} 1 "Testing 'joplin_copy_local_restorepoint_backups' is ready: ";
     joplin_copy_local_restorepoint_backups $TRAVIS_CI_TEST_TAG;

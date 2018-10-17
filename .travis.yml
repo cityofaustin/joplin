@@ -41,7 +41,7 @@ addons:
 # Environment Vars
 env:
   global:
-  - PR_AUTOBUILD: "true" # (example, enables automatic PR build when present)
+  - PR_AUTOBUILD: "false" # (example, enables automatic PR build when set to 'true')
   - PATH=$HOME/.local/bin:$PATH
   - JOPLIN_IMAGE_NAME: joplin-base
   # HEROKU_API_KEY="..."
@@ -82,9 +82,8 @@ jobs:
     - joplin_backup_database $TRAVIS_BRANCH
   - stage: Building container and upload to Heroku
     script:
-    - joplin_reset_db_backups_owner $TRAVIS_BRANCH
+    - joplin_remove_db_ownership $TRAVIS_BRANCH
     - joplin_copy_local_restorepoint_backups $TRAVIS_BRANCH
-    - joplin_remove_db_ownership
     - joplin_create_pr_app $TRAVIS_BRANCH
     - joplin_build $TRAVIS_BRANCH
     after_success:
