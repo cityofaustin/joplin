@@ -3,22 +3,12 @@ python:
 - '3.6'
 dist: trusty
 
-# Deploy only if:
-#     - it's regular push to the master or production branches
-#     - It's a pull request and:
-#       - PR_AUTOBUILD env. variable is set to "true" or
-#       - the name of the PR branch (head name) is contained in PR_AUTODEPLOY env. variable or
-#       - git commit message contains "[joplin:build]"
 #
-#   Note: PR_AUTOBUILD or PR_AUTODEPLOY variables can be set either in Travis > Settings or
-#   at the env: global: section of this configuration file. See example below.
+# Deployment Conditions
 #
 
 if: |
-  (branch IN (master, production) AND type = push) OR \
-  (type = pull_request AND env(PR_AUTOBUILD) IN (true, enabled, on)) OR \
-  (type = pull_request AND env(PR_AUTODEPLOY) =~ concat(head_branch) ) OR \
-  (type = pull_request AND commit_message =~ /\[joplin\:build\]/ )
+  (branch IN (master, production) AND type = push) OR (type = pull_request)
 
 
 # We will need these services:

@@ -891,7 +891,14 @@ function joplin_migrate {
 
         echo -e "\n"
         joplin_log ${FUNCNAME[0]} 0 "Migrating data for Branch: ${TRAVIS_BRANCH}, App: ${APPNAME}";
-        heroku run --app $APPNAME -- /app/migrate-load-data.sh
+        migration_output=`heroku run --app $APPNAME -- /app/migrate-load-data.sh`
+
+        echo $migration_output;
+
+        if [[ $migration_output == *"MIGRATION_EXIT_STATUS_ERROR"* ]]; then
+            helper_halt_deployment "There has been an error in the migration process. Marking as a failed deployment.";
+        fi;
+
         echo -e "\n"
         joplin_log ${FUNCNAME[0]} 0 "Migration process finished \n";
     fi;
