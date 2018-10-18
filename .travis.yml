@@ -3,10 +3,9 @@ python:
 - '3.6'
 dist: trusty
 
-#
 # Deployment Conditions
-#
-
+#   PRs, master and production will be automatically updated and rebuilt on git push.
+#   Regular branches will not be built, they can be updated and commited at any time without disturbing PRs, master or staging.
 if: |
   (branch IN (master, production) AND type = push) OR (type = pull_request)
 
