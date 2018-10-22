@@ -175,4 +175,4 @@ Our data migration is done in this stage, it can take up a few minutes depending
 - python ./joplin/manage.py dbimport - This command will import the latest instance database backup in folder. This only happens for PR branches.
 - python ./joplin/manage.py collectstatic - Triggers the collect static process which only takes care of wagtail and certain images. This only runs for staging and production.
 
-The process is not perfect and it is bound to struggle at any point of the deployment, feel free to document any issues you see so that the process can be improved.
+The process is not perfect and it is bound to struggle at any point of the deployment, feel free to document any issues you see so that the process can be improved. 
