@@ -7,6 +7,7 @@ from modelcluster.models import ClusterableModel
 
 from wagtail.utils.decorators import cached_classmethod
 from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, MultiFieldPanel, ObjectList, StreamFieldPanel, TabbedInterface
+from wagtail.core.blocks import TextBlock, RichTextBlock, ListBlock, StreamBlock, StructBlock
 from wagtail.core.fields import StreamField, RichTextField
 from wagtail.core.models import Page, Orderable
 from wagtail.snippets.edit_handlers import SnippetChooserPanel
@@ -18,11 +19,9 @@ from wagtail.search import index
 from . import blocks as custom_blocks
 from . import forms as custom_forms
 
-
-WYSIWYG_FEATURES = ['h1', 'h2', 'link', 'ul', 'ol']
-SERVICE_STEP_FEATURES = ['ul', 'link']
+WYSIWYG_GENERAL = ['h1', 'h2', 'link', 'ul', 'ol']
+WYSIWYG_SERVICE_STEP = ['ul', 'ol', 'link']
 DEFAULT_MAX_LENGTH = 255
-
 
 class TranslatedImage(AbstractImage):
     admin_form_fields = Image.admin_form_fields
@@ -111,6 +110,35 @@ JanisPage._meta.get_field('title').verbose_name='Write an actionable title'
 class ServicePage(JanisPage):
     janis_url_page_type = "services"
 
+    steps = StreamField(
+        [
+            ('basic_step', RichTextBlock(
+                features=WYSIWYG_SERVICE_STEP,
+                label='Basic Step'
+            )),
+            ('step_with_options_accordian', StructBlock(
+                [
+                    ('options_description', TextBlock('Describe the set of options')),
+                    ('options', ListBlock(
+                        StructBlock([
+                            ('option_name', TextBlock(
+                                label='Option name. (When clicked, this name will expand the content for this option'
+                            )),
+                            ('option_description', RichTextBlock(
+                                features=WYSIWYG_SERVICE_STEP,
+                                label='Option Content',
+                            )),
+                        ]),
+                    )),
+                ],
+                label="Step With Options"
+            )),
+        ],
+        verbose_name='Write out the steps a resident needs to take to use the service',
+        help_text='A step may have a basic text step or an options accordian which reveals two or more options',
+        blank=True
+    )
+
     dynamic_content = StreamField(
         [
             ('map_block', custom_blocks.SnippetChooserBlockWithAPIGoodness('base.Map', icon='site')),
@@ -122,7 +150,7 @@ class ServicePage(JanisPage):
         blank=True
     )
     additional_content = RichTextField(
-        features=WYSIWYG_FEATURES,
+        features=WYSIWYG_GENERAL,
         verbose_name='Write any additional content describing the service',
         help_text='Section header: What else do I need to know?',
         blank=True
@@ -134,19 +162,12 @@ class ServicePage(JanisPage):
 
     content_panels = [
         ImageChooserPanel('image'),
-        InlinePanel('service_steps', label="Service steps"),
+        StreamFieldPanel('steps'),
         StreamFieldPanel('dynamic_content'),
         FieldPanel('additional_content'),
         InlinePanel('contacts', label='Contacts'),
     ]
 
-class ServicePageStep(Orderable):
-    page = ParentalKey(ServicePage, related_name='service_steps')
-    step_description = RichTextField(features=SERVICE_STEP_FEATURES, verbose_name='Step description', blank=True)
-
-    panels = [
-        FieldPanel('step_description'),
-    ]
 
 class ProcessPage(JanisPage):
     janis_url_page_type = "processes"
@@ -170,9 +191,9 @@ class ProcessPageStep(Orderable):
     short_title = models.CharField(max_length=DEFAULT_MAX_LENGTH)
     link_title = models.CharField(max_length=DEFAULT_MAX_LENGTH)
     description = models.TextField(blank=True)
-    image = models.ForeignKey(TranslatedImage, null=True, on_delete=models.SET_NULL, related_name='+')
-    overview_steps = RichTextField(features=WYSIWYG_FEATURES, verbose_name='Write out the steps a resident needs to take to use the service', blank=True)
-    detailed_content = RichTextField(features=WYSIWYG_FEATURES, verbose_name='Write any detailed content describing the process', blank=True)
+    image = models.ForeignKey(TranslatedImage, null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
+    overview_steps = RichTextField(features=WYSIWYG_GENERAL, verbose_name='Write out the steps a resident needs to take to use the service', blank=True)
+    detailed_content = RichTextField(features=WYSIWYG_GENERAL, verbose_name='Write any detailed content describing the process', blank=True)
     quote = models.TextField(blank=True)
 
     panels = [

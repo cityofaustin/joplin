@@ -1,6 +1,13 @@
 FROM python:3.6.5-slim-stretch
 
-RUN apt-get update; apt-get -y install gnupg; apt-get -y install curl
+# GnuPG, Curl
+RUN apt-get update && apt-get install -y gnupg curl
+
+# PostgreSQL 10
+RUN echo 'deb http://apt.postgresql.org/pub/repos/apt/ stretch-pgdg main' >  /etc/apt/sources.list.d/pgdg.list \
+    && curl -s https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \
+    && apt-get update && apt-get install -y postgresql-client
+
 RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
 RUN apt-get update; apt-get -y install nodejs
 RUN npm install --global yarn
@@ -16,8 +23,8 @@ EXPOSE $PORT
 RUN mkdir /app
 WORKDIR /app
 
-COPY "$PWD/fixtures" /app/fixtures
 COPY "$PWD/joplin" /app/joplin
+COPY "$PWD/media" /app/media
 
 WORKDIR /app/joplin
 RUN yarn; yarn build
