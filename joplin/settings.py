@@ -262,6 +262,10 @@ if(ISPRODUCTION or ISSTAGING):
         'location': AWS_BACKUPS_LOCATION + "/" + APPLICATION_NAME
     }
 
+    # Specifying the location of files
+    STATICFILES_LOCATION = 'static'
+    MEDIAFILES_LOCATION = 'media'
+
     # We now change the storage mode to S3 via Boto for default, static and dbbackup
     STATICFILES_STORAGE = 'custom_storages.StaticStorage'
     DEFAULT_FILE_STORAGE = 'custom_storages.MediaStorage'
