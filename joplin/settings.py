@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 
 import os
 from distutils.util import strtobool
+from urllib.parse import urlparse
 
 import dj_database_url
 from django.conf import global_settings
@@ -68,6 +69,7 @@ INSTALLED_APPS = [
 
     'wagtail.contrib.modeladmin',
     'webpack_loader',
+    'dbbackup',
 ]
 
 MIDDLEWARE = [
@@ -112,9 +114,20 @@ TEMPLATES = [
 WSGI_APPLICATION = 'wsgi.application'
 
 
+# Detect whether it is a staging or production environment
+DEPLOYMENT_MODE = os.environ.get('DEPLOYMENT_MODE', 'LOCAL')
+ISPRODUCTION = DEPLOYMENT_MODE == "PRODUCTION"
+ISSTAGING = DEPLOYMENT_MODE == "STAGING"
+ISREVIEWAPP = DEPLOYMENT_MODE == "REVIEW"
+
+
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
-
+#
+# dj_database_url should detect the environment variable 'DATABASE_URL',
+# this is provided by Heroku in production, or locally via Dockerfile.local,
+# if it does not, then assume SQLite.
+#
 default_db_url = f'sqlite:///{os.path.join(PROJECT_DIR, "db.sqlite3")}'
 DATABASES = {
     'default': dj_database_url.config(default=default_db_url),
@@ -138,6 +151,9 @@ LANGUAGES = [lang for lang in global_settings.LANGUAGES if lang[0] in SUPPORTED_
 
 TIME_ZONE = 'UTC'
 USE_TZ = True
+
+MODELTRANSLATION_DEFAULT_LANGUAGE = 'en'
+
 
 
 # Static files (CSS, JavaScript, Images)
@@ -203,3 +219,54 @@ GRAPHENE = {
         'graphene_django.debug.DjangoDebugMiddleware',
     ]
 }
+
+# Assume DB default settings for LOCAL env
+DBBACKUP_STORAGE = 'django.core.files.storage.FileSystemStorage'
+DBBACKUP_STORAGE_OPTIONS = {'location': '/app/joplin/db/backups'}
+
+
+
+
+# Avoid exporting owner settings
+DBBACKUP_CONNECTORS = {
+    'default': {
+        'DUMP_SUFFIX': '--no-owner'
+    }
+}
+
+
+
+# Production, Staging & Review Apps
+if(ISPRODUCTION or ISSTAGING):
+    #
+    # AWS Buckets only if not local.
+    #
+    APPLICATION_NAME = os.getenv('APPLICATION_NAME')
+    AWS_ACCESS_KEY_ID = os.getenv('AWS_S3_KEYID')
+    AWS_SECRET_ACCESS_KEY = os.getenv('AWS_S3_ACCESSKEY')
+    AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_S3_BUCKET')
+    AWS_ARCHIVE_BUCKET_NAME = os.getenv('AWS_S3_BUCKET_ARCHIVE')
+    AWS_BACKUPS_LOCATION = os.getenv('AWS_S3_BUCKET_ARCHIVE_LOCATION')
+    AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+
+    AWS_S3_OBJECT_PARAMETERS = {
+        'CacheControl': 'max-age=86400',
+    }
+
+    # We now change the backups directory
+    DBBACKUP_STORAGE_OPTIONS = {
+        'access_key': AWS_ACCESS_KEY_ID,
+        'secret_key': AWS_SECRET_ACCESS_KEY,
+        'bucket_name': AWS_ARCHIVE_BUCKET_NAME,
+        'host': "s3.amazonaws.com",
+        'location': AWS_BACKUPS_LOCATION + "/" + APPLICATION_NAME
+    }
+
+    # Specifying the location of files
+    STATICFILES_LOCATION = 'static'
+    MEDIAFILES_LOCATION = 'media'
+
+    # We now change the storage mode to S3 via Boto for default, static and dbbackup
+    STATICFILES_STORAGE = 'custom_storages.StaticStorage'
+    DEFAULT_FILE_STORAGE = 'custom_storages.MediaStorage'
+    DBBACKUP_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
