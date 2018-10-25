@@ -20,7 +20,7 @@ IMAGE_WIDTHS = (
     1440,  # 1440p non retina displays/720 retina displays
     2160,  # 1080p retina displays
 )
-JANIS_SLUG_URL = 'https://api.github.com/repos/cityofaustin/janis/tarball/master'
+JANIS_SLUG_URL = settings.JANIS_SLUG_URL
 
 
 @receiver(post_save, sender=TranslatedImage)
