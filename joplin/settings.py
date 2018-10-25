@@ -271,6 +271,8 @@ if(ISPRODUCTION or ISSTAGING):
     DEFAULT_FILE_STORAGE = 'custom_storages.MediaStorage'
     DBBACKUP_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
+JANIS_SLUG_URL=""
+
 if ISPRODUCTION:
     JANIS_SLUG_URL = 'https://api.github.com/repos/cityofaustin/janis/tarball/production'
 

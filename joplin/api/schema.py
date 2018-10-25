@@ -108,7 +108,7 @@ class ServicePageNode(DjangoObjectType):
 
     class Meta:
         model = ServicePage
-        filter_fields = ['id', 'slug', 'topic', 'topic__slug']
+        filter_fields = ['id', 'slug', 'topic', 'topic__slug', 'live']
         interfaces = [graphene.Node]
 
 class ProcessPageNode(DjangoObjectType):
