@@ -22,6 +22,7 @@ class CreateContentModal extends Component {
       topic: null,
       activeStep: 0,
       titleCharacterCount: 0,
+      creatingContent: false,
     };
   }
 
@@ -56,7 +57,12 @@ class CreateContentModal extends Component {
     if (this.state.activeStep === 2 && this.state.topic === null) return false;
 
     if (this.onLastStep()) {
-      this.createPage();
+      this.setState(
+        {
+          creatingContent: true,
+        },
+        () => this.createPage(),
+      );
       return;
     }
 
@@ -132,34 +138,36 @@ class CreateContentModal extends Component {
         <div className="CreateContentModal__wrapper">
           <div className="modal-dialog" role="document">
             <div className="modal-content CreateContentModal">
-              <div className="modal-body">
-                {this.state.activeStep === 0 && (
-                  <ChooseTypeStep handleTypeSelect={this.handleTypeSelect} />
-                )}
-                {this.state.activeStep === 1 && (
-                  <ChooseTitleStep
-                    pageType={this.state.type}
-                    title={this.state.title}
-                    handleTitleInputChange={this.handleTitleInputChange}
-                    characterCount={this.state.titleCharacterCount}
-                    maxCharacterCount={MAX_TITLE_LENGTH}
+              {!this.state.creatingContent && (
+                <div className="modal-body">
+                  {this.state.activeStep === 0 && (
+                    <ChooseTypeStep handleTypeSelect={this.handleTypeSelect} />
+                  )}
+                  {this.state.activeStep === 1 && (
+                    <ChooseTitleStep
+                      pageType={this.state.type}
+                      title={this.state.title}
+                      handleTitleInputChange={this.handleTitleInputChange}
+                      characterCount={this.state.titleCharacterCount}
+                      maxCharacterCount={MAX_TITLE_LENGTH}
+                    />
+                  )}
+                  {this.state.activeStep === 2 && (
+                    <ChooseTopicStep
+                      topic={this.state.topic}
+                      handleTopicSelect={this.handleTopicSelect}
+                      themeTopicTree={THEME_TOPIC_TREE}
+                    />
+                  )}
+                  <ButtonBar
+                    handleBackButton={this.handleBackButton}
+                    handleNextButton={this.handleNextButton}
+                    handleCloseButton={this.handleCloseButton}
+                    hidden={this.state.activeStep === 0}
+                    onLastStep={this.onLastStep()}
                   />
-                )}
-                {this.state.activeStep === 2 && (
-                  <ChooseTopicStep
-                    topic={this.state.topic}
-                    handleTopicSelect={this.handleTopicSelect}
-                    themeTopicTree={THEME_TOPIC_TREE}
-                  />
-                )}
-                <ButtonBar
-                  handleBackButton={this.handleBackButton}
-                  handleNextButton={this.handleNextButton}
-                  handleCloseButton={this.handleCloseButton}
-                  hidden={this.state.activeStep === 0}
-                  onLastStep={this.onLastStep()}
-                />
-              </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
