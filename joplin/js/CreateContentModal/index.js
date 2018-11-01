@@ -113,8 +113,7 @@ class CreateContentModal extends Component {
       })
       .catch(error => {
         console.log(error);
-      })
-      .bind(this);
+      });
   };
 
   handleCloseButton = e => {
@@ -141,41 +140,46 @@ class CreateContentModal extends Component {
           <div className="modal-dialog" role="document">
             <div className="modal-content CreateContentModal">
               <div className="modal-body">
-                {this.state.creatingContent && (
+                {this.state.creatingContent ? (
                   <div className="CreateContentModal__step">
                     <h2 className="CreateContentModal__header">
                       Creating Page.
                     </h2>
                     <FontAwesomeIcon icon={faSpinner} spin size="5x" />
                   </div>
-                )}
-                {this.state.activeStep === 0 && (
-                  <ChooseTypeStep handleTypeSelect={this.handleTypeSelect} />
-                )}
-                {this.state.activeStep === 1 && (
-                  <ChooseTitleStep
-                    pageType={this.state.type}
-                    title={this.state.title}
-                    handleTitleInputChange={this.handleTitleInputChange}
-                    characterCount={this.state.titleCharacterCount}
-                    maxCharacterCount={MAX_TITLE_LENGTH}
-                  />
-                )}
-                {this.state.activeStep === 2 && (
-                  <ChooseTopicStep
-                    topic={this.state.topic}
-                    handleTopicSelect={this.handleTopicSelect}
-                    themeTopicTree={THEME_TOPIC_TREE}
-                  />
-                )}
-                {!this.state.creatingContent && (
-                  <ButtonBar
-                    handleBackButton={this.handleBackButton}
-                    handleNextButton={this.handleNextButton}
-                    handleCloseButton={this.handleCloseButton}
-                    hidden={this.state.activeStep === 0}
-                    onLastStep={this.onLastStep()}
-                  />
+                ) : (
+                  <div>
+                    {this.state.activeStep === 0 && (
+                      <ChooseTypeStep
+                        handleTypeSelect={this.handleTypeSelect}
+                      />
+                    )}
+                    {this.state.activeStep === 1 && (
+                      <ChooseTitleStep
+                        pageType={this.state.type}
+                        title={this.state.title}
+                        handleTitleInputChange={this.handleTitleInputChange}
+                        characterCount={this.state.titleCharacterCount}
+                        maxCharacterCount={MAX_TITLE_LENGTH}
+                      />
+                    )}
+                    {this.state.activeStep === 2 && (
+                      <ChooseTopicStep
+                        topic={this.state.topic}
+                        handleTopicSelect={this.handleTopicSelect}
+                        themeTopicTree={THEME_TOPIC_TREE}
+                      />
+                    )}
+                    {!this.state.creatingContent && (
+                      <ButtonBar
+                        handleBackButton={this.handleBackButton}
+                        handleNextButton={this.handleNextButton}
+                        handleCloseButton={this.handleCloseButton}
+                        hidden={this.state.activeStep === 0}
+                        onLastStep={this.onLastStep()}
+                      />
+                    )}
+                  </div>
                 )}
               </div>
             </div>
