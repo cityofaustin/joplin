@@ -2,6 +2,8 @@ import ReactDOM from 'react-dom';
 import React, { Component } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 
 import ChooseTypeStep from './ChooseTypeStep.js';
 import ChooseTitleStep from './ChooseTitleStep.js';
@@ -138,27 +140,35 @@ class CreateContentModal extends Component {
         <div className="CreateContentModal__wrapper">
           <div className="modal-dialog" role="document">
             <div className="modal-content CreateContentModal">
-              {!this.state.creatingContent && (
-                <div className="modal-body">
-                  {this.state.activeStep === 0 && (
-                    <ChooseTypeStep handleTypeSelect={this.handleTypeSelect} />
-                  )}
-                  {this.state.activeStep === 1 && (
-                    <ChooseTitleStep
-                      pageType={this.state.type}
-                      title={this.state.title}
-                      handleTitleInputChange={this.handleTitleInputChange}
-                      characterCount={this.state.titleCharacterCount}
-                      maxCharacterCount={MAX_TITLE_LENGTH}
-                    />
-                  )}
-                  {this.state.activeStep === 2 && (
-                    <ChooseTopicStep
-                      topic={this.state.topic}
-                      handleTopicSelect={this.handleTopicSelect}
-                      themeTopicTree={THEME_TOPIC_TREE}
-                    />
-                  )}
+              <div className="modal-body">
+                {this.state.creatingContent && (
+                  <div className="CreateContentModal__step">
+                    <h2 className="CreateContentModal__header">
+                      Creating Page.
+                    </h2>
+                    <FontAwesomeIcon icon={faSpinner} spin size="5x" />
+                  </div>
+                )}
+                {this.state.activeStep === 0 && (
+                  <ChooseTypeStep handleTypeSelect={this.handleTypeSelect} />
+                )}
+                {this.state.activeStep === 1 && (
+                  <ChooseTitleStep
+                    pageType={this.state.type}
+                    title={this.state.title}
+                    handleTitleInputChange={this.handleTitleInputChange}
+                    characterCount={this.state.titleCharacterCount}
+                    maxCharacterCount={MAX_TITLE_LENGTH}
+                  />
+                )}
+                {this.state.activeStep === 2 && (
+                  <ChooseTopicStep
+                    topic={this.state.topic}
+                    handleTopicSelect={this.handleTopicSelect}
+                    themeTopicTree={THEME_TOPIC_TREE}
+                  />
+                )}
+                {!this.state.creatingContent && (
                   <ButtonBar
                     handleBackButton={this.handleBackButton}
                     handleNextButton={this.handleNextButton}
@@ -166,8 +176,8 @@ class CreateContentModal extends Component {
                     hidden={this.state.activeStep === 0}
                     onLastStep={this.onLastStep()}
                   />
-                </div>
-              )}
+                )}
+              </div>
             </div>
           </div>
         </div>
