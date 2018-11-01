@@ -170,15 +170,13 @@ class CreateContentModal extends Component {
                         themeTopicTree={THEME_TOPIC_TREE}
                       />
                     )}
-                    {!this.state.creatingContent && (
-                      <ButtonBar
-                        handleBackButton={this.handleBackButton}
-                        handleNextButton={this.handleNextButton}
-                        handleCloseButton={this.handleCloseButton}
-                        hidden={this.state.activeStep === 0}
-                        onLastStep={this.onLastStep()}
-                      />
-                    )}
+                    <ButtonBar
+                      handleBackButton={this.handleBackButton}
+                      handleNextButton={this.handleNextButton}
+                      handleCloseButton={this.handleCloseButton}
+                      hidden={this.state.activeStep === 0}
+                      onLastStep={this.onLastStep()}
+                    />
                   </div>
                 )}
               </div>
