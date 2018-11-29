@@ -42,9 +42,11 @@ def new_page_from_modal(request):
     if request.method == 'POST':
         # Get the page data
         body = json.loads(request.body)
+
         data = {}
         data['topic'] = Topic.objects.get(id=body['topic'])
         data['title'] = body['title']
+        data['owner'] = request.user
 
         # Create the page
         if body['type'] == 'service':
