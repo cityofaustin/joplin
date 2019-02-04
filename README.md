@@ -66,13 +66,14 @@ docker exec --interactive --tty joplin python joplin/manage.py dbbackup
 ```
 
 
-## Update database from yaml file
-
-As you make edits to yamls files, you will need to run the following command while the server is running:
-
-```
-docker exec --interactive --tty joplin python ./joplin/manage.py loadcontent fixtures/name-of-fixture.yaml
-```
+### Updating the models (for example, adding a new page model)
+1. Clear out your docker containers and start fresh with `./scripts/serve-local.sh`
+2. Load the current backup `LOAD_DATA=on ./scripts/serve-local.sh`
+3. Make your changes to `models.py`
+4. Run `makemigrations` and `migrate` - see "Create Migrations" above
+5. Make an example page
+6. Make a new backup
+8. Try starting fresh with your new model/migration/backup
 
 ## Update: New deployment pipeline
 
