@@ -188,14 +188,37 @@ class ProcessPage(JanisPage):
 class InformationPage(JanisPage):
     janis_url_page_type = "information"
 
-    description = models.TextField(blank=True)
+    toplink = models.BooleanField(default=False, verbose_name='Make this page a top link on any service collection page for this topic')
+    description = models.TextField(blank=True, verbose_name='Write a description of this page')
+    options = StreamField(
+        [
+            ('option', RichTextBlock(
+                features=WYSIWYG_SERVICE_STEP,
+                label='Option'
+            ))
+        ],
+        verbose_name='Add option sections as needed.',
+        help_text='Options are needed when the reader needs to make a choice between a few options, such as ways to fill out a form (online, by phone, in person, etc.).',
+        blank=True
+    )
+
+    additional_content = RichTextField(
+        features=WYSIWYG_GENERAL,
+        verbose_name='Write any additional content describing the service',
+        blank=True
+    )
+
     image = models.ForeignKey(TranslatedImage, null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
     # TODO: Add images array field
 
     base_form_class = custom_forms.InformationPageForm
 
     content_panels = [
+        FieldPanel('toplink'),
         FieldPanel('description'),
+        StreamFieldPanel('options'),
+        FieldPanel('additional_content'),
+        InlinePanel('contacts', label='Contacts'),
         ImageChooserPanel('image'),
     ]
 
@@ -373,6 +396,17 @@ class ProcessPageContact(ClusterableModel):
 
 class ServicePageContact(ClusterableModel):
     page = ParentalKey(ServicePage, related_name='contacts')
+    contact = models.ForeignKey(Contact, related_name='+', on_delete=models.CASCADE)
+
+    panels = [
+        SnippetChooserPanel('contact'),
+    ]
+
+    def __str__(self):
+        return self.contact.name
+
+class InformationPageContact(ClusterableModel):
+    page = ParentalKey(InformationPage, related_name='contacts')
     contact = models.ForeignKey(Contact, related_name='+', on_delete=models.CASCADE)
 
     panels = [
