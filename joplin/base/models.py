@@ -50,7 +50,7 @@ class ThreeOneOne(ClusterableModel):
 
 class HomePage(Page):
     parent_page_types = []
-    subpage_types = ['base.ServicePage', 'base.ProcessPage']
+    subpage_types = ['base.ServicePage', 'base.ProcessPage', 'base.InformationPage']
 
     image = models.ForeignKey(TranslatedImage, null=True, on_delete=models.SET_NULL, related_name='+')
 
@@ -183,6 +183,20 @@ class ProcessPage(JanisPage):
         ImageChooserPanel('image'),
         InlinePanel('contacts', label='Contacts'),
         InlinePanel('process_steps', label="Process steps"),
+    ]
+
+class InformationPage(JanisPage):
+    janis_url_page_type = "information"
+
+    description = models.TextField(blank=True)
+    image = models.ForeignKey(TranslatedImage, null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
+    # TODO: Add images array field
+
+    base_form_class = custom_forms.InformationPageForm
+
+    content_panels = [
+        FieldPanel('description'),
+        ImageChooserPanel('image'),
     ]
 
 class ProcessPageStep(Orderable):

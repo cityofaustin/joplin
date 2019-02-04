@@ -8,3 +8,7 @@ class ServicePageForm(WagtailAdminPageForm):
 class ProcessPageForm(WagtailAdminPageForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+class InformationPageForm(WagtailAdminPageForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
