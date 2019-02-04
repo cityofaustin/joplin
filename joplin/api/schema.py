@@ -120,7 +120,7 @@ class ProcessPageNode(DjangoObjectType):
 class InformationPageNode(DjangoObjectType):
     class Meta:
         model = InformationPage
-        filter_fields = ['id', 'slug', 'topic', 'topic__slug']
+        filter_fields = ['id', 'slug', 'topic', 'topic__slug', 'live']
         interfaces = [graphene.Node]
 
 class PageRevisionNode(DjangoObjectType):
@@ -150,6 +150,11 @@ class ProcessPageStepNode(DjangoObjectType):
 class ProcessPageContactNode(DjangoObjectType):
     class Meta:
         model = ProcessPageContact
+        interfaces = [graphene.Node]
+
+class InformationPageContactNode(DjangoObjectType):
+    class Meta:
+        model = InformationPageContact
         interfaces = [graphene.Node]
 
 
