@@ -191,7 +191,7 @@ class ProcessPage(JanisPage):
         InlinePanel('process_steps', label="Process steps"),
     ]
 
-class InformationPage(Page):
+class InformationPage(JanisPage):
     janis_url_page_type = "information"
 
     toplink = models.BooleanField(default=False, verbose_name='Make this page a top link on any service collection page for this topic')
@@ -256,23 +256,27 @@ class DepartmentPage(JanisBasePage):
     )
     directors = StreamField(
         [
-            ('name', TextBlock(
-                label='Director\'s name'
+            ('director', ListBlock(
+                StructBlock([
+                    ('name', TextBlock(
+                        label='Director\'s name'
+                    )),
+                    ('photo', ImageChooserBlock(
+                        label='Photo of the director'
+                    )),
+                    ('about', TextBlock(
+                        label='About the director'
+                    )),
+                    ('email', TextBlock(
+                        label='Director\'s email',
+                        blank=True
+                    )),
+                    ('phone', TextBlock(
+                        label='Director\'s phone',
+                        blank=True
+                    ))
+                ]),
             )),
-            ('photo', ImageChooserBlock(
-                label='Photo of the director'
-            )),
-            ('about', TextBlock(
-                label='About the director'
-            )),
-            ('email', TextBlock(
-                label='Director\'s email',
-                blank=True
-            )),
-            ('phone', TextBlock(
-                label='Director\'s phone',
-                blank=True
-            ))
         ],
         verbose_name='Add directors.',
         blank=True
