@@ -203,7 +203,7 @@ class Query(graphene.ObjectType):
     all_page_revisions = DjangoFilterConnectionField(PageRevisionNode)
     all_processes = DjangoFilterConnectionField(ProcessPageNode)
     all_information_pages = DjangoFilterConnectionField(InformationPageNode)
-    # all_department_pages = DjangoFilterConnectionField(DepartmentPageNode)
+    all_department_pages = DjangoFilterConnectionField(DepartmentPageNode)
     all_themes = DjangoFilterConnectionField(ThemeNode)
     all_topics = DjangoFilterConnectionField(TopicNode)
     all_departments = DjangoFilterConnectionField(DepartmentNode)
