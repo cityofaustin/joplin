@@ -7,12 +7,13 @@ from modelcluster.models import ClusterableModel
 
 from wagtail.utils.decorators import cached_classmethod
 from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, MultiFieldPanel, ObjectList, StreamFieldPanel, TabbedInterface
-from wagtail.core.blocks import TextBlock, RichTextBlock, ListBlock, StreamBlock, StructBlock
+from wagtail.core.blocks import TextBlock, RichTextBlock, ListBlock, StreamBlock, StructBlock, URLBlock
 from wagtail.core.fields import StreamField, RichTextField
 from wagtail.core.models import Page, Orderable
 from wagtail.snippets.edit_handlers import SnippetChooserPanel
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.images.models import Image, AbstractImage, AbstractRendition
+from wagtail.images.blocks import ImageChooserBlock
 from wagtail.snippets.models import register_snippet
 from wagtail.search import index
 
@@ -50,12 +51,12 @@ class ThreeOneOne(ClusterableModel):
 
 class HomePage(Page):
     parent_page_types = []
-    subpage_types = ['base.ServicePage', 'base.ProcessPage', 'base.InformationPage']
+    subpage_types = ['base.ServicePage', 'base.ProcessPage', 'base.InformationPage', 'base.DepartmentPage']
 
     image = models.ForeignKey(TranslatedImage, null=True, on_delete=models.SET_NULL, related_name='+')
 
 
-class JanisPage(Page):
+class JanisBasePage(Page):
     parent_page_types = ['base.HomePage']
     subpage_types = []
     search_fields = Page.search_fields + [
@@ -67,12 +68,25 @@ class JanisPage(Page):
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    topic = models.ForeignKey(
-        'base.Topic',
-        on_delete=models.PROTECT,
-        verbose_name='Select a Topic',
-    )
 
+    def janis_url(self):
+        url_page_type = self.janis_url_page_type
+        page_slug = self.slug
+
+        # TODO: Add other languages
+        return os.environ["JANIS_URL"] + "/en/" + url_page_type + "/" + page_slug
+
+    def janis_preview_url(self):
+        revision = self.get_latest_revision()
+        url_page_type = self.janis_url_page_type
+        global_id = graphene.Node.to_global_id('PageRevisionNode', revision.id)
+
+        return os.environ["JANIS_URL"] + "/en/preview/" + url_page_type + "/" + global_id
+
+    class Meta:
+        abstract = True    
+
+class JanisPage(JanisBasePage):
     @cached_classmethod
     def get_edit_handler(cls):
         if hasattr(cls, 'edit_handler'):
@@ -88,19 +102,11 @@ class JanisPage(Page):
 
         return edit_handler.bind_to_model(cls)
 
-    def janis_url(self):
-        url_page_type = self.janis_url_page_type
-        page_slug = self.slug
-
-        # TODO: Add other languages
-        return os.environ["JANIS_URL"] + "/en/" + url_page_type + "/" + page_slug
-
-    def janis_preview_url(self):
-        revision = self.get_latest_revision()
-        url_page_type = self.janis_url_page_type
-        global_id = graphene.Node.to_global_id('PageRevisionNode', revision.id)
-
-        return os.environ["JANIS_URL"] + "/en/preview/" + url_page_type + "/" + global_id
+    topic = models.ForeignKey(
+        'base.Topic',
+        on_delete=models.PROTECT,
+        verbose_name='Select a Topic',
+    )
 
     class Meta:
         abstract = True
@@ -185,7 +191,7 @@ class ProcessPage(JanisPage):
         InlinePanel('process_steps', label="Process steps"),
     ]
 
-class InformationPage(JanisPage):
+class InformationPage(Page):
     janis_url_page_type = "information"
 
     toplink = models.BooleanField(default=False, verbose_name='Make this page a top link on any service collection page for this topic')
@@ -221,6 +227,84 @@ class InformationPage(JanisPage):
         InlinePanel('contacts', label='Contacts'),
         ImageChooserPanel('image'),
     ]
+
+class DepartmentPage(JanisBasePage):
+    janis_url_page_type = "department"
+
+    @cached_classmethod
+    def get_edit_handler(cls):
+        if hasattr(cls, 'edit_handler'):
+            return cls.edit_handler.bind_to_model(cls)
+
+        edit_handler = TabbedInterface([
+            ObjectList([
+                FieldPanel('title')
+            ] + cls.content_panels, heading='Content'),
+            ObjectList(Page.promote_panels + cls.promote_panels, heading='Search Info')
+        ])
+
+        return edit_handler.bind_to_model(cls)
+    
+
+    what_we_do = models.TextField(
+        verbose_name='What we do',
+        help_text='Use service-oriented language and a conversational tone. Try to stay away from jargon and just listing out services.',
+    )
+    image = models.ForeignKey(TranslatedImage, null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
+    mission = models.TextField(
+        verbose_name='Mission',
+    )
+    directors = StreamField(
+        [
+            ('name', TextBlock(
+                label='Director\'s name'
+            )),
+            ('photo', ImageChooserBlock(
+                label='Photo of the director'
+            )),
+            ('about', TextBlock(
+                label='About the director'
+            )),
+            ('email', TextBlock(
+                label='Director\'s email',
+                blank=True
+            )),
+            ('phone', TextBlock(
+                label='Director\'s phone',
+                blank=True
+            ))
+        ],
+        verbose_name='Add directors.',
+        blank=True
+    )
+    social_media = StreamField(
+        [
+            ('url', URLBlock(
+                label='Social media url'
+            ))
+        ],
+        verbose_name='Add social media urls.',
+        blank=True
+    )
+    job_listings = models.URLField(
+        verbose_name='Job listings url',
+        help_text='Link to a page with job listings.',
+        blank=True
+    )
+
+    base_form_class = custom_forms.DepartmentPageForm
+
+    content_panels = [
+        FieldPanel('what_we_do'),
+        ImageChooserPanel('image'),
+        FieldPanel('mission'),
+        InlinePanel('contacts', label='Contacts'),
+        StreamFieldPanel('directors'),
+        StreamFieldPanel('social_media'),
+        FieldPanel('job_listings')
+    ]
+
+DepartmentPage._meta.get_field('title').verbose_name='Department Name'
 
 class ProcessPageStep(Orderable):
     page = ParentalKey(ProcessPage, related_name='process_steps')
@@ -416,6 +500,16 @@ class InformationPageContact(ClusterableModel):
     def __str__(self):
         return self.contact.name
 
+class DepartmentPageContact(ClusterableModel):
+    page = ParentalKey(DepartmentPage, related_name='contacts')
+    contact = models.ForeignKey(Contact, related_name='+', on_delete=models.CASCADE)
+
+    panels = [
+        SnippetChooserPanel('contact'),
+    ]
+
+    def __str__(self):
+        return self.contact.name
 
 @register_snippet
 class Department(ClusterableModel):
