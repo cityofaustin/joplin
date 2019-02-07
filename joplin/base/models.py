@@ -254,33 +254,6 @@ class DepartmentPage(JanisBasePage):
     mission = models.TextField(
         verbose_name='Mission',
     )
-    directors = StreamField(
-        [
-            ('director', ListBlock(
-                StructBlock([
-                    ('name', TextBlock(
-                        label='Director\'s name'
-                    )),
-                    ('photo', ImageChooserBlock(
-                        label='Photo of the director'
-                    )),
-                    ('about', TextBlock(
-                        label='About the director'
-                    )),
-                    ('email', TextBlock(
-                        label='Director\'s email',
-                        blank=True
-                    )),
-                    ('phone', TextBlock(
-                        label='Director\'s phone',
-                        blank=True
-                    ))
-                ]),
-            )),
-        ],
-        verbose_name='Add directors.',
-        blank=True
-    )
     social_media = StreamField(
         [
             ('url', URLBlock(
@@ -303,12 +276,28 @@ class DepartmentPage(JanisBasePage):
         ImageChooserPanel('image'),
         FieldPanel('mission'),
         InlinePanel('contacts', label='Contacts'),
-        StreamFieldPanel('directors'),
+        InlinePanel('department_directors', label="Department Directors"),
         StreamFieldPanel('social_media'),
         FieldPanel('job_listings')
     ]
 
 DepartmentPage._meta.get_field('title').verbose_name='Department Name'
+
+class DepartmentPageDirector(Orderable):
+    page = ParentalKey(DepartmentPage, related_name='department_directors')
+    name = models.CharField(max_length=DEFAULT_MAX_LENGTH)
+    photo = models.ForeignKey(TranslatedImage, null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
+    about = models.TextField(blank=True)
+    email = models.CharField(max_length=DEFAULT_MAX_LENGTH)
+    phone = models.CharField(max_length=DEFAULT_MAX_LENGTH)
+
+    panels = [
+        FieldPanel('name'),
+        ImageChooserPanel('photo'),
+        FieldPanel('about'),
+        FieldPanel('email'),
+        FieldPanel('phone'),
+    ]
 
 class ProcessPageStep(Orderable):
     page = ParentalKey(ProcessPage, related_name='process_steps')

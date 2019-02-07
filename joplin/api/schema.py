@@ -8,7 +8,7 @@ from graphene.types import Scalar
 from wagtail.core.fields import StreamField
 from wagtail.core.models import Page, PageRevision
 
-from base.models import TranslatedImage, ThreeOneOne, ServicePage, ServicePageContact, ProcessPage, ProcessPageStep, ProcessPageContact, InformationPage, InformationPageContact, DepartmentPage, DepartmentPageContact, Theme, Topic, Contact, Location, ContactDayAndDuration, Department, DepartmentContact
+from base.models import TranslatedImage, ThreeOneOne, ServicePage, ServicePageContact, ProcessPage, ProcessPageStep, ProcessPageContact, InformationPage, InformationPageContact, DepartmentPage, DepartmentPageContact, DepartmentPageDirector, Theme, Topic, Contact, Location, ContactDayAndDuration, Department, DepartmentContact
 
 
 class StreamFieldType(Scalar):
@@ -170,6 +170,11 @@ class InformationPageContactNode(DjangoObjectType):
 class DepartmentPageContactNode(DjangoObjectType):
     class Meta:
         model = DepartmentPageContact
+        interfaces = [graphene.Node]
+
+class DepartmentPageDirectorNode(DjangoObjectType):
+    class Meta:
+        model = DepartmentPageDirector
         interfaces = [graphene.Node]
 
 def get_page_with_preview_data(page, session):
