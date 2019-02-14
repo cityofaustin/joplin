@@ -1,8 +1,8 @@
-from modeltranslation.translator import register, TranslationOptions
+from wagtail_modeltranslation.translation import register, TranslationOptions
 from wagtail.core.models import Page
 from wagtail.images.models import Image
 
-from .models import ThreeOneOne, Topic, Theme, ServicePage, ProcessPage, ProcessPageStep, TranslatedImage, Department, Map
+from .models import ThreeOneOne, Topic, Theme, ServicePage, ProcessPage, ProcessPageStep, DepartmentPage, InformationPage, TranslatedImage, Department, Map, HomePage
 
 
 @register(Image)
@@ -56,23 +56,20 @@ class MapTranslationOptions(TranslationOptions):
     )
 
 
-@register(Page)
-class PageTranslationOptions(TranslationOptions):
+@register(HomePage)
+class HomePageTranslationOptions(TranslationOptions):
     pass
-
 
 @register(ServicePage)
 class ServicePageTranslationOptions(TranslationOptions):
     fields = (
-        'title',
         'additional_content',
     )
 
 @register(ProcessPage)
 class ProcessPageTranslationOptions(TranslationOptions):
     fields = (
-        'title',
-        'description'
+        'description',
     )
 
 @register(ProcessPageStep)
@@ -84,5 +81,20 @@ class ProcessPageStepTranslationOptions(TranslationOptions):
         'description',
         'overview_steps',
         'detailed_content',
-        'quote'
+        'quote',
+    )
+
+@register(DepartmentPage)
+class DepartmentPageTranslationOptions(TranslationOptions):
+    fields = (
+        'what_we_do',
+        'mission',
+    )
+
+@register(InformationPage)
+class InformationPageTranslationOptions(TranslationOptions):
+    fields = (
+        'description',
+        'options',
+        'additional_content',
     )
