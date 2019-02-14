@@ -8,7 +8,7 @@ from graphene.types import Scalar
 from wagtail.core.fields import StreamField
 from wagtail.core.models import Page, PageRevision
 
-from base.models import TranslatedImage, ThreeOneOne, ServicePage, ServicePageContact, ProcessPage, ProcessPageStep, ProcessPageContact, Theme, Topic, Contact, Location, ContactDayAndDuration, Department, DepartmentContact
+from base.models import TranslatedImage, ThreeOneOne, ServicePage, ServicePageContact, ProcessPage, ProcessPageStep, ProcessPageContact, InformationPage, InformationPageContact, DepartmentPage, DepartmentPageContact, DepartmentPageDirector, Theme, Topic, Contact, Location, ContactDayAndDuration, Department, DepartmentContact
 
 
 class StreamFieldType(Scalar):
@@ -117,14 +117,34 @@ class ProcessPageNode(DjangoObjectType):
         filter_fields = ['id', 'slug', 'topic', 'topic__slug']
         interfaces = [graphene.Node]
 
+class InformationPageNode(DjangoObjectType):
+    class Meta:
+        model = InformationPage
+        filter_fields = ['id', 'slug', 'live']
+        interfaces = [graphene.Node]
+
+class DepartmentPageNode(DjangoObjectType):
+    class Meta:
+        model = DepartmentPage
+        filter_fields = ['id', 'slug', 'live']
+        interfaces = [graphene.Node]
+
 class PageRevisionNode(DjangoObjectType):
     as_service_page = graphene.NonNull(ServicePageNode)
     as_process_page = graphene.NonNull(ProcessPageNode)
+    as_information_page = graphene.NonNull(InformationPageNode)
+    as_department_page = graphene.NonNull(DepartmentPageNode)
 
     def resolve_as_service_page(self, resolve_info, *args, **kwargs):
         return self.as_page_object();
 
     def resolve_as_process_page(self, resolve_info, *args, **kwargs):
+        return self.as_page_object();
+
+    def resolve_as_information_page(self, resolve_info, *args, **kwargs):
+        return self.as_page_object();
+
+    def resolve_as_department_page(self, resolve_info, *args, **kwargs):
         return self.as_page_object();
 
     class Meta:
@@ -142,6 +162,20 @@ class ProcessPageContactNode(DjangoObjectType):
         model = ProcessPageContact
         interfaces = [graphene.Node]
 
+class InformationPageContactNode(DjangoObjectType):
+    class Meta:
+        model = InformationPageContact
+        interfaces = [graphene.Node]
+
+class DepartmentPageContactNode(DjangoObjectType):
+    class Meta:
+        model = DepartmentPageContact
+        interfaces = [graphene.Node]
+
+class DepartmentPageDirectorNode(DjangoObjectType):
+    class Meta:
+        model = DepartmentPageDirector
+        interfaces = [graphene.Node]
 
 def get_page_with_preview_data(page, session):
     # Wagtail saves preview data in the session. We want to mimick what they're doing to generate the built-in preview.
@@ -173,6 +207,8 @@ class Query(graphene.ObjectType):
     page_revision = graphene.Field(PageRevisionNode, id=graphene.ID())
     all_page_revisions = DjangoFilterConnectionField(PageRevisionNode)
     all_processes = DjangoFilterConnectionField(ProcessPageNode)
+    all_information_pages = DjangoFilterConnectionField(InformationPageNode)
+    all_department_pages = DjangoFilterConnectionField(DepartmentPageNode)
     all_themes = DjangoFilterConnectionField(ThemeNode)
     all_topics = DjangoFilterConnectionField(TopicNode)
     all_departments = DjangoFilterConnectionField(DepartmentNode)

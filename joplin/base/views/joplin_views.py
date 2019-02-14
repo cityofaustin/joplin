@@ -5,7 +5,7 @@ from wagtail.admin.views import pages
 from wagtail.admin import messages
 from django.utils.translation import ugettext as _
 from django.urls import reverse
-from base.models import ServicePage, ProcessPage, Topic
+from base.models import ServicePage, ProcessPage, InformationPage, Topic, DepartmentPage
 import json
 
 def publish(request, page_id):
@@ -44,7 +44,8 @@ def new_page_from_modal(request):
         body = json.loads(request.body)
 
         data = {}
-        data['topic'] = Topic.objects.get(id=body['topic'])
+        if body['type'] != 'department':
+            data['topic'] = Topic.objects.get(id=body['topic'])
         data['title'] = body['title']
         data['owner'] = request.user
 
@@ -53,6 +54,12 @@ def new_page_from_modal(request):
             page = ServicePage(**data)
         if body['type'] == 'process':
             page = ProcessPage(**data)
+        if body['type'] == 'information':
+            page = InformationPage(**data)
+        if body['type'] == 'department':
+            data['what_we_do'] = 'What we do'
+            data['mission'] = 'Mission'
+            page = DepartmentPage(**data)
 
         # Add it as a child of home
         home = Page.objects.get(slug='home')
