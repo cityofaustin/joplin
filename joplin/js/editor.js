@@ -35,6 +35,19 @@ $(function() {
   for (const label of labels) {
     let id = label.getAttribute('for');
 
+    // Since we're getting these ids let's set the title text appropriately
+    if(id == "id_title") {
+      // Super hack here, use the preview url to figure out what kind of page we're editing
+      const previewRegex = /preview\/\w+\//g;
+      const previewUrl = document.getElementById('preview_url').value;
+      const previewTypeString = previewUrl.match(previewRegex)[0];
+      if(previewTypeString == "preview/department/") {
+        label.innerText = "Department Name"
+      } else {
+        label.innerText = "Write an actionable title"
+      }
+    }
+
     // HACK: If we're dealing with subheadings in steps we need to remove the index
     if (id && id.includes('id_process_steps')) {
       const idTokens = id.split('-');
@@ -124,6 +137,74 @@ $(function() {
       },
     );
   }
+
+  function changeLanguage(currentLang) {
+    // Hide stuff that isn't our language
+    // This is hacky but it seems to be working
+    var languageStrings = {
+      en: "[EN]",
+      es: "[ES]",
+      vi: "[VI]",
+      ar: "[AR]"
+    }
+
+    var lowerLanguageStrings = {
+      en: "[en]",
+      es: "[es]",
+      vi: "[vi]",
+      ar: "[ar]"
+    }
+
+    var languageRegex = /\[\w+\]/g;
+
+    document
+      .querySelectorAll(".object")
+      .forEach(elem => {
+        if(elem.querySelectorAll("h2").length) {
+          var headerText = elem.querySelectorAll("h2")[0].innerText;
+          var langString = headerText.match(languageRegex);
+          if (langString != null && langString != languageStrings[currentLang] && langString != lowerLanguageStrings[currentLang]) {
+            elem.classList.add("hidden");
+          } else {
+            elem.classList.remove("hidden");
+          }
+        }
+      });
+
+    document
+    .querySelectorAll(".field")
+    .forEach(elem => {
+      if(elem.querySelectorAll("label").length) {
+        var labelText = elem.querySelectorAll("label")[0].innerText;
+        var langString = labelText.match(languageRegex);
+        
+        if (langString != null && langString != lowerLanguageStrings[currentLang]) {
+          elem.classList.add("hidden");
+        } else {
+          elem.classList.remove("hidden");
+        }
+      }
+    });
+  }
+
+  var enButton = $('#en');
+  enButton.click(function() {
+    changeLanguage("en");
+  });
+  var esButton = $('#es');
+  esButton.click(function() {
+    changeLanguage("es");
+  });
+  var arButton = $('#ar');
+  arButton.click(function() {
+    changeLanguage("ar");
+  });
+  var viButton = $('#vi');
+  viButton.click(function() {
+    changeLanguage("vi");
+  });
+
+  changeLanguage("en");
 
   var editform = $('#page-edit-form');
   var previewbutton = $('#page-preview-button');

@@ -62,7 +62,7 @@ def new_page_from_modal(request):
             page = DepartmentPage(**data)
 
         # Add it as a child of home
-        home = Page.objects.get(slug='home')
+        home = Page.objects.get(id=3)
         home.add_child(instance=page)
 
         # Save our draft
