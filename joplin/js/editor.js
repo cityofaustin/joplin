@@ -35,6 +35,19 @@ $(function() {
   for (const label of labels) {
     let id = label.getAttribute('for');
 
+    // Since we're getting these ids let's set the title text appropriately
+    if(id == "id_title") {
+      // Super hack here, use the preview url to figure out what kind of page we're editing
+      const previewRegex = /preview\/\w+\//g;
+      const previewUrl = document.getElementById('preview_url').value;
+      const previewTypeString = previewUrl.match(previewRegex)[0];
+      if(previewTypeString == "preview/department/") {
+        label.innerText = "Department Name"
+      } else {
+        label.innerText = "Write an actionable title"
+      }
+    }
+
     // HACK: If we're dealing with subheadings in steps we need to remove the index
     if (id && id.includes('id_process_steps')) {
       const idTokens = id.split('-');
@@ -164,7 +177,6 @@ $(function() {
       if(elem.querySelectorAll("label").length) {
         var labelText = elem.querySelectorAll("label")[0].innerText;
         var langString = labelText.match(languageRegex);
-        console.log(langString)
         
         if (langString != null && langString != lowerLanguageStrings[currentLang]) {
           elem.classList.add("hidden");

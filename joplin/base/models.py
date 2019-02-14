@@ -111,8 +111,6 @@ class JanisPage(JanisBasePage):
     class Meta:
         abstract = True
 
-JanisPage._meta.get_field('title').verbose_name='Write an actionable title'
-
 class ServicePage(JanisPage):
     janis_url_page_type = "services"
 
@@ -280,8 +278,6 @@ class DepartmentPage(JanisBasePage):
         StreamFieldPanel('social_media'),
         FieldPanel('job_listings')
     ]
-
-DepartmentPage._meta.get_field('title').verbose_name='Department Name'
 
 class DepartmentPageDirector(Orderable):
     page = ParentalKey(DepartmentPage, related_name='department_directors')
