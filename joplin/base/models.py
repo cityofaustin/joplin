@@ -218,6 +218,10 @@ class InformationPage(JanisPage):
     base_form_class = custom_forms.InformationPageForm
 
     content_panels = [
+        FieldPanel('title_en'),
+        FieldPanel('title_es'),
+        FieldPanel('title_ar'),
+        FieldPanel('title_vi'),
         FieldPanel('toplink'),
         FieldPanel('description'),
         StreamFieldPanel('options'),
@@ -270,6 +274,10 @@ class DepartmentPage(JanisBasePage):
     base_form_class = custom_forms.DepartmentPageForm
 
     content_panels = [
+        FieldPanel('title_en'),
+        FieldPanel('title_es'),
+        FieldPanel('title_ar'),
+        FieldPanel('title_vi'),
         FieldPanel('what_we_do'),
         ImageChooserPanel('image'),
         FieldPanel('mission'),
