@@ -247,11 +247,13 @@ class DepartmentPage(JanisBasePage):
 
         return edit_handler.bind_to_model(cls)
     
-
-    what_we_do = models.TextField(
+    what_we_do = RichTextField(
+        features=WYSIWYG_GENERAL,
         verbose_name='What we do',
-        help_text='Use service-oriented language and a conversational tone. Try to stay away from jargon and just listing out services.',
+        # help_text='',
+        blank=True
     )
+
     image = models.ForeignKey(TranslatedImage, null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
     mission = models.TextField(
         verbose_name='Mission',
