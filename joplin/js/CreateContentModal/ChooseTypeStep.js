@@ -40,6 +40,17 @@ const ChooseTypeStep = ({ handleTypeSelect }) => (
           className="ChooseTypeStep__option"
           onClick={() =>
             handleTypeSelect({
+              type: 'information',
+            })
+          }
+        >
+          <h3 className="ChooseTypeStep__option-header">Information Page</h3>
+          <p>A page with information.</p>
+        </div>
+        <div
+          className="ChooseTypeStep__option"
+          onClick={() =>
+            handleTypeSelect({
               type: 'department',
             })
           }
