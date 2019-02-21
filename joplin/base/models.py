@@ -20,7 +20,7 @@ from wagtail.search import index
 from . import blocks as custom_blocks
 from . import forms as custom_forms
 
-WYSIWYG_GENERAL = ['h1', 'h2', 'link', 'ul', 'ol']
+WYSIWYG_GENERAL = ['h1', 'h2', 'h3', 'link', 'ul', 'ol']
 WYSIWYG_SERVICE_STEP = ['ul', 'ol', 'link']
 DEFAULT_MAX_LENGTH = 255
 
@@ -84,7 +84,7 @@ class JanisBasePage(Page):
         return os.environ["JANIS_URL"] + "/en/preview/" + url_page_type + "/" + global_id
 
     class Meta:
-        abstract = True    
+        abstract = True
 
 class JanisPage(JanisBasePage):
     @cached_classmethod
@@ -197,7 +197,7 @@ class InformationPage(JanisPage):
     options = StreamField(
         [
             ('option', RichTextBlock(
-                features=WYSIWYG_SERVICE_STEP,
+                features=WYSIWYG_GENERAL,
                 label='Option'
             ))
         ],
@@ -246,7 +246,7 @@ class DepartmentPage(JanisBasePage):
         ])
 
         return edit_handler.bind_to_model(cls)
-    
+
     what_we_do = RichTextField(
         features=WYSIWYG_GENERAL,
         verbose_name='What we do',
