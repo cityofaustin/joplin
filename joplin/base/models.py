@@ -197,7 +197,7 @@ class InformationPage(JanisPage):
     options = StreamField(
         [
             ('option', RichTextBlock(
-                features=WYSIWYG_SERVICE_STEP,
+                features=WYSIWYG_GENERAL,
                 label='Option'
             ))
         ],
