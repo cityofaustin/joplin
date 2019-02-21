@@ -20,7 +20,7 @@ from wagtail.search import index
 from . import blocks as custom_blocks
 from . import forms as custom_forms
 
-WYSIWYG_GENERAL = ['h1', 'h2', 'h3', 'link', 'ul', 'ol']
+WYSIWYG_GENERAL = ['h1', 'h2', 'h3', 'h4', 'bold', 'link', 'ul', 'ol']
 WYSIWYG_SERVICE_STEP = ['ul', 'ol', 'link']
 DEFAULT_MAX_LENGTH = 255
 
