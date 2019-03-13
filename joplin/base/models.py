@@ -95,6 +95,7 @@ class JanisPage(JanisBasePage):
         edit_handler = TabbedInterface([
             ObjectList([
                 FieldPanel('topic'),
+                FieldPanel('department'),
                 FieldPanel('title')
             ] + cls.content_panels, heading='Content'),
             ObjectList(Page.promote_panels + cls.promote_panels, heading='Search Info')
@@ -106,6 +107,14 @@ class JanisPage(JanisBasePage):
         'base.Topic',
         on_delete=models.PROTECT,
         verbose_name='Select a Topic',
+    )
+
+    department = models.ForeignKey(
+        'base.DepartmentPage',
+        on_delete=models.PROTECT,
+        verbose_name='Select a Department',
+        blank=True,
+        null=True,
     )
 
     class Meta:
@@ -232,6 +241,9 @@ class InformationPage(JanisPage):
 
 class DepartmentPage(JanisBasePage):
     janis_url_page_type = "department"
+
+    def __str__(self):
+        return self.title_en
 
     @cached_classmethod
     def get_edit_handler(cls):
