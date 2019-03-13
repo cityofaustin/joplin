@@ -108,19 +108,19 @@ class ServicePageNode(DjangoObjectType):
 
     class Meta:
         model = ServicePage
-        filter_fields = ['id', 'slug', 'topic', 'topic__slug', 'live']
+        filter_fields = ['id', 'slug', 'topic', 'department', 'topic__slug', 'live']
         interfaces = [graphene.Node]
 
 class ProcessPageNode(DjangoObjectType):
     class Meta:
         model = ProcessPage
-        filter_fields = ['id', 'slug', 'topic', 'topic__slug']
+        filter_fields = ['id', 'slug', 'topic', 'department', 'topic__slug']
         interfaces = [graphene.Node]
 
 class InformationPageNode(DjangoObjectType):
     class Meta:
         model = InformationPage
-        filter_fields = ['id', 'slug', 'live']
+        filter_fields = ['id', 'slug', 'topic', 'department', 'live']
         interfaces = [graphene.Node]
 
 class DepartmentPageNode(DjangoObjectType):
