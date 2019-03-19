@@ -145,6 +145,7 @@ class CreateContentModal extends Component {
           type: this.state.type,
           title: this.state.title,
           topic: this.state.topic,
+          department: this.state.department
         },
         { headers: { 'X-CSRFToken': Cookies.get('csrftoken') } },
       )
