@@ -19,7 +19,9 @@ const THEME_TOPIC_TREE = window.themeTopicsTree;
 const stepsEnum = {
   CHOOSE_TYPE: 0,
   CHOOSE_TITLE: 1,
-  CHOOSE_TOPIC: 2,
+  CHOOSE_DEPT_OR_TOPIC: 2,
+  CHOOSE_TOPIC: 3,
+  CHOOSE_DEPARTMENT: 4,
 }
 
 class CreateContentModal extends Component {
@@ -37,19 +39,37 @@ class CreateContentModal extends Component {
 
   onLastStep = () => {
     return (
-      // Skip Topic Select Step for creating a Department
+      // If we're creating a department page, then the title step is the last step,
+      // Otherwise, it'll be either the choose topic or choose department step
       (this.state.type === 'department' && this.state.activeStep === stepsEnum.CHOOSE_TITLE) ||
-      this.state.activeStep === stepsEnum.CHOOSE_TOPIC
+      this.state.activeStep === stepsEnum.CHOOSE_TOPIC || this.state.activeStep === stepsEnum.CHOOSE_DEPARTMENT
     );
   };
 
   incrementActiveStep = () => {
+    // If we're creating a service page and we're on the choose title page skip the
+    // dept or topic selection because all service pages are topic only
+    if(this.state.type === 'service' && this.state.activeStep === stepsEnum.CHOOSE_TITLE) {
+      this.setState({
+        activeStep: stepsEnum.CHOOSE_TOPIC
+      });
+      return;
+    }
+
     this.setState({
       activeStep: this.state.activeStep + 1,
     });
   };
 
   decrementActiveStep = () => {
+    // If we're on choose topic or choose department go back to page title page
+    if(this.state.activeStep === stepsEnum.CHOOSE_TOPIC || this.state.activeStep === stepsEnum.CHOOSE_DEPARTMENT) {
+      this.setState({
+        activeStep: stepsEnum.CHOOSE_TITLE
+      });
+      return;
+    }
+
     this.setState({
       activeStep: this.state.activeStep - 1,
     });
@@ -87,6 +107,12 @@ class CreateContentModal extends Component {
       type: dataObj.type,
     });
     this.incrementActiveStep();
+  };
+
+  handleTopicOrDepartmentSelect = (dataObj, e) => {
+    this.setState({
+      activeStep: dataObj.topicOrDept === 'topic' ? stepsEnum.CHOOSE_TOPIC : stepsEnum.CHOOSE_DEPARTMENT,
+    });
   };
 
   handleTitleInputChange = e => {
@@ -170,6 +196,11 @@ class CreateContentModal extends Component {
                         maxCharacterCount={MAX_TITLE_LENGTH}
                       />
                     )}
+                    {this.state.activeStep === stepsEnum.CHOOSE_DEPT_OR_TOPIC && (
+                      <ChooseTopicOrDepartmentStep
+                        handleTopicOrDepartmentSelect={this.handleTopicOrDepartmentSelect}
+                      />
+                    )}
                     {this.state.activeStep === stepsEnum.CHOOSE_TOPIC && (
                       <ChooseTopicStep
                         topic={this.state.topic}
@@ -181,7 +212,7 @@ class CreateContentModal extends Component {
                       handleBackButton={this.handleBackButton}
                       handleNextButton={this.handleNextButton}
                       handleCloseButton={this.handleCloseButton}
-                      hidden={this.state.activeStep === stepsEnum.CHOOSE_TYPE}
+                      hidden={this.state.activeStep === stepsEnum.CHOOSE_TYPE || this.state.activeStep === stepsEnum.CHOOSE_DEPT_OR_TOPIC}
                       onLastStep={this.onLastStep()}
                     />
                   </div>

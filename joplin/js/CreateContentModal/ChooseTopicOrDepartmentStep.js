@@ -11,7 +11,7 @@ const ChooseTopicOrDepartmentStep = ({ handleTopicOrDepartmentSelect }) => (
           className="ChooseTypeStep__option"
           onClick={() =>
             handleTopicOrDepartmentSelect({
-              type: 'topic',
+              topicOrDept: 'topic',
             })
           }
         >
@@ -22,7 +22,7 @@ const ChooseTopicOrDepartmentStep = ({ handleTopicOrDepartmentSelect }) => (
           className="ChooseTypeStep__option"
           onClick={() =>
             handleTopicOrDepartmentSelect({
-              type: 'department',
+              topicOrDept: 'department',
             })
           }
         >
