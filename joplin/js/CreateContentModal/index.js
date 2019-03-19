@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 
 import ChooseTypeStep from './ChooseTypeStep.js';
+import ChooseTopicOrDepartmentStep from './ChooseTopicOrDepartmentStep.js';
 import ChooseTitleStep from './ChooseTitleStep.js';
 import ChooseTopicStep from './ChooseTopicStep.js';
 import ButtonBar from './ButtonBar.js';
@@ -14,6 +15,12 @@ import './index.scss';
 
 const MAX_TITLE_LENGTH = 58;
 const THEME_TOPIC_TREE = window.themeTopicsTree;
+
+const stepsEnum = {
+  CHOOSE_TYPE: 0,
+  CHOOSE_TITLE: 1,
+  CHOOSE_TOPIC: 2,
+}
 
 class CreateContentModal extends Component {
   constructor(props) {
@@ -31,8 +38,8 @@ class CreateContentModal extends Component {
   onLastStep = () => {
     return (
       // Skip Topic Select Step for creating a Department
-      (this.state.type === 'department' && this.state.activeStep === 1) ||
-      this.state.activeStep === 2
+      (this.state.type === 'department' && this.state.activeStep === stepsEnum.CHOOSE_TITLE) ||
+      this.state.activeStep === stepsEnum.CHOOSE_TOPIC
     );
   };
 
@@ -149,12 +156,12 @@ class CreateContentModal extends Component {
                   </div>
                 ) : (
                   <div>
-                    {this.state.activeStep === 0 && (
+                    {this.state.activeStep === stepsEnum.CHOOSE_TYPE && (
                       <ChooseTypeStep
                         handleTypeSelect={this.handleTypeSelect}
                       />
                     )}
-                    {this.state.activeStep === 1 && (
+                    {this.state.activeStep === stepsEnum.CHOOSE_TITLE && (
                       <ChooseTitleStep
                         pageType={this.state.type}
                         title={this.state.title}
@@ -163,7 +170,7 @@ class CreateContentModal extends Component {
                         maxCharacterCount={MAX_TITLE_LENGTH}
                       />
                     )}
-                    {this.state.activeStep === 2 && (
+                    {this.state.activeStep === stepsEnum.CHOOSE_TOPIC && (
                       <ChooseTopicStep
                         topic={this.state.topic}
                         handleTopicSelect={this.handleTopicSelect}
@@ -174,7 +181,7 @@ class CreateContentModal extends Component {
                       handleBackButton={this.handleBackButton}
                       handleNextButton={this.handleNextButton}
                       handleCloseButton={this.handleCloseButton}
-                      hidden={this.state.activeStep === 0}
+                      hidden={this.state.activeStep === stepsEnum.CHOOSE_TYPE}
                       onLastStep={this.onLastStep()}
                     />
                   </div>
