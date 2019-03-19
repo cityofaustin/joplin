@@ -3,7 +3,7 @@ import graphene
 import os
 import json
 
-from base.models import Topic, Theme
+from base.models import Topic, Theme, DepartmentPage
 from wagtail.core import hooks
 import itertools
 
@@ -51,6 +51,19 @@ def themes_topics_tree(context):
         'themes': json.dumps(themes)
     }
 
+@register.inclusion_tag('wagtailadmin/departments_list.html', takes_context=True)
+def departments_list(context):
+    departments = []
+
+    for department in DepartmentPage.objects.all():
+        departments.append({
+            'title': department.title,
+            'id': department.id,
+        })
+
+    return {
+        'departments': json.dumps(departments)
+    }
 
 @register.inclusion_tag("wagtailadmin/pages/listing/_buttons.html",
                         takes_context=True)

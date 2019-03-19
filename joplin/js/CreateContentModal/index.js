@@ -9,12 +9,14 @@ import ChooseTypeStep from './ChooseTypeStep.js';
 import ChooseTopicOrDepartmentStep from './ChooseTopicOrDepartmentStep.js';
 import ChooseTitleStep from './ChooseTitleStep.js';
 import ChooseTopicStep from './ChooseTopicStep.js';
+import ChooseDepartmentStep from './ChooseDepartmentStep.js';
 import ButtonBar from './ButtonBar.js';
 
 import './index.scss';
 
 const MAX_TITLE_LENGTH = 58;
 const THEME_TOPIC_TREE = window.themeTopicsTree;
+const DEPARTMENT_LIST = window.departments;
 
 const stepsEnum = {
   CHOOSE_TYPE: 0,
@@ -31,6 +33,7 @@ class CreateContentModal extends Component {
       type: null,
       title: '', // React warning said: `value` prop on `input` should not be null. Consider using an empty string...
       topic: null,
+      department: null,
       activeStep: 0,
       titleCharacterCount: 0,
       creatingContent: false,
@@ -126,6 +129,10 @@ class CreateContentModal extends Component {
     this.setState({ topic: id });
   };
 
+  handleDepartmentSelect = id => {
+    this.setState({ department: id });
+  };
+
   redirectToEditPage = id => {
     window.location.href = `/admin/pages/${id}/edit/`;
   };
@@ -206,6 +213,13 @@ class CreateContentModal extends Component {
                         topic={this.state.topic}
                         handleTopicSelect={this.handleTopicSelect}
                         themeTopicTree={THEME_TOPIC_TREE}
+                      />
+                    )}
+                    {this.state.activeStep === stepsEnum.CHOOSE_DEPARTMENT && (
+                      <ChooseDepartmentStep
+                        department={this.state.department}
+                        handleDepartmentSelect={this.handleDepartmentSelect}
+                        departments={DEPARTMENT_LIST}
                       />
                     )}
                     <ButtonBar
