@@ -94,7 +94,6 @@ class JanisPage(JanisBasePage):
 
         edit_handler = TabbedInterface([
             ObjectList([
-                FieldPanel('topic'),
                 FieldPanel('title')
             ] + cls.content_panels, heading='Content'),
             ObjectList(Page.promote_panels + cls.promote_panels, heading='Search Info')
@@ -102,17 +101,17 @@ class JanisPage(JanisBasePage):
 
         return edit_handler.bind_to_model(cls)
 
-    topic = models.ForeignKey(
-        'base.Topic',
-        on_delete=models.PROTECT,
-        verbose_name='Select a Topic',
-    )
-
     class Meta:
         abstract = True
 
 class ServicePage(JanisPage):
     janis_url_page_type = "services"
+
+    topic = models.ForeignKey(
+        'base.Topic',
+        on_delete=models.PROTECT,
+        verbose_name='Select a Topic',
+    )
 
     steps = StreamField(
         [
@@ -165,6 +164,7 @@ class ServicePage(JanisPage):
     base_form_class = custom_forms.ServicePageForm
 
     content_panels = [
+        FieldPanel('topic'),
         ImageChooserPanel('image'),
         StreamFieldPanel('steps'),
         StreamFieldPanel('dynamic_content'),
@@ -176,6 +176,22 @@ class ServicePage(JanisPage):
 class ProcessPage(JanisPage):
     janis_url_page_type = "processes"
 
+    topic = models.ForeignKey(
+        'base.Topic',
+        on_delete=models.PROTECT,
+        verbose_name='Select a Topic',
+        blank=True,
+        null=True,
+    )
+
+    department = models.ForeignKey(
+        'base.DepartmentPage',
+        on_delete=models.PROTECT,
+        verbose_name='Select a Department',
+        blank=True,
+        null=True,
+    )
+
     description = models.TextField(blank=True)
     image = models.ForeignKey(TranslatedImage, null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
     # TODO: Add images array field
@@ -183,6 +199,8 @@ class ProcessPage(JanisPage):
     base_form_class = custom_forms.ProcessPageForm
 
     content_panels = [
+        FieldPanel('topic'),
+        FieldPanel('department'),
         FieldPanel('description'),
         ImageChooserPanel('image'),
         InlinePanel('contacts', label='Contacts'),
@@ -191,6 +209,22 @@ class ProcessPage(JanisPage):
 
 class InformationPage(JanisPage):
     janis_url_page_type = "information"
+
+    topic = models.ForeignKey(
+        'base.Topic',
+        on_delete=models.PROTECT,
+        verbose_name='Select a Topic',
+        blank=True,
+        null=True,
+    )
+
+    department = models.ForeignKey(
+        'base.DepartmentPage',
+        on_delete=models.PROTECT,
+        verbose_name='Select a Department',
+        blank=True,
+        null=True,
+    )
 
     toplink = models.BooleanField(default=False, verbose_name='Make this page a top link on any service collection page for this topic')
     description = models.TextField(blank=True, verbose_name='Write a description of this page')
@@ -218,6 +252,8 @@ class InformationPage(JanisPage):
     base_form_class = custom_forms.InformationPageForm
 
     content_panels = [
+        FieldPanel('topic'),
+        FieldPanel('department'),
         FieldPanel('title_en'),
         FieldPanel('title_es'),
         FieldPanel('title_ar'),
@@ -232,6 +268,9 @@ class InformationPage(JanisPage):
 
 class DepartmentPage(JanisBasePage):
     janis_url_page_type = "department"
+
+    def __str__(self):
+        return self.title_en
 
     @cached_classmethod
     def get_edit_handler(cls):
