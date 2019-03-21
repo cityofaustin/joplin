@@ -297,15 +297,7 @@ class DepartmentPage(JanisBasePage):
     mission = models.TextField(
         verbose_name='Mission',
     )
-    social_media = StreamField(
-        [
-            ('url', URLBlock(
-                label='Social media url'
-            ))
-        ],
-        verbose_name='Add social media urls.',
-        blank=True
-    )
+
     job_listings = models.URLField(
         verbose_name='Job listings url',
         help_text='Link to a page with job listings.',
@@ -324,7 +316,6 @@ class DepartmentPage(JanisBasePage):
         FieldPanel('mission'),
         InlinePanel('contacts', label='Contacts'),
         InlinePanel('department_directors', label="Department Directors"),
-        StreamFieldPanel('social_media'),
         FieldPanel('job_listings')
     ]
 
@@ -484,12 +475,24 @@ class Contact(ClusterableModel):
     phone = models.CharField(max_length=DEFAULT_MAX_LENGTH)
     location = models.ForeignKey(Location, null=True, blank=True, related_name='+', on_delete=models.SET_NULL)
 
+    social_media = StreamField(
+        [
+            ('url', URLBlock(
+                label='Social media url'
+            ))
+        ],
+        verbose_name='Paste links to any social media pages',
+        help_text='For example: https://www.facebook.com/atxpoliceoversight/',
+        blank=True
+    )
+
     panels = [
         FieldPanel('name'),
         FieldPanel('email'),
         FieldPanel('phone'),
         SnippetChooserPanel('location'),
         InlinePanel('hours', label='Hours'),
+        StreamFieldPanel('social_media'),
     ]
 
     def __str__(self):
