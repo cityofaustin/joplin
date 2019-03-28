@@ -7,7 +7,7 @@ from modelcluster.models import ClusterableModel
 
 from wagtail.utils.decorators import cached_classmethod
 from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, MultiFieldPanel, ObjectList, StreamFieldPanel, TabbedInterface
-from wagtail.core.blocks import TextBlock, RichTextBlock, ListBlock, StreamBlock, StructBlock, URLBlock
+from wagtail.core.blocks import TextBlock, RichTextBlock, ListBlock, StreamBlock, StructBlock, URLBlock, PageChooserBlock, CharBlock
 from wagtail.core.fields import StreamField, RichTextField
 from wagtail.core.models import Page, Orderable
 from wagtail.snippets.edit_handlers import SnippetChooserPanel
@@ -306,11 +306,28 @@ class DepartmentPage(JanisBasePage):
 
     top_services = StreamField(
         [
-            ('url', URLBlock(
-                label='Link to top service'
-            ))
+            ('link_en', StructBlock([
+                ('url', URLBlock()),
+                ('title', CharBlock()),
+            ], icon='link', label='Link [EN]')),
+            ('link_es', StructBlock([
+                ('url', URLBlock()),
+                ('title', CharBlock()),
+            ], icon='link', label='Link [ES]')),
+            ('link_ar', StructBlock([
+                ('url', URLBlock()),
+                ('title', CharBlock()),
+            ], icon='link', label='Link [AR]')),
+            ('link_vi', StructBlock([
+                ('url', URLBlock()),
+                ('title', CharBlock()),
+            ], icon='link', label='Link [VI]')),
+            # ('page', PageChooserBlock(
+            #     label='Choose a page',
+            #     icon='doc-full'
+            # ))
         ],
-        verbose_name='Paste links to top services',
+        verbose_name='Links to top services',
         blank=True
     )
 
@@ -490,7 +507,7 @@ class Contact(ClusterableModel):
                 label='Social media url'
             ))
         ],
-        verbose_name='Paste links to any social media pages',
+        verbose_name='Links to any social media pages',
         help_text='For example: https://www.facebook.com/atxpoliceoversight/',
         blank=True
     )
