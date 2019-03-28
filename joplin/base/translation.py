@@ -95,6 +95,7 @@ class DepartmentPageTranslationOptions(TranslationOptions):
 class DepartmentPageDirectorTranslationOptions(TranslationOptions):
     fields = (
         'about',
+        'title'
     )
 
 @register(InformationPage)
