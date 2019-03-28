@@ -322,17 +322,15 @@ class DepartmentPage(JanisBasePage):
 class DepartmentPageDirector(Orderable):
     page = ParentalKey(DepartmentPage, related_name='department_directors')
     name = models.CharField(max_length=DEFAULT_MAX_LENGTH)
+    title = models.CharField(max_length=DEFAULT_MAX_LENGTH, default='Director')
     photo = models.ForeignKey(TranslatedImage, null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
     about = models.TextField(blank=True)
-    email = models.CharField(max_length=DEFAULT_MAX_LENGTH)
-    phone = models.CharField(max_length=DEFAULT_MAX_LENGTH)
 
     panels = [
         FieldPanel('name'),
+        FieldPanel('title'),
         ImageChooserPanel('photo'),
         FieldPanel('about'),
-        FieldPanel('email'),
-        FieldPanel('phone'),
     ]
 
 class ProcessPageStep(Orderable):
