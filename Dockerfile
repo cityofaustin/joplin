@@ -27,6 +27,7 @@ COPY "$PWD/joplin" /app/joplin
 COPY "$PWD/media" /app/media
 
 WORKDIR /app/joplin
+RUN npm rebuild node-sass 
 RUN yarn; yarn build
 WORKDIR /app
 

@@ -7,7 +7,7 @@ from modelcluster.models import ClusterableModel
 
 from wagtail.utils.decorators import cached_classmethod
 from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, MultiFieldPanel, ObjectList, StreamFieldPanel, TabbedInterface
-from wagtail.core.blocks import TextBlock, RichTextBlock, ListBlock, StreamBlock, StructBlock, URLBlock
+from wagtail.core.blocks import TextBlock, RichTextBlock, ListBlock, StreamBlock, StructBlock, URLBlock, PageChooserBlock, CharBlock
 from wagtail.core.fields import StreamField, RichTextField
 from wagtail.core.models import Page, Orderable
 from wagtail.snippets.edit_handlers import SnippetChooserPanel
@@ -304,6 +304,33 @@ class DepartmentPage(JanisBasePage):
         blank=True
     )
 
+    top_services = StreamField(
+        [
+            ('link_en', StructBlock([
+                ('url', URLBlock()),
+                ('title', CharBlock()),
+            ], icon='link', label='Link [EN]')),
+            ('link_es', StructBlock([
+                ('url', URLBlock()),
+                ('title', CharBlock()),
+            ], icon='link', label='Link [ES]')),
+            ('link_ar', StructBlock([
+                ('url', URLBlock()),
+                ('title', CharBlock()),
+            ], icon='link', label='Link [AR]')),
+            ('link_vi', StructBlock([
+                ('url', URLBlock()),
+                ('title', CharBlock()),
+            ], icon='link', label='Link [VI]')),
+            # ('page', PageChooserBlock(
+            #     label='Choose a page',
+            #     icon='doc-full'
+            # ))
+        ],
+        verbose_name='Links to top services',
+        blank=True
+    )
+
     base_form_class = custom_forms.DepartmentPageForm
 
     content_panels = [
@@ -316,23 +343,22 @@ class DepartmentPage(JanisBasePage):
         FieldPanel('mission'),
         InlinePanel('contacts', label='Contacts'),
         InlinePanel('department_directors', label="Department Directors"),
-        FieldPanel('job_listings')
+        FieldPanel('job_listings'),
+        StreamFieldPanel('top_services'),
     ]
 
 class DepartmentPageDirector(Orderable):
     page = ParentalKey(DepartmentPage, related_name='department_directors')
     name = models.CharField(max_length=DEFAULT_MAX_LENGTH)
+    title = models.CharField(max_length=DEFAULT_MAX_LENGTH, default='Director')
     photo = models.ForeignKey(TranslatedImage, null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
     about = models.TextField(blank=True)
-    email = models.CharField(max_length=DEFAULT_MAX_LENGTH)
-    phone = models.CharField(max_length=DEFAULT_MAX_LENGTH)
 
     panels = [
         FieldPanel('name'),
+        FieldPanel('title'),
         ImageChooserPanel('photo'),
         FieldPanel('about'),
-        FieldPanel('email'),
-        FieldPanel('phone'),
     ]
 
 class ProcessPageStep(Orderable):
@@ -481,7 +507,7 @@ class Contact(ClusterableModel):
                 label='Social media url'
             ))
         ],
-        verbose_name='Paste links to any social media pages',
+        verbose_name='Links to any social media pages',
         help_text='For example: https://www.facebook.com/atxpoliceoversight/',
         blank=True
     )
