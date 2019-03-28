@@ -304,6 +304,16 @@ class DepartmentPage(JanisBasePage):
         blank=True
     )
 
+    top_services = StreamField(
+        [
+            ('url', URLBlock(
+                label='Link to top service'
+            ))
+        ],
+        verbose_name='Paste links to top services',
+        blank=True
+    )
+
     base_form_class = custom_forms.DepartmentPageForm
 
     content_panels = [
@@ -316,7 +326,8 @@ class DepartmentPage(JanisBasePage):
         FieldPanel('mission'),
         InlinePanel('contacts', label='Contacts'),
         InlinePanel('department_directors', label="Department Directors"),
-        FieldPanel('job_listings')
+        FieldPanel('job_listings'),
+        StreamFieldPanel('top_services'),
     ]
 
 class DepartmentPageDirector(Orderable):

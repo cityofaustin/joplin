@@ -5,6 +5,6 @@ module.exports = merge(baseConfig, {
   mode: "development",
   watch: true,
   watchOptions: {
-    poll: 1000
+    poll: 5000
   },
 });
