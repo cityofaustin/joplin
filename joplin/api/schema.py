@@ -105,10 +105,10 @@ class Language(graphene.Enum):
 
 
 class ServicePageNode(DjangoObjectType):
-    related = graphene.List('api.schema.ServicePageNode')
+    # related = graphene.List('api.schema.ServicePageNode')
 
-    def resolve_related(self, resolve_info, *args, **kwargs):
-        return self.topic.servicepage_set.exclude(id=self.id)
+    # def resolve_related(self, resolve_info, *args, **kwargs):
+    #     return self.topic.servicepage_set.exclude(id=self.id)
 
     class Meta:
         model = ServicePage
