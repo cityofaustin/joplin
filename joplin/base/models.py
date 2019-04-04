@@ -51,7 +51,8 @@ class ThreeOneOne(ClusterableModel):
 
 class HomePage(Page):
     parent_page_types = []
-    subpage_types = ['base.ServicePage', 'base.ProcessPage', 'base.InformationPage', 'base.DepartmentPage']
+    # subpage_types = ['base.ServicePage', 'base.ProcessPage', 'base.InformationPage', 'base.DepartmentPage']
+    subpage_types = ['base.ServicePage', 'base.ProcessPage', 'base.InformationPage', 'base.DepartmentPage', 'base.TopicPage']
 
     image = models.ForeignKey(TranslatedImage, null=True, on_delete=models.SET_NULL, related_name='+')
 
@@ -244,6 +245,80 @@ class InformationPage(JanisPage):
         ImageChooserPanel('image'),
     ]
 
+# class TopicPage(JanisPage):
+#     janis_url_page_type = "topic"
+
+#     # theme = models.ForeignKey(
+#     #     'base.Theme',
+#     #     on_delete=models.PROTECT,
+#     #     related_name='topics',
+#     # )
+
+#     description = models.TextField(blank=True)
+#     image = models.ForeignKey(TranslatedImage, null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
+#     # TODO: Add images array field
+
+#     base_form_class = custom_forms.TopicPageForm
+
+#     content_panels = [
+#         # FieldPanel('theme'),
+#         FieldPanel('description'),
+#         ImageChooserPanel('image'),
+    # ]
+
+class TopicPage(JanisPage):
+    janis_url_page_type = "topic"
+
+    # text = models.CharField(max_length=DEFAULT_MAX_LENGTH)
+    description = models.TextField()
+    call_to_action = models.TextField(blank=True)
+
+
+    theme = models.ForeignKey(
+        'base.Theme',
+        on_delete=models.PROTECT,
+        related_name='topicPages',
+    )
+
+    image = models.ForeignKey(TranslatedImage, null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
+
+    external_services = StreamField(
+        [
+            ('link_en', StructBlock([
+                ('url', URLBlock()),
+                ('title', CharBlock()),
+            ], icon='link', label='Link [EN]')),
+            ('link_es', StructBlock([
+                ('url', URLBlock()),
+                ('title', CharBlock()),
+            ], icon='link', label='Link [ES]')),
+            ('link_ar', StructBlock([
+                ('url', URLBlock()),
+                ('title', CharBlock()),
+            ], icon='link', label='Link [AR]')),
+            ('link_vi', StructBlock([
+                ('url', URLBlock()),
+                ('title', CharBlock()),
+            ], icon='link', label='Link [VI]')),
+        ],
+        verbose_name='External links to services',
+        blank=True
+    )
+
+    base_form_class = custom_forms.TopicPageForm
+
+    content_panels = [
+        FieldPanel('title_en'),
+        FieldPanel('title_es'),
+        FieldPanel('title_ar'),
+        FieldPanel('title_vi'),
+        FieldPanel('description'),
+        FieldPanel('call_to_action'),
+        FieldPanel('theme'),
+        ImageChooserPanel('image'),
+        StreamFieldPanel('external_services'),
+    ]
+
 class DepartmentPage(JanisBasePage):
     janis_url_page_type = "department"
 
@@ -375,6 +450,7 @@ class Topic(ClusterableModel):
 
     def __str__(self):
         return self.text
+
 
 @register_snippet
 class Theme(ClusterableModel):
