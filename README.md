@@ -24,10 +24,13 @@ LOAD_DATA=on ./scripts/serve-local.sh
 
 **NOTE** You may encounter issues with the script exiting prematurely if you haven't installed the [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli#download-and-install) and run `heroku login`.
 
-
 ```
 REBUILD=on ./scripts/serve-local.sh
 ```
+
+### Managing Local DB
+
+The LOAD_DATA flag will load our backups from the django-dbbackup module. This contains full backups including users, and is not intended to migrate data between environments. In order to keep the size of this repository from ballooning out of control, local backups are made without any page data. In order to load page data locally, visit http://localhost:8000/django-admin/load/ and select a backup from the fixture directory.
 
 ### Rebuild Janis on Heroku when new pages are published
 
@@ -47,7 +50,6 @@ You can access the admin at `localhost:8000/admin` with the credentials `admin@a
 
 You can access a GraphQL API at `localhost:8000/api/graphiql`
 
-
 ## Create migrations
 
 While the server is running, run the following commands:
@@ -65,15 +67,15 @@ While the server is running, after running migrations, run the following command
 docker exec --interactive --tty joplin python joplin/manage.py dbbackup
 ```
 
-
 ### Updating the models (for example, adding a new page model)
+
 1. Clear out your docker containers and start fresh with `./scripts/serve-local.sh`
 2. Load the current backup `LOAD_DATA=on ./scripts/serve-local.sh`
 3. Make your changes to `models.py`
 4. Run `makemigrations` and `migrate` - see "Create Migrations" above
 5. Make an example page
 6. Make a new backup
-8. Try starting fresh with your new model/migration/backup
+7. Try starting fresh with your new model/migration/backup
 
 ## Update: New deployment pipeline
 
@@ -98,13 +100,11 @@ The new build process will create a service (group) of containers:
 2. joplinassets (assets)
 3. joplin (backend)
 
-The database defaults to version 10 of postgres. No password is set up, since there is no security needed for a local environment. To connect, use the localhost at the standard PostgreSQL (5432)  port where the container is mapped to listen for connections all without a password, the user and database name is 'joplin'. To manage the database, you should be able to use your favorite DB admin tool (ie. TablePlus, DBeaver, DataGrip, etc). Be sure you are not running a local PostgreSQL server prior to building the containers. Example connection string: `postgres://joplin@localhost:5432/joplin`
+The database defaults to version 10 of postgres. No password is set up, since there is no security needed for a local environment. To connect, use the localhost at the standard PostgreSQL (5432) port where the container is mapped to listen for connections all without a password, the user and database name is 'joplin'. To manage the database, you should be able to use your favorite DB admin tool (ie. TablePlus, DBeaver, DataGrip, etc). Be sure you are not running a local PostgreSQL server prior to building the containers. Example connection string: `postgres://joplin@localhost:5432/joplin`
 
-The master branch (staging app, joplin-staging.herokuapp.com) and production branch (production app, joplin-production.herokuapp.com) upload static files to an S3 bucket (both share the same bucket), but have separate databases.  
+The master branch (staging app, joplin-staging.herokuapp.com) and production branch (production app, joplin-production.herokuapp.com) upload static files to an S3 bucket (both share the same bucket), but have separate databases.
 
 Note: The containers are not built at the same time; for this purpose, joplin will wait and display a 'database not available' message in a loop until the database is up and ready. This is because the DB container takes a little longer to build and set up locally, and joplin has to wait before it can run the django migrations locally.
-
-
 
 ## Create new app
 
@@ -113,13 +113,14 @@ APP_NAME=app_name_goes_here
 docker exec joplin /bin/bash -c "mkdir -p \"$APP_NAME\" && cd joplin && python manage.py startapp \"$APP_NAME\""
 ```
 
-
 ## Design
+
 #### icons
-To get a full set of icons that Wagtail has available you'll need to upload [Wagtail's icomoon icon definitions](
-https://raw.githubusercontent.com/wagtail/wagtail/master/wagtail/admin/static_src/wagtailadmin/fonts/wagtail-icomoon.json) to the [icomoon web app](https://icomoon.io/app/). Make sure you're uploading the icon definitions for the version of wagtail we're using.
+
+To get a full set of icons that Wagtail has available you'll need to upload [Wagtail's icomoon icon definitions](https://raw.githubusercontent.com/wagtail/wagtail/master/wagtail/admin/static_src/wagtailadmin/fonts/wagtail-icomoon.json) to the [icomoon web app](https://icomoon.io/app/). Make sure you're uploading the icon definitions for the version of wagtail we're using.
 
 #### Adding Scripts/Styles
+
 We're using webpack to bundle syles and scripts, and webpack_loader to include them in our templates. To create a new bundle it should be defined as an entry in `webpack.build.js` and `webpack.dev.js`, then included in a template using `{% load render_bundle from webpack_loader %}` and `{% render_bundle 'YOUR_BUNDLE_NAME_HERE' %}`.
 
 # **Deployments with Travis CI**
@@ -136,17 +137,17 @@ We currently use Travis CI to manage and customize our deployments to our cloud 
 
 **Build Operations**
 
-Travis will detect any changes done to the code on Git, if the change was done to a PR, Master (staging application) or Production (prod application) branch, the process will automatically build and update the applications. 
+Travis will detect any changes done to the code on Git, if the change was done to a PR, Master (staging application) or Production (prod application) branch, the process will automatically build and update the applications.
 
-  As soon as you push the code to the origin remote Travis will immediately beign the build process. Regular branches are not going to be built.
+As soon as you push the code to the origin remote Travis will immediately beign the build process. Regular branches are not going to be built.
 
-**Stages** 
+**Stages**
 
 The deployment is handled in four different stages, for each stage travis will create a new container (with a temporal (ephemeral) file system) and run all the operations as indicated per stage.
 
 **1. Tests**
 
-At the moment the only pre-deployment tests it runs is to make sure that the functions can be called and are ready to be executed. It also tests whether the AWS & Heroku CLI tools have been installed and are properly running. 
+At the moment the only pre-deployment tests it runs is to make sure that the functions can be called and are ready to be executed. It also tests whether the AWS & Heroku CLI tools have been installed and are properly running.
 
 **2. Database Backup**
 
