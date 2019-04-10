@@ -230,7 +230,9 @@ DBBACKUP_STORAGE = 'django.core.files.storage.FileSystemStorage'
 DBBACKUP_STORAGE_OPTIONS = {'location': '/app/joplin/db/backups'}
 
 
-
+SMUGGLER_EXCLUDE_LIST = [
+    'users.user'
+]
 
 # Avoid exporting owner settings
 DBBACKUP_CONNECTORS = {
