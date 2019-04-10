@@ -1,4 +1,4 @@
-cat joplin/db/smuggler/prod.json | jq -r '.[].fields.file|select(.)' | while read line
+cat joplin/db/smuggler/pages.json | jq -r '.[].fields.file|select(.)' | while read line
 do
   if [ -f media/$line ]; then
     echo media/$line already exists, skipping...
