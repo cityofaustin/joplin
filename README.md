@@ -30,7 +30,9 @@ REBUILD=on ./scripts/serve-local.sh
 
 ### Managing Local DB
 
-The LOAD_DATA flag will load our backups from the django-dbbackup module. This contains full backups including users, and is not intended to migrate data between environments. In order to keep the size of this repository from ballooning out of control, local backups are made without any page data. In order to load page data locally, visit http://localhost:8000/django-admin/load/ and select a backup from the fixture directory.
+The LOAD_DATA flag will load our backups from the django-dbbackup module. This contains full backups including users, and is not intended to migrate data between environments. In order to keep the size of this repository from ballooning out of control, local backups are made without any page data. Data can be backed up using django-smuggler. In order to load page data locally, visit http://localhost:8000/django-admin/load/ and select a backup from the fixture directory.
+
+Images are also not stored in this repo, and can instead be downloaded using `./scripts/download-media.sh`. This will parse a backup file from the db/smuggler directory and place all referenced images into the local media folder.
 
 ### Rebuild Janis on Heroku when new pages are published
 
