@@ -1,0 +1,2 @@
+# cat joplin/db/smuggler/in.json | jq '.[].fields.user = ["admin@austintexas.io"] | .[].fields.uploaded_by_user = ["admin@austintexas.io"]' > joplin/db/smuggler/bb.json
+cat joplin/db/smuggler/in.json | jq '.[].fields.user = ["admin@austintexas.io"] | .[].fields.uploaded_by_user = ["admin@austintexas.io"] | .[].fields.owner = ["admin@austintexas.io"]' > joplin/db/smuggler/ee.json
