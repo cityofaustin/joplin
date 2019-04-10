@@ -32,7 +32,7 @@ class TranslatedImage(AbstractImage):
 
 
 class TranslatedImageRendition(AbstractRendition):
-    image = models.ForeignKey(TranslatedImage, related_name='renditions', on_delete=models.PROTECT)
+    image = models.ForeignKey(TranslatedImage, related_name='renditions', on_delete=models.CASCADE)
 
     class Meta:
         unique_together = (
