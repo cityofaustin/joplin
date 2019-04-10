@@ -41,10 +41,15 @@ Images are also not stored in this repo, and can instead be downloaded using `./
 If you're making schema changes, there are a few hoops to jump through. After making migrations and ensuring they work properly with a populated DB, you'll want to clear out the database and make a new backup with the updated schema. One way to do this is:
 
 - Update models and make/run migrations on a populated local db, commit the changed files
-- Revert to a commit before the model updates and migrations
+- Change your working copy to a commit before the model updates and migrations
 - Clear out the db, one way to do this is removing the joplindb container
 - Run serve-local.sh with LOAD_DATA on
--
+- Shut down the server
+- Go back to a commit with the model updates
+- Run serve-local.sh without loading data (migrations should run during startup)
+- Make a dbbackup with the new schema
+
+By following this, we should be able to avoid dbbackup schema version conflicts.
 
 ### Rebuild Janis on Heroku when new pages are published
 
