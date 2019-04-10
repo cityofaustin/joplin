@@ -14,11 +14,15 @@ Make sure you have docker installed, then run:
 ./scripts/serve-local.sh
 ```
 
-**NOTE** Fixture data is automatically loaded the first time you run the server. Add `LOAD_DATA=on` if you ever need to start with a fresh copy.
+If you can't log in to http://localhost:8000/admin/, you'll need to load a backup with a user, this can be done using:
 
 ```
 LOAD_DATA=on ./scripts/serve-local.sh
 ```
+
+By default we don't have any pages in the local DB, to load them in, visit http://localhost:8000/django-admin/load/ and select a backup from the fixture directory.
+
+At this point the database should be populated, but any media used on the site will be broken, to fix this run: `./scripts/download-media.sh`
 
 **NOTE** The first time docker-compose runs it builds new images, every time after the images are not rebuilt. To clear the cache and rebuild add `REBUILD=on`.
 
@@ -33,6 +37,14 @@ REBUILD=on ./scripts/serve-local.sh
 The LOAD_DATA flag will load our backups from the django-dbbackup module. This contains full backups including users, and is not intended to migrate data between environments. In order to keep the size of this repository from ballooning out of control, local backups are made without any page data. Data can be backed up using django-smuggler. In order to load page data locally, visit http://localhost:8000/django-admin/load/ and select a backup from the fixture directory.
 
 Images are also not stored in this repo, and can instead be downloaded using `./scripts/download-media.sh`. This will parse a backup file from the db/smuggler directory and place all referenced images into the local media folder.
+
+If you're making schema changes, there are a few hoops to jump through. After making migrations and ensuring they work properly with a populated DB, you'll want to clear out the database and make a new backup with the updated schema. One way to do this is:
+
+- Update models and make/run migrations on a populated local db, commit the changed files
+- Revert to a commit before the model updates and migrations
+- Clear out the db, one way to do this is removing the joplindb container
+- Run serve-local.sh with LOAD_DATA on
+-
 
 ### Rebuild Janis on Heroku when new pages are published
 
