@@ -19,6 +19,7 @@ def home(request):
 
 
 urlpatterns = [
+    url(r'^django-admin/', include('smuggler.urls')),
     url(r'^django-admin/', admin.site.urls),
 
     path('admin/', home),

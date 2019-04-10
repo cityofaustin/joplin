@@ -74,6 +74,7 @@ INSTALLED_APPS = [
     'wagtail.contrib.modeladmin',
     'webpack_loader',
     'dbbackup',
+    'smuggler'
 ]
 
 MIDDLEWARE = [
