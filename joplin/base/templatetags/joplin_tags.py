@@ -22,7 +22,8 @@ STYLEGUIDE_PAGES = {
   'service page': '/writing-service-pages/',
   'process page': '/writing-process-pages/',
   'information page': '/writing-process-pages/',
-  'department page': '/writing-process-pages/'
+  'department page': '/writing-process-pages/',
+  'topic page': '/writing-process-pages/',
 }
 
 @register.simple_tag

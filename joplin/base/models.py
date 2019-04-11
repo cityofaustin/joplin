@@ -245,32 +245,10 @@ class InformationPage(JanisPage):
         ImageChooserPanel('image'),
     ]
 
-# class TopicPage(JanisPage):
-#     janis_url_page_type = "topic"
-
-#     # theme = models.ForeignKey(
-#     #     'base.Theme',
-#     #     on_delete=models.PROTECT,
-#     #     related_name='topics',
-#     # )
-
-#     description = models.TextField(blank=True)
-#     image = models.ForeignKey(TranslatedImage, null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
-#     # TODO: Add images array field
-
-#     base_form_class = custom_forms.TopicPageForm
-
-#     content_panels = [
-#         # FieldPanel('theme'),
-#         FieldPanel('description'),
-#         ImageChooserPanel('image'),
-    # ]
-
 class TopicPage(JanisPage):
     janis_url_page_type = "topic"
 
-    # text = models.CharField(max_length=DEFAULT_MAX_LENGTH)
-    description = models.TextField()
+    description = models.TextField(blank=True)
     call_to_action = models.TextField(blank=True)
 
 
