@@ -47,7 +47,6 @@ class CreateContentModal extends Component {
   };
 
   incrementActiveStep = () => {
-    debugger;
     // If we're on the choose type step
     if(this.state.activeStep === stepsEnum.CHOOSE_TYPE) {
       // Department pages go straight to title, as do service pages
