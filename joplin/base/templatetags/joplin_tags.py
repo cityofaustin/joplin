@@ -3,7 +3,7 @@ import graphene
 import os
 import json
 
-from base.models import Topic, Theme, DepartmentPage
+from base.models import TopicPage, Theme, DepartmentPage
 from wagtail.core import hooks
 import itertools
 
@@ -43,9 +43,9 @@ def themes_topics_tree(context):
             'topics': []
         }
 
-    for topic in Topic.objects.all():
+    for topic in TopicPage.objects.all():
         themes[topic.theme.id]['topics'].append({
-            'text': topic.text,
+            'text': topic.title,
             'id': topic.id,
         })
 

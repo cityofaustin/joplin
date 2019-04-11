@@ -21,11 +21,10 @@ const DEPARTMENT_LIST = window.departments;
 
 const stepsEnum = {
   CHOOSE_TYPE: 0,
-  CHOOSE_TITLE: 1,
-  CHOOSE_DEPT_OR_TOPIC: 2,
-  CHOOSE_TOPIC: 3,
-  CHOOSE_DEPARTMENT: 4,
-  CHOOSE_THEME: 5,
+  CHOOSE_DEPT_OR_TOPIC: 1,
+  CHOOSE_DEPARTMENT: 2,
+  CHOOSE_THEME: 3,
+  CHOOSE_TITLE: 4,
 }
 
 class CreateContentModal extends Component {
@@ -44,63 +43,71 @@ class CreateContentModal extends Component {
   }
 
   onLastStep = () => {
-    return (
-      // If we're creating a department page, then the title step is the last step,
-      // Otherwise, it'll be either the choose topic or choose department step
-      (this.state.type === 'department' && this.state.activeStep === stepsEnum.CHOOSE_TITLE) ||
-      this.state.activeStep === stepsEnum.CHOOSE_TOPIC || this.state.activeStep === stepsEnum.CHOOSE_DEPARTMENT || this.state.activeStep === stepsEnum.CHOOSE_THEME
-    );
+    return this.state.activeStep === stepsEnum.CHOOSE_TITLE;
   };
 
   incrementActiveStep = () => {
-    // If we're creating a service page and we're on the choose title page skip the
-    // dept or topic selection because all service pages are topic only
-    if(this.state.type === 'service' && this.state.activeStep === stepsEnum.CHOOSE_TITLE) {
-      this.setState({
-        activeStep: stepsEnum.CHOOSE_TOPIC
-      });
+    debugger;
+    // If we're on the choose type step
+    if(this.state.activeStep === stepsEnum.CHOOSE_TYPE) {
+      // Department pages go straight to title, as do service pages
+      if(this.state.type === 'department' || this.state.type === 'service') {
+        this.setState({ activeStep: stepsEnum.CHOOSE_TITLE });
+        return;
+      }
+
+      // Topic pages go to theme
+      if(this.state.type === 'topic') {
+        this.setState({ activeStep: stepsEnum.CHOOSE_THEME });
+        return;
+      }
+
+      // Process and information pages to to the select dept/topic step
+      this.setState({ activeStep: stepsEnum.CHOOSE_DEPT_OR_TOPIC });
       return;
     }
 
-    // If we're creating a  page and we're on the choose title page skip to the
-    // theme selection because all topic pages are theme only
-    if(this.state.type === 'topic' && this.state.activeStep === stepsEnum.CHOOSE_TITLE) {
-      this.setState({
-        activeStep: stepsEnum.CHOOSE_THEME
-      });
+    // If we're on choose department or theme, we need to go to choose title
+    if(this.state.activeStep === stepsEnum.CHOOSE_DEPARTMENT || this.state.activeStep === stepsEnum.CHOOSE_THEME) {
+      this.setState({ activeStep: stepsEnum.CHOOSE_TITLE });
       return;
     }
-
-    this.setState({
-      activeStep: this.state.activeStep + 1,
-    });
   };
 
   decrementActiveStep = () => {
-    // If we're on choose topic or choose department or choose theme go back to page title page
-    if(this.state.activeStep === stepsEnum.CHOOSE_TOPIC || this.state.activeStep === stepsEnum.CHOOSE_DEPARTMENT || this.state.activeStep === stepsEnum.CHOOSE_THEME) {
-      this.setState({
-        activeStep: stepsEnum.CHOOSE_TITLE
-      });
-      return;
+    let previousViableStep = this.state.activeStep - 1;
+
+    // We can't go below zero
+    if(previousViableStep < 0) {
+      previousViableStep = stepsEnum.CHOOSE_TYPE
     }
 
-    this.setState({
-      activeStep: this.state.activeStep - 1,
-    });
+    // Only topic pages can have a theme
+    if(previousViableStep === stepsEnum.CHOOSE_THEME && this.state.type !== 'topic') {
+      previousViableStep--;
+    }
+
+    // we should only go to the dept select page if we have a department
+    if(previousViableStep === stepsEnum.CHOOSE_DEPARTMENT && !this.state.department) {
+      previousViableStep--;
+    }
+
+    // We should never go back to the choose dept or topic page
+    if(previousViableStep === stepsEnum.CHOOSE_DEPT_OR_TOPIC) {
+      previousViableStep--;
+    }
+
+    this.setState({ activeStep: previousViableStep });
   };
 
   handleNextButton = e => {
-    // Validate title max length
-    if (this.state.titleCharacterCount > MAX_TITLE_LENGTH) return false;
-
-    // Validate title min length
-    if (this.state.titleCharacterCount <= 0) return false;
-
-    // If we're on the topic select step we need a topic selected
-    if (this.state.activeStep === 2 && this.state.topic === null) return false;
-
     if (this.onLastStep()) {
+      // Validate title max length
+      if (this.state.titleCharacterCount > MAX_TITLE_LENGTH) return false;
+
+      // Validate title min length
+      if (this.state.titleCharacterCount <= 0) return false;
+
       this.setState(
         {
           creatingContent: true,
@@ -120,13 +127,15 @@ class CreateContentModal extends Component {
   handleTypeSelect = (dataObj, e) => {
     this.setState({
       type: dataObj.type,
+    }, () => {
+      this.incrementActiveStep();
     });
-    this.incrementActiveStep();
   };
 
   handleTopicOrDepartmentSelect = (dataObj, e) => {
     this.setState({
-      activeStep: dataObj.topicOrDept === 'topic' ? stepsEnum.CHOOSE_TOPIC : stepsEnum.CHOOSE_DEPARTMENT,
+      activeStep: dataObj.topicOrDept === 'topic' ? stepsEnum.CHOOSE_TITLE : stepsEnum.CHOOSE_DEPARTMENT,
+      department: null
     });
   };
 
@@ -135,10 +144,6 @@ class CreateContentModal extends Component {
       title: e.target.value,
       titleCharacterCount: e.target.value.length,
     });
-  };
-
-  handleTopicSelect = id => {
-    this.setState({ topic: id });
   };
 
   handleThemeSelect = id => {
@@ -224,13 +229,6 @@ class CreateContentModal extends Component {
                     {this.state.activeStep === stepsEnum.CHOOSE_DEPT_OR_TOPIC && (
                       <ChooseTopicOrDepartmentStep
                         handleTopicOrDepartmentSelect={this.handleTopicOrDepartmentSelect}
-                      />
-                    )}
-                    {this.state.activeStep === stepsEnum.CHOOSE_TOPIC && (
-                      <ChooseTopicStep
-                        topic={this.state.topic}
-                        handleTopicSelect={this.handleTopicSelect}
-                        themeTopicTree={THEME_TOPIC_TREE}
                       />
                     )}
                     {this.state.activeStep === stepsEnum.CHOOSE_DEPARTMENT && (
