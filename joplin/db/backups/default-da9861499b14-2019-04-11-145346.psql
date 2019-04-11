@@ -55,23 +55,28 @@ ALTER TABLE ONLY public.django_admin_log DROP CONSTRAINT django_admin_log_conten
 ALTER TABLE ONLY public.base_translatedimage DROP CONSTRAINT base_translatedimage_uploaded_by_user_id_520112ca_fk_users_use;
 ALTER TABLE ONLY public.base_translatedimagerendition DROP CONSTRAINT base_translatedimage_image_id_7c5496a9_fk_base_tran;
 ALTER TABLE ONLY public.base_translatedimage DROP CONSTRAINT base_translatedimage_collection_id_bcbe55dc_fk_wagtailco;
-ALTER TABLE ONLY public.base_topic DROP CONSTRAINT base_topic_theme_id_b944b5cf_fk_base_theme_id;
+ALTER TABLE ONLY public.base_topicpage DROP CONSTRAINT base_topicpage_theme_id_3e3f6806_fk_base_theme_id;
+ALTER TABLE ONLY public.base_topicpage DROP CONSTRAINT base_topicpage_page_ptr_id_43975d7c_fk_wagtailcore_page_id;
+ALTER TABLE ONLY public.base_topicpage DROP CONSTRAINT base_topicpage_image_id_83eb6f93_fk_base_translatedimage_id;
+ALTER TABLE ONLY public.base_servicepagetopic DROP CONSTRAINT base_servicepagetopi_topic_id_8c8ee82d_fk_base_topi;
+ALTER TABLE ONLY public.base_servicepagetopic DROP CONSTRAINT base_servicepagetopi_page_id_ee32c418_fk_base_serv;
 ALTER TABLE ONLY public.base_servicepagecontact DROP CONSTRAINT base_servicepagecontact_contact_id_f214244b_fk_base_contact_id;
 ALTER TABLE ONLY public.base_servicepagecontact DROP CONSTRAINT base_servicepagecont_page_id_447387c4_fk_base_serv;
-ALTER TABLE ONLY public.base_servicepage DROP CONSTRAINT base_servicepage_topic_id_52c064c6_fk_base_topic_id;
 ALTER TABLE ONLY public.base_servicepage DROP CONSTRAINT base_servicepage_page_ptr_id_051b30d5_fk_wagtailcore_page_id;
 ALTER TABLE ONLY public.base_servicepage DROP CONSTRAINT base_servicepage_image_id_2200179f_fk_base_translatedimage_id;
+ALTER TABLE ONLY public.base_processpagetopic DROP CONSTRAINT base_processpagetopi_topic_id_720998b0_fk_base_topi;
+ALTER TABLE ONLY public.base_processpagetopic DROP CONSTRAINT base_processpagetopi_page_id_2bc50492_fk_base_proc;
 ALTER TABLE ONLY public.base_processpagestep DROP CONSTRAINT base_processpagestep_page_id_fa035fe0_fk_base_proc;
 ALTER TABLE ONLY public.base_processpagestep DROP CONSTRAINT base_processpagestep_image_id_ef91bf6c_fk_base_tran;
 ALTER TABLE ONLY public.base_processpagecontact DROP CONSTRAINT base_processpagecontact_contact_id_0a9c2864_fk_base_contact_id;
 ALTER TABLE ONLY public.base_processpagecontact DROP CONSTRAINT base_processpagecont_process_id_167124bc_fk_base_proc;
-ALTER TABLE ONLY public.base_processpage DROP CONSTRAINT base_processpage_topic_id_8fafaf87_fk_base_topic_id;
 ALTER TABLE ONLY public.base_processpage DROP CONSTRAINT base_processpage_page_ptr_id_5edd7444_fk_wagtailcore_page_id;
 ALTER TABLE ONLY public.base_processpage DROP CONSTRAINT base_processpage_image_id_cabd83dd_fk_base_translatedimage_id;
 ALTER TABLE ONLY public.base_processpage DROP CONSTRAINT base_processpage_department_id_d84a7982_fk_base_depa;
 ALTER TABLE ONLY public.base_map DROP CONSTRAINT base_map_location_id_8d22d654_fk_base_location_id;
-ALTER TABLE ONLY public.base_informationpage DROP CONSTRAINT base_informationpage_topic_id_c5cf40b4_fk_base_topic_id;
+ALTER TABLE ONLY public.base_informationpagetopic DROP CONSTRAINT base_informationpage_topic_id_2dc1da42_fk_base_topi;
 ALTER TABLE ONLY public.base_informationpage DROP CONSTRAINT base_informationpage_page_ptr_id_9a0f594e_fk_wagtailco;
+ALTER TABLE ONLY public.base_informationpagetopic DROP CONSTRAINT base_informationpage_page_id_d9ca6f81_fk_base_info;
 ALTER TABLE ONLY public.base_informationpagecontact DROP CONSTRAINT base_informationpage_page_id_655b667f_fk_base_info;
 ALTER TABLE ONLY public.base_informationpage DROP CONSTRAINT base_informationpage_image_id_764f7bf1_fk_base_tran;
 ALTER TABLE ONLY public.base_informationpage DROP CONSTRAINT base_informationpage_department_id_561e612e_fk_base_depa;
@@ -157,26 +162,28 @@ DROP INDEX public.base_translatedimagerendition_filter_spec_b7fb314f;
 DROP INDEX public.base_translatedimage_uploaded_by_user_id_520112ca;
 DROP INDEX public.base_translatedimage_created_at_a2d7f113;
 DROP INDEX public.base_translatedimage_collection_id_bcbe55dc;
-DROP INDEX public.base_topic_theme_id_b944b5cf;
-DROP INDEX public.base_topic_slug_e6a21d19_like;
-DROP INDEX public.base_topic_slug_e6a21d19;
+DROP INDEX public.base_topicpage_theme_id_3e3f6806;
+DROP INDEX public.base_topicpage_image_id_83eb6f93;
 DROP INDEX public.base_theme_slug_bc7e93c0_like;
 DROP INDEX public.base_theme_slug_bc7e93c0;
+DROP INDEX public.base_servicepagetopic_topic_id_8c8ee82d;
+DROP INDEX public.base_servicepagetopic_page_id_ee32c418;
 DROP INDEX public.base_servicepagecontact_page_id_447387c4;
 DROP INDEX public.base_servicepagecontact_contact_id_f214244b;
-DROP INDEX public.base_servicepage_topic_id_52c064c6;
 DROP INDEX public.base_servicepage_image_id_2200179f;
+DROP INDEX public.base_processpagetopic_topic_id_720998b0;
+DROP INDEX public.base_processpagetopic_page_id_2bc50492;
 DROP INDEX public.base_processpagestep_page_id_fa035fe0;
 DROP INDEX public.base_processpagestep_image_id_ef91bf6c;
 DROP INDEX public.base_processpagecontact_process_id_167124bc;
 DROP INDEX public.base_processpagecontact_contact_id_0a9c2864;
-DROP INDEX public.base_processpage_topic_id_8fafaf87;
 DROP INDEX public.base_processpage_image_id_cabd83dd;
 DROP INDEX public.base_processpage_department_id_d84a7982;
 DROP INDEX public.base_map_location_id_8d22d654;
+DROP INDEX public.base_informationpagetopic_topic_id_2dc1da42;
+DROP INDEX public.base_informationpagetopic_page_id_d9ca6f81;
 DROP INDEX public.base_informationpagecontact_page_id_655b667f;
 DROP INDEX public.base_informationpagecontact_contact_id_47a7ecb9;
-DROP INDEX public.base_informationpage_topic_id_c5cf40b4;
 DROP INDEX public.base_informationpage_image_id_764f7bf1;
 DROP INDEX public.base_informationpage_department_id_561e612e;
 DROP INDEX public.base_homepage_image_id_480b2169;
@@ -247,16 +254,19 @@ ALTER TABLE ONLY public.django_admin_log DROP CONSTRAINT django_admin_log_pkey;
 ALTER TABLE ONLY public.base_translatedimagerendition DROP CONSTRAINT base_translatedimagerendition_pkey;
 ALTER TABLE ONLY public.base_translatedimagerendition DROP CONSTRAINT base_translatedimagerend_image_id_filter_spec_foc_da7be8d7_uniq;
 ALTER TABLE ONLY public.base_translatedimage DROP CONSTRAINT base_translatedimage_pkey;
-ALTER TABLE ONLY public.base_topic DROP CONSTRAINT base_topic_pkey;
+ALTER TABLE ONLY public.base_topicpage DROP CONSTRAINT base_topicpage_pkey;
 ALTER TABLE ONLY public.base_threeoneone DROP CONSTRAINT base_threeoneone_pkey;
 ALTER TABLE ONLY public.base_theme DROP CONSTRAINT base_theme_pkey;
+ALTER TABLE ONLY public.base_servicepagetopic DROP CONSTRAINT base_servicepagetopic_pkey;
 ALTER TABLE ONLY public.base_servicepagecontact DROP CONSTRAINT base_servicepagecontact_pkey;
 ALTER TABLE ONLY public.base_servicepage DROP CONSTRAINT base_servicepage_pkey;
+ALTER TABLE ONLY public.base_processpagetopic DROP CONSTRAINT base_processpagetopic_pkey;
 ALTER TABLE ONLY public.base_processpagestep DROP CONSTRAINT base_processpagestep_pkey;
 ALTER TABLE ONLY public.base_processpagecontact DROP CONSTRAINT base_processpagecontact_pkey;
 ALTER TABLE ONLY public.base_processpage DROP CONSTRAINT base_processpage_pkey;
 ALTER TABLE ONLY public.base_map DROP CONSTRAINT base_map_pkey;
 ALTER TABLE ONLY public.base_location DROP CONSTRAINT base_location_pkey;
+ALTER TABLE ONLY public.base_informationpagetopic DROP CONSTRAINT base_informationpagetopic_pkey;
 ALTER TABLE ONLY public.base_informationpagecontact DROP CONSTRAINT base_informationpagecontact_pkey;
 ALTER TABLE ONLY public.base_informationpage DROP CONSTRAINT base_informationpage_pkey;
 ALTER TABLE ONLY public.base_homepage DROP CONSTRAINT base_homepage_pkey;
@@ -304,14 +314,16 @@ ALTER TABLE public.django_content_type ALTER COLUMN id DROP DEFAULT;
 ALTER TABLE public.django_admin_log ALTER COLUMN id DROP DEFAULT;
 ALTER TABLE public.base_translatedimagerendition ALTER COLUMN id DROP DEFAULT;
 ALTER TABLE public.base_translatedimage ALTER COLUMN id DROP DEFAULT;
-ALTER TABLE public.base_topic ALTER COLUMN id DROP DEFAULT;
 ALTER TABLE public.base_threeoneone ALTER COLUMN id DROP DEFAULT;
 ALTER TABLE public.base_theme ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.base_servicepagetopic ALTER COLUMN id DROP DEFAULT;
 ALTER TABLE public.base_servicepagecontact ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.base_processpagetopic ALTER COLUMN id DROP DEFAULT;
 ALTER TABLE public.base_processpagestep ALTER COLUMN id DROP DEFAULT;
 ALTER TABLE public.base_processpagecontact ALTER COLUMN id DROP DEFAULT;
 ALTER TABLE public.base_map ALTER COLUMN id DROP DEFAULT;
 ALTER TABLE public.base_location ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.base_informationpagetopic ALTER COLUMN id DROP DEFAULT;
 ALTER TABLE public.base_informationpagecontact ALTER COLUMN id DROP DEFAULT;
 ALTER TABLE public.base_departmentpagedirector ALTER COLUMN id DROP DEFAULT;
 ALTER TABLE public.base_departmentpagecontact ALTER COLUMN id DROP DEFAULT;
@@ -383,15 +395,18 @@ DROP SEQUENCE public.base_translatedimagerendition_id_seq;
 DROP TABLE public.base_translatedimagerendition;
 DROP SEQUENCE public.base_translatedimage_id_seq;
 DROP TABLE public.base_translatedimage;
-DROP SEQUENCE public.base_topic_id_seq;
-DROP TABLE public.base_topic;
+DROP TABLE public.base_topicpage;
 DROP SEQUENCE public.base_threeoneone_id_seq;
 DROP TABLE public.base_threeoneone;
 DROP SEQUENCE public.base_theme_id_seq;
 DROP TABLE public.base_theme;
+DROP SEQUENCE public.base_servicepagetopic_id_seq;
+DROP TABLE public.base_servicepagetopic;
 DROP SEQUENCE public.base_servicepagecontact_id_seq;
 DROP TABLE public.base_servicepagecontact;
 DROP TABLE public.base_servicepage;
+DROP SEQUENCE public.base_processpagetopic_id_seq;
+DROP TABLE public.base_processpagetopic;
 DROP SEQUENCE public.base_processpagestep_id_seq;
 DROP TABLE public.base_processpagestep;
 DROP SEQUENCE public.base_processpagecontact_id_seq;
@@ -401,6 +416,8 @@ DROP SEQUENCE public.base_map_id_seq;
 DROP TABLE public.base_map;
 DROP SEQUENCE public.base_location_id_seq;
 DROP TABLE public.base_location;
+DROP SEQUENCE public.base_informationpagetopic_id_seq;
+DROP TABLE public.base_informationpagetopic;
 DROP SEQUENCE public.base_informationpagecontact_id_seq;
 DROP TABLE public.base_informationpagecontact;
 DROP TABLE public.base_informationpage;
@@ -800,7 +817,6 @@ CREATE TABLE public.base_informationpage (
     options text NOT NULL,
     additional_content text NOT NULL,
     image_id integer,
-    topic_id integer,
     additional_content_ar text,
     additional_content_en text,
     additional_content_es text,
@@ -846,6 +862,37 @@ CREATE SEQUENCE public.base_informationpagecontact_id_seq
 --
 
 ALTER SEQUENCE public.base_informationpagecontact_id_seq OWNED BY public.base_informationpagecontact.id;
+
+
+--
+-- Name: base_informationpagetopic; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.base_informationpagetopic (
+    id integer NOT NULL,
+    page_id integer NOT NULL,
+    topic_id integer NOT NULL
+);
+
+
+--
+-- Name: base_informationpagetopic_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.base_informationpagetopic_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: base_informationpagetopic_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.base_informationpagetopic_id_seq OWNED BY public.base_informationpagetopic.id;
 
 
 --
@@ -930,7 +977,6 @@ CREATE TABLE public.base_processpage (
     description_es text,
     description_vi text,
     image_id integer,
-    topic_id integer,
     department_id integer
 );
 
@@ -1032,6 +1078,37 @@ ALTER SEQUENCE public.base_processpagestep_id_seq OWNED BY public.base_processpa
 
 
 --
+-- Name: base_processpagetopic; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.base_processpagetopic (
+    id integer NOT NULL,
+    page_id integer NOT NULL,
+    topic_id integer NOT NULL
+);
+
+
+--
+-- Name: base_processpagetopic_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.base_processpagetopic_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: base_processpagetopic_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.base_processpagetopic_id_seq OWNED BY public.base_processpagetopic.id;
+
+
+--
 -- Name: base_servicepage; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1040,7 +1117,6 @@ CREATE TABLE public.base_servicepage (
     created_at timestamp with time zone NOT NULL,
     updated_at timestamp with time zone NOT NULL,
     dynamic_content text NOT NULL,
-    topic_id integer NOT NULL,
     image_id integer,
     additional_content text NOT NULL,
     additional_content_ar text,
@@ -1079,6 +1155,37 @@ CREATE SEQUENCE public.base_servicepagecontact_id_seq
 --
 
 ALTER SEQUENCE public.base_servicepagecontact_id_seq OWNED BY public.base_servicepagecontact.id;
+
+
+--
+-- Name: base_servicepagetopic; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.base_servicepagetopic (
+    id integer NOT NULL,
+    page_id integer NOT NULL,
+    topic_id integer NOT NULL
+);
+
+
+--
+-- Name: base_servicepagetopic_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.base_servicepagetopic_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: base_servicepagetopic_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.base_servicepagetopic_id_seq OWNED BY public.base_servicepagetopic.id;
 
 
 --
@@ -1155,48 +1262,27 @@ ALTER SEQUENCE public.base_threeoneone_id_seq OWNED BY public.base_threeoneone.i
 
 
 --
--- Name: base_topic; Type: TABLE; Schema: public; Owner: -
+-- Name: base_topicpage; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.base_topic (
-    id integer NOT NULL,
-    text character varying(255) NOT NULL,
+CREATE TABLE public.base_topicpage (
+    page_ptr_id integer NOT NULL,
+    created_at timestamp with time zone NOT NULL,
+    updated_at timestamp with time zone NOT NULL,
     description text NOT NULL,
     description_ar text,
     description_en text,
     description_es text,
     description_vi text,
-    slug character varying(50) NOT NULL,
-    text_ar character varying(255),
-    text_en character varying(255),
-    text_es character varying(255),
-    text_vi character varying(255),
     call_to_action text NOT NULL,
     call_to_action_ar text,
     call_to_action_en text,
     call_to_action_es text,
     call_to_action_vi text,
+    external_services text NOT NULL,
+    image_id integer,
     theme_id integer NOT NULL
 );
-
-
---
--- Name: base_topic_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.base_topic_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: base_topic_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.base_topic_id_seq OWNED BY public.base_topic.id;
 
 
 --
@@ -2318,6 +2404,13 @@ ALTER TABLE ONLY public.base_informationpagecontact ALTER COLUMN id SET DEFAULT 
 
 
 --
+-- Name: base_informationpagetopic id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.base_informationpagetopic ALTER COLUMN id SET DEFAULT nextval('public.base_informationpagetopic_id_seq'::regclass);
+
+
+--
 -- Name: base_location id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -2346,10 +2439,24 @@ ALTER TABLE ONLY public.base_processpagestep ALTER COLUMN id SET DEFAULT nextval
 
 
 --
+-- Name: base_processpagetopic id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.base_processpagetopic ALTER COLUMN id SET DEFAULT nextval('public.base_processpagetopic_id_seq'::regclass);
+
+
+--
 -- Name: base_servicepagecontact id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.base_servicepagecontact ALTER COLUMN id SET DEFAULT nextval('public.base_servicepagecontact_id_seq'::regclass);
+
+
+--
+-- Name: base_servicepagetopic id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.base_servicepagetopic ALTER COLUMN id SET DEFAULT nextval('public.base_servicepagetopic_id_seq'::regclass);
 
 
 --
@@ -2364,13 +2471,6 @@ ALTER TABLE ONLY public.base_theme ALTER COLUMN id SET DEFAULT nextval('public.b
 --
 
 ALTER TABLE ONLY public.base_threeoneone ALTER COLUMN id SET DEFAULT nextval('public.base_threeoneone_id_seq'::regclass);
-
-
---
--- Name: base_topic id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.base_topic ALTER COLUMN id SET DEFAULT nextval('public.base_topic_id_seq'::regclass);
 
 
 --
@@ -2768,6 +2868,18 @@ COPY public.auth_permission (id, name, content_type_id, codename) FROM stdin;
 146	Can add department page director	50	add_departmentpagedirector
 147	Can change department page director	50	change_departmentpagedirector
 148	Can delete department page director	50	delete_departmentpagedirector
+149	Can add information page topic	51	add_informationpagetopic
+150	Can change information page topic	51	change_informationpagetopic
+151	Can delete information page topic	51	delete_informationpagetopic
+152	Can add process page topic	52	add_processpagetopic
+153	Can change process page topic	52	change_processpagetopic
+154	Can delete process page topic	52	delete_processpagetopic
+155	Can add service page topic	53	add_servicepagetopic
+156	Can change service page topic	53	change_servicepagetopic
+157	Can delete service page topic	53	delete_servicepagetopic
+158	Can add topic page	54	add_topicpage
+159	Can change topic page	54	change_topicpage
+160	Can delete topic page	54	delete_topicpage
 \.
 
 
@@ -2864,7 +2976,7 @@ COPY public.base_homepage (page_ptr_id, image_id) FROM stdin;
 -- Data for Name: base_informationpage; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY public.base_informationpage (page_ptr_id, created_at, updated_at, toplink, description, options, additional_content, image_id, topic_id, additional_content_ar, additional_content_en, additional_content_es, additional_content_vi, description_ar, description_en, description_es, description_vi, options_ar, options_en, options_es, options_vi, department_id) FROM stdin;
+COPY public.base_informationpage (page_ptr_id, created_at, updated_at, toplink, description, options, additional_content, image_id, additional_content_ar, additional_content_en, additional_content_es, additional_content_vi, description_ar, description_en, description_es, description_vi, options_ar, options_en, options_es, options_vi, department_id) FROM stdin;
 \.
 
 
@@ -2873,6 +2985,14 @@ COPY public.base_informationpage (page_ptr_id, created_at, updated_at, toplink, 
 --
 
 COPY public.base_informationpagecontact (id, contact_id, page_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: base_informationpagetopic; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.base_informationpagetopic (id, page_id, topic_id) FROM stdin;
 \.
 
 
@@ -2900,7 +3020,7 @@ COPY public.base_map (id, description, location_id, description_ar, description_
 -- Data for Name: base_processpage; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY public.base_processpage (page_ptr_id, created_at, updated_at, description, description_ar, description_en, description_es, description_vi, image_id, topic_id, department_id) FROM stdin;
+COPY public.base_processpage (page_ptr_id, created_at, updated_at, description, description_ar, description_en, description_es, description_vi, image_id, department_id) FROM stdin;
 \.
 
 
@@ -2921,10 +3041,18 @@ COPY public.base_processpagestep (id, sort_order, title, title_ar, title_en, tit
 
 
 --
+-- Data for Name: base_processpagetopic; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.base_processpagetopic (id, page_id, topic_id) FROM stdin;
+\.
+
+
+--
 -- Data for Name: base_servicepage; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY public.base_servicepage (page_ptr_id, created_at, updated_at, dynamic_content, topic_id, image_id, additional_content, additional_content_ar, additional_content_en, additional_content_es, additional_content_vi, steps) FROM stdin;
+COPY public.base_servicepage (page_ptr_id, created_at, updated_at, dynamic_content, image_id, additional_content, additional_content_ar, additional_content_en, additional_content_es, additional_content_vi, steps) FROM stdin;
 \.
 
 
@@ -2933,6 +3061,14 @@ COPY public.base_servicepage (page_ptr_id, created_at, updated_at, dynamic_conte
 --
 
 COPY public.base_servicepagecontact (id, contact_id, page_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: base_servicepagetopic; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.base_servicepagetopic (id, page_id, topic_id) FROM stdin;
 \.
 
 
@@ -2987,47 +3123,10 @@ COPY public.base_threeoneone (id, title, title_ar, title_en, title_es, title_vi,
 
 
 --
--- Data for Name: base_topic; Type: TABLE DATA; Schema: public; Owner: -
+-- Data for Name: base_topicpage; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY public.base_topic (id, text, description, description_ar, description_en, description_es, description_vi, slug, text_ar, text_en, text_es, text_vi, call_to_action, call_to_action_ar, call_to_action_en, call_to_action_es, call_to_action_vi, theme_id) FROM stdin;
-7	Recycling, trash, and compost	The City of Austin provides hundreds of services to residents to help them manage things like recycling, trash, energy, and water. This is a short list of services that will grow over time.	\N	The City of Austin provides hundreds of services to residents to help them manage things like recycling, trash, energy, and water. This is a short list of services that will grow over time.	\N	\N	recycling-trash-compost	إعادة التدوير والنفايات والسماد	Recycling, trash, and compost	Reciclaje, basura y compostaje	Tái chế, rác, và phân ủ	Check out recycling, trash, and compost services	الاطلاع على خدمات إعادة التدوير والنفايات والسماد	Check out recycling, trash, and compost services	Vea los servicios de reciclaje, basura y compostaje	Kiểm điểm các dịch vụ về tái chế, rác, và phân ủ.	2
-13	Health Records & Certificates	Find important health records and get copies of birth and death certificates.	\N	Find important health records and get copies of birth and death certificates.	\N	\N	records-and-certificates	\N	Health Records & Certificates	\N	\N		\N		\N	\N	4
-14	Healthcare & prevention	Find the services you need to keep you and your family healthy.	\N	Find the services you need to keep you and your family healthy.	\N	\N	healthcare-prevention	\N	Healthcare & prevention	\N	\N		\N		\N	\N	4
-1	Building permits		\N		\N	\N	building-permits	\N	Building permits	\N	\N		\N		\N	\N	1
-2	Business permits & licenses		\N		\N	\N	business-permits-licenses	\N	Business permits & licenses	\N	\N		\N		\N	\N	1
-3	Event permits		\N		\N	\N	event-permits	\N	Event permits	\N	\N		\N		\N	\N	1
-4	Pay tickets		\N		\N	\N	pay-tickets	\N	Pay tickets	\N	\N		\N		\N	\N	1
-5	Pay utility bills		\N		\N	\N	pay-utility-bills	\N	Pay utility bills	\N	\N		\N		\N	\N	2
-6	Water & electric service		\N		\N	\N	water-electric-service	\N	Water & electric service	\N	\N		\N		\N	\N	2
-8	Housing assistance		\N		\N	\N	housing-assistance	\N	Housing assistance	\N	\N		\N		\N	\N	2
-9	Pet adoption		\N		\N	\N	pet-adoption	\N	Pet adoption	\N	\N		\N		\N	\N	3
-10	Foster an animal		\N		\N	\N	foster-animal	\N	Foster an animal	\N	\N		\N		\N	\N	3
-11	Report a loose animal		\N		\N	\N	report-loose-animal	\N	Report a loose animal	\N	\N		\N		\N	\N	3
-12	Lots & found pets		\N		\N	\N	lost-found-pets	\N	Lots & found pets	\N	\N		\N		\N	\N	3
-15	Find childcare		\N		\N	\N	find-childcare	\N	Find childcare	\N	\N		\N		\N	\N	4
-16	Child & senior safety		\N		\N	\N	child-senior-safety	\N	Child & senior safety	\N	\N		\N		\N	\N	4
-17	Disaster safety & relief		\N		\N	\N	disaster-safety-relief	\N	Disaster safety & relief	\N	\N		\N		\N	\N	4
-18	Police reports & records		\N		\N	\N	police-reports-records	\N	Police reports & records	\N	\N		\N		\N	\N	4
-19	Events & classes		\N		\N	\N	events-classes	\N	Events & classes	\N	\N		\N		\N	\N	5
-20	Hike, bike, swim, & play		\N		\N	\N	hike-bike-swim-play	\N	Hike, bike, swim, & play	\N	\N		\N		\N	\N	5
-21	Arts & culture		\N		\N	\N	arts-culture	\N	Arts & culture	\N	\N		\N		\N	\N	5
-22	Libraries		\N		\N	\N	libraries	\N	Libraries	\N	\N		\N		\N	\N	5
-23	Transportation & parking		\N		\N	\N	transportation-parking	\N	Transportation & parking	\N	\N		\N		\N	\N	5
-24	Airport		\N		\N	\N	airport	\N	Airport	\N	\N		\N		\N	\N	5
-25	Departments		\N		\N	\N	departments	\N	Departments	\N	\N		\N		\N	\N	6
-26	Court dates & times		\N		\N	\N	court-dates	\N	Court dates & times	\N	\N		\N		\N	\N	6
-27	Business development		\N		\N	\N	business-development	\N	Business development	\N	\N		\N		\N	\N	6
-28	City code & ordinance		\N		\N	\N	city-code	\N	City code & ordinance	\N	\N		\N		\N	\N	6
-29	Budget, performance, & open records		\N		\N	\N	budget-performance-open-records	\N	Budget, performance, & open records	\N	\N		\N		\N	\N	6
-30	Funding, grants, & rebates		\N		\N	\N	funding-grants-rebates	\N	Funding, grants, & rebates	\N	\N		\N		\N	\N	6
-31	Resident participation		\N		\N	\N	resident-participation	\N	Resident participation	\N	\N		\N		\N	\N	6
-32	Mayor & Council		\N		\N	\N	mayor-council	\N	Mayor & Council	\N	\N		\N		\N	\N	6
-33	City job titles & pay		\N		\N	\N	job-titles-pay	\N	City job titles & pay	\N	\N		\N		\N	\N	7
-34	City benefits		\N		\N	\N	benefits	\N	City benefits	\N	\N		\N		\N	\N	7
-35	[Job type 1]		\N		\N	\N	rando-job-1	\N	[Job type 1]	\N	\N		\N		\N	\N	7
-36	[Job type 2]		\N		\N	\N	rando-job-2	\N	[Job type 2]	\N	\N		\N		\N	\N	7
-37	All jobs		\N		\N	\N	all-jobs	\N	All jobs	\N	\N		\N		\N	\N	7
+COPY public.base_topicpage (page_ptr_id, created_at, updated_at, description, description_ar, description_en, description_es, description_vi, call_to_action, call_to_action_ar, call_to_action_en, call_to_action_es, call_to_action_vi, external_services, image_id, theme_id) FROM stdin;
 \.
 
 
@@ -3126,6 +3225,10 @@ COPY public.django_content_type (id, app_label, model) FROM stdin;
 48	base	departmentpage
 49	base	departmentpagecontact
 50	base	departmentpagedirector
+51	base	informationpagetopic
+52	base	processpagetopic
+53	base	servicepagetopic
+54	base	topicpage
 \.
 
 
@@ -3299,6 +3402,11 @@ COPY public.django_migrations (id, app, name, applied) FROM stdin;
 195	base	0049_auto_20190328_0954	2019-03-28 11:57:04.531425+00
 196	base	0050_auto_20190328_1156	2019-03-28 11:57:04.686153+00
 197	base	0051_auto_20190410_1344	2019-04-10 13:44:53.831525+00
+198	base	0051_auto_20190403_1039	2019-04-11 14:52:44.671682+00
+199	base	0052_topicpage	2019-04-11 14:52:44.758747+00
+200	base	0053_merge_20190411_1135	2019-04-11 14:52:44.762037+00
+201	base	0054_auto_20190411_1237	2019-04-11 14:52:44.980874+00
+202	base	0055_auto_20190411_1254	2019-04-11 14:52:45.29881+00
 \.
 
 
@@ -3558,7 +3666,7 @@ SELECT pg_catalog.setval('public.auth_group_permissions_id_seq', 14, true);
 -- Name: auth_permission_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.auth_permission_id_seq', 148, true);
+SELECT pg_catalog.setval('public.auth_permission_id_seq', 160, true);
 
 
 --
@@ -3611,6 +3719,13 @@ SELECT pg_catalog.setval('public.base_informationpagecontact_id_seq', 1, true);
 
 
 --
+-- Name: base_informationpagetopic_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.base_informationpagetopic_id_seq', 1, false);
+
+
+--
 -- Name: base_location_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
@@ -3639,10 +3754,24 @@ SELECT pg_catalog.setval('public.base_processpagestep_id_seq', 7, true);
 
 
 --
+-- Name: base_processpagetopic_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.base_processpagetopic_id_seq', 1, false);
+
+
+--
 -- Name: base_servicepagecontact_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
 SELECT pg_catalog.setval('public.base_servicepagecontact_id_seq', 13, true);
+
+
+--
+-- Name: base_servicepagetopic_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.base_servicepagetopic_id_seq', 1, false);
 
 
 --
@@ -3657,13 +3786,6 @@ SELECT pg_catalog.setval('public.base_theme_id_seq', 7, true);
 --
 
 SELECT pg_catalog.setval('public.base_threeoneone_id_seq', 27, true);
-
-
---
--- Name: base_topic_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.base_topic_id_seq', 37, true);
 
 
 --
@@ -3691,14 +3813,14 @@ SELECT pg_catalog.setval('public.django_admin_log_id_seq', 16, true);
 -- Name: django_content_type_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.django_content_type_id_seq', 50, true);
+SELECT pg_catalog.setval('public.django_content_type_id_seq', 54, true);
 
 
 --
 -- Name: django_migrations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.django_migrations_id_seq', 197, true);
+SELECT pg_catalog.setval('public.django_migrations_id_seq', 202, true);
 
 
 --
@@ -4013,6 +4135,14 @@ ALTER TABLE ONLY public.base_informationpagecontact
 
 
 --
+-- Name: base_informationpagetopic base_informationpagetopic_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.base_informationpagetopic
+    ADD CONSTRAINT base_informationpagetopic_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: base_location base_location_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -4053,6 +4183,14 @@ ALTER TABLE ONLY public.base_processpagestep
 
 
 --
+-- Name: base_processpagetopic base_processpagetopic_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.base_processpagetopic
+    ADD CONSTRAINT base_processpagetopic_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: base_servicepage base_servicepage_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -4066,6 +4204,14 @@ ALTER TABLE ONLY public.base_servicepage
 
 ALTER TABLE ONLY public.base_servicepagecontact
     ADD CONSTRAINT base_servicepagecontact_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: base_servicepagetopic base_servicepagetopic_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.base_servicepagetopic
+    ADD CONSTRAINT base_servicepagetopic_pkey PRIMARY KEY (id);
 
 
 --
@@ -4085,11 +4231,11 @@ ALTER TABLE ONLY public.base_threeoneone
 
 
 --
--- Name: base_topic base_topic_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: base_topicpage base_topicpage_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.base_topic
-    ADD CONSTRAINT base_topic_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY public.base_topicpage
+    ADD CONSTRAINT base_topicpage_pkey PRIMARY KEY (page_ptr_id);
 
 
 --
@@ -4634,13 +4780,6 @@ CREATE INDEX base_informationpage_image_id_764f7bf1 ON public.base_informationpa
 
 
 --
--- Name: base_informationpage_topic_id_c5cf40b4; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX base_informationpage_topic_id_c5cf40b4 ON public.base_informationpage USING btree (topic_id);
-
-
---
 -- Name: base_informationpagecontact_contact_id_47a7ecb9; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -4652,6 +4791,20 @@ CREATE INDEX base_informationpagecontact_contact_id_47a7ecb9 ON public.base_info
 --
 
 CREATE INDEX base_informationpagecontact_page_id_655b667f ON public.base_informationpagecontact USING btree (page_id);
+
+
+--
+-- Name: base_informationpagetopic_page_id_d9ca6f81; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX base_informationpagetopic_page_id_d9ca6f81 ON public.base_informationpagetopic USING btree (page_id);
+
+
+--
+-- Name: base_informationpagetopic_topic_id_2dc1da42; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX base_informationpagetopic_topic_id_2dc1da42 ON public.base_informationpagetopic USING btree (topic_id);
 
 
 --
@@ -4673,13 +4826,6 @@ CREATE INDEX base_processpage_department_id_d84a7982 ON public.base_processpage 
 --
 
 CREATE INDEX base_processpage_image_id_cabd83dd ON public.base_processpage USING btree (image_id);
-
-
---
--- Name: base_processpage_topic_id_8fafaf87; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX base_processpage_topic_id_8fafaf87 ON public.base_processpage USING btree (topic_id);
 
 
 --
@@ -4711,17 +4857,24 @@ CREATE INDEX base_processpagestep_page_id_fa035fe0 ON public.base_processpageste
 
 
 --
+-- Name: base_processpagetopic_page_id_2bc50492; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX base_processpagetopic_page_id_2bc50492 ON public.base_processpagetopic USING btree (page_id);
+
+
+--
+-- Name: base_processpagetopic_topic_id_720998b0; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX base_processpagetopic_topic_id_720998b0 ON public.base_processpagetopic USING btree (topic_id);
+
+
+--
 -- Name: base_servicepage_image_id_2200179f; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX base_servicepage_image_id_2200179f ON public.base_servicepage USING btree (image_id);
-
-
---
--- Name: base_servicepage_topic_id_52c064c6; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX base_servicepage_topic_id_52c064c6 ON public.base_servicepage USING btree (topic_id);
 
 
 --
@@ -4739,6 +4892,20 @@ CREATE INDEX base_servicepagecontact_page_id_447387c4 ON public.base_servicepage
 
 
 --
+-- Name: base_servicepagetopic_page_id_ee32c418; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX base_servicepagetopic_page_id_ee32c418 ON public.base_servicepagetopic USING btree (page_id);
+
+
+--
+-- Name: base_servicepagetopic_topic_id_8c8ee82d; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX base_servicepagetopic_topic_id_8c8ee82d ON public.base_servicepagetopic USING btree (topic_id);
+
+
+--
 -- Name: base_theme_slug_bc7e93c0; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -4753,24 +4920,17 @@ CREATE INDEX base_theme_slug_bc7e93c0_like ON public.base_theme USING btree (slu
 
 
 --
--- Name: base_topic_slug_e6a21d19; Type: INDEX; Schema: public; Owner: -
+-- Name: base_topicpage_image_id_83eb6f93; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX base_topic_slug_e6a21d19 ON public.base_topic USING btree (slug);
-
-
---
--- Name: base_topic_slug_e6a21d19_like; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX base_topic_slug_e6a21d19_like ON public.base_topic USING btree (slug varchar_pattern_ops);
+CREATE INDEX base_topicpage_image_id_83eb6f93 ON public.base_topicpage USING btree (image_id);
 
 
 --
--- Name: base_topic_theme_id_b944b5cf; Type: INDEX; Schema: public; Owner: -
+-- Name: base_topicpage_theme_id_3e3f6806; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX base_topic_theme_id_b944b5cf ON public.base_topic USING btree (theme_id);
+CREATE INDEX base_topicpage_theme_id_3e3f6806 ON public.base_topicpage USING btree (theme_id);
 
 
 --
@@ -5390,6 +5550,14 @@ ALTER TABLE ONLY public.base_informationpagecontact
 
 
 --
+-- Name: base_informationpagetopic base_informationpage_page_id_d9ca6f81_fk_base_info; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.base_informationpagetopic
+    ADD CONSTRAINT base_informationpage_page_id_d9ca6f81_fk_base_info FOREIGN KEY (page_id) REFERENCES public.base_informationpage(page_ptr_id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
 -- Name: base_informationpage base_informationpage_page_ptr_id_9a0f594e_fk_wagtailco; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -5398,11 +5566,11 @@ ALTER TABLE ONLY public.base_informationpage
 
 
 --
--- Name: base_informationpage base_informationpage_topic_id_c5cf40b4_fk_base_topic_id; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: base_informationpagetopic base_informationpage_topic_id_2dc1da42_fk_base_topi; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.base_informationpage
-    ADD CONSTRAINT base_informationpage_topic_id_c5cf40b4_fk_base_topic_id FOREIGN KEY (topic_id) REFERENCES public.base_topic(id) DEFERRABLE INITIALLY DEFERRED;
+ALTER TABLE ONLY public.base_informationpagetopic
+    ADD CONSTRAINT base_informationpage_topic_id_2dc1da42_fk_base_topi FOREIGN KEY (topic_id) REFERENCES public.base_topicpage(page_ptr_id) DEFERRABLE INITIALLY DEFERRED;
 
 
 --
@@ -5438,14 +5606,6 @@ ALTER TABLE ONLY public.base_processpage
 
 
 --
--- Name: base_processpage base_processpage_topic_id_8fafaf87_fk_base_topic_id; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.base_processpage
-    ADD CONSTRAINT base_processpage_topic_id_8fafaf87_fk_base_topic_id FOREIGN KEY (topic_id) REFERENCES public.base_topic(id) DEFERRABLE INITIALLY DEFERRED;
-
-
---
 -- Name: base_processpagecontact base_processpagecont_process_id_167124bc_fk_base_proc; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -5478,6 +5638,22 @@ ALTER TABLE ONLY public.base_processpagestep
 
 
 --
+-- Name: base_processpagetopic base_processpagetopi_page_id_2bc50492_fk_base_proc; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.base_processpagetopic
+    ADD CONSTRAINT base_processpagetopi_page_id_2bc50492_fk_base_proc FOREIGN KEY (page_id) REFERENCES public.base_processpage(page_ptr_id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: base_processpagetopic base_processpagetopi_topic_id_720998b0_fk_base_topi; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.base_processpagetopic
+    ADD CONSTRAINT base_processpagetopi_topic_id_720998b0_fk_base_topi FOREIGN KEY (topic_id) REFERENCES public.base_topicpage(page_ptr_id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
 -- Name: base_servicepage base_servicepage_image_id_2200179f_fk_base_translatedimage_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -5491,14 +5667,6 @@ ALTER TABLE ONLY public.base_servicepage
 
 ALTER TABLE ONLY public.base_servicepage
     ADD CONSTRAINT base_servicepage_page_ptr_id_051b30d5_fk_wagtailcore_page_id FOREIGN KEY (page_ptr_id) REFERENCES public.wagtailcore_page(id) DEFERRABLE INITIALLY DEFERRED;
-
-
---
--- Name: base_servicepage base_servicepage_topic_id_52c064c6_fk_base_topic_id; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.base_servicepage
-    ADD CONSTRAINT base_servicepage_topic_id_52c064c6_fk_base_topic_id FOREIGN KEY (topic_id) REFERENCES public.base_topic(id) DEFERRABLE INITIALLY DEFERRED;
 
 
 --
@@ -5518,11 +5686,43 @@ ALTER TABLE ONLY public.base_servicepagecontact
 
 
 --
--- Name: base_topic base_topic_theme_id_b944b5cf_fk_base_theme_id; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: base_servicepagetopic base_servicepagetopi_page_id_ee32c418_fk_base_serv; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.base_topic
-    ADD CONSTRAINT base_topic_theme_id_b944b5cf_fk_base_theme_id FOREIGN KEY (theme_id) REFERENCES public.base_theme(id) DEFERRABLE INITIALLY DEFERRED;
+ALTER TABLE ONLY public.base_servicepagetopic
+    ADD CONSTRAINT base_servicepagetopi_page_id_ee32c418_fk_base_serv FOREIGN KEY (page_id) REFERENCES public.base_servicepage(page_ptr_id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: base_servicepagetopic base_servicepagetopi_topic_id_8c8ee82d_fk_base_topi; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.base_servicepagetopic
+    ADD CONSTRAINT base_servicepagetopi_topic_id_8c8ee82d_fk_base_topi FOREIGN KEY (topic_id) REFERENCES public.base_topicpage(page_ptr_id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: base_topicpage base_topicpage_image_id_83eb6f93_fk_base_translatedimage_id; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.base_topicpage
+    ADD CONSTRAINT base_topicpage_image_id_83eb6f93_fk_base_translatedimage_id FOREIGN KEY (image_id) REFERENCES public.base_translatedimage(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: base_topicpage base_topicpage_page_ptr_id_43975d7c_fk_wagtailcore_page_id; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.base_topicpage
+    ADD CONSTRAINT base_topicpage_page_ptr_id_43975d7c_fk_wagtailcore_page_id FOREIGN KEY (page_ptr_id) REFERENCES public.wagtailcore_page(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: base_topicpage base_topicpage_theme_id_3e3f6806_fk_base_theme_id; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.base_topicpage
+    ADD CONSTRAINT base_topicpage_theme_id_3e3f6806_fk_base_theme_id FOREIGN KEY (theme_id) REFERENCES public.base_theme(id) DEFERRABLE INITIALLY DEFERRED;
 
 
 --
