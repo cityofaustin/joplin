@@ -8,7 +8,7 @@ from graphene.types import Scalar
 from wagtail.core.fields import StreamField
 from wagtail.core.models import Page, PageRevision
 
-from base.models import TranslatedImage, ThreeOneOne, ServicePage, ServicePageContact, ServicePageTopic, ProcessPage, ProcessPageStep, ProcessPageContact, ProcessPageTopic, InformationPage, InformationPageContact, InformationPageTopic, DepartmentPage, DepartmentPageContact, DepartmentPageDirector, Theme, Topic, Contact, Location, ContactDayAndDuration, Department, DepartmentContact
+from base.models import TranslatedImage, ThreeOneOne, ServicePage, ServicePageContact, ServicePageTopic, ProcessPage, ProcessPageStep, ProcessPageContact, ProcessPageTopic, InformationPage, InformationPageContact, InformationPageTopic, DepartmentPage, DepartmentPageContact, DepartmentPageDirector, Theme, TopicPage, Contact, Location, ContactDayAndDuration, Department, DepartmentContact
 
 
 class StreamFieldType(Scalar):
@@ -38,8 +38,8 @@ class ThemeNode(DjangoObjectType):
 
 class TopicNode(DjangoObjectType):
     class Meta:
-        model = Topic
-        filter_fields = ['id', 'slug', 'text']
+        model = TopicPage
+        filter_fields = ['id', 'slug']
         interfaces = [graphene.Node]
 
 

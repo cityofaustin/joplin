@@ -414,21 +414,6 @@ class ProcessPageStep(Orderable):
         FieldPanel('quote'),
     ]
 
-@register_snippet
-class Topic(ClusterableModel):
-    slug = models.SlugField()
-    text = models.CharField(max_length=DEFAULT_MAX_LENGTH)
-    description = models.TextField()
-    call_to_action = models.TextField(blank=True)
-    theme = models.ForeignKey(
-        'base.Theme',
-        on_delete=models.PROTECT,
-        related_name='topics',
-    )
-
-    def __str__(self):
-        return self.text
-
 
 @register_snippet
 class Theme(ClusterableModel):
@@ -577,7 +562,7 @@ class ProcessPageContact(ClusterableModel):
 
 class ProcessPageTopic(ClusterableModel):
     page = ParentalKey(ProcessPage, related_name='topics')
-    topic = models.ForeignKey('base.Topic',  verbose_name='Select a Topic', related_name='+', on_delete=models.CASCADE)
+    topic = models.ForeignKey('base.TopicPage',  verbose_name='Select a Topic', related_name='+', on_delete=models.CASCADE)
 
     panels = [
         SnippetChooserPanel('topic'),
@@ -599,7 +584,7 @@ class ServicePageContact(ClusterableModel):
 
 class ServicePageTopic(ClusterableModel):
     page = ParentalKey(ServicePage, related_name='topics')
-    topic = models.ForeignKey('base.Topic',  verbose_name='Select a Topic', related_name='+', on_delete=models.CASCADE)
+    topic = models.ForeignKey('base.TopicPage',  verbose_name='Select a Topic', related_name='+', on_delete=models.CASCADE)
 
     panels = [
         SnippetChooserPanel('topic'),
@@ -621,7 +606,7 @@ class InformationPageContact(ClusterableModel):
 
 class InformationPageTopic(ClusterableModel):
     page = ParentalKey(InformationPage, related_name='topics')
-    topic = models.ForeignKey('base.Topic',  verbose_name='Select a Topic', related_name='+', on_delete=models.CASCADE)
+    topic = models.ForeignKey('base.TopicPage',  verbose_name='Select a Topic', related_name='+', on_delete=models.CASCADE)
 
     panels = [
         SnippetChooserPanel('topic'),
