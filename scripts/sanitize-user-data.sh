@@ -1,0 +1,2 @@
+# Take a django-smuggler backup file and replace all users with the admin for local dev
+cat joplin/db/smuggler/in.json | jq '.[].fields.user |= (if . then ["admin@austintexas.io"] else empty end) | .[].fields.uploaded_by_user |= (if . then ["admin@austintexas.io"] else empty end) | .[].fields.owner |= (if . then ["admin@austintexas.io"] else empty end)' > joplin/db/smuggler/pages.json

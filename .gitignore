@@ -9,3 +9,6 @@ venv
 *webpack_bundles
 *webpack-stats.json
 local
+media/*/*.jpg
+media/*/*.png
+media/*/*.jpeg

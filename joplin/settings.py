@@ -74,6 +74,7 @@ INSTALLED_APPS = [
     'wagtail.contrib.modeladmin',
     'webpack_loader',
     'dbbackup',
+    'smuggler'
 ]
 
 MIDDLEWARE = [
@@ -179,6 +180,8 @@ WEBPACK_LOADER = {
     }
 }
 
+SMUGGLER_FIXTURE_DIR = os.path.join(BASE_DIR, 'joplin/db/smuggler')
+
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
 
@@ -229,7 +232,9 @@ DBBACKUP_STORAGE = 'django.core.files.storage.FileSystemStorage'
 DBBACKUP_STORAGE_OPTIONS = {'location': '/app/joplin/db/backups'}
 
 
-
+SMUGGLER_EXCLUDE_LIST = [
+    'users.user'
+]
 
 # Avoid exporting owner settings
 DBBACKUP_CONNECTORS = {

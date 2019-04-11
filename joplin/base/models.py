@@ -20,7 +20,7 @@ from wagtail.search import index
 from . import blocks as custom_blocks
 from . import forms as custom_forms
 
-WYSIWYG_GENERAL = ['h1', 'h2', 'h3', 'link', 'ul', 'ol']
+WYSIWYG_GENERAL = ['h1', 'h2', 'h3', 'h4', 'bold', 'link', 'ul', 'ol']
 WYSIWYG_SERVICE_STEP = ['ul', 'ol', 'link']
 DEFAULT_MAX_LENGTH = 255
 
@@ -32,7 +32,7 @@ class TranslatedImage(AbstractImage):
 
 
 class TranslatedImageRendition(AbstractRendition):
-    image = models.ForeignKey(TranslatedImage, related_name='renditions', on_delete=models.PROTECT)
+    image = models.ForeignKey(TranslatedImage, related_name='renditions', on_delete=models.CASCADE)
 
     class Meta:
         unique_together = (
