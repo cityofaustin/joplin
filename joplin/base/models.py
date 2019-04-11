@@ -16,6 +16,7 @@ from wagtail.images.models import Image, AbstractImage, AbstractRendition
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.snippets.models import register_snippet
 from wagtail.search import index
+from wagtail.admin.edit_handlers import PageChooserPanel
 
 from . import blocks as custom_blocks
 from . import forms as custom_forms
@@ -565,7 +566,7 @@ class ProcessPageTopic(ClusterableModel):
     topic = models.ForeignKey('base.TopicPage',  verbose_name='Select a Topic', related_name='+', on_delete=models.CASCADE)
 
     panels = [
-        SnippetChooserPanel('topic'),
+        PageChooserPanel('topic'),
     ]
 
     def __str__(self):
@@ -587,7 +588,7 @@ class ServicePageTopic(ClusterableModel):
     topic = models.ForeignKey('base.TopicPage',  verbose_name='Select a Topic', related_name='+', on_delete=models.CASCADE)
 
     panels = [
-        SnippetChooserPanel('topic'),
+        PageChooserPanel('topic'),
     ]
 
     def __str__(self):
@@ -609,7 +610,7 @@ class InformationPageTopic(ClusterableModel):
     topic = models.ForeignKey('base.TopicPage',  verbose_name='Select a Topic', related_name='+', on_delete=models.CASCADE)
 
     panels = [
-        SnippetChooserPanel('topic'),
+        PageChooserPanel('topic'),
     ]
 
     def __str__(self):
