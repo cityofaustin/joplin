@@ -9,6 +9,7 @@ import ChooseTypeStep from './ChooseTypeStep.js';
 import ChooseTopicOrDepartmentStep from './ChooseTopicOrDepartmentStep.js';
 import ChooseTitleStep from './ChooseTitleStep.js';
 import ChooseTopicStep from './ChooseTopicStep.js';
+import ChooseThemeStep from './ChooseThemeStep.js';
 import ChooseDepartmentStep from './ChooseDepartmentStep.js';
 import ButtonBar from './ButtonBar.js';
 
@@ -24,6 +25,7 @@ const stepsEnum = {
   CHOOSE_DEPT_OR_TOPIC: 2,
   CHOOSE_TOPIC: 3,
   CHOOSE_DEPARTMENT: 4,
+  CHOOSE_THEME: 5,
 }
 
 class CreateContentModal extends Component {
@@ -33,6 +35,7 @@ class CreateContentModal extends Component {
       type: null,
       title: '', // React warning said: `value` prop on `input` should not be null. Consider using an empty string...
       topic: null,
+      theme: null,
       department: null,
       activeStep: 0,
       titleCharacterCount: 0,
@@ -45,7 +48,7 @@ class CreateContentModal extends Component {
       // If we're creating a department page, then the title step is the last step,
       // Otherwise, it'll be either the choose topic or choose department step
       (this.state.type === 'department' && this.state.activeStep === stepsEnum.CHOOSE_TITLE) ||
-      this.state.activeStep === stepsEnum.CHOOSE_TOPIC || this.state.activeStep === stepsEnum.CHOOSE_DEPARTMENT
+      this.state.activeStep === stepsEnum.CHOOSE_TOPIC || this.state.activeStep === stepsEnum.CHOOSE_DEPARTMENT || this.state.activeStep === stepsEnum.CHOOSE_THEME
     );
   };
 
@@ -59,14 +62,23 @@ class CreateContentModal extends Component {
       return;
     }
 
+    // If we're creating a  page and we're on the choose title page skip to the
+    // theme selection because all topic pages are theme only
+    if(this.state.type === 'topic' && this.state.activeStep === stepsEnum.CHOOSE_TITLE) {
+      this.setState({
+        activeStep: stepsEnum.CHOOSE_THEME
+      });
+      return;
+    }
+
     this.setState({
       activeStep: this.state.activeStep + 1,
     });
   };
 
   decrementActiveStep = () => {
-    // If we're on choose topic or choose department go back to page title page
-    if(this.state.activeStep === stepsEnum.CHOOSE_TOPIC || this.state.activeStep === stepsEnum.CHOOSE_DEPARTMENT) {
+    // If we're on choose topic or choose department or choose theme go back to page title page
+    if(this.state.activeStep === stepsEnum.CHOOSE_TOPIC || this.state.activeStep === stepsEnum.CHOOSE_DEPARTMENT || this.state.activeStep === stepsEnum.CHOOSE_THEME) {
       this.setState({
         activeStep: stepsEnum.CHOOSE_TITLE
       });
@@ -127,6 +139,10 @@ class CreateContentModal extends Component {
 
   handleTopicSelect = id => {
     this.setState({ topic: id });
+  };
+
+  handleThemeSelect = id => {
+    this.setState({ theme: id });
   };
 
   handleDepartmentSelect = id => {
@@ -221,6 +237,13 @@ class CreateContentModal extends Component {
                         department={this.state.department}
                         handleDepartmentSelect={this.handleDepartmentSelect}
                         departments={DEPARTMENT_LIST}
+                      />
+                    )}
+                    {this.state.activeStep === stepsEnum.CHOOSE_THEME && (
+                      <ChooseThemeStep
+                        theme={this.state.theme}
+                        handleThemeSelect={this.handleThemeSelect}
+                        themeTopicTree={THEME_TOPIC_TREE}
                       />
                     )}
                     <ButtonBar

@@ -38,6 +38,7 @@ def themes_topics_tree(context):
     for theme in Theme.objects.all():
         themes[theme.pk] = {
             'text': theme.text,
+            'id': theme.id,
             'topics': []
         }
 
