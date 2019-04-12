@@ -16,6 +16,7 @@ from wagtail.images.models import Image, AbstractImage, AbstractRendition
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.snippets.models import register_snippet
 from wagtail.search import index
+from wagtail.admin.edit_handlers import PageChooserPanel
 
 from . import blocks as custom_blocks
 from . import forms as custom_forms
@@ -51,7 +52,8 @@ class ThreeOneOne(ClusterableModel):
 
 class HomePage(Page):
     parent_page_types = []
-    subpage_types = ['base.ServicePage', 'base.ProcessPage', 'base.InformationPage', 'base.DepartmentPage']
+    # subpage_types = ['base.ServicePage', 'base.ProcessPage', 'base.InformationPage', 'base.DepartmentPage']
+    subpage_types = ['base.ServicePage', 'base.ProcessPage', 'base.InformationPage', 'base.DepartmentPage', 'base.TopicPage']
 
     image = models.ForeignKey(TranslatedImage, null=True, on_delete=models.SET_NULL, related_name='+')
 
@@ -107,12 +109,6 @@ class JanisPage(JanisBasePage):
 class ServicePage(JanisPage):
     janis_url_page_type = "services"
 
-    topic = models.ForeignKey(
-        'base.Topic',
-        on_delete=models.PROTECT,
-        verbose_name='Select a Topic',
-    )
-
     steps = StreamField(
         [
             ('basic_step', RichTextBlock(
@@ -164,7 +160,7 @@ class ServicePage(JanisPage):
     base_form_class = custom_forms.ServicePageForm
 
     content_panels = [
-        FieldPanel('topic'),
+        InlinePanel('topics', label='Topics'),
         ImageChooserPanel('image'),
         StreamFieldPanel('steps'),
         StreamFieldPanel('dynamic_content'),
@@ -175,14 +171,6 @@ class ServicePage(JanisPage):
 
 class ProcessPage(JanisPage):
     janis_url_page_type = "processes"
-
-    topic = models.ForeignKey(
-        'base.Topic',
-        on_delete=models.PROTECT,
-        verbose_name='Select a Topic',
-        blank=True,
-        null=True,
-    )
 
     department = models.ForeignKey(
         'base.DepartmentPage',
@@ -199,7 +187,7 @@ class ProcessPage(JanisPage):
     base_form_class = custom_forms.ProcessPageForm
 
     content_panels = [
-        FieldPanel('topic'),
+        InlinePanel('topics', label='Topics'),
         FieldPanel('department'),
         FieldPanel('description'),
         ImageChooserPanel('image'),
@@ -209,14 +197,6 @@ class ProcessPage(JanisPage):
 
 class InformationPage(JanisPage):
     janis_url_page_type = "information"
-
-    topic = models.ForeignKey(
-        'base.Topic',
-        on_delete=models.PROTECT,
-        verbose_name='Select a Topic',
-        blank=True,
-        null=True,
-    )
 
     department = models.ForeignKey(
         'base.DepartmentPage',
@@ -252,7 +232,7 @@ class InformationPage(JanisPage):
     base_form_class = custom_forms.InformationPageForm
 
     content_panels = [
-        FieldPanel('topic'),
+        InlinePanel('topics', label='Topics'),
         FieldPanel('department'),
         FieldPanel('title_en'),
         FieldPanel('title_es'),
@@ -264,6 +244,58 @@ class InformationPage(JanisPage):
         FieldPanel('additional_content'),
         InlinePanel('contacts', label='Contacts'),
         ImageChooserPanel('image'),
+    ]
+
+class TopicPage(JanisPage):
+    janis_url_page_type = "topic"
+
+    description = models.TextField(blank=True)
+    call_to_action = models.TextField(blank=True)
+
+
+    theme = models.ForeignKey(
+        'base.Theme',
+        on_delete=models.PROTECT,
+        related_name='topicPages',
+    )
+
+    image = models.ForeignKey(TranslatedImage, null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
+
+    external_services = StreamField(
+        [
+            ('link_en', StructBlock([
+                ('url', URLBlock()),
+                ('title', CharBlock()),
+            ], icon='link', label='Link [EN]')),
+            ('link_es', StructBlock([
+                ('url', URLBlock()),
+                ('title', CharBlock()),
+            ], icon='link', label='Link [ES]')),
+            ('link_ar', StructBlock([
+                ('url', URLBlock()),
+                ('title', CharBlock()),
+            ], icon='link', label='Link [AR]')),
+            ('link_vi', StructBlock([
+                ('url', URLBlock()),
+                ('title', CharBlock()),
+            ], icon='link', label='Link [VI]')),
+        ],
+        verbose_name='External links to services',
+        blank=True
+    )
+
+    base_form_class = custom_forms.TopicPageForm
+
+    content_panels = [
+        FieldPanel('title_en'),
+        FieldPanel('title_es'),
+        FieldPanel('title_ar'),
+        FieldPanel('title_vi'),
+        FieldPanel('description'),
+        FieldPanel('call_to_action'),
+        FieldPanel('theme'),
+        ImageChooserPanel('image'),
+        StreamFieldPanel('external_services'),
     ]
 
 class DepartmentPage(JanisBasePage):
@@ -382,21 +414,6 @@ class ProcessPageStep(Orderable):
         FieldPanel('detailed_content'),
         FieldPanel('quote'),
     ]
-
-@register_snippet
-class Topic(ClusterableModel):
-    slug = models.SlugField()
-    text = models.CharField(max_length=DEFAULT_MAX_LENGTH)
-    description = models.TextField()
-    call_to_action = models.TextField(blank=True)
-    theme = models.ForeignKey(
-        'base.Theme',
-        on_delete=models.PROTECT,
-        related_name='topics',
-    )
-
-    def __str__(self):
-        return self.text
 
 
 @register_snippet
@@ -544,6 +561,16 @@ class ProcessPageContact(ClusterableModel):
     def __str__(self):
         return self.contact.name
 
+class ProcessPageTopic(ClusterableModel):
+    page = ParentalKey(ProcessPage, related_name='topics')
+    topic = models.ForeignKey('base.TopicPage',  verbose_name='Select a Topic', related_name='+', on_delete=models.CASCADE)
+
+    panels = [
+        PageChooserPanel('topic'),
+    ]
+
+    def __str__(self):
+        return self.topic.text
 
 class ServicePageContact(ClusterableModel):
     page = ParentalKey(ServicePage, related_name='contacts')
@@ -556,6 +583,17 @@ class ServicePageContact(ClusterableModel):
     def __str__(self):
         return self.contact.name
 
+class ServicePageTopic(ClusterableModel):
+    page = ParentalKey(ServicePage, related_name='topics')
+    topic = models.ForeignKey('base.TopicPage',  verbose_name='Select a Topic', related_name='+', on_delete=models.CASCADE)
+
+    panels = [
+        PageChooserPanel('topic'),
+    ]
+
+    def __str__(self):
+        return self.topic.text
+
 class InformationPageContact(ClusterableModel):
     page = ParentalKey(InformationPage, related_name='contacts')
     contact = models.ForeignKey(Contact, related_name='+', on_delete=models.CASCADE)
@@ -566,6 +604,17 @@ class InformationPageContact(ClusterableModel):
 
     def __str__(self):
         return self.contact.name
+
+class InformationPageTopic(ClusterableModel):
+    page = ParentalKey(InformationPage, related_name='topics')
+    topic = models.ForeignKey('base.TopicPage',  verbose_name='Select a Topic', related_name='+', on_delete=models.CASCADE)
+
+    panels = [
+        PageChooserPanel('topic'),
+    ]
+
+    def __str__(self):
+        return self.topic.text
 
 class DepartmentPageContact(ClusterableModel):
     page = ParentalKey(DepartmentPage, related_name='contacts')

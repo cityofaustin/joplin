@@ -9,7 +9,7 @@ from wagtail.contrib.modeladmin.options import ModelAdmin, ModelAdminGroup, mode
 from wagtail.admin.widgets import Button, ButtonWithDropdownFromHook, PageListingButton
 from wagtail.core import hooks
 
-from base.models import HomePage, Topic, Location, Contact
+from base.models import HomePage, Location, Contact
 
 @hooks.register('before_edit_page')
 def before_edit_page(request, page):
@@ -114,18 +114,12 @@ class LocationModelAdmin(ModelAdmin):
     search_fields = ('street',)
 
 
-class TopicModelAdmin(ModelAdmin):
-    model = Topic
-    search_fields = ('text',)
-
-
 class ContactModelAdmin(ModelAdmin):
     model = Contact
 
-
 class ReallyAwesomeGroup(ModelAdminGroup):
     menu_label = 'Important Snippets'
-    items = (LocationModelAdmin, TopicModelAdmin, ContactModelAdmin)
+    items = (LocationModelAdmin, ContactModelAdmin)
 
 
 modeladmin_register(ReallyAwesomeGroup)
