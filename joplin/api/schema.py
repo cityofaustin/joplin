@@ -8,7 +8,7 @@ from graphene.types import Scalar
 from wagtail.core.fields import StreamField
 from wagtail.core.models import Page, PageRevision
 
-from base.models import TranslatedImage, ThreeOneOne, ServicePage, ServicePageContact, ProcessPage, ProcessPageStep, ProcessPageContact, InformationPage, InformationPageContact, DepartmentPage, DepartmentPageContact, DepartmentPageDirector, Theme, Topic, Contact, Location, ContactDayAndDuration, Department, DepartmentContact
+from base.models import TranslatedImage, ThreeOneOne, ServicePage, ServicePageContact, ServicePageTopic, ProcessPage, ProcessPageStep, ProcessPageContact, ProcessPageTopic, InformationPage, InformationPageContact, InformationPageTopic, DepartmentPage, DepartmentPageContact, DepartmentPageDirector, Theme, TopicPage, Contact, Location, ContactDayAndDuration, Department, DepartmentContact
 
 
 class StreamFieldType(Scalar):
@@ -38,8 +38,8 @@ class ThemeNode(DjangoObjectType):
 
 class TopicNode(DjangoObjectType):
     class Meta:
-        model = Topic
-        filter_fields = ['id', 'slug', 'text']
+        model = TopicPage
+        filter_fields = ['id', 'slug']
         interfaces = [graphene.Node]
 
 
@@ -79,6 +79,10 @@ class ServicePageContactNode(DjangoObjectType):
         model = ServicePageContact
         interfaces = [graphene.Node]
 
+class ServicePageTopicNode(DjangoObjectType):
+    class Meta:
+        model = ServicePageTopic
+        interfaces = [graphene.Node]
 
 class TranslatedImageNode(DjangoObjectType):
     class Meta:
@@ -101,26 +105,26 @@ class Language(graphene.Enum):
 
 
 class ServicePageNode(DjangoObjectType):
-    related = graphene.List('api.schema.ServicePageNode')
+    # related = graphene.List('api.schema.ServicePageNode')
 
-    def resolve_related(self, resolve_info, *args, **kwargs):
-        return self.topic.servicepage_set.exclude(id=self.id)
+    # def resolve_related(self, resolve_info, *args, **kwargs):
+    #     return self.topic.servicepage_set.exclude(id=self.id)
 
     class Meta:
         model = ServicePage
-        filter_fields = ['id', 'slug', 'topic', 'topic__slug', 'live']
+        filter_fields = ['id', 'slug', 'live']
         interfaces = [graphene.Node]
 
 class ProcessPageNode(DjangoObjectType):
     class Meta:
         model = ProcessPage
-        filter_fields = ['id', 'slug', 'topic', 'department', 'topic__slug']
+        filter_fields = ['id', 'slug', 'department']
         interfaces = [graphene.Node]
 
 class InformationPageNode(DjangoObjectType):
     class Meta:
         model = InformationPage
-        filter_fields = ['id', 'slug', 'topic', 'department', 'live']
+        filter_fields = ['id', 'slug', 'department', 'live']
         interfaces = [graphene.Node]
 
 class DepartmentPageNode(DjangoObjectType):
@@ -162,9 +166,19 @@ class ProcessPageContactNode(DjangoObjectType):
         model = ProcessPageContact
         interfaces = [graphene.Node]
 
+class ProcessPageTopicNode(DjangoObjectType):
+    class Meta:
+        model = ProcessPageTopic
+        interfaces = [graphene.Node]
+
 class InformationPageContactNode(DjangoObjectType):
     class Meta:
         model = InformationPageContact
+        interfaces = [graphene.Node]
+
+class InformationPageTopicNode(DjangoObjectType):
+    class Meta:
+        model = InformationPageTopic
         interfaces = [graphene.Node]
 
 class DepartmentPageContactNode(DjangoObjectType):

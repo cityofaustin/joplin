@@ -3,7 +3,7 @@ import graphene
 import os
 import json
 
-from base.models import Topic, Theme, DepartmentPage
+from base.models import TopicPage, Theme, DepartmentPage
 from wagtail.core import hooks
 import itertools
 
@@ -22,7 +22,8 @@ STYLEGUIDE_PAGES = {
   'service page': '/writing-service-pages/',
   'process page': '/writing-process-pages/',
   'information page': '/writing-process-pages/',
-  'department page': '/writing-process-pages/'
+  'department page': '/writing-process-pages/',
+  'topic page': '/writing-process-pages/',
 }
 
 @register.simple_tag
@@ -38,12 +39,13 @@ def themes_topics_tree(context):
     for theme in Theme.objects.all():
         themes[theme.pk] = {
             'text': theme.text,
+            'id': theme.id,
             'topics': []
         }
 
-    for topic in Topic.objects.all():
+    for topic in TopicPage.objects.all():
         themes[topic.theme.id]['topics'].append({
-            'text': topic.text,
+            'text': topic.title,
             'id': topic.id,
         })
 
