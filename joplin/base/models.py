@@ -248,7 +248,6 @@ class TopicPage(JanisPage):
     janis_url_page_type = "topic"
 
     description = models.TextField(blank=True)
-    call_to_action = models.TextField(blank=True)
 
 
     theme = models.ForeignKey(
@@ -290,7 +289,6 @@ class TopicPage(JanisPage):
         FieldPanel('title_ar'),
         FieldPanel('title_vi'),
         FieldPanel('description'),
-        FieldPanel('call_to_action'),
         FieldPanel('theme'),
         ImageChooserPanel('image'),
         StreamFieldPanel('external_services'),
