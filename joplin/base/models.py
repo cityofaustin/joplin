@@ -206,7 +206,6 @@ class InformationPage(JanisPage):
         null=True,
     )
 
-    toplink = models.BooleanField(default=False, verbose_name='Make this page a top link on any service collection page for this topic')
     description = models.TextField(blank=True, verbose_name='Write a description of this page')
     options = StreamField(
         [
@@ -238,7 +237,6 @@ class InformationPage(JanisPage):
         FieldPanel('title_es'),
         FieldPanel('title_ar'),
         FieldPanel('title_vi'),
-        FieldPanel('toplink'),
         FieldPanel('description'),
         StreamFieldPanel('options'),
         FieldPanel('additional_content'),
@@ -586,9 +584,15 @@ class ServicePageContact(ClusterableModel):
 class ServicePageTopic(ClusterableModel):
     page = ParentalKey(ServicePage, related_name='topics')
     topic = models.ForeignKey('base.TopicPage',  verbose_name='Select a Topic', related_name='+', on_delete=models.CASCADE)
+    toplink = models.BooleanField(default=False, verbose_name='Make this service a top link for this topic')
 
     panels = [
-        PageChooserPanel('topic'),
+        MultiFieldPanel(
+            [
+                PageChooserPanel('topic'),
+                FieldPanel('toplink'),
+            ]
+        ),
     ]
 
     def __str__(self):
@@ -608,9 +612,15 @@ class InformationPageContact(ClusterableModel):
 class InformationPageTopic(ClusterableModel):
     page = ParentalKey(InformationPage, related_name='topics')
     topic = models.ForeignKey('base.TopicPage',  verbose_name='Select a Topic', related_name='+', on_delete=models.CASCADE)
+    toplink = models.BooleanField(default=False, verbose_name='Make this page a top link for this topic')
 
     panels = [
-        PageChooserPanel('topic'),
+        MultiFieldPanel(
+            [
+                PageChooserPanel('topic'),
+                FieldPanel('toplink'),
+            ]
+        ),
     ]
 
     def __str__(self):
