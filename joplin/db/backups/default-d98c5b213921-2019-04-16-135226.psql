@@ -812,7 +812,6 @@ CREATE TABLE public.base_informationpage (
     page_ptr_id integer NOT NULL,
     created_at timestamp with time zone NOT NULL,
     updated_at timestamp with time zone NOT NULL,
-    toplink boolean NOT NULL,
     description text NOT NULL,
     options text NOT NULL,
     additional_content text NOT NULL,
@@ -871,7 +870,8 @@ ALTER SEQUENCE public.base_informationpagecontact_id_seq OWNED BY public.base_in
 CREATE TABLE public.base_informationpagetopic (
     id integer NOT NULL,
     page_id integer NOT NULL,
-    topic_id integer NOT NULL
+    topic_id integer NOT NULL,
+    toplink boolean NOT NULL
 );
 
 
@@ -1164,7 +1164,8 @@ ALTER SEQUENCE public.base_servicepagecontact_id_seq OWNED BY public.base_servic
 CREATE TABLE public.base_servicepagetopic (
     id integer NOT NULL,
     page_id integer NOT NULL,
-    topic_id integer NOT NULL
+    topic_id integer NOT NULL,
+    toplink boolean NOT NULL
 );
 
 
@@ -2976,7 +2977,7 @@ COPY public.base_homepage (page_ptr_id, image_id) FROM stdin;
 -- Data for Name: base_informationpage; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY public.base_informationpage (page_ptr_id, created_at, updated_at, toplink, description, options, additional_content, image_id, additional_content_ar, additional_content_en, additional_content_es, additional_content_vi, description_ar, description_en, description_es, description_vi, options_ar, options_en, options_es, options_vi, department_id) FROM stdin;
+COPY public.base_informationpage (page_ptr_id, created_at, updated_at, description, options, additional_content, image_id, additional_content_ar, additional_content_en, additional_content_es, additional_content_vi, description_ar, description_en, description_es, description_vi, options_ar, options_en, options_es, options_vi, department_id) FROM stdin;
 \.
 
 
@@ -2992,7 +2993,7 @@ COPY public.base_informationpagecontact (id, contact_id, page_id) FROM stdin;
 -- Data for Name: base_informationpagetopic; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY public.base_informationpagetopic (id, page_id, topic_id) FROM stdin;
+COPY public.base_informationpagetopic (id, page_id, topic_id, toplink) FROM stdin;
 \.
 
 
@@ -3068,7 +3069,7 @@ COPY public.base_servicepagecontact (id, contact_id, page_id) FROM stdin;
 -- Data for Name: base_servicepagetopic; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY public.base_servicepagetopic (id, page_id, topic_id) FROM stdin;
+COPY public.base_servicepagetopic (id, page_id, topic_id, toplink) FROM stdin;
 \.
 
 
@@ -3407,6 +3408,7 @@ COPY public.django_migrations (id, app, name, applied) FROM stdin;
 200	base	0053_merge_20190411_1135	2019-04-11 14:52:44.762037+00
 201	base	0054_auto_20190411_1237	2019-04-11 14:52:44.980874+00
 202	base	0055_auto_20190411_1254	2019-04-11 14:52:45.29881+00
+203	base	0056_auto_20190416_1234	2019-04-16 13:52:12.266089+00
 \.
 
 
@@ -3820,7 +3822,7 @@ SELECT pg_catalog.setval('public.django_content_type_id_seq', 54, true);
 -- Name: django_migrations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.django_migrations_id_seq', 202, true);
+SELECT pg_catalog.setval('public.django_migrations_id_seq', 203, true);
 
 
 --
