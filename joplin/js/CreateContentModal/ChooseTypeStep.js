@@ -69,6 +69,17 @@ const ChooseTypeStep = ({ handleTypeSelect }) => (
           <h3 className="ChooseTypeStep__option-header">Topic Page</h3>
           <p>Basic information and links for a topic.</p>
         </div>
+        <div
+          className="ChooseTypeStep__option"
+          onClick={() =>
+            handleTypeSelect({
+              type: 'topiccollection',
+            })
+          }
+        >
+          <h3 className="ChooseTypeStep__option-header">Topic Collection Page</h3>
+          <p>A collection of topics.</p>
+        </div>
       </div>
     </div>
   </div>

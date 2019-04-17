@@ -43,12 +43,6 @@ def themes_topics_tree(context):
             'topics': []
         }
 
-    for topic in TopicPage.objects.all():
-        themes[topic.theme.id]['topics'].append({
-            'text': topic.title,
-            'id': topic.id,
-        })
-
     return {
         'themes': json.dumps(themes)
     }
