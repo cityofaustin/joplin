@@ -253,7 +253,7 @@ class TopicCollectionPage(JanisPage):
     theme = models.ForeignKey(
         'base.Theme',
         on_delete=models.PROTECT,
-        related_name='topicPages',
+        related_name='topicCollectionPages',
         null=True, blank=True,
     )
 
