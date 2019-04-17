@@ -1275,11 +1275,6 @@ CREATE TABLE public.base_topicpage (
     description_en text,
     description_es text,
     description_vi text,
-    call_to_action text NOT NULL,
-    call_to_action_ar text,
-    call_to_action_en text,
-    call_to_action_es text,
-    call_to_action_vi text,
     external_services text NOT NULL,
     image_id integer,
     theme_id integer NOT NULL
@@ -3127,7 +3122,7 @@ COPY public.base_threeoneone (id, title, title_ar, title_en, title_es, title_vi,
 -- Data for Name: base_topicpage; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY public.base_topicpage (page_ptr_id, created_at, updated_at, description, description_ar, description_en, description_es, description_vi, call_to_action, call_to_action_ar, call_to_action_en, call_to_action_es, call_to_action_vi, external_services, image_id, theme_id) FROM stdin;
+COPY public.base_topicpage (page_ptr_id, created_at, updated_at, description, description_ar, description_en, description_es, description_vi, external_services, image_id, theme_id) FROM stdin;
 \.
 
 
@@ -3409,6 +3404,7 @@ COPY public.django_migrations (id, app, name, applied) FROM stdin;
 201	base	0054_auto_20190411_1237	2019-04-11 14:52:44.980874+00
 202	base	0055_auto_20190411_1254	2019-04-11 14:52:45.29881+00
 203	base	0056_auto_20190416_1234	2019-04-16 13:52:12.266089+00
+204	base	0057_auto_20190416_2342	2019-04-16 23:43:09.731399+00
 \.
 
 
@@ -3822,7 +3818,7 @@ SELECT pg_catalog.setval('public.django_content_type_id_seq', 54, true);
 -- Name: django_migrations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.django_migrations_id_seq', 203, true);
+SELECT pg_catalog.setval('public.django_migrations_id_seq', 204, true);
 
 
 --

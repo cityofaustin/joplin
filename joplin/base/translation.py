@@ -28,7 +28,6 @@ class ThreeOneOneTranslationOptions(TranslationOptions):
 class TopicPageTranslationOptions(TranslationOptions):
     fields = (
         'description',
-        'call_to_action',
     )
 
 @register(Theme)
