@@ -3408,6 +3408,27 @@
   }
 },
 {
+  "model": "contenttypes.contenttype",
+  "fields": {
+    "app_label": "base",
+    "model": "topicpagetopiccollection"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "fields": {
+    "app_label": "base",
+    "model": "topiccollectionpagetopiccollection"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "fields": {
+    "app_label": "base",
+    "model": "topiccollectionpage"
+  }
+},
+{
   "model": "sessions.session",
   "pk": "09bmlnhw1xiv2sj9phf197uuzxl6kqas",
   "fields": {
@@ -3757,6 +3778,14 @@
   "fields": {
     "session_data": "NDQ5ODVmNDYxMGFhYjYzMjZlYjEzZTc5YWQ0ZGIwNTQ0NWNkNjQ3NTp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiJkZTk5OWY1MjIxOGM3NDk3OTYxNDI1ZmZkNDk4ZTgxMTIzZmMzYTQwIn0=",
     "expire_date": "2019-03-07T17:44:02.914Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "p4lrde7ededqdgf01w64f46sag9ytqc9",
+  "fields": {
+    "session_data": "NTYyMGQ1M2E2ZTVmNTI2MzFjM2RhM2U2MTczYzNlYjM5ZmFhZWVjMDp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiJiNTlkMDFmMzU1OTY5OTU2YTVjODNhNDU2MGIwNzc4NTMyY2ZkNmEzIn0=",
+    "expire_date": "2019-05-01T18:32:46.322Z"
   }
 },
 {
@@ -5704,6 +5733,105 @@
   }
 },
 {
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can add topic page topic collection",
+    "content_type": [
+      "base",
+      "topicpagetopiccollection"
+    ],
+    "codename": "add_topicpagetopiccollection"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can change topic page topic collection",
+    "content_type": [
+      "base",
+      "topicpagetopiccollection"
+    ],
+    "codename": "change_topicpagetopiccollection"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can delete topic page topic collection",
+    "content_type": [
+      "base",
+      "topicpagetopiccollection"
+    ],
+    "codename": "delete_topicpagetopiccollection"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can add topic collection page topic collection",
+    "content_type": [
+      "base",
+      "topiccollectionpagetopiccollection"
+    ],
+    "codename": "add_topiccollectionpagetopiccollection"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can change topic collection page topic collection",
+    "content_type": [
+      "base",
+      "topiccollectionpagetopiccollection"
+    ],
+    "codename": "change_topiccollectionpagetopiccollection"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can delete topic collection page topic collection",
+    "content_type": [
+      "base",
+      "topiccollectionpagetopiccollection"
+    ],
+    "codename": "delete_topiccollectionpagetopiccollection"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can add topic collection page",
+    "content_type": [
+      "base",
+      "topiccollectionpage"
+    ],
+    "codename": "add_topiccollectionpage"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can change topic collection page",
+    "content_type": [
+      "base",
+      "topiccollectionpage"
+    ],
+    "codename": "change_topiccollectionpage"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can delete topic collection page",
+    "content_type": [
+      "base",
+      "topiccollectionpage"
+    ],
+    "codename": "delete_topiccollectionpage"
+  }
+},
+{
   "model": "auth.group",
   "fields": {
     "name": "Moderators",
@@ -6049,7 +6177,6 @@
     "description_en": "",
     "description_es": "",
     "description_vi": "",
-    "theme": 4,
     "image": null,
     "external_services": "[]"
   }
@@ -6065,7 +6192,6 @@
     "description_en": "",
     "description_es": "",
     "description_vi": "",
-    "theme": 1,
     "image": null,
     "external_services": "[]"
   }
@@ -6081,7 +6207,6 @@
     "description_en": "",
     "description_es": "",
     "description_vi": "",
-    "theme": 5,
     "image": null,
     "external_services": "[]"
   }
@@ -6097,7 +6222,6 @@
     "description_en": "",
     "description_es": "",
     "description_vi": "",
-    "theme": 6,
     "image": null,
     "external_services": "[]"
   }
@@ -6113,7 +6237,6 @@
     "description_en": "",
     "description_es": "",
     "description_vi": "",
-    "theme": 6,
     "image": null,
     "external_services": "[]"
   }
@@ -6129,7 +6252,6 @@
     "description_en": "",
     "description_es": "",
     "description_vi": "",
-    "theme": 4,
     "image": null,
     "external_services": "[]"
   }
@@ -6145,7 +6267,6 @@
     "description_en": "",
     "description_es": "",
     "description_vi": "",
-    "theme": 2,
     "image": null,
     "external_services": "[]"
   }
