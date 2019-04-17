@@ -8,7 +8,7 @@ from graphene.types import Scalar
 from wagtail.core.fields import StreamField
 from wagtail.core.models import Page, PageRevision
 
-from base.models import TranslatedImage, ThreeOneOne, ServicePage, ServicePageContact, ServicePageTopic, ProcessPage, ProcessPageStep, ProcessPageContact, ProcessPageTopic, InformationPage, InformationPageContact, InformationPageTopic, DepartmentPage, DepartmentPageContact, DepartmentPageDirector, Theme, TopicPage, Contact, Location, ContactDayAndDuration, Department, DepartmentContact
+from base.models import TranslatedImage, ThreeOneOne, ServicePage, ServicePageContact, ServicePageTopic, ProcessPage, ProcessPageStep, ProcessPageContact, ProcessPageTopic, InformationPage, InformationPageContact, InformationPageTopic, DepartmentPage, DepartmentPageContact, DepartmentPageDirector, Theme, TopicCollectionPage, TopicPage, Contact, Location, ContactDayAndDuration, Department, DepartmentContact, TopicPageTopicCollection
 
 
 class StreamFieldType(Scalar):
@@ -35,6 +35,17 @@ class ThemeNode(DjangoObjectType):
         filter_fields = ['id', 'slug', 'text']
         interfaces = [graphene.Node]
 
+
+class TopicCollectionNode(DjangoObjectType):
+    class Meta:
+        model = TopicCollectionPage
+        filter_fields = ['id', 'slug']
+        interfaces = [graphene.Node]
+
+class TopicPageTopicCollectionNode(DjangoObjectType):
+    class Meta:
+        model = TopicPageTopicCollection
+        interfaces = [graphene.Node]
 
 class TopicNode(DjangoObjectType):
     class Meta:
@@ -225,6 +236,7 @@ class Query(graphene.ObjectType):
     all_department_pages = DjangoFilterConnectionField(DepartmentPageNode)
     all_themes = DjangoFilterConnectionField(ThemeNode)
     all_topics = DjangoFilterConnectionField(TopicNode)
+    all_topic_collections = DjangoFilterConnectionField(TopicCollectionNode)
     all_departments = DjangoFilterConnectionField(DepartmentNode)
     all_311 = DjangoFilterConnectionField(ThreeOneOneNode)
 

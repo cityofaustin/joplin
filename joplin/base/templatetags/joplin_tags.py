@@ -24,6 +24,7 @@ STYLEGUIDE_PAGES = {
   'information page': '/writing-process-pages/',
   'department page': '/writing-process-pages/',
   'topic page': '/writing-process-pages/',
+  'topic collection page': '/writing-process-pages/',
 }
 
 @register.simple_tag
@@ -42,12 +43,6 @@ def themes_topics_tree(context):
             'id': theme.id,
             'topics': []
         }
-
-    for topic in TopicPage.objects.all():
-        themes[topic.theme.id]['topics'].append({
-            'text': topic.title,
-            'id': topic.id,
-        })
 
     return {
         'themes': json.dumps(themes)

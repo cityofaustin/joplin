@@ -244,8 +244,8 @@ class InformationPage(JanisPage):
         ImageChooserPanel('image'),
     ]
 
-class TopicPage(JanisPage):
-    janis_url_page_type = "topic"
+class TopicCollectionPage(JanisPage):
+    janis_url_page_type = "topiccollection"
 
     description = models.TextField(blank=True)
 
@@ -253,8 +253,29 @@ class TopicPage(JanisPage):
     theme = models.ForeignKey(
         'base.Theme',
         on_delete=models.PROTECT,
-        related_name='topicPages',
+        related_name='topicCollectionPages',
+        null=True, blank=True,
     )
+
+    image = models.ForeignKey(TranslatedImage, null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
+
+    base_form_class = custom_forms.TopicCollectionPageForm
+
+    content_panels = [
+        FieldPanel('title_en'),
+        FieldPanel('title_es'),
+        FieldPanel('title_ar'),
+        FieldPanel('title_vi'),
+        FieldPanel('description'),
+        FieldPanel('theme'),
+        ImageChooserPanel('image'),
+        InlinePanel('topiccollections', label='Topic Collections this page belongs to'),
+    ]
+
+class TopicPage(JanisPage):
+    janis_url_page_type = "topic"
+
+    description = models.TextField(blank=True)
 
     image = models.ForeignKey(TranslatedImage, null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
 
@@ -289,9 +310,9 @@ class TopicPage(JanisPage):
         FieldPanel('title_ar'),
         FieldPanel('title_vi'),
         FieldPanel('description'),
-        FieldPanel('theme'),
         ImageChooserPanel('image'),
         StreamFieldPanel('external_services'),
+        InlinePanel('topiccollections', label='Topic Collections this page belongs to'),
     ]
 
 class DepartmentPage(JanisBasePage):
@@ -578,6 +599,28 @@ class ServicePageContact(ClusterableModel):
 
     def __str__(self):
         return self.contact.name
+
+class TopicCollectionPageTopicCollection(ClusterableModel):
+    page = ParentalKey(TopicCollectionPage, related_name='topiccollections')
+    topiccollection = models.ForeignKey('base.TopicCollectionPage',  verbose_name='Select a Topic Collection', related_name='+', on_delete=models.CASCADE)
+
+    panels = [
+        PageChooserPanel('topiccollection'),
+    ]
+
+    def __str__(self):
+        return self.topiccollection.text
+
+class TopicPageTopicCollection(ClusterableModel):
+    page = ParentalKey(TopicPage, related_name='topiccollections')
+    topiccollection = models.ForeignKey('base.TopicCollectionPage',  verbose_name='Select a Topic Collection', related_name='+', on_delete=models.CASCADE)
+
+    panels = [
+        PageChooserPanel('topiccollection'),
+    ]
+
+    def __str__(self):
+        return self.topiccollection.text
 
 class ServicePageTopic(ClusterableModel):
     page = ParentalKey(ServicePage, related_name='topics')

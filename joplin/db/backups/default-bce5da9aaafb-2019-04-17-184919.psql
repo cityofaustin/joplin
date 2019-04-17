@@ -55,9 +55,15 @@ ALTER TABLE ONLY public.django_admin_log DROP CONSTRAINT django_admin_log_conten
 ALTER TABLE ONLY public.base_translatedimage DROP CONSTRAINT base_translatedimage_uploaded_by_user_id_520112ca_fk_users_use;
 ALTER TABLE ONLY public.base_translatedimagerendition DROP CONSTRAINT base_translatedimage_image_id_7c5496a9_fk_base_tran;
 ALTER TABLE ONLY public.base_translatedimage DROP CONSTRAINT base_translatedimage_collection_id_bcbe55dc_fk_wagtailco;
-ALTER TABLE ONLY public.base_topicpage DROP CONSTRAINT base_topicpage_theme_id_3e3f6806_fk_base_theme_id;
+ALTER TABLE ONLY public.base_topicpagetopiccollection DROP CONSTRAINT base_topicpagetopicc_topiccollection_id_20b6e61f_fk_base_topi;
+ALTER TABLE ONLY public.base_topicpagetopiccollection DROP CONSTRAINT base_topicpagetopicc_page_id_1a20cf86_fk_base_topi;
 ALTER TABLE ONLY public.base_topicpage DROP CONSTRAINT base_topicpage_page_ptr_id_43975d7c_fk_wagtailcore_page_id;
 ALTER TABLE ONLY public.base_topicpage DROP CONSTRAINT base_topicpage_image_id_83eb6f93_fk_base_translatedimage_id;
+ALTER TABLE ONLY public.base_topiccollectionpage DROP CONSTRAINT base_topiccollectionpage_theme_id_044da93e_fk_base_theme_id;
+ALTER TABLE ONLY public.base_topiccollectionpagetopiccollection DROP CONSTRAINT base_topiccollection_topiccollection_id_a026a651_fk_base_topi;
+ALTER TABLE ONLY public.base_topiccollectionpage DROP CONSTRAINT base_topiccollection_page_ptr_id_c883bacd_fk_wagtailco;
+ALTER TABLE ONLY public.base_topiccollectionpagetopiccollection DROP CONSTRAINT base_topiccollection_page_id_89ded887_fk_base_topi;
+ALTER TABLE ONLY public.base_topiccollectionpage DROP CONSTRAINT base_topiccollection_image_id_43ad0f71_fk_base_tran;
 ALTER TABLE ONLY public.base_servicepagetopic DROP CONSTRAINT base_servicepagetopi_topic_id_8c8ee82d_fk_base_topi;
 ALTER TABLE ONLY public.base_servicepagetopic DROP CONSTRAINT base_servicepagetopi_page_id_ee32c418_fk_base_serv;
 ALTER TABLE ONLY public.base_servicepagecontact DROP CONSTRAINT base_servicepagecontact_contact_id_f214244b_fk_base_contact_id;
@@ -162,8 +168,13 @@ DROP INDEX public.base_translatedimagerendition_filter_spec_b7fb314f;
 DROP INDEX public.base_translatedimage_uploaded_by_user_id_520112ca;
 DROP INDEX public.base_translatedimage_created_at_a2d7f113;
 DROP INDEX public.base_translatedimage_collection_id_bcbe55dc;
-DROP INDEX public.base_topicpage_theme_id_3e3f6806;
+DROP INDEX public.base_topicpagetopiccollection_topiccollection_id_20b6e61f;
+DROP INDEX public.base_topicpagetopiccollection_page_id_1a20cf86;
 DROP INDEX public.base_topicpage_image_id_83eb6f93;
+DROP INDEX public.base_topiccollectionpagetopiccollection_page_id_89ded887;
+DROP INDEX public.base_topiccollectionpageto_topiccollection_id_a026a651;
+DROP INDEX public.base_topiccollectionpage_theme_id_044da93e;
+DROP INDEX public.base_topiccollectionpage_image_id_43ad0f71;
 DROP INDEX public.base_theme_slug_bc7e93c0_like;
 DROP INDEX public.base_theme_slug_bc7e93c0;
 DROP INDEX public.base_servicepagetopic_topic_id_8c8ee82d;
@@ -254,7 +265,10 @@ ALTER TABLE ONLY public.django_admin_log DROP CONSTRAINT django_admin_log_pkey;
 ALTER TABLE ONLY public.base_translatedimagerendition DROP CONSTRAINT base_translatedimagerendition_pkey;
 ALTER TABLE ONLY public.base_translatedimagerendition DROP CONSTRAINT base_translatedimagerend_image_id_filter_spec_foc_da7be8d7_uniq;
 ALTER TABLE ONLY public.base_translatedimage DROP CONSTRAINT base_translatedimage_pkey;
+ALTER TABLE ONLY public.base_topicpagetopiccollection DROP CONSTRAINT base_topicpagetopiccollection_pkey;
 ALTER TABLE ONLY public.base_topicpage DROP CONSTRAINT base_topicpage_pkey;
+ALTER TABLE ONLY public.base_topiccollectionpagetopiccollection DROP CONSTRAINT base_topiccollectionpagetopiccollection_pkey;
+ALTER TABLE ONLY public.base_topiccollectionpage DROP CONSTRAINT base_topiccollectionpage_pkey;
 ALTER TABLE ONLY public.base_threeoneone DROP CONSTRAINT base_threeoneone_pkey;
 ALTER TABLE ONLY public.base_theme DROP CONSTRAINT base_theme_pkey;
 ALTER TABLE ONLY public.base_servicepagetopic DROP CONSTRAINT base_servicepagetopic_pkey;
@@ -314,6 +328,8 @@ ALTER TABLE public.django_content_type ALTER COLUMN id DROP DEFAULT;
 ALTER TABLE public.django_admin_log ALTER COLUMN id DROP DEFAULT;
 ALTER TABLE public.base_translatedimagerendition ALTER COLUMN id DROP DEFAULT;
 ALTER TABLE public.base_translatedimage ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.base_topicpagetopiccollection ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.base_topiccollectionpagetopiccollection ALTER COLUMN id DROP DEFAULT;
 ALTER TABLE public.base_threeoneone ALTER COLUMN id DROP DEFAULT;
 ALTER TABLE public.base_theme ALTER COLUMN id DROP DEFAULT;
 ALTER TABLE public.base_servicepagetopic ALTER COLUMN id DROP DEFAULT;
@@ -395,7 +411,12 @@ DROP SEQUENCE public.base_translatedimagerendition_id_seq;
 DROP TABLE public.base_translatedimagerendition;
 DROP SEQUENCE public.base_translatedimage_id_seq;
 DROP TABLE public.base_translatedimage;
+DROP SEQUENCE public.base_topicpagetopiccollection_id_seq;
+DROP TABLE public.base_topicpagetopiccollection;
 DROP TABLE public.base_topicpage;
+DROP SEQUENCE public.base_topiccollectionpagetopiccollection_id_seq;
+DROP TABLE public.base_topiccollectionpagetopiccollection;
+DROP TABLE public.base_topiccollectionpage;
 DROP SEQUENCE public.base_threeoneone_id_seq;
 DROP TABLE public.base_threeoneone;
 DROP SEQUENCE public.base_theme_id_seq;
@@ -1263,6 +1284,55 @@ ALTER SEQUENCE public.base_threeoneone_id_seq OWNED BY public.base_threeoneone.i
 
 
 --
+-- Name: base_topiccollectionpage; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.base_topiccollectionpage (
+    page_ptr_id integer NOT NULL,
+    created_at timestamp with time zone NOT NULL,
+    updated_at timestamp with time zone NOT NULL,
+    description text NOT NULL,
+    description_ar text,
+    description_en text,
+    description_es text,
+    description_vi text,
+    image_id integer,
+    theme_id integer
+);
+
+
+--
+-- Name: base_topiccollectionpagetopiccollection; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.base_topiccollectionpagetopiccollection (
+    id integer NOT NULL,
+    page_id integer NOT NULL,
+    topiccollection_id integer NOT NULL
+);
+
+
+--
+-- Name: base_topiccollectionpagetopiccollection_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.base_topiccollectionpagetopiccollection_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: base_topiccollectionpagetopiccollection_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.base_topiccollectionpagetopiccollection_id_seq OWNED BY public.base_topiccollectionpagetopiccollection.id;
+
+
+--
 -- Name: base_topicpage; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1276,9 +1346,39 @@ CREATE TABLE public.base_topicpage (
     description_es text,
     description_vi text,
     external_services text NOT NULL,
-    image_id integer,
-    theme_id integer NOT NULL
+    image_id integer
 );
+
+
+--
+-- Name: base_topicpagetopiccollection; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.base_topicpagetopiccollection (
+    id integer NOT NULL,
+    page_id integer NOT NULL,
+    topiccollection_id integer NOT NULL
+);
+
+
+--
+-- Name: base_topicpagetopiccollection_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.base_topicpagetopiccollection_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: base_topicpagetopiccollection_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.base_topicpagetopiccollection_id_seq OWNED BY public.base_topicpagetopiccollection.id;
 
 
 --
@@ -2470,6 +2570,20 @@ ALTER TABLE ONLY public.base_threeoneone ALTER COLUMN id SET DEFAULT nextval('pu
 
 
 --
+-- Name: base_topiccollectionpagetopiccollection id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.base_topiccollectionpagetopiccollection ALTER COLUMN id SET DEFAULT nextval('public.base_topiccollectionpagetopiccollection_id_seq'::regclass);
+
+
+--
+-- Name: base_topicpagetopiccollection id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.base_topicpagetopiccollection ALTER COLUMN id SET DEFAULT nextval('public.base_topicpagetopiccollection_id_seq'::regclass);
+
+
+--
 -- Name: base_translatedimage id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -2876,6 +2990,15 @@ COPY public.auth_permission (id, name, content_type_id, codename) FROM stdin;
 158	Can add topic page	54	add_topicpage
 159	Can change topic page	54	change_topicpage
 160	Can delete topic page	54	delete_topicpage
+161	Can add topic page topic collection	55	add_topicpagetopiccollection
+162	Can change topic page topic collection	55	change_topicpagetopiccollection
+163	Can delete topic page topic collection	55	delete_topicpagetopiccollection
+164	Can add topic collection page topic collection	56	add_topiccollectionpagetopiccollection
+165	Can change topic collection page topic collection	56	change_topiccollectionpagetopiccollection
+166	Can delete topic collection page topic collection	56	delete_topiccollectionpagetopiccollection
+167	Can add topic collection page	57	add_topiccollectionpage
+168	Can change topic collection page	57	change_topiccollectionpage
+169	Can delete topic collection page	57	delete_topiccollectionpage
 \.
 
 
@@ -3119,10 +3242,34 @@ COPY public.base_threeoneone (id, title, title_ar, title_en, title_es, title_vi,
 
 
 --
+-- Data for Name: base_topiccollectionpage; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.base_topiccollectionpage (page_ptr_id, created_at, updated_at, description, description_ar, description_en, description_es, description_vi, image_id, theme_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: base_topiccollectionpagetopiccollection; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.base_topiccollectionpagetopiccollection (id, page_id, topiccollection_id) FROM stdin;
+\.
+
+
+--
 -- Data for Name: base_topicpage; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY public.base_topicpage (page_ptr_id, created_at, updated_at, description, description_ar, description_en, description_es, description_vi, external_services, image_id, theme_id) FROM stdin;
+COPY public.base_topicpage (page_ptr_id, created_at, updated_at, description, description_ar, description_en, description_es, description_vi, external_services, image_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: base_topicpagetopiccollection; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.base_topicpagetopiccollection (id, page_id, topiccollection_id) FROM stdin;
 \.
 
 
@@ -3225,6 +3372,9 @@ COPY public.django_content_type (id, app_label, model) FROM stdin;
 52	base	processpagetopic
 53	base	servicepagetopic
 54	base	topicpage
+55	base	topicpagetopiccollection
+56	base	topiccollectionpagetopiccollection
+57	base	topiccollectionpage
 \.
 
 
@@ -3405,6 +3555,7 @@ COPY public.django_migrations (id, app, name, applied) FROM stdin;
 202	base	0055_auto_20190411_1254	2019-04-11 14:52:45.29881+00
 203	base	0056_auto_20190416_1234	2019-04-16 13:52:12.266089+00
 204	base	0057_auto_20190416_2342	2019-04-16 23:43:09.731399+00
+205	base	0058_auto_20190417_1839	2019-04-17 18:48:48.642965+00
 \.
 
 
@@ -3664,7 +3815,7 @@ SELECT pg_catalog.setval('public.auth_group_permissions_id_seq', 14, true);
 -- Name: auth_permission_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.auth_permission_id_seq', 160, true);
+SELECT pg_catalog.setval('public.auth_permission_id_seq', 169, true);
 
 
 --
@@ -3787,6 +3938,20 @@ SELECT pg_catalog.setval('public.base_threeoneone_id_seq', 27, true);
 
 
 --
+-- Name: base_topiccollectionpagetopiccollection_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.base_topiccollectionpagetopiccollection_id_seq', 1, false);
+
+
+--
+-- Name: base_topicpagetopiccollection_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.base_topicpagetopiccollection_id_seq', 1, false);
+
+
+--
 -- Name: base_translatedimage_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
@@ -3811,14 +3976,14 @@ SELECT pg_catalog.setval('public.django_admin_log_id_seq', 16, true);
 -- Name: django_content_type_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.django_content_type_id_seq', 54, true);
+SELECT pg_catalog.setval('public.django_content_type_id_seq', 57, true);
 
 
 --
 -- Name: django_migrations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.django_migrations_id_seq', 204, true);
+SELECT pg_catalog.setval('public.django_migrations_id_seq', 205, true);
 
 
 --
@@ -4229,11 +4394,35 @@ ALTER TABLE ONLY public.base_threeoneone
 
 
 --
+-- Name: base_topiccollectionpage base_topiccollectionpage_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.base_topiccollectionpage
+    ADD CONSTRAINT base_topiccollectionpage_pkey PRIMARY KEY (page_ptr_id);
+
+
+--
+-- Name: base_topiccollectionpagetopiccollection base_topiccollectionpagetopiccollection_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.base_topiccollectionpagetopiccollection
+    ADD CONSTRAINT base_topiccollectionpagetopiccollection_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: base_topicpage base_topicpage_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.base_topicpage
     ADD CONSTRAINT base_topicpage_pkey PRIMARY KEY (page_ptr_id);
+
+
+--
+-- Name: base_topicpagetopiccollection base_topicpagetopiccollection_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.base_topicpagetopiccollection
+    ADD CONSTRAINT base_topicpagetopiccollection_pkey PRIMARY KEY (id);
 
 
 --
@@ -4918,6 +5107,34 @@ CREATE INDEX base_theme_slug_bc7e93c0_like ON public.base_theme USING btree (slu
 
 
 --
+-- Name: base_topiccollectionpage_image_id_43ad0f71; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX base_topiccollectionpage_image_id_43ad0f71 ON public.base_topiccollectionpage USING btree (image_id);
+
+
+--
+-- Name: base_topiccollectionpage_theme_id_044da93e; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX base_topiccollectionpage_theme_id_044da93e ON public.base_topiccollectionpage USING btree (theme_id);
+
+
+--
+-- Name: base_topiccollectionpageto_topiccollection_id_a026a651; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX base_topiccollectionpageto_topiccollection_id_a026a651 ON public.base_topiccollectionpagetopiccollection USING btree (topiccollection_id);
+
+
+--
+-- Name: base_topiccollectionpagetopiccollection_page_id_89ded887; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX base_topiccollectionpagetopiccollection_page_id_89ded887 ON public.base_topiccollectionpagetopiccollection USING btree (page_id);
+
+
+--
 -- Name: base_topicpage_image_id_83eb6f93; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -4925,10 +5142,17 @@ CREATE INDEX base_topicpage_image_id_83eb6f93 ON public.base_topicpage USING btr
 
 
 --
--- Name: base_topicpage_theme_id_3e3f6806; Type: INDEX; Schema: public; Owner: -
+-- Name: base_topicpagetopiccollection_page_id_1a20cf86; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX base_topicpage_theme_id_3e3f6806 ON public.base_topicpage USING btree (theme_id);
+CREATE INDEX base_topicpagetopiccollection_page_id_1a20cf86 ON public.base_topicpagetopiccollection USING btree (page_id);
+
+
+--
+-- Name: base_topicpagetopiccollection_topiccollection_id_20b6e61f; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX base_topicpagetopiccollection_topiccollection_id_20b6e61f ON public.base_topicpagetopiccollection USING btree (topiccollection_id);
 
 
 --
@@ -5700,6 +5924,46 @@ ALTER TABLE ONLY public.base_servicepagetopic
 
 
 --
+-- Name: base_topiccollectionpage base_topiccollection_image_id_43ad0f71_fk_base_tran; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.base_topiccollectionpage
+    ADD CONSTRAINT base_topiccollection_image_id_43ad0f71_fk_base_tran FOREIGN KEY (image_id) REFERENCES public.base_translatedimage(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: base_topiccollectionpagetopiccollection base_topiccollection_page_id_89ded887_fk_base_topi; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.base_topiccollectionpagetopiccollection
+    ADD CONSTRAINT base_topiccollection_page_id_89ded887_fk_base_topi FOREIGN KEY (page_id) REFERENCES public.base_topiccollectionpage(page_ptr_id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: base_topiccollectionpage base_topiccollection_page_ptr_id_c883bacd_fk_wagtailco; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.base_topiccollectionpage
+    ADD CONSTRAINT base_topiccollection_page_ptr_id_c883bacd_fk_wagtailco FOREIGN KEY (page_ptr_id) REFERENCES public.wagtailcore_page(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: base_topiccollectionpagetopiccollection base_topiccollection_topiccollection_id_a026a651_fk_base_topi; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.base_topiccollectionpagetopiccollection
+    ADD CONSTRAINT base_topiccollection_topiccollection_id_a026a651_fk_base_topi FOREIGN KEY (topiccollection_id) REFERENCES public.base_topiccollectionpage(page_ptr_id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: base_topiccollectionpage base_topiccollectionpage_theme_id_044da93e_fk_base_theme_id; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.base_topiccollectionpage
+    ADD CONSTRAINT base_topiccollectionpage_theme_id_044da93e_fk_base_theme_id FOREIGN KEY (theme_id) REFERENCES public.base_theme(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
 -- Name: base_topicpage base_topicpage_image_id_83eb6f93_fk_base_translatedimage_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -5716,11 +5980,19 @@ ALTER TABLE ONLY public.base_topicpage
 
 
 --
--- Name: base_topicpage base_topicpage_theme_id_3e3f6806_fk_base_theme_id; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: base_topicpagetopiccollection base_topicpagetopicc_page_id_1a20cf86_fk_base_topi; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.base_topicpage
-    ADD CONSTRAINT base_topicpage_theme_id_3e3f6806_fk_base_theme_id FOREIGN KEY (theme_id) REFERENCES public.base_theme(id) DEFERRABLE INITIALLY DEFERRED;
+ALTER TABLE ONLY public.base_topicpagetopiccollection
+    ADD CONSTRAINT base_topicpagetopicc_page_id_1a20cf86_fk_base_topi FOREIGN KEY (page_id) REFERENCES public.base_topicpage(page_ptr_id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: base_topicpagetopiccollection base_topicpagetopicc_topiccollection_id_20b6e61f_fk_base_topi; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.base_topicpagetopiccollection
+    ADD CONSTRAINT base_topicpagetopicc_topiccollection_id_20b6e61f_fk_base_topi FOREIGN KEY (topiccollection_id) REFERENCES public.base_topiccollectionpage(page_ptr_id) DEFERRABLE INITIALLY DEFERRED;
 
 
 --
