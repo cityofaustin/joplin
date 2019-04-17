@@ -236,6 +236,7 @@ class Query(graphene.ObjectType):
     all_department_pages = DjangoFilterConnectionField(DepartmentPageNode)
     all_themes = DjangoFilterConnectionField(ThemeNode)
     all_topics = DjangoFilterConnectionField(TopicNode)
+    all_topic_collections = DjangoFilterConnectionField(TopicCollectionNode)
     all_departments = DjangoFilterConnectionField(DepartmentNode)
     all_311 = DjangoFilterConnectionField(ThreeOneOneNode)
 
