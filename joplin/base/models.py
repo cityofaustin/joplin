@@ -254,6 +254,7 @@ class TopicCollectionPage(JanisPage):
         'base.Theme',
         on_delete=models.PROTECT,
         related_name='topicPages',
+        null=True, blank=True,
     )
 
     image = models.ForeignKey(TranslatedImage, null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
@@ -268,7 +269,7 @@ class TopicCollectionPage(JanisPage):
         FieldPanel('description'),
         FieldPanel('theme'),
         ImageChooserPanel('image'),
-        InlinePanel('topiccollections', label='Topic Collections'),
+        InlinePanel('topiccollections', label='Topic Collections this page belongs to'),
     ]
 
 class TopicPage(JanisPage):
@@ -311,7 +312,7 @@ class TopicPage(JanisPage):
         FieldPanel('description'),
         ImageChooserPanel('image'),
         StreamFieldPanel('external_services'),
-        InlinePanel('topiccollections', label='Topic Collections'),
+        InlinePanel('topiccollections', label='Topic Collections this page belongs to'),
     ]
 
 class DepartmentPage(JanisBasePage):
