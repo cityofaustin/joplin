@@ -20,3 +20,7 @@ class DepartmentPageForm(WagtailAdminPageForm):
 class TopicPageForm(WagtailAdminPageForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+class TopicCollectionPageForm(WagtailAdminPageForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
