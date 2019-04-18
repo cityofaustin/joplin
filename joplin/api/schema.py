@@ -39,7 +39,7 @@ class ThemeNode(DjangoObjectType):
 class TopicCollectionNode(DjangoObjectType):
     class Meta:
         model = TopicCollectionPage
-        filter_fields = ['id', 'slug']
+        filter_fields = ['id', 'slug', 'live']
         interfaces = [graphene.Node]
 
 class TopicPageTopicCollectionNode(DjangoObjectType):
@@ -50,7 +50,7 @@ class TopicPageTopicCollectionNode(DjangoObjectType):
 class TopicNode(DjangoObjectType):
     class Meta:
         model = TopicPage
-        filter_fields = ['id', 'slug']
+        filter_fields = ['id', 'slug', 'live']
         interfaces = [graphene.Node]
 
 
@@ -129,7 +129,7 @@ class ServicePageNode(DjangoObjectType):
 class ProcessPageNode(DjangoObjectType):
     class Meta:
         model = ProcessPage
-        filter_fields = ['id', 'slug', 'department']
+        filter_fields = ['id', 'slug', 'department', 'live']
         interfaces = [graphene.Node]
 
 class InformationPageNode(DjangoObjectType):
@@ -149,6 +149,8 @@ class PageRevisionNode(DjangoObjectType):
     as_process_page = graphene.NonNull(ProcessPageNode)
     as_information_page = graphene.NonNull(InformationPageNode)
     as_department_page = graphene.NonNull(DepartmentPageNode)
+    as_topic_page = graphene.NonNull(TopicNode)
+    as_topic_collection_page = graphene.NonNull(TopicCollectionNode)
 
     def resolve_as_service_page(self, resolve_info, *args, **kwargs):
         return self.as_page_object();
@@ -160,6 +162,12 @@ class PageRevisionNode(DjangoObjectType):
         return self.as_page_object();
 
     def resolve_as_department_page(self, resolve_info, *args, **kwargs):
+        return self.as_page_object();
+
+    def resolve_as_topic_page(self, resolve_info, *args, **kwargs):
+        return self.as_page_object();
+
+    def resolve_as_topic_collection_page(self, resolve_info, *args, **kwargs):
         return self.as_page_object();
 
     class Meta:
