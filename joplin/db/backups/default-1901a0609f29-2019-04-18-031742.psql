@@ -83,7 +83,6 @@ ALTER TABLE ONLY public.base_informationpagetopic DROP CONSTRAINT base_informati
 ALTER TABLE ONLY public.base_informationpage DROP CONSTRAINT base_informationpage_page_ptr_id_9a0f594e_fk_wagtailco;
 ALTER TABLE ONLY public.base_informationpagetopic DROP CONSTRAINT base_informationpage_page_id_d9ca6f81_fk_base_info;
 ALTER TABLE ONLY public.base_informationpagecontact DROP CONSTRAINT base_informationpage_page_id_655b667f_fk_base_info;
-ALTER TABLE ONLY public.base_informationpage DROP CONSTRAINT base_informationpage_image_id_764f7bf1_fk_base_tran;
 ALTER TABLE ONLY public.base_informationpage DROP CONSTRAINT base_informationpage_department_id_561e612e_fk_base_depa;
 ALTER TABLE ONLY public.base_informationpagecontact DROP CONSTRAINT base_informationpage_contact_id_47a7ecb9_fk_base_cont;
 ALTER TABLE ONLY public.base_homepage DROP CONSTRAINT base_homepage_page_ptr_id_35a5077a_fk_wagtailcore_page_id;
@@ -193,7 +192,6 @@ DROP INDEX public.base_informationpagetopic_topic_id_2dc1da42;
 DROP INDEX public.base_informationpagetopic_page_id_d9ca6f81;
 DROP INDEX public.base_informationpagecontact_page_id_655b667f;
 DROP INDEX public.base_informationpagecontact_contact_id_47a7ecb9;
-DROP INDEX public.base_informationpage_image_id_764f7bf1;
 DROP INDEX public.base_informationpage_department_id_561e612e;
 DROP INDEX public.base_homepage_image_id_480b2169;
 DROP INDEX public.base_departmentpagedirector_photo_id_cfaf5b2e;
@@ -834,7 +832,6 @@ CREATE TABLE public.base_informationpage (
     description text NOT NULL,
     options text NOT NULL,
     additional_content text NOT NULL,
-    image_id integer,
     additional_content_ar text,
     additional_content_en text,
     additional_content_es text,
@@ -3092,7 +3089,7 @@ COPY public.base_homepage (page_ptr_id, image_id) FROM stdin;
 -- Data for Name: base_informationpage; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY public.base_informationpage (page_ptr_id, created_at, updated_at, description, options, additional_content, image_id, additional_content_ar, additional_content_en, additional_content_es, additional_content_vi, description_ar, description_en, description_es, description_vi, options_ar, options_en, options_es, options_vi, department_id) FROM stdin;
+COPY public.base_informationpage (page_ptr_id, created_at, updated_at, description, options, additional_content, additional_content_ar, additional_content_en, additional_content_es, additional_content_vi, description_ar, description_en, description_es, description_vi, options_ar, options_en, options_es, options_vi, department_id) FROM stdin;
 \.
 
 
@@ -3554,6 +3551,7 @@ COPY public.django_migrations (id, app, name, applied) FROM stdin;
 204	base	0057_auto_20190416_2342	2019-04-16 23:43:09.731399+00
 205	base	0058_auto_20190417_1839	2019-04-17 18:48:48.642965+00
 206	base	0059_remove_servicepage_image	2019-04-18 03:06:19.758917+00
+207	base	0060_remove_informationpage_image	2019-04-18 03:17:26.002738+00
 \.
 
 
@@ -3572,6 +3570,7 @@ zycn40nyshpo4ve06dop7co1kfzyfhxl	NTYyMGQ1M2E2ZTVmNTI2MzFjM2RhM2U2MTczYzNlYjM5ZmF
 ryrl0bd48h2k8p0cue7q6anlp90tr15b	NTYyMGQ1M2E2ZTVmNTI2MzFjM2RhM2U2MTczYzNlYjM5ZmFhZWVjMDp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiJiNTlkMDFmMzU1OTY5OTU2YTVjODNhNDU2MGIwNzc4NTMyY2ZkNmEzIn0=	2019-03-27 16:25:19.957413+00
 herd5jn1g7p5h7o2jiwskn4gt10we3zf	NTYyMGQ1M2E2ZTVmNTI2MzFjM2RhM2U2MTczYzNlYjM5ZmFhZWVjMDp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiJiNTlkMDFmMzU1OTY5OTU2YTVjODNhNDU2MGIwNzc4NTMyY2ZkNmEzIn0=	2019-04-02 06:23:34.907861+00
 cj7drg7fyaurvkudpnmynozi075tsicl	NTYyMGQ1M2E2ZTVmNTI2MzFjM2RhM2U2MTczYzNlYjM5ZmFhZWVjMDp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiJiNTlkMDFmMzU1OTY5OTU2YTVjODNhNDU2MGIwNzc4NTMyY2ZkNmEzIn0=	2019-04-24 12:54:59.197303+00
+lkl846wo3t9xrk8y7o570j4b4v3cspg4	NTYyMGQ1M2E2ZTVmNTI2MzFjM2RhM2U2MTczYzNlYjM5ZmFhZWVjMDp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiJiNTlkMDFmMzU1OTY5OTU2YTVjODNhNDU2MGIwNzc4NTMyY2ZkNmEzIn0=	2019-05-02 03:16:53.688461+00
 \.
 
 
@@ -3597,7 +3596,7 @@ COPY public.taggit_taggeditem (id, object_id, content_type_id, tag_id) FROM stdi
 --
 
 COPY public.users_user (id, password, last_login, is_superuser, first_name, last_name, is_staff, is_active, date_joined, email) FROM stdin;
-1	pbkdf2_sha256$100000$9fpvtivuWOYg$rOB3vDHoYJyEYs35zNdIJ0BmHvR8n5daAVwz7HoeC2Q=	2019-04-10 12:54:59.193914+00	t	Austin	Pantherpants	t	t	2017-12-06 16:13:48.662+00	admin@austintexas.io
+1	pbkdf2_sha256$100000$9fpvtivuWOYg$rOB3vDHoYJyEYs35zNdIJ0BmHvR8n5daAVwz7HoeC2Q=	2019-04-18 03:16:53.656017+00	t	Austin	Pantherpants	t	t	2017-12-06 16:13:48.662+00	admin@austintexas.io
 \.
 
 
@@ -3981,7 +3980,7 @@ SELECT pg_catalog.setval('public.django_content_type_id_seq', 57, true);
 -- Name: django_migrations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.django_migrations_id_seq', 206, true);
+SELECT pg_catalog.setval('public.django_migrations_id_seq', 207, true);
 
 
 --
@@ -4958,13 +4957,6 @@ CREATE INDEX base_informationpage_department_id_561e612e ON public.base_informat
 
 
 --
--- Name: base_informationpage_image_id_764f7bf1; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX base_informationpage_image_id_764f7bf1 ON public.base_informationpage USING btree (image_id);
-
-
---
 -- Name: base_informationpagecontact_contact_id_47a7ecb9; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -5744,14 +5736,6 @@ ALTER TABLE ONLY public.base_informationpagecontact
 
 ALTER TABLE ONLY public.base_informationpage
     ADD CONSTRAINT base_informationpage_department_id_561e612e_fk_base_depa FOREIGN KEY (department_id) REFERENCES public.base_departmentpage(page_ptr_id) DEFERRABLE INITIALLY DEFERRED;
-
-
---
--- Name: base_informationpage base_informationpage_image_id_764f7bf1_fk_base_tran; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.base_informationpage
-    ADD CONSTRAINT base_informationpage_image_id_764f7bf1_fk_base_tran FOREIGN KEY (image_id) REFERENCES public.base_translatedimage(id) DEFERRABLE INITIALLY DEFERRED;
 
 
 --
