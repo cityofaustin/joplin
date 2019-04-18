@@ -222,7 +222,6 @@ class InformationPage(JanisPage):
         blank=True
     )
 
-    image = models.ForeignKey(TranslatedImage, null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
     # TODO: Add images array field
 
     base_form_class = custom_forms.InformationPageForm
@@ -238,7 +237,6 @@ class InformationPage(JanisPage):
         StreamFieldPanel('options'),
         FieldPanel('additional_content'),
         InlinePanel('contacts', label='Contacts'),
-        ImageChooserPanel('image'),
     ]
 
 class TopicCollectionPage(JanisPage):
