@@ -155,13 +155,10 @@ class ServicePage(JanisPage):
         blank=True
     )
 
-    image = models.ForeignKey(TranslatedImage, null=True, blank=True, on_delete=models.SET_NULL, related_name='+', verbose_name='Choose an image for the service banner')
-
     base_form_class = custom_forms.ServicePageForm
 
     content_panels = [
         InlinePanel('topics', label='Topics'),
-        ImageChooserPanel('image'),
         StreamFieldPanel('steps'),
         StreamFieldPanel('dynamic_content'),
         FieldPanel('additional_content'),
@@ -225,7 +222,6 @@ class InformationPage(JanisPage):
         blank=True
     )
 
-    image = models.ForeignKey(TranslatedImage, null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
     # TODO: Add images array field
 
     base_form_class = custom_forms.InformationPageForm
@@ -241,7 +237,6 @@ class InformationPage(JanisPage):
         StreamFieldPanel('options'),
         FieldPanel('additional_content'),
         InlinePanel('contacts', label='Contacts'),
-        ImageChooserPanel('image'),
     ]
 
 class TopicCollectionPage(JanisPage):
