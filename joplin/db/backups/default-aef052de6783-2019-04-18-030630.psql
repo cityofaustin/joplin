@@ -69,7 +69,6 @@ ALTER TABLE ONLY public.base_servicepagetopic DROP CONSTRAINT base_servicepageto
 ALTER TABLE ONLY public.base_servicepagecontact DROP CONSTRAINT base_servicepagecontact_contact_id_f214244b_fk_base_contact_id;
 ALTER TABLE ONLY public.base_servicepagecontact DROP CONSTRAINT base_servicepagecont_page_id_447387c4_fk_base_serv;
 ALTER TABLE ONLY public.base_servicepage DROP CONSTRAINT base_servicepage_page_ptr_id_051b30d5_fk_wagtailcore_page_id;
-ALTER TABLE ONLY public.base_servicepage DROP CONSTRAINT base_servicepage_image_id_2200179f_fk_base_translatedimage_id;
 ALTER TABLE ONLY public.base_processpagetopic DROP CONSTRAINT base_processpagetopi_topic_id_720998b0_fk_base_topi;
 ALTER TABLE ONLY public.base_processpagetopic DROP CONSTRAINT base_processpagetopi_page_id_2bc50492_fk_base_proc;
 ALTER TABLE ONLY public.base_processpagestep DROP CONSTRAINT base_processpagestep_page_id_fa035fe0_fk_base_proc;
@@ -181,7 +180,6 @@ DROP INDEX public.base_servicepagetopic_topic_id_8c8ee82d;
 DROP INDEX public.base_servicepagetopic_page_id_ee32c418;
 DROP INDEX public.base_servicepagecontact_page_id_447387c4;
 DROP INDEX public.base_servicepagecontact_contact_id_f214244b;
-DROP INDEX public.base_servicepage_image_id_2200179f;
 DROP INDEX public.base_processpagetopic_topic_id_720998b0;
 DROP INDEX public.base_processpagetopic_page_id_2bc50492;
 DROP INDEX public.base_processpagestep_page_id_fa035fe0;
@@ -1138,7 +1136,6 @@ CREATE TABLE public.base_servicepage (
     created_at timestamp with time zone NOT NULL,
     updated_at timestamp with time zone NOT NULL,
     dynamic_content text NOT NULL,
-    image_id integer,
     additional_content text NOT NULL,
     additional_content_ar text,
     additional_content_en text,
@@ -3171,7 +3168,7 @@ COPY public.base_processpagetopic (id, page_id, topic_id) FROM stdin;
 -- Data for Name: base_servicepage; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY public.base_servicepage (page_ptr_id, created_at, updated_at, dynamic_content, image_id, additional_content, additional_content_ar, additional_content_en, additional_content_es, additional_content_vi, steps) FROM stdin;
+COPY public.base_servicepage (page_ptr_id, created_at, updated_at, dynamic_content, additional_content, additional_content_ar, additional_content_en, additional_content_es, additional_content_vi, steps) FROM stdin;
 \.
 
 
@@ -3556,6 +3553,7 @@ COPY public.django_migrations (id, app, name, applied) FROM stdin;
 203	base	0056_auto_20190416_1234	2019-04-16 13:52:12.266089+00
 204	base	0057_auto_20190416_2342	2019-04-16 23:43:09.731399+00
 205	base	0058_auto_20190417_1839	2019-04-17 18:48:48.642965+00
+206	base	0059_remove_servicepage_image	2019-04-18 03:06:19.758917+00
 \.
 
 
@@ -3983,7 +3981,7 @@ SELECT pg_catalog.setval('public.django_content_type_id_seq', 57, true);
 -- Name: django_migrations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.django_migrations_id_seq', 205, true);
+SELECT pg_catalog.setval('public.django_migrations_id_seq', 206, true);
 
 
 --
@@ -5058,13 +5056,6 @@ CREATE INDEX base_processpagetopic_topic_id_720998b0 ON public.base_processpaget
 
 
 --
--- Name: base_servicepage_image_id_2200179f; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX base_servicepage_image_id_2200179f ON public.base_servicepage USING btree (image_id);
-
-
---
 -- Name: base_servicepagecontact_contact_id_f214244b; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -5873,14 +5864,6 @@ ALTER TABLE ONLY public.base_processpagetopic
 
 ALTER TABLE ONLY public.base_processpagetopic
     ADD CONSTRAINT base_processpagetopi_topic_id_720998b0_fk_base_topi FOREIGN KEY (topic_id) REFERENCES public.base_topicpage(page_ptr_id) DEFERRABLE INITIALLY DEFERRED;
-
-
---
--- Name: base_servicepage base_servicepage_image_id_2200179f_fk_base_translatedimage_id; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.base_servicepage
-    ADD CONSTRAINT base_servicepage_image_id_2200179f_fk_base_translatedimage_id FOREIGN KEY (image_id) REFERENCES public.base_translatedimage(id) DEFERRABLE INITIALLY DEFERRED;
 
 
 --
