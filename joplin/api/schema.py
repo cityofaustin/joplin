@@ -39,7 +39,7 @@ class ThemeNode(DjangoObjectType):
 class TopicCollectionNode(DjangoObjectType):
     class Meta:
         model = TopicCollectionPage
-        filter_fields = ['id', 'slug']
+        filter_fields = ['id', 'slug', 'live']
         interfaces = [graphene.Node]
 
 class TopicPageTopicCollectionNode(DjangoObjectType):
@@ -50,7 +50,7 @@ class TopicPageTopicCollectionNode(DjangoObjectType):
 class TopicNode(DjangoObjectType):
     class Meta:
         model = TopicPage
-        filter_fields = ['id', 'slug']
+        filter_fields = ['id', 'slug', 'live']
         interfaces = [graphene.Node]
 
 
@@ -129,7 +129,7 @@ class ServicePageNode(DjangoObjectType):
 class ProcessPageNode(DjangoObjectType):
     class Meta:
         model = ProcessPage
-        filter_fields = ['id', 'slug', 'department']
+        filter_fields = ['id', 'slug', 'department', 'live']
         interfaces = [graphene.Node]
 
 class InformationPageNode(DjangoObjectType):
