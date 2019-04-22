@@ -157,7 +157,14 @@ class ServicePage(JanisPage):
 
     base_form_class = custom_forms.ServicePageForm
 
+    short_description = models.TextField(
+        max_length=DEFAULT_MAX_LENGTH,
+        blank=True,
+        verbose_name='Write a description of this service'
+    )
+
     content_panels = [
+        FieldPanel('short_description'),
         InlinePanel('topics', label='Topics'),
         StreamFieldPanel('steps'),
         StreamFieldPanel('dynamic_content'),
