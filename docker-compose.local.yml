@@ -1,18 +1,20 @@
 version: '3'
 services:
   joplindb:
+    container_name: "joplin_db"
     image: postgres:10
     ports:
-     - "5432:5432"
+     - "${JOPLIN_DB_PUBLIC_PORT}:5432" # 5432:5432
     environment:
       POSTGRES_DB: 'joplin'
       POSTGRES_USER: 'joplin'
   joplin:
+    container_name: "joplin_app"
     build:
       context: .
       dockerfile: Dockerfile.local
     ports:
-     - "8000:80"
+     - "${JOPLIN_APP_PUBLIC_PORT}:80" # 8000:80
     volumes:
      - ".:/app"
     environment:
@@ -23,13 +25,14 @@ services:
       JANIS_URL: http://localhost:3000
       STYLEGUIDE_URL: https://cityofaustin.github.io/digital-services-style-guide
       DEPLOYMENT_MODE: "LOCAL"
-      DATABASE_URL: "postgres://joplin@joplindb:5432/joplin"
+      DATABASE_URL: "postgres://joplin@joplindb:${JOPLIN_DB_PUBLIC_PORT}/joplin"
     depends_on:
      - "joplindb"
-  joplinassets:
-    build:
-      context: .
-      dockerfile: Dockerfile.assets
-    volumes:
-      - "./joplin:/app/joplin"
-    entrypoint: sh docker-entrypoint.watchassets.sh
+  # joplinassets:
+  #   container_name: "$JOPLIN_ASSETS_CONTAINER_NAME"
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile.assets
+  #   volumes:
+  #     - "./joplin:/app/joplin"
+  #   entrypoint: sh docker-entrypoint.watchassets.sh
