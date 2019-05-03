@@ -33,7 +33,27 @@ def generate_responsive_images(sender, **kwargs):
         image.get_rendition(f'width-{width}')
 
 def create_build_aws():
-    client = boto3.client('ecs')
+    """
+        Triggers a build in Amazon Elastic Container Service, it requires:
+        1. DEPLOYMENT_MODE
+            - The name of the environment in github: production or staging.
+            - "PRODUCTION" builds code in the production branch
+            - "STAGING"    builds code in the master branch.
+        2. AWS_BUCKET_NAME
+            - The name of the bucket where the deployment is happening.
+            - The bucket name only, not a path.
+        3. AWS_CF_DISTRO:
+            - The name of the distribution for production.
+            - IE: E455RV7LE5UVG
+    """
+
+    client = boto3.client(
+         'ecs',
+         aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+         aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY
+    )
+
+
     response = client.run_task(
         cluster='janis-cluster',
         taskDefinition='janis-worker:10',
@@ -63,10 +83,6 @@ def create_build_aws():
                         {
                             'name': 'AWS_CF_DISTRO',
                             'value': 'E455RV7LE5UVG'
-                        },
-                        {
-                            'name': 'BASE_PATH_PR',
-                            'value': '/'
                         }
                     ]
                 }
