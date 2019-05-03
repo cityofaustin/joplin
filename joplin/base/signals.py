@@ -6,6 +6,8 @@ from wagtail.core.signals import page_published, page_unpublished
 import heroku3
 from heroku3.models.build import Build
 
+import boto3
+
 from base.models import TranslatedImage
 
 import logging
@@ -30,6 +32,48 @@ def generate_responsive_images(sender, **kwargs):
         logger.debug(f'Generating image rendition for {width}px')
         image.get_rendition(f'width-{width}')
 
+def create_build_aws():
+    client = boto3.client('ecs')
+    response = client.run_task(
+        cluster='janis-cluster',
+        taskDefinition='janis-worker:10',
+        launchType='FARGATE',
+        count=1,
+        platformVersion='LATEST',
+        networkConfiguration={
+            'awsvpcConfiguration': {
+                'subnets': ['subnet-01ab57a13c8e8ab3b'],
+                'assignPublicIp': 'ENABLED',
+                'securityGroups': ['sg-05def9abc5a743581'],
+            },
+        },
+        overrides={
+            'containerOverrides': [
+                {
+                    'name': 'janis-worker',
+                    'environment': [
+                        {
+                            'name': 'DEPLOYMENT_MODE',
+                            'value': 'PRODUCTION'
+                        },
+                        {
+                            'name': 'AWS_BUCKET_NAME',
+                            'value': 'janis-lab'
+                        },
+                        {
+                            'name': 'AWS_CF_DISTRO',
+                            'value': 'E455RV7LE5UVG'
+                        },
+                        {
+                            'name': 'BASE_PATH_PR',
+                            'value': '/'
+                        }
+                    ]
+                }
+            ]
+        }
+    )
+    logger.debug(f'Response: {response}')
 
 def create_build_if_configured():
     if not all([settings.HEROKU_KEY, settings.HEROKU_JANIS_APP_NAME]):
@@ -74,7 +118,8 @@ def create_build(heroku, app, url, checksum=None, version=None, buildpack_urls=N
 @receiver(page_published)
 def page_published_signal(sender, **kwargs):
     logger.debug(f'page_published {sender}')
-    create_build_if_configured()
+    #create_build_if_configured()
+    create_build_aws()
 
 
 @receiver(page_unpublished)
