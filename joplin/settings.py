@@ -244,6 +244,11 @@ DBBACKUP_CONNECTORS = {
 }
 
 
+if(ISREVIEWAPP):
+    AWS_ACCESS_KEY_ID = os.getenv('AWS_S3_KEYID')
+    AWS_SECRET_ACCESS_KEY = os.getenv('AWS_S3_ACCESSKEY')
+
+
 
 # Production, Staging & Review Apps
 if(ISPRODUCTION or ISSTAGING):
