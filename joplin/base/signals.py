@@ -46,50 +46,54 @@ def create_build_aws():
             - The name of the distribution for production.
             - IE: E455RV7LE5UVG
     """
+    if(settings.DEPLOYMENT_MODE in ["PRODUCTION", "STAGING"]):
 
-    client = boto3.client(
-         'ecs',
-         aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
-         aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY
-    )
+        # First we initialize our AWS handler (client)
+        client = boto3.client(
+             'ecs',
+             aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+             aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY
+        )
 
-
-    response = client.run_task(
-        cluster='janis-cluster',
-        taskDefinition='janis-worker:10',
-        launchType='FARGATE',
-        count=1,
-        platformVersion='LATEST',
-        networkConfiguration={
-            'awsvpcConfiguration': {
-                'subnets': ['subnet-01ab57a13c8e8ab3b'],
-                'assignPublicIp': 'ENABLED',
-                'securityGroups': ['sg-05def9abc5a743581'],
+        # Now we request to run a container (task) on AWS ECS on Fargate
+        response = client.run_task(
+            cluster='janis-cluster',
+            taskDefinition=settings.AWS_ECS_TASK_DEFINITION, # ie. 'janis-worker:10'
+            launchType='FARGATE',
+            count=1,
+            platformVersion='LATEST',
+            networkConfiguration={
+                'awsvpcConfiguration': {
+                    'subnets': ['subnet-01ab57a13c8e8ab3b'],
+                    'assignPublicIp': 'ENABLED',
+                    'securityGroups': ['sg-05def9abc5a743581'],
+                },
             },
-        },
-        overrides={
-            'containerOverrides': [
-                {
-                    'name': 'janis-worker',
-                    'environment': [
-                        {
-                            'name': 'DEPLOYMENT_MODE',
-                            'value': 'PRODUCTION'
-                        },
-                        {
-                            'name': 'AWS_BUCKET_NAME',
-                            'value': 'janis-lab'
-                        },
-                        {
-                            'name': 'AWS_CF_DISTRO',
-                            'value': 'E455RV7LE5UVG'
-                        }
-                    ]
-                }
-            ]
-        }
-    )
-    logger.debug(f'Response: {response}')
+            overrides={
+                'containerOverrides': [
+                    {
+                        'name': 'janis-worker',
+                        'environment': [
+                            {
+                                'name': 'DEPLOYMENT_MODE',
+                                'value': settings.DEPLOYMENT_MODE # 'PRODUCTION' OR 'STAGING'
+                            },
+                            {
+                                'name': 'AWS_BUCKET_NAME',
+                                'value': settings.AWS_ECS_DEPLOYMENT_BUCKET # ie. 'janis-lab'
+                            },
+                            {
+                                'name': 'AWS_CF_DISTRO',
+                                'value': settings.AWS_CLOUDFRONT_DISTRIBUTION #'E455RV7LE5UVG'
+                            }
+                        ]
+                    }
+                ]
+            }
+        )
+        # We log our response for debugging
+        logger.debug(f'Response: {response}')
+
 
 def create_build_if_configured():
     if not all([settings.HEROKU_KEY, settings.HEROKU_JANIS_APP_NAME]):

@@ -244,14 +244,11 @@ DBBACKUP_CONNECTORS = {
 }
 
 
-if(ISREVIEWAPP):
-    AWS_ACCESS_KEY_ID = os.getenv('AWS_S3_KEYID')
-    AWS_SECRET_ACCESS_KEY = os.getenv('AWS_S3_ACCESSKEY')
 
-
-
+#
 # Production, Staging & Review Apps
-if(ISPRODUCTION or ISSTAGING):
+#
+if(ISPRODUCTION or ISSTAGING or ISREVIEWAPP):
     #
     # AWS Buckets only if not local.
     #
@@ -262,6 +259,13 @@ if(ISPRODUCTION or ISSTAGING):
     AWS_ARCHIVE_BUCKET_NAME = os.getenv('AWS_S3_BUCKET_ARCHIVE')
     AWS_BACKUPS_LOCATION = os.getenv('AWS_S3_BUCKET_ARCHIVE_LOCATION')
     AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+
+    #
+    # Deployment Variables: AWS ECS Task Definition, CloudFront Distribution
+    #
+    AWS_ECS_DEPLOYMENT_BUCKET = os.getenv('AWS_ECS_DEPLOYMENT_BUCKET')
+    AWS_ECS_TASK_DEFINITION = os.getenv('AWS_ECS_TASK_DEFINITION')
+    AWS_CLOUDFRONT_DISTRIBUTION = os.getenv('AWS_CLOUDFRONT_DISTRIBUTION')
 
     AWS_S3_OBJECT_PARAMETERS = {
         'CacheControl': 'max-age=86400',
