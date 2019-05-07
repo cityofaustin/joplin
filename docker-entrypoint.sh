@@ -24,9 +24,10 @@ fi
 # Run Data Migrations Only (Static files can remain local)
 python ./joplin/manage.py migrate --noinput
 
-if [ "$LOAD_DATA" == "on" ]; then
-    echo "Loading data from backup."
-    python ./joplin/manage.py dbrestore --noinput
+if [ "$DEPLOYMENT_MODE" = "LOCAL" ]; then
+  # Add initial admin user to Database
+  echo "Adding test admin user for local development."
+  python ./joplin/manage.py loaddata scripts/local_admin_user.json
 fi
 
 exec "$@"

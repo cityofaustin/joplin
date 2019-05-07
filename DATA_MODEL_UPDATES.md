@@ -20,7 +20,7 @@ Make sure everything still works.
 * Remove all docker containers related to Joplin
 * Go back to a commit before any model changes.
 * run serve-local (doesn't add users)
-* run LOAD_DATA=on serve-local
+* run `scripts/serve-local.sh`
 * Once you can log in to wagtail, go to localhost:8000/django-admin/load
 * Load pages.json
 
@@ -36,7 +36,7 @@ Make sure everything still works.
 ---
 
 * Go back to a commit before any model changes.
-* run LOAD_DATA=on serve-local
+* run `scripts/serve-local.sh`
 * Make sure you can log in to localhost:8000
 * go to a commit with the model changes
 * run serve-local

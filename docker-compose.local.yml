@@ -17,7 +17,7 @@ services:
     volumes:
      - ".:/app"
     environment:
-      LOAD_DATA: $LOAD_DATA
+      LOAD_DATA: $LOAD_DATA # TODO: do something else with this?
       HEROKU_KEY: $HEROKU_KEY
       DEBUG: 1
       GUNICORN_CMD_ARGS: "--reload  --reload-engine=poll"
@@ -27,10 +27,10 @@ services:
       DATABASE_URL: "postgres://joplin@db:${JOPLIN_DB_PUBLIC_PORT}/joplin"
     depends_on:
      - "db"
-  # assets:
-  #   build:
-  #     context: .
-  #     dockerfile: Dockerfile.assets
-  #   volumes:
-  #     - "./joplin:/app/joplin"
-  #   entrypoint: sh docker-entrypoint.watchassets.sh
+  assets:
+    build:
+      context: .
+      dockerfile: Dockerfile.assets
+    volumes:
+      - "./joplin:/app/joplin"
+    entrypoint: sh docker-entrypoint.watchassets.sh

@@ -14,12 +14,6 @@ Make sure you have docker installed, then run:
 ./scripts/serve-local.sh
 ```
 
-If you can't log in to http://localhost:8000/admin/, you'll need to load a backup with a user, this can be done using:
-
-```
-LOAD_DATA=on ./scripts/serve-local.sh
-```
-
 By default we don't have any pages in the local DB, to load them in, visit http://localhost:8000/django-admin/load/ and select a backup from the fixture directory.
 
 At this point the database should be populated, but any media used on the site will be broken, to fix this run: `./scripts/download-media.sh`
@@ -43,7 +37,7 @@ If you're making schema changes, there are a few hoops to jump through. After ma
 - Update models and make/run migrations on a populated local db, commit the changed files
 - Change your working copy to a commit before the model updates and migrations
 - Clear out the db, one way to do this is removing the joplindb container
-- Run serve-local.sh with LOAD_DATA on
+- Run `scripts/serve-local.sh`
 - Shut down the server
 - Go back to a commit with the model updates
 - Run serve-local.sh without loading data (migrations should run during startup)

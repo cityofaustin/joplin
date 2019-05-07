@@ -305,7 +305,6 @@ function joplin_tag_application {
             DEBUG=1 \
             HEROKU_JANIS_APP_NAME="janis-staging" \
             JANIS_URL="https://janis-staging.herokuapp.com" \
-            LOAD_DATA="on" \
             STYLEGUIDE_URL="https://cityofaustin.github.io/digital-services-style-guide" \
             --app $HEROKU_NEW_APP_NAME;
 
