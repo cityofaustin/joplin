@@ -1,0 +1,6 @@
+version: '3'
+services:
+  app:
+    build:
+      context: "${GITHUB_URL}"
+      dockerfile: Dockerfile.migration_test # might have to change this

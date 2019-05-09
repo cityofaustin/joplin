@@ -12,19 +12,20 @@ if [ "$REBUILD" == "on" ]; then
   export JOPLIN_APP_PUBLIC_PORT=8000
 
   docker build --no-cache -f Dockerfile.base -t joplin-base .
-  docker-compose -f docker-compose.local.yml up --build
-elif [ "$MIGRATIONS_TEST" == "on" ]; then
+  docker-compose -f docker-compose.local.yml -f docker-compose.local_override.yml up --build
+elif [ "$MIGRATION_TEST" == "on" ]; then
   export COMPOSE_PROJECT_NAME=joplin_migration_test
   export JOPLIN_DB_PUBLIC_PORT=5434
   export JOPLIN_APP_PUBLIC_PORT=8001
+  export GITHUB_URL="https://github.com/cityofaustin/joplin.git#1836-migration-script"
 
-  docker build -f Dockerfile.base -t joplin-base . --build-arg MIGRATIONS_TEST=on
-  docker-compose -f docker-compose.local.yml up
+  docker build -f Dockerfile.base -t joplin-base-migration-test $GITHUB_URL
+  docker-compose -f docker-compose.local.yml -f docker-compose.migration_test_override.yml up
 else
   export COMPOSE_PROJECT_NAME=joplin
   export JOPLIN_DB_PUBLIC_PORT=5433
   export JOPLIN_APP_PUBLIC_PORT=8000
 
   docker build -f Dockerfile.base -t joplin-base .
-  docker-compose -f docker-compose.local.yml up
+  docker-compose -f docker-compose.local.yml -f docker-compose.local_override.yml up
 fi

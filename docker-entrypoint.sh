@@ -21,13 +21,23 @@ else
     echo "Running on production, start migration immediately."
 fi
 
+if [ "$MIGRATION_TEST" = "on" ]; then
+  # Load data during migration test
+  LOAD_DATA="on"
+fi
+
 # Run Data Migrations Only (Static files can remain local)
 python ./joplin/manage.py migrate --noinput
 
 if [ "$DEPLOYMENT_MODE" = "LOCAL" ]; then
   # Add initial admin user to Database
   echo "Adding test admin user for local development."
-  python ./joplin/manage.py loaddata scripts/local_admin_user.json
+  python ./joplin/manage.py loaddata ./joplin/db/data/local_admin_user.json
+fi
+
+if [ "$LOAD_DATA" = "on" ]; then
+  # Seed test data into Joplin
+  python ./joplin/manage.py loaddata ./joplin/db/data/*_main_datadump.json
 fi
 
 exec "$@"

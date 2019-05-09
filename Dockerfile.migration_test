@@ -1,0 +1,5 @@
+FROM joplin-base-migration-test
+
+ENV DEPLOYMENT_MODE "LOCAL"
+
+ENTRYPOINT ["./docker-entrypoint.sh"]
