@@ -1139,7 +1139,11 @@ CREATE TABLE public.base_servicepage (
     additional_content_es text,
     additional_content_vi text,
     steps text NOT NULL,
-    short_description text NOT NULL
+    short_description text NOT NULL,
+    steps_ar text,
+    steps_en text,
+    steps_es text,
+    steps_vi text
 );
 
 
@@ -3166,7 +3170,7 @@ COPY public.base_processpagetopic (id, page_id, topic_id) FROM stdin;
 -- Data for Name: base_servicepage; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY public.base_servicepage (page_ptr_id, created_at, updated_at, dynamic_content, additional_content, additional_content_ar, additional_content_en, additional_content_es, additional_content_vi, steps, short_description) FROM stdin;
+COPY public.base_servicepage (page_ptr_id, created_at, updated_at, dynamic_content, additional_content, additional_content_ar, additional_content_en, additional_content_es, additional_content_vi, steps, short_description, steps_ar, steps_en, steps_es, steps_vi) FROM stdin;
 \.
 
 
@@ -3554,6 +3558,7 @@ COPY public.django_migrations (id, app, name, applied) FROM stdin;
 206	base	0059_remove_servicepage_image	2019-04-18 03:06:19.758917+00
 207	base	0060_remove_informationpage_image	2019-04-18 03:17:26.002738+00
 208	base	0061_servicepage_short_description	2019-04-22 17:54:56.892526+00
+209	base	0062_auto_20190509_1742	2019-05-10 09:19:57.845247+00
 \.
 
 
@@ -3574,6 +3579,7 @@ herd5jn1g7p5h7o2jiwskn4gt10we3zf	NTYyMGQ1M2E2ZTVmNTI2MzFjM2RhM2U2MTczYzNlYjM5ZmF
 cj7drg7fyaurvkudpnmynozi075tsicl	NTYyMGQ1M2E2ZTVmNTI2MzFjM2RhM2U2MTczYzNlYjM5ZmFhZWVjMDp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiJiNTlkMDFmMzU1OTY5OTU2YTVjODNhNDU2MGIwNzc4NTMyY2ZkNmEzIn0=	2019-04-24 12:54:59.197303+00
 lkl846wo3t9xrk8y7o570j4b4v3cspg4	NTYyMGQ1M2E2ZTVmNTI2MzFjM2RhM2U2MTczYzNlYjM5ZmFhZWVjMDp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiJiNTlkMDFmMzU1OTY5OTU2YTVjODNhNDU2MGIwNzc4NTMyY2ZkNmEzIn0=	2019-05-02 03:16:53.688461+00
 y8cgz382xydb2g9nwy5jmk0eto5veic3	NTYyMGQ1M2E2ZTVmNTI2MzFjM2RhM2U2MTczYzNlYjM5ZmFhZWVjMDp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiJiNTlkMDFmMzU1OTY5OTU2YTVjODNhNDU2MGIwNzc4NTMyY2ZkNmEzIn0=	2019-05-06 17:53:30.419432+00
+j9082pk2gn5ex2gjhg5sib6npqem6rl7	NTYyMGQ1M2E2ZTVmNTI2MzFjM2RhM2U2MTczYzNlYjM5ZmFhZWVjMDp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiJiNTlkMDFmMzU1OTY5OTU2YTVjODNhNDU2MGIwNzc4NTMyY2ZkNmEzIn0=	2019-05-24 09:18:26.385805+00
 \.
 
 
@@ -3599,7 +3605,7 @@ COPY public.taggit_taggeditem (id, object_id, content_type_id, tag_id) FROM stdi
 --
 
 COPY public.users_user (id, password, last_login, is_superuser, first_name, last_name, is_staff, is_active, date_joined, email) FROM stdin;
-1	pbkdf2_sha256$100000$9fpvtivuWOYg$rOB3vDHoYJyEYs35zNdIJ0BmHvR8n5daAVwz7HoeC2Q=	2019-04-22 17:53:30.410567+00	t	Austin	Pantherpants	t	t	2017-12-06 16:13:48.662+00	admin@austintexas.io
+1	pbkdf2_sha256$100000$9fpvtivuWOYg$rOB3vDHoYJyEYs35zNdIJ0BmHvR8n5daAVwz7HoeC2Q=	2019-05-10 09:18:26.349571+00	t	Austin	Pantherpants	t	t	2017-12-06 16:13:48.662+00	admin@austintexas.io
 \.
 
 
@@ -3983,7 +3989,7 @@ SELECT pg_catalog.setval('public.django_content_type_id_seq', 57, true);
 -- Name: django_migrations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.django_migrations_id_seq', 208, true);
+SELECT pg_catalog.setval('public.django_migrations_id_seq', 209, true);
 
 
 --
