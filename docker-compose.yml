@@ -3,15 +3,15 @@ services:
   db:
     image: postgres:10
     ports:
-      - "${JOPLIN_DB_PUBLIC_PORT}:${JOPLIN_DB_PUBLIC_PORT}" # previously 5432:5432
+      - "${JOPLIN_DB_HOST_PORT}:${JOPLIN_DB_CONTAINER_PORT}" # previously 5432:5432
     environment:
       POSTGRES_DB: 'joplin'
       POSTGRES_USER: 'joplin'
-    command: -p $JOPLIN_DB_PUBLIC_PORT
+    command: -p ${JOPLIN_DB_CONTAINER_PORT}
   app:
-    # build settings are set in override file
+    image: $DOCKER_IMAGE
     ports:
-      - "${JOPLIN_APP_PUBLIC_PORT}:80" # previously 8000:80
+      - "${JOPLIN_APP_HOST_PORT}:${JOPLIN_APP_CONTAINER_PORT}" # previously 8000:80
     environment:
       LOAD_DATA: $LOAD_DATA
       MIGRATION_TEST: $MIGRATION_TEST
@@ -21,7 +21,7 @@ services:
       JANIS_URL: http://localhost:3000
       STYLEGUIDE_URL: https://cityofaustin.github.io/digital-services-style-guide
       DEPLOYMENT_MODE: "LOCAL"
-      DATABASE_URL: "postgres://joplin@db:${JOPLIN_DB_PUBLIC_PORT}/joplin"
+      DATABASE_URL: "postgres://joplin@db:${JOPLIN_DB_CONTAINER_PORT}/joplin"
     depends_on:
       - "db"
   # "assets" service is used in docker-compose.local_override.yml

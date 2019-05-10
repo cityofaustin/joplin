@@ -23,17 +23,23 @@ elif [ "$MIGRATION_TEST" == "on" ]; then
   export COMPOSE_PROJECT_NAME=joplin_migration_test
   export JOPLIN_DB_PUBLIC_PORT=5434
   export JOPLIN_APP_PUBLIC_PORT=8001
-  export TARGET=joplin-migration-test
+  export DOCKER_TARGET=joplin-migration-test
   export GITHUB_URL="https://github.com/cityofaustin/joplin.git#1836-migration-script"
 
-  docker build -f Dockerfile.app -t migration-test --target $TARGET $GITHUB_URL
+  docker build -f Dockerfile.app -t joplin_app:migration-test --target $DOCKER_TARGET $GITHUB_URL
   docker-compose build -f docker-compose.yml -f docker-compose.migration_test_override.yml up
 else
-  export COMPOSE_PROJECT_NAME=joplin
-  export JOPLIN_DB_PUBLIC_PORT=5433
-  export JOPLIN_APP_PUBLIC_PORT=8000
-  export TARGET=joplin-local
+  # Env Vars for use in Joplin
+  export JOPLIN_DB_HOST_PORT=5433
+  export JOPLIN_DB_CONTAINER_PORT=5432
+  export JOPLIN_APP_HOST_PORT=8000
+  export JOPLIN_APP_CONTAINER_PORT=80
 
-  docker build -f Dockerfile.app -t local --target $TARGET .
+  # Build Args for use during build process
+  export COMPOSE_PROJECT_NAME=joplin
+  export DOCKER_IMAGE="joplin_app:local"
+  export DOCKER_TARGET=joplin-local
+
+  docker build -f Dockerfile.app -t $DOCKER_IMAGE --target $DOCKER_TARGET .
   docker-compose -f docker-compose.yml -f docker-compose.local_override.yml up
 fi
