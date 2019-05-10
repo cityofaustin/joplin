@@ -1,6 +1,8 @@
 version: '3'
+# Build from github branch for joplin-migration-test
 services:
   app:
     build:
-      context: "${GITHUB_URL}"
-      dockerfile: Dockerfile.migration_test # might have to change this
+      dockerfile: Dockerfile.app
+      target: $TARGET
+      context: $GITHUB_URL

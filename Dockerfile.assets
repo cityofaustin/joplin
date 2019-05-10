@@ -1,10 +1,9 @@
 FROM node:10.8.0-slim
 
 RUN mkdir /app
+WORKDIR /app
 
 COPY "$PWD/joplin" /app/joplin
-COPY "$PWD/docker-entrypoint.watchassets.sh" /app/docker-entrypoint.watchassets.sh
+COPY "$PWD/docker-entrypoint.assets.sh" /app/docker-entrypoint.assets.sh
 
-WORKDIR /app/joplin
-RUN yarn
-WORKDIR /app
+ENTRYPOINT ["./docker-entrypoint.assets.sh"]

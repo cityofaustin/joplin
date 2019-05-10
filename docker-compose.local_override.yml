@@ -1,8 +1,16 @@
-version: '3'
+version: '3.7'
+# Mount a volume and add "assets" service for joplin-local
 services:
   app:
     build:
+      dockerfile: Dockerfile.app
+      target: $TARGET
       context: .
-      dockerfile: Dockerfile.local
     volumes:
      - ".:/app"
+  assets:
+    build:
+      context: .
+      dockerfile: Dockerfile.assets
+    volumes:
+      - "./joplin:/app/joplin"

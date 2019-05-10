@@ -1,4 +1,4 @@
-version: '3'
+version: '3.7'
 services:
   db:
     image: postgres:10
@@ -9,11 +9,11 @@ services:
       POSTGRES_USER: 'joplin'
     command: -p $JOPLIN_DB_PUBLIC_PORT
   app:
-    # build configs are located in override file
+    # build settings are set in override file
     ports:
-     - "${JOPLIN_APP_PUBLIC_PORT}:80" # previously 8000:80
+      - "${JOPLIN_APP_PUBLIC_PORT}:80" # previously 8000:80
     environment:
-      LOAD_DATA: $LOAD_DATA # TODO: do something else with this?
+      LOAD_DATA: $LOAD_DATA
       MIGRATION_TEST: $MIGRATION_TEST
       HEROKU_KEY: $HEROKU_KEY
       DEBUG: 1
@@ -23,11 +23,5 @@ services:
       DEPLOYMENT_MODE: "LOCAL"
       DATABASE_URL: "postgres://joplin@db:${JOPLIN_DB_PUBLIC_PORT}/joplin"
     depends_on:
-     - "db"
-  # assets:
-  #   build:
-  #     context: .
-  #     dockerfile: Dockerfile.assets
-  #   volumes:
-  #     - "./joplin:/app/joplin"
-  #   entrypoint: sh docker-entrypoint.watchassets.sh
+      - "db"
+  # "assets" service is used in docker-compose.local_override.yml
