@@ -9,7 +9,7 @@ services:
       POSTGRES_USER: 'joplin'
     command: -p ${JOPLIN_DB_CONTAINER_PORT}
   app:
-    image: $DOCKER_IMAGE
+    image: $DOCKER_IMAGE_APP
     ports:
       - "${JOPLIN_APP_HOST_PORT}:${JOPLIN_APP_CONTAINER_PORT}" # previously 8000:80
     environment:

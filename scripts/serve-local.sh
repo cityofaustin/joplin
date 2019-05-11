@@ -37,9 +37,16 @@ else
 
   # Build Args for use during build process
   export COMPOSE_PROJECT_NAME=joplin
-  export DOCKER_IMAGE="joplin_app:local"
-  export DOCKER_TARGET=joplin-local
+  export DOCKER_IMAGE_APP="joplin_app:local"
+  export DOCKER_IMAGE_ASSETS="joplin_assets:local"
+  export DOCKER_TARGET_APP=joplin-local
 
-  docker build -f Dockerfile.app -t $DOCKER_IMAGE --target $DOCKER_TARGET .
+  echo "Rebuilding ${DOCKER_IMAGE_APP}"
+  docker build -f Dockerfile.app -t $DOCKER_IMAGE_APP --target $DOCKER_TARGET_APP .
+  echo "Rebuilding ${DOCKER_IMAGE_ASSETS}"
+  docker build -f Dockerfile.assets -t $DOCKER_IMAGE_ASSETS .
+  echo "Stopping existing containers"
+  docker-compose -f docker-compose.yml -f docker-compose.local_override.yml stop
+  echo "Spinning up containers"
   docker-compose -f docker-compose.yml -f docker-compose.local_override.yml up
 fi
