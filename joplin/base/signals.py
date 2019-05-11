@@ -85,7 +85,15 @@ def create_build_aws():
                             {
                                 'name': 'AWS_CF_DISTRO',
                                 'value': settings.AWS_CLOUDFRONT_DISTRIBUTION #'E455RV7LE5UVG'
-                            }
+                            },
+                            {
+                                'name': 'CMS_API',
+                                'value': settings.JANIS_CMS_API  # 'https://joplin.herokuapp.com/api/graphql'
+                            },
+                            {
+                                'name': 'CMS_MEDIA',
+                                'value': settings.JANIS_CMS_MEDIA  # 'https://joplin-austin-gov.s3.amazonaws.com/media'
+                            },
                         ]
                     }
                 ]
