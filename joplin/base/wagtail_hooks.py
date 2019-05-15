@@ -24,8 +24,11 @@ def before_edit_page(request, page):
 def configure_main_menu(request, menu_items):
     new_items = []
 
-    contacts_item = MenuItem('', "/admin/snippets/base/contact/", classnames="icon icon-group", order=900)
+    contacts_item = MenuItem('', "/admin/snippets/base/contact/", classnames="icon icon-group", order=800)
     new_items.append(contacts_item)
+
+    locations_item = MenuItem('', "/admin/snippets/base/location/", classnames="icon icon-locations", order=900)
+    new_items.append(locations_item)
 
     for item in menu_items:
         if item.name in ('home', 'images'):
