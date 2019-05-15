@@ -59,7 +59,9 @@ ENV IS_MIGRATION_TEST "true"
 FROM joplin-local as joplin-heroku
 
 # TODO
+## Just install client is important, PRs would need it
 # need to run yarn build?
+    # Yes? node_modules
 # use different entrypoint?
 # Why is there an entrypoint-prod yet the normal entrypoint has logic to handle production things?
 
