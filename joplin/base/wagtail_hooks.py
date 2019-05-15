@@ -23,6 +23,10 @@ def before_edit_page(request, page):
 @hooks.register('construct_main_menu')
 def configure_main_menu(request, menu_items):
     new_items = []
+
+    contacts_item = MenuItem('', "/admin/snippets/base/contact/", classnames="icon icon-group", order=900)
+    new_items.append(contacts_item)
+
     for item in menu_items:
         if item.name in ('home', 'images'):
             item.label = ''
