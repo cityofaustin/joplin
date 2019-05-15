@@ -73,3 +73,11 @@
     height: 40px;
     background-size: 40px 40px;
 }
+
+.icon-locations:before {
+    background-image: url('../static/images/locations_icon_cacaca.svg');
+    content: '';
+    width: 40px !important;
+    height: 40px;
+    background-size: 40px 40px;
+}
