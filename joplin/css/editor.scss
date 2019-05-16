@@ -13,10 +13,6 @@
   background-color: #eee;
 }
 
-footer {
-  display: none;
-}
-
 .object-help.help {
   opacity: 1 !important;
   width: auto;
@@ -58,4 +54,10 @@ fieldset {
 
 label {
   width: auto !important;
+}
+
+.page-editor {
+  footer {
+    display: none;
+  }
 }

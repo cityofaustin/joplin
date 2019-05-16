@@ -1139,7 +1139,11 @@ CREATE TABLE public.base_servicepage (
     additional_content_es text,
     additional_content_vi text,
     steps text NOT NULL,
-    short_description text NOT NULL
+    short_description text NOT NULL,
+    steps_ar text,
+    steps_en text,
+    steps_es text,
+    steps_vi text
 );
 
 
@@ -3166,7 +3170,7 @@ COPY public.base_processpagetopic (id, page_id, topic_id) FROM stdin;
 -- Data for Name: base_servicepage; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY public.base_servicepage (page_ptr_id, created_at, updated_at, dynamic_content, additional_content, additional_content_ar, additional_content_en, additional_content_es, additional_content_vi, steps, short_description) FROM stdin;
+COPY public.base_servicepage (page_ptr_id, created_at, updated_at, dynamic_content, additional_content, additional_content_ar, additional_content_en, additional_content_es, additional_content_vi, steps, short_description, steps_ar, steps_en, steps_es, steps_vi) FROM stdin;
 \.
 
 
@@ -3554,6 +3558,7 @@ COPY public.django_migrations (id, app, name, applied) FROM stdin;
 206	base	0059_remove_servicepage_image	2019-04-18 03:06:19.758917+00
 207	base	0060_remove_informationpage_image	2019-04-18 03:17:26.002738+00
 208	base	0061_servicepage_short_description	2019-04-22 17:54:56.892526+00
+209	base	0062_auto_20190510_0948	2019-05-15 07:28:16.597564+00
 \.
 
 
@@ -3983,7 +3988,7 @@ SELECT pg_catalog.setval('public.django_content_type_id_seq', 57, true);
 -- Name: django_migrations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.django_migrations_id_seq', 208, true);
+SELECT pg_catalog.setval('public.django_migrations_id_seq', 209, true);
 
 
 --

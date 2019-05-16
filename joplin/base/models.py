@@ -164,6 +164,10 @@ class ServicePage(JanisPage):
     )
 
     content_panels = [
+        FieldPanel('title_en'),
+        FieldPanel('title_es'),
+        FieldPanel('title_ar'),
+        FieldPanel('title_vi'),
         FieldPanel('short_description'),
         InlinePanel('topics', label='Topics'),
         StreamFieldPanel('steps'),
