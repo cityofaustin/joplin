@@ -1,8 +1,5 @@
-version: '3'
-# Build from github branch for joplin-migration-test
+version: '3.7'
+# Override gunicorn CMD
 services:
   app:
-    build:
-      dockerfile: Dockerfile.app
-      target: $TARGET
-      context: $GITHUB_URL
+    command: ["echo", "\"No server needed at this step of the migration test: exiting app\""]
