@@ -3999,6 +3999,14 @@
 },
 {
   "model": "sessions.session",
+  "pk": "w5e3x5ffogef253mhqkv20k8s6pjk05g",
+  "fields": {
+    "session_data": "NTYyMGQ1M2E2ZTVmNTI2MzFjM2RhM2U2MTczYzNlYjM5ZmFhZWVjMDp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiJiNTlkMDFmMzU1OTY5OTU2YTVjODNhNDU2MGIwNzc4NTMyY2ZkNmEzIn0=",
+    "expire_date": "2019-05-30T05:45:27.819Z"
+  }
+},
+{
+  "model": "sessions.session",
   "pk": "wsqmu6pjodad9u4w0qkw7it6p6s13ono",
   "fields": {
     "session_data": "NjU3YWZiYjhmNzc3MTY1NDgxMzg0ODNkNTBjZjUwMjMwMzVkY2MxZDp7Il9hdXRoX3VzZXJfaWQiOiI4IiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiI4N2UxYzM0Y2MzNWEzNjMxYWE0ZDg2OTc3NzgyYWMwNGRkM2EyYTcyIn0=",
