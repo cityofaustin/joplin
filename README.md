@@ -12,7 +12,7 @@ Joplin is the Authoring Interface for adding and editing content for alpha.austi
 
 ## Index
 - [How to Run Locally](#how-to-run-locally)
-- [How to Make New Model Migrations](#how-to-make-new-migrations)
+- [Updating the Data Model](#updating-the-data-model)
 - [Useful Commands](#useful-commands)
 - [Design](#design)
 - [Deployments Part 1: New Pipeline](#deployments-part-1-new-pipeline)
@@ -28,6 +28,7 @@ First, install docker (version 18.09 or greater) and clone this repo.
 ./scripts/serve-local.sh
 ```
   - This will get you started with one admin user and no data.
+  - It will automatically run all django migrations.
   - It will start up 3 docker containers: `joplin_app_1` (for running the CMS web server), `joplin_assets_1` (for managing assets), and `joplin_db_1` (for the postgres database).
   - Viewing your docker logs, you can tell that your server is running successfully when you see these listeners:
     <img src="/README/server_success.png" align="middle" height="70" >
@@ -63,6 +64,33 @@ To load in data from smuggler follow these steps.
 5. At this point the database should be populated, but any media used on the site will be broken, to fix this run: `./scripts/download-media.sh`
 
 ---
+## Updating the Data Model
+
+1. Have a local Joplin instance running (populated with data probably).
+2. Have an up-to-date "janis:local" docker image available locally.
+3. Update your data model in `joplin/base/models.py`.
+4. Make a new migration with:
+    - `docker exec -it joplin_app_1 python joplin/manage.py makemigrations`
+5. Run that migration with:
+    - `docker exec -it joplin_app_1 python joplin/manage.py migrate`
+6. Test that your migration works with
+    - `./scripts/migration-test.sh`    
+
+**About migration-test script**
+
+The migration-test script makes sure that your migration changes will work even when they are applied to a database running the last migration. This is basically a dry run of a merge to the master branch of Joplin. If they do work, then the script will create a new datadump (to be used by `LOAD_DATA="on"`) with the new migrations applied. This will prevent future datadump schema version conflicts (which will happen if your datadump is from a different migration version than the Joplin instance its going into).
+
+Here's what `migration-test.sh` does at a high level:
+
+1. Creates a database from the last working Joplin migration
+    - This is accomplished by running Joplin migrations and data loading from the joplin_app image tagged as "cityofaustin/joplin_app:latest-master" from the City of Austin's dockerhub.
+2. Runs your new migrations on the old database
+    - The previous joplin_app container shuts down (but the joplin_db stays up). Now a new joplin_app container (built from your local Joplin directory, tagged as "joplin_app:local") runs against the old joplin_db. The new migrations are automatically applied through joplin_app's entrypoint.
+3. Spins up a local Janis and Joplin for you to test manually.
+    - Make sure that Joplin and Janis work as expected and that nothing breaks on Janis.
+    - A command line prompt will ask if the migration worked. If you enter "y", then a new datadump fixture will replace the old datadump fixture in joplin/db/data. If you enter "n", then the migration_test containers will shut down and not replace your datadump fixture.
+
+---
 ## Useful Commands
 - Shut down all joplin containers:
   - `source scripts/docker-helpers.sh; stop_project_containers joplin`
@@ -75,52 +103,6 @@ To load in data from smuggler follow these steps.
     ```
 - Access the Graphql API
   - `localhost:8000/api/graphiql`
-
----
-## How to Make New Migrations
-
-The LOAD_DATA flag will load our backups from the django-dbbackup module. This contains full backups including users, and is not intended to migrate data between environments. In order to keep the size of this repository from ballooning out of control, local backups are made without any page data. Data can be backed up using django-smuggler. In order to load page data locally, visit http://localhost:8000/django-admin/load/ and select a backup from the fixture directory.
-
-If you're making schema changes, there are a few hoops to jump through. After making migrations and ensuring they work properly with a populated DB, you'll want to clear out the database and make a new backup with the updated schema. One way to do this is:
-
-- Update models and make/run migrations on a populated local db, commit the changed files
-- Change your working copy to a commit before the model updates and migrations
-- Clear out the db, one way to do this is removing the joplindb container
-- Run `scripts/serve-local.sh`
-- Shut down the server
-- Go back to a commit with the model updates
-- Run serve-local.sh without loading data (migrations should run during startup)
-- Make a dbbackup with the new schema
-
-By following this, we should be able to avoid dbbackup schema version conflicts.
-
-### Rebuild Janis on Heroku when new pages are published
-
-You can set environment variables to get Heroku to rebuild Janis when pages are published. For example, to rebuild `janis-staging` on heroku when a page is published locally, run things like this:
-
-```
-HEROKU_JANIS_APP_NAME=janis-staging ./scripts/serve-local.sh
-```
-
-## Create migrations
-See [Data Model Updates](DATA_MODEL_UPDATES.md)
-
-While the server is running, run the following commands:
-
-```
-docker exec --interactive --tty joplin python joplin/manage.py makemigrations
-docker exec --interactive --tty joplin python joplin/manage.py migrate
-```
-
-### Updating the models (for example, adding a new page model)
-
-1. Clear out your docker containers and start fresh with `./scripts/serve-local.sh`
-2. Load the current backup `LOAD_DATA=on ./scripts/serve-local.sh`
-3. Make your changes to `models.py`
-4. Run `makemigrations` and `migrate` - see "Create Migrations" above
-5. Make an example page
-6. Make a new backup
-7. Try starting fresh with your new model/migration/backup
 
 ---
 ## Design
@@ -162,6 +144,14 @@ The database defaults to version 10 of postgres. No password is set up, since th
 The master branch (staging app, joplin-staging.herokuapp.com) and production branch (production app, joplin-production.herokuapp.com) upload static files to an S3 bucket (both share the same bucket), but have separate databases.
 
 Note: The containers are not built at the same time; for this purpose, joplin will wait and display a 'database not available' message in a loop until the database is up and ready. This is because the DB container takes a little longer to build and set up locally, and joplin has to wait before it can run the django migrations locally.
+
+**Rebuild Janis on Heroku when new pages are published**
+
+You can set environment variables to get Heroku to rebuild Janis when pages are published. For example, to rebuild `janis-staging` on heroku when a page is published locally, run things like this:
+
+```
+HEROKU_JANIS_APP_NAME=janis-staging ./scripts/serve-local.sh
+```
 
 ## Deployments Part 2: Travis CI
 
