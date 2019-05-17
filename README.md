@@ -1,36 +1,85 @@
 # Joplin - CMS for the City of Austin
 
-This is where you'll find the CMS for the City of Austin and atx.gov
+Joplin is the Authoring Interface for adding and editing content for alpha.austin.gov.
 
-## Background
+<img src="/README/authoring_interface.png" align="middle" width="500" >
 
-If you wanna do stuff in the CMS, then you will need these commands.
+<br>The public facing frontend (Janis) displays the content that is published in Joplin.
 
-## Run locally
+<img src="/README/janis.png" align="middle" width="500" >
 
-Make sure you have docker installed, then run:
+<br>Joplin is built using Wagtail, a Content Management System (CMS) using Python's django framework.
 
+## Index
+- [How to Run Locally](#how-to-run-locally)
+- [How to Make New Model Migrations](#how-to-make-new-migrations)
+- [Useful Commands](#useful-commands)
+- [Design](#design)
+- [Deployments Part 1: New Pipeline](#deployments-part-1:-new-pipeline)
+- [Deployments Part 2: Travis CI](#deployments-part-2:-travis-ci)
+
+---
+## How to Run Locally
+
+First, install docker (version 18.09 or greater) and clone this repo.
+
+**Run without data**
 ```
 ./scripts/serve-local.sh
 ```
+  - This will get you started with one admin user and no data.
+  - It will start up 3 docker containers: `joplin_app_1` (for running the CMS web server), `joplin_assets_1` (for managing assets), and `joplin_db_1` (for the postgres database).
+  - Viewing your docker logs, you can tell that your server is running successfully when you see these listeners:
+    <img src="/README/server_success.png" align="middle" height="70" >
+  - Your Joplin instance will be accessible at http://localhost:8000/admin with the credentials user: `admin@austintexas.io`, pw: `x`
 
-By default we don't have any pages in the local DB, to load them in, visit http://localhost:8000/django-admin/load/ and select a backup from the fixture directory.
-
-At this point the database should be populated, but any media used on the site will be broken, to fix this run: `./scripts/download-media.sh`
-
-**NOTE** The first time docker-compose runs it builds new images, every time after the images are not rebuilt. To clear the cache and rebuild add `REBUILD=on`.
-
-**NOTE** You may encounter issues with the script exiting prematurely if you haven't installed the [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli#download-and-install) and run `heroku login`.
+**Run with data**
 
 ```
-REBUILD=on ./scripts/serve-local.sh
+LOAD_DATA="on" ./scripts/serve-local.sh
 ```
+  - This will add some test content (from `joplin/db/data/migration_datadump_[latest migration].json`)
+  - Images are also not stored in this repo, and can instead be downloaded using `./scripts/download-media.sh`. This will parse a backup file from the db/smuggler directory and place all referenced images into the local media folder.
 
-### Managing Local DB
+**Run + Rebuild without cached image layer**
+
+If something goes wrong with your docker builds and you want to start over without any cached layers, you can run:
+```
+HARD_REBUILD="on" ./scripts/serve-local.sh
+```
+  - `LOAD_DATA="on"` can also be used with `HARD_REBUILD="on"`
+  - If worse comes to worse, you can always delete your local joplin docker images with `docker rmi`.
+
+**Run with custom smuggler data**
+
+If you don't want to load the default data used in `LOAD_DATA="on"`, you have to ability to source data from any environment you'd like using a django plugin called [smuggler](https://github.com/semente/django-smuggler).
+
+To load in data from smuggler follow these steps.
+1. Download a json datadump from the Joplin deployment of your choosing by visiting `[joplin URL]/django-admin/dump`.
+2. Place your datadump in the smuggler fixtures directory `joplin/db/smuggler`
+3. Start a data-less empty local Joplin instance with `./scripts/serve-local.sh`.
+    - Note! If you previously loaded data locally, make sure to delete your existing `joplin_db_1` container before this step.
+4. Go to your local Joplin's smuggler interface at http://localhost:8000/django-admin/load/. Select the data file that you want to load.
+5. At this point the database should be populated, but any media used on the site will be broken, to fix this run: `./scripts/download-media.sh`
+
+---
+## Useful Commands
+- Shut down all joplin containers:
+  - `source scripts/docker-helpers.sh; stop_project_containers joplin`
+- Delete all joplin containers:
+  - `scripts/docker-helpers.sh; delete_project_containers joplin`
+- Create New App:
+  - ```
+    APP_NAME=app_name_goes_here
+    docker exec joplin /bin/bash -c "mkdir -p \"$APP_NAME\" && cd joplin && python manage.py startapp \"$APP_NAME\""
+    ```
+- Access the Graphql API
+  - `localhost:8000/api/graphiql`
+
+---
+## How to Make New Migrations
 
 The LOAD_DATA flag will load our backups from the django-dbbackup module. This contains full backups including users, and is not intended to migrate data between environments. In order to keep the size of this repository from ballooning out of control, local backups are made without any page data. Data can be backed up using django-smuggler. In order to load page data locally, visit http://localhost:8000/django-admin/load/ and select a backup from the fixture directory.
-
-Images are also not stored in this repo, and can instead be downloaded using `./scripts/download-media.sh`. This will parse a backup file from the db/smuggler directory and place all referenced images into the local media folder.
 
 If you're making schema changes, there are a few hoops to jump through. After making migrations and ensuring they work properly with a populated DB, you'll want to clear out the database and make a new backup with the updated schema. One way to do this is:
 
@@ -53,16 +102,6 @@ You can set environment variables to get Heroku to rebuild Janis when pages are 
 HEROKU_JANIS_APP_NAME=janis-staging ./scripts/serve-local.sh
 ```
 
-`HEROKU_KEY` is read from the Heroku CLI. If you don't have the CLI installed or it's unconfigured, you'll need to set the `HEROKU_KEY` environment variable when running. You can check to see if you're logged in by running `heroku auth:whoami`.
-
-#### Access the admin
-
-You can access the admin at `localhost:8000/admin` with the credentials `admin@austintexas.io`/`x`
-
-#### Access the API
-
-You can access a GraphQL API at `localhost:8000/api/graphiql`
-
 ## Create migrations
 See [Data Model Updates](DATA_MODEL_UPDATES.md)
 
@@ -71,14 +110,6 @@ While the server is running, run the following commands:
 ```
 docker exec --interactive --tty joplin python joplin/manage.py makemigrations
 docker exec --interactive --tty joplin python joplin/manage.py migrate
-```
-
-### Update DB Backups
-
-While the server is running, after running migrations, run the following command:
-
-```
-docker exec --interactive --tty joplin python joplin/manage.py dbbackup
 ```
 
 ### Updating the models (for example, adding a new page model)
@@ -91,7 +122,19 @@ docker exec --interactive --tty joplin python joplin/manage.py dbbackup
 6. Make a new backup
 7. Try starting fresh with your new model/migration/backup
 
-## Update: New deployment pipeline
+---
+## Design
+
+#### icons
+
+To get a full set of icons that Wagtail has available you'll need to upload [Wagtail's icomoon icon definitions](https://raw.githubusercontent.com/wagtail/wagtail/master/wagtail/admin/static_src/wagtailadmin/fonts/wagtail-icomoon.json) to the [icomoon web app](https://icomoon.io/app/). Make sure you're uploading the icon definitions for the version of wagtail we're using.
+
+#### Adding Scripts/Styles
+
+We're using webpack to bundle syles and scripts, and webpack_loader to include them in our templates. To create a new bundle it should be defined as an entry in `webpack.build.js` and `webpack.dev.js`, then included in a template using `{% load render_bundle from webpack_loader %}` and `{% render_bundle 'YOUR_BUNDLE_NAME_HERE' %}`.
+
+---
+## Deployments Part 1: New Pipeline
 
 The team is currently working on a new deployment pipeline using best practices for continuous integration, backups, data persistence and deployment accountability. As of this moment only the local, staging and production environments have data persistence, while PR (review) apps are still using Heroku's (non-persisted) pipeline until new updates are made in the next few weeks.
 
@@ -120,24 +163,7 @@ The master branch (staging app, joplin-staging.herokuapp.com) and production bra
 
 Note: The containers are not built at the same time; for this purpose, joplin will wait and display a 'database not available' message in a loop until the database is up and ready. This is because the DB container takes a little longer to build and set up locally, and joplin has to wait before it can run the django migrations locally.
 
-## Create new app
-
-```
-APP_NAME=app_name_goes_here
-docker exec joplin /bin/bash -c "mkdir -p \"$APP_NAME\" && cd joplin && python manage.py startapp \"$APP_NAME\""
-```
-
-## Design
-
-#### icons
-
-To get a full set of icons that Wagtail has available you'll need to upload [Wagtail's icomoon icon definitions](https://raw.githubusercontent.com/wagtail/wagtail/master/wagtail/admin/static_src/wagtailadmin/fonts/wagtail-icomoon.json) to the [icomoon web app](https://icomoon.io/app/). Make sure you're uploading the icon definitions for the version of wagtail we're using.
-
-#### Adding Scripts/Styles
-
-We're using webpack to bundle syles and scripts, and webpack_loader to include them in our templates. To create a new bundle it should be defined as an entry in `webpack.build.js` and `webpack.dev.js`, then included in a template using `{% load render_bundle from webpack_loader %}` and `{% render_bundle 'YOUR_BUNDLE_NAME_HERE' %}`.
-
-# **Deployments with Travis CI**
+## Deployments Part 2: Travis CI
 
 We currently use Travis CI to manage and customize our deployments to our cloud infrastructure, there are two files that govern this process:
 

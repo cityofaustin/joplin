@@ -14,7 +14,6 @@ services:
       - "${JOPLIN_APP_HOST_PORT}:${JOPLIN_APP_CONTAINER_PORT}" # previously 8000:80
     environment:
       LOAD_DATA: $LOAD_DATA
-      MIGRATION_TEST: $MIGRATION_TEST
       HEROKU_KEY: $HEROKU_KEY
       DEBUG: 1
       JANIS_URL: $JANIS_URL
