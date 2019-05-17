@@ -15,8 +15,8 @@ Joplin is the Authoring Interface for adding and editing content for alpha.austi
 - [How to Make New Model Migrations](#how-to-make-new-migrations)
 - [Useful Commands](#useful-commands)
 - [Design](#design)
-- [Deployments Part 1: New Pipeline](#deployments-part-1:-new-pipeline)
-- [Deployments Part 2: Travis CI](#deployments-part-2:-travis-ci)
+- [Deployments Part 1: New Pipeline](#deployments-part-1-new-pipeline)
+- [Deployments Part 2: Travis CI](#deployments-part-2-travis-ci)
 
 ---
 ## How to Run Locally
