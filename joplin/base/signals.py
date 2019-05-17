@@ -46,6 +46,8 @@ def create_build_aws(instance):
             - The name of the distribution for production.
             - IE: E455RV7LE5UVG
     """
+    print("create_build_aws() Starting task")
+    logger.debug("create_build_aws() Starting task")
 
     slack_message = ""
 
@@ -53,6 +55,9 @@ def create_build_aws(instance):
         slack_message = "'%s' was published by %s " % (instance.title, instance.owner.username)
     except:
         slack_message = ""
+
+    print("create_build_aws() Message: " + slack_message)
+    logger.debug("create_build_aws() Message: " + slack_message)
 
     if(settings.DEPLOYMENT_MODE in ["PRODUCTION", "STAGING"]):
 
@@ -157,6 +162,7 @@ def create_build(heroku, app, url, checksum=None, version=None, buildpack_urls=N
 
 @receiver(page_published)
 def page_published_signal(sender, **kwargs):
+    print("Page published")
     logger.debug(f'page_published {sender}')
     #create_build_if_configured()
     create_build_aws(kwargs['instance'])
@@ -164,6 +170,7 @@ def page_published_signal(sender, **kwargs):
 
 @receiver(page_unpublished)
 def page_unpublished_signal(sender, **kwargs):
+    print("Page unpublished")
     logger.debug(f'page_unpublished {sender}')
     #create_build_if_configured()
     create_build_aws(kwargs['instance'])
