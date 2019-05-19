@@ -8,4 +8,5 @@ function get_env {
     return "prod"
   else
     return "dev"
+  fi
 }
