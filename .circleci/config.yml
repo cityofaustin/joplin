@@ -3,11 +3,10 @@ version: 2.1
 jobs:
   build:
     working_directory: ~/project
-    machine: true # Or can I find a container that has all my stuff pre-built on it?
+    machine:
+      docker_layer_caching: true
     steps:
       - checkout
-      - setup_remote_docker:
-          docker_layer_caching: true
       - run:
           name: "Build Joplin Docker Image"
           command: bash ./.circleci/build.sh
