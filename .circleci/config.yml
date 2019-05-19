@@ -8,5 +8,17 @@ jobs:
       - checkout
       - run: docker login -u $DOCKER_USER -p $DOCKER_PASS
       - run:
-        name: "Build Joplin Docker Image for << parameters.DEPLOY_ENV >>"
-        command: bash ./.circleci/build.sh << parameters.DEPLOY_ENV >>
+        name: "Build Joplin Docker Image"
+        command: bash ./.circleci/build.sh
+
+workflows:
+  version: 2.1
+  build-and-deploy:
+    jobs:
+      - build:
+          filters:
+            branches:
+              # Just for test purposes
+              ignore:
+                - master
+                - production
