@@ -6,10 +6,11 @@ jobs:
     machine: true # Or can I find a container that has all my stuff pre-built on it?
     steps:
       - checkout
-      - run: docker login -u $DOCKER_USER -p $DOCKER_PASS
+      - setup_remote_docker:
+          docker_layer_caching: true
       - run:
-        name: "Build Joplin Docker Image"
-        command: bash ./.circleci/build.sh
+          name: "Build Joplin Docker Image"
+          command: bash ./.circleci/build.sh
 
 workflows:
   version: 2.1
