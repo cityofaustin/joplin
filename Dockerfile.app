@@ -21,54 +21,54 @@ EXPOSE $PORT
 RUN mkdir /app
 WORKDIR /app
 
-########################################################
-# test
-FROM joplin-base as joplin-test-test-test
-ENV IS_TEST_TEST_TEST "this should not be included in any builds"
-
-########################################################
-# joplin-base => joplin-local
-
-FROM joplin-base as joplin-local
-
 COPY "$PWD/joplin" /app/joplin
 COPY "$PWD/media" /app
 COPY "$PWD/docker-entrypoint.sh" /app/docker-entrypoint.sh
 COPY "$PWD/migrate-load-data.sh" /app/migrate-load-data.sh
-
-# for testing only
-ENV IS_LOCAL "true"
 
 ENTRYPOINT ["./docker-entrypoint.sh"]
 
 CMD ["gunicorn", "joplin.wsgi:application", "--pythonpath", "/app/joplin"]
 
 ########################################################
-# joplin-base => joplin-local => joplin-migration-test
+# joplin-base => joplin-local
 
-FROM joplin-base as joplin-migration-test
+FROM joplin-base as joplin-local
 
-# TODO: clone form github
-
-# for testing only
-ENV IS_MIGRATION_TEST "true"
+ENV ENV "local"
 
 ########################################################
-# joplin-base => joplin-local => joplin-heroku
+# joplin-base => joplin-deployed
 
-FROM joplin-local as joplin-heroku
+FROM joplin-base as joplin-deployed
 
-# TODO
-## Just install client is important, PRs would need it
-# need to run yarn build?
-    # Yes? node_modules
-# use different entrypoint?
-# Why is there an entrypoint-prod yet the normal entrypoint has logic to handle production things?
+# Install nodejs dependencies for deployed builds
+RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
+RUN apt-get update; apt-get -y install nodejs
+RUN npm install --global yarn
+
+WORKDIR /app/joplin
+RUN npm rebuild node-sass
+RUN yarn; yarn build
+WORKDIR /app
 
 ########################################################
-# joplin-base => joplin-local => joplin-production
+# joplin-base => joplin-deployed => joplin-dev
 
-FROM joplin-local as joplin-production
+FROM joplin-deployed as joplin-dev
 
-# TODO
-# Maybe no difference between heroku/production Dockerfiles?
+ENV ENV "dev"
+
+########################################################
+# joplin-base => joplin-deployed => joplin-staging
+
+FROM joplin-base as joplin-staging
+
+ENV ENV "staging"
+
+########################################################
+# joplin-base => joplin-deployed => joplin-prod
+
+FROM joplin-base as joplin-prod
+
+ENV ENV "prod"

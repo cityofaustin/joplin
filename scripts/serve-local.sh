@@ -19,8 +19,8 @@ export DATABASE_URL="postgres://joplin@db:${JOPLIN_DB_CONTAINER_PORT}/joplin"
 
 # Build Args for use during build process
 export COMPOSE_PROJECT_NAME=joplin
-export DOCKER_IMAGE_APP="joplin_app:local"
-export DOCKER_IMAGE_ASSETS="joplin_assets:local"
+export DOCKER_TAG_APP="joplin_app:local"
+export DOCKER_TAG_ASSETS="joplin_assets:local"
 export DOCKER_TARGET_APP=joplin-local
 
 # Stop any existing joplin containers that might still be running
@@ -29,15 +29,15 @@ stop_project_containers $COMPOSE_PROJECT_NAME
 
 if [ "$HARD_REBUILD" == "on" ]; then
   echo 'HARD_REBUILD="on": Rebuilding containers without cache'
-  echo "Rebuilding ${DOCKER_IMAGE_APP}"
-  docker build --no-cache -f Dockerfile.app -t $DOCKER_IMAGE_APP --target $DOCKER_TARGET_APP .
-  echo "Rebuilding ${DOCKER_IMAGE_ASSETS}"
-  docker build --no-cache -f Dockerfile.assets -t $DOCKER_IMAGE_ASSETS .
+  echo "Rebuilding ${DOCKER_TAG_APP}"
+  docker build --no-cache -f Dockerfile.app -t $DOCKER_TAG_APP --target $DOCKER_TARGET_APP .
+  echo "Rebuilding ${DOCKER_TAG_ASSETS}"
+  docker build --no-cache -f Dockerfile.assets -t $DOCKER_TAG_ASSETS .
 else
-  echo "Rebuilding ${DOCKER_IMAGE_APP}"
-  docker build -f Dockerfile.app -t $DOCKER_IMAGE_APP --target $DOCKER_TARGET_APP .
-  echo "Rebuilding ${DOCKER_IMAGE_ASSETS}"
-  docker build -f Dockerfile.assets -t $DOCKER_IMAGE_ASSETS .
+  echo "Rebuilding ${DOCKER_TAG_APP}"
+  docker build -f Dockerfile.app -t $DOCKER_TAG_APP --target $DOCKER_TARGET_APP .
+  echo "Rebuilding ${DOCKER_TAG_ASSETS}"
+  docker build -f Dockerfile.assets -t $DOCKER_TAG_ASSETS .
 fi
 
 echo "Spinning up containers"

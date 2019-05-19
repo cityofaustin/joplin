@@ -20,28 +20,28 @@ export LOAD_DATA="on"
 
 # Build Args for use during build process
 export COMPOSE_PROJECT_NAME=joplin_migration_test
-export DOCKER_IMAGE_APP="cityofaustin/joplin_app:latest-master"
+export DOCKER_TAG_APP="cityofaustin/joplin_app:latest-master"
 export DOCKER_TARGET_APP=joplin-migration-test
 
 echo "######################"
-echo "Step 1: Create db from $DOCKER_IMAGE_APP"
+echo "Step 1: Create db from $DOCKER_TAG_APP"
 echo "######################"
-echo "Builds a database environment from $DOCKER_IMAGE_APP"
-echo "Loads migrations and data from $DOCKER_IMAGE_APP"
+echo "Builds a database environment from $DOCKER_TAG_APP"
+echo "Loads migrations and data from $DOCKER_TAG_APP"
 
 echo "Removing local ${COMPOSE_PROJECT_NAME} containers"
 delete_project_containers $COMPOSE_PROJECT_NAME
 
-echo "Pulling ${DOCKER_IMAGE_APP} from dockerhub"
-docker pull $DOCKER_IMAGE_APP
+echo "Pulling ${DOCKER_TAG_APP} from dockerhub"
+docker pull $DOCKER_TAG_APP
 echo "Spinning up joplin_app and joplin_db containers"
 docker-compose -f docker-compose.yml -f docker-compose.migration_test_override.yml up -d
 
-echo "Running old migrations from $DOCKER_IMAGE_APP and loading data"
+echo "Running old migrations from $DOCKER_TAG_APP and loading data"
 docker logs ${COMPOSE_PROJECT_NAME}_app_1 -f
 docker wait ${COMPOSE_PROJECT_NAME}_app_1
-echo "$DOCKER_IMAGE_APP migration and data loaded completed successfully"
-echo "$DOCKER_IMAGE_APP joplin_app container shutting down"
+echo "$DOCKER_TAG_APP migration and data loaded completed successfully"
+echo "$DOCKER_TAG_APP joplin_app container shutting down"
 
 echo "######################"
 echo "Step 2: Run new migrations on old db"
@@ -51,7 +51,7 @@ echo "######################"
 export HOST_IP=$(ifconfig en0 | awk '$1 == "inet" {print $2}')
 export CMS_API="http://$HOST_IP:$JOPLIN_APP_HOST_PORT/api/graphql"
 export CMS_MEDIA="http://$HOST_IP:$JOPLIN_APP_HOST_PORT/media"
-export DOCKER_IMAGE_JANIS="janis:local"
+export DOCKER_TAG_JANIS="janis:local"
 export JANIS_APP_HOST_PORT=3001
 
 # Env Vars for use in Joplin
@@ -61,11 +61,11 @@ export DATABASE_URL="postgres://joplin@${DATABASE_IPADDRESS}:${JOPLIN_DB_CONTAIN
 export LOAD_DATA="off"
 
 # Build Args for use during build process
-export DOCKER_IMAGE_APP="joplin_app:local"
+export DOCKER_TAG_APP="joplin_app:local"
 export DOCKER_TARGET_APP=joplin-local
 
-echo "Rebuilding ${DOCKER_IMAGE_APP}"
-docker build -f Dockerfile.app -t $DOCKER_IMAGE_APP --target $DOCKER_TARGET_APP .
+echo "Rebuilding ${DOCKER_TAG_APP}"
+docker build -f Dockerfile.app -t $DOCKER_TAG_APP --target $DOCKER_TARGET_APP .
 
 echo "Spinning up joplin_app and janis containers"
 docker-compose -f docker-compose.yml -f docker-compose.janis.yml up -d

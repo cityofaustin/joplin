@@ -5,6 +5,6 @@ services:
     volumes:
      - ".:/app"
   assets:
-    image: $DOCKER_IMAGE_ASSETS
+    image: $DOCKER_TAG_ASSETS
     volumes:
       - "./joplin:/app/joplin"
