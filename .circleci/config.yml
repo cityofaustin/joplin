@@ -1,0 +1,12 @@
+version: 2.1
+
+jobs:
+  build:
+    working_directory: ~/project
+    machine: true # Or can I find a container that has all my stuff pre-built on it?
+    steps:
+      - checkout
+      - run: docker login -u $DOCKER_USER -p $DOCKER_PASS
+      - run:
+        name: "Build Joplin Docker Image for << parameters.DEPLOY_ENV >>"
+        command: bash ./.circleci/build.sh << parameters.DEPLOY_ENV >>
