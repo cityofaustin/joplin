@@ -41,7 +41,7 @@ env:
 
 # We are going to install AWS Cli, Heroku Cli and source our helper scripts
 before_install:
-    - source ./.travis/heroku-helper.sh
+    - source ./.travis/index.sh
     - sudo pip install awscli
     - sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 762E3157 #hopefully this fixes our build issues
     - curl https://cli-assets.heroku.com/install-ubuntu.sh | sh
