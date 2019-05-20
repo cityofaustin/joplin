@@ -32,7 +32,7 @@ def generate_responsive_images(sender, **kwargs):
         logger.debug(f'Generating image rendition for {width}px')
         image.get_rendition(f'width-{width}')
 
-def create_build_aws(instance):
+def create_build_aws(instance, publish=False):
     """
         Triggers a build in Amazon Elastic Container Service, it requires:
         1. DEPLOYMENT_MODE
@@ -49,9 +49,16 @@ def create_build_aws(instance):
     logger.debug("create_build_aws() Starting task")
 
     slack_message = ""
+    publish_action = ""
+
+    if (publish):
+        publish_action = "published"
+    else:
+        publish_action = "unpublished"
 
     try:
-        slack_message = "'%s' was published by user: %s " % (instance.title, instance.owner.email)
+        slack_message = "'%s' was %s by user: %s " % (instance.title, publish_action, instance.owner.email)
+        print(slack_message)
     except:
         slack_message = ""
 
@@ -162,11 +169,11 @@ def create_build(heroku, app, url, checksum=None, version=None, buildpack_urls=N
 def page_published_signal(sender, **kwargs):
     logger.debug(f'page_published {sender}')
     #create_build_if_configured()
-    create_build_aws(kwargs['instance'])
+    create_build_aws(kwargs['instance'], publish=True)
 
 
 @receiver(page_unpublished)
 def page_unpublished_signal(sender, **kwargs):
     logger.debug(f'page_unpublished {sender}')
     #create_build_if_configured()
-    create_build_aws(kwargs['instance'])
+    create_build_aws(kwargs['instance'], publish=False)
