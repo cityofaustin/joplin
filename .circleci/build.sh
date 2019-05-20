@@ -4,10 +4,6 @@ CURRENT_DIR=`dirname $BASH_SOURCE`
 
 source $CURRENT_DIR/helpers.sh
 
-# Allows us to use BUILDKIT features like adding a --target to docker build
-# Only works for "docker build" not "docker-compose ... --build"
-export DOCKER_BUILDKIT=1
-
 ENV=$(get_env)
 SHA=${CIRCLE_SHA1:0:7}
 
@@ -26,7 +22,7 @@ elif [ $ENV == "prod" ]; then
 fi
 
 docker login -u $DOCKER_USER -p $DOCKER_PASS
-docker build -f Dockerfile.app -t $DOCKER_TAG_1 --target $DOCKER_TARGET $CURRENT_DIR/..
+DOCKER_BUILDKIT=1 docker build -f Dockerfile.app -t $DOCKER_TAG_1 --target $DOCKER_TARGET $CURRENT_DIR/..
 docker tag $DOCKER_TAG_1 $DOCKER_TAG_2
 docker push $DOCKER_TAG_1
 docker push $DOCKER_TAG_2
