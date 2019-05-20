@@ -220,6 +220,9 @@ HEROKU_KEY = os.getenv('HEROKU_KEY')
 HEROKU_JANIS_APP_NAME = os.getenv('HEROKU_JANIS_APP_NAME')
 JANIS_URL = os.getenv('JANIS_URL', 'http://localhost:3000')
 
+JANIS_CMS_API = os.getenv('JANIS_CMS_API')
+JANIS_CMS_MEDIA = os.getenv('JANIS_CMS_MEDIA')
+
 GRAPHENE = {
     'SCHEMA': 'api.schema.schema',
     'MIDDLEWARE': [
@@ -245,8 +248,10 @@ DBBACKUP_CONNECTORS = {
 
 
 
+#
 # Production, Staging & Review Apps
-if(ISPRODUCTION or ISSTAGING):
+#
+if(ISPRODUCTION or ISSTAGING or ISREVIEWAPP):
     #
     # AWS Buckets only if not local.
     #
@@ -257,6 +262,13 @@ if(ISPRODUCTION or ISSTAGING):
     AWS_ARCHIVE_BUCKET_NAME = os.getenv('AWS_S3_BUCKET_ARCHIVE')
     AWS_BACKUPS_LOCATION = os.getenv('AWS_S3_BUCKET_ARCHIVE_LOCATION')
     AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+
+    #
+    # Deployment Variables: AWS ECS Task Definition, CloudFront Distribution
+    #
+    AWS_ECS_DEPLOYMENT_BUCKET = os.getenv('AWS_ECS_DEPLOYMENT_BUCKET')
+    AWS_ECS_TASK_DEFINITION = os.getenv('AWS_ECS_TASK_DEFINITION')
+    AWS_CLOUDFRONT_DISTRIBUTION = os.getenv('AWS_CLOUDFRONT_DISTRIBUTION')
 
     AWS_S3_OBJECT_PARAMETERS = {
         'CacheControl': 'max-age=86400',

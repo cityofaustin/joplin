@@ -70,6 +70,7 @@ You can access the admin at `localhost:8000/admin` with the credentials `admin@a
 You can access a GraphQL API at `localhost:8000/api/graphiql`
 
 ## Create migrations
+See [Data Model Updates](DATA_MODEL_UPDATES.md)
 
 While the server is running, run the following commands:
 
