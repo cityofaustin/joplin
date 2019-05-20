@@ -1,0 +1,8 @@
+# Build a new version by running:
+# docker build -f .circleci/Dockerfile.ci -t cityofaustin/circleci:latest .circleci/
+
+# use docker 19.09 so we can use BUILDKIT=1
+FROM docker:18.09.6-dind
+
+# add bash
+RUN apk add --no-cache bash
