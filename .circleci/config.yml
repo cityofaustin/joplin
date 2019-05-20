@@ -9,7 +9,7 @@ jobs:
       - checkout
       - setup_remote_docker:
           docker_layer_caching: true
-          version: 18.09.3-ce
+          version: 18.09.3
       - run:
           name: "Build Joplin Docker Image"
           command: bash ./.circleci/build.sh
