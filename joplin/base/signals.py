@@ -52,7 +52,7 @@ def create_build_aws(instance):
     slack_message = ""
 
     try:
-        slack_message = "'%s' was published by %s " % (instance.title, instance.owner.username)
+        slack_message = "'%s' was published by user: %s " % (instance.title, instance.owner.email)
     except:
         slack_message = ""
 
