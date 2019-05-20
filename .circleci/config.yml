@@ -3,10 +3,12 @@ version: 2.1
 jobs:
   build:
     working_directory: ~/project
-    machine:
-      docker_layer_caching: true
+    docker:
+      - image: docker:18.09.6
     steps:
       - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
       - run:
           name: "Build Joplin Docker Image"
           command: bash ./.circleci/build.sh
