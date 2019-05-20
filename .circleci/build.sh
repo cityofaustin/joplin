@@ -22,7 +22,6 @@ elif [ $ENV == "prod" ]; then
 fi
 
 docker login -u $DOCKER_USER -p $DOCKER_PASS
-DOCKER_BUILDKIT=1 docker build -f Dockerfile.app -t $DOCKER_TAG_1 --target $DOCKER_TARGET $CURRENT_DIR/..
-docker tag $DOCKER_TAG_1 $DOCKER_TAG_2
+DOCKER_BUILDKIT=1 docker build -f Dockerfile.app -t $DOCKER_TAG_1 -t $DOCKER_TAG_2 --target $DOCKER_TARGET $CURRENT_DIR/..
 docker push $DOCKER_TAG_1
 docker push $DOCKER_TAG_2

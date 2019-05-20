@@ -1,8 +1,31 @@
 version: 2.1
 
 jobs:
+  test0:
+    docker:
+      - image: cityofaustin/circleci-build:e56c99c
+    steps:
+      - checkout
+      - run: echo "~~ running test0"
+  test1:
+    docker:
+      - image: cityofaustin/circleci-build:e56c99c
+    steps:
+      - checkout
+      - run: echo "~~ running test1"
+  test2:
+    docker:
+      - image: cityofaustin/circleci-build:e56c99c
+    steps:
+      - checkout
+      - run: echo "~~ running test2"
+  test3:
+    docker:
+      - image: cityofaustin/circleci-build:e56c99c
+    steps:
+      - checkout
+      - run: echo "~~ running test3"
   build:
-    working_directory: ~/project
     docker:
       - image: cityofaustin/circleci-build:e56c99c
     steps:
@@ -12,15 +35,45 @@ jobs:
       - run:
           name: "Build Joplin Docker Image"
           command: bash ./.circleci/build.sh
+  # backup_database:
+  #   docker:
+  #     - image: cityofaustin/circleci-build:e56c99c
 
 workflows:
   version: 2.1
   build-and-deploy:
     jobs:
-      - build:
+      - test0
+      - test1:
           filters:
             branches:
-              # Just for test purposes
-              ignore:
-                - master
+              only:
                 - production
+      - test2:
+          filters:
+            branches:
+              ignore:
+                - production
+      - test3:
+          requires:
+            - test0
+            - test1
+            - test2
+      # - build:
+      #     filters:
+      #       branches:
+      #         # Just for test purposes
+      #         ignore:
+      #           - master
+      #           - production
+      #     requires:
+      #       - test
+      # - backup_database:
+      #     filters:
+      #       branches:
+      #         # Just for test purposes
+      #         ignore:
+      #           - master
+      #           - production
+      #     requires:
+      #       - build
