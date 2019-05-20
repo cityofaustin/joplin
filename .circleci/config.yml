@@ -4,7 +4,7 @@ jobs:
   build:
     working_directory: ~/project
     docker:
-      - image: cityofaustin/circleci:latest
+      - image: cityofaustin/circleci-build:e56c99c
     steps:
       - checkout
       - setup_remote_docker:
