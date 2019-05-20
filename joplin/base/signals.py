@@ -32,7 +32,7 @@ def generate_responsive_images(sender, **kwargs):
         logger.debug(f'Generating image rendition for {width}px')
         image.get_rendition(f'width-{width}')
 
-def create_build_aws():
+def create_build_aws(instance):
     """
         Triggers a build in Amazon Elastic Container Service, it requires:
         1. DEPLOYMENT_MODE
@@ -46,6 +46,17 @@ def create_build_aws():
             - The name of the distribution for production.
             - IE: E455RV7LE5UVG
     """
+    logger.debug("create_build_aws() Starting task")
+
+    slack_message = ""
+
+    try:
+        slack_message = "'%s' was published by user: %s " % (instance.title, instance.owner.email)
+    except:
+        slack_message = ""
+
+    logger.debug("create_build_aws() Message: " + slack_message)
+
     if(settings.DEPLOYMENT_MODE in ["PRODUCTION", "STAGING"]):
 
         # First we initialize our AWS handler (client)
@@ -94,6 +105,10 @@ def create_build_aws():
                                 'name': 'CMS_MEDIA',
                                 'value': settings.JANIS_CMS_MEDIA  # 'https://joplin-austin-gov.s3.amazonaws.com/media'
                             },
+                            {
+                                'name': 'SLACK_MESSAGE',
+                                'value': slack_message
+                            }
                         ]
                     }
                 ]
@@ -147,10 +162,11 @@ def create_build(heroku, app, url, checksum=None, version=None, buildpack_urls=N
 def page_published_signal(sender, **kwargs):
     logger.debug(f'page_published {sender}')
     #create_build_if_configured()
-    create_build_aws()
+    create_build_aws(kwargs['instance'])
 
 
 @receiver(page_unpublished)
 def page_unpublished_signal(sender, **kwargs):
     logger.debug(f'page_unpublished {sender}')
-    create_build_if_configured()
+    #create_build_if_configured()
+    create_build_aws(kwargs['instance'])
