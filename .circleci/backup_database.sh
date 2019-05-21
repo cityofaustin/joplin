@@ -7,7 +7,8 @@ function backup_database() {
   F=${FUNCNAME[0]} # set name of function to use with log()
 
   # Check if APP/DB exists
-  APPNAME=$(get_heroku_appname)
+  # APPNAME=$(get_heroku_appname)
+  APPNAME="joplin-staging"
   APP_DB_EXISTS=$(app_database_attached $APPNAME)
 
   if [ $APP_DB_EXISTS == "true" ]; then
@@ -16,8 +17,7 @@ function backup_database() {
 
     # Get backup
     LOCAL_DUMP_FILENAME=$APPNAME.dump
-    # heroku pg:backups:download -a $APPNAME -o $LOCAL_DUMP_FILENAME
-    heroku pg:backups:download -a "joplin-staging" -o $LOCAL_DUMP_FILENAME
+    heroku pg:backups:download -a $APPNAME -o $LOCAL_DUMP_FILENAME
 
     # upload to s3
     DB_CONNECTION_STRING=$(heroku config:get DATABASE_URL -a $APPNAME);
