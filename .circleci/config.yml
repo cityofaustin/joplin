@@ -1,6 +1,15 @@
 version: 2.1
 
 jobs:
+  test:
+    docker:
+      - image: cityofaustin/circleci-test:40936de
+    steps:
+      - checkout
+      - run: source ./.circleci/cli-test.sh
+      - run:
+          name: "Test that CLI utilities work"
+          command: cli-test
   build:
     docker:
       - image: cityofaustin/circleci-build:e56c99c
@@ -8,21 +17,22 @@ jobs:
       - checkout
       - setup_remote_docker:
           version: 18.09.3
-      - run:
-          name: "Build Joplin Docker Image"
-          command: bash ./.circleci/build.sh
+      - run: echo "placeholder for build"
+      # - run:
+      #     name: "Build Joplin Docker Image"
+      #     command: bash ./.circleci/build.sh
   backup_database:
     docker:
       - image: cityofaustin/circleci-build:e56c99c
     steps:
       - checkout
       - run: echo "placeholder for backup_database"
-  release_to_heroku:
+  push_to_heroku:
     docker:
       - image: cityofaustin/circleci-build:e56c99c
     steps:
       - checkout
-      - run: echo "placeholder for release_to_heroku"
+      - run: echo "placeholder for push_to_heroku"
   migrate:
     docker:
       - image: cityofaustin/circleci-build:e56c99c
@@ -34,16 +44,21 @@ workflows:
   version: 2.1
   build-and-deploy:
     jobs:
-      - build
-      - backup_database:
-          filters:
-            branches:
-              only:
-                - master
-                - production
-      - release_to_heroku:
+      - test
+      - build:
+          requires:
+            - test
+      - backup_database
+      # - backup_database:
+      #     filters:
+      #       branches:
+      #         only:
+      #           - master
+      #           - production
+      - push_to_heroku:
           requires:
             - build
             - backup_database
       - migrate:
-          requires: release_to_heroku
+          requires:
+            - push_to_heroku
