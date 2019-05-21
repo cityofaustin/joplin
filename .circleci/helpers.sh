@@ -38,9 +38,9 @@ function print_header {
 
 # Determine ENV by your git branch
 function get_env {
-  if [ $CIRCLE_BRANCH == "master" ]; then
+  if [ "$CIRCLE_BRANCH" == "master" ]; then
     echo "staging"
-  elif [ $CIRCLE_BRANCH == "production" ]; then
+  elif [ "$CIRCLE_BRANCH" == "production" ]; then
     echo "prod"
   else
     echo "dev"
@@ -63,7 +63,7 @@ function get_heroku_appname {
       APPNAME="joplin-staging"
       ;;
     *)
-      APPNAME="joplin-dev-${CIRCLE_BRANCH}"
+      APPNAME="joplin-dev-$CIRCLE_BRANCH"
     ;;
   esac
 
@@ -75,14 +75,9 @@ function get_heroku_appname {
 function app_database_attached {
   HEROKU_APP_DB_ATTACHED=$(heroku addons --app $1 | grep postgresql)
 
-  if [ ! -z $HEROKU_APP_DB_ATTACHED ]; then
+  if [ ! -z "$HEROKU_APP_DB_ATTACHED" ]; then
     echo "true";
   else
     echo "false"
   fi;
-}
-
-function fail {
-  echo "running failure"
-  return 127
 }

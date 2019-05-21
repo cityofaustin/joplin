@@ -3,11 +3,6 @@ set -e
 CURRENT_DIR=`dirname $BASH_SOURCE`
 source $CURRENT_DIR/helpers.sh
 
-# if [ "" == "" ]; then
-#   echo "errors in ifs don't propagate?"
-#   fail
-# fi
-
 echo "Testing AWS CLI is installed"
 aws --version
 
