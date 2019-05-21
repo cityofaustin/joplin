@@ -12,7 +12,7 @@
 #
 function log {
     RANGE=$(awk "BEGIN { print 5*${2} }")
-    echo -n "${1}() "
+    echo -n "${1} "
     awk -v ORS=  "BEGIN { for (i = 1; i <= ${RANGE}; ++i) print \"-\" }" # leave ORS empty please
     echo -e " ${3}"
 }
@@ -73,11 +73,16 @@ function get_heroku_appname {
 
 # Returns "true" if a given app name has a postgresql db attached to it.
 function app_database_attached {
-    HEROKU_APP_DB_ATTACHED=$(heroku addons --app $1 | grep postgresql)
+  HEROKU_APP_DB_ATTACHED=$(heroku addons --app $1 | grep postgresql)
 
-    if [ ! -z $HEROKU_APP_DB_ATTACHED ]; then
-        echo "true";
-    else
-        echo "false"
-    fi;
+  if [ ! -z $HEROKU_APP_DB_ATTACHED ]; then
+    echo "true";
+  else
+    echo "false"
+  fi;
+}
+
+function fail {
+  echo "running failure"
+  return 127
 }

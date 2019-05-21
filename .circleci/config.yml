@@ -8,7 +8,7 @@ jobs:
       - checkout
       - run:
           name: "Test that CLI utilities work"
-          command: source ./.circleci/cli-test.sh && cli-test
+          command: bash ./.circleci/cli-test.sh
   build:
     docker:
       - image: cityofaustin/circleci-build:e56c99c
@@ -27,7 +27,7 @@ jobs:
       - checkout
       - run:
           name:
-          command: source ./.circleci/backup_database.sh && backup_database
+          command: bash ./.circleci/backup_database.sh
   push_to_heroku:
     docker:
       - image: cityofaustin/circleci-build:e56c99c
