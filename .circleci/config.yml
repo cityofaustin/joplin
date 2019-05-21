@@ -6,10 +6,9 @@ jobs:
       - image: cityofaustin/circleci-test:40936de
     steps:
       - checkout
-      - run: source ./.circleci/cli-test.sh
       - run:
           name: "Test that CLI utilities work"
-          command: cli-test
+          command: source ./.circleci/cli-test.sh && cli-test
   build:
     docker:
       - image: cityofaustin/circleci-build:e56c99c
@@ -23,10 +22,12 @@ jobs:
       #     command: bash ./.circleci/build.sh
   backup_database:
     docker:
-      - image: cityofaustin/circleci-build:e56c99c
+      - image: cityofaustin/circleci-test:40936de
     steps:
       - checkout
-      - run: echo "placeholder for backup_database"
+      - run:
+          name:
+          command: source ./.circleci/backup_database.sh && backup_database
   push_to_heroku:
     docker:
       - image: cityofaustin/circleci-build:e56c99c
@@ -48,7 +49,9 @@ workflows:
       - build:
           requires:
             - test
-      - backup_database
+      - backup_database:
+          requires:
+            - test
       # - backup_database:
       #     filters:
       #       branches:
