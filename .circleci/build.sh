@@ -1,11 +1,7 @@
 #!/usr/bin/env bash
 set -e
 CURRENT_DIR=`dirname $BASH_SOURCE`
-
 source $CURRENT_DIR/helpers.sh
-
-ENV=$(get_env)
-SHA=$(get_sha)
 
 if [ $ENV == "dev" ]; then
   DOCKER_TARGET="joplin-dev"

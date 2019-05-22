@@ -1,5 +1,34 @@
 #!/usr/bin/env bash
 
+########################################
+# Declare Constants
+# PIPELINE_NAME, ENV, APPNAME, SHA
+########################################
+set -a # exports all assigned variables
+
+# Heroku Pipeline Name
+PIPELINE_NAME="joplin-pipeline"
+PIPELINE_TEAM="innovation-fellowship-program"
+
+# Use git branch to determine ENV and Heroku APPNAME
+if [ "$CIRCLE_BRANCH" == "master" ]; then
+  ENV="staging"
+  APPNAME="joplin-staging"
+elif [ "$CIRCLE_BRANCH" == "production" ]; then
+  ENV="prod"
+  APPNAME="joplin"
+else
+  ENV="dev"
+  APPNAME="joplin-dev-$CIRCLE_BRANCH"
+fi
+
+# Get 7-character truncated SHA1 hash for git commit
+SHA=${CIRCLE_SHA1:0:7}
+
+########################################
+# Declare Functions
+########################################
+
 #
 # Prints an indention based on the calling function
 # $1 (string) name of the function
@@ -13,7 +42,7 @@
 function log {
     RANGE=$(awk "BEGIN { print 5*${2} }")
     echo -n "${1} "
-    awk -v ORS=  "BEGIN { for (i = 1; i <= ${RANGE}; ++i) print \"-\" }" # leave ORS empty please
+    awk -v ORS="BEGIN { for (i = 1; i <= ${RANGE}; ++i) print \"-\" }" # leave ORS empty please
     echo -e " ${3}"
 }
 
@@ -35,45 +64,20 @@ function print_header {
     echo ""
 }
 
+# Returns "True" if our app name exists in heroku.
+function app_exists {
+    HEROKU_TEAM_APPS=$(heroku apps --team $PIPELINE_TEAM | grep $APPNAME)
 
-# Determine ENV by your git branch
-function get_env {
-  if [ "$CIRCLE_BRANCH" == "master" ]; then
-    echo "staging"
-  elif [ "$CIRCLE_BRANCH" == "production" ]; then
-    echo "prod"
-  else
-    echo "dev"
-  fi
+    if [ "${HEROKU_TEAM_APPS}" != "" ]; then
+        echo "true";
+    else
+        echo "false"
+    fi;
 }
 
-# Get 7-character truncated SHA1 hash for git commit
-function get_sha {
-  SHA=${CIRCLE_SHA1:0:7}
-  echo $SHA
-}
-
-# Turn the branch name into the app name in Heroku
-function get_heroku_appname {
-  case $CIRCLE_BRANCH in
-    production)
-      APPNAME="joplin"
-      ;;
-    master)
-      APPNAME="joplin-staging"
-      ;;
-    *)
-      APPNAME="joplin-dev-$CIRCLE_BRANCH"
-    ;;
-  esac
-
-  # Output results for logging
-  echo $APPNAME
-}
-
-# Returns "true" if a given app name has a postgresql db attached to it.
+# Returns "true" if our app has a postgresql db attached to it.
 function app_database_attached {
-  HEROKU_APP_DB_ATTACHED=$(heroku addons --app $1 | grep postgresql)
+  HEROKU_APP_DB_ATTACHED=$(heroku addons --app $APPNAME | grep postgresql)
 
   if [ ! -z "$HEROKU_APP_DB_ATTACHED" ]; then
     echo "true";

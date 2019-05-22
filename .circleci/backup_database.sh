@@ -2,12 +2,10 @@
 set -eo pipefail
 CURRENT_DIR=`dirname $BASH_SOURCE`
 source $CURRENT_DIR/helpers.sh
-
 F=backup_database # set name of file to use with log()
 
 # Check if APP/DB exists
-# APPNAME=$(get_heroku_appname)
-APPNAME="joplin-staging"
+APPNAME="joplin-staging" # Temporary!
 APP_DB_EXISTS=$(app_database_attached $APPNAME)
 
 if [ $APP_DB_EXISTS == "true" ]; then
@@ -22,8 +20,7 @@ if [ $APP_DB_EXISTS == "true" ]; then
   DB_CONNECTION_STRING=$(heroku config:get DATABASE_URL -a $APPNAME);
   LATEST_MIGRATION=$(psql $DB_CONNECTION_STRING -qtA -c 'select name from django_migrations order by id desc limit 1;')
   BACKUP_TIMESTAMP=$(date '+%Y-%m-%d--%H-%M-%S')
-  SHA=$(get_sha)
-  APPNAME=$(get_heroku_appname) # Temporary!
+  APPNAME="joplin-dev-$CIRCLE_BRANCH" # Temporary!
   S3_DUMP_FILENAME="${APPNAME}.${BACKUP_TIMESTAMP}.${SHA}.${LATEST_MIGRATION}.dump"
   S3_BUCKET_FILE_URL="s3://joplin-austin-gov-archive/deployment-backups/database/${APPNAME}/${S3_DUMP_FILENAME}"
 

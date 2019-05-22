@@ -3,7 +3,7 @@ version: 2.1
 jobs:
   test:
     docker:
-      - image: cityofaustin/circleci-test:40936de
+      - image: cityofaustin/joplin-ci-deploy:91ad719
     steps:
       - checkout
       - run:
@@ -11,7 +11,7 @@ jobs:
           command: bash ./.circleci/cli-test.sh
   build:
     docker:
-      - image: cityofaustin/circleci-build:e56c99c
+      - image: cityofaustin/joplin-ci-build:91ad719
     steps:
       - checkout
       - setup_remote_docker:
@@ -22,21 +22,29 @@ jobs:
       #     command: bash ./.circleci/build.sh
   backup_database:
     docker:
-      - image: cityofaustin/circleci-test:40936de
+      - image: cityofaustin/joplin-ci-deploy:91ad719
     steps:
       - checkout
       - run:
-          name:
+          name: "Backup Database and Store in S3"
           command: bash ./.circleci/backup_database.sh
-  push_to_heroku:
+  create_app:
     docker:
-      - image: cityofaustin/circleci-build:e56c99c
+      - image: cityofaustin/joplin-ci-deploy:91ad719
     steps:
       - checkout
-      - run: echo "placeholder for push_to_heroku"
+      - run:
+          name: "Create App for Heroku Pipeline"
+          command: bash ./.circleci/create_app.sh
+  deploy:
+    docker:
+      - image: cityofaustin/joplin-ci-deploy:91ad719
+    steps:
+      - checkout
+      - run: echo "placeholder for deploy"
   migrate:
     docker:
-      - image: cityofaustin/circleci-build:e56c99c
+      - image: cityofaustin/joplin-ci-deploy:91ad719
     steps:
       - checkout
       - run: echo "placeholder for migrate"
@@ -58,10 +66,19 @@ workflows:
       #         only:
       #           - master
       #           - production
-      - push_to_heroku:
+      - create_app:
+          requires:
+            - test
+          filters:
+            branches:
+              ignore:
+                - master
+                - production
+      - deploy:
           requires:
             - build
             - backup_database
+            - create_app
       - migrate:
           requires:
-            - push_to_heroku
+            - deploy
