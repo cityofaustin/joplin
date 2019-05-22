@@ -10,6 +10,7 @@ from wagtail.admin.widgets import Button, ButtonWithDropdownFromHook, PageListin
 from wagtail.core import hooks
 
 from base.models import HomePage, Location, Contact
+from wagtail.core.models import PageRevision
 
 @hooks.register('before_edit_page')
 def before_edit_page(request, page):
@@ -64,6 +65,20 @@ def joplin_page_listing_buttons(page, page_perms, is_parent=False):
             page.janis_url(),
             attrs={'target': "_blank", 'title': _("View live version of '{title}'").format(title=page.get_admin_display_title())},
             priority=30
+        )
+
+    # This is kinda hacky but it should let us know when we have notes on a revision
+    all_revisions = PageRevision.objects.filter(page_id=page.id)
+    for revision in all_revisions:
+        if revision.is_latest_revision():
+            latest_revision = revision
+    author_notes = latest_revision.as_page_object().author_notes
+    if len(author_notes):
+        yield Button(
+            _('📝'),
+            '#',
+            attrs={'title': _("Notes for authors entered"), 'class':'has-author-notes'},
+            priority=70
         )
 
     yield ButtonWithDropdownFromHook(
