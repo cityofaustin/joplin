@@ -96,7 +96,7 @@ class JanisPage(JanisBasePage):
 
         edit_handler = TabbedInterface([
             ObjectList([
-                FieldPanel('title')
+                # FieldPanel('title')
             ] + cls.content_panels, heading='Content'),
             ObjectList(Page.promote_panels + cls.promote_panels, heading='Search Info')
         ])
@@ -238,12 +238,12 @@ class InformationPage(JanisPage):
     base_form_class = custom_forms.InformationPageForm
 
     content_panels = [
-        InlinePanel('topics', label='Topics'),
-        FieldPanel('department'),
         FieldPanel('title_en'),
         FieldPanel('title_es'),
         FieldPanel('title_ar'),
         FieldPanel('title_vi'),
+        InlinePanel('topics', label='Topics'),
+        FieldPanel('department'),
         FieldPanel('description'),
         StreamFieldPanel('options'),
         FieldPanel('additional_content'),
