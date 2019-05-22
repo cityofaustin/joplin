@@ -47,3 +47,13 @@
 .pagination {
   margin-top: $secondary-header-height * 3/2;
 }
+
+.account-link {
+  display: inherit;
+}
+
+.avatar {
+  img {
+    margin: auto 0px !important;
+  }
+}

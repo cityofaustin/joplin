@@ -17,8 +17,10 @@
             />
         </div>
         <div class="actions coa-user-actions">
+            <a href="/admin/account/" class="account-link">
             <div class="avatar"><img src="{% avatar_url user %}" alt="avatar" /></div>
             <div class="user coa-user">{{ user }}</div>
+            </a>
             <a href="{% url 'wagtailadmin_logout' %}" class="icon icon-logout">Log out</a>
         </div>
     </div>
