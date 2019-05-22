@@ -1,43 +1,43 @@
 // COA Global Header
 
 .coa-header {
-  display: flex;
-  padding: 0.75rem 1.5rem;
-  background: $coa-color-darkest-gray;
-  position: fixed;
-  z-index: 3;
-  width: 100%;
+    display: flex;
+    padding: 0.75rem 1.5rem;
+    background: $coa-color-darkest-gray;
+    position: fixed;
+    z-index: 3;
+    width: 100%;
 }
 
 .coa-user {
-  color: $coa-color-lightest-blue;
-  padding-left: 10px;
-  font-size: 14px;
+    color: $coa-color-lightest-blue;
+    padding-left: 10px;
+    font-size: 14px;
 }
 
 // COA Secondary Header
 
 .header.secondary {
-  width: calc(100% - #{$nav-wrapper-width});
-  background: $coa-color-gray;
-  position: fixed;
-  padding: 1rem 1.5rem;
-  z-index: 3;
-  display: flex;
-  height: $secondary-header-height;
-  h1 {
-    color: $coa-color-orange;
-    text-transform: capitalize;
-    font-style: italic;
-  }
+    width: calc(100% - #{$nav-wrapper-width});
+    background: $coa-color-gray;
+    position: fixed;
+    padding: 1rem 1.5rem;
+    z-index: 3;
+    display: flex;
+    height: $secondary-header-height;
+    h1 {
+        color: $coa-color-orange;
+        text-transform: capitalize;
+        font-style: italic;
+    }
 }
 
-// Header Actions section 
+// Header Actions section
 
 .header .actions {
-  display: flex;
-  margin: auto 0 auto auto;
+    display: flex;
+    margin: auto 0 auto auto;
 }
 .header .actions * {
-  margin: auto 2px;
+    margin: auto 2px;
 }

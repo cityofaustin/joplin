@@ -1,49 +1,56 @@
-@import "./variables";
-@import "./utilities/border-box-reset";
-@import "./layouts/headers";
-@import "./layouts/left_sidebar_nav";
-@import "./layouts/listing";
-@import "./buttons";
-@import "./pages/edit";
+@import './variables';
+@import './utilities/border-box-reset';
+@import './layouts/headers';
+@import './layouts/left_sidebar_nav';
+@import './layouts/listing';
+@import './buttons';
+@import './pages/edit';
 
 // Wagtail overrides
 
 .full input {
-  padding: 1em;
+    padding: 1em;
 }
 .logo {
-  display: none;
+    display: none;
 }
 
 .object fieldset,
 .object .field-content {
-  width: 100%;
+    width: 100%;
 }
 
 .translation-tab .object .object-help {
-  width: auto;
-  opacity: 1;
-  position: static;
-  font-size: 1.2em;
+    width: auto;
+    opacity: 1;
+    position: static;
+    font-size: 1.2em;
 }
 .translation-tab .object fieldset {
-  padding-top: 0.5em;
+    padding-top: 0.5em;
 }
 
 .hidden {
-  display: none !important;
+    display: none !important;
 }
 
 .listing .actions {
-  visibility: visible;
+    visibility: visible;
 }
 
 .page-explorer header,
 .homepage header,
 .page-editor header {
-  display: none;
+    display: none;
 }
 
 .pagination {
-  margin-top: $secondary-header-height * 3/2;
+    margin-top: $secondary-header-height * 3/2;
+}
+
+.messages {
+    position: fixed;
+    top: 23px;
+    width: 75%;
+    margin-left: 20px;
 }

@@ -1,61 +1,68 @@
 .object h2 {
-  background: inherit;
+    background: inherit;
 }
 .object > h2:before,
 .object > h2 label:before {
-  display: none;
+    display: none;
 }
 .object {
-  border-bottom: 1px dashed grey !important;
+    border-bottom: 1px dashed grey !important;
 }
 
 .tab-nav.merged {
-  background-color: #eee;
+    background-color: #eee;
 }
 
 footer {
-  display: none;
+    display: none;
 }
 
 .object-help.help {
-  opacity: 1 !important;
-  width: auto;
-  float: left;
-  position: relative;
-  padding: 0;
+    opacity: 1 !important;
+    width: auto;
+    float: left;
+    position: relative;
+    padding: 0;
 }
 
 .icon-help-inverse {
-  display: none;
+    display: none;
 }
 
 .icon-help-inverse.show {
-  display: inline;
-  float: right;
-  margin: 0.5rem 4rem 0 0;
+    display: inline;
+    float: right;
+    margin: 0.5rem 4rem 0 0;
 }
 
 .actions {
-  margin: 0 0 0 auto !important;
+    margin: 0 0 0 auto !important;
 }
 
 .tab-nav.merged {
-  display: none;
+    display: none;
 }
 
 .messages {
-  position: absolute;
-  width: 100%;
+    position: absolute;
+    width: 100%;
 }
 
 .editor__save-button {
-  min-width: 130px;
+    min-width: 130px;
 }
 
 fieldset {
-  max-width: none !important;
+    max-width: none !important;
 }
 
 label {
-  width: auto !important;
+    width: auto !important;
+}
+
+.messages {
+    position: fixed;
+    top: 23px;
+    width: 75%;
+    margin-left: 20px;
 }
