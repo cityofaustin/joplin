@@ -321,7 +321,7 @@ class TopicPage(JanisPage):
         InlinePanel('topiccollections', label='Topic Collections this page belongs to'),
     ]
 
-class DepartmentPage(JanisBasePage):
+class DepartmentPage(JanisPage):
     janis_url_page_type = "department"
 
     def __str__(self):
@@ -334,7 +334,7 @@ class DepartmentPage(JanisBasePage):
 
         edit_handler = TabbedInterface([
             ObjectList([
-                FieldPanel('title')
+                # FieldPanel('title')
             ] + cls.content_panels, heading='Content'),
             ObjectList(Page.promote_panels + cls.promote_panels, heading='Search Info')
         ])
