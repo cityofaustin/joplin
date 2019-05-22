@@ -43,11 +43,6 @@ footer {
     display: none;
 }
 
-.messages {
-    position: absolute;
-    width: 100%;
-}
-
 .editor__save-button {
     min-width: 130px;
 }
@@ -62,7 +57,6 @@ label {
 
 .messages {
     position: fixed;
-    top: 23px;
-    width: 75%;
-    margin-left: 20px;
+    bottom: 0px;
+    width: 100%;
 }
