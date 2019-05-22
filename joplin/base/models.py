@@ -71,7 +71,7 @@ class JanisBasePage(Page):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    author_notes = models.RichTextField(
+    author_notes = RichTextField(
         # max_length=DEFAULT_MAX_LENGTH,
         features=['ul', 'ol', 'link'],
         blank=True,

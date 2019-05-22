@@ -734,7 +734,8 @@ CREATE TABLE public.base_departmentpage (
     what_we_do_en text,
     what_we_do_es text,
     what_we_do_vi text,
-    top_services text NOT NULL
+    top_services text NOT NULL,
+    author_notes text NOT NULL
 );
 
 
@@ -845,7 +846,8 @@ CREATE TABLE public.base_informationpage (
     options_en text,
     options_es text,
     options_vi text,
-    department_id integer
+    department_id integer,
+    author_notes text NOT NULL
 );
 
 
@@ -994,7 +996,8 @@ CREATE TABLE public.base_processpage (
     description_es text,
     description_vi text,
     image_id integer,
-    department_id integer
+    department_id integer,
+    author_notes text NOT NULL
 );
 
 
@@ -1148,7 +1151,8 @@ CREATE TABLE public.base_servicepage (
     short_description_ar text,
     short_description_en text,
     short_description_es text,
-    short_description_vi text
+    short_description_vi text,
+    author_notes text NOT NULL
 );
 
 
@@ -1301,7 +1305,8 @@ CREATE TABLE public.base_topiccollectionpage (
     description_es text,
     description_vi text,
     image_id integer,
-    theme_id integer
+    theme_id integer,
+    author_notes text NOT NULL
 );
 
 
@@ -1350,7 +1355,8 @@ CREATE TABLE public.base_topicpage (
     description_es text,
     description_vi text,
     external_services text NOT NULL,
-    image_id integer
+    image_id integer,
+    author_notes text NOT NULL
 );
 
 
@@ -3125,7 +3131,7 @@ COPY public.base_departmentcontact (id, contact_id, department_id) FROM stdin;
 -- Data for Name: base_departmentpage; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY public.base_departmentpage (page_ptr_id, created_at, updated_at, what_we_do, mission, job_listings, image_id, mission_ar, mission_en, mission_es, mission_vi, what_we_do_ar, what_we_do_en, what_we_do_es, what_we_do_vi, top_services) FROM stdin;
+COPY public.base_departmentpage (page_ptr_id, created_at, updated_at, what_we_do, mission, job_listings, image_id, mission_ar, mission_en, mission_es, mission_vi, what_we_do_ar, what_we_do_en, what_we_do_es, what_we_do_vi, top_services, author_notes) FROM stdin;
 \.
 
 
@@ -3158,7 +3164,7 @@ COPY public.base_homepage (page_ptr_id, image_id) FROM stdin;
 -- Data for Name: base_informationpage; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY public.base_informationpage (page_ptr_id, created_at, updated_at, description, options, additional_content, additional_content_ar, additional_content_en, additional_content_es, additional_content_vi, description_ar, description_en, description_es, description_vi, options_ar, options_en, options_es, options_vi, department_id) FROM stdin;
+COPY public.base_informationpage (page_ptr_id, created_at, updated_at, description, options, additional_content, additional_content_ar, additional_content_en, additional_content_es, additional_content_vi, description_ar, description_en, description_es, description_vi, options_ar, options_en, options_es, options_vi, department_id, author_notes) FROM stdin;
 \.
 
 
@@ -3202,7 +3208,7 @@ COPY public.base_map (id, description, location_id, description_ar, description_
 -- Data for Name: base_processpage; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY public.base_processpage (page_ptr_id, created_at, updated_at, description, description_ar, description_en, description_es, description_vi, image_id, department_id) FROM stdin;
+COPY public.base_processpage (page_ptr_id, created_at, updated_at, description, description_ar, description_en, description_es, description_vi, image_id, department_id, author_notes) FROM stdin;
 \.
 
 
@@ -3234,7 +3240,7 @@ COPY public.base_processpagetopic (id, page_id, topic_id) FROM stdin;
 -- Data for Name: base_servicepage; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY public.base_servicepage (page_ptr_id, created_at, updated_at, dynamic_content, additional_content, additional_content_ar, additional_content_en, additional_content_es, additional_content_vi, steps, short_description, steps_ar, steps_en, steps_es, steps_vi, short_description_ar, short_description_en, short_description_es, short_description_vi) FROM stdin;
+COPY public.base_servicepage (page_ptr_id, created_at, updated_at, dynamic_content, additional_content, additional_content_ar, additional_content_en, additional_content_es, additional_content_vi, steps, short_description, steps_ar, steps_en, steps_es, steps_vi, short_description_ar, short_description_en, short_description_es, short_description_vi, author_notes) FROM stdin;
 \.
 
 
@@ -3308,7 +3314,7 @@ COPY public.base_threeoneone (id, title, title_ar, title_en, title_es, title_vi,
 -- Data for Name: base_topiccollectionpage; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY public.base_topiccollectionpage (page_ptr_id, created_at, updated_at, description, description_ar, description_en, description_es, description_vi, image_id, theme_id) FROM stdin;
+COPY public.base_topiccollectionpage (page_ptr_id, created_at, updated_at, description, description_ar, description_en, description_es, description_vi, image_id, theme_id, author_notes) FROM stdin;
 \.
 
 
@@ -3324,7 +3330,7 @@ COPY public.base_topiccollectionpagetopiccollection (id, page_id, topiccollectio
 -- Data for Name: base_topicpage; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY public.base_topicpage (page_ptr_id, created_at, updated_at, description, description_ar, description_en, description_es, description_vi, external_services, image_id) FROM stdin;
+COPY public.base_topicpage (page_ptr_id, created_at, updated_at, description, description_ar, description_en, description_es, description_vi, external_services, image_id, author_notes) FROM stdin;
 \.
 
 
@@ -3641,6 +3647,7 @@ COPY public.django_migrations (id, app, name, applied) FROM stdin;
 225	base	0064_auto_20190516_0909	2019-05-16 09:19:05.040507+00
 226	base	0065_auto_20190516_0911	2019-05-16 09:19:05.16332+00
 227	base	0066_auto_20190522_0558	2019-05-22 06:13:22.755251+00
+228	base	0067_auto_20190522_0840	2019-05-22 08:40:29.793751+00
 \.
 
 
@@ -3663,6 +3670,7 @@ lkl846wo3t9xrk8y7o570j4b4v3cspg4	NTYyMGQ1M2E2ZTVmNTI2MzFjM2RhM2U2MTczYzNlYjM5ZmF
 y8cgz382xydb2g9nwy5jmk0eto5veic3	NTYyMGQ1M2E2ZTVmNTI2MzFjM2RhM2U2MTczYzNlYjM5ZmFhZWVjMDp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiJiNTlkMDFmMzU1OTY5OTU2YTVjODNhNDU2MGIwNzc4NTMyY2ZkNmEzIn0=	2019-05-06 17:53:30.419432+00
 qubpelmx5an4i8ajbzqobnxuuhxxyr9f	NWM0ZWZhNTYwNmQ3NjNiYTM2NzIxZTlhOWRmNzkwY2I0YTM2NmI0YTp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiI2MTAwZjZiNGMxOWZhN2Y3OWUwYjFiNzVhOGNmNjc0NzM0ZDgxZjZmIn0=	2019-05-30 09:18:46.611061+00
 t4g8b00umx4jl214m1mk0fqdytvt10x5	NWM0ZWZhNTYwNmQ3NjNiYTM2NzIxZTlhOWRmNzkwY2I0YTM2NmI0YTp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiI2MTAwZjZiNGMxOWZhN2Y3OWUwYjFiNzVhOGNmNjc0NzM0ZDgxZjZmIn0=	2019-06-05 06:12:43.181077+00
+eb6de2doqg9sa22sl7lxvq9zgubfq828	NWM0ZWZhNTYwNmQ3NjNiYTM2NzIxZTlhOWRmNzkwY2I0YTM2NmI0YTp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiI2MTAwZjZiNGMxOWZhN2Y3OWUwYjFiNzVhOGNmNjc0NzM0ZDgxZjZmIn0=	2019-06-05 08:40:54.353733+00
 \.
 
 
@@ -3688,7 +3696,7 @@ COPY public.taggit_taggeditem (id, object_id, content_type_id, tag_id) FROM stdi
 --
 
 COPY public.users_user (id, password, last_login, is_superuser, first_name, last_name, is_staff, is_active, date_joined, email) FROM stdin;
-1	pbkdf2_sha256$150000$RoyN8ScwYJQt$JDfSf0umKpHUhD+6v4vh2hkQAd+uX7HLvZDMLhjr5+g=	2019-05-22 06:12:43.177814+00	t	Austin	Pantherpants	t	t	2017-12-06 16:13:48.662+00	admin@austintexas.io
+1	pbkdf2_sha256$150000$RoyN8ScwYJQt$JDfSf0umKpHUhD+6v4vh2hkQAd+uX7HLvZDMLhjr5+g=	2019-05-22 08:40:54.346417+00	t	Austin	Pantherpants	t	t	2017-12-06 16:13:48.662+00	admin@austintexas.io
 \.
 
 
@@ -4072,7 +4080,7 @@ SELECT pg_catalog.setval('public.django_content_type_id_seq', 57, true);
 -- Name: django_migrations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.django_migrations_id_seq', 227, true);
+SELECT pg_catalog.setval('public.django_migrations_id_seq', 228, true);
 
 
 --
