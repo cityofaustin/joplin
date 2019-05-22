@@ -1,24 +1,36 @@
 {% extends "wagtailadmin/base.html" %}
 {% load staticfiles wagtailadmin_tags %}
+{% load i18n %}
 {% load render_bundle from webpack_loader %}
 
 {% block branding_logo %}
 {% endblock %}
 
 {% block js %}
-    {{ block.super }}
-    {% render_bundle 'admin' %}
+{{ block.super }}
+{% render_bundle 'admin' %}
 
-    <div class="header coa-header">
-        <div>
-            <img class="wagtail-logo wagtail-logo__full"
-              src="{% static 'images/coa_seal_transparent_white.png' %}"
-              alt="Welcome to Wagtail CMS" width="60"
-            />
-        </div>
-        <div class="actions coa-user-actions">
-            <div class="avatar"><img src="{% avatar_url user %}" alt="avatar" /></div>
-            <div class="user coa-user">{{ user }}</div>
-        </div>
+<div class="header coa-header">
+    <div>
+        <img class="wagtail-logo wagtail-logo__full" src="{% static 'images/coa_seal_transparent_white.png' %}" alt="Welcome to Wagtail CMS" width="60" />
     </div>
+    <div class="dropdown">
+        <div class="actions coa-user coa-account-actions dropdown-toggle">
+            <div class="avatar circle"><img src="{% avatar_url user %}" alt="avatar" /></div>
+            <!-- <div class="user coa-user">{{ request.user.first_name|default:request.user.get_username }}</div> -->
+            <div class="user coa-user" type="button" id="user-account-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                {{ request.user.first_name|default:request.user.get_username }}
+                <span class="icon icon-arrow-down-after"></span>
+                <ul class="account-dropdown-menu" aria-labelledby="user-account-dropdown">
+                    <li><a href="{% url 'wagtailadmin_account' %}" class="icon icon-user">{% trans "Account settings" %}</a></li>
+                    <li><a href="{% url 'wagtailadmin_logout' %}" class="icon icon-logout">{% trans "Log out" %}</a></li>
+                </ul>
+            </div>
+
+        </div>
+
+
+    </div>
+
+</div>
 {% endblock %}

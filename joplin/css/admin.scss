@@ -54,3 +54,52 @@
     width: 75%;
     margin-left: 20px;
 }
+
+.dropdown {
+    display: flex;
+    position: static;
+}
+
+.dropdown .dropdown-toggle {
+    background-color: $coa-color-darkest-gray;
+    border-left: none;
+    color: #fff;
+    text-transform: none;
+    line-height: 2.8em;
+    cursor: pointer;
+    height: 100%;
+    border-left: none;
+    position: absolute;
+    right: 1%;
+    height: auto;
+}
+
+.dropdown ul {
+    background-color: $coa-color-gray;
+    margin-left: -40px;
+}
+
+.dropdown ul a {
+    padding: 0;
+    text-transform: none;
+    color: black;
+}
+
+.dropdown .dropdown-toggle:hover {
+    background-color: $coa-color-darkest-gray;
+}
+
+.dropdown ul a:hover {
+    background-color: $coa-color-lightest-blue;
+}
+
+.dropdown.open .dropdown-toggle {
+    background-color: $coa-color-darkest-gray;
+}
+
+.account-dropdown-menu {
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    border-radius: 1px;
+}
