@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 10.7 (Debian 10.7-1.pgdg90+1)
--- Dumped by pg_dump version 11.2 (Debian 11.2-1.pgdg90+1)
+-- Dumped from database version 10.8 (Debian 10.8-1.pgdg90+1)
+-- Dumped by pg_dump version 11.3 (Debian 11.3-1.pgdg90+1)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -12,6 +12,7 @@ SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SELECT pg_catalog.set_config('search_path', '', false);
 SET check_function_bodies = false;
+SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
@@ -484,7 +485,7 @@ SET default_with_oids = false;
 
 CREATE TABLE public.auth_group (
     id integer NOT NULL,
-    name character varying(80) NOT NULL
+    name character varying(150) NOT NULL
 );
 
 
@@ -2096,7 +2097,10 @@ CREATE TABLE public.wagtaildocs_document (
     file character varying(100) NOT NULL,
     created_at timestamp with time zone NOT NULL,
     uploaded_by_user_id integer,
-    collection_id integer NOT NULL
+    collection_id integer NOT NULL,
+    file_size integer,
+    file_hash character varying(40) NOT NULL,
+    CONSTRAINT wagtaildocs_document_file_size_check CHECK ((file_size >= 0))
 );
 
 
@@ -2132,7 +2136,7 @@ CREATE TABLE public.wagtailembeds_embed (
     title text NOT NULL,
     author_name text NOT NULL,
     provider_name text NOT NULL,
-    thumbnail_url character varying(200),
+    thumbnail_url character varying(255),
     width integer,
     height integer,
     last_updated timestamp with time zone NOT NULL
@@ -2207,6 +2211,7 @@ CREATE TABLE public.wagtailimages_image (
     uploaded_by_user_id integer,
     file_size integer,
     collection_id integer NOT NULL,
+    file_hash character varying(40) NOT NULL,
     CONSTRAINT wagtailimages_image_file_size_check CHECK ((file_size >= 0)),
     CONSTRAINT wagtailimages_image_focal_point_height_check CHECK ((focal_point_height >= 0)),
     CONSTRAINT wagtailimages_image_focal_point_width_check CHECK ((focal_point_width >= 0)),
@@ -2276,7 +2281,7 @@ CREATE TABLE public.wagtailredirects_redirect (
     id integer NOT NULL,
     old_path character varying(255) NOT NULL,
     is_permanent boolean NOT NULL,
-    redirect_link character varying(200) NOT NULL,
+    redirect_link character varying(255) NOT NULL,
     redirect_page_id integer,
     site_id integer
 );
@@ -2998,6 +3003,60 @@ COPY public.auth_permission (id, name, content_type_id, codename) FROM stdin;
 167	Can add topic collection page	57	add_topiccollectionpage
 168	Can change topic collection page	57	change_topiccollectionpage
 169	Can delete topic collection page	57	delete_topiccollectionpage
+170	Can view home page	3	view_homepage
+171	Can view contact	8	view_contact
+172	Can view day and duration	9	view_dayandduration
+173	Can view location	10	view_location
+174	Can view service page	4	view_servicepage
+175	Can view service page contact	11	view_servicepagecontact
+176	Can view contact day and duration	13	view_contactdayandduration
+177	Can view department	14	view_department
+178	Can view department contact	15	view_departmentcontact
+179	Can view map	16	view_map
+180	Can view translated image	17	view_translatedimage
+181	Can view translated image rendition	18	view_translatedimagerendition
+182	Can view theme	19	view_theme
+183	Can view three one one	20	view_threeoneone
+184	Can view process page	5	view_processpage
+185	Can view process page step	21	view_processpagestep
+186	Can view process page contact	22	view_processpagecontact
+187	Can view information page	47	view_informationpage
+188	Can view information page contact	46	view_informationpagecontact
+189	Can view department page	48	view_departmentpage
+190	Can view department page contact	49	view_departmentpagecontact
+191	Can view department page director	50	view_departmentpagedirector
+192	Can view information page topic	51	view_informationpagetopic
+193	Can view process page topic	52	view_processpagetopic
+194	Can view service page topic	53	view_servicepagetopic
+195	Can view topic page	54	view_topicpage
+196	Can view topic collection page	57	view_topiccollectionpage
+197	Can view topic collection page topic collection	56	view_topiccollectionpagetopiccollection
+198	Can view topic page topic collection	55	view_topicpagetopiccollection
+199	Can view user	24	view_user
+200	Can view embed	25	view_embed
+201	Can view user profile	26	view_userprofile
+202	Can view document	7	view_document
+203	Can view image	2	view_image
+204	Can view rendition	27	view_rendition
+205	Can view query	28	view_query
+206	Can view Query Daily Hits	29	view_querydailyhits
+207	Can view page	1	view_page
+208	Can view group page permission	30	view_grouppagepermission
+209	Can view page revision	31	view_pagerevision
+210	Can view page view restriction	32	view_pageviewrestriction
+211	Can view site	33	view_site
+212	Can view collection	34	view_collection
+213	Can view group collection permission	35	view_groupcollectionpermission
+214	Can view collection view restriction	36	view_collectionviewrestriction
+215	Can view form submission	37	view_formsubmission
+216	Can view redirect	38	view_redirect
+217	Can view Tag	39	view_tag
+218	Can view Tagged Item	40	view_taggeditem
+219	Can view log entry	41	view_logentry
+220	Can view permission	42	view_permission
+221	Can view group	43	view_group
+222	Can view content type	44	view_contenttype
+223	Can view session	45	view_session
 \.
 
 
@@ -3559,6 +3618,21 @@ COPY public.django_migrations (id, app, name, applied) FROM stdin;
 207	base	0060_remove_informationpage_image	2019-04-18 03:17:26.002738+00
 208	base	0061_servicepage_short_description	2019-04-22 17:54:56.892526+00
 209	base	0062_auto_20190510_0948	2019-05-15 07:28:16.597564+00
+210	admin	0003_logentry_add_action_flag_choices	2019-05-16 05:16:16.237867+00
+211	auth	0010_alter_group_name_max_length	2019-05-16 05:16:16.25922+00
+212	auth	0011_update_proxy_permissions	2019-05-16 05:16:16.332937+00
+213	base	0063_auto_20190516_0319	2019-05-16 05:16:16.503998+00
+214	wagtailcore	0041_group_collection_permissions_verbose_name_plural	2019-05-16 05:16:16.525691+00
+215	wagtaildocs	0008_document_file_size	2019-05-16 05:16:16.555575+00
+216	wagtaildocs	0009_document_verbose_name_plural	2019-05-16 05:16:16.581816+00
+217	wagtaildocs	0010_document_file_hash	2019-05-16 05:16:16.619512+00
+218	wagtailembeds	0004_embed_verbose_name_plural	2019-05-16 05:16:16.63126+00
+219	wagtailembeds	0005_specify_thumbnail_url_max_length	2019-05-16 05:16:16.644282+00
+220	wagtailimages	0021_image_file_hash	2019-05-16 05:16:16.684682+00
+221	wagtailredirects	0006_redirect_increase_max_length	2019-05-16 05:16:16.717445+00
+222	wagtailsearch	0004_querydailyhits_verbose_name_plural	2019-05-16 05:16:16.728149+00
+223	wagtailusers	0009_userprofile_verbose_name_plural	2019-05-16 05:16:16.750885+00
+224	wagtailimages	0001_squashed_0021	2019-05-16 05:16:16.757895+00
 \.
 
 
@@ -3726,7 +3800,7 @@ COPY public.wagtailcore_site (id, hostname, port, is_default_site, root_page_id,
 -- Data for Name: wagtaildocs_document; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY public.wagtaildocs_document (id, title, file, created_at, uploaded_by_user_id, collection_id) FROM stdin;
+COPY public.wagtaildocs_document (id, title, file, created_at, uploaded_by_user_id, collection_id, file_size, file_hash) FROM stdin;
 \.
 
 
@@ -3750,7 +3824,7 @@ COPY public.wagtailforms_formsubmission (id, form_data, submit_time, page_id) FR
 -- Data for Name: wagtailimages_image; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY public.wagtailimages_image (id, title, file, width, height, created_at, focal_point_x, focal_point_y, focal_point_width, focal_point_height, uploaded_by_user_id, file_size, collection_id) FROM stdin;
+COPY public.wagtailimages_image (id, title, file, width, height, created_at, focal_point_x, focal_point_y, focal_point_width, focal_point_height, uploaded_by_user_id, file_size, collection_id, file_hash) FROM stdin;
 \.
 
 
@@ -3820,7 +3894,7 @@ SELECT pg_catalog.setval('public.auth_group_permissions_id_seq', 14, true);
 -- Name: auth_permission_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.auth_permission_id_seq', 169, true);
+SELECT pg_catalog.setval('public.auth_permission_id_seq', 223, true);
 
 
 --
@@ -3988,7 +4062,7 @@ SELECT pg_catalog.setval('public.django_content_type_id_seq', 57, true);
 -- Name: django_migrations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.django_migrations_id_seq', 209, true);
+SELECT pg_catalog.setval('public.django_migrations_id_seq', 224, true);
 
 
 --

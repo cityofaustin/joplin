@@ -2587,6 +2587,7 @@
   "model": "base.contactdayandduration",
   "pk": 1,
   "fields": {
+    "dayandduration_ptr": 1,
     "sort_order": null,
     "contact": 1
   }
@@ -2595,6 +2596,7 @@
   "model": "base.contactdayandduration",
   "pk": 2,
   "fields": {
+    "dayandduration_ptr": 2,
     "sort_order": null,
     "contact": 1
   }
@@ -2603,6 +2605,7 @@
   "model": "base.contactdayandduration",
   "pk": 3,
   "fields": {
+    "dayandduration_ptr": 3,
     "sort_order": null,
     "contact": 1
   }
@@ -2611,6 +2614,7 @@
   "model": "base.contactdayandduration",
   "pk": 4,
   "fields": {
+    "dayandduration_ptr": 4,
     "sort_order": null,
     "contact": 1
   }
@@ -2619,6 +2623,7 @@
   "model": "base.contactdayandduration",
   "pk": 5,
   "fields": {
+    "dayandduration_ptr": 5,
     "sort_order": null,
     "contact": 1
   }
@@ -2627,6 +2632,7 @@
   "model": "base.contactdayandduration",
   "pk": 6,
   "fields": {
+    "dayandduration_ptr": 6,
     "sort_order": null,
     "contact": 1
   }
@@ -2635,6 +2641,7 @@
   "model": "base.contactdayandduration",
   "pk": 7,
   "fields": {
+    "dayandduration_ptr": 7,
     "sort_order": 0,
     "contact": 2
   }
@@ -2643,6 +2650,7 @@
   "model": "base.contactdayandduration",
   "pk": 8,
   "fields": {
+    "dayandduration_ptr": 8,
     "sort_order": 1,
     "contact": 2
   }
@@ -2651,6 +2659,7 @@
   "model": "base.contactdayandduration",
   "pk": 9,
   "fields": {
+    "dayandduration_ptr": 9,
     "sort_order": 2,
     "contact": 2
   }
@@ -2659,6 +2668,7 @@
   "model": "base.contactdayandduration",
   "pk": 10,
   "fields": {
+    "dayandduration_ptr": 10,
     "sort_order": 3,
     "contact": 2
   }
@@ -2667,6 +2677,7 @@
   "model": "base.contactdayandduration",
   "pk": 11,
   "fields": {
+    "dayandduration_ptr": 11,
     "sort_order": 4,
     "contact": 2
   }
@@ -3999,6 +4010,14 @@
 },
 {
   "model": "sessions.session",
+  "pk": "w5e3x5ffogef253mhqkv20k8s6pjk05g",
+  "fields": {
+    "session_data": "NTYyMGQ1M2E2ZTVmNTI2MzFjM2RhM2U2MTczYzNlYjM5ZmFhZWVjMDp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiJiNTlkMDFmMzU1OTY5OTU2YTVjODNhNDU2MGIwNzc4NTMyY2ZkNmEzIn0=",
+    "expire_date": "2019-05-30T05:45:27.819Z"
+  }
+},
+{
+  "model": "sessions.session",
   "pk": "wsqmu6pjodad9u4w0qkw7it6p6s13ono",
   "fields": {
     "session_data": "NjU3YWZiYjhmNzc3MTY1NDgxMzg0ODNkNTBjZjUwMjMwMzVkY2MxZDp7Il9hdXRoX3VzZXJfaWQiOiI4IiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiI4N2UxYzM0Y2MzNWEzNjMxYWE0ZDg2OTc3NzgyYWMwNGRkM2EyYTcyIn0=",
@@ -4043,6 +4062,14 @@
   "fields": {
     "session_data": "NTYyMGQ1M2E2ZTVmNTI2MzFjM2RhM2U2MTczYzNlYjM5ZmFhZWVjMDp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiJiNTlkMDFmMzU1OTY5OTU2YTVjODNhNDU2MGIwNzc4NTMyY2ZkNmEzIn0=",
     "expire_date": "2019-05-06T17:53:30.419Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "yz28c5h6hooi3mqhlujdrp1bg2h8j4zx",
+  "fields": {
+    "session_data": "NWY2NjFhZDcwYTU3YjMyOWI4N2ZlNDExMGNiODA1NTY1NmMxZTA3NDp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiIzNjFmNzFlY2MyZjRkYzNlN2EwMzA3OWU4Yjc0MzY5MGJjMGQ0Mzg0In0=",
+    "expire_date": "2019-05-30T09:08:50.929Z"
   }
 },
 {
@@ -5937,6 +5964,600 @@
   }
 },
 {
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view home page",
+    "content_type": [
+      "base",
+      "homepage"
+    ],
+    "codename": "view_homepage"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view contact",
+    "content_type": [
+      "base",
+      "contact"
+    ],
+    "codename": "view_contact"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view day and duration",
+    "content_type": [
+      "base",
+      "dayandduration"
+    ],
+    "codename": "view_dayandduration"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view location",
+    "content_type": [
+      "base",
+      "location"
+    ],
+    "codename": "view_location"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view service page",
+    "content_type": [
+      "base",
+      "servicepage"
+    ],
+    "codename": "view_servicepage"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view service page contact",
+    "content_type": [
+      "base",
+      "servicepagecontact"
+    ],
+    "codename": "view_servicepagecontact"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view contact day and duration",
+    "content_type": [
+      "base",
+      "contactdayandduration"
+    ],
+    "codename": "view_contactdayandduration"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view department",
+    "content_type": [
+      "base",
+      "department"
+    ],
+    "codename": "view_department"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view department contact",
+    "content_type": [
+      "base",
+      "departmentcontact"
+    ],
+    "codename": "view_departmentcontact"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view map",
+    "content_type": [
+      "base",
+      "map"
+    ],
+    "codename": "view_map"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view translated image",
+    "content_type": [
+      "base",
+      "translatedimage"
+    ],
+    "codename": "view_translatedimage"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view translated image rendition",
+    "content_type": [
+      "base",
+      "translatedimagerendition"
+    ],
+    "codename": "view_translatedimagerendition"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view theme",
+    "content_type": [
+      "base",
+      "theme"
+    ],
+    "codename": "view_theme"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view three one one",
+    "content_type": [
+      "base",
+      "threeoneone"
+    ],
+    "codename": "view_threeoneone"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view process page",
+    "content_type": [
+      "base",
+      "processpage"
+    ],
+    "codename": "view_processpage"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view process page step",
+    "content_type": [
+      "base",
+      "processpagestep"
+    ],
+    "codename": "view_processpagestep"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view process page contact",
+    "content_type": [
+      "base",
+      "processpagecontact"
+    ],
+    "codename": "view_processpagecontact"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view information page",
+    "content_type": [
+      "base",
+      "informationpage"
+    ],
+    "codename": "view_informationpage"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view information page contact",
+    "content_type": [
+      "base",
+      "informationpagecontact"
+    ],
+    "codename": "view_informationpagecontact"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view department page",
+    "content_type": [
+      "base",
+      "departmentpage"
+    ],
+    "codename": "view_departmentpage"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view department page contact",
+    "content_type": [
+      "base",
+      "departmentpagecontact"
+    ],
+    "codename": "view_departmentpagecontact"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view department page director",
+    "content_type": [
+      "base",
+      "departmentpagedirector"
+    ],
+    "codename": "view_departmentpagedirector"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view information page topic",
+    "content_type": [
+      "base",
+      "informationpagetopic"
+    ],
+    "codename": "view_informationpagetopic"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view process page topic",
+    "content_type": [
+      "base",
+      "processpagetopic"
+    ],
+    "codename": "view_processpagetopic"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view service page topic",
+    "content_type": [
+      "base",
+      "servicepagetopic"
+    ],
+    "codename": "view_servicepagetopic"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view topic page",
+    "content_type": [
+      "base",
+      "topicpage"
+    ],
+    "codename": "view_topicpage"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view topic collection page",
+    "content_type": [
+      "base",
+      "topiccollectionpage"
+    ],
+    "codename": "view_topiccollectionpage"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view topic collection page topic collection",
+    "content_type": [
+      "base",
+      "topiccollectionpagetopiccollection"
+    ],
+    "codename": "view_topiccollectionpagetopiccollection"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view topic page topic collection",
+    "content_type": [
+      "base",
+      "topicpagetopiccollection"
+    ],
+    "codename": "view_topicpagetopiccollection"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view user",
+    "content_type": [
+      "users",
+      "user"
+    ],
+    "codename": "view_user"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view embed",
+    "content_type": [
+      "wagtailembeds",
+      "embed"
+    ],
+    "codename": "view_embed"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view user profile",
+    "content_type": [
+      "wagtailusers",
+      "userprofile"
+    ],
+    "codename": "view_userprofile"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view document",
+    "content_type": [
+      "wagtaildocs",
+      "document"
+    ],
+    "codename": "view_document"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view image",
+    "content_type": [
+      "wagtailimages",
+      "image"
+    ],
+    "codename": "view_image"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view rendition",
+    "content_type": [
+      "wagtailimages",
+      "rendition"
+    ],
+    "codename": "view_rendition"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view query",
+    "content_type": [
+      "wagtailsearch",
+      "query"
+    ],
+    "codename": "view_query"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view Query Daily Hits",
+    "content_type": [
+      "wagtailsearch",
+      "querydailyhits"
+    ],
+    "codename": "view_querydailyhits"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view page",
+    "content_type": [
+      "wagtailcore",
+      "page"
+    ],
+    "codename": "view_page"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view group page permission",
+    "content_type": [
+      "wagtailcore",
+      "grouppagepermission"
+    ],
+    "codename": "view_grouppagepermission"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view page revision",
+    "content_type": [
+      "wagtailcore",
+      "pagerevision"
+    ],
+    "codename": "view_pagerevision"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view page view restriction",
+    "content_type": [
+      "wagtailcore",
+      "pageviewrestriction"
+    ],
+    "codename": "view_pageviewrestriction"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view site",
+    "content_type": [
+      "wagtailcore",
+      "site"
+    ],
+    "codename": "view_site"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view collection",
+    "content_type": [
+      "wagtailcore",
+      "collection"
+    ],
+    "codename": "view_collection"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view group collection permission",
+    "content_type": [
+      "wagtailcore",
+      "groupcollectionpermission"
+    ],
+    "codename": "view_groupcollectionpermission"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view collection view restriction",
+    "content_type": [
+      "wagtailcore",
+      "collectionviewrestriction"
+    ],
+    "codename": "view_collectionviewrestriction"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view form submission",
+    "content_type": [
+      "wagtailforms",
+      "formsubmission"
+    ],
+    "codename": "view_formsubmission"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view redirect",
+    "content_type": [
+      "wagtailredirects",
+      "redirect"
+    ],
+    "codename": "view_redirect"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view Tag",
+    "content_type": [
+      "taggit",
+      "tag"
+    ],
+    "codename": "view_tag"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view Tagged Item",
+    "content_type": [
+      "taggit",
+      "taggeditem"
+    ],
+    "codename": "view_taggeditem"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view log entry",
+    "content_type": [
+      "admin",
+      "logentry"
+    ],
+    "codename": "view_logentry"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view permission",
+    "content_type": [
+      "auth",
+      "permission"
+    ],
+    "codename": "view_permission"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view group",
+    "content_type": [
+      "auth",
+      "group"
+    ],
+    "codename": "view_group"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view content type",
+    "content_type": [
+      "contenttypes",
+      "contenttype"
+    ],
+    "codename": "view_contenttype"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view session",
+    "content_type": [
+      "sessions",
+      "session"
+    ],
+    "codename": "view_session"
+  }
+},
+{
   "model": "auth.group",
   "fields": {
     "name": "Moderators",
@@ -6212,6 +6833,7 @@
   "model": "base.departmentpage",
   "pk": 27,
   "fields": {
+    "page_ptr": 27,
     "created_at": "2019-02-20T22:45:45.614Z",
     "updated_at": "2019-03-28T23:21:33.670Z",
     "what_we_do": "<p>When people have concerns or complaints about potential police misconduct, those concerns need to be heard, investigated, and resolved. At Austin\u2019s Office of Police Oversight (OPO), everything we do is to promote an atmosphere of earned trust between Austinites and the Austin Police Department (APD). We do this by making it easy, accessible, and safe for Austinites to provide information and start the process. For example, we ensure that:</p><ul><li>There are several reporting options available (email, an online form, telephone, etc.).</li><li>The process is not overwhelming or complex.</li><li>People understand that they can choose to remain anonymous.</li><li>There is follow-through and transparency on the investigation\u2019s status and eventual outcome.</li><li>The community understands what we do, how we do it, and how to reach us.</li></ul><p>Our office also:</p><ul><li>Can start its own complaints independent of specific residents making a complaint.</li><li>Makes recommendations to the City Manager and to APD about individual incidents and investigations, as well as broader policy recommendations.</li><li>Is committed to treating all parties \u2014 residents, APD, and the Austin Police Association (APA) \u2014 as stakeholders involved in an ongoing conversation. We seek to understand and learn from all perspectives.</li></ul>",
@@ -6233,6 +6855,7 @@
   "model": "base.departmentpage",
   "pk": 36,
   "fields": {
+    "page_ptr": 36,
     "created_at": "2019-02-21T20:48:34.631Z",
     "updated_at": "2019-02-21T20:52:29.845Z",
     "what_we_do": "<h1>What we do</h1><p>We provide residential curbside collection of trash, recycling, compost, yard trimmings, bulk items, and large brush. Additional services include sweeping streets, collecting dead animals and operating a drop-off center for recycling and household hazardous waste.</p><p>We are committed to a Zero Waste goal to reduce the amount of trash sent to landfills by 90 percent by the year 2040. Zero Waste is a philosophy that goes beyond recycling to focus first on reducing trash and reusing products and then recycling and composting the rest. Zero Waste recognizes that one person\u2019s trash is another person\u2019s treasure, and everything is a resource for something or someone else.</p>",
@@ -6254,6 +6877,7 @@
   "model": "base.departmentpage",
   "pk": 39,
   "fields": {
+    "page_ptr": 39,
     "created_at": "2019-03-20T21:34:48.798Z",
     "updated_at": "2019-03-20T21:34:48.999Z",
     "what_we_do": "What we do",
@@ -6275,6 +6899,7 @@
   "model": "base.topicpage",
   "pk": 51,
   "fields": {
+    "page_ptr": 51,
     "created_at": "2019-04-17T19:04:33.428Z",
     "updated_at": "2019-04-17T19:05:14.485Z",
     "description": "",
@@ -6290,6 +6915,7 @@
   "model": "base.topicpage",
   "pk": 53,
   "fields": {
+    "page_ptr": 53,
     "created_at": "2019-04-17T19:09:52.914Z",
     "updated_at": "2019-04-17T19:10:13.548Z",
     "description": "",
@@ -6305,6 +6931,7 @@
   "model": "base.topicpage",
   "pk": 55,
   "fields": {
+    "page_ptr": 55,
     "created_at": "2019-04-17T19:11:13.304Z",
     "updated_at": "2019-04-17T19:11:25.401Z",
     "description": "",
@@ -6320,6 +6947,7 @@
   "model": "base.topicpage",
   "pk": 57,
   "fields": {
+    "page_ptr": 57,
     "created_at": "2019-04-17T19:12:51.276Z",
     "updated_at": "2019-04-17T19:13:38.047Z",
     "description": "",
@@ -6335,6 +6963,7 @@
   "model": "base.topicpage",
   "pk": 58,
   "fields": {
+    "page_ptr": 58,
     "created_at": "2019-04-17T19:13:52.677Z",
     "updated_at": "2019-04-17T19:14:04.256Z",
     "description": "",
@@ -6350,6 +6979,7 @@
   "model": "base.topicpage",
   "pk": 59,
   "fields": {
+    "page_ptr": 59,
     "created_at": "2019-04-17T19:14:22.802Z",
     "updated_at": "2019-04-17T19:14:37.893Z",
     "description": "",
@@ -6365,6 +6995,7 @@
   "model": "base.topiccollectionpage",
   "pk": 50,
   "fields": {
+    "page_ptr": 50,
     "created_at": "2019-04-17T19:02:50.469Z",
     "updated_at": "2019-04-17T19:03:33.481Z",
     "description": "",
@@ -6380,6 +7011,7 @@
   "model": "base.topiccollectionpage",
   "pk": 52,
   "fields": {
+    "page_ptr": 52,
     "created_at": "2019-04-17T19:09:08.045Z",
     "updated_at": "2019-04-17T19:09:16.856Z",
     "description": "",
@@ -6395,6 +7027,7 @@
   "model": "base.topiccollectionpage",
   "pk": 54,
   "fields": {
+    "page_ptr": 54,
     "created_at": "2019-04-17T19:10:52.070Z",
     "updated_at": "2019-04-17T19:10:57.192Z",
     "description": "",
@@ -6410,6 +7043,7 @@
   "model": "base.topiccollectionpage",
   "pk": 56,
   "fields": {
+    "page_ptr": 56,
     "created_at": "2019-04-17T19:11:56.818Z",
     "updated_at": "2019-04-17T19:12:08.280Z",
     "description": "",
@@ -6425,6 +7059,7 @@
   "model": "base.informationpage",
   "pk": 28,
   "fields": {
+    "page_ptr": 28,
     "created_at": "2019-02-20T22:48:29.147Z",
     "updated_at": "2019-03-20T12:44:07.542Z",
     "department": 27,
@@ -6449,6 +7084,7 @@
   "model": "base.informationpage",
   "pk": 29,
   "fields": {
+    "page_ptr": 29,
     "created_at": "2019-02-20T22:51:33.512Z",
     "updated_at": "2019-03-27T17:27:18.627Z",
     "department": 27,
@@ -6473,6 +7109,7 @@
   "model": "base.informationpage",
   "pk": 31,
   "fields": {
+    "page_ptr": 31,
     "created_at": "2019-02-20T23:21:33.090Z",
     "updated_at": "2019-04-17T19:23:35.963Z",
     "department": null,
@@ -6497,6 +7134,7 @@
   "model": "base.informationpage",
   "pk": 32,
   "fields": {
+    "page_ptr": 32,
     "created_at": "2019-02-20T23:27:49Z",
     "updated_at": "2019-04-17T19:24:57.458Z",
     "department": null,
@@ -6521,6 +7159,7 @@
   "model": "base.informationpage",
   "pk": 33,
   "fields": {
+    "page_ptr": 33,
     "created_at": "2019-02-20T23:43:18.755Z",
     "updated_at": "2019-04-17T19:26:11.367Z",
     "department": null,
@@ -6545,6 +7184,7 @@
   "model": "base.informationpage",
   "pk": 35,
   "fields": {
+    "page_ptr": 35,
     "created_at": "2019-02-21T17:14:54.533Z",
     "updated_at": "2019-02-21T17:20:51.150Z",
     "department": null,
@@ -6569,6 +7209,7 @@
   "model": "base.informationpage",
   "pk": 37,
   "fields": {
+    "page_ptr": 37,
     "created_at": "2019-03-15T20:06:23.813Z",
     "updated_at": "2019-04-12T12:42:30.659Z",
     "department": null,
@@ -6593,6 +7234,7 @@
   "model": "base.informationpage",
   "pk": 38,
   "fields": {
+    "page_ptr": 38,
     "created_at": "2019-03-20T21:34:06.102Z",
     "updated_at": "2019-03-20T21:34:06.285Z",
     "department": null,
@@ -6617,6 +7259,7 @@
   "model": "base.informationpage",
   "pk": 42,
   "fields": {
+    "page_ptr": 42,
     "created_at": "2019-04-02T16:06:17.346Z",
     "updated_at": "2019-04-02T16:06:17.505Z",
     "department": null,
@@ -6641,6 +7284,7 @@
   "model": "base.processpage",
   "pk": 15,
   "fields": {
+    "page_ptr": 15,
     "created_at": "2018-09-25T20:09:02.785Z",
     "updated_at": "2019-02-27T17:16:35.452Z",
     "department": null,
@@ -6656,6 +7300,7 @@
   "model": "base.processpage",
   "pk": 16,
   "fields": {
+    "page_ptr": 16,
     "created_at": "2018-09-25T20:09:04.187Z",
     "updated_at": "2019-04-12T12:37:17.618Z",
     "department": null,
@@ -6671,6 +7316,7 @@
   "model": "base.processpage",
   "pk": 41,
   "fields": {
+    "page_ptr": 41,
     "created_at": "2019-03-20T21:40:35.784Z",
     "updated_at": "2019-03-20T21:40:36.378Z",
     "department": null,
@@ -6686,6 +7332,7 @@
   "model": "base.servicepage",
   "pk": 4,
   "fields": {
+    "page_ptr": 4,
     "created_at": "2018-09-25T20:08:46.785Z",
     "updated_at": "2019-04-17T19:23:54.600Z",
     "steps": "[{\"type\": \"step_with_options_accordian\", \"value\": {\"options_description\": \"Determine how you would like to receive your certificate based on how quickly you need it\", \"options\": [{\"option_name\": \"15 minutes in person\", \"option_description\": \"<ol><li>Bring your current, government-issued photo identification.</li><li>Bring cash, a money order in the exact amount, a personal check, or a credit or debit card in your name for the certificate you need.</li><li>Visit the The Office of Vital Records is at 7201 Levander Loop, Building C, Austin, TX, 78702 between 8 am and 4:30 pm Monday through Friday. The last application is accepted until 4:15 p.m. Note that our office is usually busiest between 11:00 a.m. \\u2013 2:00 p.m. Customers should expect longer wait times during those hours.</li><li>For faster service, download and print an application in <a href=\\\"http://austintexas.gov/sites/default/files/files/Health/VitalRecords/2018_OVR_WalkInENGLISH.pdf\\\">English</a> or <a href=\\\"http://austintexas.gov/sites/default/files/files/Health/VitalRecords/2018_OVR_WalkInSPANISH.pdf\\\">Spanish</a> and bring it with you.</li></ol>\"}, {\"option_name\": \"2-5 business days online\", \"option_description\": \"<ol><li>Visit <a href=\\\"https://www.vitalchek.com/\\\">www.VitalChek.com</a>.</li><li>Follow the prompts on VitalChek to select which kind of certificate(s) you need.</li><li>Verify your identity by answering the questions on VitalChek. If they cannot verify your identity with their standard questions, you will be instructed to upload a copy of your current government-issued identification and proof of shipping address before your application can be processed. This will delay the processing and delivery time.</li><li>Use a credit or debit card (Visa, MasterCard, American Express, or Discover) to pay for your certificate(s). Processing and UPS shipping fees will be added.</li></ol>\"}, {\"option_name\": \"3-5 business days by phone\", \"option_description\": \"<ol><li>Call VitalChek, our secure online agent at 1-800-457-7586.</li><li>Verify your identity by answering a series of questions. If VitalChek cannot verify your identity with their standard questions, you will be instructed to upload a copy of your current government-issued identification and proof of shipping address before your application can be processed. This will delay the processing and delivery time.</li><li>Use a credit or debit card (Visa, MasterCard, American Express, or Discover) to pay for your certificate(s). Processing and UPS shipping fees will be added.</li></ol>\"}, {\"option_name\": \"2-3 weeks by mail\", \"option_description\": \"<p>Mail the following items to Office of Vital Records, PO Box 1088, Austin, TX 78767-1088:</p><ol><li>A completed and notarized <a href=\\\"http://austintexas.gov/sites/default/files/files/Health/VitalRecords/2018_OVR_WalkInENGLISH.pdf\\\">certificate application in English</a> or a <a href=\\\"http://austintexas.gov/sites/default/files/files/Health/VitalRecords/2018_OVR_WalkInSPANISH.pdf\\\">certificate application in Spanish</a>.</li><li>A check or money order in the exact amount payable to the Office of Vital Records. Personal checks must be signed by the same person who signs the application</li><li>A copy of one of your acceptable and current <a href=\\\"https://www.dshs.texas.gov/vs/reqproc/Acceptable-IDs/\\\">forms of government-issued photo identification</a>. If your home address is different than the address on your ID, also include a proof of residence like a utility bill, voter registration card, etc...</li><li>A self-addressed envelope with a stamp. You may use an express mail envelope for faster return delivery. If this is not included, you will not receive the certificate.</li></ol><p>If you need the certificate quickly through the mail, use an Express form of delivery, such as FedEx, USPS, or UPS, and send your application to: Office of Vital Records, 7201 Levander Loop, Bldg. C, Austin, TX 78702.</p>\"}]}, \"id\": \"f601e59c-9e52-46f3-947e-399120fa604a\"}]",
@@ -6706,6 +7353,7 @@
   "model": "base.servicepage",
   "pk": 5,
   "fields": {
+    "page_ptr": 5,
     "created_at": "2018-09-25T20:08:48.296Z",
     "updated_at": "2019-04-17T19:22:33.868Z",
     "steps": "[{\"type\": \"basic_step\", \"value\": \"<p>Use the \\u201cWhat do I do with\\u201d tool below to see what bulk items can be picked up. Bulk items are items that are too large for your trash cart, such as appliances, furniture, and carpet.</p>\", \"id\": \"387583c9-5aaa-40b2-acdb-a197e32a4f6d\"}, {\"type\": \"basic_step\", \"value\": \"<p>Consider donating your items before placing them on the curb for pickup.</p>\", \"id\": \"3b80d7f5-1cce-480f-be13-217784eabcd9\"}, {\"type\": \"basic_step\", \"value\": \"<p>Look up your bulk pickup weeks with My Collection Schedule tool below. We only collect bulk items from Austin residential trash and recycling customers twice a year, and customers have different pickup weeks.</p>\", \"id\": \"15b9a848-91ed-41be-857a-0b44a5580eb0\"}, {\"type\": \"basic_step\", \"value\": \"<p>Review the bulk item pickup do\\u2019s and don\\u2019ts below.</p>\", \"id\": \"a8b677b9-d8d0-4c45-baa6-894e4e504c97\"}, {\"type\": \"basic_step\", \"value\": \"<p>Place bulk items at the curb in front of your house by 6:30 a.m. on the first day of your scheduled collection week.</p>\", \"id\": \"9cce1999-8a7f-4400-922d-ae6b03e41d68\"}, {\"type\": \"basic_step\", \"value\": \"<p>Separate items into three piles:</p><ul><li>Metal - includes appliances, doors must be removed</li><li>Passenger car tires - limit of eight tires per household, rims must be removed, no truck or tractor tires</li><li>Non-metal items - includes carpeting and nail-free lumber</li></ul>\", \"id\": \"bb6b732d-177d-4a89-b179-882f2166aa63\"}, {\"type\": \"basic_step\", \"value\": \"<p>The three separate piles are collected by different trucks and may be collected at different times throughout the week.</p>\", \"id\": \"47a7c5da-7afe-4fd0-9de0-03045938ef24\"}]",
@@ -6726,6 +7374,7 @@
   "model": "base.servicepage",
   "pk": 6,
   "fields": {
+    "page_ptr": 6,
     "created_at": "2018-09-25T20:08:49.595Z",
     "updated_at": "2019-04-17T19:23:02.128Z",
     "steps": "[]",
@@ -6746,6 +7395,7 @@
   "model": "base.servicepage",
   "pk": 7,
   "fields": {
+    "page_ptr": 7,
     "created_at": "2018-09-25T20:08:50.920Z",
     "updated_at": "2019-04-17T19:26:34.642Z",
     "steps": "[{\"type\": \"basic_step\", \"value\": \"<p>Use our <a href=\\\"http://austin.maps.arcgis.com/apps/webappviewer/index.html?id=07706098076547358b7cc0c7b3d8562e%20\\\">free condom map</a> to find locations in the Austin giving them. Locations include:</p><ul><li>Neighborhood centers,</li><li>Barber shops,</li><li>Liquor stores and bars,</li><li>And other easily accessible local establishments.</li></ul>\", \"id\": \"a9f32dc9-7994-44d5-ab6a-420528bb7c9e\"}, {\"type\": \"basic_step\", \"value\": \"<p>Review steps you can take to prevent HIV.</p><ul><li>Always use latex condoms with your partner, especially if you do not know your partner\\u2019s HIV status.</li><li>Don\\u2019t have sex. Abstinence is the only sure way to avoid contracting HIV.</li><li>If you and your partner are both HIV negative, being faithful in your relationship removes your risk for HIV infection.</li><li>Don\\u2019t share needles and syringes. Needles and syringes can expose you to HIV.</li><li>Speak to a doctor about a prescription for <a href=\\\"https://www.cdc.gov/hiv/basics/prep.html\\\">Pre-exposure prophylaxis (or PrEP)</a>. PrEP is taken daily to lower chances of HIV infection.</li></ul>\", \"id\": \"2f508460-1e1f-492b-a551-92f17391c59e\"}]",
@@ -6766,6 +7416,7 @@
   "model": "base.servicepage",
   "pk": 9,
   "fields": {
+    "page_ptr": 9,
     "created_at": "2018-09-25T20:08:54.133Z",
     "updated_at": "2019-04-17T19:18:58.715Z",
     "steps": "[{\"type\": \"basic_step\", \"value\": \"<p>We provide immunization shots to uninsured children and adults and Medicaid recipients. Decide which shots you or your family members need.</p><ul><li>Shots for children<ul><li>DTaP, DT, or DTP</li><li>Hepatitis A</li><li>Hepatitis B</li><li>HPV</li><li>Polio</li><li>Hib</li><li>PCV</li><li>Measles, Mumps, and Rubella (MMR)</li><li>Varicella; the chickenpox vaccine (VAR)</li><li>Meningococcal (MCV4)</li></ul></li><li>Shots for adults<ul><li>DTaP, DT, or DTP</li><li>Hepatitis A</li><li>Hepatitis B</li><li>HPV</li><li>Meningitis (through age 21)</li><li>Measles, Mumps, and Rubella (MMR)</li><li>Pneumonia</li><li>Tdap/Td</li><li>Varicella; the chickenpox vaccine (VAR)</li><li>Shingles</li></ul></li></ul>\", \"id\": \"2f65166a-0b07-40d9-894c-2fb262166100\"}, {\"type\": \"basic_step\", \"value\": \"<p>Find the clinic nearest you</p><ul><li>Far South Austin Clinic</li><li>St. John Clinic</li></ul>\", \"id\": \"ea038930-2d1f-4771-9568-b9112efe0ede\"}, {\"type\": \"basic_step\", \"value\": \"<p><a href=\\\"http://www.austintexas.gov/sites/default/files/files/Health/Immunizations/2018_S4T_BS_Flyer-_English.pdf\\\">Find available appointment times</a>.</p>\", \"id\": \"d540fe0e-8be0-4e7c-8d6f-3b91fc86a6aa\"}, {\"type\": \"basic_step\", \"value\": \"<p>Call 512-972-5520 Monday through Friday 8 a.m. to 4:30 p.m. to make an appointment.</p>\", \"id\": \"bcd4598c-907a-42cd-aa82-2f9d95749051\"}, {\"type\": \"basic_step\", \"value\": \"<p>Bring the required items with you to your appointment:</p><ul><li>Your shot records</li><li>Your Medicaid card if you have one</li><li>Your payment<ul><li>$10 per dose of vaccine for children</li><li>$25 per dose of vaccine for adults</li><li>$20 for a TB test</li><li>No one is refused services if they are unable to pay.</li></ul></li></ul>\", \"id\": \"0be7a488-0e00-4c26-a080-3f33bbb675db\"}]",
@@ -6786,6 +7437,7 @@
   "model": "base.servicepage",
   "pk": 11,
   "fields": {
+    "page_ptr": 11,
     "created_at": "2018-09-25T20:08:56.918Z",
     "updated_at": "2019-04-17T19:20:03.343Z",
     "steps": "[{\"type\": \"basic_step\", \"value\": \"<p>Check the \\u201cWhat do I do with\\u201d tool below to find out what items are accepted. Some items are free to drop off and some items, like tires, require a fee.</p>\", \"id\": \"a69f4e15-3613-4d69-9c3f-0575db4ac1fc\"}, {\"type\": \"basic_step\", \"value\": \"<p>Review the Household Hazardous Waste Do\\u2019s and Don\\u2019ts below.</p>\", \"id\": \"893cb981-9258-4cad-a597-5e5ec3d09613\"}, {\"type\": \"basic_step\", \"value\": \"<p>Drop off your items at the Recycle and ReUse Center at 2514 Business Center Dr, Austin, TX 78744.</p>\", \"id\": \"96ca3653-a014-4ecf-909c-8578324e8581\"}]",
@@ -6806,6 +7458,7 @@
   "model": "base.servicepage",
   "pk": 12,
   "fields": {
+    "page_ptr": 12,
     "created_at": "2018-09-25T20:08:58.359Z",
     "updated_at": "2019-04-17T19:20:45.169Z",
     "steps": "[]",
@@ -6826,6 +7479,7 @@
   "model": "base.servicepage",
   "pk": 13,
   "fields": {
+    "page_ptr": 13,
     "created_at": "2018-09-25T20:08:59.880Z",
     "updated_at": "2019-04-17T19:20:22.631Z",
     "steps": "[{\"type\": \"basic_step\", \"value\": \"<p><a href=\\\"https://www.cdc.gov/phpr/areyouprepared/kit.htm\\\">Pack an emergency preparedness kit</a>. Make sure you have enough food and water, medication, and anything else you and your family need for 3 or more days.</p>\", \"id\": \"317175d3-977e-4c9c-99ec-3dd5a91d57fe\"}, {\"type\": \"basic_step\", \"value\": \"<p><a href=\\\"https://www.cdc.gov/phpr/areyouprepared/plan.htm\\\">Make a plan for where you will meet with your family during an emergency</a>.</p>\", \"id\": \"cb059dd9-90dc-421c-9bdc-e7c12557a3ab\"}, {\"type\": \"basic_step\", \"value\": \"<p>Sign up for emergency alerts, <a href=\\\"https://public.coderedweb.com/CNE/en-US/21C524DBEA1F\\\">register for the emergency notification system</a>.</p>\", \"id\": \"df6918eb-7896-41ec-8951-c074f4d19b0a\"}]",
@@ -6846,6 +7500,7 @@
   "model": "base.servicepage",
   "pk": 14,
   "fields": {
+    "page_ptr": 14,
     "created_at": "2018-09-25T20:09:01.272Z",
     "updated_at": "2019-04-17T19:21:31.825Z",
     "steps": "[]",
@@ -6866,6 +7521,7 @@
   "model": "base.servicepage",
   "pk": 19,
   "fields": {
+    "page_ptr": 19,
     "created_at": "2018-11-06T17:51:04.313Z",
     "updated_at": "2019-04-17T19:21:57.775Z",
     "steps": "[{\"type\": \"basic_step\", \"value\": \"<p>Put your grass clippings, dead leaves, small branches, and other yard trimmings in lawn and leaf bags. If you have a green cart, place them there.</p>\", \"id\": \"feeb3c9e-2a13-45b5-a882-c35303fb7202\"}, {\"type\": \"basic_step\", \"value\": \"<p>If branches don\\u2019t fit in your cart or bags, bundle them and place them next to your cart. Branches should be shorter than 5 feet long and less than 3 inches in diameter.</p>\", \"id\": \"ba9f6962-7750-461d-ae8b-8322385cdc63\"}, {\"type\": \"basic_step\", \"value\": \"<p>Look up your collection day with My Collection Schedule tool below.</p>\", \"id\": \"3bc56774-4b40-44ce-b780-1a8faf18579a\"}, {\"type\": \"basic_step\", \"value\": \"<p>Set out your yard trimmings by 6:30 am on your collection day. Make sure they are 5 feet apart from carts, cars, and mailboxes.</p>\", \"id\": \"40e0e50c-22c9-40d1-a31a-4f629d9946c4\"}]",
@@ -6886,6 +7542,7 @@
   "model": "base.servicepage",
   "pk": 20,
   "fields": {
+    "page_ptr": 20,
     "created_at": "2018-11-15T03:52:10.930Z",
     "updated_at": "2018-11-15T03:52:11.125Z",
     "steps": "[]",
@@ -6906,6 +7563,7 @@
   "model": "base.servicepage",
   "pk": 21,
   "fields": {
+    "page_ptr": 21,
     "created_at": "2018-11-20T21:10:03.725Z",
     "updated_at": "2018-11-20T21:10:04.101Z",
     "steps": "[]",
@@ -6926,6 +7584,7 @@
   "model": "base.servicepage",
   "pk": 22,
   "fields": {
+    "page_ptr": 22,
     "created_at": "2018-12-04T22:02:00.651Z",
     "updated_at": "2018-12-04T22:02:00.749Z",
     "steps": "[]",
@@ -6946,6 +7605,7 @@
   "model": "base.servicepage",
   "pk": 23,
   "fields": {
+    "page_ptr": 23,
     "created_at": "2019-02-11T14:57:15.260Z",
     "updated_at": "2019-02-11T14:57:15.363Z",
     "steps": "[]",
@@ -6966,6 +7626,7 @@
   "model": "base.servicepage",
   "pk": 40,
   "fields": {
+    "page_ptr": 40,
     "created_at": "2019-03-20T21:39:29.773Z",
     "updated_at": "2019-03-20T21:39:30.567Z",
     "steps": "[]",
@@ -6986,6 +7647,7 @@
   "model": "base.homepage",
   "pk": 3,
   "fields": {
+    "page_ptr": 3,
     "image": null
   }
 },
@@ -7008,7 +7670,8 @@
     "focal_point_y": null,
     "focal_point_width": null,
     "focal_point_height": null,
-    "file_size": 1114301
+    "file_size": 1114301,
+    "file_hash": ""
   }
 },
 {
@@ -7030,7 +7693,8 @@
     "focal_point_y": null,
     "focal_point_width": null,
     "focal_point_height": null,
-    "file_size": null
+    "file_size": null,
+    "file_hash": ""
   }
 },
 {
@@ -7052,7 +7716,8 @@
     "focal_point_y": null,
     "focal_point_width": null,
     "focal_point_height": null,
-    "file_size": null
+    "file_size": null,
+    "file_hash": ""
   }
 },
 {
@@ -7074,7 +7739,8 @@
     "focal_point_y": null,
     "focal_point_width": null,
     "focal_point_height": null,
-    "file_size": null
+    "file_size": null,
+    "file_hash": ""
   }
 },
 {
@@ -7096,7 +7762,8 @@
     "focal_point_y": null,
     "focal_point_width": null,
     "focal_point_height": null,
-    "file_size": null
+    "file_size": null,
+    "file_hash": ""
   }
 },
 {
@@ -7118,7 +7785,8 @@
     "focal_point_y": null,
     "focal_point_width": null,
     "focal_point_height": null,
-    "file_size": null
+    "file_size": null,
+    "file_hash": ""
   }
 },
 {
@@ -7140,7 +7808,8 @@
     "focal_point_y": null,
     "focal_point_width": null,
     "focal_point_height": null,
-    "file_size": 458994
+    "file_size": 458994,
+    "file_hash": ""
   }
 },
 {
@@ -7162,7 +7831,8 @@
     "focal_point_y": null,
     "focal_point_width": null,
     "focal_point_height": null,
-    "file_size": 35996
+    "file_size": 35996,
+    "file_hash": ""
   }
 },
 {
@@ -7186,7 +7856,8 @@
     "focal_point_y": null,
     "focal_point_width": null,
     "focal_point_height": null,
-    "file_size": 394
+    "file_size": 394,
+    "file_hash": ""
   }
 },
 {
@@ -7210,7 +7881,8 @@
     "focal_point_y": null,
     "focal_point_width": null,
     "focal_point_height": null,
-    "file_size": 14498
+    "file_size": 14498,
+    "file_hash": ""
   }
 },
 {
@@ -7234,7 +7906,8 @@
     "focal_point_y": null,
     "focal_point_width": null,
     "focal_point_height": null,
-    "file_size": 2182180
+    "file_size": 2182180,
+    "file_hash": ""
   }
 },
 {
@@ -7258,7 +7931,8 @@
     "focal_point_y": null,
     "focal_point_width": null,
     "focal_point_height": null,
-    "file_size": 14498
+    "file_size": 14498,
+    "file_hash": ""
   }
 },
 {
@@ -7282,7 +7956,8 @@
     "focal_point_y": null,
     "focal_point_width": null,
     "focal_point_height": null,
-    "file_size": 104767
+    "file_size": 104767,
+    "file_hash": ""
   }
 },
 {
@@ -7306,7 +7981,8 @@
     "focal_point_y": null,
     "focal_point_width": null,
     "focal_point_height": null,
-    "file_size": 49681
+    "file_size": 49681,
+    "file_hash": ""
   }
 },
 {
@@ -7330,7 +8006,8 @@
     "focal_point_y": null,
     "focal_point_width": null,
     "focal_point_height": null,
-    "file_size": 27251
+    "file_size": 27251,
+    "file_hash": ""
   }
 },
 {
