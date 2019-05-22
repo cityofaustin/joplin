@@ -8,7 +8,7 @@ set -a # exports all assigned variables
 
 # Heroku Pipeline Name
 PIPELINE_NAME="joplin-pipeline"
-PIPELINE_TEAM="innovation-fellowship-program"
+PIPELINE_TEAM="odd"
 
 # Use git branch to determine ENV and Heroku APPNAME
 if [ "$CIRCLE_BRANCH" == "master" ]; then
@@ -19,7 +19,8 @@ elif [ "$CIRCLE_BRANCH" == "production" ]; then
   APPNAME="joplin"
 else
   ENV="dev"
-  APPNAME="joplin-dev-$CIRCLE_BRANCH"
+  # truncates to 30 characters for heroku app name length limitations
+  APPNAME="joplin-dev-$CIRCLE_BRANCH"; APPNAME=${APPNAME:0:30}
 fi
 
 # Get 7-character truncated SHA1 hash for git commit

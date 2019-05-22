@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -eo pipefail
 CURRENT_DIR=`dirname $BASH_SOURCE`
-source $CURRENT_DIR/helper.sh
+source $CURRENT_DIR/helpers.sh
 F=create_pipeline # set name of file to use with log()
 
 # Attaches postgresql database to heroku application
@@ -9,7 +9,7 @@ function attach_heroku_database {
     heroku addons:create heroku-postgresql:hobby-dev --version=10 --app $APPNAME
 }
 
-print_header "Build PR Heroku App"
+print_header "Build Heroku Review App"
 log $F 1 ">>> Deployment details:"
 log $F 1 "Deploying new app:         ${APPNAME}"
 log $F 1 "Into Pipeline:             ${PIPELINE_NAME}"
@@ -43,6 +43,7 @@ fi
 
 # Add or update environment variables for review app
 # Vars prefixed with "CI_" are sourced from circleci
+# Suppress stdout with "> /dev/null" to hide display of sensitive variables
 log $F 1 "Adding environment variables to Heroku App: $APPNAME"
 
 heroku config:set   \
@@ -58,4 +59,4 @@ heroku config:set   \
   HEROKU_JANIS_APP_NAME="janis-staging" \
   JANIS_URL="https://janis-staging.herokuapp.com" \
   STYLEGUIDE_URL="https://cityofaustin.github.io/digital-services-style-guide" \
-  --app $APPNAME;
+  --app $APPNAME > /dev/null
