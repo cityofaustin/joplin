@@ -327,20 +327,6 @@ class DepartmentPage(JanisPage):
     def __str__(self):
         return self.title_en
 
-    @cached_classmethod
-    def get_edit_handler(cls):
-        if hasattr(cls, 'edit_handler'):
-            return cls.edit_handler.bind_to_model(cls)
-
-        edit_handler = TabbedInterface([
-            ObjectList([
-                # FieldPanel('title')
-            ] + cls.content_panels, heading='Content'),
-            ObjectList(Page.promote_panels + cls.promote_panels, heading='Search Info')
-        ])
-
-        return edit_handler.bind_to_model(cls)
-
     what_we_do = RichTextField(
         features=WYSIWYG_GENERAL,
         verbose_name='What we do',
