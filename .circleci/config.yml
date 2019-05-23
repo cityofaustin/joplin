@@ -8,7 +8,7 @@ jobs:
       - checkout
       - run:
           name: "Test that CLI utilities work"
-          command: bash ./.circleci/cli-test.sh
+          command: bash ./.circleci/scripts/cli-test.sh
   backup_database:
     docker:
       - image: cityofaustin/joplin-ci-deploy:91ad719
@@ -16,7 +16,7 @@ jobs:
       - checkout
       - run:
           name: "Backup Database and Store in S3"
-          command: bash ./.circleci/backup_database.sh
+          command: bash ./.circleci/scripts/backup_database.sh
   create_review_app:
     docker:
       - image: cityofaustin/joplin-ci-deploy:91ad719
@@ -24,7 +24,7 @@ jobs:
       - checkout
       - run:
           name: "Create Review App for Heroku Pipeline"
-          command: bash ./.circleci/create_review_app.sh
+          command: bash ./.circleci/scripts/create_review_app.sh
   build_and_release:
     docker:
       - image: cityofaustin/joplin-ci-build:5a25aef
@@ -34,13 +34,13 @@ jobs:
           version: 18.09.3
       - run:
           name: "Build Joplin Docker Image"
-          command: bash ./.circleci/build.sh
+          command: bash ./.circleci/scripts/build.sh
       - run:
           name: "Release Image to Heroku"
-          command: bash ./.circleci/release.sh
+          command: bash ./.circleci/scripts/release.sh
       - run:
           name: "Run Migrations"
-          command: bash ./.circleci/migrate.sh
+          command: bash ./.circleci/scripts/migrate.sh
 
 workflows:
   version: 2.1
