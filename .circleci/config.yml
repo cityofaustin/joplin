@@ -32,12 +32,12 @@ jobs:
       - checkout
       - setup_remote_docker:
           version: 18.09.3
-      - run:
-          name: "Build Joplin Docker Image"
-          command: bash ./.circleci/scripts/build.sh
-      - run:
-          name: "Release Image to Heroku"
-          command: bash ./.circleci/scripts/release.sh
+      # - run:
+      #     name: "Build Joplin Docker Image"
+      #     command: bash ./.circleci/scripts/build.sh
+      # - run:
+      #     name: "Release Image to Heroku"
+      #     command: bash ./.circleci/scripts/release.sh
       - run:
           name: "Run Migrations"
           command: bash ./.circleci/scripts/migrate.sh
