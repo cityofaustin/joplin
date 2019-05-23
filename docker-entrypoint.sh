@@ -7,7 +7,7 @@ set -o errexit
 
 function load_backup_data {
   echo "Adding backup data"
-  python ./joplin/manage.py loaddata ./joplin/db/system-generated/fake/*.datadump.json
+  python ./joplin/manage.py loaddata ./joplin/db/system-generated/*.datadump.json
 }
 
 if [ $DEPLOYMENT_MODE == "LOCAL" ]; then
