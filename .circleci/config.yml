@@ -8,7 +8,7 @@ jobs:
       - checkout
       - run:
           name: "Test that CLI utilities work"
-          command: bash ./.circleci/scripts/cli-test.sh
+          command: bash ./.circleci/scripts/cli_test.sh
   backup_database:
     docker:
       - image: cityofaustin/joplin-ci-deploy:91ad719

@@ -20,7 +20,7 @@ export LOAD_DATA="on"
 
 # Build Args for use during build process
 export COMPOSE_PROJECT_NAME=joplin_migration_test
-export DOCKER_TAG_APP="cityofaustin/joplin_app:latest-master"
+export DOCKER_TAG_APP="cityofaustin/joplin-app:master-latest"
 export DOCKER_TARGET_APP=joplin-migration-test
 
 echo "######################"
@@ -34,14 +34,14 @@ delete_project_containers $COMPOSE_PROJECT_NAME
 
 echo "Pulling ${DOCKER_TAG_APP} from dockerhub"
 docker pull $DOCKER_TAG_APP
-echo "Spinning up joplin_app and joplin_db containers"
+echo "Spinning up joplin-app and joplin_db containers"
 docker-compose -f docker-compose.yml -f docker-compose.migration_test_override.yml up -d
 
 echo "Running old migrations from $DOCKER_TAG_APP and loading data"
 docker logs ${COMPOSE_PROJECT_NAME}_app_1 -f
 docker wait ${COMPOSE_PROJECT_NAME}_app_1
 echo "$DOCKER_TAG_APP migration and data loaded completed successfully"
-echo "$DOCKER_TAG_APP joplin_app container shutting down"
+echo "$DOCKER_TAG_APP joplin-app container shutting down"
 
 echo "######################"
 echo "Step 2: Run new migrations on old db"
@@ -61,13 +61,13 @@ export DATABASE_URL="postgres://joplin@${DATABASE_IPADDRESS}:${JOPLIN_DB_CONTAIN
 export LOAD_DATA="off"
 
 # Build Args for use during build process
-export DOCKER_TAG_APP="joplin_app:local"
+export DOCKER_TAG_APP="joplin-app:local"
 export DOCKER_TARGET_APP=joplin-local
 
 echo "Rebuilding ${DOCKER_TAG_APP}"
 docker build -f app.Dockerfile -t $DOCKER_TAG_APP --target $DOCKER_TARGET_APP .
 
-echo "Spinning up joplin_app and janis containers"
+echo "Spinning up joplin-app and janis containers"
 docker-compose -f docker-compose.yml -f docker-compose.janis.yml up -d
 
 echo "######################"

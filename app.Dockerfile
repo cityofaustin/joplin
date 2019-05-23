@@ -23,9 +23,7 @@ WORKDIR /app
 
 COPY "$PWD/joplin" /app/joplin
 COPY "$PWD/media" /app
-
-# Start the Joplin server
-CMD ["gunicorn", "joplin.wsgi:application", "--pythonpath", "/app/joplin"]
+COPY "$PWD/docker-entrypoint.sh" /app/docker-entrypoint.sh
 
 ########################################################
 # joplin-base => joplin-local
@@ -34,8 +32,10 @@ FROM joplin-base as joplin-local
 
 ENV DEPLOYMENT_MODE "LOCAL"
 
-COPY "$PWD/docker-entrypoint.sh" /app/docker-entrypoint.sh
+# Run Migrations
 ENTRYPOINT ["./docker-entrypoint.sh"]
+# Start the Joplin server
+CMD ["gunicorn", "joplin.wsgi:application", "--pythonpath", "/app/joplin"]
 
 ########################################################
 # joplin-base => joplin-deployed
@@ -52,8 +52,9 @@ RUN npm rebuild node-sass
 RUN yarn; yarn build
 WORKDIR /app
 
-COPY "$PWD/docker-entrypoint.sh" /app/docker-entrypoint.sh
 # Entrypoint must be executed manually since heroku has a 60 second time limit for entrypoint scripts
+# Start the Joplin server
+CMD ["gunicorn", "joplin.wsgi:application", "--pythonpath", "/app/joplin"]
 
 ########################################################
 # joplin-base => joplin-deployed => joplin-review

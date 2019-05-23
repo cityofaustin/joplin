@@ -19,8 +19,8 @@ export DATABASE_URL="postgres://joplin@db:${JOPLIN_DB_CONTAINER_PORT}/joplin"
 
 # Build Args for use during build process
 export COMPOSE_PROJECT_NAME=joplin
-export DOCKER_TAG_APP="joplin_app:local"
-export DOCKER_TAG_ASSETS="joplin_assets:local"
+export DOCKER_TAG_APP="joplin-app:local"
+export DOCKER_TAG_ASSETS="joplin-assets:local"
 export DOCKER_TARGET_APP=joplin-local
 
 # Stop any existing joplin containers that might still be running
