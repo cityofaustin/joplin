@@ -17,19 +17,19 @@ SHA=${CIRCLE_SHA1:0:7}
 if [ "$CIRCLE_BRANCH" == "master" ]; then
   APPNAME="joplin-staging"
   DOCKER_TARGET="joplin-staging"
-  DOCKER_TAG_1="cityofaustin/joplin_app:master-${SHA}"
-  DOCKER_TAG_2="cityofaustin/joplin_app:master-latest"
+  DOCKER_TAG_1="cityofaustin/joplin-app:master-${SHA}"
+  DOCKER_TAG_2="cityofaustin/joplin-app:master-latest"
 elif [ "$CIRCLE_BRANCH" == "production" ]; then
   APPNAME="joplin"
   DOCKER_TARGET="joplin-prod"
-  DOCKER_TAG_1="cityofaustin/joplin_app:production-${SHA}"
-  DOCKER_TAG_2="cityofaustin/joplin_app:production-latest"
+  DOCKER_TAG_1="cityofaustin/joplin-app:production-${SHA}"
+  DOCKER_TAG_2="cityofaustin/joplin-app:production-latest"
 else
   # truncates to 30 characters for heroku app name length limitations
   APPNAME="joplin-pr-$CIRCLE_BRANCH"; APPNAME=${APPNAME:0:30}
   DOCKER_TARGET="joplin-review"
-  DOCKER_TAG_1="cityofaustin/joplin_app:dev-${CIRCLE_BRANCH}-${SHA}"
-  DOCKER_TAG_2="cityofaustin/joplin_app:dev-${CIRCLE_BRANCH}-latest"
+  DOCKER_TAG_1="cityofaustin/joplin-app:pr-${CIRCLE_BRANCH}-${SHA}"
+  DOCKER_TAG_2="cityofaustin/joplin-app:pr-${CIRCLE_BRANCH}-latest"
 fi
 DOCKER_TAG_HEROKU=registry.heroku.com/$APPNAME/web
 

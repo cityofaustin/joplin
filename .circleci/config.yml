@@ -34,7 +34,13 @@ jobs:
           version: 18.09.3
       - run:
           name: "Build Joplin Docker Image"
-          command: bash ./.circleci/build_and_release.sh
+          command: bash ./.circleci/build.sh
+      - run:
+          name: "Release Image to Heroku"
+          command: bash ./.circleci/release.sh
+      - run:
+          name: "Run Migrations"
+          command: bash ./.circleci/migrate.sh
 
 workflows:
   version: 2.1

@@ -42,6 +42,7 @@ else
 fi
 
 # Add or update environment variables for review app
+# Environment variables for staging and production are handled manually within Heroku Console
 # Vars prefixed with "CI_" are sourced from circleci
 # Suppress stdout with "> /dev/null" to hide display of sensitive variables
 log 1 "Adding environment variables to Heroku App: $APPNAME"

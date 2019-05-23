@@ -5,7 +5,6 @@ source $CURRENT_DIR/helpers.sh
 log() { log_base "backup_database" $1 $2; }
 
 # Check if APP/DB exists
-APPNAME="joplin-staging" # Temporary!
 APP_DB_EXISTS=$(app_database_attached $APPNAME)
 
 if [ $APP_DB_EXISTS == "true" ]; then
@@ -20,7 +19,6 @@ if [ $APP_DB_EXISTS == "true" ]; then
   DB_CONNECTION_STRING=$(heroku config:get DATABASE_URL -a $APPNAME);
   LATEST_MIGRATION=$(psql $DB_CONNECTION_STRING -qtA -c 'select name from django_migrations order by id desc limit 1;')
   BACKUP_TIMESTAMP=$(date '+%Y-%m-%d--%H-%M-%S')
-  APPNAME="joplin-dev-$CIRCLE_BRANCH" # Temporary!
   S3_DUMP_FILENAME="${APPNAME}.${BACKUP_TIMESTAMP}.${SHA}.${LATEST_MIGRATION}.dump"
   S3_BUCKET_FILE_URL="s3://joplin-austin-gov-archive/deployment-backups/database/${APPNAME}/${S3_DUMP_FILENAME}"
 
