@@ -7,8 +7,8 @@ jobs:
     steps:
       - checkout
       - run:
-          name: "Test that CLI utilities work"
-          command: bash ./.circleci/scripts/cli_test.sh
+          name: "WHERE am I??"
+          command: bash ./.circleci/scripts/what.sh
   backup_database:
     docker:
       - image: cityofaustin/joplin-ci-deploy:91ad719
@@ -47,23 +47,23 @@ workflows:
   build-and-deploy:
     jobs:
       - test
-      - backup_database:
-          requires:
-            - test
-          filters:
-            branches:
-              only:
-                - master
-                - production
-      - create_review_app:
-          requires:
-            - test
-          filters:
-            branches:
-              ignore:
-                - master
-                - production
-      - build_and_release:
-          requires:
-            - backup_database
-            - create_review_app
+      # - backup_database:
+      #     requires:
+      #       - test
+      #     filters:
+      #       branches:
+      #         only:
+      #           - master
+      #           - production
+      # - create_review_app:
+      #     requires:
+      #       - test
+      #     filters:
+      #       branches:
+      #         ignore:
+      #           - master
+      #           - production
+      # - build_and_release:
+      #     requires:
+      #       - backup_database
+      #       - create_review_app
