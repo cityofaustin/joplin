@@ -21,7 +21,7 @@ from wagtail.admin.edit_handlers import PageChooserPanel
 from . import blocks as custom_blocks
 from . import forms as custom_forms
 
-WYSIWYG_GENERAL = ['h1', 'h2', 'h3', 'h4', 'bold', 'link', 'ul', 'ol']
+WYSIWYG_GENERAL = ['h1', 'h2', 'h3', 'h4', 'bold', 'link', 'ul', 'ol', 'code']
 WYSIWYG_SERVICE_STEP = ['ul', 'ol', 'link']
 DEFAULT_MAX_LENGTH = 255
 
@@ -96,7 +96,7 @@ class JanisPage(JanisBasePage):
 
         edit_handler = TabbedInterface([
             ObjectList([
-                FieldPanel('title')
+                # FieldPanel('title')
             ] + cls.content_panels, heading='Content'),
             ObjectList(Page.promote_panels + cls.promote_panels, heading='Search Info')
         ])
@@ -164,6 +164,10 @@ class ServicePage(JanisPage):
     )
 
     content_panels = [
+        FieldPanel('title_en'),
+        FieldPanel('title_es'),
+        FieldPanel('title_ar'),
+        FieldPanel('title_vi'),
         FieldPanel('short_description'),
         InlinePanel('topics', label='Topics'),
         StreamFieldPanel('steps'),
@@ -234,12 +238,12 @@ class InformationPage(JanisPage):
     base_form_class = custom_forms.InformationPageForm
 
     content_panels = [
-        InlinePanel('topics', label='Topics'),
-        FieldPanel('department'),
         FieldPanel('title_en'),
         FieldPanel('title_es'),
         FieldPanel('title_ar'),
         FieldPanel('title_vi'),
+        InlinePanel('topics', label='Topics'),
+        FieldPanel('department'),
         FieldPanel('description'),
         StreamFieldPanel('options'),
         FieldPanel('additional_content'),
