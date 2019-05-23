@@ -7,7 +7,7 @@ set -o errexit
 
 function load_backup_data {
   echo "Adding backup data"
-  python ./joplin/manage.py loaddata ./joplin/db/data/migration_datadump_*.json
+  python ./joplin/manage.py loaddata ./joplin/db/system-generated/*.datadump.json
 }
 
 if [ $DEPLOYMENT_MODE == "LOCAL" ]; then
@@ -33,7 +33,7 @@ case "${DEPLOYMENT_MODE}" in
     else
       # Add initial admin user to Database if we aren't loading data
       echo "Adding test admin user for local development."
-      python ./joplin/manage.py loaddata ./joplin/db/data/local_admin_user.json
+      python ./joplin/manage.py loaddata ./joplin/db/system-generated/local_admin_user.json
     fi
   ;;
   REVIEW)

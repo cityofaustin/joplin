@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
-
 set -o errexit
-
 CURRENT_DIR=`dirname $BASH_SOURCE`
 source $CURRENT_DIR/docker-helpers.sh
 
@@ -80,19 +78,20 @@ echo "Joplin URL: http://localhost:${JOPLIN_APP_HOST_PORT}/admin"
 function handle_input {
   echo "Is it all good? Enter y/n"
   echo "If you enter n, the story ends, the ${COMPOSE_PROJECT_NAME} containers will be stopped, you wake up in your bed, and you believe whatever you want to believe."
-  echo "If you enter y, then congratulations, we'll rewrite joplin/db/data/migration_datadump with your latest migration changes."
+  echo "If you enter y, then congratulations, we'll rewrite joplin/db/system-generated/[migration].datadump.json with your latest migration changes."
   read answer
   if [ "$answer" == "y" ]; then
     echo "Glad that worked. We'll create a new migration_datadump for you."
-    OLD_MIGRATION_DATADUMP=$CURRENT_DIR/../joplin/db/data/migration_datadump_*
-    if [ -z $OLD_MIGRATION_DATADUMP ]; then rm $OLD_MIGRATION_DATADUMP; fi
-    # Get latest migration from database
-    LATEST_MIGRATION=$(psql postgres://joplin@127.0.0.1:${JOPLIN_DB_HOST_PORT}/joplin -qtA -c 'select id from django_migrations order by id desc limit 1;')
-    NEW_MIGRATION_DATADUMP="migration_datadump_${LATEST_MIGRATION}.json"
-    # Build new migration_datadump
+    # Get name of latest migration from database
+    LATEST_MIGRATION=$(psql postgres://joplin@127.0.0.1:${JOPLIN_DB_HOST_PORT}/joplin -qtA -c 'select name from django_migrations order by id desc limit 1;')
+    NEW_MIGRATION_DATADUMP="${LATEST_MIGRATION}.datadump.json"
+    # Build new migration datadump
     docker exec -it ${COMPOSE_PROJECT_NAME}_app_1 python joplin/manage.py dumpdata > $NEW_MIGRATION_DATADUMP
-    # Copy migration_datadump from container to host
-    docker cp ${COMPOSE_PROJECT_NAME}_app_1:/app/$NEW_MIGRATION_DATADUMP ./joplin/db/data
+    # Remove old migration datadump
+    OLD_MIGRATION_DATADUMP=$CURRENT_DIR/../joplin/db/system-generated/*.datadump.json
+    if [ -z $OLD_MIGRATION_DATADUMP ]; then rm $OLD_MIGRATION_DATADUMP; fi
+    # Copy new migration datadump from container to host
+    docker cp ${COMPOSE_PROJECT_NAME}_app_1:/app/$NEW_MIGRATION_DATADUMP ./joplin/db/system-generated
     stop_project_containers $COMPOSE_PROJECT_NAME
     exit 0
   elif [ "$answer" == "n" ]; then

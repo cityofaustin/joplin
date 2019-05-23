@@ -39,7 +39,7 @@ First, install docker (version 18.09 or greater) and clone this repo.
 ```
 LOAD_DATA="on" ./scripts/serve-local.sh
 ```
-  - This will add some test content (from `joplin/db/data/migration_datadump_[latest migration].json`)
+  - This will add some test content (from `joplin/db/system-generated/[latest migration].datadump.json`)
   - Images are also not stored in this repo, and can instead be downloaded using `./scripts/download-media.sh`. This will parse a backup file from the db/smuggler directory and place all referenced images into the local media folder.
 
 **Run + Rebuild without cached image layer**
@@ -88,7 +88,7 @@ Here's what `migration-test.sh` does at a high level:
     - The previous joplin_app container shuts down (but the joplin_db stays up). Now a new joplin_app container (built from your local Joplin directory, tagged as "joplin_app:local") runs against the old joplin_db. The new migrations are automatically applied through joplin_app's entrypoint.
 3. Spins up a local Janis and Joplin for you to test manually.
     - Make sure that Joplin and Janis work as expected and that nothing breaks on Janis.
-    - A command line prompt will ask if the migration worked. If you enter "y", then a new datadump fixture will replace the old datadump fixture in joplin/db/data. If you enter "n", then the migration_test containers will shut down and not replace your datadump fixture.
+    - A command line prompt will ask if the migration worked. If you enter "y", then a new datadump fixture will replace the old datadump fixture in joplin/db/system-generated. If you enter "n", then the migration_test containers will shut down and not replace your datadump fixture.
 
 ---
 ## Useful Commands
