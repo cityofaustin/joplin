@@ -2,7 +2,7 @@
 set -eo pipefail
 CURRENT_DIR=`dirname $BASH_SOURCE`
 source $CURRENT_DIR/helpers.sh
-log() { log_base "backup_database" $1 $2; }
+log() { log_base "backup_database" "$1" "$2"; }
 
 # Check if APP/DB exists
 APP_DB_EXISTS=$(app_database_attached $APPNAME)

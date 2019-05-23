@@ -2,7 +2,7 @@
 set -eo pipefail
 CURRENT_DIR=`dirname $BASH_SOURCE`
 source $CURRENT_DIR/helpers.sh
-log() { log_base "release" $1 $2; }
+log() { log_base "release" "$1" "$2"; }
 
 print_header "Releasing Image"
 

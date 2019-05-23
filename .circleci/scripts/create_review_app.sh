@@ -2,7 +2,7 @@
 set -eo pipefail
 CURRENT_DIR=`dirname $BASH_SOURCE`
 source $CURRENT_DIR/helpers.sh
-log() { log_base "create_review_app" $1 $2; }
+log() { log_base "create_review_app" "$1" "$2"; }
 
 # Attaches postgresql database to heroku application
 function attach_heroku_database {

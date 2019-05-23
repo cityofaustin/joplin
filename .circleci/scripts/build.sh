@@ -2,7 +2,7 @@
 set -eo pipefail
 CURRENT_DIR=`dirname $BASH_SOURCE`
 source $CURRENT_DIR/helpers.sh
-log() { log_base "build" $1 $2; }
+log() { log_base "build" "$1" "$2"; }
 
 print_header "Building Joplin Docker Image"
 
