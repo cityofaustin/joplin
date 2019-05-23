@@ -55,7 +55,7 @@
     margin-left: 20px;
 }
 
-.dropdown.user-account {
+.user-account {
     display: flex;
     position: static;
 }
@@ -67,23 +67,18 @@
     text-transform: none;
     line-height: 2.8em;
     cursor: pointer;
-    height: 100%;
     position: absolute;
     right: 1%;
     height: auto;
 }
 
-.user-account-dropdown {
-    text-transform: none;
-}
-
 .user-account-dropdown ul {
     background-color: $coa-color-gray;
-    margin-left: -40px;
+    margin-left: -50px;
 }
 
 .user-account-dropdown ul a {
-    padding: 0;
+    padding: 0.5em;
     text-transform: none;
     color: black;
 }
