@@ -2,7 +2,7 @@
 
 ########################################
 # Declare Constants
-# PIPELINE_NAME, ENV, APPNAME, SHA
+# PIPELINE_NAME, ENV, APPNAME, SHA, DOCKER_TARGET, DOCKER_TAG_*
 ########################################
 set -a # exports all assigned variables
 
@@ -10,21 +10,28 @@ set -a # exports all assigned variables
 PIPELINE_NAME="joplin-pipeline"
 PIPELINE_TEAM="odd"
 
-# Use git branch to determine ENV and Heroku APPNAME
-if [ "$CIRCLE_BRANCH" == "master" ]; then
-  ENV="staging"
-  APPNAME="joplin-staging"
-elif [ "$CIRCLE_BRANCH" == "production" ]; then
-  ENV="prod"
-  APPNAME="joplin"
-else
-  ENV="dev"
-  # truncates to 30 characters for heroku app name length limitations
-  APPNAME="joplin-dev-$CIRCLE_BRANCH"; APPNAME=${APPNAME:0:30}
-fi
-
 # Get 7-character truncated SHA1 hash for git commit
 SHA=${CIRCLE_SHA1:0:7}
+
+# Use git branch to determine ENV and Heroku APPNAME
+if [ "$CIRCLE_BRANCH" == "master" ]; then
+  APPNAME="joplin-staging"
+  DOCKER_TARGET="joplin-staging"
+  DOCKER_TAG_1="cityofaustin/joplin_app:master-${SHA}"
+  DOCKER_TAG_2="cityofaustin/joplin_app:master-latest"
+elif [ "$CIRCLE_BRANCH" == "production" ]; then
+  APPNAME="joplin"
+  DOCKER_TARGET="joplin-prod"
+  DOCKER_TAG_1="cityofaustin/joplin_app:production-${SHA}"
+  DOCKER_TAG_2="cityofaustin/joplin_app:production-latest"
+else
+  # truncates to 30 characters for heroku app name length limitations
+  APPNAME="joplin-pr-$CIRCLE_BRANCH"; APPNAME=${APPNAME:0:30}
+  DOCKER_TARGET="joplin-review"
+  DOCKER_TAG_1="cityofaustin/joplin_app:dev-${CIRCLE_BRANCH}-${SHA}"
+  DOCKER_TAG_2="cityofaustin/joplin_app:dev-${CIRCLE_BRANCH}-latest"
+fi
+DOCKER_TAG_HEROKU=registry.heroku.com/$APPNAME/web
 
 ########################################
 # Declare Functions
@@ -40,10 +47,10 @@ SHA=${CIRCLE_SHA1:0:7}
 # Example: log ${FUNCNAME[0]} 1 "My Message";
 #       ${FUNCNAME[0]} holds the name of the function where it is being accessed from.
 #
-function log {
+function log_base {
     RANGE=$(awk "BEGIN { print 5*${2} }")
-    echo -n "${1} "
-    awk -v ORS="BEGIN { for (i = 1; i <= ${RANGE}; ++i) print \"-\" }" # leave ORS empty please
+    echo -n "${1}() "
+    awk -v ORS=  "BEGIN { for (i = 1; i <= ${RANGE}; ++i) print \"-\" }" # leave ORS empty please
     echo -e " ${3}"
 }
 

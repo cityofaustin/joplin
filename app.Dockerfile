@@ -23,11 +23,8 @@ WORKDIR /app
 
 COPY "$PWD/joplin" /app/joplin
 COPY "$PWD/media" /app
-COPY "$PWD/docker-entrypoint.sh" /app/docker-entrypoint.sh
-COPY "$PWD/migrate-load-data.sh" /app/migrate-load-data.sh
 
-ENTRYPOINT ["./docker-entrypoint.sh"]
-
+# Start the Joplin server
 CMD ["gunicorn", "joplin.wsgi:application", "--pythonpath", "/app/joplin"]
 
 ########################################################
@@ -35,7 +32,10 @@ CMD ["gunicorn", "joplin.wsgi:application", "--pythonpath", "/app/joplin"]
 
 FROM joplin-base as joplin-local
 
-ENV ENV "local"
+ENV DEPLOYMENT_MODE "LOCAL"
+
+COPY "$PWD/docker-entrypoint.sh" /app/docker-entrypoint.sh
+ENTRYPOINT ["./docker-entrypoint.sh"]
 
 ########################################################
 # joplin-base => joplin-deployed
@@ -52,23 +52,26 @@ RUN npm rebuild node-sass
 RUN yarn; yarn build
 WORKDIR /app
 
+COPY "$PWD/docker-entrypoint.sh" /app/docker-entrypoint.sh
+# Entrypoint must be executed manually since heroku has a 60 second time limit for entrypoint scripts
+
 ########################################################
-# joplin-base => joplin-deployed => joplin-dev
+# joplin-base => joplin-deployed => joplin-review
 
-FROM joplin-deployed as joplin-dev
+FROM joplin-deployed as joplin-review
 
-ENV ENV "dev"
+ENV DEPLOYMENT_MODE "REVIEW"
 
 ########################################################
 # joplin-base => joplin-deployed => joplin-staging
 
 FROM joplin-base as joplin-staging
 
-ENV ENV "staging"
+ENV DEPLOYMENT_MODE "STAGING"
 
 ########################################################
 # joplin-base => joplin-deployed => joplin-prod
 
 FROM joplin-base as joplin-prod
 
-ENV ENV "prod"
+ENV DEPLOYMENT_MODE "PRODUCTION"

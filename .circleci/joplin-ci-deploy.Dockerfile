@@ -1,3 +1,7 @@
+##########
+# add python so we can install using pip
+# uses debian linux as its base
+##########
 FROM python:3.6.5-slim-stretch
 
 # apt-utils for installs

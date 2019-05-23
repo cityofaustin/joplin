@@ -30,14 +30,14 @@ stop_project_containers $COMPOSE_PROJECT_NAME
 if [ "$HARD_REBUILD" == "on" ]; then
   echo 'HARD_REBUILD="on": Rebuilding containers without cache'
   echo "Rebuilding ${DOCKER_TAG_APP}"
-  docker build --no-cache -f Dockerfile.app -t $DOCKER_TAG_APP --target $DOCKER_TARGET_APP .
+  docker build --no-cache -f app.Dockerfile -t $DOCKER_TAG_APP --target $DOCKER_TARGET_APP .
   echo "Rebuilding ${DOCKER_TAG_ASSETS}"
-  docker build --no-cache -f Dockerfile.assets -t $DOCKER_TAG_ASSETS .
+  docker build --no-cache -f assets.Dockerfile -t $DOCKER_TAG_ASSETS .
 else
   echo "Rebuilding ${DOCKER_TAG_APP}"
-  docker build -f Dockerfile.app -t $DOCKER_TAG_APP --target $DOCKER_TARGET_APP .
+  docker build -f app.Dockerfile -t $DOCKER_TAG_APP --target $DOCKER_TARGET_APP .
   echo "Rebuilding ${DOCKER_TAG_ASSETS}"
-  docker build -f Dockerfile.assets -t $DOCKER_TAG_ASSETS .
+  docker build -f assets.Dockerfile -t $DOCKER_TAG_ASSETS .
 fi
 
 echo "Spinning up containers"

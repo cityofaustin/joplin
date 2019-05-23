@@ -2,7 +2,7 @@
 set -eo pipefail
 CURRENT_DIR=`dirname $BASH_SOURCE`
 source $CURRENT_DIR/helpers.sh
-F=create_pipeline # set name of file to use with log()
+log() { log_base "create_review_app" $1 $2; }
 
 # Attaches postgresql database to heroku application
 function attach_heroku_database {
@@ -10,26 +10,26 @@ function attach_heroku_database {
 }
 
 print_header "Build Heroku Review App"
-log $F 1 ">>> Deployment details:"
-log $F 1 "Deploying new app:         ${APPNAME}"
-log $F 1 "Into Pipeline:             ${PIPELINE_NAME}"
+log 1 ">>> Deployment details:"
+log 1 "Deploying new app:         ${APPNAME}"
+log 1 "Into Pipeline:             ${PIPELINE_NAME}"
 
 # If the review app exists, then check if database exists
 APP_EXISTS=$(app_exists)
 if [ "$APP_EXISTS" = "true" ]; then
   # If the review app exists, then add a database if it doesn't have one already
-  log $F 2 "App $APPNAME already exists, tagging & checking if database exists.";
+  log 2 "App $APPNAME already exists, tagging & checking if database exists.";
   APP_DB_EXISTS=$(app_database_attached)
   if [ "${APP_DB_EXISTS}" = "false" ]; then
-      log $F 3 "No database detected, attaching new database to $APPNAME.";
+      log 3 "No database detected, attaching new database to $APPNAME.";
       attach_heroku_database
-      log $F 3 "Done attaching database."
+      log 3 "Done attaching database."
   else
-      log $F 2 "The database already exists."
+      log 2 "The database already exists."
   fi
 else
   # Create a new Heroku review app, if the app doesn't already exist
-  log $F 2 "Creating app ${APPNAME}";
+  log 2 "Creating app ${APPNAME}";
 
   # Create app with specified APPNAME
   heroku create $APPNAME --team $PIPELINE_TEAM
@@ -44,10 +44,9 @@ fi
 # Add or update environment variables for review app
 # Vars prefixed with "CI_" are sourced from circleci
 # Suppress stdout with "> /dev/null" to hide display of sensitive variables
-log $F 1 "Adding environment variables to Heroku App: $APPNAME"
+log 1 "Adding environment variables to Heroku App: $APPNAME"
 
 heroku config:set   \
-  DEPLOYMENT_MODE=REVIEW \
   APPLICATION_NAME=$APPNAME \
   AWS_S3_KEYID=$AWS_ACCESS_KEY_ID \
   AWS_S3_ACCESSKEY=$AWS_SECRET_ACCESS_KEY \

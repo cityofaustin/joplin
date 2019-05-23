@@ -9,17 +9,6 @@ jobs:
       - run:
           name: "Test that CLI utilities work"
           command: bash ./.circleci/cli-test.sh
-  build:
-    docker:
-      - image: cityofaustin/joplin-ci-build:91ad719
-    steps:
-      - checkout
-      - setup_remote_docker:
-          version: 18.09.3
-      - run: echo "placeholder for build"
-      # - run:
-      #     name: "Build Joplin Docker Image"
-      #     command: bash ./.circleci/build.sh
   backup_database:
     docker:
       - image: cityofaustin/joplin-ci-deploy:91ad719
@@ -36,27 +25,22 @@ jobs:
       - run:
           name: "Create Review App for Heroku Pipeline"
           command: bash ./.circleci/create_review_app.sh
-  deploy:
+  build_and_release:
     docker:
-      - image: cityofaustin/joplin-ci-deploy:91ad719
+      - image: cityofaustin/joplin-ci-build:5a25aef
     steps:
       - checkout
-      - run: echo "placeholder for deploy"
-  migrate:
-    docker:
-      - image: cityofaustin/joplin-ci-deploy:91ad719
-    steps:
-      - checkout
-      - run: echo "placeholder for migrate"
+      - setup_remote_docker:
+          version: 18.09.3
+      - run:
+          name: "Build Joplin Docker Image"
+          command: bash ./.circleci/build_and_release.sh
 
 workflows:
   version: 2.1
   build-and-deploy:
     jobs:
       - test
-      - build:
-          requires:
-            - test
       - backup_database:
           requires:
             - test
@@ -73,11 +57,7 @@ workflows:
               ignore:
                 - master
                 - production
-      - deploy:
+      - build_and_release:
           requires:
-            - build
             - backup_database
             - create_review_app
-      - migrate:
-          requires:
-            - deploy

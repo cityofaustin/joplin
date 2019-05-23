@@ -65,7 +65,7 @@ export DOCKER_TAG_APP="joplin_app:local"
 export DOCKER_TARGET_APP=joplin-local
 
 echo "Rebuilding ${DOCKER_TAG_APP}"
-docker build -f Dockerfile.app -t $DOCKER_TAG_APP --target $DOCKER_TARGET_APP .
+docker build -f app.Dockerfile -t $DOCKER_TAG_APP --target $DOCKER_TARGET_APP .
 
 echo "Spinning up joplin_app and janis containers"
 docker-compose -f docker-compose.yml -f docker-compose.janis.yml up -d
