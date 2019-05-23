@@ -10,7 +10,7 @@ RUN echo 'deb http://apt.postgresql.org/pub/repos/apt/ stretch-pgdg main' >  /et
     && curl -s https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \
     && apt-get update && apt-get install -y postgresql-client
 
-COPY /deploy/requirements.txt /deploy/requirements.txt
+COPY "$PWD/deploy/requirements.txt" /deploy/requirements.txt
 RUN pip install --no-cache-dir --disable-pip-version-check --requirement /deploy/requirements.txt
 
 ENV PYTHONUNBUFFERED=1
