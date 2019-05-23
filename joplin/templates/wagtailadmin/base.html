@@ -18,7 +18,6 @@
         <div class="dropdown-toggle">
           <div class="user-account">
             <div class="avatar circle"><img src="{% avatar_url user %}" alt="avatar" /></div>
-            <!-- <div class="user coa-user">{{ request.user.first_name|default:request.user.get_username }}</div> -->
             <div class="user coa-user user-account-dropdown " type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                 {{ request.user.first_name|default:request.user.get_username }}
                 <span class="icon icon-arrow-down-after"></span>
@@ -32,4 +31,3 @@
     </div>
 </div>
 {% endblock %}
-#wagtail > div.header.coa-header > div.dropdown.user-account > div
