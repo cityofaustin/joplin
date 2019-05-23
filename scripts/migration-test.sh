@@ -82,16 +82,18 @@ function handle_input {
   read answer
   if [ "$answer" == "y" ]; then
     echo "Glad that worked. We'll create a new migration_datadump for you."
+
     # Get name of latest migration from database
     LATEST_MIGRATION=$(psql postgres://joplin@127.0.0.1:${JOPLIN_DB_HOST_PORT}/joplin -qtA -c 'select name from django_migrations order by id desc limit 1;')
     NEW_MIGRATION_DATADUMP="${LATEST_MIGRATION}.datadump.json"
-    # Build new migration datadump
-    docker exec -it ${COMPOSE_PROJECT_NAME}_app_1 python joplin/manage.py dumpdata > $NEW_MIGRATION_DATADUMP
+
     # Remove old migration datadump
     OLD_MIGRATION_DATADUMP=$CURRENT_DIR/../joplin/db/system-generated/*.datadump.json
-    if [ -z $OLD_MIGRATION_DATADUMP ]; then rm $OLD_MIGRATION_DATADUMP; fi
-    # Copy new migration datadump from container to host
-    docker cp ${COMPOSE_PROJECT_NAME}_app_1:/app/$NEW_MIGRATION_DATADUMP ./joplin/db/system-generated
+    if [ ! -z $OLD_MIGRATION_DATADUMP ]; then rm $OLD_MIGRATION_DATADUMP; fi
+
+    # Build new migration datadump
+    docker exec -it ${COMPOSE_PROJECT_NAME}_app_1 python joplin/manage.py dumpdata > ./joplin/db/system-generated/$NEW_MIGRATION_DATADUMP
+
     stop_project_containers $COMPOSE_PROJECT_NAME
     exit 0
   elif [ "$answer" == "n" ]; then
