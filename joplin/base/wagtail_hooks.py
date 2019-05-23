@@ -12,6 +12,16 @@ from wagtail.core import hooks
 from base.models import HomePage, Location, Contact
 from wagtail.core.models import PageRevision
 
+from html.parser import HTMLParser
+
+# Following this: https://docs.python.org/3/library/html.parser.html#examples
+class CheckForDataInHTMLParser(HTMLParser):
+    has_data = False
+
+    def handle_data(self, data):
+        self.has_data = True
+
+
 @hooks.register('before_edit_page')
 def before_edit_page(request, page):
     print(f'BeforeEditHook request: {request}')
@@ -72,8 +82,14 @@ def joplin_page_listing_buttons(page, page_perms, is_parent=False):
     for revision in all_revisions:
         if revision.is_latest_revision():
             latest_revision = revision
+
     author_notes = latest_revision.as_page_object().author_notes
-    if len(author_notes):
+
+    # Following this: https://docs.python.org/3/library/html.parser.html#examples
+    parser = CheckForDataInHTMLParser()
+    parser.feed(author_notes)
+
+    if parser.has_data:
         yield Button(
             _('📝'),
             '#',
