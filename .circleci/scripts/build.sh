@@ -19,7 +19,7 @@ log 2 "Application Name:  ${APPNAME}"
 # DOCKER_BUILDKIT=1 allows us to specify a --target within our app.Dockerfile
 # Adds 3 tags
 # Builds using top-level directory ($CURRENT_DIR/..) as context
-DOCKER_BUILDKIT=1 docker build -f app.Dockerfile -t $DOCKER_TAG_1 -t $DOCKER_TAG_2 -t $DOCKER_TAG_HEROKU --target $DOCKER_TARGET $CURRENT_DIR/..
+DOCKER_BUILDKIT=1 docker build -f app.Dockerfile -t $DOCKER_TAG_1 -t $DOCKER_TAG_2 -t $DOCKER_TAG_HEROKU --target $DOCKER_TARGET $CURRENT_DIR/../..
 
 # Push all 3 tags (2 to dockerhub, 1 to heroku)
 print_header "Pushing Image to Dockerhub"
