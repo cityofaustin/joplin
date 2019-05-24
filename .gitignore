@@ -13,3 +13,4 @@ media/*/*.jpg
 media/*/*.png
 media/*/*.jpeg
 *.log
+joplin/db/smuggler/*
