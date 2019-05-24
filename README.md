@@ -92,7 +92,7 @@ Here's what `migration-test.sh` does at a high level:
 
 1. Creates a database from the last working Joplin migration
     - This is accomplished by running Joplin migrations and data loading from the joplin_app image tagged as `cityofaustin/joplin_app:master-latest` from the City of Austin's dockerhub.
-    - Note: if you aren't intending to merge into the latest master branch, you can manually plug in your own value for `$DB_CREATION_DOCKER_TAG` to test how you migrations work against a different build.
+    - Note: if you aren't intending to fork from/merge into the latest master branch, you can manually plug in your own `DOCKER_TAG_DB_BUILD` to test how you migrations work against a different build by running `DOCKER_TAG_DB_BUILD=[joplin-app:some-tag] migration-test.sh`.
 2. Runs your new migrations on the old database
     - The previous joplin_app container shuts down (but the joplin_db stays up). Now a new joplin_app container (built from your local Joplin directory, tagged as "joplin_app:local") runs against the old joplin_db. The new migrations are automatically applied through joplin_app's entrypoint.
 3. Spins up a local Janis and Joplin for you to test manually.
