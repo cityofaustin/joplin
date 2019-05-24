@@ -2587,6 +2587,7 @@
   "model": "base.contactdayandduration",
   "pk": 1,
   "fields": {
+    "dayandduration_ptr": 1,
     "sort_order": null,
     "contact": 1
   }
@@ -2595,6 +2596,7 @@
   "model": "base.contactdayandduration",
   "pk": 2,
   "fields": {
+    "dayandduration_ptr": 2,
     "sort_order": null,
     "contact": 1
   }
@@ -2603,6 +2605,7 @@
   "model": "base.contactdayandduration",
   "pk": 3,
   "fields": {
+    "dayandduration_ptr": 3,
     "sort_order": null,
     "contact": 1
   }
@@ -2611,6 +2614,7 @@
   "model": "base.contactdayandduration",
   "pk": 4,
   "fields": {
+    "dayandduration_ptr": 4,
     "sort_order": null,
     "contact": 1
   }
@@ -2619,6 +2623,7 @@
   "model": "base.contactdayandduration",
   "pk": 5,
   "fields": {
+    "dayandduration_ptr": 5,
     "sort_order": null,
     "contact": 1
   }
@@ -2627,6 +2632,7 @@
   "model": "base.contactdayandduration",
   "pk": 6,
   "fields": {
+    "dayandduration_ptr": 6,
     "sort_order": null,
     "contact": 1
   }
@@ -2635,6 +2641,7 @@
   "model": "base.contactdayandduration",
   "pk": 7,
   "fields": {
+    "dayandduration_ptr": 7,
     "sort_order": 0,
     "contact": 2
   }
@@ -2643,6 +2650,7 @@
   "model": "base.contactdayandduration",
   "pk": 8,
   "fields": {
+    "dayandduration_ptr": 8,
     "sort_order": 1,
     "contact": 2
   }
@@ -2651,6 +2659,7 @@
   "model": "base.contactdayandduration",
   "pk": 9,
   "fields": {
+    "dayandduration_ptr": 9,
     "sort_order": 2,
     "contact": 2
   }
@@ -2659,6 +2668,7 @@
   "model": "base.contactdayandduration",
   "pk": 10,
   "fields": {
+    "dayandduration_ptr": 10,
     "sort_order": 3,
     "contact": 2
   }
@@ -2667,6 +2677,7 @@
   "model": "base.contactdayandduration",
   "pk": 11,
   "fields": {
+    "dayandduration_ptr": 11,
     "sort_order": 4,
     "contact": 2
   }
@@ -3607,6 +3618,14 @@
 },
 {
   "model": "sessions.session",
+  "pk": "6whrpm50yrtscwdrhlylyqvr9xxo3w14",
+  "fields": {
+    "session_data": "NTYyMGQ1M2E2ZTVmNTI2MzFjM2RhM2U2MTczYzNlYjM5ZmFhZWVjMDp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiJiNTlkMDFmMzU1OTY5OTU2YTVjODNhNDU2MGIwNzc4NTMyY2ZkNmEzIn0=",
+    "expire_date": "2019-05-24T09:43:19.263Z"
+  }
+},
+{
+  "model": "sessions.session",
   "pk": "7wnvbyr183ips1w5rj71wbdoand795fv",
   "fields": {
     "session_data": "NDQ5ODVmNDYxMGFhYjYzMjZlYjEzZTc5YWQ0ZGIwNTQ0NWNkNjQ3NTp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiJkZTk5OWY1MjIxOGM3NDk3OTYxNDI1ZmZkNDk4ZTgxMTIzZmMzYTQwIn0=",
@@ -3619,6 +3638,14 @@
   "fields": {
     "session_data": "YmE5MmJmMjUyNWZlMjA3MDk0NjRlZWVhNzEzNWNkNTQ1YWMzZTIyMjp7Il9hdXRoX3VzZXJfaWQiOiI0IiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiJmNjk1OWUyN2Y2MDU3NjU1MzgxMTEyZjA2MWI2NmI1ODIwMWRhNDA5In0=",
     "expire_date": "2018-12-04T00:06:52.617Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "9qpwsz3zhgjzwkp4mc9zenxnfiuwubit",
+  "fields": {
+    "session_data": "NWM0ZWZhNTYwNmQ3NjNiYTM2NzIxZTlhOWRmNzkwY2I0YTM2NmI0YTp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiI2MTAwZjZiNGMxOWZhN2Y3OWUwYjFiNzVhOGNmNjc0NzM0ZDgxZjZmIn0=",
+    "expire_date": "2019-06-05T08:45:16.566Z"
   }
 },
 {
@@ -3775,6 +3802,14 @@
 },
 {
   "model": "sessions.session",
+  "pk": "jf44ggk1b348wpk44fml17jbpehh88dg",
+  "fields": {
+    "session_data": "NWM0ZWZhNTYwNmQ3NjNiYTM2NzIxZTlhOWRmNzkwY2I0YTM2NmI0YTp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiI2MTAwZjZiNGMxOWZhN2Y3OWUwYjFiNzVhOGNmNjc0NzM0ZDgxZjZmIn0=",
+    "expire_date": "2019-06-05T06:16:42.109Z"
+  }
+},
+{
+  "model": "sessions.session",
   "pk": "k4x9ed2z7rsczhzwvq0tnd6joebanzd2",
   "fields": {
     "session_data": "OWU1MmE4YTI3YjljYTc5OGI3NmUzNDQ0YTI0ZDQyMDY2MDcxOWJhZjp7Il9hdXRoX3VzZXJfaWQiOiI1IiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiIyMWZjNmNiNDYxZTBjNzAzZjNmYjU2NzE2ZTFkMzViYjFlODI0MGZkIn0=",
@@ -3895,6 +3930,14 @@
 },
 {
   "model": "sessions.session",
+  "pk": "qubpelmx5an4i8ajbzqobnxuuhxxyr9f",
+  "fields": {
+    "session_data": "NWM0ZWZhNTYwNmQ3NjNiYTM2NzIxZTlhOWRmNzkwY2I0YTM2NmI0YTp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiI2MTAwZjZiNGMxOWZhN2Y3OWUwYjFiNzVhOGNmNjc0NzM0ZDgxZjZmIn0=",
+    "expire_date": "2019-05-30T09:18:46.611Z"
+  }
+},
+{
+  "model": "sessions.session",
   "pk": "rw2iocoa8x3tnxpz7dhnbxgvqh64lcmp",
   "fields": {
     "session_data": "NDQ5ODVmNDYxMGFhYjYzMjZlYjEzZTc5YWQ0ZGIwNTQ0NWNkNjQ3NTp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiJkZTk5OWY1MjIxOGM3NDk3OTYxNDI1ZmZkNDk4ZTgxMTIzZmMzYTQwIn0=",
@@ -3923,6 +3966,14 @@
   "fields": {
     "session_data": "NDQ5ODVmNDYxMGFhYjYzMjZlYjEzZTc5YWQ0ZGIwNTQ0NWNkNjQ3NTp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiJkZTk5OWY1MjIxOGM3NDk3OTYxNDI1ZmZkNDk4ZTgxMTIzZmMzYTQwIn0=",
     "expire_date": "2019-01-24T05:42:18.253Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "t4g8b00umx4jl214m1mk0fqdytvt10x5",
+  "fields": {
+    "session_data": "NWM0ZWZhNTYwNmQ3NjNiYTM2NzIxZTlhOWRmNzkwY2I0YTM2NmI0YTp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiI2MTAwZjZiNGMxOWZhN2Y3OWUwYjFiNzVhOGNmNjc0NzM0ZDgxZjZmIn0=",
+    "expire_date": "2019-06-05T06:12:43.181Z"
   }
 },
 {
@@ -3991,6 +4042,14 @@
 },
 {
   "model": "sessions.session",
+  "pk": "w5e3x5ffogef253mhqkv20k8s6pjk05g",
+  "fields": {
+    "session_data": "NTYyMGQ1M2E2ZTVmNTI2MzFjM2RhM2U2MTczYzNlYjM5ZmFhZWVjMDp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiJiNTlkMDFmMzU1OTY5OTU2YTVjODNhNDU2MGIwNzc4NTMyY2ZkNmEzIn0=",
+    "expire_date": "2019-05-30T05:45:27.819Z"
+  }
+},
+{
+  "model": "sessions.session",
   "pk": "wsqmu6pjodad9u4w0qkw7it6p6s13ono",
   "fields": {
     "session_data": "NjU3YWZiYjhmNzc3MTY1NDgxMzg0ODNkNTBjZjUwMjMwMzVkY2MxZDp7Il9hdXRoX3VzZXJfaWQiOiI4IiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiI4N2UxYzM0Y2MzNWEzNjMxYWE0ZDg2OTc3NzgyYWMwNGRkM2EyYTcyIn0=",
@@ -4027,6 +4086,22 @@
   "fields": {
     "session_data": "NTYyMGQ1M2E2ZTVmNTI2MzFjM2RhM2U2MTczYzNlYjM5ZmFhZWVjMDp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiJiNTlkMDFmMzU1OTY5OTU2YTVjODNhNDU2MGIwNzc4NTMyY2ZkNmEzIn0=",
     "expire_date": "2019-05-06T17:42:24.334Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "y8cgz382xydb2g9nwy5jmk0eto5veic3",
+  "fields": {
+    "session_data": "NTYyMGQ1M2E2ZTVmNTI2MzFjM2RhM2U2MTczYzNlYjM5ZmFhZWVjMDp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiJiNTlkMDFmMzU1OTY5OTU2YTVjODNhNDU2MGIwNzc4NTMyY2ZkNmEzIn0=",
+    "expire_date": "2019-05-06T17:53:30.419Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "yz28c5h6hooi3mqhlujdrp1bg2h8j4zx",
+  "fields": {
+    "session_data": "NWY2NjFhZDcwYTU3YjMyOWI4N2ZlNDExMGNiODA1NTY1NmMxZTA3NDp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiIzNjFmNzFlY2MyZjRkYzNlN2EwMzA3OWU4Yjc0MzY5MGJjMGQ0Mzg0In0=",
+    "expire_date": "2019-05-30T09:08:50.929Z"
   }
 },
 {
@@ -5921,6 +5996,600 @@
   }
 },
 {
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view home page",
+    "content_type": [
+      "base",
+      "homepage"
+    ],
+    "codename": "view_homepage"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view contact",
+    "content_type": [
+      "base",
+      "contact"
+    ],
+    "codename": "view_contact"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view day and duration",
+    "content_type": [
+      "base",
+      "dayandduration"
+    ],
+    "codename": "view_dayandduration"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view location",
+    "content_type": [
+      "base",
+      "location"
+    ],
+    "codename": "view_location"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view service page",
+    "content_type": [
+      "base",
+      "servicepage"
+    ],
+    "codename": "view_servicepage"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view service page contact",
+    "content_type": [
+      "base",
+      "servicepagecontact"
+    ],
+    "codename": "view_servicepagecontact"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view contact day and duration",
+    "content_type": [
+      "base",
+      "contactdayandduration"
+    ],
+    "codename": "view_contactdayandduration"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view department",
+    "content_type": [
+      "base",
+      "department"
+    ],
+    "codename": "view_department"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view department contact",
+    "content_type": [
+      "base",
+      "departmentcontact"
+    ],
+    "codename": "view_departmentcontact"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view map",
+    "content_type": [
+      "base",
+      "map"
+    ],
+    "codename": "view_map"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view translated image",
+    "content_type": [
+      "base",
+      "translatedimage"
+    ],
+    "codename": "view_translatedimage"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view translated image rendition",
+    "content_type": [
+      "base",
+      "translatedimagerendition"
+    ],
+    "codename": "view_translatedimagerendition"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view theme",
+    "content_type": [
+      "base",
+      "theme"
+    ],
+    "codename": "view_theme"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view three one one",
+    "content_type": [
+      "base",
+      "threeoneone"
+    ],
+    "codename": "view_threeoneone"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view process page",
+    "content_type": [
+      "base",
+      "processpage"
+    ],
+    "codename": "view_processpage"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view process page step",
+    "content_type": [
+      "base",
+      "processpagestep"
+    ],
+    "codename": "view_processpagestep"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view process page contact",
+    "content_type": [
+      "base",
+      "processpagecontact"
+    ],
+    "codename": "view_processpagecontact"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view information page",
+    "content_type": [
+      "base",
+      "informationpage"
+    ],
+    "codename": "view_informationpage"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view information page contact",
+    "content_type": [
+      "base",
+      "informationpagecontact"
+    ],
+    "codename": "view_informationpagecontact"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view department page",
+    "content_type": [
+      "base",
+      "departmentpage"
+    ],
+    "codename": "view_departmentpage"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view department page contact",
+    "content_type": [
+      "base",
+      "departmentpagecontact"
+    ],
+    "codename": "view_departmentpagecontact"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view department page director",
+    "content_type": [
+      "base",
+      "departmentpagedirector"
+    ],
+    "codename": "view_departmentpagedirector"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view information page topic",
+    "content_type": [
+      "base",
+      "informationpagetopic"
+    ],
+    "codename": "view_informationpagetopic"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view process page topic",
+    "content_type": [
+      "base",
+      "processpagetopic"
+    ],
+    "codename": "view_processpagetopic"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view service page topic",
+    "content_type": [
+      "base",
+      "servicepagetopic"
+    ],
+    "codename": "view_servicepagetopic"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view topic page",
+    "content_type": [
+      "base",
+      "topicpage"
+    ],
+    "codename": "view_topicpage"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view topic collection page",
+    "content_type": [
+      "base",
+      "topiccollectionpage"
+    ],
+    "codename": "view_topiccollectionpage"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view topic collection page topic collection",
+    "content_type": [
+      "base",
+      "topiccollectionpagetopiccollection"
+    ],
+    "codename": "view_topiccollectionpagetopiccollection"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view topic page topic collection",
+    "content_type": [
+      "base",
+      "topicpagetopiccollection"
+    ],
+    "codename": "view_topicpagetopiccollection"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view user",
+    "content_type": [
+      "users",
+      "user"
+    ],
+    "codename": "view_user"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view embed",
+    "content_type": [
+      "wagtailembeds",
+      "embed"
+    ],
+    "codename": "view_embed"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view user profile",
+    "content_type": [
+      "wagtailusers",
+      "userprofile"
+    ],
+    "codename": "view_userprofile"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view document",
+    "content_type": [
+      "wagtaildocs",
+      "document"
+    ],
+    "codename": "view_document"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view image",
+    "content_type": [
+      "wagtailimages",
+      "image"
+    ],
+    "codename": "view_image"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view rendition",
+    "content_type": [
+      "wagtailimages",
+      "rendition"
+    ],
+    "codename": "view_rendition"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view query",
+    "content_type": [
+      "wagtailsearch",
+      "query"
+    ],
+    "codename": "view_query"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view Query Daily Hits",
+    "content_type": [
+      "wagtailsearch",
+      "querydailyhits"
+    ],
+    "codename": "view_querydailyhits"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view page",
+    "content_type": [
+      "wagtailcore",
+      "page"
+    ],
+    "codename": "view_page"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view group page permission",
+    "content_type": [
+      "wagtailcore",
+      "grouppagepermission"
+    ],
+    "codename": "view_grouppagepermission"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view page revision",
+    "content_type": [
+      "wagtailcore",
+      "pagerevision"
+    ],
+    "codename": "view_pagerevision"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view page view restriction",
+    "content_type": [
+      "wagtailcore",
+      "pageviewrestriction"
+    ],
+    "codename": "view_pageviewrestriction"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view site",
+    "content_type": [
+      "wagtailcore",
+      "site"
+    ],
+    "codename": "view_site"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view collection",
+    "content_type": [
+      "wagtailcore",
+      "collection"
+    ],
+    "codename": "view_collection"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view group collection permission",
+    "content_type": [
+      "wagtailcore",
+      "groupcollectionpermission"
+    ],
+    "codename": "view_groupcollectionpermission"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view collection view restriction",
+    "content_type": [
+      "wagtailcore",
+      "collectionviewrestriction"
+    ],
+    "codename": "view_collectionviewrestriction"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view form submission",
+    "content_type": [
+      "wagtailforms",
+      "formsubmission"
+    ],
+    "codename": "view_formsubmission"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view redirect",
+    "content_type": [
+      "wagtailredirects",
+      "redirect"
+    ],
+    "codename": "view_redirect"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view Tag",
+    "content_type": [
+      "taggit",
+      "tag"
+    ],
+    "codename": "view_tag"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view Tagged Item",
+    "content_type": [
+      "taggit",
+      "taggeditem"
+    ],
+    "codename": "view_taggeditem"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view log entry",
+    "content_type": [
+      "admin",
+      "logentry"
+    ],
+    "codename": "view_logentry"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view permission",
+    "content_type": [
+      "auth",
+      "permission"
+    ],
+    "codename": "view_permission"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view group",
+    "content_type": [
+      "auth",
+      "group"
+    ],
+    "codename": "view_group"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view content type",
+    "content_type": [
+      "contenttypes",
+      "contenttype"
+    ],
+    "codename": "view_contenttype"
+  }
+},
+{
+  "model": "auth.permission",
+  "fields": {
+    "name": "Can view session",
+    "content_type": [
+      "sessions",
+      "session"
+    ],
+    "codename": "view_session"
+  }
+},
+{
   "model": "auth.group",
   "fields": {
     "name": "Moderators",
@@ -6196,8 +6865,10 @@
   "model": "base.departmentpage",
   "pk": 27,
   "fields": {
+    "page_ptr": 27,
     "created_at": "2019-02-20T22:45:45.614Z",
     "updated_at": "2019-03-28T23:21:33.670Z",
+    "author_notes": "",
     "what_we_do": "<p>When people have concerns or complaints about potential police misconduct, those concerns need to be heard, investigated, and resolved. At Austin\u2019s Office of Police Oversight (OPO), everything we do is to promote an atmosphere of earned trust between Austinites and the Austin Police Department (APD). We do this by making it easy, accessible, and safe for Austinites to provide information and start the process. For example, we ensure that:</p><ul><li>There are several reporting options available (email, an online form, telephone, etc.).</li><li>The process is not overwhelming or complex.</li><li>People understand that they can choose to remain anonymous.</li><li>There is follow-through and transparency on the investigation\u2019s status and eventual outcome.</li><li>The community understands what we do, how we do it, and how to reach us.</li></ul><p>Our office also:</p><ul><li>Can start its own complaints independent of specific residents making a complaint.</li><li>Makes recommendations to the City Manager and to APD about individual incidents and investigations, as well as broader policy recommendations.</li><li>Is committed to treating all parties \u2014 residents, APD, and the Austin Police Association (APA) \u2014 as stakeholders involved in an ongoing conversation. We seek to understand and learn from all perspectives.</li></ul>",
     "what_we_do_ar": "<p></p>",
     "what_we_do_en": "<p>When people have concerns or complaints about potential police misconduct, those concerns need to be heard, investigated, and resolved. At Austin\u2019s Office of Police Oversight (OPO), everything we do is to promote an atmosphere of earned trust between Austinites and the Austin Police Department (APD). We do this by making it easy, accessible, and safe for Austinites to provide information and start the process. For example, we ensure that:</p><ul><li>There are several reporting options available (email, an online form, telephone, etc.).</li><li>The process is not overwhelming or complex.</li><li>People understand that they can choose to remain anonymous.</li><li>There is follow-through and transparency on the investigation\u2019s status and eventual outcome.</li><li>The community understands what we do, how we do it, and how to reach us.</li></ul><p>Our office also:</p><ul><li>Can start its own complaints independent of specific residents making a complaint.</li><li>Makes recommendations to the City Manager and to APD about individual incidents and investigations, as well as broader policy recommendations.</li><li>Is committed to treating all parties \u2014 residents, APD, and the Austin Police Association (APA) \u2014 as stakeholders involved in an ongoing conversation. We seek to understand and learn from all perspectives.</li></ul>",
@@ -6217,8 +6888,10 @@
   "model": "base.departmentpage",
   "pk": 36,
   "fields": {
+    "page_ptr": 36,
     "created_at": "2019-02-21T20:48:34.631Z",
     "updated_at": "2019-02-21T20:52:29.845Z",
+    "author_notes": "",
     "what_we_do": "<h1>What we do</h1><p>We provide residential curbside collection of trash, recycling, compost, yard trimmings, bulk items, and large brush. Additional services include sweeping streets, collecting dead animals and operating a drop-off center for recycling and household hazardous waste.</p><p>We are committed to a Zero Waste goal to reduce the amount of trash sent to landfills by 90 percent by the year 2040. Zero Waste is a philosophy that goes beyond recycling to focus first on reducing trash and reusing products and then recycling and composting the rest. Zero Waste recognizes that one person\u2019s trash is another person\u2019s treasure, and everything is a resource for something or someone else.</p>",
     "what_we_do_ar": "<p></p>",
     "what_we_do_en": "<h1>What we do</h1><p>We provide residential curbside collection of trash, recycling, compost, yard trimmings, bulk items, and large brush. Additional services include sweeping streets, collecting dead animals and operating a drop-off center for recycling and household hazardous waste.</p><p>We are committed to a Zero Waste goal to reduce the amount of trash sent to landfills by 90 percent by the year 2040. Zero Waste is a philosophy that goes beyond recycling to focus first on reducing trash and reusing products and then recycling and composting the rest. Zero Waste recognizes that one person\u2019s trash is another person\u2019s treasure, and everything is a resource for something or someone else.</p>",
@@ -6238,8 +6911,10 @@
   "model": "base.departmentpage",
   "pk": 39,
   "fields": {
+    "page_ptr": 39,
     "created_at": "2019-03-20T21:34:48.798Z",
     "updated_at": "2019-03-20T21:34:48.999Z",
+    "author_notes": "",
     "what_we_do": "What we do",
     "what_we_do_ar": null,
     "what_we_do_en": "What we do",
@@ -6259,8 +6934,10 @@
   "model": "base.topicpage",
   "pk": 51,
   "fields": {
+    "page_ptr": 51,
     "created_at": "2019-04-17T19:04:33.428Z",
     "updated_at": "2019-04-17T19:05:14.485Z",
+    "author_notes": "",
     "description": "",
     "description_ar": "",
     "description_en": "",
@@ -6274,8 +6951,10 @@
   "model": "base.topicpage",
   "pk": 53,
   "fields": {
+    "page_ptr": 53,
     "created_at": "2019-04-17T19:09:52.914Z",
     "updated_at": "2019-04-17T19:10:13.548Z",
+    "author_notes": "",
     "description": "",
     "description_ar": "",
     "description_en": "",
@@ -6289,8 +6968,10 @@
   "model": "base.topicpage",
   "pk": 55,
   "fields": {
+    "page_ptr": 55,
     "created_at": "2019-04-17T19:11:13.304Z",
     "updated_at": "2019-04-17T19:11:25.401Z",
+    "author_notes": "",
     "description": "",
     "description_ar": "",
     "description_en": "",
@@ -6304,8 +6985,10 @@
   "model": "base.topicpage",
   "pk": 57,
   "fields": {
+    "page_ptr": 57,
     "created_at": "2019-04-17T19:12:51.276Z",
     "updated_at": "2019-04-17T19:13:38.047Z",
+    "author_notes": "",
     "description": "",
     "description_ar": "",
     "description_en": "",
@@ -6319,8 +7002,10 @@
   "model": "base.topicpage",
   "pk": 58,
   "fields": {
+    "page_ptr": 58,
     "created_at": "2019-04-17T19:13:52.677Z",
     "updated_at": "2019-04-17T19:14:04.256Z",
+    "author_notes": "",
     "description": "",
     "description_ar": "",
     "description_en": "",
@@ -6334,8 +7019,10 @@
   "model": "base.topicpage",
   "pk": 59,
   "fields": {
+    "page_ptr": 59,
     "created_at": "2019-04-17T19:14:22.802Z",
     "updated_at": "2019-04-17T19:14:37.893Z",
+    "author_notes": "",
     "description": "",
     "description_ar": "",
     "description_en": "",
@@ -6349,8 +7036,10 @@
   "model": "base.topiccollectionpage",
   "pk": 50,
   "fields": {
+    "page_ptr": 50,
     "created_at": "2019-04-17T19:02:50.469Z",
     "updated_at": "2019-04-17T19:03:33.481Z",
+    "author_notes": "",
     "description": "",
     "description_ar": "",
     "description_en": "",
@@ -6364,8 +7053,10 @@
   "model": "base.topiccollectionpage",
   "pk": 52,
   "fields": {
+    "page_ptr": 52,
     "created_at": "2019-04-17T19:09:08.045Z",
     "updated_at": "2019-04-17T19:09:16.856Z",
+    "author_notes": "",
     "description": "",
     "description_ar": "",
     "description_en": "",
@@ -6379,8 +7070,10 @@
   "model": "base.topiccollectionpage",
   "pk": 54,
   "fields": {
+    "page_ptr": 54,
     "created_at": "2019-04-17T19:10:52.070Z",
     "updated_at": "2019-04-17T19:10:57.192Z",
+    "author_notes": "",
     "description": "",
     "description_ar": "",
     "description_en": "",
@@ -6394,8 +7087,10 @@
   "model": "base.topiccollectionpage",
   "pk": 56,
   "fields": {
+    "page_ptr": 56,
     "created_at": "2019-04-17T19:11:56.818Z",
     "updated_at": "2019-04-17T19:12:08.280Z",
+    "author_notes": "",
     "description": "",
     "description_ar": "",
     "description_en": "",
@@ -6409,8 +7104,10 @@
   "model": "base.informationpage",
   "pk": 28,
   "fields": {
+    "page_ptr": 28,
     "created_at": "2019-02-20T22:48:29.147Z",
     "updated_at": "2019-03-20T12:44:07.542Z",
+    "author_notes": "",
     "department": 27,
     "description": "",
     "description_ar": "",
@@ -6433,8 +7130,10 @@
   "model": "base.informationpage",
   "pk": 29,
   "fields": {
+    "page_ptr": 29,
     "created_at": "2019-02-20T22:51:33.512Z",
     "updated_at": "2019-03-27T17:27:18.627Z",
+    "author_notes": "",
     "department": 27,
     "description": "Learn about the Office of Police Oversight's complaint investigation process.",
     "description_ar": "",
@@ -6457,8 +7156,10 @@
   "model": "base.informationpage",
   "pk": 31,
   "fields": {
+    "page_ptr": 31,
     "created_at": "2019-02-20T23:21:33.090Z",
     "updated_at": "2019-04-17T19:23:35.963Z",
+    "author_notes": "",
     "department": null,
     "description": "In Austin, crypto is often spread through recreational water use.",
     "description_ar": "",
@@ -6481,8 +7182,10 @@
   "model": "base.informationpage",
   "pk": 32,
   "fields": {
+    "page_ptr": 32,
     "created_at": "2019-02-20T23:27:49Z",
     "updated_at": "2019-04-17T19:24:57.458Z",
+    "author_notes": "",
     "department": null,
     "description": "We provide free flu shots to people who are uninsured or on Medicaid.",
     "description_ar": "",
@@ -6505,8 +7208,10 @@
   "model": "base.informationpage",
   "pk": 33,
   "fields": {
+    "page_ptr": 33,
     "created_at": "2019-02-20T23:43:18.755Z",
     "updated_at": "2019-04-17T19:26:11.367Z",
+    "author_notes": "",
     "department": null,
     "description": "Immunizations are the only way to prevent measles.",
     "description_ar": "",
@@ -6529,8 +7234,10 @@
   "model": "base.informationpage",
   "pk": 35,
   "fields": {
+    "page_ptr": 35,
     "created_at": "2019-02-21T17:14:54.533Z",
     "updated_at": "2019-02-21T17:20:51.150Z",
+    "author_notes": "",
     "department": null,
     "description": "You do not have to give personal information in order to file a complaint. By telling us about your experience, you help us better serve you and your community. Thank you.",
     "description_ar": "",
@@ -6553,8 +7260,10 @@
   "model": "base.informationpage",
   "pk": 37,
   "fields": {
+    "page_ptr": 37,
     "created_at": "2019-03-15T20:06:23.813Z",
     "updated_at": "2019-04-12T12:42:30.659Z",
+    "author_notes": "",
     "department": null,
     "description": "",
     "description_ar": "",
@@ -6577,12 +7286,14 @@
   "model": "base.informationpage",
   "pk": 38,
   "fields": {
+    "page_ptr": 38,
     "created_at": "2019-03-20T21:34:06.102Z",
     "updated_at": "2019-03-20T21:34:06.285Z",
+    "author_notes": "",
     "department": null,
     "description": "",
     "description_ar": null,
-    "description_en": null,
+    "description_en": "",
     "description_es": null,
     "description_vi": null,
     "options": "[]",
@@ -6592,7 +7303,7 @@
     "options_vi": "[]",
     "additional_content": "",
     "additional_content_ar": null,
-    "additional_content_en": null,
+    "additional_content_en": "",
     "additional_content_es": null,
     "additional_content_vi": null
   }
@@ -6601,12 +7312,14 @@
   "model": "base.informationpage",
   "pk": 42,
   "fields": {
+    "page_ptr": 42,
     "created_at": "2019-04-02T16:06:17.346Z",
     "updated_at": "2019-04-02T16:06:17.505Z",
+    "author_notes": "",
     "department": null,
     "description": "",
     "description_ar": null,
-    "description_en": null,
+    "description_en": "",
     "description_es": null,
     "description_vi": null,
     "options": "[]",
@@ -6616,7 +7329,7 @@
     "options_vi": "[]",
     "additional_content": "",
     "additional_content_ar": null,
-    "additional_content_en": null,
+    "additional_content_en": "",
     "additional_content_es": null,
     "additional_content_vi": null
   }
@@ -6625,8 +7338,10 @@
   "model": "base.processpage",
   "pk": 15,
   "fields": {
+    "page_ptr": 15,
     "created_at": "2018-09-25T20:09:02.785Z",
     "updated_at": "2019-02-27T17:16:35.452Z",
+    "author_notes": "",
     "department": null,
     "description": "We\u2019re so happy you\u2019re interested in fostering for the Austin Animal Center! There are six steps to fostering a pet from the Austin Animal Center.",
     "description_ar": null,
@@ -6640,8 +7355,10 @@
   "model": "base.processpage",
   "pk": 16,
   "fields": {
+    "page_ptr": 16,
     "created_at": "2018-09-25T20:09:04.187Z",
     "updated_at": "2019-04-12T12:37:17.618Z",
+    "author_notes": "",
     "department": null,
     "description": "This is a preview of the permitting process for interior remodels and can be used as a checklist throughout your project. The cost for permitting an interior remodel depends on the type of work done to the home.",
     "description_ar": "",
@@ -6655,12 +7372,14 @@
   "model": "base.processpage",
   "pk": 41,
   "fields": {
+    "page_ptr": 41,
     "created_at": "2019-03-20T21:40:35.784Z",
     "updated_at": "2019-03-20T21:40:36.378Z",
+    "author_notes": "",
     "department": null,
     "description": "",
     "description_ar": null,
-    "description_en": null,
+    "description_en": "",
     "description_es": null,
     "description_vi": null,
     "image": null
@@ -6670,246 +7389,397 @@
   "model": "base.servicepage",
   "pk": 4,
   "fields": {
+    "page_ptr": 4,
     "created_at": "2018-09-25T20:08:46.785Z",
     "updated_at": "2019-04-17T19:23:54.600Z",
+    "author_notes": "",
     "steps": "[{\"type\": \"step_with_options_accordian\", \"value\": {\"options_description\": \"Determine how you would like to receive your certificate based on how quickly you need it\", \"options\": [{\"option_name\": \"15 minutes in person\", \"option_description\": \"<ol><li>Bring your current, government-issued photo identification.</li><li>Bring cash, a money order in the exact amount, a personal check, or a credit or debit card in your name for the certificate you need.</li><li>Visit the The Office of Vital Records is at 7201 Levander Loop, Building C, Austin, TX, 78702 between 8 am and 4:30 pm Monday through Friday. The last application is accepted until 4:15 p.m. Note that our office is usually busiest between 11:00 a.m. \\u2013 2:00 p.m. Customers should expect longer wait times during those hours.</li><li>For faster service, download and print an application in <a href=\\\"http://austintexas.gov/sites/default/files/files/Health/VitalRecords/2018_OVR_WalkInENGLISH.pdf\\\">English</a> or <a href=\\\"http://austintexas.gov/sites/default/files/files/Health/VitalRecords/2018_OVR_WalkInSPANISH.pdf\\\">Spanish</a> and bring it with you.</li></ol>\"}, {\"option_name\": \"2-5 business days online\", \"option_description\": \"<ol><li>Visit <a href=\\\"https://www.vitalchek.com/\\\">www.VitalChek.com</a>.</li><li>Follow the prompts on VitalChek to select which kind of certificate(s) you need.</li><li>Verify your identity by answering the questions on VitalChek. If they cannot verify your identity with their standard questions, you will be instructed to upload a copy of your current government-issued identification and proof of shipping address before your application can be processed. This will delay the processing and delivery time.</li><li>Use a credit or debit card (Visa, MasterCard, American Express, or Discover) to pay for your certificate(s). Processing and UPS shipping fees will be added.</li></ol>\"}, {\"option_name\": \"3-5 business days by phone\", \"option_description\": \"<ol><li>Call VitalChek, our secure online agent at 1-800-457-7586.</li><li>Verify your identity by answering a series of questions. If VitalChek cannot verify your identity with their standard questions, you will be instructed to upload a copy of your current government-issued identification and proof of shipping address before your application can be processed. This will delay the processing and delivery time.</li><li>Use a credit or debit card (Visa, MasterCard, American Express, or Discover) to pay for your certificate(s). Processing and UPS shipping fees will be added.</li></ol>\"}, {\"option_name\": \"2-3 weeks by mail\", \"option_description\": \"<p>Mail the following items to Office of Vital Records, PO Box 1088, Austin, TX 78767-1088:</p><ol><li>A completed and notarized <a href=\\\"http://austintexas.gov/sites/default/files/files/Health/VitalRecords/2018_OVR_WalkInENGLISH.pdf\\\">certificate application in English</a> or a <a href=\\\"http://austintexas.gov/sites/default/files/files/Health/VitalRecords/2018_OVR_WalkInSPANISH.pdf\\\">certificate application in Spanish</a>.</li><li>A check or money order in the exact amount payable to the Office of Vital Records. Personal checks must be signed by the same person who signs the application</li><li>A copy of one of your acceptable and current <a href=\\\"https://www.dshs.texas.gov/vs/reqproc/Acceptable-IDs/\\\">forms of government-issued photo identification</a>. If your home address is different than the address on your ID, also include a proof of residence like a utility bill, voter registration card, etc...</li><li>A self-addressed envelope with a stamp. You may use an express mail envelope for faster return delivery. If this is not included, you will not receive the certificate.</li></ol><p>If you need the certificate quickly through the mail, use an Express form of delivery, such as FedEx, USPS, or UPS, and send your application to: Office of Vital Records, 7201 Levander Loop, Bldg. C, Austin, TX 78702.</p>\"}]}, \"id\": \"f601e59c-9e52-46f3-947e-399120fa604a\"}]",
+    "steps_ar": "[]",
+    "steps_en": "[{\"type\": \"step_with_options_accordian\", \"value\": {\"options_description\": \"Determine how you would like to receive your certificate based on how quickly you need it\", \"options\": [{\"option_name\": \"15 minutes in person\", \"option_description\": \"<ol><li>Bring your current, government-issued photo identification.</li><li>Bring cash, a money order in the exact amount, a personal check, or a credit or debit card in your name for the certificate you need.</li><li>Visit the The Office of Vital Records is at 7201 Levander Loop, Building C, Austin, TX, 78702 between 8 am and 4:30 pm Monday through Friday. The last application is accepted until 4:15 p.m. Note that our office is usually busiest between 11:00 a.m. \\u2013 2:00 p.m. Customers should expect longer wait times during those hours.</li><li>For faster service, download and print an application in <a href=\\\"http://austintexas.gov/sites/default/files/files/Health/VitalRecords/2018_OVR_WalkInENGLISH.pdf\\\">English</a> or <a href=\\\"http://austintexas.gov/sites/default/files/files/Health/VitalRecords/2018_OVR_WalkInSPANISH.pdf\\\">Spanish</a> and bring it with you.</li></ol>\"}, {\"option_name\": \"2-5 business days online\", \"option_description\": \"<ol><li>Visit <a href=\\\"https://www.vitalchek.com/\\\">www.VitalChek.com</a>.</li><li>Follow the prompts on VitalChek to select which kind of certificate(s) you need.</li><li>Verify your identity by answering the questions on VitalChek. If they cannot verify your identity with their standard questions, you will be instructed to upload a copy of your current government-issued identification and proof of shipping address before your application can be processed. This will delay the processing and delivery time.</li><li>Use a credit or debit card (Visa, MasterCard, American Express, or Discover) to pay for your certificate(s). Processing and UPS shipping fees will be added.</li></ol>\"}, {\"option_name\": \"3-5 business days by phone\", \"option_description\": \"<ol><li>Call VitalChek, our secure online agent at 1-800-457-7586.</li><li>Verify your identity by answering a series of questions. If VitalChek cannot verify your identity with their standard questions, you will be instructed to upload a copy of your current government-issued identification and proof of shipping address before your application can be processed. This will delay the processing and delivery time.</li><li>Use a credit or debit card (Visa, MasterCard, American Express, or Discover) to pay for your certificate(s). Processing and UPS shipping fees will be added.</li></ol>\"}, {\"option_name\": \"2-3 weeks by mail\", \"option_description\": \"<p>Mail the following items to Office of Vital Records, PO Box 1088, Austin, TX 78767-1088:</p><ol><li>A completed and notarized <a href=\\\"http://austintexas.gov/sites/default/files/files/Health/VitalRecords/2018_OVR_WalkInENGLISH.pdf\\\">certificate application in English</a> or a <a href=\\\"http://austintexas.gov/sites/default/files/files/Health/VitalRecords/2018_OVR_WalkInSPANISH.pdf\\\">certificate application in Spanish</a>.</li><li>A check or money order in the exact amount payable to the Office of Vital Records. Personal checks must be signed by the same person who signs the application</li><li>A copy of one of your acceptable and current <a href=\\\"https://www.dshs.texas.gov/vs/reqproc/Acceptable-IDs/\\\">forms of government-issued photo identification</a>. If your home address is different than the address on your ID, also include a proof of residence like a utility bill, voter registration card, etc...</li><li>A self-addressed envelope with a stamp. You may use an express mail envelope for faster return delivery. If this is not included, you will not receive the certificate.</li></ol><p>If you need the certificate quickly through the mail, use an Express form of delivery, such as FedEx, USPS, or UPS, and send your application to: Office of Vital Records, 7201 Levander Loop, Bldg. C, Austin, TX 78702.</p>\"}]}, \"id\": \"f601e59c-9e52-46f3-947e-399120fa604a\"}]",
+    "steps_es": "[]",
+    "steps_vi": "[]",
     "dynamic_content": "[]",
     "additional_content": "<h1>Make sure you have enough money for the certificate(s) you need.</h1><ul><li>The cost for each birth certificate is $23.</li><li>The cost for one death certificate is $21.</li><li>If you order more copies at the same time, the cost for each extra one is $4.</li></ul>",
     "additional_content_ar": "<p></p>",
     "additional_content_en": "<h1>Make sure you have enough money for the certificate(s) you need.</h1><ul><li>The cost for each birth certificate is $23.</li><li>The cost for one death certificate is $21.</li><li>If you order more copies at the same time, the cost for each extra one is $4.</li></ul>",
     "additional_content_es": "<p></p>",
     "additional_content_vi": "<p></p>",
-    "short_description": ""
+    "short_description": "",
+    "short_description_ar": null,
+    "short_description_en": null,
+    "short_description_es": null,
+    "short_description_vi": null
   }
 },
 {
   "model": "base.servicepage",
   "pk": 5,
   "fields": {
+    "page_ptr": 5,
     "created_at": "2018-09-25T20:08:48.296Z",
     "updated_at": "2019-04-17T19:22:33.868Z",
+    "author_notes": "",
     "steps": "[{\"type\": \"basic_step\", \"value\": \"<p>Use the \\u201cWhat do I do with\\u201d tool below to see what bulk items can be picked up. Bulk items are items that are too large for your trash cart, such as appliances, furniture, and carpet.</p>\", \"id\": \"387583c9-5aaa-40b2-acdb-a197e32a4f6d\"}, {\"type\": \"basic_step\", \"value\": \"<p>Consider donating your items before placing them on the curb for pickup.</p>\", \"id\": \"3b80d7f5-1cce-480f-be13-217784eabcd9\"}, {\"type\": \"basic_step\", \"value\": \"<p>Look up your bulk pickup weeks with My Collection Schedule tool below. We only collect bulk items from Austin residential trash and recycling customers twice a year, and customers have different pickup weeks.</p>\", \"id\": \"15b9a848-91ed-41be-857a-0b44a5580eb0\"}, {\"type\": \"basic_step\", \"value\": \"<p>Review the bulk item pickup do\\u2019s and don\\u2019ts below.</p>\", \"id\": \"a8b677b9-d8d0-4c45-baa6-894e4e504c97\"}, {\"type\": \"basic_step\", \"value\": \"<p>Place bulk items at the curb in front of your house by 6:30 a.m. on the first day of your scheduled collection week.</p>\", \"id\": \"9cce1999-8a7f-4400-922d-ae6b03e41d68\"}, {\"type\": \"basic_step\", \"value\": \"<p>Separate items into three piles:</p><ul><li>Metal - includes appliances, doors must be removed</li><li>Passenger car tires - limit of eight tires per household, rims must be removed, no truck or tractor tires</li><li>Non-metal items - includes carpeting and nail-free lumber</li></ul>\", \"id\": \"bb6b732d-177d-4a89-b179-882f2166aa63\"}, {\"type\": \"basic_step\", \"value\": \"<p>The three separate piles are collected by different trucks and may be collected at different times throughout the week.</p>\", \"id\": \"47a7c5da-7afe-4fd0-9de0-03045938ef24\"}]",
+    "steps_ar": "[]",
+    "steps_en": "[{\"type\": \"basic_step\", \"value\": \"<p>Use the \\u201cWhat do I do with\\u201d tool below to see what bulk items can be picked up. Bulk items are items that are too large for your trash cart, such as appliances, furniture, and carpet.</p>\", \"id\": \"387583c9-5aaa-40b2-acdb-a197e32a4f6d\"}, {\"type\": \"basic_step\", \"value\": \"<p>Consider donating your items before placing them on the curb for pickup.</p>\", \"id\": \"3b80d7f5-1cce-480f-be13-217784eabcd9\"}, {\"type\": \"basic_step\", \"value\": \"<p>Look up your bulk pickup weeks with My Collection Schedule tool below. We only collect bulk items from Austin residential trash and recycling customers twice a year, and customers have different pickup weeks.</p>\", \"id\": \"15b9a848-91ed-41be-857a-0b44a5580eb0\"}, {\"type\": \"basic_step\", \"value\": \"<p>Review the bulk item pickup do\\u2019s and don\\u2019ts below.</p>\", \"id\": \"a8b677b9-d8d0-4c45-baa6-894e4e504c97\"}, {\"type\": \"basic_step\", \"value\": \"<p>Place bulk items at the curb in front of your house by 6:30 a.m. on the first day of your scheduled collection week.</p>\", \"id\": \"9cce1999-8a7f-4400-922d-ae6b03e41d68\"}, {\"type\": \"basic_step\", \"value\": \"<p>Separate items into three piles:</p><ul><li>Metal - includes appliances, doors must be removed</li><li>Passenger car tires - limit of eight tires per household, rims must be removed, no truck or tractor tires</li><li>Non-metal items - includes carpeting and nail-free lumber</li></ul>\", \"id\": \"bb6b732d-177d-4a89-b179-882f2166aa63\"}, {\"type\": \"basic_step\", \"value\": \"<p>The three separate piles are collected by different trucks and may be collected at different times throughout the week.</p>\", \"id\": \"47a7c5da-7afe-4fd0-9de0-03045938ef24\"}]",
+    "steps_es": "[]",
+    "steps_vi": "[]",
     "dynamic_content": "[{\"type\": \"what_do_i_do_with_block\", \"value\": null, \"id\": \"5c72ac88-ad78-4eb8-a13c-4af077917db1\"}, {\"type\": \"collection_schedule_block\", \"value\": null, \"id\": \"0fb4a6b6-e8cd-4ffe-8550-e5fc2759b318\"}]",
     "additional_content": "<h2>Bulk item pickup do\u2019s and don\u2019ts</h2><p>Do not put bulk items in bags, boxes, or other containers. Bags will be treated as extra trash and are subject to extra trash fees.</p><p>Do not place any items under low hanging tree limbs or power lines.</p><p>Do not place items in an alley in any area in front of a vacant lot or in front of a business. Items will not be collected from these areas.</p><p>To prevent damage to your property, keep bulk items 5 feet away from your:</p><ul><li>Trash cart</li><li>Mailbox</li><li>Fences or walls</li><li>Water meter</li><li>Telephone connection box</li><li>Parked cars</li></ul>",
     "additional_content_ar": "<h2>\u0642\u0627\u0626\u0645\u0629 \u0627\u0644\u0639\u0646\u0627\u0635\u0631 \u0643\u0628\u064a\u0631\u0629 \u0627\u0644\u062d\u062c\u0645 \u0627\u0644\u062a\u064a \u064a\u0645\u0643\u0646 \u062c\u0645\u0639\u0647\u0627 \u0648\u0627\u0644\u0639\u0646\u0627\u0635\u0631 \u0627\u0644\u062a\u064a \u0644\u0627 \u064a\u0645\u0643\u0646 \u062c\u0645\u0639\u0647\u0627</h2><p>\u0644\u0627 \u062a\u0636\u0639 \u0627\u0644\u0639\u0646\u0627\u0635\u0631 \u0643\u0628\u064a\u0631\u0629 \u0627\u0644\u062d\u062c\u0645 \u0641\u064a \u0623\u0643\u064a\u0627\u0633\u060c \u0623\u0648 \u0635\u0646\u0627\u062f\u064a\u0642\u060c \u0623\u0648 \u063a\u064a\u0631 \u0630\u0644\u0643 \u0645\u0646 \u0627\u0644\u062d\u0627\u0648\u064a\u0627\u062a. \u0633\u064a\u062a\u0645 \u0627\u0644\u062a\u0639\u0627\u0645\u0644 \u0645\u0639 \u0627\u0644\u0623\u0643\u064a\u0627\u0633 \u0639\u0644\u0649 \u0623\u0646\u0647\u0627 \u0642\u0645\u0627\u0645\u0629 \u0625\u0636\u0627\u0641\u064a\u0629 \u0648\u062a\u062e\u0636\u0639 \u0644\u0631\u0633\u0648\u0645 \u0625\u0636\u0627\u0641\u064a\u0629 \u0644\u062c\u0645\u0639 \u0627\u0644\u0642\u0645\u0627\u0645\u0629.</p><p>\u0644\u0627 \u062a\u0636\u0639 \u0623\u064a \u0639\u0646\u0627\u0635\u0631 \u062a\u062d\u062a \u0641\u0631\u0648\u0639 \u0634\u062c\u0631 \u0623\u0648 \u0623\u0633\u0644\u0627\u0643 \u0643\u0647\u0631\u0628\u0627\u0621 \u0645\u062a\u062f\u0644 \u0628\u0627\u0631\u062a\u0641\u0627\u0639 \u0645\u0646\u062e\u0641\u0636.</p><p>\u0644\u0627 \u062a\u0636\u0639 \u0627\u0644\u0639\u0646\u0627\u0635\u0631 \u0641\u064a \u0645\u0645\u0631 \u0641\u064a \u0623\u064a \u0645\u0646\u0637\u0642\u0629 \u0623\u0645\u0627\u0645 \u0642\u0637\u0639\u0629 \u0623\u0631\u0636 \u0634\u0627\u063a\u0631\u0629 \u0623\u0648 \u0623\u0645\u0627\u0645 \u0634\u0631\u0643\u0629. \u0644\u0646 \u064a\u062a\u0645 \u0627\u0644\u062a\u0642\u0627\u0637 \u0627\u0644\u0639\u0646\u0627\u0635\u0631 \u0645\u0646 \u0647\u0630\u0647 \u0627\u0644\u0645\u0646\u0627\u0637\u0642.</p><p>\u0644\u0645\u0646\u0639 \u0627\u0644\u0623\u0636\u0631\u0627\u0631 \u0627\u0644\u062a\u064a \u064a\u0645\u0643\u0646 \u0623\u0646 \u062a\u0644\u062d\u0642 \u0628\u0639\u0642\u0627\u0631\u0643 \u0623\u0648 \u0639\u0642\u0627\u0631 \u0627\u0644\u0622\u062e\u0631\u064a\u0646\u060c \u0627\u062c\u0639\u0644 \u0627\u0644\u0639\u0646\u0627\u0635\u0631 \u0643\u0628\u064a\u0631\u0629 \u0627\u0644\u062d\u062c\u0645 \u0639\u0644\u0649 \u0628\u064f\u0639\u062f 5 \u0623\u0642\u062f\u0627\u0645 \u0645\u0646:</p><ul><li>\u0639\u0631\u0628\u0629 \u0627\u0644\u0642\u0645\u0627\u0645\u0629</li><li>\u0635\u0646\u062f\u0648\u0642 \u0627\u0644\u0628\u0631\u064a\u062f</li><li>\u0627\u0644\u0633\u064a\u0627\u062c \u0623\u0648 \u0627\u0644\u062c\u062f\u0631\u0627\u0646</li><li>\u0639\u062f\u0627\u062f \u0627\u0644\u0645\u064a\u0627\u0647</li><li>\u0635\u0646\u062f\u0648\u0642 \u0627\u0644\u0627\u062a\u0635\u0627\u0644 \u0627\u0644\u0647\u0627\u062a\u0641\u064a</li><li>\u0627\u0644\u0633\u064a\u0627\u0631\u0627\u062a \u0627\u0644\u0645\u0631\u0643\u0648\u0646\u0629.</li></ul>",
     "additional_content_en": "<h2>Bulk item pickup do\u2019s and don\u2019ts</h2><p>Do not put bulk items in bags, boxes, or other containers. Bags will be treated as extra trash and are subject to extra trash fees.</p><p>Do not place any items under low hanging tree limbs or power lines.</p><p>Do not place items in an alley in any area in front of a vacant lot or in front of a business. Items will not be collected from these areas.</p><p>To prevent damage to your property, keep bulk items 5 feet away from your:</p><ul><li>Trash cart</li><li>Mailbox</li><li>Fences or walls</li><li>Water meter</li><li>Telephone connection box</li><li>Parked cars</li></ul>",
     "additional_content_es": "<h2>Qu\u00e9 debe y no debe hacer para la recolecci\u00f3n de art\u00edculos grandes</h2><p>No meta los art\u00edculos grandes en bolsas, cajas ni otros recipientes. Las bolsas se consideran basura adicional y est\u00e1n sujetas a cuotas de basura adicionales.</p><p>No coloque ning\u00fan art\u00edculo debajo de \u00e1rboles con ramas bajas ni cables del tendido el\u00e9ctrico bajos.</p><p>No coloque art\u00edculos en callejones en ning\u00fan \u00e1rea frente a terrenos bald\u00edos ni negocios. No recogeremos art\u00edculos en esas \u00e1reas.</p><p>Para evitar el da\u00f1o a su propiedad y la de otros, mantenga los art\u00edculos grandes a 5 pies de distancia de su:</p><ul><li>Bote de basura</li><li>Buz\u00f3n</li><li>Cerca o pared</li><li>Medidor de agua</li><li>Caja de conexi\u00f3n telef\u00f3nica</li><li>Autos estacionados</li></ul>",
     "additional_content_vi": "<h2>Nh\u1eefng \u0110i\u1ec1u N\u00ean L\u00e0m v\u00e0 Kh\u00f4ng N\u00ean L\u00e0m v\u1ec1 B\u1ed1c R\u00e1c Kh\u1ed1i</h2><p>Kh\u00f4ng \u0111\u1ec3 c\u00e1c r\u00e1c kh\u1ed1i v\u00e0o trong t\u00fai, h\u1ed9p, hay c\u00e1c th\u00f9ng \u0111\u1ef1ng kh\u00e1c. C\u00e1c t\u00fai \u0111\u1ef1ng s\u1ebd \u0111\u01b0\u1ee3c xem l\u00e0 r\u00e1c ph\u1ee5 tr\u1ed9i v\u00e0 ph\u1ea3i ch\u1ecbu l\u1ec7 ph\u00ed r\u00e1c ph\u1ee5 tr\u1ed9i.</p><p>Kh\u00f4ng \u0111\u1ec3 b\u1ea5t k\u1ef3 \u0111\u1ed3 v\u1eadt n\u00e0o d\u01b0\u1edbi c\u00e1c c\u00e0nh c\u00e2y l\u01a1 l\u1eedng \u1edf t\u1ea7m th\u1ea5p ho\u1eb7c d\u01b0\u1edbi c\u00e1c \u0111\u01b0\u1eddng d\u00e2y \u0111i\u1ec7n.</p><p>Kh\u00f4ng \u0111\u1ec3 c\u00e1c \u0111\u1ed3 v\u1eadt \u1edf \u0111\u01b0\u1eddng h\u1ebbm t\u1ea1i b\u1ea5t k\u1ef3 khu v\u1ef1c n\u00e0o ph\u00eda tr\u01b0\u1edbc m\u1ed9t khu \u0111\u1ea5t tr\u1ed1ng ho\u1eb7c tr\u01b0\u1edbc m\u1ed9t c\u01a1 s\u1edf kinh doanh. C\u00e1c \u0111\u1ed3 v\u1eadt \u1edf c\u00e1c ch\u1ed7 n\u00e0y s\u1ebd kh\u00f4ng \u0111\u01b0\u1ee3c thu \u0111i.</p><p>\u0110\u1ec3 tr\u00e1nh g\u00e2y thi\u1ec7t h\u1ea1i cho t\u00e0i s\u1ea3n c\u1ee7a qu\u00fd v\u1ecb ho\u1eb7c c\u1ee7a ng\u01b0\u1eddi kh\u00e1c, h\u00e3y \u0111\u1ec3 c\u00e1c r\u00e1c kh\u1ed1i c\u00e1ch xa 5 feet (1 m\u00e9t r\u01b0\u1ee1i) t\u1eeb c\u00e1c ch\u1ed7 sau \u0111\u00e2y c\u1ee7a m\u00ecnh:</p><ul><li>Thu\u0300ng xe ra\u0301c</li><li>H\u1ed9p th\u01b0</li><li>H\u00e0ng r\u00e0o v\u00e0 t\u01b0\u1eddng r\u00e0o</li><li>\u0110\u1ed3ng h\u1ed3 \u0111o n\u01b0\u1edbc</li><li>H\u1ed9p \u0111\u1ea5u n\u1ed1i \u0111i\u1ec7n tho\u1ea1i</li><li>Xe h\u01a1i \u0111\u1eadu.</li></ul>",
-    "short_description": ""
+    "short_description": "",
+    "short_description_ar": null,
+    "short_description_en": null,
+    "short_description_es": null,
+    "short_description_vi": null
   }
 },
 {
   "model": "base.servicepage",
   "pk": 6,
   "fields": {
+    "page_ptr": 6,
     "created_at": "2018-09-25T20:08:49.595Z",
     "updated_at": "2019-04-17T19:23:02.128Z",
+    "author_notes": "",
     "steps": "[]",
+    "steps_ar": "[]",
+    "steps_en": "[]",
+    "steps_es": "[]",
+    "steps_vi": "[]",
     "dynamic_content": "[{\"type\": \"what_do_i_do_with_block\", \"value\": null, \"id\": \"eb008c9c-f4e5-4586-877d-3a9a2667a07e\"}]",
     "additional_content": "<h2>Keeping your compost cart fresh</h2><p>While it is not required, there are a few things you can do to keep your compost cart from smelling bad:</p><ul><li>Line your compost cart with a paper bag or use BPI-certified compostable bags. If you don\u2019t have a bag, you can put dry leaves, pizza boxes, or newspaper on the bottom of your cart. Sprinkling baking soda on the bottom will also help keep the smell down.</li><li>Keep your compost cart in the shade if possible, and always keep the lid closed to contain the smell and to keep bugs and animals out of your cart.</li></ul><h2>Why compost?</h2><p>When buried in a landfill, compostable materials do not break down as they would in nature or in a compost pile. Instead of going to a landfill, where they would release methane into the atmosphere, organic materials placed in the green carts are taken to a local composting facility, where they break down into compost. Compost helps soil retain water and fertilizes lawns and gardens without using chemicals.</p><h2>Save money with your green cart</h2><p>You will have less trash to throw away each week after putting food scraps and food-soiled paper in your green cart. This may allow you to <a href=\"http://www.austintexas.gov/department/residential-rates-fees\">downsize to a smaller, less expensive trash cart</a>. Austin Resource Recovery offers four trash cart sizes \u2013 the smaller the cart, the less it costs each month.</p>",
     "additional_content_ar": "<h2>\u0627\u0644\u062d\u0641\u0627\u0638 \u0639\u0644\u0649 \u0639\u0631\u0628\u0629 \u0627\u0644\u062a\u0633\u0645\u064a\u062f \u062e\u0627\u0635\u062a\u0643 \u0645\u0646 \u0627\u0644\u0631\u0648\u0627\u0626\u062d \u0627\u0644\u0643\u0631\u064a\u0647\u0629</h2><p>\u0641\u064a \u062d\u064a\u0646 \u0623\u0646 \u0647\u0630\u0627 \u0627\u0644\u0625\u062c\u0631\u0627\u0621 \u0644\u064a\u0633 \u0645\u0637\u0644\u0648\u0628\u0627\u060c \u0625\u0644\u0627 \u0623\u0646 \u0647\u0646\u0627\u0643 \u0627\u0644\u0642\u0644\u064a\u0644 \u0645\u0646 \u0627\u0644\u0623\u0634\u064a\u0627\u0621 \u0627\u0644\u062a\u064a \u064a\u0645\u0643\u0646\u0643 \u0627\u0644\u0642\u064a\u0627\u0645 \u0628\u0647\u0627 \u0644\u0644\u062d\u0641\u0627\u0638 \u0639\u0644\u0649 \u0639\u0631\u0628\u0629 \u0627\u0644\u062a\u0633\u0645\u064a\u062f \u062e\u0627\u0635\u062a\u0643 \u0645\u0646 \u0627\u0644\u0631\u0648\u0627\u0626\u062d \u0627\u0644\u0643\u0631\u064a\u0647\u0629:</p><ul><li>\u0636\u0639 \u062f\u0627\u062e\u0644 \u0639\u0631\u0628\u0629 \u0627\u0644\u062a\u0633\u0645\u064a\u062f \u0628\u0627\u0644\u0623\u0633\u0641\u0644 \u0628\u0637\u0627\u0646\u0629 \u0645\u0646 \u0627\u0644\u0623\u0643\u064a\u0627\u0633 \u0627\u0644\u0648\u0631\u0642\u064a\u0629 \u0623\u0648 \u0627\u0644\u0623\u0643\u064a\u0627\u0633 \u0627\u0644\u0645\u0639\u062a\u0645\u062f\u0629 \u0645\u0646 \u0642\u0628\u0644 BPI \u0627\u0644\u0642\u0627\u0628\u0644\u0629 \u0644\u0644\u062a\u0633\u0645\u064a\u062f. \u0625\u0630\u0627 \u0644\u0645 \u064a\u0643\u0646 \u0644\u062f\u064a\u0643 \u0623\u0643\u064a\u0627\u0633\u060c \u064a\u0645\u0643\u0646\u0643 \u0648\u0636\u0639 \u0623\u0648\u0631\u0627\u0642 \u0627\u0644\u0634\u062c\u0631 \u0627\u0644\u062c\u0627\u0641\u0629 \u0623\u0648 \u0635\u0646\u0627\u062f\u064a\u0642 \u0627\u0644\u0628\u064a\u062a\u0632\u0627 \u0623\u0648 \u0648\u0631\u0642 \u0627\u0644\u062c\u0631\u0627\u0626\u062f \u062f\u0627\u062e\u0644 \u0627\u0644\u062c\u0632\u0621 \u0627\u0644\u0633\u0641\u0644\u064a \u0645\u0646 \u0639\u0631\u0628\u062a\u0643. \u0633\u064a\u0633\u0627\u0639\u062f \u0623\u064a\u0636\u0627 \u0631\u0634 \u0628\u064a\u0643\u0631\u0628\u0648\u0646\u0627\u062a \u0627\u0644\u0635\u0648\u062f\u0627 \u0641\u064a \u0627\u0644\u0642\u0627\u0639 \u0639\u0644\u0649 \u0637\u0631\u062f \u0627\u0644\u0631\u0648\u0627\u0626\u062d \u0627\u0644\u0643\u0631\u064a\u0647\u0629.</li><li>\u0627\u062d\u062a\u0641\u0638 \u0628\u0639\u0631\u0628\u0629 \u0627\u0644\u062a\u0633\u0645\u064a\u062f \u062e\u0627\u0635\u062a\u0643 \u0641\u064a \u0627\u0644\u0638\u0644 \u0625\u0646 \u0623\u0645\u0643\u0646\u060c \u0648\u0627\u062d\u0631\u0635 \u062f\u0627\u0626\u0645\u0627 \u0639\u0644\u0649 \u0625\u063a\u0644\u0627\u0642 \u0627\u0644\u063a\u0637\u0627\u0621 \u0644\u0639\u062f\u0645 \u0627\u0646\u062a\u0634\u0627\u0631 \u0623\u064a \u0631\u0648\u0627\u0626\u062d \u0648\u0625\u0628\u0639\u0627\u062f \u0627\u0644\u062d\u0634\u0631\u0627\u062a \u0648\u0627\u0644\u062d\u064a\u0648\u0627\u0646\u0627\u062a \u0639\u0646 \u0639\u0631\u0628\u062a\u0643.</li></ul><h2>\u0644\u0645\u0627\u0630\u0627 \u0627\u0644\u0633\u0645\u0627\u062f\u061f</h2><p>\u0639\u0646\u062f \u062f\u0641\u0646 \u0627\u0644\u0645\u0648\u0627\u062f \u0627\u0644\u0642\u0627\u0628\u0644\u0629 \u0644\u0644\u062a\u0633\u0645\u064a\u062f \u0641\u064a \u0645\u0643\u0628 \u0627\u0644\u0646\u0641\u0627\u064a\u0627\u062a\u060c \u0641\u0625\u0646\u0647\u0627 \u0644\u0627 \u062a\u062a\u062d\u0644\u0644 \u0643\u0645\u0627 \u062a\u062a\u062d\u0644\u0644 \u0641\u064a \u0627\u0644\u0637\u0628\u064a\u0639\u0629 \u0623\u0648 \u0641\u064a \u0643\u0648\u0645\u0629 \u0627\u0644\u0633\u0645\u0627\u062f. \u0641\u0628\u062f\u0644\u0627 \u0645\u0646 \u0627\u0644\u0630\u0647\u0627\u0628 \u0628\u0647\u0627 \u0625\u0644\u0649 \u0645\u0643\u0628 \u0627\u0644\u0646\u0641\u0627\u064a\u0627\u062a \u062d\u064a\u062b \u0642\u062f \u062a\u0637\u0644\u0642 \u063a\u0627\u0632 \u0627\u0644\u0645\u064a\u062b\u0627\u0646 \u0641\u064a \u0627\u0644\u063a\u0644\u0627\u0641 \u0627\u0644\u062c\u0648\u064a\u060c \u062a\u0624\u062e\u0630 \u0627\u0644\u0645\u0648\u0627\u062f \u0627\u0644\u0639\u0636\u0648\u064a\u0629 \u0627\u0644\u0645\u0648\u0636\u0648\u0639\u0629 \u0641\u064a \u0627\u0644\u0639\u0631\u0628\u0627\u062a \u0627\u0644\u062e\u0636\u0631\u0627\u0621 \u0625\u0644\u0649 \u0627\u0644\u0645\u0646\u0634\u0623\u0629 \u0627\u0644\u0645\u062d\u0644\u064a\u0629 \u0644\u0644\u062a\u0633\u0645\u064a\u062f\u060c \u062d\u064a\u062b \u062a\u062a\u062d\u0644\u0644 \u0647\u0646\u0627\u0643 \u0625\u0644\u0649 \u0633\u0645\u0627\u062f. \u064a\u0633\u0627\u0639\u062f \u0627\u0644\u0633\u0645\u0627\u062f \u0627\u0644\u062a\u0631\u0628\u0629 \u0639\u0644\u0649 \u0627\u0644\u0627\u062d\u062a\u0641\u0627\u0638 \u0628\u0627\u0644\u0645\u0627\u0621 \u0648\u062a\u062e\u0635\u064a\u0628 \u0627\u0644\u0645\u0631\u0648\u062c \u0648\u0627\u0644\u062d\u062f\u0627\u0626\u0642 \u062f\u0648\u0646 \u0627\u0633\u062a\u062e\u062f\u0627\u0645 \u0627\u0644\u0645\u0648\u0627\u062f \u0627\u0644\u0643\u064a\u0645\u064a\u0627\u0626\u064a\u0629.</p><h2>\u0648\u0641\u0651\u0631 \u0627\u0644\u0645\u0627\u0644 \u0645\u0639 \u0639\u0631\u0628\u062a\u0643 \u0627\u0644\u062e\u0636\u0631\u0627\u0621</h2><p>\u0633\u064a\u0643\u0648\u0646 \u0644\u062f\u064a\u0643 \u0623\u0642\u0644 \u0633\u0644\u0629 \u0642\u0645\u0627\u0645\u0629 \u062d\u062c\u0645\u0627 \u062a\u062a\u062e\u0644\u0635 \u0645\u0646\u0647\u0627 \u0643\u0644 \u0623\u0633\u0628\u0648\u0639 \u0628\u0639\u062f \u0648\u0636\u0639 \u0641\u0636\u0644\u0627\u062a \u0627\u0644\u0637\u0639\u0627\u0645 \u0648\u0627\u0644\u0648\u0631\u0642 \u0627\u0644\u0645\u062a\u0633\u062e \u0628\u0627\u0644\u0637\u0639\u0627\u0645 \u0641\u064a \u0639\u0631\u0628\u062a\u0643 \u0627\u0644\u062e\u0636\u0631\u0627\u0621. \u0648\u0647\u0630\u0627 \u0642\u062f \u064a\u0633\u0645\u062d \u0644\u0643 \u0628\u062a\u0635\u063a\u064a\u0631 \u062d\u062c\u0645 \u0639\u0631\u0628\u0629 \u0627\u0644\u0642\u0645\u0627\u0645\u0629 \u0625\u0644\u0649 \u062d\u062c\u0645 \u0623\u0635\u063a\u0631 \u0648\u0628\u0623\u0642\u0644 \u062a\u0643\u0644\u0641\u0629. \u062a\u0648\u0641\u0631 Austin Resource Recovery \u0623\u0631\u0628\u0639\u0629 \u0623\u062d\u062c\u0627\u0645 \u0644\u0639\u0631\u0628\u0629 \u0627\u0644\u0646\u0641\u0627\u064a\u0627\u062a - \u0641\u0623\u0635\u063a\u0631 \u0639\u0631\u0628\u0629\u060c \u062a\u0643\u0644\u0641\u062a\u0647\u0627 \u0623\u0642\u0644.</p>",
     "additional_content_en": "<h2>Keeping your compost cart fresh</h2><p>While it is not required, there are a few things you can do to keep your compost cart from smelling bad:</p><ul><li>Line your compost cart with a paper bag or use BPI-certified compostable bags. If you don\u2019t have a bag, you can put dry leaves, pizza boxes, or newspaper on the bottom of your cart. Sprinkling baking soda on the bottom will also help keep the smell down.</li><li>Keep your compost cart in the shade if possible, and always keep the lid closed to contain the smell and to keep bugs and animals out of your cart.</li></ul><h2>Why compost?</h2><p>When buried in a landfill, compostable materials do not break down as they would in nature or in a compost pile. Instead of going to a landfill, where they would release methane into the atmosphere, organic materials placed in the green carts are taken to a local composting facility, where they break down into compost. Compost helps soil retain water and fertilizes lawns and gardens without using chemicals.</p><h2>Save money with your green cart</h2><p>You will have less trash to throw away each week after putting food scraps and food-soiled paper in your green cart. This may allow you to <a href=\"http://www.austintexas.gov/department/residential-rates-fees\">downsize to a smaller, less expensive trash cart</a>. Austin Resource Recovery offers four trash cart sizes \u2013 the smaller the cart, the less it costs each month.</p>",
     "additional_content_es": "<h2>C\u00f3mo mantener su bote de compost fresco</h2><p>Aunque no es necesario, estas son algunas cosas que puede hacer para evitar que su bote de compostaje huela mal:</p><ul><li>Coloque una bolsa de papel dentro del bote de compostaje o use bolsas de compostaje certificadas por BPI. Si no tiene una bolsa, puede colocar hojas secas, cajas de pizza o peri\u00f3dico en el fondo del bote. Espolvorear bicarbonato de soda en el fondo del bote tambi\u00e9n controlar\u00e1 el olor.</li><li>Mantenga su bote de compostaje en la sombra si es posible y siempre cerrado para contener el olor y evitar que le entren insectos y animales.</li></ul><h2>\u00bfPor qu\u00e9 es bueno hacer compost?</h2><p>Cuando se entierran en un vertedero de basura, los materiales para compostaje no se descomponen como lo har\u00edan en la naturaleza o en una pila de compost. En lugar de ir al vertedero, donde expulsar\u00edan gas metano a la atm\u00f3sfera, los materiales org\u00e1nicos colocados en los botes verdes son llevados al centro de compostaje local donde se descomponen para formar compost. El compost ayuda a la tierra a retener el agua y sirve como fertilizante para el c\u00e9sped y jardines sin necesidad de qu\u00edmicos.</p><h2>\u00a1El bote verde le ahorra dinero!</h2><p>Despu\u00e9s de poner los restos de comida y los papeles que se hayan ensuciado con alimentos en su bote verde, tendr\u00e1 menos basura que tirar cada semana. Esto podr\u00eda permitirle <a href=\"http://www.austintexas.gov/department/residential-rates-fees\">cambiarse a un bote de basura m\u00e1s peque\u00f1o y m\u00e1s barato</a>. Austin Resource Recovery ofrece cuatro tama\u00f1os de botes de basura y, mientras m\u00e1s peque\u00f1o, menos le cuesta al mes.</p>",
     "additional_content_vi": "<h2>Gi\u1eef thu\u0300ng xe ra\u0301c \u1ee7 ph\u00e2n h\u1eefu c\u01a1 c\u1ee7a m\u00ecnh t\u01b0\u01a1i s\u1ea1ch:</h2><p>Cho d\u00f9 kh\u00f4ng b\u1eaft bu\u1ed9c, v\u1eabn c\u00f3 m\u1ed9t s\u1ed1 \u0111i\u1ec1u qu\u00fd v\u1ecb c\u00f3 th\u1ec3 l\u00e0m \u0111\u1ec3 gi\u1eef cho th\u00f9ng r\u00e1c \u1ee7 ph\u00e2n h\u1eefu c\u01a1 c\u1ee7a m\u00ecnh kh\u00f4ng b\u1ecb b\u1ed1c m\u00f9i kh\u00f3 ch\u1ecbu:</p><ul><li>L\u00f3t th\u00f9ng \u0111\u1ef1ng r\u00e1c \u1ee7 ph\u00e2n h\u1eefu c\u01a1 b\u1eb1ng t\u00fai gi\u1ea5y ho\u1eb7c d\u00f9ng t\u00fai c\u00f3 th\u1ec3 ph\u00e2n h\u1ee7y v\u00e0 \u0111\u01b0\u1ee3c ch\u1ee9ng nh\u1eadn b\u1edfi BPI. N\u1ebfu qu\u00fd v\u1ecb kh\u00f4ng c\u00f3 t\u00fai, qu\u00fd v\u1ecb c\u00f3 th\u1ec3 l\u00f3t \u0111\u00e1y th\u00f9ng b\u1eb1ng l\u00e1 kh\u00f4, h\u1ed9p pizza, ho\u1eb7c gi\u1ea5y b\u00e1o. R\u1eafc thu\u1ed1c mu\u1ed1i \u1edf d\u01b0\u1edbi \u0111\u00e1y c\u0169ng s\u1ebd gi\u00fap gi\u1ea3m b\u1ed1c m\u00f9i.</li><li>N\u1ebfu c\u00f3 th\u1ec3 h\u00e3y \u0111\u1ec3 th\u00f9ng r\u00e1c \u0111\u1ef1ng ph\u00e2n \u1ee7 h\u1eefu c\u01a1 d\u01b0\u1edbi b\u00f3ng m\u00e1t, v\u00e0 lu\u00f4n \u0111\u1eady n\u1eafp k\u00edn \u0111\u1ec3 gi\u1eef m\u00f9i h\u00f4i v\u00e0 khi\u1ebfn cho c\u00e1c lo\u1ea1i s\u00e2u b\u1ecd c\u0169ng nh\u01b0 th\u00fa v\u1eadt kh\u00f4ng v\u00e0o th\u00f9ng c\u1ee7a m\u00ecnh.</li></ul><h2>T\u1ea1i sao l\u1ea1i \u1ee7 ph\u00e2n h\u1eefu c\u01a1?</h2><p>Khi b\u1ecb ch\u00f4n \u1edf m\u1ed9t b\u00e3i ch\u00f4n r\u00e1c, c\u00e1c ch\u1ea5t khi th\u01b0\u1eddng th\u00ec t\u1ef1 ph\u00e2n h\u1ee7y s\u1ebd kh\u00f4ng tan r\u00e3 nh\u01b0 khi ch\u00fang \u1edf trong thi\u00ean nhi\u00ean ho\u1eb7c \u1edf trong m\u1ed9t \u0111\u1ed1ng r\u00e1c \u1ee7 ph\u00e2n h\u1eefu c\u01a1. Thay v\u00ec cho ra b\u00e3i ch\u00f4n r\u00e1c, n\u01a1i m\u00e0 ch\u00fang s\u1ebd th\u1ea3i kh\u00ed m\u00ea-than (methanol) v\u00e0o trong kh\u00f4ng kh\u00ed, c\u00e1c v\u1eadt li\u1ec7u h\u1eefu c\u01a1 n\u00e0y \u0111\u01b0\u1ee3c \u0111\u1eb7t trong c\u00e1c th\u00f9ng xe r\u00e1c m\u00e0u xanh l\u00e1 c\u00e2y \u0111\u1ec3 \u0111\u01b0\u1ee3c \u0111\u01b0a \u0111\u1ebfn m\u1ed9t c\u01a1 s\u1edf \u1ee7 ph\u00e2n h\u1eefu c\u01a1 \u1edf \u0111\u1ecba ph\u01b0\u01a1ng, \u1edf \u0111\u00f3 ch\u00fang ph\u00e2n h\u1ee7y th\u00e0nh ph\u00e2n \u1ee7 h\u1eefu c\u01a1. Ph\u00e2n \u1ee7 h\u1eefu c\u01a1 gi\u00fap cho \u0111\u1ea5t gi\u1eef d\u01b0\u1ee3c n\u01b0\u1edbc v\u00e0 l\u00e0m ph\u00e2n b\u00f3n cho b\u00e3i c\u1ecf v\u00e0 v\u01b0\u1eddn t\u01b0\u1ee3c m\u00e0 kh\u00f4ng ph\u1ea3i s\u1eed d\u1ee5ng h\u00f3a ch\u1ea5t.</p><h2>Ti\u1ebft ki\u1ec7m ti\u1ec1n v\u1edbi thu\u0300ng xe ra\u0301c xanh l\u00e1 c\u00e2y</h2><p>Qu\u00fd v\u1ecb s\u1ebd c\u00f3 \u00edt \u0111i s\u1ed1 r\u00e1c ph\u1ea3i v\u1ee9t b\u1ecf m\u1ed7i tu\u1ea7n sau khi cho c\u00e1c \u0111\u1ed3 \u0103n th\u1eeba v\u00e0 gi\u1ea5y b\u1ecdc th\u1ef1c ph\u1ea9m \u0111\u00e3 b\u1ea9n v\u00e0o trong th\u00f9ng xe r\u00e1c m\u00e0u xanh l\u00e1 c\u00e2y c\u1ee7a m\u00ecnh. \u0110i\u1ec1u n\u00e0y c\u00f3 th\u1ec3 cho ph\u00e9p qu\u00fd <a href=\"http://www.austintexas.gov/department/residential-rates-fees\">v\u1ecb gi\u1ea3m k\u00edch th\u01b0\u1edbc thu\u0300ng xe ra\u0301c xu\u1ed1ng lo\u1ea1i nh\u1ecf h\u01a1n, \u0111\u1ee1 t\u1ed1n k\u00e9m h\u01a1n</a>. S\u1edf Ph\u1ee5c H\u1ed3i Ngu\u1ed3n L\u1ef1c Austin cung c\u1ea5p b\u1ed1n c\u1ee1 thu\u0300ng xe ra\u0301c \u2013 xe nh\u1ecf h\u01a1n, th\u00ec chi ph\u00ed \u00edt h\u01a1n m\u1ed7i th\u00e1ng.</p>",
-    "short_description": ""
+    "short_description": "",
+    "short_description_ar": null,
+    "short_description_en": null,
+    "short_description_es": null,
+    "short_description_vi": null
   }
 },
 {
   "model": "base.servicepage",
   "pk": 7,
   "fields": {
+    "page_ptr": 7,
     "created_at": "2018-09-25T20:08:50.920Z",
-    "updated_at": "2019-04-17T19:26:34.642Z",
+    "updated_at": "2019-05-22T06:34:00.440Z",
+    "author_notes": "",
     "steps": "[{\"type\": \"basic_step\", \"value\": \"<p>Use our <a href=\\\"http://austin.maps.arcgis.com/apps/webappviewer/index.html?id=07706098076547358b7cc0c7b3d8562e%20\\\">free condom map</a> to find locations in the Austin giving them. Locations include:</p><ul><li>Neighborhood centers,</li><li>Barber shops,</li><li>Liquor stores and bars,</li><li>And other easily accessible local establishments.</li></ul>\", \"id\": \"a9f32dc9-7994-44d5-ab6a-420528bb7c9e\"}, {\"type\": \"basic_step\", \"value\": \"<p>Review steps you can take to prevent HIV.</p><ul><li>Always use latex condoms with your partner, especially if you do not know your partner\\u2019s HIV status.</li><li>Don\\u2019t have sex. Abstinence is the only sure way to avoid contracting HIV.</li><li>If you and your partner are both HIV negative, being faithful in your relationship removes your risk for HIV infection.</li><li>Don\\u2019t share needles and syringes. Needles and syringes can expose you to HIV.</li><li>Speak to a doctor about a prescription for <a href=\\\"https://www.cdc.gov/hiv/basics/prep.html\\\">Pre-exposure prophylaxis (or PrEP)</a>. PrEP is taken daily to lower chances of HIV infection.</li></ul>\", \"id\": \"2f508460-1e1f-492b-a551-92f17391c59e\"}]",
+    "steps_ar": "[]",
+    "steps_en": "[{\"type\": \"basic_step\", \"value\": \"<p>Use our <a href=\\\"http://austin.maps.arcgis.com/apps/webappviewer/index.html?id=07706098076547358b7cc0c7b3d8562e%20\\\">free condom map</a> to find locations in the Austin giving them. Locations include:</p><ul><li>Neighborhood centers,</li><li>Barber shops,</li><li>Liquor stores and bars,</li><li>And other easily accessible local establishments.</li></ul>\", \"id\": \"a9f32dc9-7994-44d5-ab6a-420528bb7c9e\"}, {\"type\": \"basic_step\", \"value\": \"<p>Review steps you can take to prevent HIV.</p><ul><li>Always use latex condoms with your partner, especially if you do not know your partner\\u2019s HIV status.</li><li>Don\\u2019t have sex. Abstinence is the only sure way to avoid contracting HIV.</li><li>If you and your partner are both HIV negative, being faithful in your relationship removes your risk for HIV infection.</li><li>Don\\u2019t share needles and syringes. Needles and syringes can expose you to HIV.</li><li>Speak to a doctor about a prescription for <a href=\\\"https://www.cdc.gov/hiv/basics/prep.html\\\">Pre-exposure prophylaxis (or PrEP)</a>. PrEP is taken daily to lower chances of HIV infection.</li></ul>\", \"id\": \"2f508460-1e1f-492b-a551-92f17391c59e\"}]",
+    "steps_es": "[]",
+    "steps_vi": "[]",
     "dynamic_content": "[{\"type\": \"map_block\", \"value\": 1, \"id\": \"0dd24d96-be4c-4766-9625-74eed6223aab\"}]",
-    "additional_content": "<p></p>",
-    "additional_content_ar": "<p></p>",
-    "additional_content_en": "<p></p>",
-    "additional_content_es": "<p></p>",
-    "additional_content_vi": "<p></p>",
-    "short_description": ""
+    "additional_content": "",
+    "additional_content_ar": "",
+    "additional_content_en": "",
+    "additional_content_es": "",
+    "additional_content_vi": "",
+    "short_description": "",
+    "short_description_ar": "",
+    "short_description_en": "",
+    "short_description_es": "",
+    "short_description_vi": ""
   }
 },
 {
   "model": "base.servicepage",
   "pk": 9,
   "fields": {
+    "page_ptr": 9,
     "created_at": "2018-09-25T20:08:54.133Z",
     "updated_at": "2019-04-17T19:18:58.715Z",
+    "author_notes": "",
     "steps": "[{\"type\": \"basic_step\", \"value\": \"<p>We provide immunization shots to uninsured children and adults and Medicaid recipients. Decide which shots you or your family members need.</p><ul><li>Shots for children<ul><li>DTaP, DT, or DTP</li><li>Hepatitis A</li><li>Hepatitis B</li><li>HPV</li><li>Polio</li><li>Hib</li><li>PCV</li><li>Measles, Mumps, and Rubella (MMR)</li><li>Varicella; the chickenpox vaccine (VAR)</li><li>Meningococcal (MCV4)</li></ul></li><li>Shots for adults<ul><li>DTaP, DT, or DTP</li><li>Hepatitis A</li><li>Hepatitis B</li><li>HPV</li><li>Meningitis (through age 21)</li><li>Measles, Mumps, and Rubella (MMR)</li><li>Pneumonia</li><li>Tdap/Td</li><li>Varicella; the chickenpox vaccine (VAR)</li><li>Shingles</li></ul></li></ul>\", \"id\": \"2f65166a-0b07-40d9-894c-2fb262166100\"}, {\"type\": \"basic_step\", \"value\": \"<p>Find the clinic nearest you</p><ul><li>Far South Austin Clinic</li><li>St. John Clinic</li></ul>\", \"id\": \"ea038930-2d1f-4771-9568-b9112efe0ede\"}, {\"type\": \"basic_step\", \"value\": \"<p><a href=\\\"http://www.austintexas.gov/sites/default/files/files/Health/Immunizations/2018_S4T_BS_Flyer-_English.pdf\\\">Find available appointment times</a>.</p>\", \"id\": \"d540fe0e-8be0-4e7c-8d6f-3b91fc86a6aa\"}, {\"type\": \"basic_step\", \"value\": \"<p>Call 512-972-5520 Monday through Friday 8 a.m. to 4:30 p.m. to make an appointment.</p>\", \"id\": \"bcd4598c-907a-42cd-aa82-2f9d95749051\"}, {\"type\": \"basic_step\", \"value\": \"<p>Bring the required items with you to your appointment:</p><ul><li>Your shot records</li><li>Your Medicaid card if you have one</li><li>Your payment<ul><li>$10 per dose of vaccine for children</li><li>$25 per dose of vaccine for adults</li><li>$20 for a TB test</li><li>No one is refused services if they are unable to pay.</li></ul></li></ul>\", \"id\": \"0be7a488-0e00-4c26-a080-3f33bbb675db\"}]",
+    "steps_ar": "[]",
+    "steps_en": "[{\"type\": \"basic_step\", \"value\": \"<p>We provide immunization shots to uninsured children and adults and Medicaid recipients. Decide which shots you or your family members need.</p><ul><li>Shots for children<ul><li>DTaP, DT, or DTP</li><li>Hepatitis A</li><li>Hepatitis B</li><li>HPV</li><li>Polio</li><li>Hib</li><li>PCV</li><li>Measles, Mumps, and Rubella (MMR)</li><li>Varicella; the chickenpox vaccine (VAR)</li><li>Meningococcal (MCV4)</li></ul></li><li>Shots for adults<ul><li>DTaP, DT, or DTP</li><li>Hepatitis A</li><li>Hepatitis B</li><li>HPV</li><li>Meningitis (through age 21)</li><li>Measles, Mumps, and Rubella (MMR)</li><li>Pneumonia</li><li>Tdap/Td</li><li>Varicella; the chickenpox vaccine (VAR)</li><li>Shingles</li></ul></li></ul>\", \"id\": \"2f65166a-0b07-40d9-894c-2fb262166100\"}, {\"type\": \"basic_step\", \"value\": \"<p>Find the clinic nearest you</p><ul><li>Far South Austin Clinic</li><li>St. John Clinic</li></ul>\", \"id\": \"ea038930-2d1f-4771-9568-b9112efe0ede\"}, {\"type\": \"basic_step\", \"value\": \"<p><a href=\\\"http://www.austintexas.gov/sites/default/files/files/Health/Immunizations/2018_S4T_BS_Flyer-_English.pdf\\\">Find available appointment times</a>.</p>\", \"id\": \"d540fe0e-8be0-4e7c-8d6f-3b91fc86a6aa\"}, {\"type\": \"basic_step\", \"value\": \"<p>Call 512-972-5520 Monday through Friday 8 a.m. to 4:30 p.m. to make an appointment.</p>\", \"id\": \"bcd4598c-907a-42cd-aa82-2f9d95749051\"}, {\"type\": \"basic_step\", \"value\": \"<p>Bring the required items with you to your appointment:</p><ul><li>Your shot records</li><li>Your Medicaid card if you have one</li><li>Your payment<ul><li>$10 per dose of vaccine for children</li><li>$25 per dose of vaccine for adults</li><li>$20 for a TB test</li><li>No one is refused services if they are unable to pay.</li></ul></li></ul>\", \"id\": \"0be7a488-0e00-4c26-a080-3f33bbb675db\"}]",
+    "steps_es": "[]",
+    "steps_vi": "[]",
     "dynamic_content": "[{\"type\": \"map_block\", \"value\": 1, \"id\": \"548bc326-c67f-4555-b641-671bca52687a\"}]",
     "additional_content": "<h2>Child immunizations requirements</h2><p>The Texas Department of State Health Services requires children to get certain immunizations to attend schools and childcare facilities. <a href=\"http://www.dshs.texas.gov/immunize/school/child-care-requirements.aspx\">Learn more about child-care immunization requirements for children under the age of five here</a> and <a href=\"http://www.dshs.texas.gov/immunize/school/school-requirements.aspx\">immunization requirements for students K-12</a>. If you don\u2019t have Medicaid or are already insured, you can make an appointment with a private doctor or clinic for immunizations shots.</p>",
     "additional_content_ar": "<p></p>",
     "additional_content_en": "<h2>Child immunizations requirements</h2><p>The Texas Department of State Health Services requires children to get certain immunizations to attend schools and childcare facilities. <a href=\"http://www.dshs.texas.gov/immunize/school/child-care-requirements.aspx\">Learn more about child-care immunization requirements for children under the age of five here</a> and <a href=\"http://www.dshs.texas.gov/immunize/school/school-requirements.aspx\">immunization requirements for students K-12</a>. If you don\u2019t have Medicaid or are already insured, you can make an appointment with a private doctor or clinic for immunizations shots.</p>",
     "additional_content_es": "<p></p>",
     "additional_content_vi": "<p></p>",
-    "short_description": ""
+    "short_description": "",
+    "short_description_ar": null,
+    "short_description_en": null,
+    "short_description_es": null,
+    "short_description_vi": null
   }
 },
 {
   "model": "base.servicepage",
   "pk": 11,
   "fields": {
+    "page_ptr": 11,
     "created_at": "2018-09-25T20:08:56.918Z",
     "updated_at": "2019-04-17T19:20:03.343Z",
+    "author_notes": "",
     "steps": "[{\"type\": \"basic_step\", \"value\": \"<p>Check the \\u201cWhat do I do with\\u201d tool below to find out what items are accepted. Some items are free to drop off and some items, like tires, require a fee.</p>\", \"id\": \"a69f4e15-3613-4d69-9c3f-0575db4ac1fc\"}, {\"type\": \"basic_step\", \"value\": \"<p>Review the Household Hazardous Waste Do\\u2019s and Don\\u2019ts below.</p>\", \"id\": \"893cb981-9258-4cad-a597-5e5ec3d09613\"}, {\"type\": \"basic_step\", \"value\": \"<p>Drop off your items at the Recycle and ReUse Center at 2514 Business Center Dr, Austin, TX 78744.</p>\", \"id\": \"96ca3653-a014-4ecf-909c-8578324e8581\"}]",
+    "steps_ar": "[]",
+    "steps_en": "[{\"type\": \"basic_step\", \"value\": \"<p>Check the \\u201cWhat do I do with\\u201d tool below to find out what items are accepted. Some items are free to drop off and some items, like tires, require a fee.</p>\", \"id\": \"a69f4e15-3613-4d69-9c3f-0575db4ac1fc\"}, {\"type\": \"basic_step\", \"value\": \"<p>Review the Household Hazardous Waste Do\\u2019s and Don\\u2019ts below.</p>\", \"id\": \"893cb981-9258-4cad-a597-5e5ec3d09613\"}, {\"type\": \"basic_step\", \"value\": \"<p>Drop off your items at the Recycle and ReUse Center at 2514 Business Center Dr, Austin, TX 78744.</p>\", \"id\": \"96ca3653-a014-4ecf-909c-8578324e8581\"}]",
+    "steps_es": "[]",
+    "steps_vi": "[]",
     "dynamic_content": "[{\"type\": \"what_do_i_do_with_block\", \"value\": null, \"id\": \"19185e8f-e1e3-46f0-ad67-b231b6b316b5\"}, {\"type\": \"map_block\", \"value\": 1, \"id\": \"0d8879df-6a04-49eb-a32c-e0888af3cb99\"}]",
     "additional_content": "<h2>Household Hazardous Waste Do\u2019s and Don\u2019ts</h2><p>Throwing household hazardous waste in the trash or pouring it down the drain is dangerous and harmful to the environment. Austin and Travis County residents can drop off up to 30 gallons of hazardous waste for free each year.</p><p>Bring products in their original containers. If the original container is larger than 5-gallons, please call the Recycle and ReUse Center at 512-974-4343 to find out how to get your products ready for drop off.</p><p>Put small containers upright in sturdy boxes. If a container is leaking, pour cat litter into a larger container and put the leaking container inside the larger. The litter will absorb the spill.</p><p>Do not mix items. Large truck or trailer loads will not be accepted after 4:45 p.m.</p><p>Businesses are not eligible to drop off hazardous waste. For information about how businesses can dispose of hazardous waste, call 512-974-4336.</p>",
     "additional_content_ar": "<h2>\u0642\u0627\u0626\u0645\u0629 \u0627\u0644\u0646\u0641\u0627\u064a\u0627\u062a \u0627\u0644\u0645\u0646\u0632\u0644\u064a\u0629 \u0627\u0644\u062e\u0637\u0631\u0629 \u0627\u0644\u062a\u064a \u064a\u0645\u0643\u0646 \u0627\u0644\u062a\u062e\u0644\u0635 \u0645\u0646\u0647\u0627 \u0648\u0627\u0644\u0639\u0646\u0627\u0635\u0631 \u0627\u0644\u062a\u064a \u0644\u0627 \u064a\u0645\u0643\u0646 \u0627\u0644\u062a\u062e\u0644\u0635 \u0645\u0646\u0647\u0627</h2><p>\u0625\u0644\u0642\u0627\u0621 \u0627\u0644\u0646\u0641\u0627\u064a\u0627\u062a \u0627\u0644\u0645\u0646\u0632\u0644\u064a\u0629 \u0627\u0644\u062e\u0637\u0631\u0629 \u0641\u064a \u0627\u0644\u0642\u0645\u0627\u0645\u0629 \u0623\u0648 \u0633\u0643\u0628\u0647\u0627 \u0641\u064a \u0627\u0644\u0645\u0635\u0627\u0631\u0641 \u064a\u0639\u062f \u0623\u0645\u0631\u0627 \u062e\u0637\u064a\u0631\u0627 \u0648\u0636\u0627\u0631\u0627 \u0628\u0627\u0644\u0628\u064a\u0626\u0629. \u064a\u0645\u0643\u0646 \u0644\u0633\u0643\u0627\u0646 \u0645\u0642\u0627\u0637\u0639\u0629 \u0623\u0648\u0633\u062a\u0646 \u0648\u062a\u0631\u0627\u0641\u064a\u0633 \u0627\u0644\u062a\u062e\u0644\u0635 \u0645\u0646 \u0639\u062f\u062f \u064a\u0635\u0644 \u0625\u0644\u0649 30 \u063a\u0627\u0644\u0648\u0646 \u0645\u0646 \u0627\u0644\u0646\u0641\u0627\u064a\u0627\u062a \u0627\u0644\u062e\u0637\u0631\u0629 \u0645\u062c\u0627\u0646\u0627 \u0643\u0644 \u0639\u0627\u0645.</p><p>\u0623\u062d\u0636\u0631 \u0627\u0644\u0645\u0646\u062a\u062c\u0627\u062a \u0641\u064a \u062d\u0627\u0648\u064a\u0627\u062a\u0647\u0627 \u0627\u0644\u0623\u0635\u0644\u064a\u0629. \u0625\u0630\u0627 \u0643\u0627\u0646\u062a \u0627\u0644\u062d\u0627\u0648\u064a\u0629 \u0627\u0644\u0623\u0635\u0644\u064a\u0629 \u0623\u0643\u0628\u0631 \u0645\u0646 5 \u063a\u0627\u0644\u0648\u0646\u0627\u062a\u060c \u064a\u0631\u062c\u0649 \u0627\u0644\u0627\u062a\u0635\u0627\u0644 \u0628\u0645\u0631\u0643\u0632 \u0625\u0639\u0627\u062f\u0629 \u0627\u0644\u062a\u062f\u0648\u064a\u0631 \u0648\u0625\u0639\u0627\u062f\u0629 \u0627\u0644\u0627\u0633\u062a\u062e\u062f\u0627\u0645 \u0639\u0644\u0649 \u0631\u0642\u0645 512-974-4343 \u0644\u0645\u0639\u0631\u0641\u0629 \u0643\u064a\u0641\u064a\u0629 \u062a\u062c\u0647\u064a\u0632 \u0645\u0646\u062a\u062c\u0627\u062a\u0643 \u0644\u0644\u062a\u062e\u0644\u0635 \u0645\u0646\u0647\u0627.</p><p>\u0636\u0639 \u0627\u0644\u062d\u0627\u0648\u064a\u0627\u062a \u0627\u0644\u0635\u063a\u064a\u0631\u0629 \u0641\u0649 \u0648\u0636\u0639 \u0639\u0645\u0648\u062f\u0649 \u0641\u064a \u0635\u0646\u0627\u062f\u064a\u0642 \u0642\u0648\u064a\u0629. \u0625\u0630\u0627 \u0643\u0627\u0646\u062a \u0627\u0644\u062d\u0627\u0648\u064a\u0629 \u062a\u0633\u0631\u0628\u060c \u0635\u064f\u0628 \u062d\u0628\u064a\u0628\u0627\u062a \u0627\u0644\u0642\u0637\u0637 \u0627\u0644\u0645\u0627\u0635\u0629 \u0641\u064a \u062d\u0627\u0648\u064a\u0629 \u0623\u0643\u0628\u0631 \u0648\u064e\u0636\u064e\u0639\u0652 \u0627\u0644\u062d\u0627\u0648\u064a\u0629 \u0627\u0644\u062a\u064a \u062a\u0633\u0631\u0628 \u062f\u0627\u062e\u0644 \u0627\u0644\u062d\u0627\u0648\u064a\u0629 \u0627\u0644\u0623\u0643\u0628\u0631. \u0633\u0648\u0641 \u062a\u0645\u062a\u0635 \u0627\u0644\u062d\u0628\u064a\u0628\u0627\u062a \u0627\u0644\u0645\u0627\u0635\u0629 \u0627\u0644\u0633\u0643\u0628.</p><p>\u0644\u0627 \u062a\u062e\u0644\u0637 \u0627\u0644\u0639\u0646\u0627\u0635\u0631. \u0644\u0646 \u064a\u062a\u0645 \u0642\u0628\u0648\u0644 \u0627\u0644\u0623\u062d\u0645\u0627\u0644 \u0627\u0644\u0643\u0628\u064a\u0631\u0629 \u0644\u0644\u0634\u0627\u062d\u0646\u0627\u062a \u0623\u0648 \u0627\u0644\u0645\u0642\u0637\u0648\u0631\u0629 \u0628\u0639\u062f \u0627\u0644\u0633\u0627\u0639\u0629 4:45 \u0645\u0633\u0627\u0621\u064b.</p><p>\u0627\u0644\u0634\u0631\u0643\u0627\u062a \u0644\u064a\u0633\u062a \u0645\u0624\u0647\u0644\u0629 \u0644\u0644\u062a\u062e\u0644\u0635 \u0645\u0646 \u0627\u0644\u0646\u0641\u0627\u064a\u0627\u062a \u0627\u0644\u062e\u0637\u0631\u0629. \u0644\u0644\u062d\u0635\u0648\u0644 \u0639\u0644\u0649 \u0645\u0639\u0644\u0648\u0645\u0627\u062a \u062d\u0648\u0644 \u0643\u064a\u0641\u064a\u0629 \u062a\u062e\u0644\u0635 \u0627\u0644\u0634\u0631\u0643\u0627\u062a \u0645\u0646 \u0627\u0644\u0646\u0641\u0627\u064a\u0627\u062a \u0627\u0644\u062e\u0637\u0631\u0629\u060c \u0627\u062a\u0635\u0644 \u0639\u0644\u0649 \u0627\u0644\u0631\u0642\u0645 512-974-4336.</p>",
     "additional_content_en": "<h2>Household Hazardous Waste Do\u2019s and Don\u2019ts</h2><p>Throwing household hazardous waste in the trash or pouring it down the drain is dangerous and harmful to the environment. Austin and Travis County residents can drop off up to 30 gallons of hazardous waste for free each year.</p><p>Bring products in their original containers. If the original container is larger than 5-gallons, please call the Recycle and ReUse Center at 512-974-4343 to find out how to get your products ready for drop off.</p><p>Put small containers upright in sturdy boxes. If a container is leaking, pour cat litter into a larger container and put the leaking container inside the larger. The litter will absorb the spill.</p><p>Do not mix items. Large truck or trailer loads will not be accepted after 4:45 p.m.</p><p>Businesses are not eligible to drop off hazardous waste. For information about how businesses can dispose of hazardous waste, call 512-974-4336.</p>",
     "additional_content_es": "<h2>Qu\u00e9 debe y no debe hacer con los art\u00edculos peligrosos del hogar</h2><p>Botar desechos peligrosos del hogar en la basura o por el drenaje es peligroso y perjudicial para el medio ambiente. Los residentes del Condado de Travis pueden entregar hasta 30 galones de desechos dom\u00e9sticos peligrosos al a\u00f1o.</p><p>Traiga los productos en sus recipientes originales. Si el recipiente original es de m\u00e1s de 5 galones, por favor llame al Centro de Reciclaje y Re\u00faso al 512-974-4343 para averiguar c\u00f3mo preparar su producto para entregarlo.</p><p>Ponga los recipientes peque\u00f1os parados dentro de una caja resistente. Si un recipiente tiene alg\u00fan escape, cubra el fondo de un recipiente m\u00e1s grande con una capa de arena sanitaria para gatos y coloque el recipiente que tiene la fuga dentro del recipiente m\u00e1s grande. La arena sanitaria para gatos absorber\u00e1 el material que se bote.</p><p>No mezcle los art\u00edculos. No se aceptan cargas de camiones ni remolques grandes despu\u00e9s de las 4:45 p.m.</p><p>Los negocios no califican para entregar desechos peligrosos. Para informaci\u00f3n sobre c\u00f3mo los negocios pueden descartar sus desechos peligrosos, llame al 512-974-4336.</p>",
     "additional_content_vi": "<h2>Nh\u1eefng \u0111i\u1ec1u N\u00ean l\u00e0m v\u00e0 Kh\u00f4ng N\u00ean l\u00e0m v\u1edbi R\u00e1c th\u1ea3i Nguy h\u1ea1i c\u1ee7a H\u1ed9 gia \u0111\u00ecnh</h2><p>V\u1ee9t b\u1ecf r\u00e1c th\u1ea3i nguy h\u1ea1i c\u1ee7a h\u1ed9 gia \u0111\u00ecnh v\u00e0o th\u00f9ng r\u00e1c ho\u1eb7c \u0111\u1ed5 tr\u1ef1c ti\u1ebfp xu\u1ed1ng c\u1ed1ng r\u00e3nh g\u00e2y nguy hi\u1ec3m v\u00e0 g\u00e2y h\u1ea1i cho m\u00f4i tr\u01b0\u1eddng. C\u00e1c c\u01b0 d\u00e2n c\u1ee7a H\u1ea1t Travis v\u00e0 Austin c\u00f3 th\u1ec3 b\u1ecf t\u1ed1i \u0111a 30 ga-l\u00f4ng r\u00e1c th\u1ea3i nguy h\u1ea1i m\u1ed7i n\u0103m m\u00e0 kh\u00f4ng ph\u1ea3i \u0111\u00f3ng ph\u00ed.</p><p>\u0110em s\u1ea3n ph\u1ea9m \u0111\u1ebfn trong c\u00e1c b\u00ecnh ch\u1ee9a/th\u00f9ng ch\u1ee9a g\u1ed1c. N\u1ebfu th\u00f9ng ch\u1ee9a g\u1ed1c l\u1edbn h\u01a1n 5 ga-l\u00f4ng, xin vui l\u00f2ng g\u1ecdi Trung t\u00e2m T\u00e1i ch\u1ebf v\u00e0 T\u00e1i S\u1eed d\u1ee5ng theo s\u1ed1 512-974-4343 \u0111\u1ec3 bi\u1ebft c\u00e1ch chu\u1ea9n b\u1ecb s\u1eb5n s\u00e0ng cho c\u00e1c s\u1ea3n ph\u1ea9m c\u1ee7a b\u1ea1n tr\u01b0\u1edbc khi v\u1ee9t b\u1ecf.</p><p>\u0110\u1eb7t c\u00e1c th\u00f9ng ch\u1ee9a nh\u1ecf theo chi\u1ec1u th\u1eb3ng \u0111\u1ee9ng trong c\u00e1c h\u1ed9p c\u1ee9ng. N\u1ebfu c\u00f3 th\u00f9ng ch\u1ee9a b\u1ecb r\u00f2 r\u1ec9, \u0111\u1ed5 x\u1ec9/c\u00e1t v\u1ec7 sinh cho m\u00e8o v\u00e0o m\u1ed9t th\u00f9ng ch\u1ee9a l\u1edbn h\u01a1n v\u00e0 \u0111\u1eb7t th\u00f9ng ch\u1ee9a b\u1ecb r\u00f2 r\u1ec9 v\u00e0o trong th\u00f9ng ch\u1ee9a l\u1edbn h\u01a1n \u0111\u00f3. C\u00e1t/x\u1ec9 v\u1ec7 sinh cho m\u00e8o s\u1ebd h\u00fat ph\u1ea7n b\u1ecb r\u00f2 r\u1ec9.</p><p>Kh\u00f4ng tr\u1ed9n l\u1eabn c\u00e1c lo\u1ea1i v\u1edbi nhau. Xe t\u1ea3i c\u1ee1 l\u1edbn hay xe \u0111\u1ea7u k\u00e9o r\u01a1-m\u00f3c s\u1ebd kh\u00f4ng \u0111\u01b0\u1ee3c v\u00e0o sau 4:45 chi\u1ec1u.</p><p>C\u00e1c c\u01a1 s\u1edf kinh doanh kh\u00f4ng \u0111\u01b0\u1ee3c \u0111\u1ed5 b\u1ecf r\u00e1c th\u1ea3i nguy h\u1ea1i. \u0110\u1ec3 c\u00f3 th\u00f4ng tin v\u1ec1 c\u00e1ch th\u1ee9c c\u00e1c c\u01a1 s\u1edf kinh doanh c\u00f3 th\u1ec3 x\u1eed l\u00fd r\u00e1c th\u1ea3i nguy h\u1ea1i, h\u00e3y g\u1ecdi 512-974-4336.</p>",
-    "short_description": ""
+    "short_description": "",
+    "short_description_ar": null,
+    "short_description_en": null,
+    "short_description_es": null,
+    "short_description_vi": null
   }
 },
 {
   "model": "base.servicepage",
   "pk": 12,
   "fields": {
+    "page_ptr": 12,
     "created_at": "2018-09-25T20:08:58.359Z",
     "updated_at": "2019-04-17T19:20:45.169Z",
+    "author_notes": "",
     "steps": "[]",
+    "steps_ar": "[]",
+    "steps_en": "[]",
+    "steps_es": "[]",
+    "steps_vi": "[]",
     "dynamic_content": "[{\"type\": \"map_block\", \"value\": 1, \"id\": \"6a26ca09-4fa8-4b97-b979-fdc14b957837\"}]",
     "additional_content": "<h2>Learn about Austin ReBlend Paint</h2><p>Austin ReBlend is a free, 100 percent flat paint made from paint dropped off at the Recycle &amp; Reuse Drop-Off Center. The paint is inspected to ensure quality, reblended into three colors and offered in 3.5 gallon containers. The available colors include:</p><ul><li>Texas Limestone (beige)</li><li>Balcones Canyonland (dark beige)</li><li>Barton Creek Greenbelt (dark green)</li></ul><h2>Pick up other free household items</h2><p>Many reusable materials are dropped off at the center. You can also pick up these items for free (availability varies):</p><ul><li>Art supplies</li><li>Cleaning products</li><li>Household chemicals</li><li>Automotive fluids</li><li>Mulch*</li></ul><p>*You must load mulch yourself. Bring a pitchfork or shovel, work gloves, and containers.</p><p>Need to drop off items to be recycled? See how to drop off at the Recycle and ReUse Center.</p>",
     "additional_content_ar": "<h2>\u062a\u0639\u0631\u0651\u0641 \u0639\u0644\u0649 \u062f\u0647\u0627\u0646\u0627\u062a Austin ReBlend</h2><p>Austin ReBlend \u0647\u064a \u0639\u0628\u0627\u0631\u0629 \u0639\u0646 \u062f\u0647\u0627\u0646\u0627\u062a \u0645\u062c\u0627\u0646\u064a\u0629 \u063a\u064a\u0631 \u0644\u0627\u0645\u0639\u0629 \u0628\u0646\u0633\u0628\u0629 100\u066a \u0645\u0635\u0646\u0648\u0639\u0629 \u0645\u0646 \u062f\u0647\u0627\u0646\u0627\u062a \u062a\u0645 \u062a\u0633\u0644\u064a\u0645\u0647\u0627 \u0641\u064a \u0645\u0631\u0643\u0632 \u0625\u0639\u0627\u062f\u0629 \u0627\u0644\u062a\u062f\u0648\u064a\u0631 \u0648\u0625\u0639\u0627\u062f\u0629 \u0627\u0644\u0627\u0633\u062a\u062e\u062f\u0627\u0645. \u062a\u064f\u0641\u062d\u0635 \u0627\u0644\u062f\u0647\u0627\u0646\u0627\u062a \u0644\u0636\u0645\u0627\u0646 \u0627\u0644\u062c\u0648\u062f\u0629\u060c \u0648\u064a\u064f\u0639\u0627\u062f \u0645\u0632\u062c\u0647\u0627 \u0625\u0644\u0649 \u062b\u0644\u0627\u062b\u0629 \u0623\u0644\u0648\u0627\u0646 \u0648\u062a\u064f\u0648\u0641\u0631 \u0641\u064a \u062d\u0627\u0648\u064a\u0627\u062a 3.5 \u062c\u0627\u0644\u0648\u0646. \u062a\u0634\u0645\u0644 \u0627\u0644\u0623\u0644\u0648\u0627\u0646 \u0627\u0644\u0645\u062a\u0627\u062d\u0629:</p><ul><li>Texas Limestone (\u0627\u0644\u0628\u064a\u062c)</li><li>Balcones Canyonland (\u0627\u0644\u0628\u064a\u062c \u0627\u0644\u062f\u0627\u0643\u0646)</li><li>Barton Creek Greenbelt (\u0627\u0644\u0623\u062e\u0636\u0631 \u0627\u0644\u062f\u0627\u0643\u0646)</li></ul><h2>\u064a\u0645\u0643\u0646\u0643 \u0627\u062e\u062a\u064a\u0627\u0631 \u063a\u064a\u0631 \u0630\u0644\u0643 \u0645\u0646 \u0627\u0644\u0623\u062f\u0648\u0627\u062a \u0627\u0644\u0645\u0646\u0632\u0644\u064a\u0629 \u0645\u062c\u0627\u0646\u0627</h2><p>\u064a\u062a\u0645 \u062a\u0633\u0644\u064a\u0645 \u0627\u0644\u0639\u062f\u064a\u062f \u0645\u0646 \u0627\u0644\u0645\u0648\u0627\u062f \u0627\u0644\u0642\u0627\u0628\u0644\u0629 \u0644\u0625\u0639\u0627\u062f\u0629 \u0627\u0644\u0627\u0633\u062a\u062e\u062f\u0627\u0645 \u0641\u064a \u0627\u0644\u0645\u0631\u0643\u0632. \u064a\u0645\u0643\u0646\u0643 \u0623\u064a\u0636\u0627 \u0627\u062e\u062a\u064a\u0627\u0631 \u0647\u0630\u0647 \u0627\u0644\u0639\u0646\u0627\u0635\u0631 \u0645\u062c\u0627\u0646\u0627 (\u062a\u062e\u062a\u0644\u0641 \u062d\u0633\u0628 \u0627\u0644\u062a\u0648\u0641\u0631):</p><ul><li>\u0627\u0644\u0623\u062f\u0648\u0627\u062a \u0627\u0644\u0641\u0646\u064a\u0629</li><li>\u0645\u0633\u062a\u062d\u0636\u0631\u0627\u062a \u0627\u0644\u062a\u0646\u0638\u064a\u0641</li><li>\u0627\u0644\u0645\u0648\u0627\u062f \u0627\u0644\u0643\u064a\u0645\u064a\u0627\u0626\u064a\u0629 \u0627\u0644\u0645\u0646\u0632\u0644\u064a\u0629</li><li>\u0633\u0648\u0627\u0626\u0644 \u0627\u0644\u0633\u064a\u0627\u0631\u0627\u062a</li><li>\u0627\u0644\u0646\u0634\u0627\u0631\u0629*</li></ul><p>\u0639\u0644\u064a\u0643 \u062a\u0639\u0628\u0626\u0629 \u0627\u0644\u0646\u0634\u0627\u0631\u0629 \u0628\u0646\u0641\u0633\u0643.</p><p>\u0627\u062d\u0636\u0631 \u0645\u0639\u0643 \u0645\u0630\u0627\u0631\u0629 \u0623\u0648 \u0645\u062c\u0631\u0641\u0629\u060c \u0648\u0642\u0641\u0627\u0632\u0627\u062a \u0639\u0645\u0644\u060c \u0648\u062d\u0627\u0648\u064a\u0627\u062a.</p>",
     "additional_content_en": "<h2>Learn about Austin ReBlend Paint</h2><p>Austin ReBlend is a free, 100 percent flat paint made from paint dropped off at the Recycle &amp; Reuse Drop-Off Center. The paint is inspected to ensure quality, reblended into three colors and offered in 3.5 gallon containers. The available colors include:</p><ul><li>Texas Limestone (beige)</li><li>Balcones Canyonland (dark beige)</li><li>Barton Creek Greenbelt (dark green)</li></ul><h2>Pick up other free household items</h2><p>Many reusable materials are dropped off at the center. You can also pick up these items for free (availability varies):</p><ul><li>Art supplies</li><li>Cleaning products</li><li>Household chemicals</li><li>Automotive fluids</li><li>Mulch*</li></ul><p>*You must load mulch yourself. Bring a pitchfork or shovel, work gloves, and containers.</p><p>Need to drop off items to be recycled? See how to drop off at the Recycle and ReUse Center.</p>",
     "additional_content_es": "<h2>Aprenda m\u00e1s sobre la pintura Austin ReBlend</h2><p>Austin ReBlend es una pintura gratis, 100 por ciento sin brillo hecha de la pintura entregada en el Centro de Reciclaje y Re\u00faso. La pintura pasa por una inspecci\u00f3n para garantizar su calidad y se mezcla en tres colores en botes de 3.5 galones. Los colores disponibles incluyen:</p><ul><li>Texas Limestone (crema)</li><li>Balcones Canyonland (crema oscuro)</li><li>Barton Creek Greenbelt (verde oscuro)</li></ul><h2>Art\u00edculos para el hogar gratis</h2><p>El centro recibe muchos materiales reusables. Tambi\u00e9n puede recoger estos art\u00edculos gratis (la disponibilidad var\u00eda):</p><ul><li>Materiales para arte</li><li>Productos de limpieza</li><li>Qu\u00edmicos para el hogar</li><li>Fluidos de autom\u00f3vil</li><li>Mantillo org\u00e1nico (mulch)*</li></ul><p>*El mantillo org\u00e1nico lo tiene que empacar usted mismo.</p><p>Traiga una horqueta o pala, guantes de trabajo y recipientes.</p>",
     "additional_content_vi": "<h2>T\u00ecm hi\u1ec3u v\u1ec1 s\u01a1n Austin Reblend</h2><p>Austin ReBlend l\u00e0 m\u1ed9t s\u01a1n mi\u1ec5n ph\u00ed, 100% s\u01a1n \u00e1nh m\u1edd \u0111\u01b0\u1ee3c l\u00e0m t\u1eeb s\u01a1n b\u1ecf \u1edf Trung T\u00e2m B\u1ecf \u0110\u1ed3 T\u00e1i D\u1ee5ng &amp; T\u00e1i Ch\u1ebf. S\u01a1n \u0111\u01b0\u1ee3c ki\u1ec3m tra \u0111\u1ec3 \u0111\u1ea3m b\u1ea3o ch\u1ea5t l\u01b0\u1ee3ng, \u0111\u01b0\u1ee3c pha tr\u1ed9n l\u1ea1i th\u00e0nh 3 m\u00e0u v\u00e0 cung c\u1ea5p trong c\u00e1c th\u00f9ng \u0111\u1ef1ng 3.5 ga-l\u00f4ng. C\u00e1c m\u00e0u hi\u1ec7n c\u00f3 bao g\u1ed3m:</p><ul><li>Texas Limestone (m\u00e0u be)</li><li>Balcones Canyonland (m\u00e0u be \u0111\u1eadm)</li><li>Barton Creek Greenbelt (m\u00e0u xanh l\u00e1 c\u00e2y \u0111\u1eadm)</li></ul><h2>L\u1ea7y mi\u1ec5n ph\u00ed c\u00e1c \u0111\u1ed3 d\u00f9ng cho vi\u1ec7c nh\u00e0 kh\u00e1c</h2><p>Nhi\u1ec1u v\u1eadt d\u1ee5ng c\u00f3 th\u1ec3 t\u00e1i s\u1eed d\u1ee5ng \u0111\u01b0\u1ee3c b\u1ecf \u1edf trung t\u00e2m. Qu\u00fd v\u1ecb c\u0169ng c\u00f3 th\u1ec3 l\u1ea5y nh\u1eefng \u0111\u1ed3 n\u00e0y mi\u1ec5n ph\u00ed (c\u00f3 nhi\u1ec1u lo\u1ea1i kh\u00e1c nhau):</p><ul><li>C\u00e1c \u0111\u1ed3 ngh\u1ec7 thu\u1eadt</li><li>C\u00e1c s\u1ea3n ph\u1ea9m t\u1ea9y r\u1eeda</li><li>C\u00e1c h\u00f3a ch\u1ea5t d\u00f9ng cho vi\u1ec7c nh\u00e0</li><li>C\u00e1c dung d\u1ecbch d\u00f9ng cho xe h\u01a1i</li><li>B\u1ed5i che ph\u1ee7*</li></ul><p>*Qu\u00fd v\u1ecb ph\u1ea3i t\u1ef1 b\u00ea l\u1ea5y b\u1ed5i che ph\u1ee7.</p><p>Mang theo c\u00e2y x\u1ec9a ho\u1eb7c x\u1ebbng, g\u0103ng tay b\u1ea3o h\u1ed9, v\u00e0 \u0111\u1ed3 \u0111\u1ef1ng.</p>",
-    "short_description": ""
+    "short_description": "",
+    "short_description_ar": null,
+    "short_description_en": null,
+    "short_description_es": null,
+    "short_description_vi": null
   }
 },
 {
   "model": "base.servicepage",
   "pk": 13,
   "fields": {
+    "page_ptr": 13,
     "created_at": "2018-09-25T20:08:59.880Z",
     "updated_at": "2019-04-17T19:20:22.631Z",
+    "author_notes": "",
     "steps": "[{\"type\": \"basic_step\", \"value\": \"<p><a href=\\\"https://www.cdc.gov/phpr/areyouprepared/kit.htm\\\">Pack an emergency preparedness kit</a>. Make sure you have enough food and water, medication, and anything else you and your family need for 3 or more days.</p>\", \"id\": \"317175d3-977e-4c9c-99ec-3dd5a91d57fe\"}, {\"type\": \"basic_step\", \"value\": \"<p><a href=\\\"https://www.cdc.gov/phpr/areyouprepared/plan.htm\\\">Make a plan for where you will meet with your family during an emergency</a>.</p>\", \"id\": \"cb059dd9-90dc-421c-9bdc-e7c12557a3ab\"}, {\"type\": \"basic_step\", \"value\": \"<p>Sign up for emergency alerts, <a href=\\\"https://public.coderedweb.com/CNE/en-US/21C524DBEA1F\\\">register for the emergency notification system</a>.</p>\", \"id\": \"df6918eb-7896-41ec-8951-c074f4d19b0a\"}]",
+    "steps_ar": "[]",
+    "steps_en": "[{\"type\": \"basic_step\", \"value\": \"<p><a href=\\\"https://www.cdc.gov/phpr/areyouprepared/kit.htm\\\">Pack an emergency preparedness kit</a>. Make sure you have enough food and water, medication, and anything else you and your family need for 3 or more days.</p>\", \"id\": \"317175d3-977e-4c9c-99ec-3dd5a91d57fe\"}, {\"type\": \"basic_step\", \"value\": \"<p><a href=\\\"https://www.cdc.gov/phpr/areyouprepared/plan.htm\\\">Make a plan for where you will meet with your family during an emergency</a>.</p>\", \"id\": \"cb059dd9-90dc-421c-9bdc-e7c12557a3ab\"}, {\"type\": \"basic_step\", \"value\": \"<p>Sign up for emergency alerts, <a href=\\\"https://public.coderedweb.com/CNE/en-US/21C524DBEA1F\\\">register for the emergency notification system</a>.</p>\", \"id\": \"df6918eb-7896-41ec-8951-c074f4d19b0a\"}]",
+    "steps_es": "[]",
+    "steps_vi": "[]",
     "dynamic_content": "[]",
     "additional_content": "<h2>Prepare for an emergency</h2><p>Preparing for public health emergencies is critical to protect everyone\u2019s health and wellbeing. Public health emergencies include natural disasters, disease outbreaks like pandemic flu, as well as those related to homeland security, such as a biological or chemical terrorist attack. We work closely with other local, state, and federal emergency management authorities to plan and prepare for any emergency that affects the health of the public. For emergency conditions and information on disaster preparedness, visit the <a href=\"http://www.austintexas.gov/hsem\">City of Austin Office of Homeland Security and Emergency Management</a>.</p><h2>Have a plan to stay safe in an emergency</h2><p>When disaster hits, Austinites need to be ready. Use the online resources from the <a href=\"https://www.texasprepares.org/default.htm\">Texas Department of State Health Services</a> to build your plan -- including family strategies, handy checklists, and special needs considerations for people with disabilities, the elderly, and pets.</p>",
     "additional_content_ar": "<p></p>",
     "additional_content_en": "<h2>Prepare for an emergency</h2><p>Preparing for public health emergencies is critical to protect everyone\u2019s health and wellbeing. Public health emergencies include natural disasters, disease outbreaks like pandemic flu, as well as those related to homeland security, such as a biological or chemical terrorist attack. We work closely with other local, state, and federal emergency management authorities to plan and prepare for any emergency that affects the health of the public. For emergency conditions and information on disaster preparedness, visit the <a href=\"http://www.austintexas.gov/hsem\">City of Austin Office of Homeland Security and Emergency Management</a>.</p><h2>Have a plan to stay safe in an emergency</h2><p>When disaster hits, Austinites need to be ready. Use the online resources from the <a href=\"https://www.texasprepares.org/default.htm\">Texas Department of State Health Services</a> to build your plan -- including family strategies, handy checklists, and special needs considerations for people with disabilities, the elderly, and pets.</p>",
     "additional_content_es": "<p></p>",
     "additional_content_vi": "<p></p>",
-    "short_description": ""
+    "short_description": "",
+    "short_description_ar": null,
+    "short_description_en": null,
+    "short_description_es": null,
+    "short_description_vi": null
   }
 },
 {
   "model": "base.servicepage",
   "pk": 14,
   "fields": {
+    "page_ptr": 14,
     "created_at": "2018-09-25T20:09:01.272Z",
     "updated_at": "2019-04-17T19:21:31.825Z",
+    "author_notes": "",
     "steps": "[]",
+    "steps_ar": "[]",
+    "steps_en": "[]",
+    "steps_es": "[]",
+    "steps_vi": "[]",
     "dynamic_content": "[{\"type\": \"collection_schedule_block\", \"value\": null, \"id\": \"a716788e-e067-4d7a-95b8-4bb248912747\"}]",
     "additional_content": "<h2>Trash, recycling, and compost pickup</h2><p>Every week, we will pick up your trash, compost, and yard trimmings. Every other week, we will pick up recycling, clothing, and housewares. All curbside pick-ups happen on the same day of the week unless it is a holiday.</p><h2>Holiday pickup days</h2><p>If your curbside pickup day is on Thanksgiving Day, Christmas Day, or New Year&#x27;s Day\u2014or if it is after the holiday but in the same week\u2014your collection will be one day later than your usual pickup day that week. If the holiday falls on a Sunday or Saturday, your pickup day will not change.</p>",
     "additional_content_ar": "<h2>\u062c\u0645\u0639 \u0627\u0644\u0642\u0645\u0627\u0645\u0629 \u0648\u0627\u0644\u0645\u0648\u0627\u062f \u0627\u0644\u062a\u064a \u064a\u064f\u0639\u0627\u062f \u062a\u062f\u0648\u064a\u0631\u0647\u0627 \u0648\u0627\u0644\u0642\u0627\u0628\u0644\u0629 \u0644\u0644\u062a\u0633\u0645\u064a\u062f</h2><p>\u0643\u0644 \u0623\u0633\u0628\u0648\u0639\u060c \u0633\u0648\u0641 \u0646\u062c\u0645\u0639 \u0627\u0644\u0642\u0645\u0627\u0645\u0629 \u0648\u0627\u0644\u0645\u0648\u0627\u062f \u0627\u0644\u0642\u0627\u0628\u0644\u0629 \u0644\u0644\u062a\u0633\u0645\u064a\u062f \u0648\u0645\u062e\u0644\u0641\u0627\u062a \u0627\u0644\u062d\u062f\u0627\u0626\u0642 \u0627\u0644\u062a\u064a \u0644\u062f\u064a\u0643. \u0643\u0644 \u0623\u0633\u0628\u0648\u0639\u064a\u0646\u060c \u0633\u0648\u0641 \u0646\u062c\u0645\u0639 \u0627\u0644\u0645\u0648\u0627\u062f \u0627\u0644\u062a\u064a \u064a\u064f\u0639\u0627\u062f \u062a\u062f\u0648\u064a\u0631\u0647\u0627 \u0648\u0627\u0644\u0645\u0644\u0627\u0628\u0633 \u0648\u0627\u0644\u0623\u062f\u0648\u0627\u062a \u0627\u0644\u0645\u0646\u0632\u0644\u064a\u0629. \u062c\u0645\u064a\u0639 \u0639\u0645\u0644\u064a\u0627\u062a \u062c\u0645\u0639 \u0627\u0644\u0646\u0641\u0627\u064a\u0627\u062a \u0639\u0644\u0649 \u0627\u0644\u0631\u0635\u064a\u0641 \u062a\u062a\u0645 \u0641\u064a \u0646\u0641\u0633 \u0627\u0644\u064a\u0648\u0645 \u0645\u0646 \u0627\u0644\u0623\u0633\u0628\u0648\u0639 \u0625\u0644\u0627 \u0625\u0630\u0627 \u0643\u0627\u0646 \u0647\u0630\u0627 \u0627\u0644\u064a\u0648\u0645 \u0639\u0637\u0644\u0629.</p><h2>\u0623\u064a\u0627\u0645 \u062c\u0645\u0639 \u0627\u0644\u0646\u0641\u0627\u064a\u0627\u062a \u0625\u0630\u0627 \u0648\u0627\u0641\u0642 \u0639\u0637\u0644\u0629</h2><p>\u0625\u0630\u0627 \u0648\u0627\u0641\u0642 \u064a\u0648\u0645 \u062c\u0645\u0639 \u0627\u0644\u0646\u0641\u0627\u064a\u0627\u062a \u0639\u0644\u0649 \u062c\u0627\u0646\u0628 \u0627\u0644\u0631\u0635\u064a\u0641 \u0639\u0637\u0644\u0629 \u0639\u064a\u062f \u0627\u0644\u0634\u0643\u0631 \u0623\u0648 \u0639\u064a\u062f \u0627\u0644\u0645\u064a\u0644\u0627\u062f \u0623\u0648 \u064a\u0648\u0645 \u0631\u0623\u0633 \u0627\u0644\u0633\u0646\u0629 \u0627\u0644\u0645\u064a\u0644\u0627\u062f\u064a\u0629\u060c \u0623\u0648 \u0625\u0630\u0627 \u0643\u0627\u0646 \u0628\u0639\u062f \u0627\u0644\u0639\u0637\u0644\u0629 \u0648\u0644\u0643\u0646 \u0641\u064a \u0646\u0641\u0633 \u0627\u0644\u0623\u0633\u0628\u0648\u0639\u060c \u0633\u0648\u0641 \u062a\u0624\u062c\u0644 \u0639\u0645\u0644\u064a\u0629 \u062c\u0645\u0639 \u0627\u0644\u0646\u0641\u0627\u064a\u0627\u062a \u062e\u0627\u0635\u062a\u0643 \u0641\u064a \u064a\u0648\u0645 \u0622\u062e\u0631 \u063a\u064a\u0631 \u064a\u0648\u0645 \u0627\u0644\u062c\u0645\u0639 \u0627\u0644\u0645\u0639\u062a\u0627\u062f \u0641\u064a \u0630\u0644\u0643 \u0627\u0644\u0623\u0633\u0628\u0648\u0639. \u0625\u0630\u0627 \u0648\u0627\u0641\u0642 \u064a\u0648\u0645 \u0627\u0644\u0639\u0637\u0644\u0629 \u064a\u0648\u0645 \u0627\u0644\u0623\u062d\u062f \u0623\u0648 \u0627\u0644\u0633\u0628\u062a\u060c \u0644\u0646 \u064a\u062a\u063a\u064a\u0631 \u064a\u0648\u0645 \u062c\u0645\u0639 \u0627\u0644\u0646\u0641\u0627\u064a\u0627\u062a \u062e\u0627\u0635\u062a\u0643.</p>",
     "additional_content_en": "<h2>Trash, recycling, and compost pickup</h2><p>Every week, we will pick up your trash, compost, and yard trimmings. Every other week, we will pick up recycling, clothing, and housewares. All curbside pick-ups happen on the same day of the week unless it is a holiday.</p><h2>Holiday pickup days</h2><p>If your curbside pickup day is on Thanksgiving Day, Christmas Day, or New Year&#x27;s Day\u2014or if it is after the holiday but in the same week\u2014your collection will be one day later than your usual pickup day that week. If the holiday falls on a Sunday or Saturday, your pickup day will not change.</p>",
     "additional_content_es": "<h2>Recolecci\u00f3n de basura, reciclaje y compost</h2><p>Todas las semanas recogeremos su basura, compost y recortes del jard\u00edn. Una semana s\u00ed y otra no, recogeremos el reciclaje, ropa y art\u00edculos para el hogar. Toda la recolecci\u00f3n al borde de la acera se hace el mismo d\u00eda de la semana a menos que sea un d\u00eda festivo.</p><h2>Recolecci\u00f3n en d\u00edas festivos</h2><p>Si su d\u00eda de recolecci\u00f3n es el D\u00eda de Acci\u00f3n de Gracias, Navidad o A\u00f1o Nuevo, o si es despu\u00e9s de uno de estos d\u00edas festivos pero en la misma semana, su d\u00eda de recolecci\u00f3n ser\u00e1 un d\u00eda despu\u00e9s de su d\u00eda de recolecci\u00f3n regular. Si el d\u00eda festivo cae domingo o s\u00e1bado, su d\u00eda de recolecci\u00f3n no cambiar\u00e1.</p>",
     "additional_content_vi": "<h2>B\u1ed1c r\u00e1c th\u01b0\u1eddng, r\u00e1c t\u00e1i ch\u1ebf, v\u00e0 r\u00e1c \u1ee7 ph\u00e2n h\u1eefu c\u01a1</h2><p>H\u00e0ng tu\u1ea7n, ch\u00fang t\u00f4i s\u1ebd b\u1ed1c r\u00e1c th\u01b0\u1eddng, r\u00e1c \u1ee7 ph\u00e2n h\u1eefu c\u01a1, v\u00e0 r\u00e1c l\u00e0m v\u01b0\u1eddn. H\u00e0ng tu\u1ea7n, ch\u00fang t\u00f4i s\u1ebd b\u1ed1c r\u00e1c t\u00e1i ch\u1ebf, qu\u1ea7n \u00e1o, v\u00e0 v\u1eadt d\u1ee5ng trong nh\u00e0. T\u1ea5t c\u1ea3 k\u1ef3 b\u1ed1c r\u00e1c \u1edf l\u1ec1 \u0111\u01b0\u1eddng s\u1ebd x\u1ea3y ra v\u00e0o c\u00f9ng ng\u00e0y trong tu\u1ea7n, tr\u1eeb khi \u0111\u00f3 l\u00e0 ng\u00e0y l\u1ec5.</p><h2>B\u1ed1c r\u00e1c cho c\u00e1c ng\u00e0y ngh\u1ec9 l\u1ec5</h2><p>N\u1ebfu ng\u00e0y b\u1ed1c r\u00e1c c\u1ee7a qu\u00fd v\u1ecb r\u01a1i v\u00e0o ng\u00e0y L\u1ec5 T\u1ea1 \u1ecen, ng\u00e0y L\u1ec5 Gi\u00e1ng Sinh, ho\u1eb7c ng\u00e0y \u0110\u1ea7u N\u0103m - ho\u1eb7c sau ng\u00e0y ngh\u1ec9 l\u1ec5 nh\u01b0ng v\u1eabn trong tu\u1ea7n \u0111\u00f3 - th\u00ec ng\u00e0y thu r\u00e1c c\u1ee7a qu\u00fd v\u1ecb s\u1ebd l\u00e0 m\u1ed9t ng\u00e0y mu\u1ed9n h\u01a1n so v\u1edbi l\u1ecbch b\u1ed1c r\u00e1c th\u01b0\u1eddng l\u1ec7 c\u1ee7a m\u00ecnh trong tu\u1ea7n \u0111\u00f3. N\u1ebfu ng\u00e0y ngh\u1ec9 l\u1ec5 r\u01a1i v\u00e0o Th\u1ee9 B\u1ea3y ho\u1eb7c Ch\u1ee7 Nh\u1eadt, ng\u00e0y b\u1ed1c r\u00e1c c\u1ee7a qu\u00fd v\u1ecb s\u1ebd kh\u00f4ng thay \u0111\u1ed5i.</p>",
-    "short_description": ""
+    "short_description": "",
+    "short_description_ar": null,
+    "short_description_en": null,
+    "short_description_es": null,
+    "short_description_vi": null
   }
 },
 {
   "model": "base.servicepage",
   "pk": 19,
   "fields": {
+    "page_ptr": 19,
     "created_at": "2018-11-06T17:51:04.313Z",
     "updated_at": "2019-04-17T19:21:57.775Z",
+    "author_notes": "",
     "steps": "[{\"type\": \"basic_step\", \"value\": \"<p>Put your grass clippings, dead leaves, small branches, and other yard trimmings in lawn and leaf bags. If you have a green cart, place them there.</p>\", \"id\": \"feeb3c9e-2a13-45b5-a882-c35303fb7202\"}, {\"type\": \"basic_step\", \"value\": \"<p>If branches don\\u2019t fit in your cart or bags, bundle them and place them next to your cart. Branches should be shorter than 5 feet long and less than 3 inches in diameter.</p>\", \"id\": \"ba9f6962-7750-461d-ae8b-8322385cdc63\"}, {\"type\": \"basic_step\", \"value\": \"<p>Look up your collection day with My Collection Schedule tool below.</p>\", \"id\": \"3bc56774-4b40-44ce-b780-1a8faf18579a\"}, {\"type\": \"basic_step\", \"value\": \"<p>Set out your yard trimmings by 6:30 am on your collection day. Make sure they are 5 feet apart from carts, cars, and mailboxes.</p>\", \"id\": \"40e0e50c-22c9-40d1-a31a-4f629d9946c4\"}]",
+    "steps_ar": "[]",
+    "steps_en": "[{\"type\": \"basic_step\", \"value\": \"<p>Put your grass clippings, dead leaves, small branches, and other yard trimmings in lawn and leaf bags. If you have a green cart, place them there.</p>\", \"id\": \"feeb3c9e-2a13-45b5-a882-c35303fb7202\"}, {\"type\": \"basic_step\", \"value\": \"<p>If branches don\\u2019t fit in your cart or bags, bundle them and place them next to your cart. Branches should be shorter than 5 feet long and less than 3 inches in diameter.</p>\", \"id\": \"ba9f6962-7750-461d-ae8b-8322385cdc63\"}, {\"type\": \"basic_step\", \"value\": \"<p>Look up your collection day with My Collection Schedule tool below.</p>\", \"id\": \"3bc56774-4b40-44ce-b780-1a8faf18579a\"}, {\"type\": \"basic_step\", \"value\": \"<p>Set out your yard trimmings by 6:30 am on your collection day. Make sure they are 5 feet apart from carts, cars, and mailboxes.</p>\", \"id\": \"40e0e50c-22c9-40d1-a31a-4f629d9946c4\"}]",
+    "steps_es": "[]",
+    "steps_vi": "[]",
     "dynamic_content": "[{\"type\": \"what_do_i_do_with_block\", \"value\": null, \"id\": \"a90ef257-089e-4651-aeff-3ff7d9023ca9\"}, {\"type\": \"collection_schedule_block\", \"value\": null, \"id\": \"296579bb-6dce-4a8d-8c18-98799d8749ad\"}]",
     "additional_content": "<p>Your grass clippings, dead leaves, small branches and other yard trimmings are collected and then turned into mulch. Mulch is great for helping your soil retain moisture and you can <a href=\"http://alpha.austin.gov/services/pickup-free-paint\">pick up free mulch at the ReUse Store</a>.</p><h2>Yard trimmings do\u2019s and don&#x27;ts</h2><ul><li>Do remove all rocks and dirt from your yard trimmings.</li><li>Do wrap thorns in newspaper or cardboard and label them \u201cthorns\u201d to protect the City staff picking them up.</li><li>Don\u2019t put large brush items, such as tree stumps and large branches, with your yard trimmings. These are considered bulk items.</li><li>Don\u2019t include sawdust, lumber, and animal waste.</li><li>Don\u2019t put plastic bags or extra trash in your yard trimmings pick up. It will not be collected.</li></ul>",
     "additional_content_ar": "<p></p>",
     "additional_content_en": "<p>Your grass clippings, dead leaves, small branches and other yard trimmings are collected and then turned into mulch. Mulch is great for helping your soil retain moisture and you can <a href=\"http://alpha.austin.gov/services/pickup-free-paint\">pick up free mulch at the ReUse Store</a>.</p><h2>Yard trimmings do\u2019s and don&#x27;ts</h2><ul><li>Do remove all rocks and dirt from your yard trimmings.</li><li>Do wrap thorns in newspaper or cardboard and label them \u201cthorns\u201d to protect the City staff picking them up.</li><li>Don\u2019t put large brush items, such as tree stumps and large branches, with your yard trimmings. These are considered bulk items.</li><li>Don\u2019t include sawdust, lumber, and animal waste.</li><li>Don\u2019t put plastic bags or extra trash in your yard trimmings pick up. It will not be collected.</li></ul>",
     "additional_content_es": "<p></p>",
     "additional_content_vi": "<p></p>",
-    "short_description": ""
+    "short_description": "",
+    "short_description_ar": null,
+    "short_description_en": null,
+    "short_description_es": null,
+    "short_description_vi": null
   }
 },
 {
   "model": "base.servicepage",
   "pk": 20,
   "fields": {
+    "page_ptr": 20,
     "created_at": "2018-11-15T03:52:10.930Z",
     "updated_at": "2018-11-15T03:52:11.125Z",
+    "author_notes": "",
     "steps": "[]",
+    "steps_ar": "[]",
+    "steps_en": "[]",
+    "steps_es": "[]",
+    "steps_vi": "[]",
     "dynamic_content": "[]",
     "additional_content": "",
     "additional_content_ar": null,
     "additional_content_en": "",
     "additional_content_es": null,
     "additional_content_vi": null,
-    "short_description": ""
+    "short_description": "",
+    "short_description_ar": null,
+    "short_description_en": null,
+    "short_description_es": null,
+    "short_description_vi": null
   }
 },
 {
   "model": "base.servicepage",
   "pk": 21,
   "fields": {
+    "page_ptr": 21,
     "created_at": "2018-11-20T21:10:03.725Z",
     "updated_at": "2018-11-20T21:10:04.101Z",
+    "author_notes": "",
     "steps": "[]",
+    "steps_ar": "[]",
+    "steps_en": "[]",
+    "steps_es": "[]",
+    "steps_vi": "[]",
     "dynamic_content": "[]",
     "additional_content": "",
     "additional_content_ar": null,
     "additional_content_en": "",
     "additional_content_es": null,
     "additional_content_vi": null,
-    "short_description": ""
+    "short_description": "",
+    "short_description_ar": null,
+    "short_description_en": null,
+    "short_description_es": null,
+    "short_description_vi": null
   }
 },
 {
   "model": "base.servicepage",
   "pk": 22,
   "fields": {
+    "page_ptr": 22,
     "created_at": "2018-12-04T22:02:00.651Z",
     "updated_at": "2018-12-04T22:02:00.749Z",
+    "author_notes": "",
     "steps": "[]",
+    "steps_ar": "[]",
+    "steps_en": "[]",
+    "steps_es": "[]",
+    "steps_vi": "[]",
     "dynamic_content": "[]",
     "additional_content": "",
     "additional_content_ar": null,
     "additional_content_en": "",
     "additional_content_es": null,
     "additional_content_vi": null,
-    "short_description": ""
+    "short_description": "",
+    "short_description_ar": null,
+    "short_description_en": null,
+    "short_description_es": null,
+    "short_description_vi": null
   }
 },
 {
   "model": "base.servicepage",
   "pk": 23,
   "fields": {
+    "page_ptr": 23,
     "created_at": "2019-02-11T14:57:15.260Z",
     "updated_at": "2019-02-11T14:57:15.363Z",
+    "author_notes": "",
     "steps": "[]",
+    "steps_ar": "[]",
+    "steps_en": "[]",
+    "steps_es": "[]",
+    "steps_vi": "[]",
     "dynamic_content": "[]",
     "additional_content": "",
     "additional_content_ar": null,
     "additional_content_en": "",
     "additional_content_es": null,
     "additional_content_vi": null,
-    "short_description": ""
+    "short_description": "",
+    "short_description_ar": null,
+    "short_description_en": null,
+    "short_description_es": null,
+    "short_description_vi": null
   }
 },
 {
   "model": "base.servicepage",
   "pk": 40,
   "fields": {
+    "page_ptr": 40,
     "created_at": "2019-03-20T21:39:29.773Z",
     "updated_at": "2019-03-20T21:39:30.567Z",
+    "author_notes": "",
     "steps": "[]",
+    "steps_ar": "[]",
+    "steps_en": "[]",
+    "steps_es": "[]",
+    "steps_vi": "[]",
     "dynamic_content": "[]",
     "additional_content": "",
     "additional_content_ar": null,
-    "additional_content_en": null,
+    "additional_content_en": "",
     "additional_content_es": null,
     "additional_content_vi": null,
-    "short_description": ""
+    "short_description": "",
+    "short_description_ar": null,
+    "short_description_en": null,
+    "short_description_es": null,
+    "short_description_vi": null
   }
 },
 {
   "model": "base.homepage",
   "pk": 3,
   "fields": {
+    "page_ptr": 3,
     "image": null
   }
 },
@@ -6932,7 +7802,8 @@
     "focal_point_y": null,
     "focal_point_width": null,
     "focal_point_height": null,
-    "file_size": 1114301
+    "file_size": 1114301,
+    "file_hash": ""
   }
 },
 {
@@ -6954,7 +7825,8 @@
     "focal_point_y": null,
     "focal_point_width": null,
     "focal_point_height": null,
-    "file_size": null
+    "file_size": null,
+    "file_hash": ""
   }
 },
 {
@@ -6976,7 +7848,8 @@
     "focal_point_y": null,
     "focal_point_width": null,
     "focal_point_height": null,
-    "file_size": null
+    "file_size": null,
+    "file_hash": ""
   }
 },
 {
@@ -6998,7 +7871,8 @@
     "focal_point_y": null,
     "focal_point_width": null,
     "focal_point_height": null,
-    "file_size": null
+    "file_size": null,
+    "file_hash": ""
   }
 },
 {
@@ -7020,7 +7894,8 @@
     "focal_point_y": null,
     "focal_point_width": null,
     "focal_point_height": null,
-    "file_size": null
+    "file_size": null,
+    "file_hash": ""
   }
 },
 {
@@ -7042,7 +7917,8 @@
     "focal_point_y": null,
     "focal_point_width": null,
     "focal_point_height": null,
-    "file_size": null
+    "file_size": null,
+    "file_hash": ""
   }
 },
 {
@@ -7064,7 +7940,8 @@
     "focal_point_y": null,
     "focal_point_width": null,
     "focal_point_height": null,
-    "file_size": 458994
+    "file_size": 458994,
+    "file_hash": ""
   }
 },
 {
@@ -7086,7 +7963,8 @@
     "focal_point_y": null,
     "focal_point_width": null,
     "focal_point_height": null,
-    "file_size": 35996
+    "file_size": 35996,
+    "file_hash": ""
   }
 },
 {
@@ -7110,7 +7988,8 @@
     "focal_point_y": null,
     "focal_point_width": null,
     "focal_point_height": null,
-    "file_size": 394
+    "file_size": 394,
+    "file_hash": ""
   }
 },
 {
@@ -7134,7 +8013,8 @@
     "focal_point_y": null,
     "focal_point_width": null,
     "focal_point_height": null,
-    "file_size": 14498
+    "file_size": 14498,
+    "file_hash": ""
   }
 },
 {
@@ -7158,7 +8038,8 @@
     "focal_point_y": null,
     "focal_point_width": null,
     "focal_point_height": null,
-    "file_size": 2182180
+    "file_size": 2182180,
+    "file_hash": ""
   }
 },
 {
@@ -7182,7 +8063,8 @@
     "focal_point_y": null,
     "focal_point_width": null,
     "focal_point_height": null,
-    "file_size": 14498
+    "file_size": 14498,
+    "file_hash": ""
   }
 },
 {
@@ -7206,7 +8088,8 @@
     "focal_point_y": null,
     "focal_point_width": null,
     "focal_point_height": null,
-    "file_size": 104767
+    "file_size": 104767,
+    "file_hash": ""
   }
 },
 {
@@ -7230,7 +8113,8 @@
     "focal_point_y": null,
     "focal_point_width": null,
     "focal_point_height": null,
-    "file_size": 49681
+    "file_size": 49681,
+    "file_hash": ""
   }
 },
 {
@@ -7254,7 +8138,8 @@
     "focal_point_y": null,
     "focal_point_width": null,
     "focal_point_height": null,
-    "file_size": 27251
+    "file_size": 27251,
+    "file_hash": ""
   }
 },
 {
@@ -7393,7 +8278,7 @@
     ],
     "seo_title": "",
     "seo_title_ar": null,
-    "seo_title_en": null,
+    "seo_title_en": "",
     "seo_title_es": null,
     "seo_title_vi": null,
     "show_in_menus": false,
@@ -7446,7 +8331,7 @@
     ],
     "seo_title": "",
     "seo_title_ar": null,
-    "seo_title_en": null,
+    "seo_title_en": "",
     "seo_title_es": null,
     "seo_title_vi": null,
     "show_in_menus": false,
@@ -7499,7 +8384,7 @@
     ],
     "seo_title": "",
     "seo_title_ar": null,
-    "seo_title_en": null,
+    "seo_title_en": "",
     "seo_title_es": null,
     "seo_title_vi": null,
     "show_in_menus": false,
@@ -7541,7 +8426,7 @@
       "servicepage"
     ],
     "live": true,
-    "has_unpublished_changes": true,
+    "has_unpublished_changes": false,
     "url_path": "/home/find-free-condoms/",
     "url_path_ar": "/home/find-free-condoms/",
     "url_path_en": "/home/find-free-condoms/",
@@ -7566,9 +8451,9 @@
     "expired": false,
     "locked": false,
     "first_published_at": "2018-09-25T20:08:51.022Z",
-    "last_published_at": "2019-04-17T19:26:34.613Z",
-    "latest_revision_created_at": "2019-04-18T01:37:08.354Z",
-    "live_revision": 349
+    "last_published_at": "2019-05-22T06:34:00.414Z",
+    "latest_revision_created_at": "2019-05-22T06:34:00.362Z",
+    "live_revision": 353
   }
 },
 {
@@ -7605,7 +8490,7 @@
     ],
     "seo_title": "",
     "seo_title_ar": null,
-    "seo_title_en": null,
+    "seo_title_en": "",
     "seo_title_es": null,
     "seo_title_vi": null,
     "show_in_menus": false,
@@ -7658,7 +8543,7 @@
     ],
     "seo_title": "",
     "seo_title_ar": null,
-    "seo_title_en": null,
+    "seo_title_en": "",
     "seo_title_es": null,
     "seo_title_vi": null,
     "show_in_menus": false,
@@ -7711,7 +8596,7 @@
     ],
     "seo_title": "",
     "seo_title_ar": null,
-    "seo_title_en": null,
+    "seo_title_en": "",
     "seo_title_es": null,
     "seo_title_vi": null,
     "show_in_menus": false,
@@ -7764,7 +8649,7 @@
     ],
     "seo_title": "",
     "seo_title_ar": null,
-    "seo_title_en": null,
+    "seo_title_en": "",
     "seo_title_es": null,
     "seo_title_vi": null,
     "show_in_menus": false,
@@ -7817,7 +8702,7 @@
     ],
     "seo_title": "",
     "seo_title_ar": null,
-    "seo_title_en": null,
+    "seo_title_en": "",
     "seo_title_es": null,
     "seo_title_vi": null,
     "show_in_menus": false,
@@ -7919,7 +8804,7 @@
     "owner": null,
     "seo_title": "",
     "seo_title_ar": null,
-    "seo_title_en": null,
+    "seo_title_en": "",
     "seo_title_es": null,
     "seo_title_vi": null,
     "show_in_menus": false,
@@ -7970,7 +8855,7 @@
     "owner": null,
     "seo_title": "",
     "seo_title_ar": null,
-    "seo_title_en": null,
+    "seo_title_en": "",
     "seo_title_es": null,
     "seo_title_vi": null,
     "show_in_menus": false,
@@ -8227,7 +9112,7 @@
     ],
     "seo_title": "",
     "seo_title_ar": null,
-    "seo_title_en": null,
+    "seo_title_en": "",
     "seo_title_es": null,
     "seo_title_vi": null,
     "show_in_menus": false,
@@ -8280,7 +9165,7 @@
     ],
     "seo_title": "",
     "seo_title_ar": null,
-    "seo_title_en": null,
+    "seo_title_en": "",
     "seo_title_es": null,
     "seo_title_vi": null,
     "show_in_menus": false,
@@ -8333,7 +9218,7 @@
     ],
     "seo_title": "",
     "seo_title_ar": null,
-    "seo_title_en": null,
+    "seo_title_en": "",
     "seo_title_es": null,
     "seo_title_vi": null,
     "show_in_menus": false,
@@ -8386,7 +9271,7 @@
     ],
     "seo_title": "",
     "seo_title_ar": null,
-    "seo_title_en": null,
+    "seo_title_en": "",
     "seo_title_es": null,
     "seo_title_vi": null,
     "show_in_menus": false,
@@ -8439,7 +9324,7 @@
     ],
     "seo_title": "",
     "seo_title_ar": null,
-    "seo_title_en": null,
+    "seo_title_en": "",
     "seo_title_es": null,
     "seo_title_vi": null,
     "show_in_menus": false,
@@ -8492,7 +9377,7 @@
     ],
     "seo_title": "",
     "seo_title_ar": null,
-    "seo_title_en": null,
+    "seo_title_en": "",
     "seo_title_es": null,
     "seo_title_vi": null,
     "show_in_menus": false,
@@ -8545,7 +9430,7 @@
     ],
     "seo_title": "",
     "seo_title_ar": null,
-    "seo_title_en": null,
+    "seo_title_en": "",
     "seo_title_es": null,
     "seo_title_vi": null,
     "show_in_menus": false,
@@ -8598,7 +9483,7 @@
     ],
     "seo_title": "",
     "seo_title_ar": null,
-    "seo_title_en": null,
+    "seo_title_en": "",
     "seo_title_es": null,
     "seo_title_vi": null,
     "show_in_menus": false,
@@ -8651,7 +9536,7 @@
     ],
     "seo_title": "",
     "seo_title_ar": null,
-    "seo_title_en": null,
+    "seo_title_en": "",
     "seo_title_es": null,
     "seo_title_vi": null,
     "show_in_menus": false,
@@ -8704,13 +9589,13 @@
     ],
     "seo_title": "",
     "seo_title_ar": null,
-    "seo_title_en": null,
+    "seo_title_en": "",
     "seo_title_es": null,
     "seo_title_vi": null,
     "show_in_menus": false,
     "search_description": "",
     "search_description_ar": null,
-    "search_description_en": null,
+    "search_description_en": "",
     "search_description_es": null,
     "search_description_vi": null,
     "go_live_at": null,
@@ -8757,13 +9642,13 @@
     ],
     "seo_title": "",
     "seo_title_ar": null,
-    "seo_title_en": null,
+    "seo_title_en": "",
     "seo_title_es": null,
     "seo_title_vi": null,
     "show_in_menus": false,
     "search_description": "",
     "search_description_ar": null,
-    "search_description_en": null,
+    "search_description_en": "",
     "search_description_es": null,
     "search_description_vi": null,
     "go_live_at": null,
@@ -8810,13 +9695,13 @@
     ],
     "seo_title": "",
     "seo_title_ar": null,
-    "seo_title_en": null,
+    "seo_title_en": "",
     "seo_title_es": null,
     "seo_title_vi": null,
     "show_in_menus": false,
     "search_description": "",
     "search_description_ar": null,
-    "search_description_en": null,
+    "search_description_en": "",
     "search_description_es": null,
     "search_description_vi": null,
     "go_live_at": null,
@@ -8863,13 +9748,13 @@
     ],
     "seo_title": "",
     "seo_title_ar": null,
-    "seo_title_en": null,
+    "seo_title_en": "",
     "seo_title_es": null,
     "seo_title_vi": null,
     "show_in_menus": false,
     "search_description": "",
     "search_description_ar": null,
-    "search_description_en": null,
+    "search_description_en": "",
     "search_description_es": null,
     "search_description_vi": null,
     "go_live_at": null,
@@ -8916,13 +9801,13 @@
     ],
     "seo_title": "",
     "seo_title_ar": null,
-    "seo_title_en": null,
+    "seo_title_en": "",
     "seo_title_es": null,
     "seo_title_vi": null,
     "show_in_menus": false,
     "search_description": "",
     "search_description_ar": null,
-    "search_description_en": null,
+    "search_description_en": "",
     "search_description_es": null,
     "search_description_vi": null,
     "go_live_at": null,
@@ -8969,7 +9854,7 @@
     ],
     "seo_title": "",
     "seo_title_ar": null,
-    "seo_title_en": null,
+    "seo_title_en": "",
     "seo_title_es": null,
     "seo_title_vi": null,
     "show_in_menus": false,
@@ -9022,7 +9907,7 @@
     ],
     "seo_title": "",
     "seo_title_ar": null,
-    "seo_title_en": null,
+    "seo_title_en": "",
     "seo_title_es": null,
     "seo_title_vi": null,
     "show_in_menus": false,
@@ -9075,7 +9960,7 @@
     ],
     "seo_title": "",
     "seo_title_ar": null,
-    "seo_title_en": null,
+    "seo_title_en": "",
     "seo_title_es": null,
     "seo_title_vi": null,
     "show_in_menus": false,
@@ -9128,7 +10013,7 @@
     ],
     "seo_title": "",
     "seo_title_ar": null,
-    "seo_title_en": null,
+    "seo_title_en": "",
     "seo_title_es": null,
     "seo_title_vi": null,
     "show_in_menus": false,
@@ -9181,7 +10066,7 @@
     ],
     "seo_title": "",
     "seo_title_ar": null,
-    "seo_title_en": null,
+    "seo_title_en": "",
     "seo_title_es": null,
     "seo_title_vi": null,
     "show_in_menus": false,
@@ -9234,7 +10119,7 @@
     ],
     "seo_title": "",
     "seo_title_ar": null,
-    "seo_title_en": null,
+    "seo_title_en": "",
     "seo_title_es": null,
     "seo_title_vi": null,
     "show_in_menus": false,
@@ -9287,7 +10172,7 @@
     ],
     "seo_title": "",
     "seo_title_ar": null,
-    "seo_title_en": null,
+    "seo_title_en": "",
     "seo_title_es": null,
     "seo_title_vi": null,
     "show_in_menus": false,
@@ -9340,7 +10225,7 @@
     ],
     "seo_title": "",
     "seo_title_ar": null,
-    "seo_title_en": null,
+    "seo_title_en": "",
     "seo_title_es": null,
     "seo_title_vi": null,
     "show_in_menus": false,
@@ -9393,7 +10278,7 @@
     ],
     "seo_title": "",
     "seo_title_ar": null,
-    "seo_title_en": null,
+    "seo_title_en": "",
     "seo_title_es": null,
     "seo_title_vi": null,
     "show_in_menus": false,
@@ -9446,7 +10331,7 @@
     ],
     "seo_title": "",
     "seo_title_ar": null,
-    "seo_title_en": null,
+    "seo_title_en": "",
     "seo_title_es": null,
     "seo_title_vi": null,
     "show_in_menus": false,
@@ -12686,6 +13571,34 @@
       "admin@austintexas.io"
     ],
     "content_json": "{\"pk\": 41, \"path\": \"00010001000Z\", \"depth\": 3, \"numchild\": 0, \"title\": \"Grow a Community Garden\", \"title_ar\": null, \"title_en\": \"Grow a Community Garden\", \"title_es\": null, \"title_vi\": null, \"draft_title\": \"Grow a Community Garden\", \"slug\": \"get-a-community-garden-permit\", \"slug_ar\": null, \"slug_en\": \"get-a-community-garden-permit\", \"slug_es\": null, \"slug_vi\": null, \"content_type\": 5, \"live\": false, \"has_unpublished_changes\": true, \"url_path\": \"/home/get-a-community-garden-permit/\", \"url_path_ar\": \"/home/get-a-community-garden-permit/\", \"url_path_en\": \"/home/get-a-community-garden-permit/\", \"url_path_es\": \"/home/get-a-community-garden-permit/\", \"url_path_vi\": \"/home/get-a-community-garden-permit/\", \"owner\": 1, \"seo_title\": \"\", \"seo_title_ar\": null, \"seo_title_en\": null, \"seo_title_es\": null, \"seo_title_vi\": null, \"show_in_menus\": false, \"search_description\": \"\", \"search_description_ar\": \"\", \"search_description_en\": \"\", \"search_description_es\": \"\", \"search_description_vi\": \"\", \"go_live_at\": null, \"expire_at\": null, \"expired\": false, \"locked\": false, \"first_published_at\": null, \"last_published_at\": null, \"latest_revision_created_at\": \"2019-04-12T12:39:10.546Z\", \"live_revision\": null, \"created_at\": \"2019-03-20T21:40:35.784Z\", \"updated_at\": \"2019-04-18T02:04:53.096Z\", \"department\": null, \"description\": \"\", \"description_ar\": \"\", \"description_en\": \"\", \"description_es\": \"\", \"description_vi\": \"\", \"image\": null, \"process_steps\": [], \"contacts\": [], \"topics\": []}",
+    "approved_go_live_at": null
+  }
+},
+{
+  "model": "wagtailcore.pagerevision",
+  "pk": 352,
+  "fields": {
+    "page": 7,
+    "submitted_for_moderation": false,
+    "created_at": "2019-05-22T06:30:16.115Z",
+    "user": [
+      "admin@austintexas.io"
+    ],
+    "content_json": "{\"pk\": 7, \"path\": \"000100010004\", \"depth\": 3, \"numchild\": 0, \"title\": \"Find free condoms and learn other ways to prevent HIV\", \"title_ar\": null, \"title_en\": \"Find free condoms and learn other ways to prevent HIV\", \"title_es\": null, \"title_vi\": null, \"draft_title\": \"Find free condoms and learn other ways to prevent HIV\", \"slug\": \"find-free-condoms\", \"slug_ar\": null, \"slug_en\": \"find-free-condoms\", \"slug_es\": null, \"slug_vi\": null, \"content_type\": 4, \"live\": true, \"has_unpublished_changes\": true, \"url_path\": \"/home/find-free-condoms/\", \"url_path_ar\": \"/home/find-free-condoms/\", \"url_path_en\": \"/home/find-free-condoms/\", \"url_path_es\": \"/home/find-free-condoms/\", \"url_path_vi\": \"/home/find-free-condoms/\", \"owner\": 1, \"seo_title\": \"\", \"seo_title_ar\": null, \"seo_title_en\": null, \"seo_title_es\": null, \"seo_title_vi\": null, \"show_in_menus\": false, \"search_description\": \"\", \"search_description_ar\": \"\", \"search_description_en\": \"\", \"search_description_es\": \"\", \"search_description_vi\": \"\", \"go_live_at\": null, \"expire_at\": null, \"expired\": false, \"locked\": false, \"first_published_at\": \"2018-09-25T20:08:51.022Z\", \"last_published_at\": \"2019-04-17T19:26:34.613Z\", \"latest_revision_created_at\": \"2019-04-18T01:37:08.354Z\", \"live_revision\": 349, \"created_at\": \"2018-09-25T20:08:50.920Z\", \"updated_at\": \"2019-05-22T06:30:16.114Z\", \"steps\": \"[{\\\"type\\\": \\\"basic_step\\\", \\\"value\\\": \\\"<p>Use our <a href=\\\\\\\"http://austin.maps.arcgis.com/apps/webappviewer/index.html?id=07706098076547358b7cc0c7b3d8562e%20\\\\\\\">free condom map</a> to find locations in the Austin giving them. Locations include:</p><ul><li>Neighborhood centers,</li><li>Barber shops,</li><li>Liquor stores and bars,</li><li>And other easily accessible local establishments.</li></ul>\\\", \\\"id\\\": \\\"a9f32dc9-7994-44d5-ab6a-420528bb7c9e\\\"}, {\\\"type\\\": \\\"basic_step\\\", \\\"value\\\": \\\"<p>Review steps you can take to prevent HIV.</p><ul><li>Always use latex condoms with your partner, especially if you do not know your partner\\\\u2019s HIV status.</li><li>Don\\\\u2019t have sex. Abstinence is the only sure way to avoid contracting HIV.</li><li>If you and your partner are both HIV negative, being faithful in your relationship removes your risk for HIV infection.</li><li>Don\\\\u2019t share needles and syringes. Needles and syringes can expose you to HIV.</li><li>Speak to a doctor about a prescription for <a href=\\\\\\\"https://www.cdc.gov/hiv/basics/prep.html\\\\\\\">Pre-exposure prophylaxis (or PrEP)</a>. PrEP is taken daily to lower chances of HIV infection.</li></ul>\\\", \\\"id\\\": \\\"2f508460-1e1f-492b-a551-92f17391c59e\\\"}]\", \"steps_ar\": \"[]\", \"steps_en\": \"[{\\\"type\\\": \\\"basic_step\\\", \\\"value\\\": \\\"<p>Use our <a href=\\\\\\\"http://austin.maps.arcgis.com/apps/webappviewer/index.html?id=07706098076547358b7cc0c7b3d8562e%20\\\\\\\">free condom map</a> to find locations in the Austin giving them. Locations include:</p><ul><li>Neighborhood centers,</li><li>Barber shops,</li><li>Liquor stores and bars,</li><li>And other easily accessible local establishments.</li></ul>\\\", \\\"id\\\": \\\"a9f32dc9-7994-44d5-ab6a-420528bb7c9e\\\"}, {\\\"type\\\": \\\"basic_step\\\", \\\"value\\\": \\\"<p>Review steps you can take to prevent HIV.</p><ul><li>Always use latex condoms with your partner, especially if you do not know your partner\\\\u2019s HIV status.</li><li>Don\\\\u2019t have sex. Abstinence is the only sure way to avoid contracting HIV.</li><li>If you and your partner are both HIV negative, being faithful in your relationship removes your risk for HIV infection.</li><li>Don\\\\u2019t share needles and syringes. Needles and syringes can expose you to HIV.</li><li>Speak to a doctor about a prescription for <a href=\\\\\\\"https://www.cdc.gov/hiv/basics/prep.html\\\\\\\">Pre-exposure prophylaxis (or PrEP)</a>. PrEP is taken daily to lower chances of HIV infection.</li></ul>\\\", \\\"id\\\": \\\"2f508460-1e1f-492b-a551-92f17391c59e\\\"}]\", \"steps_es\": \"[]\", \"steps_vi\": \"[]\", \"dynamic_content\": \"[{\\\"type\\\": \\\"map_block\\\", \\\"value\\\": 1, \\\"id\\\": \\\"0dd24d96-be4c-4766-9625-74eed6223aab\\\"}]\", \"additional_content\": \"\", \"additional_content_ar\": \"\", \"additional_content_en\": \"\", \"additional_content_es\": \"\", \"additional_content_vi\": \"\", \"short_description\": \"Twice a year, Austin residential trash and recycling customers can place large items out on the curb to be picked up. These items include appliances, furniture, and carpet.\", \"short_description_ar\": \"\", \"short_description_en\": \"Twice a year, Austin residential trash and recycling customers can place large items out on the curb to be picked up. These items include appliances, furniture, and carpet.\", \"short_description_es\": \"\", \"short_description_vi\": \"\", \"contacts\": [{\"pk\": 4, \"page\": null, \"contact\": 1}], \"topics\": [{\"pk\": 22, \"page\": null, \"topic\": 53, \"toplink\": false}]}",
+    "approved_go_live_at": null
+  }
+},
+{
+  "model": "wagtailcore.pagerevision",
+  "pk": 353,
+  "fields": {
+    "page": 7,
+    "submitted_for_moderation": false,
+    "created_at": "2019-05-22T06:34:00.362Z",
+    "user": [
+      "admin@austintexas.io"
+    ],
+    "content_json": "{\"pk\": 7, \"path\": \"000100010004\", \"depth\": 3, \"numchild\": 0, \"title\": \"Find free condoms and learn other ways to prevent HIV\", \"title_ar\": null, \"title_en\": \"Find free condoms and learn other ways to prevent HIV\", \"title_es\": null, \"title_vi\": null, \"draft_title\": \"Find free condoms and learn other ways to prevent HIV\", \"slug\": \"find-free-condoms\", \"slug_ar\": null, \"slug_en\": \"find-free-condoms\", \"slug_es\": null, \"slug_vi\": null, \"content_type\": 4, \"live\": true, \"has_unpublished_changes\": false, \"url_path\": \"/home/find-free-condoms/\", \"url_path_ar\": \"/home/find-free-condoms/\", \"url_path_en\": \"/home/find-free-condoms/\", \"url_path_es\": \"/home/find-free-condoms/\", \"url_path_vi\": \"/home/find-free-condoms/\", \"owner\": 1, \"seo_title\": \"\", \"seo_title_ar\": null, \"seo_title_en\": null, \"seo_title_es\": null, \"seo_title_vi\": null, \"show_in_menus\": false, \"search_description\": \"\", \"search_description_ar\": \"\", \"search_description_en\": \"\", \"search_description_es\": \"\", \"search_description_vi\": \"\", \"go_live_at\": null, \"expire_at\": null, \"expired\": false, \"locked\": false, \"first_published_at\": \"2018-09-25T20:08:51.022Z\", \"last_published_at\": \"2019-05-22T06:30:16.173Z\", \"latest_revision_created_at\": \"2019-05-22T06:30:16.115Z\", \"live_revision\": 352, \"created_at\": \"2018-09-25T20:08:50.920Z\", \"updated_at\": \"2019-05-22T06:34:00.361Z\", \"steps\": \"[{\\\"type\\\": \\\"basic_step\\\", \\\"value\\\": \\\"<p>Use our <a href=\\\\\\\"http://austin.maps.arcgis.com/apps/webappviewer/index.html?id=07706098076547358b7cc0c7b3d8562e%20\\\\\\\">free condom map</a> to find locations in the Austin giving them. Locations include:</p><ul><li>Neighborhood centers,</li><li>Barber shops,</li><li>Liquor stores and bars,</li><li>And other easily accessible local establishments.</li></ul>\\\", \\\"id\\\": \\\"a9f32dc9-7994-44d5-ab6a-420528bb7c9e\\\"}, {\\\"type\\\": \\\"basic_step\\\", \\\"value\\\": \\\"<p>Review steps you can take to prevent HIV.</p><ul><li>Always use latex condoms with your partner, especially if you do not know your partner\\\\u2019s HIV status.</li><li>Don\\\\u2019t have sex. Abstinence is the only sure way to avoid contracting HIV.</li><li>If you and your partner are both HIV negative, being faithful in your relationship removes your risk for HIV infection.</li><li>Don\\\\u2019t share needles and syringes. Needles and syringes can expose you to HIV.</li><li>Speak to a doctor about a prescription for <a href=\\\\\\\"https://www.cdc.gov/hiv/basics/prep.html\\\\\\\">Pre-exposure prophylaxis (or PrEP)</a>. PrEP is taken daily to lower chances of HIV infection.</li></ul>\\\", \\\"id\\\": \\\"2f508460-1e1f-492b-a551-92f17391c59e\\\"}]\", \"steps_ar\": \"[]\", \"steps_en\": \"[{\\\"type\\\": \\\"basic_step\\\", \\\"value\\\": \\\"<p>Use our <a href=\\\\\\\"http://austin.maps.arcgis.com/apps/webappviewer/index.html?id=07706098076547358b7cc0c7b3d8562e%20\\\\\\\">free condom map</a> to find locations in the Austin giving them. Locations include:</p><ul><li>Neighborhood centers,</li><li>Barber shops,</li><li>Liquor stores and bars,</li><li>And other easily accessible local establishments.</li></ul>\\\", \\\"id\\\": \\\"a9f32dc9-7994-44d5-ab6a-420528bb7c9e\\\"}, {\\\"type\\\": \\\"basic_step\\\", \\\"value\\\": \\\"<p>Review steps you can take to prevent HIV.</p><ul><li>Always use latex condoms with your partner, especially if you do not know your partner\\\\u2019s HIV status.</li><li>Don\\\\u2019t have sex. Abstinence is the only sure way to avoid contracting HIV.</li><li>If you and your partner are both HIV negative, being faithful in your relationship removes your risk for HIV infection.</li><li>Don\\\\u2019t share needles and syringes. Needles and syringes can expose you to HIV.</li><li>Speak to a doctor about a prescription for <a href=\\\\\\\"https://www.cdc.gov/hiv/basics/prep.html\\\\\\\">Pre-exposure prophylaxis (or PrEP)</a>. PrEP is taken daily to lower chances of HIV infection.</li></ul>\\\", \\\"id\\\": \\\"2f508460-1e1f-492b-a551-92f17391c59e\\\"}]\", \"steps_es\": \"[]\", \"steps_vi\": \"[]\", \"dynamic_content\": \"[{\\\"type\\\": \\\"map_block\\\", \\\"value\\\": 1, \\\"id\\\": \\\"0dd24d96-be4c-4766-9625-74eed6223aab\\\"}]\", \"additional_content\": \"\", \"additional_content_ar\": \"\", \"additional_content_en\": \"\", \"additional_content_es\": \"\", \"additional_content_vi\": \"\", \"short_description\": \"\", \"short_description_ar\": \"\", \"short_description_en\": \"\", \"short_description_es\": \"\", \"short_description_vi\": \"\", \"contacts\": [{\"pk\": 4, \"page\": 7, \"contact\": 1}], \"topics\": [{\"pk\": 22, \"page\": 7, \"topic\": 53, \"toplink\": false}]}",
     "approved_go_live_at": null
   }
 },

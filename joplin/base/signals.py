@@ -6,6 +6,8 @@ from wagtail.core.signals import page_published, page_unpublished
 import heroku3
 from heroku3.models.build import Build
 
+import boto3
+
 from base.models import TranslatedImage
 
 import logging
@@ -29,6 +31,98 @@ def generate_responsive_images(sender, **kwargs):
     for width in IMAGE_WIDTHS:
         logger.debug(f'Generating image rendition for {width}px')
         image.get_rendition(f'width-{width}')
+
+def create_build_aws(instance, publish=False):
+    """
+        Triggers a build in Amazon Elastic Container Service, it requires:
+        1. DEPLOYMENT_MODE
+            - The name of the environment in github: production or staging.
+            - "PRODUCTION" builds code in the production branch
+            - "STAGING"    builds code in the master branch.
+        2. AWS_BUCKET_NAME
+            - The name of the bucket where the deployment is happening.
+            - The bucket name only, not a path.
+        3. AWS_CF_DISTRO:
+            - The name of the distribution for production.
+            - IE: E455RV7LE5UVG
+    """
+    logger.debug("create_build_aws() Starting task")
+
+    slack_message = ""
+    publish_action = ""
+
+    if (publish):
+        publish_action = "published"
+    else:
+        publish_action = "unpublished"
+
+    try:
+        slack_message = "'%s' was %s by user: %s " % (instance.title, publish_action, instance.owner.email)
+        print(slack_message)
+    except:
+        slack_message = ""
+
+    logger.debug("create_build_aws() Message: " + slack_message)
+
+    if(settings.DEPLOYMENT_MODE in ["PRODUCTION", "STAGING"]):
+
+        # First we initialize our AWS handler (client)
+        client = boto3.client(
+             'ecs',
+             aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+             aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY
+        )
+
+        # Now we request to run a container (task) on AWS ECS on Fargate
+        response = client.run_task(
+            cluster='janis-cluster',
+            taskDefinition=settings.AWS_ECS_TASK_DEFINITION, # ie. 'janis-worker:10'
+            launchType='FARGATE',
+            count=1,
+            platformVersion='LATEST',
+            networkConfiguration={
+                'awsvpcConfiguration': {
+                    'subnets': ['subnet-01ab57a13c8e8ab3b'],
+                    'assignPublicIp': 'ENABLED',
+                    'securityGroups': ['sg-05def9abc5a743581'],
+                },
+            },
+            overrides={
+                'containerOverrides': [
+                    {
+                        'name': 'janis-worker',
+                        'environment': [
+                            {
+                                'name': 'DEPLOYMENT_MODE',
+                                'value': settings.DEPLOYMENT_MODE # 'PRODUCTION' OR 'STAGING'
+                            },
+                            {
+                                'name': 'AWS_BUCKET_NAME',
+                                'value': settings.AWS_ECS_DEPLOYMENT_BUCKET # ie. 'janis-lab'
+                            },
+                            {
+                                'name': 'AWS_CF_DISTRO',
+                                'value': settings.AWS_CLOUDFRONT_DISTRIBUTION #'E455RV7LE5UVG'
+                            },
+                            {
+                                'name': 'CMS_API',
+                                'value': settings.JANIS_CMS_API  # 'https://joplin.herokuapp.com/api/graphql'
+                            },
+                            {
+                                'name': 'CMS_MEDIA',
+                                'value': settings.JANIS_CMS_MEDIA  # 'https://joplin-austin-gov.s3.amazonaws.com/media'
+                            },
+                            {
+                                'name': 'SLACK_MESSAGE',
+                                'value': slack_message
+                            }
+                        ]
+                    }
+                ]
+            }
+        )
+        # We log our response for debugging
+        logger.debug(f'Response: {response}')
 
 
 def create_build_if_configured():
@@ -74,10 +168,12 @@ def create_build(heroku, app, url, checksum=None, version=None, buildpack_urls=N
 @receiver(page_published)
 def page_published_signal(sender, **kwargs):
     logger.debug(f'page_published {sender}')
-    create_build_if_configured()
+    #create_build_if_configured()
+    create_build_aws(kwargs['instance'], publish=True)
 
 
 @receiver(page_unpublished)
 def page_unpublished_signal(sender, **kwargs):
     logger.debug(f'page_unpublished {sender}')
-    create_build_if_configured()
+    #create_build_if_configured()
+    create_build_aws(kwargs['instance'], publish=False)

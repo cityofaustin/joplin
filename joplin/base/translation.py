@@ -68,6 +68,8 @@ class HomePageTranslationOptions(TranslationOptions):
 class ServicePageTranslationOptions(TranslationOptions):
     fields = (
         'additional_content',
+        'steps',
+        'short_description',
     )
 
 @register(ProcessPage)
