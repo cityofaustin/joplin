@@ -42,6 +42,13 @@ LOAD_DATA="on" ./scripts/serve-local.sh
   - This will add some test content (from `joplin/db/system-generated/[latest migration].datadump.json`)
   - Images are also not stored in this repo, and can instead be downloaded using `./scripts/download-media.sh`. This will parse a backup file from the db/smuggler directory and place all referenced images into the local media folder.
 
+**Drop DB, run with fresh data**
+
+```
+RELOAD_DATA="on" ./scripts/serve-local.sh
+```
+  - Same as LOAD_DATA="on", except it drops any existing data in your database before loading data.
+
 **Run + Rebuild without cached image layer**
 
 If something goes wrong with your docker builds and you want to start over without any cached layers, you can run:
@@ -49,6 +56,7 @@ If something goes wrong with your docker builds and you want to start over witho
 HARD_REBUILD="on" ./scripts/serve-local.sh
 ```
   - `LOAD_DATA="on"` can also be used with `HARD_REBUILD="on"`
+  - It takes 90 seconds to do a HARD_REBUILD.
   - If worse comes to worse, you can always delete your local joplin docker images with `docker rmi`.
 
 **Run with custom smuggler data**

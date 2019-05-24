@@ -27,10 +27,19 @@ export DOCKER_TARGET_APP=joplin-local
 echo "Stopping any $COMPOSE_PROJECT_NAME containers that might still be running"
 stop_project_containers $COMPOSE_PROJECT_NAME
 
+# Aside from the database dropping step, RELOAD_DATA does the same thing as LOAD_DATA
+if [ "$RELOAD_DATA" == "on" ]; then
+  export LOAD_DATA="on"
+fi
+
+# Delete old database containers for HARD_REBUILDs or RELOADs
+if [ "$HARD_REBUILD" == "on" ] || [ "$RELOAD_DATA" == "on" ]; then
+  echo "Deleting old joplin_db containes"
+  docker ps -aq -f name=joplin_db_1 | while read CONTAINER ; do docker rm -f $CONTAINER ; done
+fi
+
 if [ "$HARD_REBUILD" == "on" ]; then
   echo 'HARD_REBUILD="on": Rebuilding containers without cache'
-  echo "Deleting joplin_db containes"
-  docker ps -aq -f name=joplin_db_1 | while read CONTAINER ; do docker rm -f $CONTAINER ; done
   echo "Rebuilding ${DOCKER_TAG_APP}"
   docker build --no-cache -f app.Dockerfile -t $DOCKER_TAG_APP --target $DOCKER_TARGET_APP .
   echo "Rebuilding ${DOCKER_TAG_ASSETS}"
