@@ -49,6 +49,14 @@ RELOAD_DATA="on" ./scripts/serve-local.sh
 ```
   - Same as LOAD_DATA="on", except it drops any existing data in your database before loading data.
 
+**Run with Janis**
+
+```
+JANIS="on" ./scripts/serve-local.sh
+```
+  - Runs with the "janis:local" image built on your machine.
+  - Can be combined with any other args.
+
 **Run + Rebuild without cached image layer**
 
 If something goes wrong with your docker builds and you want to start over without any cached layers, you can run:

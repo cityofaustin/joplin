@@ -52,4 +52,15 @@ else
 fi
 
 echo "Spinning up containers"
-docker-compose -f docker-compose.yml -f docker-compose.local_override.yml up
+if [ "$JANIS" == "on" ]; then
+  # Env Vars for use in Janis
+  export HOST_IP=$(ifconfig en0 | awk '$1 == "inet" {print $2}')
+  export CMS_API="http://$HOST_IP:$JOPLIN_APP_HOST_PORT/api/graphql"
+  export CMS_MEDIA="http://$HOST_IP:$JOPLIN_APP_HOST_PORT/media"
+  export DOCKER_TAG_JANIS="janis:local"
+  export JANIS_APP_HOST_PORT=3000
+  
+  docker-compose -f docker-compose.yml -f docker-compose.local_override.yml -f docker-compose.janis.yml up
+else
+  docker-compose -f docker-compose.yml -f docker-compose.local_override.yml up
+fi
