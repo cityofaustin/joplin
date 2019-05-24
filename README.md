@@ -71,6 +71,16 @@ To load in data from smuggler follow these steps.
 4. Go to your local Joplin's smuggler interface at http://localhost:8000/django-admin/load/. Select the data file that you want to load.
 5. At this point the database should be populated, but any media used on the site will be broken, to fix this run: `./scripts/download-media.sh`
 
+**Access Local DB**
+
+`psql postgres://joplin@localhost:5433/joplin`
+
+The database defaults to version 10 of postgres. No password is set up, since there is no security needed for a local environment. To connect, use the localhost at the standard PostgreSQL (5432) port where the container is mapped to listen for connections all without a password, the user and database name is 'joplin'. To manage the database, you should be able to use your favorite DB admin tool (ie. TablePlus, DBeaver, DataGrip, etc).
+
+It runs on PORT 5433 to avoid port conflicts with your host's default postgres port.
+
+Note: The containers are not built at the same time; for this purpose, joplin will wait and display a 'database not available' message in a loop until the database is up and ready. This is because the DB container takes a little longer to build and set up locally, and joplin has to wait before it can run the django migrations locally.
+
 ---
 ## Updating the Data Model
 
@@ -209,18 +219,6 @@ We're using webpack to bundle syles and scripts, and webpack_loader to include t
 
 ---
 ## Misc
-
-#### Local Builds
-
-The build process will create a service (group) of containers:
-
-1. joplin_db (PostgreSQL)
-2. joplin_assets (assets)
-3. joplin_app (web server for authoring interface)
-
-The database defaults to version 10 of postgres. No password is set up, since there is no security needed for a local environment. To connect, use the localhost at the standard PostgreSQL (5432) port where the container is mapped to listen for connections all without a password, the user and database name is 'joplin'. To manage the database, you should be able to use your favorite DB admin tool (ie. TablePlus, DBeaver, DataGrip, etc). Be sure you are not running a local PostgreSQL server prior to building the containers. Example connection string: `postgres://joplin@localhost:5433/joplin`
-
-Note: The containers are not built at the same time; for this purpose, joplin will wait and display a 'database not available' message in a loop until the database is up and ready. This is because the DB container takes a little longer to build and set up locally, and joplin has to wait before it can run the django migrations locally.
 
 #### Static File Uploads
 
