@@ -18,28 +18,28 @@ export LOAD_DATA="on"
 
 # Build Args for use during build process
 export COMPOSE_PROJECT_NAME=joplin_migration_test
-export DOCKER_TAG_APP="cityofaustin/joplin-app:master-latest"
+export DB_CREATION_DOCKER_TAG="cityofaustin/joplin-app:master-latest"
 export DOCKER_TARGET_APP=joplin-migration-test
 
 echo "######################"
-echo "Step 1: Create db from $DOCKER_TAG_APP"
+echo "Step 1: Create db from $DB_CREATION_DOCKER_TAG"
 echo "######################"
-echo "Builds a database environment from $DOCKER_TAG_APP"
-echo "Loads migrations and data from $DOCKER_TAG_APP"
+echo "Builds a database environment from $DB_CREATION_DOCKER_TAG"
+echo "Loads migrations and data from $DB_CREATION_DOCKER_TAG"
 
 echo "Removing local ${COMPOSE_PROJECT_NAME} containers"
 delete_project_containers $COMPOSE_PROJECT_NAME
 
-echo "Pulling ${DOCKER_TAG_APP} from dockerhub"
-docker pull $DOCKER_TAG_APP
+echo "Pulling ${DB_CREATION_DOCKER_TAG} from dockerhub"
+docker pull $DB_CREATION_DOCKER_TAG
 echo "Spinning up joplin-app and joplin_db containers"
 docker-compose -f docker-compose.yml -f docker-compose.migration_test_override.yml up -d
 
-echo "Running old migrations from $DOCKER_TAG_APP and loading data"
+echo "Running old migrations from $DB_CREATION_DOCKER_TAG and loading data"
 docker logs ${COMPOSE_PROJECT_NAME}_app_1 -f
 docker wait ${COMPOSE_PROJECT_NAME}_app_1
-echo "$DOCKER_TAG_APP migration and data loaded completed successfully"
-echo "$DOCKER_TAG_APP joplin-app container shutting down"
+echo "$DB_CREATION_DOCKER_TAG migration and data loaded completed successfully"
+echo "$DB_CREATION_DOCKER_TAG joplin-app container shutting down"
 
 echo "######################"
 echo "Step 2: Run new migrations on old db"

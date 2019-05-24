@@ -29,6 +29,8 @@ stop_project_containers $COMPOSE_PROJECT_NAME
 
 if [ "$HARD_REBUILD" == "on" ]; then
   echo 'HARD_REBUILD="on": Rebuilding containers without cache'
+  echo "Deleting joplin_db containes"
+  docker ps -aq -f name=joplin_db_1 | while read CONTAINER ; do docker rm -f $CONTAINER ; done
   echo "Rebuilding ${DOCKER_TAG_APP}"
   docker build --no-cache -f app.Dockerfile -t $DOCKER_TAG_APP --target $DOCKER_TARGET_APP .
   echo "Rebuilding ${DOCKER_TAG_ASSETS}"
