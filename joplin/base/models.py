@@ -71,6 +71,13 @@ class JanisBasePage(Page):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    author_notes = RichTextField(
+        # max_length=DEFAULT_MAX_LENGTH,
+        features=['ul', 'ol', 'link'],
+        blank=True,
+        verbose_name='Notes for authors (Not visible on the resident facing site)'
+    )
+
     def janis_url(self):
         url_page_type = self.janis_url_page_type
         page_slug = self.slug
@@ -95,9 +102,9 @@ class JanisPage(JanisBasePage):
             return cls.edit_handler.bind_to_model(cls)
 
         edit_handler = TabbedInterface([
-            ObjectList([
-                # FieldPanel('title')
-            ] + cls.content_panels, heading='Content'),
+            ObjectList(cls.content_panels + [
+                FieldPanel('author_notes')
+            ], heading='Content'),
             ObjectList(Page.promote_panels + cls.promote_panels, heading='Search Info')
         ])
 
@@ -321,25 +328,11 @@ class TopicPage(JanisPage):
         InlinePanel('topiccollections', label='Topic Collections this page belongs to'),
     ]
 
-class DepartmentPage(JanisBasePage):
+class DepartmentPage(JanisPage):
     janis_url_page_type = "department"
 
     def __str__(self):
         return self.title_en
-
-    @cached_classmethod
-    def get_edit_handler(cls):
-        if hasattr(cls, 'edit_handler'):
-            return cls.edit_handler.bind_to_model(cls)
-
-        edit_handler = TabbedInterface([
-            ObjectList([
-                FieldPanel('title')
-            ] + cls.content_panels, heading='Content'),
-            ObjectList(Page.promote_panels + cls.promote_panels, heading='Search Info')
-        ])
-
-        return edit_handler.bind_to_model(cls)
 
     what_we_do = RichTextField(
         features=WYSIWYG_GENERAL,

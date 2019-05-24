@@ -93,3 +93,13 @@
     flex-direction: column;
     border-radius: 1px;
 }
+
+.account-link {
+  display: inherit;
+}
+
+.avatar {
+  img {
+    margin: auto 0px !important;
+  }
+}
