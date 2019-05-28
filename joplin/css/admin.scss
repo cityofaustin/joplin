@@ -69,6 +69,7 @@
     position: absolute;
     right: 1%;
     height: auto;
+    top: 18%;
 }
 
 .user-account-dropdown ul {
@@ -94,11 +95,11 @@
 }
 
 .account-link {
-  display: inherit;
+    display: inherit;
 }
 
 .avatar {
-  img {
-    margin: auto 0px !important;
-  }
+    img {
+        margin: auto 0px !important;
+    }
 }
