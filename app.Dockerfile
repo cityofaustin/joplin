@@ -66,13 +66,13 @@ ENV DEPLOYMENT_MODE "REVIEW"
 ########################################################
 # joplin-base => joplin-deployed => joplin-staging
 
-FROM joplin-base as joplin-staging
+FROM joplin-deployed as joplin-staging
 
 ENV DEPLOYMENT_MODE "STAGING"
 
 ########################################################
 # joplin-base => joplin-deployed => joplin-prod
 
-FROM joplin-base as joplin-prod
+FROM joplin-deployed as joplin-prod
 
 ENV DEPLOYMENT_MODE "PRODUCTION"
