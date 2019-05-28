@@ -11,6 +11,11 @@
 }
 
 // select any label right after a radio button
+#language-select input[type='radio'] + label {
+    border: 0.5px solid $wagtail-turquoise;
+    line-height: 200%;
+}
+
 #language-select input[type='radio']:checked + label {
     background: $wagtail-turquoise;
     color: $coa-color-white;
