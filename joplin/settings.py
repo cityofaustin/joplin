@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'wagtail.core',
     'wagtail.contrib.forms',
     'wagtail.contrib.redirects',
+    'wagtail.contrib.styleguide',
 
     'wagtail_modeltranslation',
     'wagtail_modeltranslation.makemigrations',
