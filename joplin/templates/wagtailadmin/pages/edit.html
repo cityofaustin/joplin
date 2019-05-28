@@ -18,26 +18,28 @@
         <div>
             <h1 class="edit_page_header">
                 <span class="coa-page-action">Edit</span>
-                <span class="page_title">{{ page.draft_title }}</span>
-                <div>
-                  <button class="coa-secondary-button button button-small" id="en">EN</button>
-                  <button class="coa-secondary-button button button-small" id="es">ES</button>
-                  <button class="coa-secondary-button button button-small" id="ar">AR</button>
-                  <button class="coa-secondary-button button button-small" id="vi">VI</button>
-                </div>
+                <span class="page_title">{{ page.draft_title }}</span><br>
             </h1>
+            <section>
+            <div class="coa-page-action" id="language-select">
+              <input type="radio" id="en" name="toggle" checked ><label class="coa-secondary-button button-small" for="en">EN</label>
+              <input type="radio" id="es" name="toggle"><label class="coa-secondary-button button-small" for="es">ES</label>
+              <input type="radio" id="ar" name="toggle"><label class="coa-secondary-button button-small" for="ar">AR</label>
+              <input type="radio" id="vi" name="toggle"><label class="coa-secondary-button button-small" for="vi">VI</label>
+            </section>
         </div>
 
         <div class="actions">
+
             <div>
                 <div>See <a href="{% url 'wagtailadmin_pages:revisions_index' page.id %}" class="underlined">All Revisions</a></div>
             </div>
 
             <!-- SHARE -->
             <div>
-                <button id="page-share-preview-button" type="submit" form="page-edit-form" 
-                  class="coa-secondary-button button action-save button-longrunning icon coa-icon-share {% if is_revision %}warning{% endif %}" 
-                  data-clicked-text="{% trans 'Saving…' %}" 
+                <button id="page-share-preview-button" type="submit" form="page-edit-form"
+                  class="coa-secondary-button button action-save button-longrunning icon coa-icon-share {% if is_revision %}warning{% endif %}"
+                  data-clicked-text="{% trans 'Saving…' %}"
                   {% if page.locked %}disabled {% endif %}
                 >
                   <span class="icon icon-spinner"></span>
@@ -53,8 +55,9 @@
                     {% endif %}
                   </em>
                 </button>
-                <div id="page-share-url-copied" class="hidden">
-                  Preview URL copied to clipboard.
+                <div id="page-share-url-copied" class="hidd" >
+                  <div> <span class="icon icon-success"></span> Draft preview URL copied to clipboard</div>
+                  <div class="preview-url">{{page.janis_preview_url}}</div>
                 </div>
             </div>
 
@@ -88,14 +91,14 @@
                   data-clicked-text="{% trans 'Saving…' %}" {% if page.locked %}disabled {% endif %}>
                   <span class="icon icon-spinner"></span>
                   <em>
-                    {% if page.locked %} 
-                      {% trans 'Page locked' %} 
-                    {% else %} 
-                      {% if is_revision %} 
-                        {% trans 'Replace current draft' %} 
-                      {% else %} 
-                        {% trans 'Save draft' %} 
-                      {% endif %} 
+                    {% if page.locked %}
+                      {% trans 'Page locked' %}
+                    {% else %}
+                      {% if is_revision %}
+                        {% trans 'Replace current draft' %}
+                      {% else %}
+                        {% trans 'Save draft' %}
+                      {% endif %}
                     {% endif %}
                   </em>
                 </button>
