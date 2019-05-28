@@ -1,0 +1,5 @@
+version: '3.7'
+# Override gunicorn CMD
+services:
+  app:
+    command: ["echo", "\"No server needed at this step of the migration test: exiting app\""]

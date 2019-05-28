@@ -1,7 +1,0 @@
-FROM joplin-base
-
-ENV DEPLOYMENT_MODE "LOCAL"
-
-ENTRYPOINT ["./docker-entrypoint.sh"]
-
-CMD ["gunicorn", "joplin.wsgi:application", "--pythonpath", "/app/joplin"]
