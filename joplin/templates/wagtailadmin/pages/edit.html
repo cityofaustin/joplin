@@ -36,7 +36,7 @@
             </div>
 
             <!-- SHARE -->
-            <div>
+            <div class="coa-button--margin">
                 <button id="page-share-preview-button" type="submit" form="page-edit-form"
                   class="coa-secondary-button button action-save button-longrunning icon coa-icon-share {% if is_revision %}warning{% endif %}"
                   data-clicked-text="{% trans 'Saving…' %}"
@@ -55,14 +55,14 @@
                     {% endif %}
                   </em>
                 </button>
-                <div id="page-share-url-copied" class="hidd" >
+                <div id="page-share-url-copied" class="hidden" >
                   <div> <span class="icon icon-success"></span> Draft preview URL copied to clipboard</div>
                   <div class="preview-url">{{page.janis_preview_url}}</div>
                 </div>
             </div>
 
             <!-- PREVIEW -->
-            <div>
+            <div class="coa-button--margin">
                 <button id="page-preview-button" type="submit" form="page-edit-form"
                   class="coa-secondary-button button action-save button-longrunning icon icon-view {% if is_revision %}warning{% endif %}"
                   data-clicked-text="{% trans 'Saving…' %}"
@@ -85,7 +85,7 @@
 
 
             <!-- SAVE DRAFT -->
-            <div class="dropdown dropdown-button {% if is_revision %}warning{% endif %}">
+            <div class="dropdown dropdown-button {% if is_revision %}warning{% endif %} coa-button--margin">
               <div>
                 <button type="submit" form="page-edit-form" class="button action-save button-longrunning {% if is_revision %}warning{% endif %} editor__save-button"
                   data-clicked-text="{% trans 'Saving…' %}" {% if page.locked %}disabled {% endif %}>
