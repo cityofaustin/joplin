@@ -1,0 +1,10 @@
+version: '3.7'
+# Mount a volume for "app" service and add "assets" service for joplin-local
+services:
+  app:
+    volumes:
+     - ".:/app"
+  assets:
+    image: $DOCKER_TAG_ASSETS
+    volumes:
+      - "./joplin:/app/joplin"
