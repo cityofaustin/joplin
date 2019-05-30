@@ -26,8 +26,8 @@ elif [ "$CIRCLE_BRANCH" == "production" ]; then
   DOCKER_TAG_2="cityofaustin/joplin-app:production-latest"
 else
   # truncates to 30 characters for heroku app name length limitations
-  # TODO: Make it so this doesn't break when we have a dash as char 30
-  APPNAME="joplin-pr-$CIRCLE_BRANCH"; APPNAME=${APPNAME:0:29}
+  # eliminate trailing dashes for heroku app name restrictions
+  APPNAME="joplin-pr-$CIRCLE_BRANCH"; APPNAME=$(echo ${APPNAME:0:30} | sed -e 's/-*$//g')
   DOCKER_TARGET="joplin-review"
   DOCKER_TAG_1="cityofaustin/joplin-app:pr-${CIRCLE_BRANCH}-${SHA}"
   DOCKER_TAG_2="cityofaustin/joplin-app:pr-${CIRCLE_BRANCH}-latest"
