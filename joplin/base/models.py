@@ -116,6 +116,14 @@ class JanisPage(JanisBasePage):
 class ServicePage(JanisPage):
     janis_url_page_type = "services"
 
+    department = models.ForeignKey(
+        'base.DepartmentPage',
+        on_delete=models.PROTECT,
+        verbose_name='Select a Department',
+        blank=True,
+        null=True,
+    )
+
     steps = StreamField(
         [
             ('basic_step', RichTextBlock(
@@ -177,6 +185,7 @@ class ServicePage(JanisPage):
         FieldPanel('title_vi'),
         FieldPanel('short_description'),
         InlinePanel('topics', label='Topics'),
+        FieldPanel('department'),
         StreamFieldPanel('steps'),
         StreamFieldPanel('dynamic_content'),
         FieldPanel('additional_content'),
