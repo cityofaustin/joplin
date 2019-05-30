@@ -32,7 +32,7 @@ def generate_responsive_images(sender, **kwargs):
         logger.debug(f'Generating image rendition for {width}px')
         image.get_rendition(f'width-{width}')
 
-def create_build_aws(instance, publish=False):
+def create_build_aws(instance, publish=False, request=None):
     """
         Triggers a build in Amazon Elastic Container Service, it requires:
         1. DEPLOYMENT_MODE
@@ -57,7 +57,7 @@ def create_build_aws(instance, publish=False):
         publish_action = "unpublished"
 
     try:
-        slack_message = "'%s' was %s by user: %s " % (instance.title, publish_action, instance.owner.email)
+        slack_message = "'%s' was %s by user: %s " % (instance.title, publish_action, request.user.email)
         print(slack_message)
     except:
         slack_message = ""
@@ -165,15 +165,36 @@ def create_build(heroku, app, url, checksum=None, version=None, buildpack_urls=N
     return Build.new_from_dict(item, h=heroku, app=app)
 
 
+#
+# Returns a Django request object
+#
+
+def get_http_request():
+    """
+        Probably a bad-practice & non-performant approach,
+        returns a django request object.
+        https://docs.djangoproject.com/en/2.2/ref/request-response/
+    """
+    import inspect
+    for frame_record in inspect.stack():
+        if frame_record[3] == 'get_response':
+            # looking good...
+            return frame_record[0].f_locals['request']
+            break
+    else:
+        # looking bad...
+        return None
+
+
 @receiver(page_published)
 def page_published_signal(sender, **kwargs):
     logger.debug(f'page_published {sender}')
     #create_build_if_configured()
-    create_build_aws(kwargs['instance'], publish=True)
+    create_build_aws(kwargs['instance'], publish=True, request=get_http_request())
 
 
 @receiver(page_unpublished)
 def page_unpublished_signal(sender, **kwargs):
     logger.debug(f'page_unpublished {sender}')
     #create_build_if_configured()
-    create_build_aws(kwargs['instance'], publish=False)
+    create_build_aws(kwargs['instance'], publish=False, request=get_http_request())
