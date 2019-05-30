@@ -36,9 +36,14 @@
                             {% endwith %}
           {% if revision.approved_go_live_at %}
         <li><a href="{% url 'wagtailadmin_pages:revisions_unschedule' page.id revision.id %}" class="button button-small button-secondary">{% trans 'Cancel scheduled publish' %}</a></li>
+
           {% endif %}
                         </ul>
                     </td>
+                    <td>Last revision by: {{ revision.user.first_name }} &nbsp;{{ revision.user.last_name }} </td>
+                    <td>Draft Author: {{ page.owner.first_name }}&nbsp;{{ page.owner.last_name }}</td>
+
+
                 </tr>
             {% endfor %}
         {% else %}
