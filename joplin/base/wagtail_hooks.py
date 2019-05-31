@@ -69,7 +69,7 @@ def joplin_page_listing_buttons(page, page_perms, is_parent=False):
             attrs={'title': _("Preview draft version of '{title}'").format(title=page.get_admin_display_title()), 'target': '_blank'},
             priority=20
         )
-    if page.live and page.url:
+    if page.live and page.url and hasattr(page, 'janis_url'):
         yield PageListingButton(
             _('View live'),
             page.janis_url(),
@@ -78,24 +78,26 @@ def joplin_page_listing_buttons(page, page_perms, is_parent=False):
         )
 
     # This is kinda hacky but it should let us know when we have notes on a revision
+    latest_revision = None
     all_revisions = PageRevision.objects.filter(page_id=page.id)
     for revision in all_revisions:
         if revision.is_latest_revision():
             latest_revision = revision
 
-    author_notes = latest_revision.as_page_object().author_notes
+    if latest_revision:
+        author_notes = latest_revision.as_page_object().author_notes
 
-    # Following this: https://docs.python.org/3/library/html.parser.html#examples
-    parser = CheckForDataInHTMLParser()
-    parser.feed(author_notes)
+        # Following this: https://docs.python.org/3/library/html.parser.html#examples
+        parser = CheckForDataInHTMLParser()
+        parser.feed(author_notes)
 
-    if parser.has_data:
-        yield Button(
-            _('📝'),
-            'javascript:alert("Wouldn\'t it be cool if this linked to the notes?");',
-            attrs={'title': _("Notes for authors entered"), 'class':'has-author-notes'},
-            priority=70
-        )
+        if parser.has_data:
+            yield Button(
+                _('📝'),
+                'javascript:alert("Wouldn\'t it be cool if this linked to the notes?");',
+                attrs={'title': _("Notes for authors entered"), 'class':'has-author-notes'},
+                priority=70
+            )
 
     yield ButtonWithDropdownFromHook(
         _('More'),

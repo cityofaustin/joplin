@@ -29,7 +29,7 @@ ordering: the current sort parameter
     {% endif %}
     <th class="title">
         {% if sortable %}
-            <a href="{% url 'wagtailadmin_explore' parent_page.id %}?ordering={% if ordering == 'title' %}-{% endif %}title" class="icon icon-arrow-{% if ordering == 'title' %}down-after{% elif ordering == '-title' %}up-after{% else %}down-after{% endif %} {% if ordering == 'title' or ordering == '-title' %}teal{% endif %}">
+            <a href="{% url 'wagtailadmin_explore' 3 %}?ordering={% if ordering == 'title' %}-{% endif %}title" class="icon icon-arrow-{% if ordering == 'title' %}down-after{% elif ordering == '-title' %}up-after{% else %}down-after{% endif %} {% if ordering == 'title' or ordering == '-title' %}teal{% endif %}">
                 {% trans 'Title' %}
             </a>
         {% else %}
@@ -41,7 +41,7 @@ ordering: the current sort parameter
     {% endif %}
      <th class="updated">
         {% if sortable %}
-            <a href="{% url 'wagtailadmin_explore' parent_page.id %}?ordering={% if ordering == 'latest_revision_created_at' %}-{% endif %}latest_revision_created_at" class="icon icon-arrow-{% if ordering == '-latest_revision_created_at' %}up-after{% else %}down-after{% endif %} {% if ordering == 'latest_revision_created_at' or ordering == '-latest_revision_created_at' %}teal {% endif %}">
+            <a href="{% url 'wagtailadmin_explore' 3 %}?ordering={% if ordering == 'latest_revision_created_at' %}-{% endif %}latest_revision_created_at" class="icon icon-arrow-{% if ordering == '-latest_revision_created_at' %}up-after{% else %}down-after{% endif %} {% if ordering == 'latest_revision_created_at' or ordering == '-latest_revision_created_at' %}teal {% endif %}">
                 {% trans 'Updated' %}
             </a>
         {% else %}
@@ -50,7 +50,7 @@ ordering: the current sort parameter
     </th>
     <th class="type">
         {% if sortable %}
-            <a href="{% url 'wagtailadmin_explore' parent_page.id %}?ordering={% if ordering == 'content_type' %}-{% endif %}content_type" class="icon icon-arrow-{% if ordering == '-content_type' %}up-after{% else %}down-after{% endif %} {% if ordering == 'content_type' or ordering == '-content_type' %}teal {% endif %}">
+            <a href="{% url 'wagtailadmin_explore' 3 %}?ordering={% if ordering == 'content_type' %}-{% endif %}content_type" class="icon icon-arrow-{% if ordering == '-content_type' %}up-after{% else %}down-after{% endif %} {% if ordering == 'content_type' or ordering == '-content_type' %}teal {% endif %}">
                 {% trans 'Type' %}
             </a>
         {% else %}
@@ -59,7 +59,7 @@ ordering: the current sort parameter
     </th>
     <th class="author">
         {% if sortable %}
-            <a href="{% url 'wagtailadmin_explore' parent_page.id %}?ordering={% if ordering == 'author' %}-{% endif %}author" class="icon icon-arrow-{% if ordering == '-author' %}up-after{% else %}down-after{% endif %} {% if ordering == 'author' or ordering == '-author' %}teal {% endif %}">
+            <a href="{% url 'wagtailadmin_explore' 3 %}?ordering={% if ordering == 'author' %}-{% endif %}author" class="icon icon-arrow-{% if ordering == '-author' %}up-after{% else %}down-after{% endif %} {% if ordering == 'author' or ordering == '-author' %}teal {% endif %}">
                 {% trans 'Author' %}
             </a>
         {% else %}
@@ -68,7 +68,7 @@ ordering: the current sort parameter
     </th>
     <th class="status">
         {% if sortable %}
-            <a href="{% url 'wagtailadmin_explore' parent_page.id %}?ordering={% if ordering == 'live' %}-{% endif %}live" class="icon icon-arrow-{% if ordering == '-live' %}up-after{% else %}down-after{% endif %} {% if ordering == 'live' or ordering == '-live' %}teal {% endif %}">
+            <a href="{% url 'wagtailadmin_explore' 3 %}?ordering={% if ordering == 'live' %}-{% endif %}live" class="icon icon-arrow-{% if ordering == '-live' %}up-after{% else %}down-after{% endif %} {% if ordering == 'live' or ordering == '-live' %}teal {% endif %}">
                 {% trans 'Status' %}
             </a>
         {% else %}
