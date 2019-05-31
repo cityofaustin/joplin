@@ -41,6 +41,7 @@ def configure_main_menu(request, menu_items):
     locations_item = MenuItem('', "/admin/snippets/base/location/", classnames="icon icon-locations", order=900)
     new_items.append(locations_item)
 
+    # @TODO: make sure this only shows for admins
     manage_users_item = MenuItem('', "/admin/users/", classnames="icon icon-group", order=1000)
     new_items.append(manage_users_item)
 
