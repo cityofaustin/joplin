@@ -1,6 +1,7 @@
 from django.db import models
 import os
 import graphene
+from pprint import pprint
 
 from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
@@ -91,6 +92,30 @@ class JanisBasePage(Page):
         global_id = graphene.Node.to_global_id('PageRevisionNode', revision.id)
 
         return os.environ["JANIS_URL"] + "/en/preview/" + url_page_type + "/" + global_id
+
+    def make_janis_preview_url(self, lang):
+        revision = self.get_latest_revision()
+        url_page_type = self.janis_url_page_type
+        global_id = graphene.Node.to_global_id('PageRevisionNode', revision.id)
+
+        return os.environ["JANIS_URL"] + f"/{lang}/preview/" + url_page_type + "/" + global_id
+
+#        urlData: JSON.parse("{{url_data}}"),
+    # def url_data(self):
+    #     return {
+    #         janis_url: os.environ["JANIS_URL"],
+    #         url_page_type: self.janis_url_page_type,
+    #         global_id: global_id
+    #     }
+
+    def janis_preview_url_en(self):
+        return self.make_janis_preview_url("en")
+    def janis_preview_url_es(self):
+        return self.make_janis_preview_url("es")
+    def janis_preview_url_ar(self):
+        return self.make_janis_preview_url("ar")
+    def janis_preview_url_vi(self):
+        return self.make_janis_preview_url("vi")
 
     class Meta:
         abstract = True
@@ -644,6 +669,7 @@ class ServicePageTopic(ClusterableModel):
         ),
     ]
 
+    # print(f"~~~~ attrs in topic: {dir(topic)}")
     def __str__(self):
         return self.topic.text
 

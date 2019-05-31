@@ -5,6 +5,8 @@ import insertWizardData from './CreateContentModal/insertWizardData';
 import menuActiveState from './EditPage/menuActiveState';
 import toggleActivePanel from './SidebarPreview/toggleActivePanel';
 
+import _ from 'lodash';
+
 $(function() {
   insertWizardData();
   menuActiveState();
@@ -177,7 +179,7 @@ $(function() {
       if(elem.querySelectorAll("label").length) {
         var labelText = elem.querySelectorAll("label")[0].innerText;
         var langString = labelText.match(languageRegex);
-        
+
         if (langString != null && langString != lowerLanguageStrings[currentLang]) {
           elem.classList.add("hidden");
         } else {
@@ -185,6 +187,32 @@ $(function() {
         }
       }
     });
+
+    // console.log("~~what I get?", djangoData)
+
+
+    // ----
+    // Switch the language for Mobile Previews
+    // ----
+    const previewLink = _.get(djangoData, ["janisPreviewUrls", currentLang]) || "https://alpha.austin.gov"
+    const mobilePreviewSidebarButton = $('#mobile-preview-sidebar-button')
+    // Update link for "Mobile Preview" button on sidebar
+    mobilePreviewSidebarButton.attr("href", previewLink);
+    // force reload of Mobile Preview iframe if its already open
+    if (_.includes(mobilePreviewSidebarButton[0].classList, "coa-sidebar-button--active")) {
+      $('#mobile-preview-iframe').attr("src", previewLink)
+    }
+
+
+    // const langs = Object.keys(languageStrings)
+    // for (lang in languageStrings.keys()) {
+    //   const langNode = $(`mobile-preview-${lang}`);
+    //   if (lang === currentLang) {
+    //     langNode.removeClass("hidden");
+    //   } else {
+    //     langNode.addClass("hidden");
+    //   }
+    // }
   }
 
   var enButton = $('#en');

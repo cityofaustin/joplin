@@ -1,17 +1,17 @@
-<div class="sidebar-container">
+<div id="mobile-preview-sidebar" class="sidebar-container">
     <div class="fixed-content">
         <div class="thumbnail-container">
             <div class="thumbnail">
-                <iframe name="sidebar-iframe" frameborder="0" onload="this.style.opacity = 1" src="{{style_guide_url}}"></iframe>
+                <iframe id="mobile-preview-iframe" name="sidebar-iframe" frameborder="0" onload="this.style.opacity = 1" src="{{style_guide_url}}"></iframe>
             </div>
         </div>
         <div class="coa-sidebar-buttons">
-            <a class="coa-sidebar-button js-toggle-active-panel"
-                {% if page.janis_preview_url %} 
-                    href="{{ page.janis_preview_url }}" 
+            <a id="mobile-preview-sidebar-button" class="coa-sidebar-button js-toggle-active-panel"
+                {% if page.janis_preview_url_en %}
+                    href="{{ page.janis_preview_url_en }}"
                 {% else %}
                     {# TODO: When we are creating a page (as opposed to editing), we do not yet have a saved revision so what do we show in the mobile preview? #}
-                    href="https://alpha.austin.gov" 
+                    href="https://alpha.austin.gov"
                 {% endif %}
                 target="sidebar-iframe"
             >
