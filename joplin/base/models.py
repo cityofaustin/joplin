@@ -6,7 +6,7 @@ from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
 
 from wagtail.utils.decorators import cached_classmethod
-from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, MultiFieldPanel, ObjectList, StreamFieldPanel, TabbedInterface
+from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, MultiFieldPanel, ObjectList, StreamFieldPanel, TabbedInterface, HelpPanel
 from wagtail.core.blocks import TextBlock, RichTextBlock, ListBlock, StreamBlock, StructBlock, URLBlock, PageChooserBlock, CharBlock
 from wagtail.core.fields import StreamField, RichTextField
 from wagtail.core.models import Page, Orderable
@@ -183,6 +183,7 @@ class ServicePage(JanisPage):
         FieldPanel('title_es'),
         FieldPanel('title_ar'),
         FieldPanel('title_vi'),
+        HelpPanel('Where is my help panel?'),
         FieldPanel('short_description'),
         InlinePanel('topics', label='Topics'),
         FieldPanel('department'),
