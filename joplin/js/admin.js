@@ -8,5 +8,5 @@ $(function() {
       elem.click();
     });
   var messages = $('.messages');
-  messages.fadeOut(5000);
+  messages.fadeOut(10000);
 });

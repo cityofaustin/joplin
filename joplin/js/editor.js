@@ -223,7 +223,7 @@ $(function() {
     // TODO: Don't just alert with the preview URL
     copyTextToClipboard(previewUrl);
     urlcopied.removeClass('hidden');
-    urlcopied.fadeOut(5000);
+    urlcopied.fadeOut(10000);
     localStorage.sharingpreview = false;
   }
 
@@ -235,5 +235,5 @@ $(function() {
     localStorage.sharingpreview = true;
   });
 
-  messages.fadeOut(5000);
+  messages.fadeOut(10000);
 });

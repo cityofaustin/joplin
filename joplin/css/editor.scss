@@ -57,12 +57,12 @@ label {
 
 .messages {
     position: fixed;
-    bottom: 0px;
-    width: 100%;
+    top: 0px;
+    width: 75%;
 }
 
 .page-editor {
-  footer {
-    display: none;
-  }
+    footer {
+        display: none;
+    }
 }
