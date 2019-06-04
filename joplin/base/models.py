@@ -1,7 +1,6 @@
 from django.db import models
 import os
 import graphene
-from pprint import pprint
 
 from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
@@ -662,7 +661,6 @@ class ServicePageTopic(ClusterableModel):
         ),
     ]
 
-    # print(f"~~~~ attrs in topic: {dir(topic)}")
     def __str__(self):
         return self.topic.text
 
