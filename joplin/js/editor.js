@@ -5,6 +5,8 @@ import insertWizardData from './CreateContentModal/insertWizardData';
 import menuActiveState from './EditPage/menuActiveState';
 import toggleActivePanel from './SidebarPreview/toggleActivePanel';
 
+import _ from 'lodash';
+
 $(function() {
   insertWizardData();
   menuActiveState();
@@ -30,7 +32,13 @@ $(function() {
 
   // Get all labels and add styleguide links
   const labels = document.querySelectorAll('label');
-  const styleGuideUrl = document.getElementById('style_guide_url').value;
+  const styleGuideUrl = djangoData.styleGuideUrl
+
+  // initialize state
+  const state = {
+    currentLang: "en",
+    janisPreviewUrl: getPreviewUrl("en")
+  };
 
   for (const label of labels) {
     let id = label.getAttribute('for');
@@ -138,9 +146,22 @@ $(function() {
     );
   }
 
+  function getPreviewUrl(currentLang) {
+    const previewUrlData = djangoData.previewUrlData
+    const janisUrlBase = previewUrlData.janis_url_base;
+    const urlPageType = previewUrlData.url_page_type;
+    const globalId = previewUrlData.global_id;
+    let janisPreviewUrl = djangoData.fallBackPreviewUrl
+    if (janisUrlBase && urlPageType && globalId) {
+      janisPreviewUrl = `${janisUrlBase}/${currentLang}/preview/${urlPageType}/${globalId}`;
+    }
+    return janisPreviewUrl
+  }
+
+  // Changes language and update janisPreviewUrl for our language
   function changeLanguage(currentLang) {
-    // Hide stuff that isn't our language
-    // This is hacky but it seems to be working
+    state.currentLang = currentLang;
+
     var languageStrings = {
       en: "[EN]",
       es: "[ES]",
@@ -157,6 +178,8 @@ $(function() {
 
     var languageRegex = /\[\w+\]/g;
 
+    // Hide stuff that isn't our language
+    // This is hacky but it seems to be working
     document
       .querySelectorAll(".object")
       .forEach(elem => {
@@ -177,7 +200,7 @@ $(function() {
       if(elem.querySelectorAll("label").length) {
         var labelText = elem.querySelectorAll("label")[0].innerText;
         var langString = labelText.match(languageRegex);
-        
+
         if (langString != null && langString != lowerLanguageStrings[currentLang]) {
           elem.classList.add("hidden");
         } else {
@@ -185,6 +208,28 @@ $(function() {
         }
       }
     });
+
+    // Select language radio button if it isn't set already
+    // For instance, if the language change is triggered by a refresh from clicking Share or Preview
+    $(`#${currentLang}`).prop("checked", true);
+
+    // ----
+    // Switch the language for janisPreviewUrl
+    // ----
+    const janisPreviewUrl = getPreviewUrl(currentLang);
+    state.janisPreviewUrl = janisPreviewUrl;
+
+    const mobilePreviewSidebarButton = $('#mobile-preview-sidebar-button');
+    const sharePreviewUrl = $('#share-preview-url');
+
+    // Update link for "Mobile Preview" button on sidebar
+    mobilePreviewSidebarButton.attr("href", janisPreviewUrl);
+    sharePreviewUrl.text(janisPreviewUrl);
+
+    // force reload of Mobile Preview iframe if its already open
+    if (_.includes(mobilePreviewSidebarButton[0].classList, "coa-sidebar-button--active")) {
+      $('#mobile-preview-iframe').attr("src", janisPreviewUrl)
+    }
   }
 
   var enButton = $('#en');
@@ -204,36 +249,38 @@ $(function() {
     changeLanguage("vi");
   });
 
+  // Initialize page in English, hide all other language fields
   changeLanguage("en");
 
-  var editform = $('#page-edit-form');
+  // Persist language for preview even after page refreshes on save
   var previewbutton = $('#page-preview-button');
+  if (localStorage.preview_lang) {
+    changeLanguage(localStorage.preview_lang)
+    window.open(state.janisPreviewUrl, '_blank');
+    localStorage.removeItem("preview_lang");
+  }
+  previewbutton.click(function() {
+    localStorage.preview_lang = state.currentLang;
+  });
+
+  // Persist language for sharing even after page refreshes on save
   var sharebutton = $('#page-share-preview-button');
   var urlcopied = $('#page-share-url-copied');
-  var messages = $('.messages');
-
-  const previewUrl = document.getElementById('preview_url').value;
-
-  if (localStorage.previewing === 'true') {
-    window.open(previewUrl, '_blank');
-    localStorage.previewing = false;
-  }
-
-  if (localStorage.sharingpreview === 'true') {
+  if (localStorage.share_lang) {
     // TODO: Don't just alert with the preview URL
-    copyTextToClipboard(previewUrl);
+    changeLanguage(localStorage.share_lang);
+    copyTextToClipboard(state.janisPreviewUrl);
     urlcopied.removeClass('hidden');
+
     urlcopied.fadeOut(10000);
     localStorage.sharingpreview = false;
+    localStorage.removeItem("share_lang");
   }
-
-  previewbutton.click(function() {
-    localStorage.previewing = true;
-  });
-
   sharebutton.click(function() {
-    localStorage.sharingpreview = true;
+    localStorage.share_lang = state.currentLang;
   });
 
+  var messages = $('.messages');
   messages.fadeOut(10000);
+
 });
