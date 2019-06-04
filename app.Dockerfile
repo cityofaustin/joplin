@@ -10,11 +10,6 @@ RUN echo 'deb http://apt.postgresql.org/pub/repos/apt/ stretch-pgdg main' >  /et
     && curl -s https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \
     && apt-get update && apt-get install -y postgresql-client
 
-# Install nodejs dependencies
-RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
-RUN apt-get update; apt-get -y install nodejs
-RUN npm install --global yarn
-
 # Set Environment Variables
 ENV PYTHONUNBUFFERED=1
 ENV WEB_CONCURRENCY=4
@@ -50,6 +45,11 @@ CMD ["gunicorn", "joplin.wsgi:application", "--pythonpath", "/app/joplin", "--re
 # joplin-base => joplin-deployed
 
 FROM joplin-base as joplin-deployed
+
+# Install nodejs dependencies
+RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
+RUN apt-get update; apt-get -y install nodejs
+RUN npm install --global yarn
 
 # Build nodejs dependencies for deployed builds
 WORKDIR /app/joplin
