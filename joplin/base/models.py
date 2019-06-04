@@ -165,7 +165,7 @@ class ServicePage(JanisPage):
     )
     additional_content = RichTextField(
         features=WYSIWYG_GENERAL,
-        verbose_name='Write any additional content describing the service',
+        verbose_name='Additional content',
         help_text='Section header: What else do I need to know?',
         blank=True
     )
@@ -183,13 +183,21 @@ class ServicePage(JanisPage):
         FieldPanel('title_es'),
         FieldPanel('title_ar'),
         FieldPanel('title_vi'),
-        HelpPanel('Where is my help panel?'),
+
         FieldPanel('short_description'),
         InlinePanel('topics', label='Topics'),
         FieldPanel('department'),
         StreamFieldPanel('steps'),
         StreamFieldPanel('dynamic_content'),
-        FieldPanel('additional_content'),
+        MultiFieldPanel(
+        [
+            HelpPanel('Section header: What else do I need to know?', classname="coa-helpPanel"),
+            FieldPanel('additional_content')
+        ],
+        heading="Write any additional content describing the service",
+        classname='coa-multiField-nopadding'
+        )
+        ,
         InlinePanel('contacts', label='Contacts'),
     ]
 
@@ -248,6 +256,7 @@ class InformationPage(JanisPage):
         features=WYSIWYG_GENERAL,
         verbose_name='Write any additional content describing the service',
         blank=True
+
     )
 
     # TODO: Add images array field
