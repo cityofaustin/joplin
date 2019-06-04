@@ -149,6 +149,7 @@ class ServicePage(JanisPage):
             )),
         ],
         verbose_name='Write out the steps a resident needs to take to use the service',
+        # this gets called in the help panel
         help_text='A step may have a basic text step or an options accordian which reveals two or more options',
         blank=True
     )
@@ -165,7 +166,7 @@ class ServicePage(JanisPage):
     )
     additional_content = RichTextField(
         features=WYSIWYG_GENERAL,
-        verbose_name='Additional content',
+        verbose_name='Write any additional content describing the service',
         help_text='Section header: What else do I need to know?',
         blank=True
     )
@@ -183,18 +184,24 @@ class ServicePage(JanisPage):
         FieldPanel('title_es'),
         FieldPanel('title_ar'),
         FieldPanel('title_vi'),
-
         FieldPanel('short_description'),
         InlinePanel('topics', label='Topics'),
         FieldPanel('department'),
-        StreamFieldPanel('steps'),
+        MultiFieldPanel(
+        [
+            HelpPanel(steps.help_text, classname="coa-helpPanel"),
+            StreamFieldPanel('steps')
+        ],
+        heading=steps.verbose_name,
+        classname='coa-multiField-nopadding'
+        ),
         StreamFieldPanel('dynamic_content'),
         MultiFieldPanel(
         [
-            HelpPanel('Section header: What else do I need to know?', classname="coa-helpPanel"),
+            HelpPanel(additional_content.help_text, classname="coa-helpPanel"),
             FieldPanel('additional_content')
         ],
-        heading="Write any additional content describing the service",
+        heading=additional_content.verbose_name,
         classname='coa-multiField-nopadding'
         )
         ,
@@ -356,7 +363,6 @@ class DepartmentPage(JanisPage):
     what_we_do = RichTextField(
         features=WYSIWYG_GENERAL,
         verbose_name='What we do',
-        # help_text='',
         blank=True
     )
 

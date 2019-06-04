@@ -38,6 +38,18 @@
     padding: 0;
 }
 
+// tech debt: hiding help instead of removing, check scoping, bad idea?
+// nested these to hopefully avoid css scoping issues
+.coa-multiField-nopadding {
+    .help {
+        display: none;
+    }
+
+    .field label {
+        display: none;
+    }
+}
+
 .coa-icon-share {
     &:before {
         background-image: url('../static/images/share.svg');
