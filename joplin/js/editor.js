@@ -30,9 +30,10 @@ $(function() {
     'id_process_steps-quote': '#step-quote',
   };
 
+  console.log("~~~ djangoData", djangoData)
   // Get all labels and add styleguide links
   const labels = document.querySelectorAll('label');
-  const styleGuideUrl = document.getElementById('style_guide_url').value;
+  const styleGuideUrl = djangoData.styleGuideUrl
 
   // initialize state
   const state = {
@@ -209,6 +210,10 @@ $(function() {
       }
     });
 
+    // Select language radio button if it isn't set already
+    // For instance, if the language change is triggered by a refresh from clicking Share or Preview
+    $(`#${currentLang}`).prop("checked", true);
+
     // ----
     // Switch the language for janisPreviewUrl
     // ----
@@ -216,12 +221,10 @@ $(function() {
     state.janisPreviewUrl = janisPreviewUrl;
 
     const mobilePreviewSidebarButton = $('#mobile-preview-sidebar-button');
-    const previewUrlInput = $('#preview_url');
     const sharePreviewUrl = $('#share-preview-url');
 
     // Update link for "Mobile Preview" button on sidebar
     mobilePreviewSidebarButton.attr("href", janisPreviewUrl);
-    previewUrlInput.attr("value", janisPreviewUrl);
     sharePreviewUrl.text(janisPreviewUrl);
 
     // force reload of Mobile Preview iframe if its already open
@@ -247,26 +250,23 @@ $(function() {
     changeLanguage("vi");
   });
 
-  // Also initializes our janisPreviewUrl
+  // Initialize page in English, hide all other language fields
   changeLanguage("en");
 
-  var editform = $('#page-edit-form');
+  // Persist language for preview even after page refreshes on save
   var previewbutton = $('#page-preview-button');
-  var sharebutton = $('#page-share-preview-button');
-  var urlcopied = $('#page-share-url-copied');
-  var messages = $('.messages');
-
-  // const previewUrl = document.getElementById('preview_url').value;
-
   if (localStorage.preview_lang) {
-    console.log("::: state before:", state)
     changeLanguage(localStorage.preview_lang)
-    console.log("::: state despues:", state)
-    debugger;
     window.open(state.janisPreviewUrl, '_blank');
     localStorage.removeItem("preview_lang");
   }
+  previewbutton.click(function() {
+    localStorage.preview_lang = state.currentLang;
+  });
 
+  // Persist language for sharing even after page refreshes on save
+  var sharebutton = $('#page-share-preview-button');
+  var urlcopied = $('#page-share-url-copied');
   if (localStorage.share_lang) {
     // TODO: Don't just alert with the preview URL
     changeLanguage(localStorage.share_lang);
@@ -275,14 +275,10 @@ $(function() {
     urlcopied.fadeOut(5000);
     localStorage.removeItem("share_lang");
   }
-
-  previewbutton.click(function() {
-    localStorage.preview_lang = state.currentLang;
-  });
-
   sharebutton.click(function() {
     localStorage.share_lang = state.currentLang;
   });
 
+  var messages = $('.messages');
   messages.fadeOut(5000);
 });

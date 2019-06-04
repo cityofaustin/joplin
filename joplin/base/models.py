@@ -98,7 +98,8 @@ class JanisBasePage(Page):
         return "https://alpha.austin.gov"
 
     # data needed to construct preview URLs for any language
-    # ex: janis_url_base/lang/preview/url_page_type/global_id
+    # [janis_url_base]/[lang]/preview/[url_page_type]/[global_id]
+    # ex: http://localhost:3000/es/preview/information/UGFnZVJldmlzaW9uTm9kZToyMjg=
     def preview_url_data(self):
         revision = self.get_latest_revision()
         global_id = graphene.Node.to_global_id('PageRevisionNode', revision.id)
