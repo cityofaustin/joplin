@@ -1,0 +1,13 @@
+{% load l10n %}
+{% load i18n %}
+<button type="submit" name="action-publish" form="page-edit-form" value="action-publish" class="button button-longrunning {% if is_revision %}warning{% endif %}"
+  tabindex="3" data-clicked-text="{% trans 'Publishing…' %}" {% if page.locked %}disabled {% endif %}>
+  <span class="icon icon-spinner"></span>
+  <em>
+    {% if page.live %}
+      {% trans 'Update' %}
+    {% else %}
+      {% trans 'Publish' %}
+    {% endif %}
+  </em>
+</button>
