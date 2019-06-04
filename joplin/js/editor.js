@@ -188,19 +188,33 @@ $(function() {
       }
     });
 
-    // console.log("~~what I get?", djangoData)
-
-
     // ----
-    // Switch the language for Mobile Previews
+    // Switch the language for janisPreviewUrl
     // ----
-    const previewLink = _.get(djangoData, ["janisPreviewUrls", currentLang]) || "https://alpha.austin.gov"
-    const mobilePreviewSidebarButton = $('#mobile-preview-sidebar-button')
+    const previewUrlData = djangoData.previewUrlData
+    const janisUrlBase = previewUrlData.janis_url_base;
+    const urlPageType = previewUrlData.url_page_type;
+    const globalId = previewUrlData.global_id;
+    const defaultJanisPreviewUrl = "https://alpha.austin.gov";
+    let janisPreviewUrl = defaultJanisPreviewUrl
+    if (janisUrlBase && urlPageType && globalId) {
+      janisPreviewUrl = `${janisUrlBase}/${currentLang}/preview/${urlPageType}/${globalId}`;
+    }
+
+    const mobilePreviewSidebarButton = $('#mobile-preview-sidebar-button');
+    const previewUrlInput = $('#preview_url');
+    const sharePreviewUrl = $('#share-preview-url');
+
+    console.log("~~~ whats here??", sharePreviewUrl);
+
     // Update link for "Mobile Preview" button on sidebar
-    mobilePreviewSidebarButton.attr("href", previewLink);
+    mobilePreviewSidebarButton.attr("href", janisPreviewUrl);
+    previewUrlInput.attr("value", janisPreviewUrl);
+    sharePreviewUrl.text(janisPreviewUrl);
+
     // force reload of Mobile Preview iframe if its already open
     if (_.includes(mobilePreviewSidebarButton[0].classList, "coa-sidebar-button--active")) {
-      $('#mobile-preview-iframe').attr("src", previewLink)
+      $('#mobile-preview-iframe').attr("src", janisPreviewUrl)
     }
 
 
@@ -232,6 +246,7 @@ $(function() {
     changeLanguage("vi");
   });
 
+  // Also initializes our janisPreviewUrl
   changeLanguage("en");
 
   var editform = $('#page-edit-form');

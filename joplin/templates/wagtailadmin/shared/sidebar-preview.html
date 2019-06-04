@@ -7,13 +7,11 @@
         </div>
         <div class="coa-sidebar-buttons">
             <a id="mobile-preview-sidebar-button" class="coa-sidebar-button js-toggle-active-panel"
-                {% if page.janis_preview_url_en %}
-                    href="{{ page.janis_preview_url_en }}"
-                {% else %}
-                    {# TODO: When we are creating a page (as opposed to editing), we do not yet have a saved revision so what do we show in the mobile preview? #}
-                    href="https://alpha.austin.gov"
-                {% endif %}
-                target="sidebar-iframe"
+              {# Placeholder that will be overwritten by changeLanguage() in editor.js #}
+              {# When editing an existing page, there will be a mobile preview #}
+              {# However, there will not be a mobile preview yet for a new page #}
+              href={{ page.fallback_preview_url }}
+              target="sidebar-iframe"
             >
                 <span>Mobile Preview</span>
             </a>

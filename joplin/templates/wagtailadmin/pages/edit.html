@@ -11,20 +11,24 @@
 {% block content %}
     <script>
       // Load this before render_bundle to use django vars inside javascript
+      var previewUrlData = {};
+      try {
+        // get python dictionary into valid JSON format
+        previewUrlData=JSON.parse("{{page.preview_url_data|escapejs}}".replace(/\'/g, '\"'));
+      } catch (e) {}
+
       var djangoData = {
-        janisPreviewUrls: {
-          en: "{{page.janis_preview_url_en}}",
-          es: "{{page.janis_preview_url_es}}",
-          ar: "{{page.janis_preview_url_ar}}",
-          vi: "{{page.janis_preview_url_vi}}"
-        }
+        previewUrlData: previewUrlData
       }
     </script>
     {% render_bundle 'editor' %}
     {% get_style_guide_url content_type=content_type as style_guide_url %}
     {% page_permissions page as page_perms %}
     <input type="hidden" id="style_guide_url" name="style_guide_url" value="{{ style_guide_url }}">
-    <input type="hidden" id="preview_url" name="preview_url" value="{{page.janis_preview_url}}">
+    <input type="hidden" id="preview_url" name="preview_url"
+      {# Placeholder that will be overwritten by changeLanguage() in editor.js #}
+      value={{ page.fallback_preview_url }}
+    >
     <div class="header secondary">
         <div>
             <h1 class="edit_page_header">
@@ -68,7 +72,7 @@
                 </button>
                 <div id="page-share-url-copied" class="hidden" >
                   <div> <span class="icon icon-success"></span> Draft preview URL copied to clipboard</div>
-                  <div class="preview-url">{{page.janis_preview_url}}</div>
+                  <div id="share-preview-url">{{ page.fallback_preview_url }}</div>
                 </div>
             </div>
 
