@@ -30,7 +30,6 @@ $(function() {
     'id_process_steps-quote': '#step-quote',
   };
 
-  console.log("~~~ djangoData", djangoData)
   // Get all labels and add styleguide links
   const labels = document.querySelectorAll('label');
   const styleGuideUrl = djangoData.styleGuideUrl
