@@ -92,6 +92,23 @@ class JanisBasePage(Page):
 
         return os.environ["JANIS_URL"] + "/en/preview/" + url_page_type + "/" + global_id
 
+    # Default preview_url before janis_preview_url gets set
+    def fallback_preview_url(self):
+        return "https://alpha.austin.gov"
+
+    # data needed to construct preview URLs for any language
+    # [janis_url_base]/[lang]/preview/[url_page_type]/[global_id]
+    # ex: http://localhost:3000/es/preview/information/UGFnZVJldmlzaW9uTm9kZToyMjg=
+    def preview_url_data(self):
+        revision = self.get_latest_revision()
+        global_id = graphene.Node.to_global_id('PageRevisionNode', revision.id)
+
+        return {
+            "janis_url_base": os.environ["JANIS_URL"],
+            "url_page_type": self.janis_url_page_type,
+            "global_id": global_id
+        }
+
     class Meta:
         abstract = True
 
