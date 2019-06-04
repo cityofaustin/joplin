@@ -38,6 +38,9 @@ case "${DEPLOYMENT_MODE}" in
   ;;
   REVIEW)
     load_backup_data
+    # Let's try being reckless and doing that static thing here too.
+    echo "Collecting static files"
+    python ./joplin/manage.py collectstatic --noinput;
   ;;
   STAGING|PRODUCTION)
     echo "Collecting static files"
