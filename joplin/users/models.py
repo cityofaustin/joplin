@@ -10,7 +10,13 @@ class UserManager(BaseUserManager):
 
     use_in_migrations = True
 
+    
     def get_by_natural_key(self, email):
+        """ 
+        uses Django serializer to perform a case insensitive query
+        https://docs.djangoproject.com/en/2.2/topics/serialization/
+        https://docs.djangoproject.com/en/2.2/ref/models/querysets/#iexact
+        """
         return self.get(email__iexact = email)
 
     def _create_user(self, email, password, **extra_fields):
