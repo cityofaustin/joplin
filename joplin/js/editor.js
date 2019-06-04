@@ -34,6 +34,12 @@ $(function() {
   const labels = document.querySelectorAll('label');
   const styleGuideUrl = document.getElementById('style_guide_url').value;
 
+  // initialize state
+  const state = {
+    currentLang: "en",
+    janisPreviewUrl: getPreviewUrl("en")
+  };
+
   for (const label of labels) {
     let id = label.getAttribute('for');
 
@@ -140,9 +146,22 @@ $(function() {
     );
   }
 
+  function getPreviewUrl(currentLang) {
+    const previewUrlData = djangoData.previewUrlData
+    const janisUrlBase = previewUrlData.janis_url_base;
+    const urlPageType = previewUrlData.url_page_type;
+    const globalId = previewUrlData.global_id;
+    let janisPreviewUrl = djangoData.fallBackPreviewUrl
+    if (janisUrlBase && urlPageType && globalId) {
+      janisPreviewUrl = `${janisUrlBase}/${currentLang}/preview/${urlPageType}/${globalId}`;
+    }
+    return janisPreviewUrl
+  }
+
+  // Changes language and update janisPreviewUrl for our language
   function changeLanguage(currentLang) {
-    // Hide stuff that isn't our language
-    // This is hacky but it seems to be working
+    state.currentLang = currentLang;
+
     var languageStrings = {
       en: "[EN]",
       es: "[ES]",
@@ -159,6 +178,8 @@ $(function() {
 
     var languageRegex = /\[\w+\]/g;
 
+    // Hide stuff that isn't our language
+    // This is hacky but it seems to be working
     document
       .querySelectorAll(".object")
       .forEach(elem => {
@@ -191,21 +212,12 @@ $(function() {
     // ----
     // Switch the language for janisPreviewUrl
     // ----
-    const previewUrlData = djangoData.previewUrlData
-    const janisUrlBase = previewUrlData.janis_url_base;
-    const urlPageType = previewUrlData.url_page_type;
-    const globalId = previewUrlData.global_id;
-    const defaultJanisPreviewUrl = "https://alpha.austin.gov";
-    let janisPreviewUrl = defaultJanisPreviewUrl
-    if (janisUrlBase && urlPageType && globalId) {
-      janisPreviewUrl = `${janisUrlBase}/${currentLang}/preview/${urlPageType}/${globalId}`;
-    }
+    const janisPreviewUrl = getPreviewUrl(currentLang);
+    state.janisPreviewUrl = janisPreviewUrl;
 
     const mobilePreviewSidebarButton = $('#mobile-preview-sidebar-button');
     const previewUrlInput = $('#preview_url');
     const sharePreviewUrl = $('#share-preview-url');
-
-    console.log("~~~ whats here??", sharePreviewUrl);
 
     // Update link for "Mobile Preview" button on sidebar
     mobilePreviewSidebarButton.attr("href", janisPreviewUrl);
@@ -216,17 +228,6 @@ $(function() {
     if (_.includes(mobilePreviewSidebarButton[0].classList, "coa-sidebar-button--active")) {
       $('#mobile-preview-iframe').attr("src", janisPreviewUrl)
     }
-
-
-    // const langs = Object.keys(languageStrings)
-    // for (lang in languageStrings.keys()) {
-    //   const langNode = $(`mobile-preview-${lang}`);
-    //   if (lang === currentLang) {
-    //     langNode.removeClass("hidden");
-    //   } else {
-    //     langNode.addClass("hidden");
-    //   }
-    // }
   }
 
   var enButton = $('#en');
@@ -255,27 +256,32 @@ $(function() {
   var urlcopied = $('#page-share-url-copied');
   var messages = $('.messages');
 
-  const previewUrl = document.getElementById('preview_url').value;
+  // const previewUrl = document.getElementById('preview_url').value;
 
-  if (localStorage.previewing === 'true') {
-    window.open(previewUrl, '_blank');
-    localStorage.previewing = false;
+  if (localStorage.preview_lang) {
+    console.log("::: state before:", state)
+    changeLanguage(localStorage.preview_lang)
+    console.log("::: state despues:", state)
+    debugger;
+    window.open(state.janisPreviewUrl, '_blank');
+    localStorage.removeItem("preview_lang");
   }
 
-  if (localStorage.sharingpreview === 'true') {
+  if (localStorage.share_lang) {
     // TODO: Don't just alert with the preview URL
-    copyTextToClipboard(previewUrl);
+    changeLanguage(localStorage.share_lang);
+    copyTextToClipboard(state.janisPreviewUrl);
     urlcopied.removeClass('hidden');
     urlcopied.fadeOut(5000);
-    localStorage.sharingpreview = false;
+    localStorage.removeItem("share_lang");
   }
 
   previewbutton.click(function() {
-    localStorage.previewing = true;
+    localStorage.preview_lang = state.currentLang;
   });
 
   sharebutton.click(function() {
-    localStorage.sharingpreview = true;
+    localStorage.share_lang = state.currentLang;
   });
 
   messages.fadeOut(5000);

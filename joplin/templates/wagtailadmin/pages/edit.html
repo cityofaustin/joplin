@@ -18,7 +18,8 @@
       } catch (e) {}
 
       var djangoData = {
-        previewUrlData: previewUrlData
+        previewUrlData: previewUrlData,
+        fallBackPreviewUrl: "{{ page.fallback_preview_url }}"
       }
     </script>
     {% render_bundle 'editor' %}
