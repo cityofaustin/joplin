@@ -263,7 +263,6 @@ class InformationPage(JanisPage):
         features=WYSIWYG_GENERAL,
         verbose_name='Write any additional content describing the service',
         blank=True
-
     )
 
     # TODO: Add images array field

@@ -38,7 +38,7 @@
     padding: 0;
 }
 
-// tech debt: hiding help instead of removing, check scoping, bad idea?
+// tech debt: hiding help and labels instead of removing
 // nested these to hopefully avoid css scoping issues
 .coa-multiField-nopadding {
     .help {
