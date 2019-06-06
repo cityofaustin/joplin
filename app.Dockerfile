@@ -27,6 +27,7 @@ WORKDIR /app
 # Copy over project files
 COPY "$PWD/joplin" /app/joplin
 COPY "$PWD/media" /app
+COPY "$PWD/scripts" /app/scripts
 COPY "$PWD/docker-entrypoint.sh" /app/docker-entrypoint.sh
 
 ########################################################
