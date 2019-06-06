@@ -20,10 +20,6 @@ if [ $DEPLOYMENT_MODE == "LOCAL" ]; then
   >&2 echo "Postgres is up - executing command"
 fi
 
-# makes migrations, with merge flag to handle conflics
-echo "making Schema Migrations"
-python ./joplin/manage.py makemigrations --merge --noinput
-
 # Run schema Migrations Only (Static files can remain local)
 echo "Running schema Migrations"
 python ./joplin/manage.py migrate --noinput
