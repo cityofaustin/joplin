@@ -24,6 +24,7 @@ from . import forms as custom_forms
 WYSIWYG_GENERAL = ['h1', 'h2', 'h3', 'h4', 'bold', 'link', 'ul', 'ol', 'code']
 WYSIWYG_SERVICE_STEP = ['ul', 'ol', 'link']
 DEFAULT_MAX_LENGTH = 255
+SHORT_DESCRIPTION_LENGTH = 300
 
 class TranslatedImage(AbstractImage):
     admin_form_fields = Image.admin_form_fields
@@ -190,7 +191,7 @@ class ServicePage(JanisPage):
     base_form_class = custom_forms.ServicePageForm
 
     short_description = models.TextField(
-        max_length=DEFAULT_MAX_LENGTH,
+        max_length=SHORT_DESCRIPTION_LENGTH,
         blank=True,
         verbose_name='Write a description of this service'
     )
