@@ -7,3 +7,5 @@ services:
     environment:
       CMS_API: $CMS_API
       CMS_MEDIA: $CMS_MEDIA
+    depends_on:
+      - "app"

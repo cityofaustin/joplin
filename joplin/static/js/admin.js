@@ -19,7 +19,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
   // HACK: I can't find a way to override this in python
   // Get all labels and turn them into links
   const labels = document.querySelectorAll("label");
-  // const styleGuideUrl = document.getElementById("style_guide_url").value;
 
   for (const label of labels) {
     let id = label.getAttribute("for");
