@@ -94,7 +94,7 @@ function handle_input {
     if [ ! -z $OLD_MIGRATION_DATADUMP ]; then rm $OLD_MIGRATION_DATADUMP; fi
 
     # Build new migration datadump
-    docker exec -it ${COMPOSE_PROJECT_NAME}_app_1 python joplin/manage.py dumpdata > ./joplin/db/system-generated/$NEW_MIGRATION_DATADUMP
+    docker exec -it ${COMPOSE_PROJECT_NAME}_app_1 python joplin/manage.py dumpdata --natural-foreign --natural-primary > ./joplin/db/system-generated/$NEW_MIGRATION_DATADUMP
 
     stop_project_containers $COMPOSE_PROJECT_NAME
     exit 0
