@@ -85,7 +85,8 @@ function handle_input {
     echo "Glad that worked. We'll create a new migration_datadump for you."
 
     # Get name of latest migration from database
-    LATEST_MIGRATION=$(psql postgres://joplin@127.0.0.1:${JOPLIN_DB_HOST_PORT}/joplin -qtA -c 'select name from django_migrations order by id desc limit 1;')
+    # sed $'s/\x0D//g' gets rid of \r character for both linux and MacOS
+    LATEST_MIGRATION=$(docker exec -it ${COMPOSE_PROJECT_NAME}_db_1 psql postgres://joplin@127.0.0.1:${JOPLIN_DB_CONTAINER_PORT}/joplin -qtA -c 'select name from django_migrations order by id desc limit 1;' | sed $'s/\x0D//g')
     NEW_MIGRATION_DATADUMP="${LATEST_MIGRATION}.datadump.json"
 
     # Remove old migration datadump
@@ -93,7 +94,7 @@ function handle_input {
     if [ ! -z $OLD_MIGRATION_DATADUMP ]; then rm $OLD_MIGRATION_DATADUMP; fi
 
     # Build new migration datadump
-    docker exec -it ${COMPOSE_PROJECT_NAME}_app_1 python joplin/manage.py dumpdata > ./joplin/db/system-generated/$NEW_MIGRATION_DATADUMP
+    docker exec -it ${COMPOSE_PROJECT_NAME}_app_1 python joplin/manage.py dumpdata --natural-foreign --natural-primary > ./joplin/db/system-generated/$NEW_MIGRATION_DATADUMP
 
     stop_project_containers $COMPOSE_PROJECT_NAME
     exit 0

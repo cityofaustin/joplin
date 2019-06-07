@@ -20,8 +20,8 @@ if [ $DEPLOYMENT_MODE == "LOCAL" ]; then
   >&2 echo "Postgres is up - executing command"
 fi
 
-# Run Data Migrations Only (Static files can remain local)
-echo "Running Data Migrations"
+# Run schema Migrations Only (Static files can remain local)
+echo "Running schema Migrations"
 python ./joplin/manage.py migrate --noinput
 
 case "${DEPLOYMENT_MODE}" in
@@ -38,6 +38,9 @@ case "${DEPLOYMENT_MODE}" in
   ;;
   REVIEW)
     load_backup_data
+    # Let's try being reckless and doing that static thing here too.
+    echo "Collecting static files"
+    python ./joplin/manage.py collectstatic --noinput;
   ;;
   STAGING|PRODUCTION)
     echo "Collecting static files"

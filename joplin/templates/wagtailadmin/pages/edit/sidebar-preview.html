@@ -1,0 +1,21 @@
+<div id="mobile-preview-sidebar" class="sidebar-container">
+    <div class="fixed-content">
+        <div class="thumbnail-container">
+            <div class="thumbnail">
+                <iframe id="mobile-preview-iframe" name="sidebar-iframe" frameborder="0" onload="this.style.opacity = 1" src="{{style_guide_url}}"></iframe>
+            </div>
+        </div>
+        <div class="coa-sidebar-buttons">
+            <a id="mobile-preview-sidebar-button" class="coa-sidebar-button js-toggle-active-panel"
+              {# Placeholder that will be overwritten by changeLanguage() in editor.js #}
+              href={{ page.fallback_preview_url }}
+              target="sidebar-iframe"
+            >
+                <span>Mobile Preview</span>
+            </a>
+            <a class="coa-sidebar-button coa-sidebar-button--active js-toggle-active-panel" href="{{style_guide_url}}" target="sidebar-iframe">
+                <span>Style Guide</span>
+            </a>
+        </div>
+    </div>
+</div>
