@@ -33,7 +33,7 @@ if [ "$RELOAD_DATA" == "on" ]; then
 fi
 
 # Delete old database containers for HARD_REBUILDs or RELOADs
-if [ "$HARD_REBUILD" == "on" ] || [ "$RELOAD_DATA" == "on" ]; then
+if [ "$HARD_REBUILD" == "on" ] || [ "$RELOAD_DATA" == "on" ] || [ "$DROP_DB" == "on" ]; then
   echo "Deleting old joplin_db containes"
   docker ps -aq -f name=joplin_db_1 | while read CONTAINER ; do docker rm -f $CONTAINER ; done
 fi
@@ -59,7 +59,7 @@ if [ "$JANIS" == "on" ]; then
   export CMS_MEDIA="http://$HOST_IP:$JOPLIN_APP_HOST_PORT/media"
   export DOCKER_TAG_JANIS="janis:local"
   export JANIS_APP_HOST_PORT=3000
-  
+
   docker-compose -f docker-compose.yml -f docker-compose.local_override.yml -f docker-compose.janis.yml up
 else
   docker-compose -f docker-compose.yml -f docker-compose.local_override.yml up

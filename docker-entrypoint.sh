@@ -5,9 +5,16 @@ set -o errexit
 # This script sets the command and parameters that will be executed first when a container is started.
 # $DEPLOYMENT_MODE is set in app.Dockerfile at image build time
 
+# Seed test data into Joplin from migration_test generated backup
 function load_backup_data {
   echo "Adding backup data"
-  python ./joplin/manage.py loaddata ./joplin/db/system-generated/*.datadump.json
+  python ./joplin/manage.py loaddata ./joplin/db/system-generated/seeding.datadump.json
+}
+
+# Add initial admin user to Database
+function load_test_admin {
+  echo "Adding test admin user for local development."
+  python ./joplin/manage.py loaddata ./joplin/db/system-generated/local_admin_user.json
 }
 
 if [ $DEPLOYMENT_MODE == "LOCAL" ]; then
@@ -26,14 +33,14 @@ python ./joplin/manage.py migrate --noinput
 
 case "${DEPLOYMENT_MODE}" in
   LOCAL)
-    # Allow option for data loading if DEPLOYMENT_MODE == "local"
-    if [ "$LOAD_DATA" = "on" ]; then
-      # Seed test data into Joplin
+    if [ "$LOAD_PROD_DATA" == "on" ]; then
+      # Option for migration_test.sh to source directly from production
+      python ./joplin/manage.py loaddata ./joplin/db/system-generated/tmp_production.datadump.json
+      load_test_admin
+    elif [ "$LOAD_DATA" == "on" ]; then
       load_backup_data
     else
-      # Add initial admin user to Database if we aren't loading data
-      echo "Adding test admin user for local development."
-      python ./joplin/manage.py loaddata ./joplin/db/system-generated/local_admin_user.json
+      load_test_admin
     fi
   ;;
   REVIEW)

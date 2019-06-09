@@ -3,7 +3,8 @@
 
 FROM python:3.6.5-slim-stretch as joplin-base
 
-RUN apt-get update && apt-get install -y gnupg curl
+# jq for sanitizing backup data on hosted container
+RUN apt-get update && apt-get install -y gnupg curl jq
 
 # PostgreSQL 10
 RUN echo 'deb http://apt.postgresql.org/pub/repos/apt/ stretch-pgdg main' >  /etc/apt/sources.list.d/pgdg.list \
