@@ -22,8 +22,6 @@
 
 .translation-tab .object .object-help {
     width: auto;
-    opacity: 1;
-    position: static;
     font-size: 1.2em;
 }
 .translation-tab .object fieldset {
@@ -50,8 +48,8 @@
 
 .messages {
     position: fixed;
-    bottom: 0px;
-    width: 100%;
+    top: 0px;
+    width: 75%;
 }
 
 .user-account {

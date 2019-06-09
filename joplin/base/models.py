@@ -6,7 +6,7 @@ from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
 
 from wagtail.utils.decorators import cached_classmethod
-from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, MultiFieldPanel, ObjectList, StreamFieldPanel, TabbedInterface
+from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, MultiFieldPanel, ObjectList, StreamFieldPanel, TabbedInterface, HelpPanel
 from wagtail.core.blocks import TextBlock, RichTextBlock, ListBlock, StreamBlock, StructBlock, URLBlock, PageChooserBlock, CharBlock
 from wagtail.core.fields import StreamField, RichTextField
 from wagtail.core.models import Page, Orderable
@@ -24,6 +24,7 @@ from . import forms as custom_forms
 WYSIWYG_GENERAL = ['h1', 'h2', 'h3', 'h4', 'bold', 'link', 'ul', 'ol', 'code']
 WYSIWYG_SERVICE_STEP = ['ul', 'ol', 'link']
 DEFAULT_MAX_LENGTH = 255
+SHORT_DESCRIPTION_LENGTH = 300
 
 class TranslatedImage(AbstractImage):
     admin_form_fields = Image.admin_form_fields
@@ -166,6 +167,7 @@ class ServicePage(JanisPage):
             )),
         ],
         verbose_name='Write out the steps a resident needs to take to use the service',
+        # this gets called in the help panel
         help_text='A step may have a basic text step or an options accordian which reveals two or more options',
         blank=True
     )
@@ -190,7 +192,7 @@ class ServicePage(JanisPage):
     base_form_class = custom_forms.ServicePageForm
 
     short_description = models.TextField(
-        max_length=DEFAULT_MAX_LENGTH,
+        max_length=SHORT_DESCRIPTION_LENGTH,
         blank=True,
         verbose_name='Write a description of this service'
     )
@@ -203,9 +205,24 @@ class ServicePage(JanisPage):
         FieldPanel('short_description'),
         InlinePanel('topics', label='Topics'),
         FieldPanel('department'),
-        StreamFieldPanel('steps'),
+        MultiFieldPanel(
+        [
+            HelpPanel(steps.help_text, classname="coa-helpPanel"),
+            StreamFieldPanel('steps')
+        ],
+        heading=steps.verbose_name,
+        classname='coa-multiField-nopadding'
+        ),
         StreamFieldPanel('dynamic_content'),
-        FieldPanel('additional_content'),
+        MultiFieldPanel(
+        [
+            HelpPanel(additional_content.help_text, classname="coa-helpPanel"),
+            FieldPanel('additional_content')
+        ],
+        heading=additional_content.verbose_name,
+        classname='coa-multiField-nopadding'
+        )
+        ,
         InlinePanel('contacts', label='Contacts'),
     ]
 
@@ -363,7 +380,6 @@ class DepartmentPage(JanisPage):
     what_we_do = RichTextField(
         features=WYSIWYG_GENERAL,
         verbose_name='What we do',
-        # help_text='',
         blank=True
     )
 

@@ -30,6 +30,26 @@
     display: none;
 }
 
+.coa-multiField-nopadding li {
+    padding: 0;
+}
+
+.coa-helpPanel fieldset {
+    padding: 0;
+}
+
+// tech debt: hiding help and labels instead of removing
+// nested these to hopefully avoid css scoping issues
+.coa-multiField-nopadding {
+    .help {
+        display: none;
+    }
+
+    .field label {
+        display: none;
+    }
+}
+
 .coa-icon-share {
     &:before {
         background-image: url('../static/images/share.svg');

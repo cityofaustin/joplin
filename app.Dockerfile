@@ -28,6 +28,7 @@ WORKDIR /app
 # Copy over project files
 COPY "$PWD/joplin" /app/joplin
 COPY "$PWD/media" /app
+COPY "$PWD/scripts" /app/scripts
 COPY "$PWD/docker-entrypoint.sh" /app/docker-entrypoint.sh
 
 ########################################################
@@ -60,7 +61,7 @@ WORKDIR /app
 
 # Entrypoint must be executed manually since heroku has a 60 second time limit for entrypoint scripts
 # Start the Joplin server
-CMD ["gunicorn", "joplin.wsgi:application", "--pythonpath", "/app/joplin"]
+CMD ["gunicorn", "joplin.wsgi:application", "--pythonpath", "/app/joplin", "--reload"]
 
 ########################################################
 # joplin-base => joplin-deployed => joplin-review

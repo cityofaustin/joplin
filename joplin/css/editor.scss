@@ -1,5 +1,7 @@
+// stop the annoying uppercase: TODO: font size
 .object h2 {
     background: inherit;
+    text-transform: none;
 }
 .object > h2:before,
 .object > h2 label:before {
@@ -9,23 +11,7 @@
     border-bottom: 1px dashed grey !important;
 }
 
-.tab-nav.merged {
-    background-color: #eee;
-}
-
 footer {
-    display: none;
-}
-
-.object-help.help {
-    opacity: 1;
-    width: auto;
-    float: left;
-    position: relative;
-    padding: 0;
-}
-
-.icon-help-inverse {
     display: none;
 }
 
@@ -41,6 +27,7 @@ footer {
 
 .tab-nav.merged {
     display: none;
+    background-color: #eee;
 }
 
 .editor__save-button {
@@ -57,12 +44,12 @@ label {
 
 .messages {
     position: fixed;
-    bottom: 0px;
-    width: 100%;
+    top: 0px;
+    width: 75%;
 }
 
 .page-editor {
-  footer {
-    display: none;
-  }
+    footer {
+        display: none;
+    }
 }

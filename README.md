@@ -11,36 +11,40 @@ Joplin is the Authoring Interface for adding and editing content for alpha.austi
 <br>Joplin is built using Wagtail, a Content Management System (CMS) using Python's django framework.
 
 ## Index
-- [How to Run Locally](#how-to-run-locally)
-- [Updating the Data Model](#updating-the-data-model)
-- [CircleCI Deployments](#circleci-deployments)
-- [Useful Commands](#useful-commands)
-- [Design](#design)
-- [Misc](#misc)
+
+-   [How to Run Locally](#how-to-run-locally)
+-   [Updating the Data Model](#updating-the-data-model)
+-   [CircleCI Deployments](#circleci-deployments)
+-   [Useful Commands](#useful-commands)
+-   [Design](#design)
+-   [Misc](#misc)
 
 ---
+
 ## How to Run Locally
 
 First, install docker (version 18.09 or greater) and clone this repo.
 
 **Run without data**
+
 ```
 ./scripts/serve-local.sh
 ```
-  - This will get you started with one admin user and no data.
-  - It will automatically run all django migrations.
-  - It will start up 3 docker containers: `joplin_app_1` (for running the CMS web server), `joplin_assets_1` (for managing assets), and `joplin_db_1` (for the postgres database).
-  - Viewing your docker logs, you can tell that your server is running successfully when you see these listeners:
+
+-   This will get you started with one admin user and no data.
+-   It will automatically run all django migrations.
+-   It will start up 3 docker containers: `joplin_app_1` (for running the CMS web server), `joplin_assets_1` (for managing assets), and `joplin_db_1` (for the postgres database).
+-   Viewing your docker logs, you can tell that your server is running successfully when you see these listeners:
     <img src="/README/server_success.png" align="middle" height="70" >
-  - Your Joplin instance will be accessible at http://localhost:8000/admin with the credentials user: `admin@austintexas.io`, pw: `x`
+-   Your Joplin instance will be accessible at http://localhost:8000/admin with the credentials user: `admin@austintexas.io`, pw: `x`
 
 **Run with data**
 
 ```
 LOAD_DATA="on" ./scripts/serve-local.sh
 ```
-  - This will add some test content (from `joplin/db/system-generated/seeding.datadump.json`)
-  - Images are also not stored in this repo, and can instead be downloaded using `./scripts/download-media.sh`. This will parse a backup file from the db/smuggler directory and place all referenced images into the local media folder.
+-   This will add some test content (from `joplin/db/system-generated/seeding.datadump.json`)
+-   Images are also not stored in this repo, and can instead be downloaded using `./scripts/download-media.sh`. This will parse a backup file from the db/smuggler directory and place all referenced images into the local media folder.
 
 **Drop Existing DB**
 
@@ -53,31 +57,35 @@ DROP_DB=on ./scripts/serve-local.sh
 ```
 RELOAD_DATA=on ./scripts/serve-local.sh
 ```
-  - LOAD_DATA=on + DROP_DB=on
+-   LOAD_DATA=on + DROP_DB=on
 
 **Run with Janis**
 
 ```
 JANIS="on" ./scripts/serve-local.sh
 ```
-  - Runs with the "janis:local" image built on your machine.
-  - Can be combined with any other args.
+
+-   Runs with the "janis:local" image built on your machine.
+-   Can be combined with any other args.
 
 **Run + Rebuild without cached image layer**
 
 If something goes wrong with your docker builds and you want to start over without any cached layers, you can run:
+
 ```
 HARD_REBUILD="on" ./scripts/serve-local.sh
 ```
-  - `LOAD_DATA="on"` can also be used with `HARD_REBUILD="on"`
-  - It takes 90 seconds to do a HARD_REBUILD.
-  - If worse comes to worse, you can always delete your local joplin docker images with `docker rmi`.
+
+-   `LOAD_DATA="on"` can also be used with `HARD_REBUILD="on"`
+-   It takes 90 seconds to do a HARD_REBUILD.
+-   If worse comes to worse, you can always delete your local joplin docker images with `docker rmi`.
 
 **Run with custom smuggler data**
 
 If you don't want to load the default data used in `LOAD_DATA="on"`, you have to ability to source data from any environment you'd like using a django plugin called [smuggler](https://github.com/semente/django-smuggler).
 
 To load in data from smuggler follow these steps.
+
 1. Download a json datadump from the Joplin deployment of your choosing by visiting `[joplin URL]/django-admin/dump`.
 2. Place your datadump in the smuggler fixtures directory `joplin/db/smuggler`
 3. Start a data-less empty local Joplin instance with `./scripts/serve-local.sh`.
@@ -95,7 +103,30 @@ It runs on PORT 5433 to avoid port conflicts with your host's default postgres p
 
 Note: The containers are not built at the same time; for this purpose, joplin will wait and display a 'database not available' message in a loop until the database is up and ready. This is because the DB container takes a little longer to build and set up locally, and joplin has to wait before it can run the django migrations locally.
 
+**Handling schema migration conflict**
+
+Sometimes, you may run `./scripts/serve-local.sh` and find that the joplin container cannot run due to a migration conflict.
+
+If you check the log, you might see an error like this:
+
+```
+app_1     | CommandError: Conflicting migrations detected; multiple leaf nodes in the migration graph: (0073_auto_20190604_2124, 0069_auto_20190530_2220 in base).
+app_1     | To fix them run 'python manage.py makemigrations --merge'
+```
+
+In that case, to fix the error run:
+
+```
+./scripts/run-handle-migration-conflicts.sh
+```
+
+This will run `makemigrations` with the --merge flag, and should do a good job handling simple conflicts.
+
+See more:
+https://docs.djangoproject.com/en/2.2/topics/migrations/
+
 ---
+
 ## Updating the Data Model
 
 1. Have a local Joplin instance running (probably populated with data).
@@ -142,6 +173,7 @@ This file contains the stages and commands to execute, and the order of executio
 The contains the docker images used during circleci builds. The `joplin-ci-build` image is for the build job (BUILDKIT=1 docker builds are very particular and need a special image and deployment process as of 05/2019). `joplin-ci-deploy` is used for every other job.
 
 Builds for these images are done manually as needed and then stored in the cityofaustin dockerhub repo. You can build and push a new image by following these steps:
+
 ```
 SHA=$(git rev-parse HEAD)
 docker build -f .circleci/docker/joplin-ci-build.Dockerfile -t "cityofaustin/joplin-ci-build:${SHA:0:7}" .circleci/
@@ -168,10 +200,10 @@ At the moment the pre-deployment tests only check whether the AWS & Heroku CLI t
 
 If deploying on master or production, we first take a backup of the database and store it in S3 for disaster recovery. The backup file name is comprised of these values:
 
-- The name of the application
-- The timestamp
-- The SHA of the latest commit
-- The name of the latest django migration
+-   The name of the application
+-   The timestamp
+-   The SHA of the latest commit
+-   The name of the latest django migration
 
 Once the name is generated then it proceeds to generate a full URL link where the final file will be stored in S3. It connects to the database and generates a full backup and automatically saves it to S3 using the established nomenclature.
 
@@ -196,37 +228,41 @@ Heroku Docker entrypoints time out at 60 seconds. So django migrations and data 
 
 The migration process currently consists of 3 commands:
 
-- `python ./joplin/manage.py migrate` - This command will trigger the django migration process. It runs for all instances on the Cloud: PRs, Staging and Production.
-- `python ./joplin/manage.py loaddata` - This command will import the latest datadump in `joplin/db/system-generated`. This only happens for PR branches.
-- `python ./joplin/manage.py collectstatic` - Triggers the collect static process which only takes care of wagtail and certain images. This only runs for staging and production.
+-   `python ./joplin/manage.py migrate` - This command will trigger the django migration process. It runs for all instances on the Cloud: PRs, Staging and Production.
+-   `python ./joplin/manage.py loaddata` - This command will import the latest datadump in `joplin/db/system-generated`. This only happens for PR branches.
+-   `python ./joplin/manage.py collectstatic` - Triggers the collect static process which only takes care of wagtail and certain images. This only runs for staging and production.
 
 ---
+
 ## Useful Commands
-- Shut down all joplin containers:
-  - `source scripts/docker-helpers.sh; stop_project_containers joplin`
-- Delete all joplin containers:
-  - `scripts/docker-helpers.sh; delete_project_containers joplin`
-- Create New App:
-  - ```
-    APP_NAME=app_name_goes_here
-    docker exec joplin /bin/bash -c "mkdir -p \"$APP_NAME\" && cd joplin && python manage.py startapp \"$APP_NAME\""
-    ```
-- Access the Graphql API
-  - `localhost:8000/api/graphiql`
-- Troubleshooting:
-  - Clean up older docker images and containers and rebuild the new application if necessary:
-  - ```
-    # Assuming you only have joplin containers running, remove all containers first:
-    docker rm $(docker container ls -aq);
 
-    # Delete orphan (dangling) images only:
-    docker rmi $(docker image ls -aq -f "dangling=true");
+-   Shut down all joplin containers:
+    -   `source scripts/docker-helpers.sh; stop_project_containers joplin`
+-   Delete all joplin containers:
+    -   `scripts/docker-helpers.sh; delete_project_containers joplin`
+-   Create New App:
+    -   ```
+        APP_NAME=app_name_goes_here
+        docker exec joplin /bin/bash -c "mkdir -p \"$APP_NAME\" && cd joplin && python manage.py startapp \"$APP_NAME\""
+        ```
+-   Access the Graphql API
+    -   `localhost:8000/api/graphiql`
+-   Troubleshooting:
 
-    # Then Rebuild (be sure to have the heroku cli installed in your machine)
-    REBUILD=on ./scripts/serve-local.sh
-    ```
+    -   Clean up older docker images and containers and rebuild the new application if necessary:
+    -   ```
+        # Assuming you only have joplin containers running, remove all containers first:
+        docker rm $(docker container ls -aq);
+
+        # Delete orphan (dangling) images only:
+        docker rmi $(docker image ls -aq -f "dangling=true");
+
+        # Then Rebuild (be sure to have the heroku cli installed in your machine)
+        REBUILD=on ./scripts/serve-local.sh
+        ```
 
 ---
+
 ## Design
 
 #### icons
@@ -238,6 +274,7 @@ To get a full set of icons that Wagtail has available you'll need to upload [Wag
 We're using webpack to bundle syles and scripts, and webpack_loader to include them in our templates. To create a new bundle it should be defined as an entry in `webpack.build.js` and `webpack.dev.js`, then included in a template using `{% load render_bundle from webpack_loader %}` and `{% render_bundle 'YOUR_BUNDLE_NAME_HERE' %}`.
 
 ---
+
 ## Misc
 
 #### Static File Uploads

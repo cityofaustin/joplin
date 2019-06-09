@@ -271,7 +271,9 @@ $(function() {
     changeLanguage(localStorage.share_lang);
     copyTextToClipboard(state.janisPreviewUrl);
     urlcopied.removeClass('hidden');
-    urlcopied.fadeOut(5000);
+
+    urlcopied.fadeOut(10000);
+    localStorage.sharingpreview = false;
     localStorage.removeItem("share_lang");
   }
   sharebutton.click(function() {
@@ -279,5 +281,6 @@ $(function() {
   });
 
   var messages = $('.messages');
-  messages.fadeOut(5000);
+  messages.fadeOut(10000);
+
 });
