@@ -8,8 +8,17 @@ from graphene.types import Scalar
 from wagtail.core.fields import StreamField
 from wagtail.core.models import Page, PageRevision
 
-from base.models import TranslatedImage, ThreeOneOne, ServicePage, ServicePageContact, ServicePageTopic, ProcessPage, ProcessPageStep, ProcessPageContact, ProcessPageTopic, InformationPage, InformationPageContact, InformationPageTopic, DepartmentPage, DepartmentPageContact, DepartmentPageDirector, Theme, TopicCollectionPage, TopicPage, Contact, Location, ContactDayAndDuration, Department, DepartmentContact, TopicPageTopicCollection
-
+from base.models import (
+    TranslatedImage, ThreeOneOne, ServicePage, ServicePageContact,
+    ServicePageTopic, ProcessPage, ProcessPageStep, ProcessPageContact,
+    ProcessPageTopic, InformationPage, InformationPageContact,
+    InformationPageTopic, DepartmentPage, DepartmentPageContact,
+    DepartmentPageDirector, Theme, TopicCollectionPage, TopicPage,
+    Contact, Location, ContactDayAndDuration, Department,
+    DepartmentContact,
+    TopicPageTopicCollection,
+    FormPage
+)
 
 class StreamFieldType(Scalar):
     @staticmethod
@@ -144,11 +153,18 @@ class DepartmentPageNode(DjangoObjectType):
         filter_fields = ['id', 'slug', 'live']
         interfaces = [graphene.Node]
 
+class FormPageNode(DjangoObjectType):
+    class Meta:
+        model = FormPage
+        filter_fields = ['id', 'slug', 'live']
+        interfaces = [graphene.Node]
+
 class PageRevisionNode(DjangoObjectType):
     as_service_page = graphene.NonNull(ServicePageNode)
     as_process_page = graphene.NonNull(ProcessPageNode)
     as_information_page = graphene.NonNull(InformationPageNode)
     as_department_page = graphene.NonNull(DepartmentPageNode)
+    as_form_page = graphene.NonNull(FormPageNode)
     as_topic_page = graphene.NonNull(TopicNode)
     as_topic_collection_page = graphene.NonNull(TopicCollectionNode)
 
@@ -242,6 +258,7 @@ class Query(graphene.ObjectType):
     all_processes = DjangoFilterConnectionField(ProcessPageNode)
     all_information_pages = DjangoFilterConnectionField(InformationPageNode)
     all_department_pages = DjangoFilterConnectionField(DepartmentPageNode)
+    all_form_pages = DjangoFilterConnectionField(FormPageNode)
     all_themes = DjangoFilterConnectionField(ThemeNode)
     all_topics = DjangoFilterConnectionField(TopicNode)
     all_topic_collections = DjangoFilterConnectionField(TopicCollectionNode)

@@ -67,9 +67,15 @@ def joplin_page_listing_buttons(page, page_perms, is_parent=False):
             priority=10
         )
     if page.has_unpublished_changes:
+        try:
+            url = page.janis_preview_url()
+        except Exception as e:
+            url = "test"
+
         yield PageListingButton(
             _('View draft'),
-            page.janis_preview_url(),
+            url,
+
             attrs={'title': _("Preview draft version of '{title}'").format(title=page.get_admin_display_title()), 'target': '_blank'},
             priority=20
         )
