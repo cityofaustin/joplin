@@ -6,8 +6,17 @@ from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
 
 from wagtail.utils.decorators import cached_classmethod
-from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, MultiFieldPanel, ObjectList, StreamFieldPanel, TabbedInterface, HelpPanel
-from wagtail.core.blocks import TextBlock, RichTextBlock, ListBlock, StreamBlock, StructBlock, URLBlock, PageChooserBlock, CharBlock
+from wagtail.admin.edit_handlers import (
+    FieldPanel, InlinePanel,
+    MultiFieldPanel, ObjectList,
+    StreamFieldPanel,
+    TabbedInterface,
+    HelpPanel, FieldRowPanel
+)
+from wagtail.core.blocks import (
+    TextBlock, RichTextBlock, ListBlock, StreamBlock, StructBlock, URLBlock,
+    PageChooserBlock, CharBlock
+)
 from wagtail.core.fields import StreamField, RichTextField
 from wagtail.core.models import Page, Orderable
 from wagtail.snippets.edit_handlers import SnippetChooserPanel
@@ -17,6 +26,7 @@ from wagtail.images.blocks import ImageChooserBlock
 from wagtail.snippets.models import register_snippet
 from wagtail.search import index
 from wagtail.admin.edit_handlers import PageChooserPanel
+from wagtail.contrib.forms.models import AbstractEmailForm, AbstractFormField
 
 from . import blocks as custom_blocks
 from . import forms as custom_forms
@@ -54,7 +64,7 @@ class ThreeOneOne(ClusterableModel):
 class HomePage(Page):
     parent_page_types = []
     # subpage_types = ['base.ServicePage', 'base.ProcessPage', 'base.InformationPage', 'base.DepartmentPage']
-    subpage_types = ['base.ServicePage', 'base.ProcessPage', 'base.InformationPage', 'base.DepartmentPage', 'base.TopicPage']
+    subpage_types = ['base.ServicePage', 'base.ProcessPage', 'base.InformationPage', 'base.DepartmentPage', 'base.TopicPage', 'base.FormPage']
 
     image = models.ForeignKey(TranslatedImage, null=True, on_delete=models.SET_NULL, related_name='+')
 
@@ -747,3 +757,26 @@ class DepartmentContact(ClusterableModel):
 
     def __str__(self):
         return self.department.name
+
+
+class FormField(AbstractFormField):
+    page = ParentalKey('FormPage', on_delete=models.CASCADE, related_name='form_fields')
+
+
+class FormPage(AbstractEmailForm):
+    janis_url_page_type = "services"
+    intro = RichTextField(blank=True)
+    thank_you_text = RichTextField(blank=True)
+
+    content_panels = AbstractEmailForm.content_panels + [
+        FieldPanel('intro', classname="full"),
+        InlinePanel('form_fields', label="Form fields"),
+        FieldPanel('thank_you_text', classname="full"),
+        MultiFieldPanel([
+            FieldRowPanel([
+                FieldPanel('from_address', classname="col6"),
+                FieldPanel('to_address', classname="col6"),
+            ]),
+            FieldPanel('subject'),
+        ], "Email"),
+    ]
