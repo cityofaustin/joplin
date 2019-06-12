@@ -25,6 +25,7 @@ STYLEGUIDE_PAGES = {
   'department page': '/writing-process-pages/',
   'topic page': '/writing-process-pages/',
   'topic collection page': '/writing-process-pages/',
+  'form page': '/writing-process-pages/',
 }
 
 @register.simple_tag
