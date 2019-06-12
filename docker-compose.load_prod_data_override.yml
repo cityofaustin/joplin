@@ -1,0 +1,8 @@
+version: '3.7'
+services:
+  app:
+    environment:
+      LOAD_PROD_DATA: $LOAD_PROD_DATA
+    volumes:
+      # Add production datadump to container if $LOAD_PROD_DATA == on
+      - "./joplin/db/system-generated/tmp_production.datadump.json:/app/joplin/db/system-generated/tmp_production.datadump.json"

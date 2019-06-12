@@ -43,17 +43,21 @@ First, install docker (version 18.09 or greater) and clone this repo.
 ```
 LOAD_DATA="on" ./scripts/serve-local.sh
 ```
-
--   This will add some test content (from `joplin/db/system-generated/[latest migration].datadump.json`)
+-   This will add some test content (from `joplin/db/system-generated/seeding.datadump.json`)
 -   Images are also not stored in this repo, and can instead be downloaded using `./scripts/download-media.sh`. This will parse a backup file from the db/smuggler directory and place all referenced images into the local media folder.
+
+**Drop Existing DB**
+
+```
+DROP_DB=on ./scripts/serve-local.sh
+```
 
 **Drop DB, run with fresh data**
 
 ```
-RELOAD_DATA="on" ./scripts/serve-local.sh
+RELOAD_DATA=on ./scripts/serve-local.sh
 ```
-
--   Same as LOAD_DATA="on", except it drops any existing data in your database before loading data.
+-   LOAD_DATA=on + DROP_DB=on
 
 **Run with Janis**
 
@@ -125,19 +129,24 @@ https://docs.djangoproject.com/en/2.2/topics/migrations/
 
 ## Updating the Data Model
 
-1. Have a local Joplin instance running (populated with data probably).
-2. Have an up-to-date "janis:local" docker image available locally.
-3. Update your data model in `joplin/base/models.py`.
-4. Make a new migration with:
+1. Have a local Joplin instance running (probably populated with data).
+2. Update your data model in `joplin/base/models.py`.
+3. Make a new migration with:
     - `docker exec -it joplin_app_1 python joplin/manage.py makemigrations`
-5. Run that migration with:
+4. Run that migration with:
     - `docker exec -it joplin_app_1 python joplin/manage.py migrate`
-6. Test that your migration works with
-    - `./scripts/migration-test.sh`
+5. Test that your migration works with
+    - `./scripts/migration-test.sh`    
 
 **About migration-test script**
 
 The migration-test script makes sure that your migration changes will work even when they are applied to a database running the last migration. This is basically a dry run of a merge to the master branch of Joplin. If they do work, then the script will create a new datadump (to be used by `LOAD_DATA="on"`) with the new migrations applied. This will prevent future datadump schema version conflicts (which will happen if your datadump is from a different migration version than the Joplin instance its going into).
+
+Options:
+  - "LOAD_PROD_DATA=on" will source data from production and build migrations from "cityofaustin/joplin-app:production-latest" image
+    - Default is to source data from current seeding.datadump.json and build migrations from "cityofaustin/joplin-app:master-latest" image
+  - "DOCKER_TAG_DB_BUILD=[x]" will build initial migrations from the docker image of your choice. Potentially could be used if you intend to merge into a branch other than master.
+  - "JANIS=on" will automatically spin up a Janis container for you. Note: you must have a "janis:local" image available locally.
 
 Here's what `migration-test.sh` does at a high level:
 
@@ -147,8 +156,9 @@ Here's what `migration-test.sh` does at a high level:
 2. Runs your new migrations on the old database
     - The previous joplin_app container shuts down (but the joplin_db stays up). Now a new joplin_app container (built from your local Joplin directory, tagged as "joplin_app:local") runs against the old joplin_db. The new migrations are automatically applied through joplin_app's entrypoint.
 3. Spins up a local Janis and Joplin for you to test manually.
+    - If you pass `JANIS=on ./scripts/migration-test.sh` then it will automatically spin up a Janis image using your own janis:local image. Otherwise, at this step you can manually start a Janis instance using another method.
     - Make sure that Joplin and Janis work as expected and that nothing breaks on Janis.
-    - A command line prompt will ask if the migration worked. If you enter "y", then a new datadump fixture will replace the old datadump fixture in joplin/db/system-generated. If you enter "n", then the migration_test containers will shut down and not replace your datadump fixture.
+    - A command line prompt will ask if the migration worked. If you enter "y", then a new datadump fixture will replace the old seeing.datadump.json fixture in joplin/db/system-generated. If you enter "n", then the migration_test containers will shut down and not replace your datadump fixture.
 
 ## CircleCI Deployments
 
