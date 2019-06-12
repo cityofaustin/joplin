@@ -150,6 +150,16 @@ Here's what `migration-test.sh` does at a high level:
     - Make sure that Joplin and Janis work as expected and that nothing breaks on Janis.
     - A command line prompt will ask if the migration worked. If you enter "y", then a new datadump fixture will replace the old datadump fixture in joplin/db/system-generated. If you enter "n", then the migration_test containers will shut down and not replace your datadump fixture.
 
+## Adding New Models
+
+1. Make new model in models.py
+
+-   in order for stuff to not break inherit from Janis base pages
+-   register in translations.py
+-   add something to template_tags so the styleguide can be referenced 'properly'
+-   map the model in api schema, following an existing pattern (related names/parental keys should be matched appropriately)
+-   make migrations, run migrations
+
 ## CircleCI Deployments
 
 We use CircleCI to manage and customize our deployments to our cloud infrastructure. Important files to consider:

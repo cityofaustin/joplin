@@ -18,6 +18,7 @@ def get_revision_preview_url(*args, **kwargs):
     # TODO: Add other languages
     return os.environ["JANIS_URL"] + "/en/preview/" + url_page_type + "/" + global_id
 
+# this is how we know which url of the ODD styleguide to load
 STYLEGUIDE_PAGES = {
   'service page': '/writing-service-pages/',
   'process page': '/writing-process-pages/',

@@ -17,7 +17,7 @@ from base.models import (
     Contact, Location, ContactDayAndDuration, Department,
     DepartmentContact,
     TopicPageTopicCollection,
-    FormPage
+    FormPage, FormField
 )
 
 class StreamFieldType(Scalar):
@@ -110,6 +110,11 @@ class TranslatedImageNode(DjangoObjectType):
         interfaces = [graphene.Node]
         exclude_fields = ['tags']
     filename = graphene.String()
+
+class FormFieldNode(DjangoObjectType):
+    class Meta:
+        model = FormField
+        interfaces = [graphene.Node]
 
 
 class Language(graphene.Enum):
