@@ -764,6 +764,7 @@ class FormField(AbstractFormField):
 
 
 class FormPage(AbstractEmailForm, JanisBasePage):
+    #TODO: figure out how to pass/use the endpoint for submission
     janis_url_page_type = "services"
     intro = RichTextField(blank=True)
     thank_you_text = RichTextField(blank=True)
