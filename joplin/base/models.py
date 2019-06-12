@@ -763,7 +763,7 @@ class FormField(AbstractFormField):
     page = ParentalKey('FormPage', on_delete=models.CASCADE, related_name='form_fields')
 
 
-class FormPage(AbstractEmailForm):
+class FormPage(AbstractEmailForm, JanisBasePage):
     janis_url_page_type = "services"
     intro = RichTextField(blank=True)
     thank_you_text = RichTextField(blank=True)
