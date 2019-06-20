@@ -198,11 +198,11 @@ class ServicePage(JanisPage):
     )
 
     content_panels = [
-        FieldPanel('title_en'),
+        FieldPanel('title_en', classname="title"),
         FieldPanel('title_es'),
         FieldPanel('title_ar'),
         FieldPanel('title_vi'),
-        FieldPanel('short_description'),
+        FieldPanel('short_description', classname="description"),
         InlinePanel('topics', label='Topics'),
         FieldPanel('department'),
         MultiFieldPanel(
@@ -211,7 +211,7 @@ class ServicePage(JanisPage):
             StreamFieldPanel('steps')
         ],
         heading=steps.verbose_name,
-        classname='coa-multiField-nopadding'
+        classname='coa-multiField-nopadding steps'
         ),
         StreamFieldPanel('dynamic_content'),
         MultiFieldPanel(

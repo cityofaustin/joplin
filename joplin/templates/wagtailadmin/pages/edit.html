@@ -26,6 +26,7 @@
       }
     </script>
     {% render_bundle 'editor' %}
+    {% include "wagtailadmin/edit_handlers/object_list.html" with style_guide_url=style_guide_url%}
     <div class="header secondary">
         <div>
             <h1 class="edit_page_header">
@@ -135,6 +136,7 @@
             </div>
         </div>
     </div>
+
 
     <div class="flex-container">
       <div class="edit-page-form-container">
