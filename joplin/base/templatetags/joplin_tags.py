@@ -32,6 +32,18 @@ def get_style_guide_url(*args, **kwargs):
   content_type = kwargs['content_type'].name
   return os.environ['STYLEGUIDE_URL'] + STYLEGUIDE_PAGES[content_type]
 
+@register.inclusion_tag('wagtailadmin/pages/edit/styleguide_anchor.html', takes_context=True)
+def style_guide_anchor(context):
+  return {
+  context['style_guide_url']
+  }
+
+@register.simple_tag
+def with_styleguide_url(*args, **kwargs):
+    url = os.environ['STYLEGUIDE_URL']
+    return url
+
+
 @register.inclusion_tag('wagtailadmin/themes_topics_tree.html', takes_context=True)
 def themes_topics_tree(context):
     themes = {}

@@ -14,7 +14,8 @@ $(function() {
 
   // TODO: This a better way
   const anchors = {
-    id_title: '#title',
+    // example of updating titles but this also feels bad
+    id_title_en: '#title',
     id_image: '#TODO',
     id_steps: '#steps',
     id_apps: '#apps',
@@ -33,6 +34,9 @@ $(function() {
   // Get all labels and add styleguide links
   const labels = document.querySelectorAll('label');
   const styleGuideUrl = djangoData.styleGuideUrl
+
+  const styleguideLinks = $("a[target='sidebar-iframe']");
+  const styleGuide = ('#styleguide_url')[0].innerText;
 
   // initialize state
   const state = {

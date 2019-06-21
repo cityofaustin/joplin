@@ -1,17 +1,16 @@
-{% load debug_tags %}
+<p id="styleguide_url" class="hidden">{{style_guide_url}}</p>
 
 <ul class="objects">
-  {% get_style_guide_url content_type=content_type as style_guide_url %}
-      {{style_guide_url}}
     {% for child in self.children %}
-
         <li class="object {{ child.classes|join:" " }}">
+
             {% if child.heading %}
                 <h2>
                     <label {% if child.id_for_label %}for="{{ child.id_for_label }}"{% endif %}>
                         {{ child.heading }}
                     </label>
-                        <a href="{{style_guide_url}}#{{ child.classname }}" target="sidebar-iframe" class="icon-help-inverse" aria-hidden="true"></a>
+                    {% with_styleguide_url %}
+                        <a href="#{{child.classname}}" target="sidebar-iframe" class="icon-help-inverse" aria-hidden="true"></a>
                 </h2>
             {% endif %}
             <div class="object-layout">

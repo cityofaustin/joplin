@@ -64,7 +64,7 @@ INSTALLED_APPS = [
     'modeltranslation',
     'graphene_django',
     'django_extensions',
-
+    'django.contrib.admindocs',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
