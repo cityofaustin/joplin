@@ -21,4 +21,6 @@ services:
       DATABASE_URL: $DATABASE_URL
     depends_on:
       - "db"
+    stdin_open: true
+    tty: true
   # "assets" service is used in docker-compose.local_override.yml
