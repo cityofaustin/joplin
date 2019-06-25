@@ -83,8 +83,22 @@ class JanisBasePage(Page):
         url_page_type = self.janis_url_page_type
         page_slug = self.slug
 
+        if self.janis_url_page_type == "services":
+            # If we have topics, use the first one
+            if self.topics and self.topics.all():
+                topic_slug = self.topics.all()[0].topic.slug
+                # Make sure we have a topic collection too
+                if self.topics.all()[0].topic.topiccollections.all():
+                    tc_slug = self.topics.all()[0].topic.topiccollections.all()[0].topiccollection.slug;
+                    return os.environ["JANIS_URL"] + "/en/" + tc_slug + "/" + topic_slug + "/" + page_slug
+
+
+        # We don't have a valid live url
+        # TODO: add something to make this clear to users
+        return "#"
+
         # TODO: Add other languages
-        return os.environ["JANIS_URL"] + "/en/" + url_page_type + "/" + page_slug
+        # return os.environ["JANIS_URL"] + "/en/" + url_page_type + "/" + page_slug
 
     def janis_preview_url(self):
         revision = self.get_latest_revision()
@@ -678,7 +692,7 @@ class ServicePageTopic(ClusterableModel):
     ]
 
     def __str__(self):
-        return self.topic.text
+        return self.topic.title
 
 class InformationPageContact(ClusterableModel):
     page = ParentalKey(InformationPage, related_name='contacts')
