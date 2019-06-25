@@ -83,7 +83,7 @@ class JanisBasePage(Page):
         url_page_type = self.janis_url_page_type
         page_slug = self.slug
 
-        if self.janis_url_page_type == "services":
+        if self.janis_url_page_type == "services" or self.janis_url_page_type == "information":
             # If we have topics, use the first one
             if self.topics and self.topics.all():
                 topic_slug = self.topics.all()[0].topic.slug
@@ -92,6 +92,9 @@ class JanisBasePage(Page):
                     tc_slug = self.topics.all()[0].topic.topiccollections.all()[0].topiccollection.slug;
                     return os.environ["JANIS_URL"] + "/en/" + tc_slug + "/" + topic_slug + "/" + page_slug
 
+            # If we have a department, use that
+            if self.department:
+                return os.environ["JANIS_URL"] + "/en/" + self.department.slug + "/" + page_slug
 
         # We don't have a valid live url
         # TODO: add something to make this clear to users
