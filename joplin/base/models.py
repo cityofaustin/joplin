@@ -80,8 +80,17 @@ class JanisBasePage(Page):
     )
 
     def janis_url(self):
-        url_page_type = self.janis_url_page_type
         page_slug = self.slug
+
+        if self.janis_url_page_type == "department" or self.janis_url_page_type == "topiccollection":
+            return os.environ["JANIS_URL"] + "/en/" + page_slug
+
+        if self.janis_url_page_type == "topic":
+            # If we have a topic collection
+            if self.topiccollections and self.topiccollections.all():
+                tc_slug = self.topiccollections.all()[0].topiccollection.slug;
+                return os.environ["JANIS_URL"] + "/en/" + tc_slug + "/" + page_slug            
+
 
         if self.janis_url_page_type == "services" or self.janis_url_page_type == "information":
             # If we have topics, use the first one
@@ -99,9 +108,6 @@ class JanisBasePage(Page):
         # We don't have a valid live url
         # TODO: add something to make this clear to users
         return "#"
-
-        # TODO: Add other languages
-        # return os.environ["JANIS_URL"] + "/en/" + url_page_type + "/" + page_slug
 
     def janis_preview_url(self):
         revision = self.get_latest_revision()
