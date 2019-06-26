@@ -93,7 +93,6 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'wagtail.core.middleware.SiteMiddleware',
     'wagtail.contrib.redirects.middleware.RedirectMiddleware',
-
 ]
 
 ROOT_URLCONF = 'urls'
@@ -215,7 +214,7 @@ below
 
 INTERNAL_IPS = ['127.0.0.1']
 
-# adds docker gateway automagically 
+# adds docker gateway automagically
 
 import socket
 hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
