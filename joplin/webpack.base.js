@@ -1,14 +1,18 @@
-var BundleTracker = require("webpack-bundle-tracker");
-var path = require("path");
+const path = require("path");
+const fs = require("fs");
+const BundleTracker = require("webpack-bundle-tracker");
+const WebpackOnBuildPlugin = require('on-build-webpack');
 
 // Using this example to save some config copy pasta
 // https://simonsmith.io/organising-webpack-config-environments/
 
+const buildDir = path.resolve(__dirname, "./static/webpack_bundles/")
+
 module.exports = {
   entry: {
-    admin: "./js/admin.js",
-    editor: "./js/editor.js",
-    createContentModal: './js/CreateContentModal/index.js'
+    admin: path.resolve(__dirname, "./js/admin.js"),
+    editor: path.resolve(__dirname, "./js/editor.js"),
+    createContentModal: path.resolve(__dirname, "./js/CreateContentModal/index.js")
   },
   module: {
     rules: [
@@ -42,13 +46,26 @@ module.exports = {
     ],
   },
   output: {
-    path: path.resolve("./static/webpack_bundles/"),
+    path: buildDir,
     filename: "[name]-[hash].js"
   },
   plugins: [
     new BundleTracker({
-      path: __dirname,
-      filename: "./static/webpack-stats.json"
-    })
+      path: path.resolve(__dirname, "./static/"),
+      filename: "webpack-stats.json"
+    }),
+    // new WebpackOnBuildPlugin(function(stats) {
+    //   // Deletes old bundles once new ones are created
+    //   // Note to the future: this will break builds if you try to run 2 Joplins at the same time.
+    //   // TODO: Figure out a better way to volume mount joplin/static/ for distinct Joplin instances.
+    //   const hashtest = new RegExp(`${stats.hash}.js$`)
+    //   fs.readdir(buildDir, (err, files) => {
+    //     files.forEach(file => {
+    //       if (!file.match(hashtest)) {
+    //         fs.unlinkSync(path.resolve(buildDir, file))
+    //       }
+    //     })
+    //   })
+    // })
   ]
 };
