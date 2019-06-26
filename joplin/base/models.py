@@ -114,7 +114,6 @@ class JanisBasePage(Page):
         abstract = True
 
 class JanisPage(JanisBasePage):
-    import pdb; pdb.set_trace()
     @cached_classmethod
     def get_edit_handler(cls):
         if hasattr(cls, 'edit_handler'):
