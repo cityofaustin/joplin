@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'base.apps.BaseConfig',
     'users',
     'api.apps.APIConfig',
-
+    'debug_toolbar',
     'wagtail.api.v2',
 
     'wagtail.embeds',
@@ -88,7 +88,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
-
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'wagtail.core.middleware.SiteMiddleware',
     'wagtail.contrib.redirects.middleware.RedirectMiddleware',
 ]
@@ -193,6 +193,7 @@ AUTH_USER_MODEL = 'users.User'
 
 CORS_ORIGIN_ALLOW_ALL = True
 ALLOWED_HOSTS = [
+    '127.0.0.1',
     'localhost',
     '.herokuapp.com',
 ]
@@ -200,6 +201,15 @@ ALLOWED_HOSTS = [
 if DEBUG:
     ALLOWED_HOSTS.append('*')
 
+# for debug
+INTERNAL_IPS = ('127.0.0.1', 'localhost')
+
+def show_toolbar(request):
+        return True
+
+DEBUG_TOOLBAR_CONFIG = {
+    'SHOW_TOOLBAR_CALLBACK': show_toolbar,
+}
 
 # Wagtail settings
 
