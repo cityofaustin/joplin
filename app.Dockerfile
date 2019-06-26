@@ -41,7 +41,7 @@ ENV DEPLOYMENT_MODE "LOCAL"
 # Run Migrations
 ENTRYPOINT ["./docker-entrypoint.sh"]
 # Start the Joplin server
-CMD ["gunicorn", "joplin.wsgi:application", "--pythonpath", "/app/joplin", "--reload"]
+CMD ["gunicorn", "joplin.wsgi:application", "--pythonpath", "/app/joplin", "--reload", "--timeout=90", "--log-level=DEBUG"]
 
 ########################################################
 # joplin-base => joplin-deployed

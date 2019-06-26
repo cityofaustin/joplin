@@ -11,6 +11,7 @@ from wagtail.documents import urls as wagtaildocs_urls
 from base.views import joplin_views
 
 from base.models import HomePage
+import debug_toolbar
 
 
 def home(request):
@@ -27,7 +28,7 @@ urlpatterns = [
     url(r'admin/pages/new_from_modal/$', joplin_views.new_page_from_modal, name='new_page_from_modal'),
     url(r'^admin/', include(wagtailadmin_urls)),
     url(r'^documents/', include(wagtaildocs_urls)),
-
+    path('__debug__/', include(debug_toolbar.urls)),
     url(r'^api/graphql', csrf_exempt(GraphQLView.as_view())),
     url(r'^api/graphiql', csrf_exempt(GraphQLView.as_view(graphiql=True, pretty=True))),
 

@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'base.apps.BaseConfig',
     'users',
     'api.apps.APIConfig',
-    'debug_toolbar',
+
     'wagtail.api.v2',
 
     'wagtail.embeds',
@@ -75,10 +75,13 @@ INSTALLED_APPS = [
     'wagtail.contrib.modeladmin',
     'webpack_loader',
     'dbbackup',
-    'smuggler'
+    'smuggler',
+    'debug_toolbar',
+
 ]
 
 MIDDLEWARE = [
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -88,9 +91,9 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'wagtail.core.middleware.SiteMiddleware',
     'wagtail.contrib.redirects.middleware.RedirectMiddleware',
+
 ]
 
 ROOT_URLCONF = 'urls'
@@ -201,15 +204,25 @@ ALLOWED_HOSTS = [
 if DEBUG:
     ALLOWED_HOSTS.append('*')
 
-# for debug
-INTERNAL_IPS = ('127.0.0.1', 'localhost')
+"""
+for django debug toolbar
+this is what exposes the toolbar to the docker gateway so it actually shows up
+i.e.
+docker inspect joplin_app_1 | grep -e '"Gateway"' or just rely on the fancy thing
+below
+"""
 
-def show_toolbar(request):
-        return True
 
-DEBUG_TOOLBAR_CONFIG = {
-    'SHOW_TOOLBAR_CALLBACK': show_toolbar,
-}
+INTERNAL_IPS = ['127.0.0.1']
+
+# adds docker gateway automagically 
+
+import socket
+hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
+INTERNAL_IPS += [ip[:-1] + '1' for ip in ips]
+
+
+
 
 # Wagtail settings
 
