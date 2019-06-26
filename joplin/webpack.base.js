@@ -54,18 +54,16 @@ module.exports = {
       path: path.resolve(__dirname, "./static/"),
       filename: "webpack-stats.json"
     }),
-    // new WebpackOnBuildPlugin(function(stats) {
-    //   // Deletes old bundles once new ones are created
-    //   // Note to the future: this will break builds if you try to run 2 Joplins at the same time.
-    //   // TODO: Figure out a better way to volume mount joplin/static/ for distinct Joplin instances.
-    //   const hashtest = new RegExp(`${stats.hash}.js$`)
-    //   fs.readdir(buildDir, (err, files) => {
-    //     files.forEach(file => {
-    //       if (!file.match(hashtest)) {
-    //         fs.unlinkSync(path.resolve(buildDir, file))
-    //       }
-    //     })
-    //   })
-    // })
+    new WebpackOnBuildPlugin(function(stats) {
+      // Deletes old bundles once new ones are created
+      const hashtest = new RegExp(`${stats.hash}.js$`)
+      fs.readdir(buildDir, (err, files) => {
+        files.forEach(file => {
+          if (!file.match(hashtest)) {
+            fs.unlinkSync(path.resolve(buildDir, file))
+          }
+        })
+      })
+    })
   ]
 };
