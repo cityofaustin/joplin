@@ -2,8 +2,8 @@
 
 set -o errexit
 
-D=`dirname $BASH_SOURCE`
-source $D/docker-helpers.sh
+CURRENT_DIR=`dirname $BASH_SOURCE`
+source $CURRENT_DIR/docker-helpers.sh
 
 # Allows us to use BUILDKIT features like adding a --target to docker build
 # Only works for "docker build" not "docker-compose ... --build"
@@ -86,5 +86,5 @@ else
   # Only run containers for db and assets
   docker-compose -f docker-compose.yml -f docker-compose.local_override.yml up -d db assets
 
-  pipenv run $D/../joplin/manage.py runserver 0.0.0.0:$JOPLIN_APP_HOST_PORT
+  pipenv run $CURRENT_DIR/../joplin/manage.py runserver 0.0.0.0:$JOPLIN_APP_HOST_PORT
 fi
