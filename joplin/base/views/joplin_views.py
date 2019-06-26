@@ -18,8 +18,15 @@ def publish(request, page_id):
     next_url = pages.get_valid_next_url_from_request(request)
 
     if request.method == 'POST':
-        # changing this to save makes prod data work on staging 
-        page.save_revision().publish()
+        # changing this to save makes prod data work on staging
+        try:
+            page.get_latest_revision().publish()
+        except Exception as e:
+            print("didnt work", print(e), "try saving revision first")
+            page.save_revision().publish()
+
+
+
 
         messages.success(request, _("Page '{0}' published.").format(page.get_admin_display_title()), buttons=[
             messages.button(reverse('wagtailadmin_pages:edit', args=(page.id,)), _('Edit'))
