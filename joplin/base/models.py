@@ -82,14 +82,19 @@ class JanisBasePage(Page):
     def janis_url(self):
         page_slug = self.slug
 
-        if self.janis_url_page_type == "department" or self.janis_url_page_type == "topiccollection":
+        if self.janis_url_page_type == "department":
             return os.environ["JANIS_URL"] + "/en/" + page_slug
+
+        if self.janis_url_page_type == "topiccollection":
+            theme_slug = self.theme.slug;
+            return os.environ["JANIS_URL"] + "/en/" theme_slug + "/" + page_slug
 
         if self.janis_url_page_type == "topic":
             # If we have a topic collection
             if self.topiccollections and self.topiccollections.all():
+                theme_slug = self.topiccollections.all()[0].topiccollection.theme.slug;
                 tc_slug = self.topiccollections.all()[0].topiccollection.slug;
-                return os.environ["JANIS_URL"] + "/en/" + tc_slug + "/" + page_slug            
+                return os.environ["JANIS_URL"] + "/en/" + theme_slug + "/" + tc_slug + "/" + page_slug            
 
 
         if self.janis_url_page_type == "services" or self.janis_url_page_type == "information":
