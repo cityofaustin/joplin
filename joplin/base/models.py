@@ -98,8 +98,9 @@ class JanisBasePage(Page):
                 topic_slug = self.topics.all()[0].topic.slug
                 # Make sure we have a topic collection too
                 if self.topics.all()[0].topic.topiccollections.all():
+                    theme_slug = self.topics.all()[0].topic.topiccollections.all()[0].topiccollection.theme.slug;
                     tc_slug = self.topics.all()[0].topic.topiccollections.all()[0].topiccollection.slug;
-                    return os.environ["JANIS_URL"] + "/en/" + tc_slug + "/" + topic_slug + "/" + page_slug
+                    return os.environ["JANIS_URL"] + "/en/" + theme_slug + "/" + tc_slug + "/" + topic_slug + "/" + page_slug
 
             # If we have a department, use that
             if self.department:
