@@ -22,7 +22,7 @@ from . import blocks as custom_blocks
 from . import forms as custom_forms
 
 WYSIWYG_GENERAL = ['h1', 'h2', 'h3', 'h4', 'bold', 'link', 'ul', 'ol', 'code']
-WYSIWYG_SERVICE_STEP = ['ul', 'ol', 'link']
+WYSIWYG_SERVICE_STEP = ['ul', 'ol', 'link', 'code']
 DEFAULT_MAX_LENGTH = 255
 SHORT_DESCRIPTION_LENGTH = 300
 
