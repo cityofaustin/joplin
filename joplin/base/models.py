@@ -87,7 +87,7 @@ class JanisBasePage(Page):
 
         if self.janis_url_page_type == "topiccollection":
             theme_slug = self.theme.slug;
-            return os.environ["JANIS_URL"] + "/en/" theme_slug + "/" + page_slug
+            return os.environ["JANIS_URL"] + "/en/" + theme_slug + "/" + page_slug
 
         if self.janis_url_page_type == "topic":
             # If we have a topic collection
