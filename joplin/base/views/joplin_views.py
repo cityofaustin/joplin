@@ -19,11 +19,7 @@ def publish(request, page_id):
 
     if request.method == 'POST':
         # changing this to save makes prod data work on staging
-        try:
-            page.get_latest_revision().publish()
-        except Exception as e:
-            print("didnt work", print(e), "try saving revision first")
-            page.save_revision().publish()
+        page.save_revision().publish()
 
 
 
