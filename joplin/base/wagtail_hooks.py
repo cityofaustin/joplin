@@ -59,49 +59,58 @@ def register_page_list_menu_item():
 
 @hooks.register('register_joplin_page_listing_buttons')
 def joplin_page_listing_buttons(page, page_perms, is_parent=False):
-    if page_perms.can_edit():
-        yield PageListingButton(
-            _('Edit'),
-            reverse('wagtailadmin_pages:edit', args=[page.id]),
-            attrs={'title': _("Edit '{title}'").format(title=page.get_admin_display_title())},
-            priority=10
-        )
-    if page.has_unpublished_changes:
-        yield PageListingButton(
-            _('View draft'),
-            page.janis_preview_url(),
-            attrs={'title': _("Preview draft version of '{title}'").format(title=page.get_admin_display_title()), 'target': '_blank'},
-            priority=20
-        )
-    if page.live and page.url and hasattr(page, 'janis_url'):
-        yield PageListingButton(
-            _('View live'),
-            page.janis_url(),
-            attrs={'target': "_blank", 'title': _("View live version of '{title}'").format(title=page.get_admin_display_title())},
-            priority=30
-        )
+    try:
+        if page_perms.can_edit():
+            yield PageListingButton(
+                _('Edit'),
+                reverse('wagtailadmin_pages:edit', args=[page.id]),
+                attrs={'title': _("Edit '{title}'").format(title=page.get_admin_display_title())},
+                priority=10
+            )
+        if page.has_unpublished_changes:
+            yield PageListingButton(
+                _('View draft'),
+                page.janis_preview_url(),
+                attrs={'title': _("Preview draft version of '{title}'").format(title=page.get_admin_display_title()), 'target': '_blank'},
+                priority=20
+            )
+        if page.live and page.url and hasattr(page, 'janis_url'):
+            yield PageListingButton(
+                _('View live'),
+                page.janis_url(),
+                attrs={'target': "_blank", 'title': _("View live version of '{title}'").format(title=page.get_admin_display_title())},
+                priority=30
+            )
+    except Exception as e:
+        print('problem, forget these buttons')
+        pass
 
     # This is kinda hacky but it should let us know when we have notes on a revision
-    latest_revision = None
-    all_revisions = PageRevision.objects.filter(page_id=page.id)
-    for revision in all_revisions:
-        if revision.is_latest_revision():
-            latest_revision = revision
+    try:
+        latest_revision = None
+        all_revisions = PageRevision.objects.filter(page_id=page.id)
+        for revision in all_revisions:
+            if revision.is_latest_revision():
+                latest_revision = revision
 
-    if latest_revision:
-        author_notes = latest_revision.as_page_object().author_notes
+        if latest_revision:
+            author_notes = latest_revision.as_page_object().author_notes
 
-        # Following this: https://docs.python.org/3/library/html.parser.html#examples
-        parser = CheckForDataInHTMLParser()
-        parser.feed(author_notes)
+            # Following this: https://docs.python.org/3/library/html.parser.html#examples
+            parser = CheckForDataInHTMLParser()
+            parser.feed(author_notes)
 
-        if parser.has_data:
-            yield Button(
-                _('📝'),
-                'javascript:alert("Wouldn\'t it be cool if this linked to the notes?");',
-                attrs={'title': _("Notes for authors entered"), 'class':'has-author-notes'},
-                priority=70
-            )
+            if parser.has_data:
+                yield Button(
+                    _('📝'),
+                    'javascript:alert("Wouldn\'t it be cool if this linked to the notes?");',
+                    attrs={'title': _("Notes for authors entered"), 'class':'has-author-notes'},
+                    priority=70
+                )
+    except Exception as e:
+        print('author notes trubble')
+        pass
+
 
     yield ButtonWithDropdownFromHook(
         _('More'),
