@@ -80,6 +80,15 @@ HARD_REBUILD="on" ./scripts/serve-local.sh
 -   It takes 90 seconds to do a HARD_REBUILD.
 -   If worse comes to worse, you can always delete your local joplin docker images with `docker rmi`.
 
+**Run undockerized**
+
+You might prefer to run the Django app on your host computer to enable better access to debugging tools. This script will still run joplin_assets and joplin_db on docker containers, but will run a django `runserver` command directly on your host computer.
+
+```
+pipenv install --requirements deploy/requirements.txt
+sh scripts/undockered.sh
+```
+
 **Run with custom smuggler data**
 
 If you don't want to load the default data used in `LOAD_DATA="on"`, you have to ability to source data from any environment you'd like using a django plugin called [smuggler](https://github.com/semente/django-smuggler).
