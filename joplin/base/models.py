@@ -94,7 +94,7 @@ class JanisBasePage(Page):
             if self.topiccollections and self.topiccollections.all():
                 theme_slug = self.topiccollections.all()[0].topiccollection.theme.slug;
                 tc_slug = self.topiccollections.all()[0].topiccollection.slug;
-                return os.environ["JANIS_URL"] + "/en/" + theme_slug + "/" + tc_slug + "/" + page_slug            
+                return os.environ["JANIS_URL"] + "/en/" + theme_slug + "/" + tc_slug + "/" + page_slug
 
 
         if self.janis_url_page_type == "services" or self.janis_url_page_type == "information":
@@ -233,7 +233,7 @@ class ServicePage(JanisPage):
         FieldPanel('title_vi'),
         FieldPanel('short_description'),
         InlinePanel('topics', label='Topics'),
-        FieldPanel('department'),
+        InlinePanel('department_owners', label='Offered by'),
         MultiFieldPanel(
         [
             HelpPanel(steps.help_text, classname="coa-helpPanel"),
@@ -709,6 +709,8 @@ class ServicePageTopic(ClusterableModel):
     def __str__(self):
         return self.topic.title
 
+
+
 class InformationPageContact(ClusterableModel):
     page = ParentalKey(InformationPage, related_name='contacts')
     contact = models.ForeignKey(Contact, related_name='+', on_delete=models.CASCADE)
@@ -776,3 +778,17 @@ class DepartmentContact(ClusterableModel):
 
     def __str__(self):
         return self.department.name
+
+class DepartmentOwners(Orderable):
+    """This allows us to select one or more owners related to a service """
+
+    page = ParentalKey("base.servicePage", related_name="department_owners")
+    department = models.ForeignKey(
+        "base.departmentPage",
+        on_delete=models.PROTECT,
+    )
+
+    panels = [
+    	# Use a SnippetChooserPanel because blog.BlogAuthor is registered as a snippet
+        PageChooserPanel("department"),
+    ]
