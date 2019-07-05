@@ -63,7 +63,6 @@ INSTALLED_APPS = [
     'corsheaders',
     'modeltranslation',
     'graphene_django',
-    'django_extensions',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -71,7 +70,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
+    'django_extensions',
     'wagtail.contrib.modeladmin',
     'webpack_loader',
     'dbbackup',
