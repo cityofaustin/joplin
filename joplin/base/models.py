@@ -322,7 +322,8 @@ class InformationPage(JanisPage):
         FieldPanel('title_ar'),
         FieldPanel('title_vi'),
         InlinePanel('topics', label='Topics'),
-        FieldPanel('department'),
+        # FieldPanel('department'),
+        InlinePanel('department_owners', label='Offered by'),
         FieldPanel('description'),
         StreamFieldPanel('options'),
         FieldPanel('additional_content'),
@@ -780,9 +781,9 @@ class DepartmentContact(ClusterableModel):
         return self.department.name
 
 class DepartmentOwners(Orderable):
-    """This allows us to select one or more owners related to a service """
+    """This allows us to select one or more owners related to a page """
 
-    page = ParentalKey("base.servicePage", related_name="department_owners")
+    page = ParentalKey(Page, related_name="department_owners")
     department = models.ForeignKey(
         "base.departmentPage",
         on_delete=models.PROTECT,
