@@ -303,8 +303,8 @@ if ISPRODUCTION:
 if ISSTAGING:
     JANIS_SLUG_URL = 'https://api.github.com/repos/cityofaustin/janis/tarball/master'
 
-### security logout after x seconds
-SESSION_SECURITY_WARN_AFTER=5
-SESSION_SECURITY_EXPIRE_AFTER=10
+### security logout ward after half of expire value (four hours currently)
+SESSION_SECURITY_WARN_AFTER=14400/2
+SESSION_SECURITY_EXPIRE_AFTER=14400
 # lets us run timeout while staying logged in with closed browser tab (for now)
 SESSION_SECURITY_INSECURE=True
