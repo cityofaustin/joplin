@@ -672,14 +672,14 @@ class ServicePageContact(ClusterableModel):
 
 class ServicePageRelatedDepartments(ClusterableModel):
     page = ParentalKey(ServicePage, related_name='related_departments', default=None)
-    related_departments = models.ForeignKey(
+    related_department = models.ForeignKey(
         "base.departmentPage",
         on_delete=models.PROTECT,
     )
 
     panels = [
     	# Use a SnippetChooserPanel because blog.BlogAuthor is registered as a snippet
-        PageChooserPanel("related_departments"),
+        PageChooserPanel("related_department"),
     ]
 
 # class ServicePageRelatedDepartments(models.Model):

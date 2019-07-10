@@ -241,8 +241,7 @@ class Query(graphene.ObjectType):
     debug = graphene.Field(DjangoDebug, name='__debug')
 
     service_page = graphene.Field(ServicePageNode, id=graphene.ID(), pk=graphene.Int(), slug=graphene.String(), show_preview=graphene.Boolean(default_value=False), language=Language())
-    department_page = graphene.Node(DepartmentPageNode)
-
+    department_page = graphene.Node.Field(DepartmentPageNode)
     all_service_pages = DjangoFilterConnectionField(ServicePageNode)
     page_revision = graphene.Field(PageRevisionNode, id=graphene.ID())
     all_page_revisions = DjangoFilterConnectionField(PageRevisionNode)
