@@ -8,7 +8,7 @@ from graphene.types import Scalar
 from wagtail.core.fields import StreamField
 from wagtail.core.models import Page, PageRevision
 
-from base.models import TranslatedImage, ThreeOneOne, ServicePage, ServicePageContact, ServicePageTopic, ProcessPage, ProcessPageStep, ProcessPageContact, ProcessPageTopic, InformationPage, InformationPageContact, InformationPageTopic, DepartmentPage, DepartmentPageContact, DepartmentPageDirector, Theme, TopicCollectionPage, TopicPage, Contact, Location, ContactDayAndDuration, Department, DepartmentContact, TopicPageTopicCollection
+from base.models import TranslatedImage, ThreeOneOne, ServicePage, ServicePageContact, ServicePageTopic, ServicePageRelatedDepartments, ProcessPage, ProcessPageStep, ProcessPageContact, ProcessPageTopic, InformationPage, InformationPageContact, InformationPageTopic, DepartmentPage, DepartmentPageContact, DepartmentPageDirector, Theme, TopicCollectionPage, TopicPage, Contact, Location, ContactDayAndDuration, Department, DepartmentContact, TopicPageTopicCollection
 
 
 class StreamFieldType(Scalar):
@@ -88,6 +88,11 @@ class ContactNode(DjangoObjectType):
 class ServicePageContactNode(DjangoObjectType):
     class Meta:
         model = ServicePageContact
+        interfaces = [graphene.Node]
+
+class ServicePageRelatedDepartmentsNode(DjangoObjectType):
+    class Meta:
+        model = ServicePageRelatedDepartments
         interfaces = [graphene.Node]
 
 class ServicePageTopicNode(DjangoObjectType):
@@ -236,6 +241,8 @@ class Query(graphene.ObjectType):
     debug = graphene.Field(DjangoDebug, name='__debug')
 
     service_page = graphene.Field(ServicePageNode, id=graphene.ID(), pk=graphene.Int(), slug=graphene.String(), show_preview=graphene.Boolean(default_value=False), language=Language())
+    department_page = graphene.Node(DepartmentPageNode)
+
     all_service_pages = DjangoFilterConnectionField(ServicePageNode)
     page_revision = graphene.Field(PageRevisionNode, id=graphene.ID())
     all_page_revisions = DjangoFilterConnectionField(PageRevisionNode)

@@ -233,7 +233,7 @@ class ServicePage(JanisPage):
         FieldPanel('title_vi'),
         FieldPanel('short_description'),
         InlinePanel('topics', label='Topics'),
-        FieldPanel('department'),
+        InlinePanel('related_departments', label='Related Departments'),
         MultiFieldPanel(
         [
             HelpPanel(steps.help_text, classname="coa-helpPanel"),
@@ -670,13 +670,26 @@ class ServicePageContact(ClusterableModel):
     def __str__(self):
         return self.contact.name
 
-class ServicePageDepartments(ClusterableModel):
-    page = ParentalKey(ServicePage, related_name='related_departments')
-    departments = models.ForeignKey('base.DepartmentPage', related_name='+', on_delete=models.PROTECT)
+class ServicePageRelatedDepartments(ClusterableModel):
+    page = ParentalKey(ServicePage, related_name='related_departments', default=None)
+    related_departments = models.ForeignKey(
+        "base.departmentPage",
+        on_delete=models.PROTECT,
+    )
 
     panels = [
-        PageChooserPanel('departments'),
+    	# Use a SnippetChooserPanel because blog.BlogAuthor is registered as a snippet
+        PageChooserPanel("related_departments"),
     ]
+
+# class ServicePageRelatedDepartments(models.Model):
+#     page = ParentalKey(ServicePage, on_delete=models.PROTECT, related_name='related_departments', default=None)
+#     related_departments = models.ForeignKey(
+#         'wagtailcore.Page', on_delete=models.PROTECT, related_name='+'
+#     )
+#     panels = [
+#         PageChooserPanel('related_departments', 'base.DepartmentPage'),
+#     ]
 
 class TopicCollectionPageTopicCollection(ClusterableModel):
     page = ParentalKey(TopicCollectionPage, related_name='topiccollections')
