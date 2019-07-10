@@ -76,7 +76,8 @@ INSTALLED_APPS = [
     'wagtail.contrib.modeladmin',
     'webpack_loader',
     'dbbackup',
-    'smuggler'
+    'smuggler',
+    'session_security'
 ]
 
 MIDDLEWARE = [
@@ -92,6 +93,7 @@ MIDDLEWARE = [
 
     'wagtail.core.middleware.SiteMiddleware',
     'wagtail.contrib.redirects.middleware.RedirectMiddleware',
+    'session_security.middleware.SessionSecurityMiddleware',
 ]
 
 ROOT_URLCONF = 'urls'
@@ -301,3 +303,9 @@ if ISPRODUCTION:
 
 if ISSTAGING:
     JANIS_SLUG_URL = 'https://api.github.com/repos/cityofaustin/janis/tarball/master'
+
+### security logout ward after half of expire value (four hours currently)
+SESSION_SECURITY_WARN_AFTER=14400/2
+SESSION_SECURITY_EXPIRE_AFTER=14400
+# lets us run timeout while staying logged in with closed browser tab (for now)
+SESSION_SECURITY_INSECURE=True
