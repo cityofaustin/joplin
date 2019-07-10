@@ -682,14 +682,6 @@ class ServicePageRelatedDepartments(ClusterableModel):
         PageChooserPanel("related_department"),
     ]
 
-# class ServicePageRelatedDepartments(models.Model):
-#     page = ParentalKey(ServicePage, on_delete=models.PROTECT, related_name='related_departments', default=None)
-#     related_departments = models.ForeignKey(
-#         'wagtailcore.Page', on_delete=models.PROTECT, related_name='+'
-#     )
-#     panels = [
-#         PageChooserPanel('related_departments', 'base.DepartmentPage'),
-#     ]
 
 class TopicCollectionPageTopicCollection(ClusterableModel):
     page = ParentalKey(TopicCollectionPage, related_name='topiccollections')
