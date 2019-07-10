@@ -94,7 +94,7 @@ class JanisBasePage(Page):
             if self.topiccollections and self.topiccollections.all():
                 theme_slug = self.topiccollections.all()[0].topiccollection.theme.slug;
                 tc_slug = self.topiccollections.all()[0].topiccollection.slug;
-                return os.environ["JANIS_URL"] + "/en/" + theme_slug + "/" + tc_slug + "/" + page_slug            
+                return os.environ["JANIS_URL"] + "/en/" + theme_slug + "/" + tc_slug + "/" + page_slug
 
 
         if self.janis_url_page_type == "services" or self.janis_url_page_type == "information":
@@ -669,6 +669,14 @@ class ServicePageContact(ClusterableModel):
 
     def __str__(self):
         return self.contact.name
+
+class ServicePageDepartments(ClusterableModel):
+    page = ParentalKey(ServicePage, related_name='related_departments')
+    departments = models.ForeignKey('base.DepartmentPage', related_name='+', on_delete=models.PROTECT)
+
+    panels = [
+        PageChooserPanel('departments'),
+    ]
 
 class TopicCollectionPageTopicCollection(ClusterableModel):
     page = ParentalKey(TopicCollectionPage, related_name='topiccollections')
