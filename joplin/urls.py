@@ -13,16 +13,16 @@ from base.views import joplin_views
 from base.models import HomePage
 
 
-def home(request):
-    page = HomePage.objects.first()
-    return redirect('wagtailadmin_explore', page.id)
+# def home(request):
+#     page = HomePage.objects.first()
+#     return redirect('wagtailadmin_explore', page.id)
 
 
 urlpatterns = [
     url(r'^django-admin/', include('smuggler.urls')),
     url(r'^django-admin/', admin.site.urls),
-
-    path('admin/', home),
+    # 
+    # path('admin/', home),
     url(r'admin/pages/(\d+)/publish/$', joplin_views.publish, name='publish'),
     url(r'admin/pages/new_from_modal/$', joplin_views.new_page_from_modal, name='new_page_from_modal'),
     url(r'^admin/', include(wagtailadmin_urls)),
