@@ -33,6 +33,7 @@ def before_edit_page(request, page):
 
 @hooks.register('construct_main_menu')
 def configure_main_menu(request, menu_items):
+    # TODO: this whole pattern is screwy and dosen't match wagtail guides
     new_items = []
 
     contacts_item = MenuItem('', "/admin/snippets/base/contact/", classnames="icon icon-group", order=800)
@@ -41,8 +42,10 @@ def configure_main_menu(request, menu_items):
     locations_item = MenuItem('', "/admin/snippets/base/location/", classnames="icon icon-locations", order=900)
     new_items.append(locations_item)
 
+    maps_item = MenuItem('', "/admin/snippets/base/map/", classnames='icon icon-wagtail', order=1000)
+    new_items.append(maps_item)
     # @TODO: make sure this only shows for admins
-    manage_users_item = MenuItem('', "/admin/users/", classnames="icon icon-group", order=1000)
+    manage_users_item = MenuItem('', "/admin/users/", classnames="icon icon-group", order=1100)
     new_items.append(manage_users_item)
 
     for item in menu_items:
@@ -56,6 +59,10 @@ def configure_main_menu(request, menu_items):
 def register_page_list_menu_item():
     home = HomePage.objects.first()
     return MenuItem('Home', reverse('wagtailadmin_explore', args=[home.pk]), classnames='icon icon-home', order=10)
+
+@hooks.register('register_admin_menu_item')
+def register_map_menu_item():
+    return MenuItem('Maps', "/admin/snippets/base/map/", classnames='icon icon-site', order=10)
 
 @hooks.register('register_joplin_page_listing_buttons')
 def joplin_page_listing_buttons(page, page_perms, is_parent=False):
