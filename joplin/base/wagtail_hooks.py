@@ -9,7 +9,7 @@ from wagtail.contrib.modeladmin.options import ModelAdmin, ModelAdminGroup, mode
 from wagtail.admin.widgets import Button, ButtonWithDropdownFromHook, PageListingButton
 from wagtail.core import hooks
 
-from base.models import HomePage, Location, Contact
+from base.models import HomePage, Location, Contact, Map
 from wagtail.core.models import PageRevision
 
 from html.parser import HTMLParser
@@ -47,15 +47,14 @@ def configure_main_menu(request, menu_items):
         [
         'explorer',
         'documents',
-        'settings',
-        'snippets'
         ]
     ]
 
     # replace wagtail icon with material-icons class to use that font
     for item in menu_items:
             item.label = ''
-            item.classnames = item.classnames.replace('icon ', 'material-icons ', 1)
+            if item.name not in ['snippets', 'settings', 'important-snippets']:
+                item.classnames = item.classnames.replace('icon ', 'material-icons ', 1)
 
 @hooks.register('register_admin_menu_item')
 def register_page_list_menu_item():
@@ -78,22 +77,25 @@ def register_contacts_menu_item():
 def register_users_menu_item():
     return MenuItem('Users', "/admin/users/", classnames="material-icons icon-users", order=50)
 
-
 # example of rendering custom nested menu items
-# class LocationModelAdmin(ModelAdmin):
-#     model = Location
-#     search_fields = ('street',)
-#
-#
-# class ContactModelAdmin(ModelAdmin):
-#     model = Contact
-#
-# class ReallyAwesomeGroup(ModelAdminGroup):
-#     menu_label = 'Important Snippets'
-#     items = (LocationModelAdmin, ContactModelAdmin)
-#
-#
-# modeladmin_register(ReallyAwesomeGroup)
+class LocationModelAdmin(ModelAdmin):
+    model = Location
+    search_fields = ('street',)
+
+class MapModelAdmin(ModelAdmin):
+    model = Map
+
+
+class ContactModelAdmin(ModelAdmin):
+    model = Contact
+
+class ReallyAwesomeGroup(ModelAdminGroup):
+    menu_label = 'Important Snippets'
+    menu_icon = 'folder-open-inverse'
+    items = (LocationModelAdmin, ContactModelAdmin, MapModelAdmin)
+
+
+modeladmin_register(ReallyAwesomeGroup)
 
 @hooks.register('register_joplin_page_listing_buttons')
 def joplin_page_listing_buttons(page, page_perms, is_parent=False):
