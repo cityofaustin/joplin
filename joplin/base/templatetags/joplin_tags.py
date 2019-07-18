@@ -22,7 +22,7 @@ STYLEGUIDE_PAGES = {
   'service page': '/pick-the-perfect-content-type/service-page',
   'process page': '/pick-the-perfect-content-type/process-page',
   'information page': '/pick-the-perfect-content-type/information-page',
-  'department page': '',
+  'department page': 'pick-the-perfect-content-type/department-page',
   'topic page': '',
   'topic collection page': '',
 }
