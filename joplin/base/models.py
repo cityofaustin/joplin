@@ -22,7 +22,7 @@ from . import blocks as custom_blocks
 from . import forms as custom_forms
 
 WYSIWYG_GENERAL = ['h1', 'h2', 'h3', 'h4', 'bold', 'link', 'ul', 'ol', 'code']
-WYSIWYG_SERVICE_STEP = ['ul', 'ol', 'link', 'code']
+WYSIWYG_SERVICE_STEP = ['ul', 'ol', 'link', 'code', 'rich-text-button-link']
 DEFAULT_MAX_LENGTH = 255
 SHORT_DESCRIPTION_LENGTH = 300
 
@@ -94,7 +94,7 @@ class JanisBasePage(Page):
             if self.topiccollections and self.topiccollections.all():
                 theme_slug = self.topiccollections.all()[0].topiccollection.theme.slug;
                 tc_slug = self.topiccollections.all()[0].topiccollection.slug;
-                return os.environ["JANIS_URL"] + "/en/" + theme_slug + "/" + tc_slug + "/" + page_slug            
+                return os.environ["JANIS_URL"] + "/en/" + theme_slug + "/" + tc_slug + "/" + page_slug
 
 
         if self.janis_url_page_type == "services" or self.janis_url_page_type == "information":
