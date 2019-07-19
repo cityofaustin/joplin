@@ -7,9 +7,13 @@
 {% endblock %}
 
 {% block js %}
+
+
 {{ block.super }}
 {% render_bundle 'admin' %}
-
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
+{% include 'session_security/all.html' %}
 <div class="header coa-header">
     <div>
         <img class="wagtail-logo wagtail-logo__full" src="{% static 'images/coa_seal_transparent_white.png' %}" alt="Welcome to City of Austin CMS" width="60" />

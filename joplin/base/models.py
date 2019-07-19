@@ -197,7 +197,7 @@ class ServicePage(JanisPage):
         ],
         verbose_name='Write out the steps a resident needs to take to use the service',
         # this gets called in the help panel
-        help_text='A step may have a basic text step or an options accordian which reveals two or more options',
+        help_text='A step may have a basic text step or an options accordion which reveals two or more options',
         blank=True
     )
 
