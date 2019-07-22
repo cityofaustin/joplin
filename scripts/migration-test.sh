@@ -33,9 +33,10 @@ export COMPOSE_PROJECT_NAME=joplin_migration_test
 if [ "$LOAD_PROD_DATA" = "on" ]; then
   export TMP_PROD_DATADUMP=$CURRENT_DIR/../joplin/db/system-generated/tmp_production.datadump.json
   export DOCKER_TAG_APP="cityofaustin/joplin-app:production-latest"
+  export SOURCED_FROM_PROD=TRUE
   echo "Pulling datadump from Production"
   # Replace all user passwords with default admin test password
-  # TODO: once prod has jq dependency, run sanitation script on production container itself
+  # TODO: once prod has scripts/export_heroku_data.sh, run sanitation script on production container itself
   heroku run -xa joplin python ./joplin/manage.py dumpdata --indent 2 --natural-foreign --natural-primary -- | \
     jq '(.[] | select(.model == "users.user") | .fields.password) |= "pbkdf2_sha256$150000$GJQ1UoZlgrC4$Ir0Uww/i9f2VKzHznU4B1uaHbdCxRnZ69w12cIvxWP0="' \
     > $TMP_PROD_DATADUMP
@@ -161,8 +162,8 @@ function handle_input {
     append "TOTAL_MIGRATIONS: $(exec_psql_query "select count(*) from django_migrations;")"
     append "TOTAL_BASE_MIGRATIONS: $(exec_psql_query "select count(*) from django_migrations where app='base';")"
     append "BRANCH: \"$(git rev-parse --abbrev-ref HEAD)\""
-    append "SOURCED_FROM_PROD: $([[ "$LOAD_PROD_DATA" == "on" ]] && echo 'TRUE' || echo 'FALSE')"
-    append "SOURCED_FROM_PRIOR_DATADUMP: $([[ "$LOAD_PROD_DATA" != "on" ]] && echo 'TRUE' || echo 'FALSE')"
+    append "SOURCED_FROM_PROD: $([[ "$SOURCED_FROM_PROD" == "TRUE" ]] && echo 'TRUE' || echo 'FALSE')"
+    append "SOURCED_FROM_PRIOR_DATADUMP: $([[ "$SOURCED_FROM_PROD" != "TRUE" ]] && echo 'TRUE' || echo 'FALSE')"
 
     exit 0
   elif [ "$answer" == "n" ]; then

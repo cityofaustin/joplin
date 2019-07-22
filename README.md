@@ -16,6 +16,7 @@ Joplin is the Authoring Interface for adding and editing content for alpha.austi
 -   [Updating the Data Model](#updating-the-data-model)
 -   [CircleCI Deployments](#circleci-deployments)
 -   [Useful Commands](#useful-commands)
+-   [Debugging With Pycharm](#debugging-with-pycharm)
 -   [Design](#design)
 -   [Misc](#misc)
 
@@ -269,6 +270,15 @@ The migration process currently consists of 3 commands:
         # Then Rebuild (be sure to have the heroku cli installed in your machine)
         REBUILD=on ./scripts/serve-local.sh
         ```
+
+---
+
+## Debugging with Pycharm
+
+1. Run `sh scripts/undockered.sh` to initialize an undockered Joplin instance. This will run your initial data migration and seeding for you. It will also spin up joplin_db and joplin_assets containers. These are steps that our Pycharm debugging script can't do on its own.
+2. Shut down `^C` your undockered Joplin runserver. The joplin_db and joplin_assets containers should still be running.
+3. Open Pycharm.
+4. Open your 'Undockered Joplin' Run Configuration `Run > Debug 'Undockered Joplin'`. This run configuration should be git committed in your .idea/ folder. It will run a Joplin `runserver` command with the benefit of Pycharm's debugger. 
 
 ---
 
