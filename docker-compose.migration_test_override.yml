@@ -9,3 +9,5 @@ services:
     volumes:
       # Use local docker-entrypoint.sh instead of docker-entrypoint from older master image
       - "./docker-entrypoint.sh:/app/docker-entrypoint.sh"
+      # Use local scripts in case there were updates that are not in older master image
+      - "./scripts:/app/scripts"
