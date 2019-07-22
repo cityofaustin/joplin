@@ -86,5 +86,6 @@ else
   # Only run containers for db and assets
   docker-compose -f docker-compose.yml -f docker-compose.local_override.yml up -d db assets
 
+  sh $CURRENT_DIR/../scripts/setup-undockered-data.sh
   pipenv run $CURRENT_DIR/../joplin/manage.py runserver 0.0.0.0:$JOPLIN_APP_HOST_PORT
 fi
