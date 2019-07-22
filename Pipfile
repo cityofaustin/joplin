@@ -23,7 +23,7 @@ django-storages = "==1.6.6"
 django-dbbackup = "==3.2.0"
 django-smuggler = "==0.9.1"
 PyYAML = ">=4.2b1"
-# pygraphviz = "*" # Breaks undockerized Joplin
+# pygraphviz = "*" # Breaks on OSX/undockerized
 django-session-security = "==2.6.5"
 
 [requires]

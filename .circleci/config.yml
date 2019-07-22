@@ -61,7 +61,6 @@ workflows:
           filters:
             branches:
               ignore:
-                - master
                 - production
       - build_and_release:
           requires:
