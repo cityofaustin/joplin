@@ -31,53 +31,23 @@
 }
 
 .nav-main .menu-item {
-    .icon:before {
-        content: '';
-        display: inline-block;
-        margin: auto auto auto 8px;
-    }
-}
-
-.menu-active {
     .icon-home:before {
-        background-image: url('../static/images/content_d1ecf1.svg');
+        content: 'create';
     }
 
-    .icon-image:before,
-    .icon-picture:before {
-        background-image: url('../static/images/image_icon_d1ecf1.svg');
+    .icon-maps:before {
+        content: 'map';
     }
-}
-
-.icon-home:before {
-    background-image: url('../static/images/content_cacaca.svg');
-    content: '';
-    width: 40px;
-    height: 40px;
-    background-size: 40px 40px;
-}
-
-.icon-image:before,
-.icon-picture:before {
-    background-image: url('../static/images/image_icon_cacaca.svg');
-    content: '';
-    width: 40px !important;
-    height: 40px;
-    background-size: 40px 40px;
-}
-
-.icon-group:before {
-    background-image: url('../static/images/group_icon_cacaca.svg');
-    content: '';
-    width: 40px !important;
-    height: 40px;
-    background-size: 40px 40px;
-}
-
-.icon-locations:before {
-    background-image: url('../static/images/locations_icon_cacaca.svg');
-    content: '';
-    width: 40px !important;
-    height: 40px;
-    background-size: 40px 40px;
+    .icon-locations:before {
+        content: 'location_on';
+    }
+    .icon-image:before {
+        content: 'photo';
+    }
+    .icon-contacts:before {
+        content: 'contact_phone';
+    }
+    .icon-users:before {
+        content: 'account_circle';
+    }
 }
