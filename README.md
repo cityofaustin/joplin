@@ -217,15 +217,21 @@ If deploying on master or production, we first take a backup of the database and
 
 Once the name is generated then it proceeds to generate a full URL link where the final file will be stored in S3. It connects to the database and generates a full backup and automatically saves it to S3 using the established nomenclature.
 
-**3. create_review_app**
+**3. build_heroku_infrastructure**
 
-`.circleci/scripts/create_review_app.sh`
+`.circleci/scripts/build_heroku_infrastructure.sh`
 
-Builds infrastructure for a new heroku app. This step is only done for PR/Review/Dev branches because staging and production branches already have heroku apps in place.
+Builds infrastructure for a new heroku app. Rebuilds database for an existing heroku app if the database does not exist. This step is not done on the production branch because production should already have a heroku app and database in place.
 
-**4. build_and_release**
+**4. set_pr_vars**
 
-`.circleci/scripts/build.sh`
+`.circleci/scripts/set_pr_vars.sh`
+
+Adds environment variables to PR apps. Environment vars for staging and production are handled manually within Heroku console.
+
+**5. build_and_release**
+
+`.circleci/scripts/build_image.sh`
 Builds the Joplin docker image and pushes to cityofaustin's dockerhub repo and the heroku app.
 
 `.circleci/scripts/release.sh`
@@ -278,7 +284,7 @@ The migration process currently consists of 3 commands:
 1. Run `sh scripts/undockered.sh` to initialize an undockered Joplin instance. This will run your initial data migration and seeding for you. It will also spin up joplin_db and joplin_assets containers. These are steps that our Pycharm debugging script can't do on its own.
 2. Shut down `^C` your undockered Joplin runserver. The joplin_db and joplin_assets containers should still be running.
 3. Open Pycharm.
-4. Open your 'Undockered Joplin' Run Configuration `Run > Debug 'Undockered Joplin'`. This run configuration should be git committed in your .idea/ folder. It will run a Joplin `runserver` command with the benefit of Pycharm's debugger. 
+4. Open your 'Undockered Joplin' Run Configuration `Run > Debug 'Undockered Joplin'`. This run configuration should be git committed in your .idea/ folder. It will run a Joplin `runserver` command with the benefit of Pycharm's debugger.
 
 ---
 
