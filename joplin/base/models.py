@@ -679,19 +679,19 @@ class ServicePageRelatedDepartments(ClusterableModel):
         on_delete=models.PROTECT,
     )
 
-     panels = [
+    panels = [
         # Use a SnippetChooserPanel because blog.BlogAuthor is registered as a snippet
         PageChooserPanel("related_department"),
     ]
 
 class InformationPageRelatedDepartments(ClusterableModel):
-    page = ParentalKey(ServicePage, related_name='related_departments', default=None)
+    page = ParentalKey(InformationPage, related_name='related_departments', default=None)
     related_department = models.ForeignKey(
         "base.departmentPage",
         on_delete=models.PROTECT,
     )
 
-     panels = [
+    panels = [
         # Use a SnippetChooserPanel because blog.BlogAuthor is registered as a snippet
         PageChooserPanel("related_department"),
     ]
