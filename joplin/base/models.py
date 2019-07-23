@@ -324,6 +324,7 @@ class InformationPage(JanisPage):
         FieldPanel('title_vi'),
         InlinePanel('topics', label='Topics'),
         FieldPanel('department'),
+        InlinePanel('related_departments', label='Related Departments'),
         FieldPanel('description'),
         StreamFieldPanel('options'),
         FieldPanel('additional_content'),
@@ -672,6 +673,18 @@ class ServicePageContact(ClusterableModel):
         return self.contact.name
 
 class ServicePageRelatedDepartments(ClusterableModel):
+    page = ParentalKey(ServicePage, related_name='related_departments', default=None)
+    related_department = models.ForeignKey(
+        "base.departmentPage",
+        on_delete=models.PROTECT,
+    )
+
+     panels = [
+        # Use a SnippetChooserPanel because blog.BlogAuthor is registered as a snippet
+        PageChooserPanel("related_department"),
+    ]
+
+class InformationPageRelatedDepartments(ClusterableModel):
     page = ParentalKey(ServicePage, related_name='related_departments', default=None)
     related_department = models.ForeignKey(
         "base.departmentPage",

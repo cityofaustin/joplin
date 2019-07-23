@@ -8,7 +8,7 @@ from graphene.types import Scalar
 from wagtail.core.fields import StreamField
 from wagtail.core.models import Page, PageRevision
 
-from base.models import TranslatedImage, ThreeOneOne, ServicePage, ServicePageContact, ServicePageTopic, ServicePageRelatedDepartments, ProcessPage, ProcessPageStep, ProcessPageContact, ProcessPageTopic, InformationPage, InformationPageContact, InformationPageTopic, DepartmentPage, DepartmentPageContact, DepartmentPageDirector, Theme, TopicCollectionPage, TopicPage, Contact, Location, ContactDayAndDuration, Department, DepartmentContact, TopicPageTopicCollection
+from base.models import TranslatedImage, ThreeOneOne, ServicePage, ServicePageContact, ServicePageTopic, ServicePageRelatedDepartments, InformationPageRelatedDepartments, ProcessPage, ProcessPageStep, ProcessPageContact, ProcessPageTopic, InformationPage, InformationPageContact, InformationPageTopic, DepartmentPage, DepartmentPageContact, DepartmentPageDirector, Theme, TopicCollectionPage, TopicPage, Contact, Location, ContactDayAndDuration, Department, DepartmentContact, TopicPageTopicCollection
 
 class StreamFieldType(Scalar):
     @staticmethod
@@ -97,6 +97,11 @@ class ServicePageTopicNode(DjangoObjectType):
 class ServicePageRelatedDepartmentsNode(DjangoObjectType):
     class Meta:
         model = ServicePageRelatedDepartments
+        interfaces = [graphene.Node]
+
+class InformationPageRelatedDepartmentsNode(DjangoObjectType):
+    class Meta:
+        model = InformationPageRelatedDepartments
         interfaces = [graphene.Node]
 
 class TranslatedImageNode(DjangoObjectType):
