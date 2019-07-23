@@ -234,6 +234,7 @@ class ServicePage(JanisPage):
         FieldPanel('short_description'),
         InlinePanel('topics', label='Topics'),
         FieldPanel('department'),
+        InlinePanel('related_departments', label='Related Departments'),
         MultiFieldPanel(
         [
             HelpPanel(steps.help_text, classname="coa-helpPanel"),
@@ -323,6 +324,7 @@ class InformationPage(JanisPage):
         FieldPanel('title_vi'),
         InlinePanel('topics', label='Topics'),
         FieldPanel('department'),
+        InlinePanel('related_departments', label='Related Departments'),
         FieldPanel('description'),
         StreamFieldPanel('options'),
         FieldPanel('additional_content'),
@@ -669,6 +671,30 @@ class ServicePageContact(ClusterableModel):
 
     def __str__(self):
         return self.contact.name
+
+class ServicePageRelatedDepartments(ClusterableModel):
+    page = ParentalKey(ServicePage, related_name='related_departments', default=None)
+    related_department = models.ForeignKey(
+        "base.departmentPage",
+        on_delete=models.PROTECT,
+    )
+
+    panels = [
+        # Use a SnippetChooserPanel because blog.BlogAuthor is registered as a snippet
+        PageChooserPanel("related_department"),
+    ]
+
+class InformationPageRelatedDepartments(ClusterableModel):
+    page = ParentalKey(InformationPage, related_name='related_departments', default=None)
+    related_department = models.ForeignKey(
+        "base.departmentPage",
+        on_delete=models.PROTECT,
+    )
+
+    panels = [
+        # Use a SnippetChooserPanel because blog.BlogAuthor is registered as a snippet
+        PageChooserPanel("related_department"),
+    ]
 
 class TopicCollectionPageTopicCollection(ClusterableModel):
     page = ParentalKey(TopicCollectionPage, related_name='topiccollections')
