@@ -1,8 +1,8 @@
-TIMESTAMP: "2019-07-22--10-24-08"
-LATEST_MIGRATION: "0001_squashed_0016_change_page_url_path_to_text_field"
-LATEST_BASE_MIGRATION: "0076_auto_20190710_2252"
-TOTAL_MIGRATIONS: 204
-TOTAL_BASE_MIGRATIONS: 79
-BRANCH: "2311-bad-data"
-SOURCED_FROM_PROD: TRUE
-SOURCED_FROM_PRIOR_DATADUMP: FALSE
+TIMESTAMP: "2019-07-23--12-00-12"
+LATEST_MIGRATION: "0077_informationpagerelateddepartments_servicepagerelateddepartments"
+LATEST_BASE_MIGRATION: "0077_informationpagerelateddepartments_servicepagerelateddepartments"
+TOTAL_MIGRATIONS: 205
+TOTAL_BASE_MIGRATIONS: 80
+BRANCH: "2271-multiple-departments-for-pages"
+SOURCED_FROM_PROD: FALSE
+SOURCED_FROM_PRIOR_DATADUMP: TRUE
