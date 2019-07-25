@@ -25,6 +25,7 @@ django-smuggler = "==0.9.1"
 PyYAML = ">=4.2b1"
 # pygraphviz = "*" # Breaks on OSX/undockerized
 django-session-security = "==2.6.5"
+wagtail-react-streamfield = "*"
 
 [requires]
 python_version = "3.7"
