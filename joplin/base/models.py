@@ -41,7 +41,6 @@ class TranslatedImageRendition(AbstractRendition):
             ('image', 'filter_spec', 'focal_point_key'),
         )
 
-
 @register_snippet
 class ThreeOneOne(ClusterableModel):
     title = models.CharField(max_length=DEFAULT_MAX_LENGTH)
@@ -94,7 +93,7 @@ class JanisBasePage(Page):
             if self.topiccollections and self.topiccollections.all():
                 theme_slug = self.topiccollections.all()[0].topiccollection.theme.slug;
                 tc_slug = self.topiccollections.all()[0].topiccollection.slug;
-                return os.environ["JANIS_URL"] + "/en/" + theme_slug + "/" + tc_slug + "/" + page_slug            
+                return os.environ["JANIS_URL"] + "/en/" + theme_slug + "/" + tc_slug + "/" + page_slug
 
 
         if self.janis_url_page_type == "services" or self.janis_url_page_type == "information":
@@ -482,6 +481,32 @@ class DepartmentPageDirector(Orderable):
         FieldPanel('about'),
     ]
 
+class OfficialDocumentPage(JanisPage):
+    janis_url_page_type = "official_document"
+    base_form_class = custom_forms.OfficialDocumentPageForm
+
+    description = models.TextField(blank=True)
+
+    department = models.ForeignKey(
+        'base.DepartmentPage',
+        on_delete=models.PROTECT,
+        verbose_name='Select a Department',
+        blank=True,
+        null=True,
+    )
+
+    content_panels = [
+        FieldPanel('title_en'),
+        FieldPanel('title_es'),
+        FieldPanel('title_ar'),
+        FieldPanel('title_vi'),
+        FieldPanel('description'),
+        InlinePanel('topics', label='Topics'),
+        FieldPanel('department'),
+        InlinePanel('related_departments', label='Related Departments'),
+        FieldPanel('author_notes'),
+    ]
+
 class ProcessPageStep(Orderable):
     page = ParentalKey(ProcessPage, related_name='process_steps')
     title = models.CharField(max_length=DEFAULT_MAX_LENGTH)
@@ -696,6 +721,18 @@ class InformationPageRelatedDepartments(ClusterableModel):
         PageChooserPanel("related_department"),
     ]
 
+class OfficialDocumentPageRelatedDepartments(ClusterableModel):
+    page = ParentalKey(OfficialDocumentPage, related_name='related_departments', default=None)
+    related_department = models.ForeignKey(
+        "base.departmentPage",
+        on_delete=models.PROTECT,
+    )
+
+    panels = [
+        # Use a SnippetChooserPanel because blog.BlogAuthor is registered as a snippet
+        PageChooserPanel("related_department"),
+    ]
+
 class TopicCollectionPageTopicCollection(ClusterableModel):
     page = ParentalKey(TopicCollectionPage, related_name='topiccollections')
     topiccollection = models.ForeignKey('base.TopicCollectionPage',  verbose_name='Select a Topic Collection', related_name='+', on_delete=models.CASCADE)
@@ -750,6 +787,23 @@ class InformationPageTopic(ClusterableModel):
     page = ParentalKey(InformationPage, related_name='topics')
     topic = models.ForeignKey('base.TopicPage',  verbose_name='Select a Topic', related_name='+', on_delete=models.CASCADE)
     toplink = models.BooleanField(default=False, verbose_name='Make this page a top link for this topic')
+
+    panels = [
+        MultiFieldPanel(
+            [
+                PageChooserPanel('topic'),
+                FieldPanel('toplink'),
+            ]
+        ),
+    ]
+
+    def __str__(self):
+        return self.topic.text
+
+class OfficialDocumentPageTopic(ClusterableModel):
+    page = ParentalKey(OfficialDocumentPage, related_name='topics')
+    topic = models.ForeignKey('base.TopicPage',  verbose_name='Select a Topic', related_name='+', on_delete=models.CASCADE)
+    toplink = models.BooleanField(default=False, verbose_name='Make this list a top link for this topic')
 
     panels = [
         MultiFieldPanel(
