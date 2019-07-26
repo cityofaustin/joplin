@@ -8,7 +8,7 @@ from graphene.types import Scalar
 from wagtail.core.fields import StreamField
 from wagtail.core.models import Page, PageRevision
 
-from base.models import TranslatedImage, ThreeOneOne, ServicePage, ServicePageContact, ServicePageTopic, ServicePageRelatedDepartments, InformationPageRelatedDepartments, ProcessPage, ProcessPageStep, ProcessPageContact, ProcessPageTopic, InformationPage, InformationPageContact, InformationPageTopic, DepartmentPage, DepartmentPageContact, DepartmentPageDirector, Theme, TopicCollectionPage, TopicPage, Contact, Location, ContactDayAndDuration, Department, DepartmentContact, TopicPageTopicCollection
+from base.models import TranslatedImage, ThreeOneOne, ServicePage, ServicePageContact, ServicePageTopic, ServicePageRelatedDepartments, InformationPageRelatedDepartments, ProcessPage, ProcessPageStep, ProcessPageContact, ProcessPageTopic, InformationPage, InformationPageContact, InformationPageTopic, DepartmentPage, DepartmentPageContact, DepartmentPageDirector, Theme, TopicCollectionPage, TopicPage, Contact, Location, ContactDayAndDuration, Department, DepartmentContact, TopicPageTopicCollection, OfficialDocumentPage, OfficialDocumentPageRelatedDepartments, OfficialDocumentPageTopic
 
 class StreamFieldType(Scalar):
     @staticmethod
@@ -104,6 +104,11 @@ class InformationPageRelatedDepartmentsNode(DjangoObjectType):
         model = InformationPageRelatedDepartments
         interfaces = [graphene.Node]
 
+class OfficialDocumentPageRelatedDepartmentsNode(DjangoObjectType):
+    class Meta:
+        model = OfficialDocumentPageRelatedDepartments
+        interfaces = [graphene.Node]
+
 class TranslatedImageNode(DjangoObjectType):
     class Meta:
         model = TranslatedImage
@@ -153,6 +158,12 @@ class DepartmentPageNode(DjangoObjectType):
         filter_fields = ['id', 'slug', 'live']
         interfaces = [graphene.Node]
 
+class OfficialDocumentPageNode(DjangoObjectType):
+    class Meta:
+        model = OfficialDocumentPage
+        filter_fields = ['id', 'slug', 'department', 'live']
+        interfaces = [graphene.Node]
+
 class PageRevisionNode(DjangoObjectType):
     as_service_page = graphene.NonNull(ServicePageNode)
     as_process_page = graphene.NonNull(ProcessPageNode)
@@ -160,6 +171,7 @@ class PageRevisionNode(DjangoObjectType):
     as_department_page = graphene.NonNull(DepartmentPageNode)
     as_topic_page = graphene.NonNull(TopicNode)
     as_topic_collection_page = graphene.NonNull(TopicCollectionNode)
+    as_official_document_page = graphene.NonNull(OfficialDocumentPageNode)
 
     def resolve_as_service_page(self, resolve_info, *args, **kwargs):
         return self.as_page_object();
@@ -177,6 +189,9 @@ class PageRevisionNode(DjangoObjectType):
         return self.as_page_object();
 
     def resolve_as_topic_collection_page(self, resolve_info, *args, **kwargs):
+        return self.as_page_object();
+
+    def resolve_as_official_document_page(self, resolve_info, *args, **kwargs):
         return self.as_page_object();
 
     class Meta:
@@ -219,6 +234,11 @@ class DepartmentPageDirectorNode(DjangoObjectType):
         model = DepartmentPageDirector
         interfaces = [graphene.Node]
 
+class OfficialDocumentPageTopicNode(DjangoObjectType):
+    class Meta:
+        model = OfficialDocumentPageTopic
+        interfaces = [graphene.Node]
+
 def get_page_with_preview_data(page, session):
     # Wagtail saves preview data in the session. We want to mimick what they're doing to generate the built-in preview.
     # https://github.com/wagtail/wagtail/blob/db6d36845f3f2c5d7009a22421c2efab9968aa24/wagtail/admin/views/pages.py#L544
@@ -257,6 +277,7 @@ class Query(graphene.ObjectType):
     all_topic_collections = DjangoFilterConnectionField(TopicCollectionNode)
     all_departments = DjangoFilterConnectionField(DepartmentNode)
     all_311 = DjangoFilterConnectionField(ThreeOneOneNode)
+    all_official_document_pages = DjangoFilterConnectionField(OfficialDocumentPageNode)
 
     def resolve_page_revision(self, resolve_info, id=None):
         revision = graphene.Node.get_node_from_global_id(resolve_info, id)

@@ -25,6 +25,7 @@ STYLEGUIDE_PAGES = {
   'department page': 'pick-the-perfect-content-type/department-page',
   'topic page': '',
   'topic collection page': '',
+  'official document page': '',
 }
 
 @register.simple_tag

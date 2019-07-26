@@ -504,7 +504,6 @@ class OfficialDocumentPage(JanisPage):
         InlinePanel('topics', label='Topics'),
         FieldPanel('department'),
         InlinePanel('related_departments', label='Related Departments'),
-        FieldPanel('author_notes'),
     ]
 
 class ProcessPageStep(Orderable):
