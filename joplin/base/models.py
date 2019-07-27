@@ -107,9 +107,7 @@ class JanisBasePage(Page):
                     tc_slug = self.topics.all()[0].topic.topiccollections.all()[0].topiccollection.slug;
                     return os.environ["JANIS_URL"] + "/en/" + theme_slug + "/" + tc_slug + "/" + topic_slug + "/" + page_slug
 
-            # If we have a department, use that
-            if self.department:
-                return os.environ["JANIS_URL"] + "/en/" + self.department.slug + "/" + page_slug
+            # TODO: bring back departments now that we can have multiple
 
         # We don't have a valid live url
         # TODO: add something to make this clear to users
