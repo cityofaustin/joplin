@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'api.apps.APIConfig',
 
     'wagtail.api.v2',
+    'generic_chooser',
 
     'wagtail.embeds',
     'wagtail.sites',

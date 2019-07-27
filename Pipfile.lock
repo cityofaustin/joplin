@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "7bab3e2b4f19edca8ce08424edc9cdce5fbee0769bb7cc2e4327e99ccca6f627"
+            "sha256": "2c7609c3767f0536dbb3765406d32a4d890b6528a0cdd76207c0cff529e73211"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -41,10 +41,10 @@
         },
         "botocore": {
             "hashes": [
-                "sha256:140ab03867d912b9cf44421861e6191681cbc065e36ccb51ece865b0ee30b5f3",
-                "sha256:f9c54673beb91ea21c718f1c1fef64862851c561a3810a18b39d3fdbd62ce32c"
+                "sha256:6e7c49014430f73ba6ab638d4ad313f8522b8185e476fe1a57ce9cd50c596062",
+                "sha256:78627966a280328e4a7018758e91e6413d5cae8387e08ab219e232689a92cb45"
             ],
-            "version": "==1.12.188"
+            "version": "==1.12.197"
         },
         "certifi": {
             "hashes": [
@@ -202,10 +202,10 @@
         },
         "graphql-core": {
             "hashes": [
-                "sha256:60ef8277b82aaad49e87154a0288a9542a82a63909568375712f826b1c280ef5",
-                "sha256:6288fe97c32d2f868a2dfe62e766dc85d48c96c1d085294edf44714190f2e4f3"
+                "sha256:1488f2a5c2272dc9ba66e3042a6d1c30cea0db4c80bd1e911c6791ad6187d91b",
+                "sha256:da64c472d720da4537a2e8de8ba859210b62841bd47a9be65ca35177f62fe0e4"
             ],
-            "version": "==2.2"
+            "version": "==2.2.1"
         },
         "graphql-relay": {
             "hashes": [
@@ -368,10 +368,10 @@
         },
         "rx": {
             "hashes": [
-                "sha256:69e7dc76a4391910972f20316f9ccd4664b9694f21dace5a16519d56869e5d35",
-                "sha256:7ad01944a6b86ed2ef9f38d785c61d5074c40bbb0d60c72c55aaf6da13af1475"
+                "sha256:13a1d8d9e252625c173dc795471e614eadfe1cf40ffc684e08b8fff0d9748c23",
+                "sha256:7357592bc7e881a95e0c2013b73326f704953301ab551fbc8133a6fadab84105"
             ],
-            "version": "==3.0.0"
+            "version": "==1.6.1"
         },
         "s3transfer": {
             "hashes": [
@@ -429,6 +429,13 @@
             ],
             "index": "pypi",
             "version": "==2.5.1"
+        },
+        "wagtail-generic-chooser": {
+            "hashes": [
+                "sha256:25ea082c29f361e298e71d4747230eec2cc4c8f21d31b3cf36ea228a397a1d19"
+            ],
+            "index": "pypi",
+            "version": "==0.1"
         },
         "wagtail-modeltranslation": {
             "hashes": [
