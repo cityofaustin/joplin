@@ -31,6 +31,9 @@
 }
 
 .nav-main .menu-item {
+    span {
+      font-family: "Open Sans"; 
+    }
     .icon-home:before {
         content: 'create';
     }
