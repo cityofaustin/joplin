@@ -107,9 +107,7 @@ class JanisBasePage(Page):
                     tc_slug = self.topics.all()[0].topic.topiccollections.all()[0].topiccollection.slug;
                     return os.environ["JANIS_URL"] + "/en/" + theme_slug + "/" + tc_slug + "/" + topic_slug + "/" + page_slug
 
-            # If we have a department, use that
-            if self.department:
-                return os.environ["JANIS_URL"] + "/en/" + self.department.slug + "/" + page_slug
+            # TODO: bring back departments now that we can have multiple
 
         # We don't have a valid live url
         # TODO: add something to make this clear to users
@@ -162,14 +160,6 @@ class JanisPage(JanisBasePage):
 
 class ServicePage(JanisPage):
     janis_url_page_type = "services"
-
-    department = models.ForeignKey(
-        'base.DepartmentPage',
-        on_delete=models.PROTECT,
-        verbose_name='Select a Department',
-        blank=True,
-        null=True,
-    )
 
     steps = StreamField(
         [
@@ -233,7 +223,6 @@ class ServicePage(JanisPage):
         FieldPanel('title_vi'),
         FieldPanel('short_description'),
         InlinePanel('topics', label='Topics'),
-        FieldPanel('department'),
         InlinePanel('related_departments', label='Related Departments'),
         MultiFieldPanel(
         [
@@ -286,14 +275,6 @@ class ProcessPage(JanisPage):
 class InformationPage(JanisPage):
     janis_url_page_type = "information"
 
-    department = models.ForeignKey(
-        'base.DepartmentPage',
-        on_delete=models.PROTECT,
-        verbose_name='Select a Department',
-        blank=True,
-        null=True,
-    )
-
     description = models.TextField(blank=True, verbose_name='Write a description of this page')
     options = StreamField(
         [
@@ -323,7 +304,6 @@ class InformationPage(JanisPage):
         FieldPanel('title_ar'),
         FieldPanel('title_vi'),
         InlinePanel('topics', label='Topics'),
-        FieldPanel('department'),
         InlinePanel('related_departments', label='Related Departments'),
         FieldPanel('description'),
         StreamFieldPanel('options'),
