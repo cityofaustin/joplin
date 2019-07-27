@@ -54,8 +54,7 @@ def configure_main_menu(request, menu_items):
 
     # replace wagtail icon with material-icons class to use that font
     for item in menu_items:
-            item.label = item.label.upper()
-            item.classnames = item.classnames.replace('icon ', 'material-icons ', 1)
+        item.classnames = item.classnames.replace('icon ', 'material-icons ', 1)
 
 @hooks.register('register_admin_menu_item')
 def register_page_list_menu_item():

@@ -104,3 +104,14 @@
     }
     right: 15px;
 }
+
+// This is kinda gross but it seems to do something
+.material-icons {
+    font-family: 'Open Sans' !important;
+}
+
+.menu-item {
+    a::before {
+        font-family: 'Material Icons';
+    }
+}
