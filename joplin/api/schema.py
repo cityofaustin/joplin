@@ -144,7 +144,7 @@ class ProcessPageNode(DjangoObjectType):
 class InformationPageNode(DjangoObjectType):
     class Meta:
         model = InformationPage
-        filter_fields = ['id', 'slug', 'department', 'live']
+        filter_fields = ['id', 'slug', 'live']
         interfaces = [graphene.Node]
 
 class DepartmentPageNode(DjangoObjectType):

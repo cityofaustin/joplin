@@ -21,7 +21,7 @@ def home(request):
 urlpatterns = [
     url(r'^django-admin/', include('smuggler.urls')),
     url(r'^django-admin/', admin.site.urls),
-
+    path('admin/docs/', include('django.contrib.admindocs.urls')),
     path('admin/', home),
     url(r'admin/pages/(\d+)/publish/$', joplin_views.publish, name='publish'),
     url(r'admin/pages/new_from_modal/$', joplin_views.new_page_from_modal, name='new_page_from_modal'),
@@ -31,7 +31,7 @@ urlpatterns = [
     url(r'^api/graphql', csrf_exempt(GraphQLView.as_view())),
     url(r'^api/graphiql', csrf_exempt(GraphQLView.as_view(graphiql=True, pretty=True))),
     url(r'session_security/', include('session_security.urls')),
-    path('admin/docs/', include('django.contrib.admindocs.urls')),
+
 
     # For anything not caught by a more specific rule above, hand over to
     # Wagtail's page serving mechanism. This should be the last pattern in
