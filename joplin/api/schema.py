@@ -7,8 +7,9 @@ from graphene_django.filter import DjangoFilterConnectionField
 from graphene.types import Scalar
 from wagtail.core.fields import StreamField
 from wagtail.core.models import Page, PageRevision
+from django_filters import FilterSet, OrderingFilter
 
-from base.models import TranslatedImage, ThreeOneOne, ServicePage, ServicePageContact, ServicePageTopic, ServicePageRelatedDepartments, InformationPageRelatedDepartments, ProcessPage, ProcessPageStep, ProcessPageContact, ProcessPageTopic, InformationPage, InformationPageContact, InformationPageTopic, DepartmentPage, DepartmentPageContact, DepartmentPageDirector, Theme, TopicCollectionPage, TopicPage, Contact, Location, ContactDayAndDuration, Department, DepartmentContact, TopicPageTopicCollection, OfficialDocumentPage, OfficialDocumentPageRelatedDepartments, OfficialDocumentPageTopic
+from base.models import TranslatedImage, ThreeOneOne, ServicePage, ServicePageContact, ServicePageTopic, ServicePageRelatedDepartments, InformationPageRelatedDepartments, ProcessPage, ProcessPageStep, ProcessPageContact, ProcessPageTopic, InformationPage, InformationPageContact, InformationPageTopic, DepartmentPage, DepartmentPageContact, DepartmentPageDirector, Theme, TopicCollectionPage, TopicPage, Contact, Location, ContactDayAndDuration, Department, DepartmentContact, TopicPageTopicCollection, OfficialDocumentPage, OfficialDocumentPageRelatedDepartments, OfficialDocumentPageTopic, OfficialDocumentPageOfficialDocument
 
 class StreamFieldType(Scalar):
     @staticmethod
@@ -158,7 +159,26 @@ class DepartmentPageNode(DjangoObjectType):
         filter_fields = ['id', 'slug', 'live']
         interfaces = [graphene.Node]
 
+class OfficialDocumentFilter(FilterSet):
+    order_by = OrderingFilter(
+        fields=(
+            ('date'),
+        )
+    )
+
+    class Meta:
+        model = OfficialDocumentPageOfficialDocument
+        fields = ['date']
+
+class OfficialDocumentPageOfficialDocumentNode(DjangoObjectType):
+    class Meta:
+        model = OfficialDocumentPageOfficialDocument
+        filter_fields = ['date']
+        interfaces = [graphene.Node]
+
 class OfficialDocumentPageNode(DjangoObjectType):
+    official_documents = DjangoFilterConnectionField(OfficialDocumentPageOfficialDocumentNode, filterset_class=OfficialDocumentFilter)
+
     class Meta:
         model = OfficialDocumentPage
         filter_fields = ['id', 'slug', 'department', 'live']

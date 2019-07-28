@@ -525,6 +525,9 @@ class OfficialDocumentPageOfficialDocument(Orderable):
         FieldPanel('link'),
     ]
 
+    class Meta:
+        indexes = [models.Index(fields=['-date'])]
+
 class ProcessPageStep(Orderable):
     page = ParentalKey(ProcessPage, related_name='process_steps')
     title = models.CharField(max_length=DEFAULT_MAX_LENGTH)
