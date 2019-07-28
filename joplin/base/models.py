@@ -7,7 +7,7 @@ from modelcluster.models import ClusterableModel
 
 from wagtail.utils.decorators import cached_classmethod
 from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, MultiFieldPanel, ObjectList, StreamFieldPanel, TabbedInterface, HelpPanel
-from wagtail.core.blocks import TextBlock, RichTextBlock, ListBlock, StreamBlock, StructBlock, URLBlock, PageChooserBlock, CharBlock
+from wagtail.core.blocks import TextBlock, RichTextBlock, ListBlock, StreamBlock, StructBlock, URLBlock, PageChooserBlock, CharBlock, DateBlock
 from wagtail.core.fields import StreamField, RichTextField
 from wagtail.core.models import Page, Orderable
 from wagtail.snippets.edit_handlers import SnippetChooserPanel
@@ -495,6 +495,23 @@ class OfficialDocumentPage(JanisPage):
         null=True,
     )
 
+    documents = StreamField(
+        [
+            ('document', StructBlock(
+                [
+                    ('date', DateBlock(label="Document date")),
+                    ('title', CharBlock(label="Document title")),
+                    ('authoring_office', CharBlock(label="Authoring office of document")),
+                    ('summary', TextBlock(label="Document summary", max_length=600, classname="streamfield-textblock", help_text="600 char limit")),
+                    ('name', CharBlock(label="Name of Document")),
+                    ('link', URLBlock(label="Link to Document (URL)"))
+                ]
+            )),
+        ],
+        verbose_name="Entries will be listed by document date (newest first).",
+        blank=True,
+    )
+
     content_panels = [
         FieldPanel('title_en'),
         FieldPanel('title_es'),
@@ -504,6 +521,14 @@ class OfficialDocumentPage(JanisPage):
         InlinePanel('topics', label='Topics'),
         FieldPanel('department'),
         InlinePanel('related_departments', label='Related Departments'),
+        # MultiFieldPanel(
+        #     [
+        #         StreamFieldPanel('documents')
+        #     ],
+        #     heading=documents.verbose_name,
+        #     classname='coa-multiField-nopadding'
+        # ),
+        StreamFieldPanel('documents'),
     ]
 
 class ProcessPageStep(Orderable):

@@ -53,3 +53,9 @@ label {
         display: none;
     }
 }
+
+.streamfield-textblock textarea {
+  resize: vertical;
+  height: 230px;
+  background: orange;
+}

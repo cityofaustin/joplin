@@ -90,6 +90,8 @@ pipenv install --requirements deploy/requirements.txt
 sh scripts/undockered.sh
 ```
 
+Note! To run additional pipenv commands like `pipenv run ./joplin/manage.py migrate` you must have the variable `export DATABASE_URL=postgres://joplin@127.0.0.1:5433/joplin` in your bash scope.
+
 **Run with custom smuggler data**
 
 If you don't want to load the default data used in `LOAD_DATA="on"`, you have to ability to source data from any environment you'd like using a django plugin called [smuggler](https://github.com/semente/django-smuggler).
