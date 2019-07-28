@@ -495,23 +495,6 @@ class OfficialDocumentPage(JanisPage):
         null=True,
     )
 
-    documents = StreamField(
-        [
-            ('document', StructBlock(
-                [
-                    ('date', DateBlock(label="Document date")),
-                    ('title', CharBlock(label="Document title")),
-                    ('authoring_office', CharBlock(label="Authoring office of document")),
-                    ('summary', TextBlock(label="Document summary", max_length=600, classname="streamfield-textblock", help_text="600 char limit")),
-                    ('name', CharBlock(label="Name of Document")),
-                    ('link', URLBlock(label="Link to Document (URL)"))
-                ]
-            )),
-        ],
-        verbose_name="Entries will be listed by document date (newest first).",
-        blank=True,
-    )
-
     content_panels = [
         FieldPanel('title_en'),
         FieldPanel('title_es'),
@@ -521,14 +504,25 @@ class OfficialDocumentPage(JanisPage):
         InlinePanel('topics', label='Topics'),
         FieldPanel('department'),
         InlinePanel('related_departments', label='Related Departments'),
-        # MultiFieldPanel(
-        #     [
-        #         StreamFieldPanel('documents')
-        #     ],
-        #     heading=documents.verbose_name,
-        #     classname='coa-multiField-nopadding'
-        # ),
-        StreamFieldPanel('documents'),
+        InlinePanel('official_documents', label="Documents", heading="Entries will be listed by document date (newest first)."),
+    ]
+
+class OfficialDocumentPageOfficialDocument(Orderable):
+    page = ParentalKey(OfficialDocumentPage, related_name='official_documents')
+    date = models.DateField(verbose_name="Document date", null=True)
+    title = models.CharField(verbose_name="Document title", max_length=DEFAULT_MAX_LENGTH)
+    authoring_office = models.CharField(verbose_name="Authoring office of document", max_length=DEFAULT_MAX_LENGTH)
+    summary = models.TextField(verbose_name="Document summary", max_length=600, help_text="600 char limit")
+    name = models.CharField(verbose_name="Name of Document", max_length=DEFAULT_MAX_LENGTH)
+    link = models.URLField(verbose_name="Link to Document (URL)")
+
+    panels = [
+        FieldPanel('date'),
+        FieldPanel('title'),
+        FieldPanel('authoring_office'),
+        FieldPanel('summary'),
+        FieldPanel('name'),
+        FieldPanel('link'),
     ]
 
 class ProcessPageStep(Orderable):
