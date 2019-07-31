@@ -22,6 +22,7 @@ from base import blocks as custom_blocks
 from base import forms as custom_forms
 
 from .janis_page import JanisPage, JanisBasePage
+from .home_page import HomePage
 from .service_page import ServicePage
 from .translated_image import TranslatedImage
 
@@ -37,12 +38,6 @@ class ThreeOneOne(ClusterableModel):
     def __str__(self):
         return self.title
 
-class HomePage(Page):
-    parent_page_types = []
-    # subpage_types = ['base.ServicePage', 'base.ProcessPage', 'base.InformationPage', 'base.DepartmentPage']
-    subpage_types = ['base.ServicePage', 'base.ProcessPage', 'base.InformationPage', 'base.DepartmentPage', 'base.TopicPage']
-
-    image = models.ForeignKey(TranslatedImage, null=True, on_delete=models.SET_NULL, related_name='+')
 
 class ProcessPage(JanisPage):
     janis_url_page_type = "processes"
