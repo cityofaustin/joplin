@@ -21,10 +21,13 @@ from wagtail.admin.edit_handlers import PageChooserPanel
 from base import blocks as custom_blocks
 from base import forms as custom_forms
 
+from .translated_image import TranslatedImage
+
 from .janis_page import JanisPage, JanisBasePage
 from .home_page import HomePage
+from .topic_collection_page import TopicCollectionPage
+from .topic_page import TopicPage
 from .service_page import ServicePage
-from .translated_image import TranslatedImage
 from .information_page import InformationPage
 
 WYSIWYG_GENERAL = ['h1', 'h2', 'h3', 'h4', 'bold', 'link', 'ul', 'ol', 'code']
@@ -64,77 +67,6 @@ class ProcessPage(JanisPage):
         ImageChooserPanel('image'),
         InlinePanel('contacts', label='Contacts'),
         InlinePanel('process_steps', label="Process steps"),
-    ]
-
-class TopicCollectionPage(JanisPage):
-    janis_url_page_type = "topiccollection"
-
-    description = models.TextField(blank=True)
-
-
-    theme = models.ForeignKey(
-        'base.Theme',
-        on_delete=models.PROTECT,
-        related_name='topicCollectionPages',
-        null=True, blank=True,
-    )
-
-    image = models.ForeignKey(TranslatedImage, null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
-
-    base_form_class = custom_forms.TopicCollectionPageForm
-
-    content_panels = [
-        FieldPanel('title_en'),
-        FieldPanel('title_es'),
-        FieldPanel('title_ar'),
-        FieldPanel('title_vi'),
-        FieldPanel('description'),
-        FieldPanel('theme'),
-        ImageChooserPanel('image'),
-        InlinePanel('topiccollections', label='Topic Collections this page belongs to'),
-    ]
-
-class TopicPage(JanisPage):
-    janis_url_page_type = "topic"
-
-    description = models.TextField(blank=True)
-
-    image = models.ForeignKey(TranslatedImage, null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
-
-    external_services = StreamField(
-        [
-            ('link_en', StructBlock([
-                ('url', URLBlock()),
-                ('title', CharBlock()),
-            ], icon='link', label='Link [EN]')),
-            ('link_es', StructBlock([
-                ('url', URLBlock()),
-                ('title', CharBlock()),
-            ], icon='link', label='Link [ES]')),
-            ('link_ar', StructBlock([
-                ('url', URLBlock()),
-                ('title', CharBlock()),
-            ], icon='link', label='Link [AR]')),
-            ('link_vi', StructBlock([
-                ('url', URLBlock()),
-                ('title', CharBlock()),
-            ], icon='link', label='Link [VI]')),
-        ],
-        verbose_name='External links to services',
-        blank=True
-    )
-
-    base_form_class = custom_forms.TopicPageForm
-
-    content_panels = [
-        FieldPanel('title_en'),
-        FieldPanel('title_es'),
-        FieldPanel('title_ar'),
-        FieldPanel('title_vi'),
-        FieldPanel('description'),
-        ImageChooserPanel('image'),
-        StreamFieldPanel('external_services'),
-        InlinePanel('topiccollections', label='Topic Collections this page belongs to'),
     ]
 
 class DepartmentPage(JanisPage):
