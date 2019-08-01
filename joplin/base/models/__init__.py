@@ -31,7 +31,7 @@ from .theme import Theme
 from .topic_collection_page import TopicCollectionPage
 from .topic_page import TopicPage
 from .service_page import ServicePage, ServicePageTopic, ServicePageContact, ServicePageRelatedDepartments
-from .information_page import InformationPage
+from .information_page import InformationPage, InformationPageRelatedDepartments, InformationPageTopic, InformationPageContact
 from .department_page import DepartmentPage, DepartmentPageDirector, DepartmentPageContact
 
 WYSIWYG_GENERAL = ['h1', 'h2', 'h3', 'h4', 'bold', 'link', 'ul', 'ol', 'code']
@@ -95,18 +95,6 @@ class ContactDayAndDuration(Orderable, DayAndDuration):
         SnippetChooserPanel('day_and_duration'),
     ]
 
-class InformationPageRelatedDepartments(ClusterableModel):
-    page = ParentalKey(InformationPage, related_name='related_departments', default=None)
-    related_department = models.ForeignKey(
-        "base.departmentPage",
-        on_delete=models.PROTECT,
-    )
-
-    panels = [
-        # Use a SnippetChooserPanel because blog.BlogAuthor is registered as a snippet
-        PageChooserPanel("related_department"),
-    ]
-
 class TopicCollectionPageTopicCollection(ClusterableModel):
     page = ParentalKey(TopicCollectionPage, related_name='topiccollections')
     topiccollection = models.ForeignKey('base.TopicCollectionPage',  verbose_name='Select a Topic Collection', related_name='+', on_delete=models.CASCADE)
@@ -128,35 +116,6 @@ class TopicPageTopicCollection(ClusterableModel):
 
     def __str__(self):
         return self.topiccollection.text
-
-
-class InformationPageContact(ClusterableModel):
-    page = ParentalKey(InformationPage, related_name='contacts')
-    contact = models.ForeignKey(Contact, related_name='+', on_delete=models.CASCADE)
-
-    panels = [
-        SnippetChooserPanel('contact'),
-    ]
-
-    def __str__(self):
-        return self.contact.name
-
-class InformationPageTopic(ClusterableModel):
-    page = ParentalKey(InformationPage, related_name='topics')
-    topic = models.ForeignKey('base.TopicPage',  verbose_name='Select a Topic', related_name='+', on_delete=models.CASCADE)
-    toplink = models.BooleanField(default=False, verbose_name='Make this page a top link for this topic')
-
-    panels = [
-        MultiFieldPanel(
-            [
-                PageChooserPanel('topic'),
-                FieldPanel('toplink'),
-            ]
-        ),
-    ]
-
-    def __str__(self):
-        return self.topic.text
 
 # TODO: Remove everything below this comment
 
