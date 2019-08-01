@@ -1,17 +1,20 @@
 from django.db import models
 
 from modelcluster.fields import ParentalKey
+from modelcluster.models import ClusterableModel
 
 from wagtail.core.fields import RichTextField, StreamField
 from wagtail.core.blocks import CharBlock, StructBlock, URLBlock
 from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, StreamFieldPanel
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.core.models import Orderable
+from wagtail.snippets.edit_handlers import SnippetChooserPanel
 
 from base.forms import DepartmentPageForm
 
 from .janis_page import JanisPage
 from .translated_image import TranslatedImage
+from .contact import Contact
 
 from .constants import DEFAULT_MAX_LENGTH, WYSIWYG_GENERAL
 
@@ -94,3 +97,14 @@ class DepartmentPageDirector(Orderable):
         ImageChooserPanel('photo'),
         FieldPanel('about'),
     ]
+
+class DepartmentPageContact(ClusterableModel):
+    page = ParentalKey(DepartmentPage, related_name='contacts')
+    contact = models.ForeignKey(Contact, related_name='+', on_delete=models.CASCADE)
+
+    panels = [
+        SnippetChooserPanel('contact'),
+    ]
+
+    def __str__(self):
+        return self.contact.name

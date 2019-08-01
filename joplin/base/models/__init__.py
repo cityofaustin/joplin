@@ -32,7 +32,7 @@ from .topic_collection_page import TopicCollectionPage
 from .topic_page import TopicPage
 from .service_page import ServicePage, ServicePageTopic, ServicePageContact, ServicePageRelatedDepartments
 from .information_page import InformationPage
-from .department_page import DepartmentPage, DepartmentPageDirector
+from .department_page import DepartmentPage, DepartmentPageDirector, DepartmentPageContact
 
 WYSIWYG_GENERAL = ['h1', 'h2', 'h3', 'h4', 'bold', 'link', 'ul', 'ol', 'code']
 DEFAULT_MAX_LENGTH = 255
@@ -157,19 +157,6 @@ class InformationPageTopic(ClusterableModel):
 
     def __str__(self):
         return self.topic.text
-
-class DepartmentPageContact(ClusterableModel):
-    page = ParentalKey(DepartmentPage, related_name='contacts')
-    contact = models.ForeignKey(Contact, related_name='+', on_delete=models.CASCADE)
-
-    panels = [
-        SnippetChooserPanel('contact'),
-    ]
-
-    def __str__(self):
-        return self.contact.name
-
-
 
 # TODO: Remove everything below this comment
 
