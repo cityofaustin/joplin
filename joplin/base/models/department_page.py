@@ -1,16 +1,19 @@
 from django.db import models
 
+from modelcluster.fields import ParentalKey
+
 from wagtail.core.fields import RichTextField, StreamField
 from wagtail.core.blocks import CharBlock, StructBlock, URLBlock
 from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, StreamFieldPanel
 from wagtail.images.edit_handlers import ImageChooserPanel
+from wagtail.core.models import Orderable
 
 from base.forms import DepartmentPageForm
 
 from .janis_page import JanisPage
 from .translated_image import TranslatedImage
 
-from .constants import WYSIWYG_GENERAL
+from .constants import DEFAULT_MAX_LENGTH, WYSIWYG_GENERAL
 
 class DepartmentPage(JanisPage):
     janis_url_page_type = "department"
@@ -76,4 +79,18 @@ class DepartmentPage(JanisPage):
         InlinePanel('department_directors', label="Department Directors"),
         FieldPanel('job_listings'),
         StreamFieldPanel('top_services'),
+    ]
+
+class DepartmentPageDirector(Orderable):
+    page = ParentalKey(DepartmentPage, related_name='department_directors')
+    name = models.CharField(max_length=DEFAULT_MAX_LENGTH)
+    title = models.CharField(max_length=DEFAULT_MAX_LENGTH, default='Director')
+    photo = models.ForeignKey(TranslatedImage, null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
+    about = models.TextField(blank=True)
+
+    panels = [
+        FieldPanel('name'),
+        FieldPanel('title'),
+        ImageChooserPanel('photo'),
+        FieldPanel('about'),
     ]

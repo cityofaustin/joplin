@@ -1,13 +1,18 @@
 from django.db import models
 
+from modelcluster.models import ClusterableModel
+from modelcluster.fields import ParentalKey
+
 from wagtail.core.fields import RichTextField, StreamField
 from wagtail.core.blocks import ListBlock, RichTextBlock, StructBlock, TextBlock
-from wagtail.admin.edit_handlers import FieldPanel, HelpPanel, InlinePanel, MultiFieldPanel, StreamFieldPanel
+from wagtail.admin.edit_handlers import FieldPanel, HelpPanel, InlinePanel, MultiFieldPanel, PageChooserPanel, StreamFieldPanel
+from wagtail.snippets.edit_handlers import SnippetChooserPanel
 
 from base.blocks import SnippetChooserBlockWithAPIGoodness, WhatDoIDoWithBlock, CollectionScheduleBlock, RecollectBlock
 from base.forms import ServicePageForm
 
 from .janis_page import JanisPage
+from .contact import Contact
 
 from .constants import WYSIWYG_GENERAL, SHORT_DESCRIPTION_LENGTH
 WYSIWYG_SERVICE_STEP = ['ul', 'ol', 'link', 'code']
@@ -97,4 +102,44 @@ class ServicePage(JanisPage):
         )
         ,
         InlinePanel('contacts', label='Contacts'),
+    ]
+
+class ServicePageTopic(ClusterableModel):
+    page = ParentalKey(ServicePage, related_name='topics')
+    topic = models.ForeignKey('base.TopicPage',  verbose_name='Select a Topic', related_name='+', on_delete=models.CASCADE)
+    toplink = models.BooleanField(default=False, verbose_name='Make this service a top link for this topic')
+
+    panels = [
+        MultiFieldPanel(
+            [
+                PageChooserPanel('topic'),
+                FieldPanel('toplink'),
+            ]
+        ),
+    ]
+
+    def __str__(self):
+        return self.topic.title
+
+class ServicePageContact(ClusterableModel):
+    page = ParentalKey(ServicePage, related_name='contacts')
+    contact = models.ForeignKey(Contact, related_name='+', on_delete=models.CASCADE)
+
+    panels = [
+        SnippetChooserPanel('contact'),
+    ]
+
+    def __str__(self):
+        return self.contact.name
+
+class ServicePageRelatedDepartments(ClusterableModel):
+    page = ParentalKey(ServicePage, related_name='related_departments', default=None)
+    related_department = models.ForeignKey(
+        "base.departmentPage",
+        on_delete=models.PROTECT,
+    )
+
+    panels = [
+        # Use a SnippetChooserPanel because blog.BlogAuthor is registered as a snippet
+        PageChooserPanel("related_department"),
     ]
