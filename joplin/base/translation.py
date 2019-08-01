@@ -123,5 +123,6 @@ class OfficialDocumentPageOfficialDocumentTranslationOptions(TranslationOptions)
     fields = (
         'title',
         'summary',
-        'name'
+        'name',
+        'authoring_office'
     )

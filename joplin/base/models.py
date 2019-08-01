@@ -502,7 +502,6 @@ class OfficialDocumentPage(JanisPage):
         FieldPanel('title_vi'),
         FieldPanel('description'),
         InlinePanel('topics', label='Topics'),
-        FieldPanel('department'),
         InlinePanel('related_departments', label='Related Departments'),
         InlinePanel('official_documents', label="Documents", heading="Entries will be listed by document date (newest first)."),
     ]
