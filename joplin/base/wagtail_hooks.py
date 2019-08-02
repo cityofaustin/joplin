@@ -35,7 +35,7 @@ def before_edit_page(request, page):
 def configure_main_menu(request, menu_items):
     """
     Each item in the nav has icons. Here are the names for the icons within the Material icon font set that we have in Joplin:
-    Content: "text_fields"
+    Content: "create"
     Map: "map"
     Locations: "location_on"
     Images: "photo"
@@ -54,7 +54,6 @@ def configure_main_menu(request, menu_items):
 
     # replace wagtail icon with material-icons class to use that font
     for item in menu_items:
-            item.label = ''
             item.classnames = item.classnames.replace('icon ', 'material-icons ', 1)
 
 @hooks.register('register_admin_menu_item')
