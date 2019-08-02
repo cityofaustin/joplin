@@ -20,7 +20,7 @@ const ChooseTitleStep = ({
       )}
       {pageType !== 'department' && (
         <span>
-          Write an actionable title for your  {pageType} page, starting with a
+          Write an actionable title for your  {pageType.replace("_", " ")} page, starting with a
           verb.
         </span>
       )}
