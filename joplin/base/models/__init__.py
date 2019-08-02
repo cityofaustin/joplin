@@ -22,14 +22,15 @@ from base import blocks as custom_blocks
 from base import forms as custom_forms
 
 from .translated_image import TranslatedImage
-from .contact import Contact
+from .contact import Contact, ContactDayAndDuration
 from .location import Location
+from .day_and_duration import DayAndDuration
 
 from .janis_page import JanisPage, JanisBasePage
 from .home_page import HomePage
 from .theme import Theme
 from .topic_collection_page import TopicCollectionPage
-from .topic_page import TopicPage
+from .topic_page import TopicPage, TopicPageTopicCollection
 from .service_page import ServicePage, ServicePageTopic, ServicePageContact, ServicePageRelatedDepartments
 from .information_page import InformationPage, InformationPageRelatedDepartments, InformationPageTopic, InformationPageContact
 from .department_page import DepartmentPage, DepartmentPageDirector, DepartmentPageContact
@@ -57,43 +58,7 @@ class Map(ClusterableModel):
 
         return data
 
-class DayAndDuration(ClusterableModel):
-    MONDAY = 'Monday'
-    TUESDAY = 'Tuesday'
-    WEDNESDAY = 'Wednesday'
-    THURSDAY = 'Thursday'
-    FRIDAY = 'Friday'
-    SATURDAY = 'Saturday'
-    SUNDAY = 'Sunday'
-    DAY_OF_WEEK_CHOICES = (
-        (MONDAY, 'Monday'),
-        (TUESDAY, 'Tuesday'),
-        (WEDNESDAY, 'Wednesday'),
-        (THURSDAY, 'Thursday'),
-        (FRIDAY, 'Friday'),
-        (SATURDAY, 'Saturday'),
-        (SUNDAY, 'Sunday'),
-    )
-
-    day_of_week = models.CharField(max_length=20, choices=DAY_OF_WEEK_CHOICES)
-    start_time = models.TimeField()
-    end_time = models.TimeField()
-
-    content_panels = [
-        FieldPanel('day_of_week'),
-        FieldPanel('start_time'),
-        FieldPanel('end_time'),
-    ]
-
-    def __str__(self):
-        return f'{self.day_of_week} {self.start_time} - {self.end_time}'
-
-class ContactDayAndDuration(Orderable, DayAndDuration):
-    contact = ParentalKey(Contact, related_name='hours')
-
-    content_panels = [
-        SnippetChooserPanel('day_and_duration'),
-    ]
+# TODO: Remove everything below this comment
 
 class TopicCollectionPageTopicCollection(ClusterableModel):
     page = ParentalKey(TopicCollectionPage, related_name='topiccollections')
@@ -105,19 +70,6 @@ class TopicCollectionPageTopicCollection(ClusterableModel):
 
     def __str__(self):
         return self.topiccollection.text
-
-class TopicPageTopicCollection(ClusterableModel):
-    page = ParentalKey(TopicPage, related_name='topiccollections')
-    topiccollection = models.ForeignKey('base.TopicCollectionPage',  verbose_name='Select a Topic Collection', related_name='+', on_delete=models.CASCADE)
-
-    panels = [
-        PageChooserPanel('topiccollection'),
-    ]
-
-    def __str__(self):
-        return self.topiccollection.text
-
-# TODO: Remove everything below this comment
 
 @register_snippet
 class ThreeOneOne(ClusterableModel):

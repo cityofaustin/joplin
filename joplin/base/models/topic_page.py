@@ -1,8 +1,11 @@
 from django.db import models
 
+from modelcluster.models import ClusterableModel
+from modelcluster.fields import ParentalKey
+
 from wagtail.core.fields import StreamField
 from wagtail.core.blocks import CharBlock, StructBlock, URLBlock
-from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, StreamFieldPanel
+from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, PageChooserPanel, StreamFieldPanel
 from wagtail.images.edit_handlers import ImageChooserPanel
 
 from base.forms import TopicPageForm
@@ -52,3 +55,14 @@ class TopicPage(JanisPage):
         StreamFieldPanel('external_services'),
         InlinePanel('topiccollections', label='Topic Collections this page belongs to'),
     ]
+
+class TopicPageTopicCollection(ClusterableModel):
+    page = ParentalKey(TopicPage, related_name='topiccollections')
+    topiccollection = models.ForeignKey('base.TopicCollectionPage',  verbose_name='Select a Topic Collection', related_name='+', on_delete=models.CASCADE)
+
+    panels = [
+        PageChooserPanel('topiccollection'),
+    ]
+
+    def __str__(self):
+        return self.topiccollection.text

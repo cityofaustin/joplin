@@ -1,13 +1,17 @@
 from django.db import models
 
-from wagtail.snippets.models import register_snippet
 from modelcluster.models import ClusterableModel
+from modelcluster.fields import ParentalKey
+
+from wagtail.snippets.models import register_snippet
 from wagtail.core.fields import StreamField
 from wagtail.core.blocks import URLBlock
 from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, StreamFieldPanel
 from wagtail.snippets.edit_handlers import SnippetChooserPanel
+from wagtail.core.models import Orderable
 
 from .location import Location
+from .day_and_duration import DayAndDuration
 
 from .constants import DEFAULT_MAX_LENGTH
 
@@ -40,3 +44,10 @@ class Contact(ClusterableModel):
 
     def __str__(self):
         return self.name
+
+class ContactDayAndDuration(Orderable, DayAndDuration):
+    contact = ParentalKey(Contact, related_name='hours')
+
+    content_panels = [
+        SnippetChooserPanel('day_and_duration'),
+    ]
