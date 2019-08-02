@@ -181,7 +181,7 @@ class OfficialDocumentPageNode(DjangoObjectType):
 
     class Meta:
         model = OfficialDocumentPage
-        filter_fields = ['id', 'slug', 'department', 'live']
+        filter_fields = ['id', 'slug', 'live']
         interfaces = [graphene.Node]
 
 class PageRevisionNode(DjangoObjectType):

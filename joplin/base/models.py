@@ -7,7 +7,7 @@ from modelcluster.models import ClusterableModel
 
 from wagtail.utils.decorators import cached_classmethod
 from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, MultiFieldPanel, ObjectList, StreamFieldPanel, TabbedInterface, HelpPanel
-from wagtail.core.blocks import TextBlock, RichTextBlock, ListBlock, StreamBlock, StructBlock, URLBlock, PageChooserBlock, CharBlock, DateBlock
+from wagtail.core.blocks import TextBlock, RichTextBlock, ListBlock, StreamBlock, StructBlock, URLBlock, PageChooserBlock, CharBlock
 from wagtail.core.fields import StreamField, RichTextField
 from wagtail.core.models import Page, Orderable
 from wagtail.snippets.edit_handlers import SnippetChooserPanel
@@ -481,19 +481,17 @@ class DepartmentPageDirector(Orderable):
         FieldPanel('about'),
     ]
 
+"""
+This is a page that displays a list of Official Documents (model: umentPageOfficialDocument).
+This page can be assigned to multiple topics or departments.
+The Documents will be displayed in date descending order (newest first by the "date" field).
+Eventually the OfficialDocumentPageOfficialDocument should be replaced by a model using Wagtail Documents
+"""
 class OfficialDocumentPage(JanisPage):
     janis_url_page_type = "official_document"
     base_form_class = custom_forms.OfficialDocumentPageForm
 
     description = models.TextField(blank=True)
-
-    department = models.ForeignKey(
-        'base.DepartmentPage',
-        on_delete=models.PROTECT,
-        verbose_name='Select a Department',
-        blank=True,
-        null=True,
-    )
 
     content_panels = [
         FieldPanel('title_en'),
@@ -506,6 +504,10 @@ class OfficialDocumentPage(JanisPage):
         InlinePanel('official_documents', label="Documents", heading="Entries will be listed by document date (newest first)."),
     ]
 
+"""
+An OfficialDocumentPageOfficialDocument is an Official Document belonging to a single OfficialDocumentPage.
+One OfficialDocumentPage can have many OfficialDocumentPageOfficialDocuments.
+"""
 class OfficialDocumentPageOfficialDocument(Orderable):
     page = ParentalKey(OfficialDocumentPage, related_name='official_documents')
     date = models.DateField(verbose_name="Document date", null=True)
@@ -749,7 +751,6 @@ class OfficialDocumentPageRelatedDepartments(ClusterableModel):
     )
 
     panels = [
-        # Use a SnippetChooserPanel because blog.BlogAuthor is registered as a snippet
         PageChooserPanel("related_department"),
     ]
 
