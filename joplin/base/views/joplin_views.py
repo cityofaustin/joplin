@@ -52,8 +52,6 @@ def new_page_from_modal(request):
         data['owner'] = request.user
 
         # Create the page
-        print("~~~~~ eyo")
-        from pprint import pprint; pprint(data)
         if body['type'] == 'service':
             page = ServicePage(**data)
         if body['type'] == 'process':
