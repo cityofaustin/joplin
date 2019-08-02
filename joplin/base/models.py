@@ -41,7 +41,6 @@ class TranslatedImageRendition(AbstractRendition):
             ('image', 'filter_spec', 'focal_point_key'),
         )
 
-
 @register_snippet
 class ThreeOneOne(ClusterableModel):
     title = models.CharField(max_length=DEFAULT_MAX_LENGTH)
@@ -94,7 +93,7 @@ class JanisBasePage(Page):
             if self.topiccollections and self.topiccollections.all():
                 theme_slug = self.topiccollections.all()[0].topiccollection.theme.slug;
                 tc_slug = self.topiccollections.all()[0].topiccollection.slug;
-                return os.environ["JANIS_URL"] + "/en/" + theme_slug + "/" + tc_slug + "/" + page_slug            
+                return os.environ["JANIS_URL"] + "/en/" + theme_slug + "/" + tc_slug + "/" + page_slug
 
 
         if self.janis_url_page_type == "services" or self.janis_url_page_type == "information":
@@ -107,9 +106,7 @@ class JanisBasePage(Page):
                     tc_slug = self.topics.all()[0].topic.topiccollections.all()[0].topiccollection.slug;
                     return os.environ["JANIS_URL"] + "/en/" + theme_slug + "/" + tc_slug + "/" + topic_slug + "/" + page_slug
 
-            # If we have a department, use that
-            if self.department:
-                return os.environ["JANIS_URL"] + "/en/" + self.department.slug + "/" + page_slug
+            # TODO: bring back departments now that we can have multiple
 
         # We don't have a valid live url
         # TODO: add something to make this clear to users
@@ -162,14 +159,6 @@ class JanisPage(JanisBasePage):
 
 class ServicePage(JanisPage):
     janis_url_page_type = "services"
-
-    department = models.ForeignKey(
-        'base.DepartmentPage',
-        on_delete=models.PROTECT,
-        verbose_name='Select a Department',
-        blank=True,
-        null=True,
-    )
 
     steps = StreamField(
         [
@@ -233,7 +222,6 @@ class ServicePage(JanisPage):
         FieldPanel('title_vi'),
         FieldPanel('short_description'),
         InlinePanel('topics', label='Topics'),
-        FieldPanel('department'),
         InlinePanel('related_departments', label='Related Departments'),
         MultiFieldPanel(
         [
@@ -286,14 +274,6 @@ class ProcessPage(JanisPage):
 class InformationPage(JanisPage):
     janis_url_page_type = "information"
 
-    department = models.ForeignKey(
-        'base.DepartmentPage',
-        on_delete=models.PROTECT,
-        verbose_name='Select a Department',
-        blank=True,
-        null=True,
-    )
-
     description = models.TextField(blank=True, verbose_name='Write a description of this page')
     options = StreamField(
         [
@@ -323,7 +303,6 @@ class InformationPage(JanisPage):
         FieldPanel('title_ar'),
         FieldPanel('title_vi'),
         InlinePanel('topics', label='Topics'),
-        FieldPanel('department'),
         InlinePanel('related_departments', label='Related Departments'),
         FieldPanel('description'),
         StreamFieldPanel('options'),
@@ -481,6 +460,54 @@ class DepartmentPageDirector(Orderable):
         ImageChooserPanel('photo'),
         FieldPanel('about'),
     ]
+
+"""
+This is a page that displays a list of Official Documents (model: umentPageOfficialDocument).
+This page can be assigned to multiple topics or departments.
+The Documents will be displayed in date descending order (newest first by the "date" field).
+Eventually the OfficialDocumentPageOfficialDocument should be replaced by a model using Wagtail Documents
+"""
+class OfficialDocumentPage(JanisPage):
+    janis_url_page_type = "official_document"
+    base_form_class = custom_forms.OfficialDocumentPageForm
+
+    description = models.TextField(blank=True)
+
+    content_panels = [
+        FieldPanel('title_en'),
+        FieldPanel('title_es'),
+        FieldPanel('title_ar'),
+        FieldPanel('title_vi'),
+        FieldPanel('description'),
+        InlinePanel('topics', label='Topics'),
+        InlinePanel('related_departments', label='Related Departments'),
+        InlinePanel('official_documents', label="Documents", heading="Entries will be listed by document date (newest first)."),
+    ]
+
+"""
+An OfficialDocumentPageOfficialDocument is an Official Document belonging to a single OfficialDocumentPage.
+One OfficialDocumentPage can have many OfficialDocumentPageOfficialDocuments.
+"""
+class OfficialDocumentPageOfficialDocument(Orderable):
+    page = ParentalKey(OfficialDocumentPage, related_name='official_documents')
+    date = models.DateField(verbose_name="Document date", null=True)
+    title = models.CharField(verbose_name="Document title", max_length=DEFAULT_MAX_LENGTH)
+    authoring_office = models.CharField(verbose_name="Authoring office of document", max_length=DEFAULT_MAX_LENGTH)
+    summary = models.TextField(verbose_name="Document summary", max_length=600, help_text="600 char limit")
+    name = models.CharField(verbose_name="Name of Document", max_length=DEFAULT_MAX_LENGTH)
+    link = models.URLField(verbose_name="Link to Document (URL)")
+
+    panels = [
+        FieldPanel('date'),
+        FieldPanel('title'),
+        FieldPanel('authoring_office'),
+        FieldPanel('summary'),
+        FieldPanel('name'),
+        FieldPanel('link'),
+    ]
+
+    class Meta:
+        indexes = [models.Index(fields=['-date'])]
 
 class ProcessPageStep(Orderable):
     page = ParentalKey(ProcessPage, related_name='process_steps')
@@ -696,6 +723,17 @@ class InformationPageRelatedDepartments(ClusterableModel):
         PageChooserPanel("related_department"),
     ]
 
+class OfficialDocumentPageRelatedDepartments(ClusterableModel):
+    page = ParentalKey(OfficialDocumentPage, related_name='related_departments', default=None)
+    related_department = models.ForeignKey(
+        "base.departmentPage",
+        on_delete=models.PROTECT,
+    )
+
+    panels = [
+        PageChooserPanel("related_department"),
+    ]
+
 class TopicCollectionPageTopicCollection(ClusterableModel):
     page = ParentalKey(TopicCollectionPage, related_name='topiccollections')
     topiccollection = models.ForeignKey('base.TopicCollectionPage',  verbose_name='Select a Topic Collection', related_name='+', on_delete=models.CASCADE)
@@ -750,6 +788,23 @@ class InformationPageTopic(ClusterableModel):
     page = ParentalKey(InformationPage, related_name='topics')
     topic = models.ForeignKey('base.TopicPage',  verbose_name='Select a Topic', related_name='+', on_delete=models.CASCADE)
     toplink = models.BooleanField(default=False, verbose_name='Make this page a top link for this topic')
+
+    panels = [
+        MultiFieldPanel(
+            [
+                PageChooserPanel('topic'),
+                FieldPanel('toplink'),
+            ]
+        ),
+    ]
+
+    def __str__(self):
+        return self.topic.text
+
+class OfficialDocumentPageTopic(ClusterableModel):
+    page = ParentalKey(OfficialDocumentPage, related_name='topics')
+    topic = models.ForeignKey('base.TopicPage',  verbose_name='Select a Topic', related_name='+', on_delete=models.CASCADE)
+    toplink = models.BooleanField(default=False, verbose_name='Make this list a top link for this topic')
 
     panels = [
         MultiFieldPanel(

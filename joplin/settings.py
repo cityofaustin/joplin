@@ -71,7 +71,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_extensions',
-    'django.contrib.admindocs.urls',
+    'django.contrib.admindocs',
     'wagtail.contrib.modeladmin',
     'webpack_loader',
     'dbbackup',
