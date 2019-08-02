@@ -23,8 +23,9 @@ from base import forms as custom_forms
 
 from .translated_image import TranslatedImage
 from .contact import Contact, ContactDayAndDuration
-from .location import Location
 from .day_and_duration import DayAndDuration
+from .location import Location
+from .map import Map
 
 from .janis_page import JanisPage, JanisBasePage
 from .home_page import HomePage
@@ -38,25 +39,6 @@ from .department_page import DepartmentPage, DepartmentPageDirector, DepartmentP
 WYSIWYG_GENERAL = ['h1', 'h2', 'h3', 'h4', 'bold', 'link', 'ul', 'ol', 'code']
 DEFAULT_MAX_LENGTH = 255
 SHORT_DESCRIPTION_LENGTH = 300
-
-
-@register_snippet
-class Map(ClusterableModel):
-    description = models.TextField()
-    location = models.ForeignKey('base.Location', on_delete=models.CASCADE, related_name='+')
-
-    def __str__(self):
-        return self.description
-
-    def serializable_data(self):
-        data = {
-            'location': self.location.serializable_data(),
-            'description': self.description,
-        }
-
-        data['location'].pop('pk')
-
-        return data
 
 # TODO: Remove everything below this comment
 
