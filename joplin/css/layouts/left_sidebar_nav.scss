@@ -31,6 +31,7 @@
 }
 
 .nav-main .menu-item {
+
     .icon-home:before {
         content: 'create';
     }
@@ -50,4 +51,8 @@
     .icon-users:before {
         content: 'account_circle';
     }
+}
+
+.nav-main .menu-item  .material-icons span {
+    font-family: "Open Sans";
 }
