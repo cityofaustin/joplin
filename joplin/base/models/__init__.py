@@ -35,91 +35,11 @@ from .topic_page import TopicPage, TopicPageTopicCollection
 from .service_page import ServicePage, ServicePageTopic, ServicePageContact, ServicePageRelatedDepartments
 from .information_page import InformationPage, InformationPageRelatedDepartments, InformationPageTopic, InformationPageContact
 from .department_page import DepartmentPage, DepartmentPageDirector, DepartmentPageContact
+from .official_documents_page import OfficialDocumentPage, OfficialDocumentPageOfficialDocument, OfficialDocumentPageRelatedDepartments, OfficialDocumentPageTopic
 
 WYSIWYG_GENERAL = ['h1', 'h2', 'h3', 'h4', 'bold', 'link', 'ul', 'ol', 'code']
 DEFAULT_MAX_LENGTH = 255
 SHORT_DESCRIPTION_LENGTH = 300
-
-# TODO: move this to it's own file
-
-"""
-This is a page that displays a list of Official Documents (model: umentPageOfficialDocument).
-This page can be assigned to multiple topics or departments.
-The Documents will be displayed in date descending order (newest first by the "date" field).
-Eventually the OfficialDocumentPageOfficialDocument should be replaced by a model using Wagtail Documents
-"""
-class OfficialDocumentPage(JanisPage):
-    janis_url_page_type = "official_document"
-    base_form_class = custom_forms.OfficialDocumentPageForm
-
-    description = models.TextField(blank=True)
-
-    content_panels = [
-        FieldPanel('title_en'),
-        FieldPanel('title_es'),
-        FieldPanel('title_ar'),
-        FieldPanel('title_vi'),
-        FieldPanel('description'),
-        InlinePanel('topics', label='Topics'),
-        InlinePanel('related_departments', label='Related Departments'),
-        InlinePanel('official_documents', label="Documents", heading="Entries will be listed by document date (newest first)."),
-    ]
-
-"""
-An OfficialDocumentPageOfficialDocument is an Official Document belonging to a single OfficialDocumentPage.
-One OfficialDocumentPage can have many OfficialDocumentPageOfficialDocuments.
-"""
-class OfficialDocumentPageOfficialDocument(Orderable):
-    page = ParentalKey(OfficialDocumentPage, related_name='official_documents')
-    date = models.DateField(verbose_name="Document date", null=True)
-    title = models.CharField(verbose_name="Document title", max_length=DEFAULT_MAX_LENGTH)
-    authoring_office = models.CharField(verbose_name="Authoring office of document", max_length=DEFAULT_MAX_LENGTH)
-    summary = models.TextField(verbose_name="Document summary", max_length=600, help_text="600 char limit")
-    name = models.CharField(verbose_name="Name of Document", max_length=DEFAULT_MAX_LENGTH)
-    link = models.URLField(verbose_name="Link to Document (URL)")
-
-    panels = [
-        FieldPanel('date'),
-        FieldPanel('title'),
-        FieldPanel('authoring_office'),
-        FieldPanel('summary'),
-        FieldPanel('name'),
-        FieldPanel('link'),
-    ]
-
-    class Meta:
-        indexes = [models.Index(fields=['-date'])]
-
-
-class OfficialDocumentPageRelatedDepartments(ClusterableModel):
-    page = ParentalKey(OfficialDocumentPage, related_name='related_departments', default=None)
-    related_department = models.ForeignKey(
-        "base.departmentPage",
-        on_delete=models.PROTECT,
-    )
-
-    panels = [
-        PageChooserPanel("related_department"),
-    ]
-
-
-class OfficialDocumentPageTopic(ClusterableModel):
-    page = ParentalKey(OfficialDocumentPage, related_name='topics')
-    topic = models.ForeignKey('base.TopicPage',  verbose_name='Select a Topic', related_name='+', on_delete=models.CASCADE)
-    toplink = models.BooleanField(default=False, verbose_name='Make this list a top link for this topic')
-
-    panels = [
-        MultiFieldPanel(
-            [
-                PageChooserPanel('topic'),
-                FieldPanel('toplink'),
-            ]
-        ),
-    ]
-
-    def __str__(self):
-        return self.topic.text
-
 
 
 # TODO: Remove everything below this comment
