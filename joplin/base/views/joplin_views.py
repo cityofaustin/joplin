@@ -14,6 +14,11 @@ class ThemeChooserViewSet(ModelChooserViewSet):
     model = Theme
     fields = ['slug', 'text', 'description']
 
+class DepartmentChooserViewSet(ModelChooserViewSet):
+    icon = 'user'
+    model = DepartmentPage
+    fields = ['title_en']
+
 
 def publish(request, page_id):
     page = get_object_or_404(Page, id=page_id).specific

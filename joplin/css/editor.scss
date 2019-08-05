@@ -25,9 +25,15 @@ footer {
     margin: 0 0 0 auto;
 }
 
+
+// hiding default wagtail tabls here
 .tab-nav.merged {
-    // display: none;
+    display: none;
     background-color: #eee;
+}
+// lets not hide that for modals tho
+.modal-body .tab-nav.merged {
+  display: block;
 }
 
 .editor__save-button {

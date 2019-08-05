@@ -41,8 +41,12 @@ class ThemeChooser(AdminChooser):
     link_to_chosen_text = _('Edit this theme')
     choose_modal_url_name = 'theme_chooser:choose'
 
-    def get_edit_item_url(self, item):
-        return reverse('wagtailsnippets:edit', args=('base', 'theme', quote(item.pk)))
+class DepartmentChooser(AdminChooser):
+    choose_one_text = _('Choose a related department')
+    model = 'base.DepartmentPage'
+    link_to_chosen_text = _('Edit this department')
+    choose_modal_url_name = 'department_chooser:choose'
+
 
 
 class TranslatedImage(AbstractImage):
@@ -267,6 +271,9 @@ class ServicePage(JanisPage):
         ,
         InlinePanel('contacts', label='Contacts'),
         FieldPanel('theme', widget=ThemeChooser),
+        # played around with defining the chooser here but got it to work
+        # by calling the widget in ServicePageRelatedDepartments
+        # FieldPanel('related_departments', widget=DepartmentChooser),
     ]
 
 
@@ -722,10 +729,8 @@ class ServicePageRelatedDepartments(ClusterableModel):
         "base.departmentPage",
         on_delete=models.PROTECT,
     )
-
     panels = [
-        # Use a SnippetChooserPanel because blog.BlogAuthor is registered as a snippet
-        PageChooserPanel("related_department"),
+        FieldPanel('related_department', widget=DepartmentChooser),
     ]
 
 class InformationPageRelatedDepartments(ClusterableModel):
