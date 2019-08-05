@@ -186,10 +186,6 @@ class OfficialDocumentPageNode(DjangoObjectType):
         filter_fields = ['id', 'slug', 'live']
         interfaces = [graphene.Node]
 
-class GuidePageSectionPageNode(DjangoObjectType):
-    class Meta:
-        model = JanisPage
-
 class GuidePageSectionPageBlock(graphene.ObjectType):
     value = GenericScalar()
     service_page = graphene.Field(ServicePageNode)
