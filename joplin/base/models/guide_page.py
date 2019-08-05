@@ -13,6 +13,8 @@ from wagtail.images.edit_handlers import ImageChooserPanel
 from base.forms import GuidePageForm
 
 from .janis_page import JanisPage
+from .information_page import InformationPage
+from .service_page import ServicePage
 from .contact import Contact
 from .translated_image import TranslatedImage
 
@@ -30,7 +32,7 @@ class GuidePage(JanisPage):
             ('section', StructBlock(
                 [
                     ('section_heading', TextBlock('Heading')),
-                    ('pages', ListBlock(PageChooserBlock(label="Page"))),
+                    ('pages', ListBlock(PageChooserBlock(label="Page", page_type=[InformationPage, ServicePage]))),
                 ],
                 label="Section"
             )),
