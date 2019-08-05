@@ -9,7 +9,7 @@ from wagtail.core.fields import StreamField
 from wagtail.core.models import Page, PageRevision
 from django_filters import FilterSet, OrderingFilter
 
-from base.models import TranslatedImage, ThreeOneOne, ServicePage, ServicePageContact, ServicePageTopic, ServicePageRelatedDepartments, InformationPageRelatedDepartments, ProcessPage, ProcessPageStep, ProcessPageContact, ProcessPageTopic, InformationPage, InformationPageContact, InformationPageTopic, DepartmentPage, DepartmentPageContact, DepartmentPageDirector, Theme, TopicCollectionPage, TopicPage, Contact, Location, ContactDayAndDuration, Department, DepartmentContact, TopicPageTopicCollection, OfficialDocumentPage, OfficialDocumentPageRelatedDepartments, OfficialDocumentPageTopic, OfficialDocumentPageOfficialDocument
+from base.models import TranslatedImage, ThreeOneOne, ServicePage, ServicePageContact, ServicePageTopic, ServicePageRelatedDepartments, InformationPageRelatedDepartments, ProcessPage, ProcessPageStep, ProcessPageContact, ProcessPageTopic, InformationPage, InformationPageContact, InformationPageTopic, DepartmentPage, DepartmentPageContact, DepartmentPageDirector, Theme, TopicCollectionPage, TopicPage, Contact, Location, ContactDayAndDuration, Department, DepartmentContact, TopicPageTopicCollection, OfficialDocumentPage, OfficialDocumentPageRelatedDepartments, OfficialDocumentPageTopic, OfficialDocumentPageOfficialDocument, GuidePage, GuidePageTopic, GuidePageRelatedDepartments, GuidePageContact
 
 class StreamFieldType(Scalar):
     @staticmethod
@@ -184,6 +184,12 @@ class OfficialDocumentPageNode(DjangoObjectType):
         filter_fields = ['id', 'slug', 'live']
         interfaces = [graphene.Node]
 
+class GuidePageNode(DjangoObjectType):
+    class Meta:
+        model = GuidePage
+        filter_fields = ['id', 'slug', 'live']
+        interfaces = [graphene.Node]
+
 class PageRevisionNode(DjangoObjectType):
     as_service_page = graphene.NonNull(ServicePageNode)
     as_process_page = graphene.NonNull(ProcessPageNode)
@@ -259,6 +265,8 @@ class OfficialDocumentPageTopicNode(DjangoObjectType):
         model = OfficialDocumentPageTopic
         interfaces = [graphene.Node]
 
+
+
 def get_page_with_preview_data(page, session):
     # Wagtail saves preview data in the session. We want to mimick what they're doing to generate the built-in preview.
     # https://github.com/wagtail/wagtail/blob/db6d36845f3f2c5d7009a22421c2efab9968aa24/wagtail/admin/views/pages.py#L544
@@ -298,6 +306,7 @@ class Query(graphene.ObjectType):
     all_departments = DjangoFilterConnectionField(DepartmentNode)
     all_311 = DjangoFilterConnectionField(ThreeOneOneNode)
     all_official_document_pages = DjangoFilterConnectionField(OfficialDocumentPageNode)
+    all_guide_pages = DjangoFilterConnectionField(GuidePageNode)
 
     def resolve_page_revision(self, resolve_info, id=None):
         revision = graphene.Node.get_node_from_global_id(resolve_info, id)
