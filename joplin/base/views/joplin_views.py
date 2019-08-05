@@ -5,8 +5,14 @@ from wagtail.admin.views import pages
 from wagtail.admin import messages
 from django.utils.translation import ugettext as _
 from django.urls import reverse
+from generic_chooser.views import ModelChooserViewSet
 from base.models import ServicePage, ProcessPage, InformationPage, TopicPage, TopicCollectionPage, DepartmentPage, Theme, OfficialDocumentPage
 import json
+
+class ThemeChooserViewSet(ModelChooserViewSet):
+    icon = 'user'
+    model = Theme
+
 
 def publish(request, page_id):
     page = get_object_or_404(Page, id=page_id).specific

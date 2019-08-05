@@ -4,7 +4,7 @@ import graphene
 
 from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
-
+from django.utils.translation import ugettext_lazy as _
 from wagtail.utils.decorators import cached_classmethod
 from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, MultiFieldPanel, ObjectList, StreamFieldPanel, TabbedInterface, HelpPanel
 from wagtail.core.blocks import TextBlock, RichTextBlock, ListBlock, StreamBlock, StructBlock, URLBlock, PageChooserBlock, CharBlock
@@ -17,7 +17,7 @@ from wagtail.images.blocks import ImageChooserBlock
 from wagtail.snippets.models import register_snippet
 from wagtail.search import index
 from wagtail.admin.edit_handlers import PageChooserPanel
-
+from generic_chooser.widgets import AdminChooser
 from . import blocks as custom_blocks
 from . import forms as custom_forms
 
@@ -25,6 +25,25 @@ WYSIWYG_GENERAL = ['h1', 'h2', 'h3', 'h4', 'bold', 'link', 'ul', 'ol', 'code']
 WYSIWYG_SERVICE_STEP = ['ul', 'ol', 'link', 'code']
 DEFAULT_MAX_LENGTH = 255
 SHORT_DESCRIPTION_LENGTH = 300
+
+@register_snippet
+class Theme(ClusterableModel):
+    slug = models.SlugField()
+    text = models.CharField(max_length=DEFAULT_MAX_LENGTH)
+    description = models.TextField()
+
+    def __str__(self):
+        return self.text
+
+class ThemeChooser(AdminChooser):
+    choose_one_text = _('Choose a theme')
+    model = 'base.Theme'
+    link_to_chosen_text = _('Edit this theme')
+    choose_modal_url_name = 'theme_chooser:choose'
+
+    def get_edit_item_url(self, item):
+        return reverse('wagtailsnippets:edit', args=('base', 'theme', quote(item.pk)))
+
 
 class TranslatedImage(AbstractImage):
     admin_form_fields = Image.admin_form_fields
@@ -160,6 +179,11 @@ class JanisPage(JanisBasePage):
 class ServicePage(JanisPage):
     janis_url_page_type = "services"
 
+    theme = models.ForeignKey(
+        'base.Theme', related_name='theme',
+        null=True, blank=True, on_delete=models.SET_NULL
+    )
+
     steps = StreamField(
         [
             ('basic_step', RichTextBlock(
@@ -242,6 +266,7 @@ class ServicePage(JanisPage):
         )
         ,
         InlinePanel('contacts', label='Contacts'),
+        FieldPanel('theme', widget=ThemeChooser),
     ]
 
 
@@ -532,14 +557,6 @@ class ProcessPageStep(Orderable):
     ]
 
 
-@register_snippet
-class Theme(ClusterableModel):
-    slug = models.SlugField()
-    text = models.CharField(max_length=DEFAULT_MAX_LENGTH)
-    description = models.TextField()
-
-    def __str__(self):
-        return self.text
 
 
 @register_snippet
