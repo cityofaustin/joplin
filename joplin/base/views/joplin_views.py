@@ -12,6 +12,7 @@ import json
 class ThemeChooserViewSet(ModelChooserViewSet):
     icon = 'user'
     model = Theme
+    fields = ['slug', 'text', 'description']
 
 
 def publish(request, page_id):
