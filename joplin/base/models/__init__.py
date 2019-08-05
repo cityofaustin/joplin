@@ -36,7 +36,7 @@ from .service_page import ServicePage, ServicePageTopic, ServicePageContact, Ser
 from .information_page import InformationPage, InformationPageRelatedDepartments, InformationPageTopic, InformationPageContact
 from .department_page import DepartmentPage, DepartmentPageDirector, DepartmentPageContact
 from .official_documents_page import OfficialDocumentPage, OfficialDocumentPageOfficialDocument, OfficialDocumentPageRelatedDepartments, OfficialDocumentPageTopic
-from .guide_page import GuidePage, GuidePageSection, GuidePageSectionPage, GuidePageTopic, GuidePageRelatedDepartments, GuidePageContact
+from .guide_page import GuidePage, GuidePageTopic, GuidePageRelatedDepartments, GuidePageContact
 
 WYSIWYG_GENERAL = ['h1', 'h2', 'h3', 'h4', 'bold', 'link', 'ul', 'ol', 'code']
 DEFAULT_MAX_LENGTH = 255

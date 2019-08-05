@@ -27,7 +27,7 @@ const stepsEnum = {
   CHOOSE_DEPARTMENT: 3,
   CHOOSE_THEME: 4,
   CHOOSE_TITLE: 5,
-}
+};
 
 class CreateContentModal extends Component {
   constructor(props) {
@@ -50,16 +50,22 @@ class CreateContentModal extends Component {
 
   incrementActiveStep = () => {
     // If we're on the choose type step
-    if(this.state.activeStep === stepsEnum.CHOOSE_TYPE) {
+    if (this.state.activeStep === stepsEnum.CHOOSE_TYPE) {
       // Department pages, topic pages, and service pages go straight to title
-      if(this.state.type === 'department' || this.state.type === 'service' || this.state.type === 'topic') {
+      if (
+        this.state.type === 'department' ||
+        this.state.type === 'service' ||
+        this.state.type === 'topic'
+      ) {
         this.setState({ activeStep: stepsEnum.CHOOSE_TITLE });
         return;
       }
 
       // Topic collection pages to to the select topic collection/theme step
-      if(this.state.type === 'topiccollection') {
-        this.setState({ activeStep: stepsEnum.CHOOSE_TOPIC_COLLECTION_OR_THEME });
+      if (this.state.type === 'topiccollection') {
+        this.setState({
+          activeStep: stepsEnum.CHOOSE_TOPIC_COLLECTION_OR_THEME,
+        });
         return;
       }
 
@@ -69,7 +75,10 @@ class CreateContentModal extends Component {
     }
 
     // If we're on choose department or choose theme, we need to go to choose title
-    if(this.state.activeStep === stepsEnum.CHOOSE_DEPARTMENT || this.state.activeStep === stepsEnum.CHOOSE_THEME) {
+    if (
+      this.state.activeStep === stepsEnum.CHOOSE_DEPARTMENT ||
+      this.state.activeStep === stepsEnum.CHOOSE_THEME
+    ) {
       this.setState({ activeStep: stepsEnum.CHOOSE_TITLE });
       return;
     }
@@ -79,32 +88,38 @@ class CreateContentModal extends Component {
     let previousViableStep = this.state.activeStep - 1;
 
     // We can't go below zero
-    if(previousViableStep < 0) {
-      previousViableStep = stepsEnum.CHOOSE_TYPE
+    if (previousViableStep < 0) {
+      previousViableStep = stepsEnum.CHOOSE_TYPE;
     }
 
     // we should only go to the theme select page if we have a theme
-    if(previousViableStep === stepsEnum.CHOOSE_THEME && !this.state.theme) {
+    if (previousViableStep === stepsEnum.CHOOSE_THEME && !this.state.theme) {
       previousViableStep--;
     }
 
     // Only topic collection pages can have a theme
-    if(previousViableStep === stepsEnum.CHOOSE_THEME && this.state.type !== 'topiccollection') {
+    if (
+      previousViableStep === stepsEnum.CHOOSE_THEME &&
+      this.state.type !== 'topiccollection'
+    ) {
       previousViableStep--;
     }
 
     // we should only go to the dept select page if we have a department
-    if(previousViableStep === stepsEnum.CHOOSE_DEPARTMENT && !this.state.department) {
+    if (
+      previousViableStep === stepsEnum.CHOOSE_DEPARTMENT &&
+      !this.state.department
+    ) {
       previousViableStep--;
     }
 
     // We should never go back to the choose dept or topic page
-    if(previousViableStep === stepsEnum.CHOOSE_DEPT_OR_TOPIC) {
+    if (previousViableStep === stepsEnum.CHOOSE_DEPT_OR_TOPIC) {
       previousViableStep--;
     }
 
     // We should never go back to the choose topic collection or theme page
-    if(previousViableStep === stepsEnum.CHOOSE_TOPIC_COLLECTION_OR_THEME) {
+    if (previousViableStep === stepsEnum.CHOOSE_TOPIC_COLLECTION_OR_THEME) {
       previousViableStep--;
     }
 
@@ -136,26 +151,35 @@ class CreateContentModal extends Component {
   };
 
   handleTypeSelect = (dataObj, e) => {
-    this.setState({
-      type: dataObj.type,
-    }, () => {
-      this.incrementActiveStep();
-    });
+    this.setState(
+      {
+        type: dataObj.type,
+      },
+      () => {
+        this.incrementActiveStep();
+      },
+    );
   };
 
   handleTopicOrDepartmentSelect = (dataObj, e) => {
     this.setState({
-      activeStep: dataObj.topicOrDept === 'topic' ? stepsEnum.CHOOSE_TITLE : stepsEnum.CHOOSE_DEPARTMENT,
-      department: null
+      activeStep:
+        dataObj.topicOrDept === 'topic'
+          ? stepsEnum.CHOOSE_TITLE
+          : stepsEnum.CHOOSE_DEPARTMENT,
+      department: null,
     });
   };
 
   handleTopicCollectionOrThemeSelect = (dataObj, e) => {
     this.setState({
-      activeStep: dataObj.topicCollectionOrTheme === 'topiccollection' ? stepsEnum.CHOOSE_TITLE : stepsEnum.CHOOSE_THEME,
-      theme: null
+      activeStep:
+        dataObj.topicCollectionOrTheme === 'topiccollection'
+          ? stepsEnum.CHOOSE_TITLE
+          : stepsEnum.CHOOSE_THEME,
+      theme: null,
     });
-  }
+  };
 
   handleTitleInputChange = e => {
     this.setState({
@@ -185,7 +209,7 @@ class CreateContentModal extends Component {
           title: this.state.title,
           topic: this.state.topic,
           department: this.state.department,
-          theme: this.state.theme
+          theme: this.state.theme,
         },
         { headers: { 'X-CSRFToken': Cookies.get('csrftoken') } },
       )
@@ -244,14 +268,20 @@ class CreateContentModal extends Component {
                         maxCharacterCount={MAX_TITLE_LENGTH}
                       />
                     )}
-                    {this.state.activeStep === stepsEnum.CHOOSE_DEPT_OR_TOPIC && (
+                    {this.state.activeStep ===
+                      stepsEnum.CHOOSE_DEPT_OR_TOPIC && (
                       <ChooseTopicOrDepartmentStep
-                        handleTopicOrDepartmentSelect={this.handleTopicOrDepartmentSelect}
+                        handleTopicOrDepartmentSelect={
+                          this.handleTopicOrDepartmentSelect
+                        }
                       />
                     )}
-                    {this.state.activeStep === stepsEnum.CHOOSE_TOPIC_COLLECTION_OR_THEME && (
+                    {this.state.activeStep ===
+                      stepsEnum.CHOOSE_TOPIC_COLLECTION_OR_THEME && (
                       <ChooseTopicCollectionOrThemeStep
-                        handleTopicCollectionOrThemeSelect={this.handleTopicCollectionOrThemeSelect}
+                        handleTopicCollectionOrThemeSelect={
+                          this.handleTopicCollectionOrThemeSelect
+                        }
                       />
                     )}
                     {this.state.activeStep === stepsEnum.CHOOSE_DEPARTMENT && (
@@ -272,7 +302,13 @@ class CreateContentModal extends Component {
                       handleBackButton={this.handleBackButton}
                       handleNextButton={this.handleNextButton}
                       handleCloseButton={this.handleCloseButton}
-                      hidden={this.state.activeStep === stepsEnum.CHOOSE_TYPE || this.state.activeStep === stepsEnum.CHOOSE_DEPT_OR_TOPIC || this.state.activeStep === stepsEnum.CHOOSE_TOPIC_COLLECTION_OR_THEME}
+                      hidden={
+                        this.state.activeStep === stepsEnum.CHOOSE_TYPE ||
+                        this.state.activeStep ===
+                          stepsEnum.CHOOSE_DEPT_OR_TOPIC ||
+                        this.state.activeStep ===
+                          stepsEnum.CHOOSE_TOPIC_COLLECTION_OR_THEME
+                      }
                       onLastStep={this.onLastStep()}
                     />
                   </div>
