@@ -35,12 +35,6 @@ class Theme(ClusterableModel):
     def __str__(self):
         return self.text
 
-class ThemeChooser(AdminChooser):
-    choose_one_text = _('Choose a theme')
-    model = 'base.Theme'
-    link_to_chosen_text = _('Edit this theme')
-    choose_modal_url_name = 'theme_chooser:choose'
-
 class DepartmentChooser(AdminChooser):
     choose_one_text = _('Choose a related department')
     model = 'base.DepartmentPage'
@@ -182,12 +176,7 @@ class JanisPage(JanisBasePage):
 
 class ServicePage(JanisPage):
     janis_url_page_type = "services"
-
-    theme = models.ForeignKey(
-        'base.Theme', related_name='theme',
-        null=True, blank=True, on_delete=models.SET_NULL
-    )
-
+    
     steps = StreamField(
         [
             ('basic_step', RichTextBlock(
@@ -270,7 +259,6 @@ class ServicePage(JanisPage):
         )
         ,
         InlinePanel('contacts', label='Contacts'),
-        FieldPanel('theme', widget=ThemeChooser),
         # played around with defining the chooser here but got it to work
         # by calling the widget in ServicePageRelatedDepartments
         # FieldPanel('related_departments', widget=DepartmentChooser),

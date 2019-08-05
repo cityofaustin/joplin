@@ -9,15 +9,11 @@ from generic_chooser.views import ModelChooserViewSet
 from base.models import ServicePage, ProcessPage, InformationPage, TopicPage, TopicCollectionPage, DepartmentPage, Theme, OfficialDocumentPage
 import json
 
-class ThemeChooserViewSet(ModelChooserViewSet):
-    icon = 'user'
-    model = Theme
-    fields = ['slug', 'text', 'description']
 
 class DepartmentChooserViewSet(ModelChooserViewSet):
     icon = 'user'
     model = DepartmentPage
-    fields = ['title_en']
+    fields = ['title_en','mission']
 
 
 def publish(request, page_id):
