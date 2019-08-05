@@ -26,26 +26,19 @@ class GuidePage(JanisPage):
     description = models.TextField(blank=True, verbose_name='Write a description of the guide')
     image = models.ForeignKey(TranslatedImage, null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
 
-# label="Select existing pages in the order you want them to display within each heading. Pages should be added only once to any single guide."
     sections = StreamField(
         [
             ('section', StructBlock(
                 [
                     ('section_heading', TextBlock('Heading')),
-                    ('pages', ListBlock(PageChooserBlock(label="Page", page_type=[InformationPage, ServicePage]))),
+                    ('pages', ListBlock(PageChooserBlock(label="Page", page_type=[InformationPage, ServicePage]), help_text='Select existing pages in the order you want them to display within each heading. Pages should be added only once to any single guide.')),
                 ],
                 label="Section"
             )),
         ],
-        verbose_name='Add a section header and pages to each section',
-        # this gets called in the help panel
-        # help_text='A step may have a basic text step or an options accordion which reveals two or more options',
+        verbose_name='Add a section header and pages to each section', 
         blank=True
     )
-
-
-
-
 
     base_form_class = GuidePageForm
 
@@ -57,36 +50,10 @@ class GuidePage(JanisPage):
         FieldPanel('description'),
         InlinePanel('topics', label='Topics'),
         InlinePanel('related_departments', label='Related Departments'),
-        # InlinePanel('sections', label='Add a section header and pages to each section'),
         ImageChooserPanel('image'),
         StreamFieldPanel('sections'),
         InlinePanel('contacts', label='Contacts'),
     ]
-
-# class GuidePageSection(Orderable):
-#     guide_page = ParentalKey(GuidePage, related_name='sections')
-#     heading = models.TextField(blank=True, verbose_name='Heading')
-    
-
-#     panels = [
-#       FieldPanel('heading'),
-#       InlinePanel('section_pages', label='Select existing pages in the order you want them to display within each heading. Pages should be added only once to any single guide.'),
-#     ]
-
-#     def __str__(self):
-#         return self.heading.text
-
-
-# class GuidePageSectionPage(Orderable):
-#     section = ParentalKey(GuidePageSection, related_name='section_pages')
-#     page = models.ForeignKey('base.JanisBasePage',  verbose_name='Select a Page', related_name='+', on_delete=models.CASCADE)
-
-#     panels = [
-#         PageChooserPanel("page"),
-#     ]
-
-#     def __str__(self):
-#         return self.page.text
 
 class GuidePageTopic(ClusterableModel):
     page = ParentalKey(GuidePage, related_name='topics')
