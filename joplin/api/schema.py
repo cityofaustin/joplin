@@ -323,8 +323,6 @@ class OfficialDocumentPageTopicNode(DjangoObjectType):
         model = OfficialDocumentPageTopic
         interfaces = [graphene.Node]
 
-
-
 def get_page_with_preview_data(page, session):
     # Wagtail saves preview data in the session. We want to mimick what they're doing to generate the built-in preview.
     # https://github.com/wagtail/wagtail/blob/db6d36845f3f2c5d7009a22421c2efab9968aa24/wagtail/admin/views/pages.py#L544
