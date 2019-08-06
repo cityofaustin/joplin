@@ -5,7 +5,7 @@ from wagtail.admin.views import pages
 from wagtail.admin import messages
 from django.utils.translation import ugettext as _
 from django.urls import reverse
-from base.models import ServicePage, ProcessPage, InformationPage, TopicPage, TopicCollectionPage, DepartmentPage, Theme
+from base.models import ServicePage, ProcessPage, InformationPage, TopicPage, TopicCollectionPage, DepartmentPage, Theme, OfficialDocumentPage
 import json
 
 def publish(request, page_id):
@@ -18,11 +18,8 @@ def publish(request, page_id):
     next_url = pages.get_valid_next_url_from_request(request)
 
     if request.method == 'POST':
-        # changing this to save makes prod data work on staging
-        page.save_revision().publish()
 
-
-
+        page.get_latest_revision().publish()
 
         messages.success(request, _("Page '{0}' published.").format(page.get_admin_display_title()), buttons=[
             messages.button(reverse('wagtailadmin_pages:edit', args=(page.id,)), _('Edit'))
@@ -48,9 +45,6 @@ def new_page_from_modal(request):
         print(body['type'])
 
         data = {}
-        if body['type'] != 'department' and body['type'] != 'topic':
-            if body['department'] != None:
-                data['department'] = DepartmentPage.objects.get(id=body['department'])
         data['title'] = body['title']
         data['owner'] = request.user
 
@@ -71,6 +65,8 @@ def new_page_from_modal(request):
             data['what_we_do'] = 'What we do'
             data['mission'] = 'Mission'
             page = DepartmentPage(**data)
+        if body['type'] == 'official_document':
+            page = OfficialDocumentPage(**data)
 
         # Add it as a child of home
         home = Page.objects.get(id=3)

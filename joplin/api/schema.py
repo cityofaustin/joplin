@@ -7,9 +7,9 @@ from graphene_django.filter import DjangoFilterConnectionField
 from graphene.types import Scalar
 from wagtail.core.fields import StreamField
 from wagtail.core.models import Page, PageRevision
+from django_filters import FilterSet, OrderingFilter
 
-from base.models import TranslatedImage, ThreeOneOne, ServicePage, ServicePageContact, ServicePageTopic, ProcessPage, ProcessPageStep, ProcessPageContact, ProcessPageTopic, InformationPage, InformationPageContact, InformationPageTopic, DepartmentPage, DepartmentPageContact, DepartmentPageDirector, Theme, TopicCollectionPage, TopicPage, Contact, Location, ContactDayAndDuration, Department, DepartmentContact, TopicPageTopicCollection
-
+from base.models import TranslatedImage, ThreeOneOne, ServicePage, ServicePageContact, ServicePageTopic, ServicePageRelatedDepartments, InformationPageRelatedDepartments, ProcessPage, ProcessPageStep, ProcessPageContact, ProcessPageTopic, InformationPage, InformationPageContact, InformationPageTopic, DepartmentPage, DepartmentPageContact, DepartmentPageDirector, Theme, TopicCollectionPage, TopicPage, Contact, Location, ContactDayAndDuration, Department, DepartmentContact, TopicPageTopicCollection, OfficialDocumentPage, OfficialDocumentPageRelatedDepartments, OfficialDocumentPageTopic, OfficialDocumentPageOfficialDocument
 
 class StreamFieldType(Scalar):
     @staticmethod
@@ -95,6 +95,21 @@ class ServicePageTopicNode(DjangoObjectType):
         model = ServicePageTopic
         interfaces = [graphene.Node]
 
+class ServicePageRelatedDepartmentsNode(DjangoObjectType):
+    class Meta:
+        model = ServicePageRelatedDepartments
+        interfaces = [graphene.Node]
+
+class InformationPageRelatedDepartmentsNode(DjangoObjectType):
+    class Meta:
+        model = InformationPageRelatedDepartments
+        interfaces = [graphene.Node]
+
+class OfficialDocumentPageRelatedDepartmentsNode(DjangoObjectType):
+    class Meta:
+        model = OfficialDocumentPageRelatedDepartments
+        interfaces = [graphene.Node]
+
 class TranslatedImageNode(DjangoObjectType):
     class Meta:
         model = TranslatedImage
@@ -135,12 +150,37 @@ class ProcessPageNode(DjangoObjectType):
 class InformationPageNode(DjangoObjectType):
     class Meta:
         model = InformationPage
-        filter_fields = ['id', 'slug', 'department', 'live']
+        filter_fields = ['id', 'slug', 'live']
         interfaces = [graphene.Node]
 
 class DepartmentPageNode(DjangoObjectType):
     class Meta:
         model = DepartmentPage
+        filter_fields = ['id', 'slug', 'live']
+        interfaces = [graphene.Node]
+
+class OfficialDocumentFilter(FilterSet):
+    order_by = OrderingFilter(
+        fields=(
+            ('date'),
+        )
+    )
+
+    class Meta:
+        model = OfficialDocumentPageOfficialDocument
+        fields = ['date']
+
+class OfficialDocumentPageOfficialDocumentNode(DjangoObjectType):
+    class Meta:
+        model = OfficialDocumentPageOfficialDocument
+        filter_fields = ['date']
+        interfaces = [graphene.Node]
+
+class OfficialDocumentPageNode(DjangoObjectType):
+    official_documents = DjangoFilterConnectionField(OfficialDocumentPageOfficialDocumentNode, filterset_class=OfficialDocumentFilter)
+
+    class Meta:
+        model = OfficialDocumentPage
         filter_fields = ['id', 'slug', 'live']
         interfaces = [graphene.Node]
 
@@ -151,6 +191,7 @@ class PageRevisionNode(DjangoObjectType):
     as_department_page = graphene.NonNull(DepartmentPageNode)
     as_topic_page = graphene.NonNull(TopicNode)
     as_topic_collection_page = graphene.NonNull(TopicCollectionNode)
+    as_official_document_page = graphene.NonNull(OfficialDocumentPageNode)
 
     def resolve_as_service_page(self, resolve_info, *args, **kwargs):
         return self.as_page_object();
@@ -168,6 +209,9 @@ class PageRevisionNode(DjangoObjectType):
         return self.as_page_object();
 
     def resolve_as_topic_collection_page(self, resolve_info, *args, **kwargs):
+        return self.as_page_object();
+
+    def resolve_as_official_document_page(self, resolve_info, *args, **kwargs):
         return self.as_page_object();
 
     class Meta:
@@ -210,6 +254,11 @@ class DepartmentPageDirectorNode(DjangoObjectType):
         model = DepartmentPageDirector
         interfaces = [graphene.Node]
 
+class OfficialDocumentPageTopicNode(DjangoObjectType):
+    class Meta:
+        model = OfficialDocumentPageTopic
+        interfaces = [graphene.Node]
+
 def get_page_with_preview_data(page, session):
     # Wagtail saves preview data in the session. We want to mimick what they're doing to generate the built-in preview.
     # https://github.com/wagtail/wagtail/blob/db6d36845f3f2c5d7009a22421c2efab9968aa24/wagtail/admin/views/pages.py#L544
@@ -236,6 +285,7 @@ class Query(graphene.ObjectType):
     debug = graphene.Field(DjangoDebug, name='__debug')
 
     service_page = graphene.Field(ServicePageNode, id=graphene.ID(), pk=graphene.Int(), slug=graphene.String(), show_preview=graphene.Boolean(default_value=False), language=Language())
+    department_page = graphene.Node.Field(DepartmentPageNode)
     all_service_pages = DjangoFilterConnectionField(ServicePageNode)
     page_revision = graphene.Field(PageRevisionNode, id=graphene.ID())
     all_page_revisions = DjangoFilterConnectionField(PageRevisionNode)
@@ -247,6 +297,7 @@ class Query(graphene.ObjectType):
     all_topic_collections = DjangoFilterConnectionField(TopicCollectionNode)
     all_departments = DjangoFilterConnectionField(DepartmentNode)
     all_311 = DjangoFilterConnectionField(ThreeOneOneNode)
+    all_official_document_pages = DjangoFilterConnectionField(OfficialDocumentPageNode)
 
     def resolve_page_revision(self, resolve_info, id=None):
         revision = graphene.Node.get_node_from_global_id(resolve_info, id)

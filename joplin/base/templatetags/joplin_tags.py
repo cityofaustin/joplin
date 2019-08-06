@@ -19,12 +19,13 @@ def get_revision_preview_url(*args, **kwargs):
     return os.environ["JANIS_URL"] + "/en/preview/" + url_page_type + "/" + global_id
 
 STYLEGUIDE_PAGES = {
-  'service page': '/writing-service-pages/',
-  'process page': '/writing-process-pages/',
-  'information page': '/writing-process-pages/',
-  'department page': '/writing-process-pages/',
-  'topic page': '/writing-process-pages/',
-  'topic collection page': '/writing-process-pages/',
+  'service page': '/pick-the-perfect-content-type/service-page',
+  'process page': '/pick-the-perfect-content-type/process-page',
+  'information page': '/pick-the-perfect-content-type/information-page',
+  'department page': 'pick-the-perfect-content-type/department-page',
+  'topic page': '',
+  'topic collection page': '',
+  'official document page': '',
 }
 
 @register.simple_tag
