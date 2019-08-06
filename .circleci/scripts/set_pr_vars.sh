@@ -20,6 +20,6 @@ heroku config:set   \
   AWS_S3_BUCKET_ARCHIVE_LOCATION=$CI_AWS_S3_BUCKET_ARCHIVE_LOCATION \
   DEBUG=1 \
   HEROKU_JANIS_APP_NAME="janis-staging" \
-  JANIS_URL="https://janis-staging.herokuapp.com" \
+  JANIS_URL=$JANIS_URL \
   STYLEGUIDE_URL="https://cityofaustin.github.io/digital-services-style-guide" \
   --app $APPNAME > /dev/null

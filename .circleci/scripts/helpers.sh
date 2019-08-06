@@ -24,6 +24,7 @@ elif [ "$CIRCLE_BRANCH" == "production" ]; then
   DOCKER_TARGET="joplin-prod"
   DOCKER_TAG_1="cityofaustin/joplin-app:production-${SHA}"
   DOCKER_TAG_2="cityofaustin/joplin-app:production-latest"
+  JANIS_URL="https://janis-staging.herokuapp.com"
 else
   # truncates to 30 characters for heroku app name length limitations
   # eliminate trailing dashes for heroku app name restrictions
@@ -31,6 +32,10 @@ else
   DOCKER_TARGET="joplin-review"
   DOCKER_TAG_1="cityofaustin/joplin-app:pr-${CIRCLE_BRANCH}-${SHA}"
   DOCKER_TAG_2="cityofaustin/joplin-app:pr-${CIRCLE_BRANCH}-latest"
+  JANIS_URL="https://janis-staging.herokuapp.com"
+  if [ "$CIRCLE_BRANCH" == "2572-official-doc" ]; then
+    JANIS_URL="https://deploy-preview-463--janis.netlify.com"
+  fi
 fi
 DOCKER_TAG_HEROKU=registry.heroku.com/$APPNAME/web
 
