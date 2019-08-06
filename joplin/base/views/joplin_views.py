@@ -45,9 +45,6 @@ def new_page_from_modal(request):
         print(body['type'])
 
         data = {}
-        if body['type'] != 'department' and body['type'] != 'topic':
-            if body['department'] != None:
-                data['department'] = DepartmentPage.objects.get(id=body['department'])
         data['title'] = body['title']
         data['owner'] = request.user
 
