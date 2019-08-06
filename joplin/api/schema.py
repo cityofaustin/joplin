@@ -92,6 +92,11 @@ class ServicePageContactNode(DjangoObjectType):
         model = ServicePageContact
         interfaces = [graphene.Node]
 
+class GuidePageContactNode(DjangoObjectType):
+    class Meta:
+        model = GuidePageContact
+        interfaces = [graphene.Node]
+
 class ServicePageTopicNode(DjangoObjectType):
     class Meta:
         model = ServicePageTopic
