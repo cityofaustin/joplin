@@ -112,6 +112,11 @@ class OfficialDocumentPageRelatedDepartmentsNode(DjangoObjectType):
         model = OfficialDocumentPageRelatedDepartments
         interfaces = [graphene.Node]
 
+class GuidePageRelatedDepartmentsNode(DjangoObjectType):
+    class Meta:
+        model = GuidePageRelatedDepartments
+        interfaces = [graphene.Node]
+
 class TranslatedImageNode(DjangoObjectType):
     class Meta:
         model = TranslatedImage
@@ -317,6 +322,11 @@ class DepartmentPageDirectorNode(DjangoObjectType):
 class OfficialDocumentPageTopicNode(DjangoObjectType):
     class Meta:
         model = OfficialDocumentPageTopic
+        interfaces = [graphene.Node]
+
+class GuidePageTopicNode(DjangoObjectType):
+    class Meta:
+        model = GuidePageTopic
         interfaces = [graphene.Node]
 
 def get_page_with_preview_data(page, session):
