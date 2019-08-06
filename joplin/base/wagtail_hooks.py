@@ -11,7 +11,7 @@ from wagtail.core import hooks
 
 from base.models import HomePage, Location, Contact
 from wagtail.core.models import PageRevision
-
+from base.views.joplin_views import DepartmentChooserViewSet
 from html.parser import HTMLParser
 
 # Following this: https://docs.python.org/3/library/html.parser.html#examples
@@ -20,6 +20,11 @@ class CheckForDataInHTMLParser(HTMLParser):
 
     def handle_data(self, data):
         self.has_data = True
+
+
+@hooks.register('register_admin_viewset')
+def register_department_chooser_viewset():
+    return DepartmentChooserViewSet('department_chooser', url_prefix='department-chooser')
 
 
 @hooks.register('before_edit_page')
