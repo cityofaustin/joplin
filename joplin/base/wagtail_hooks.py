@@ -188,3 +188,10 @@ def joplin_page_listing_more_buttons(page, page_perms, is_parent=False):
             attrs={'title': _("View revision history for '{title}'").format(title=page.get_admin_display_title())},
             priority=60
         )
+    if page_perms.can_delete():
+        yield Button(
+            _('Delete'),
+            reverse('wagtailadmin_pages:delete', args=[page.id]),
+            attrs={'title': _("Delete page '{title}'").format(title=page.get_admin_display_title())},
+            priority=30
+        )
