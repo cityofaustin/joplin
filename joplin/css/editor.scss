@@ -11,10 +11,6 @@
     border-bottom: 1px dashed grey !important;
 }
 
-footer {
-    display: none;
-}
-
 .icon-help-inverse.show {
     display: inline;
     float: right;
@@ -46,10 +42,4 @@ label {
     position: fixed;
     top: 0px;
     width: 75%;
-}
-
-.page-editor {
-    footer {
-        display: none;
-    }
 }
