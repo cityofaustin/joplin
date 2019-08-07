@@ -48,3 +48,9 @@ label {
     // This is because the drafttail editor goes to 30 when in focus
     z-index: 31 !important;
 }
+
+.struct-block {
+    .fields {
+        float: none !important;
+    }
+}
