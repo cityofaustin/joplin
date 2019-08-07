@@ -11,10 +11,6 @@
     border-bottom: 1px dashed grey !important;
 }
 
-footer {
-    display: none;
-}
-
 .icon-help-inverse.show {
     display: inline;
     float: right;
@@ -31,7 +27,7 @@ footer {
 }
 
 .editor__save-button {
-    min-width: 130px;
+    min-width: 145px;
 }
 
 fieldset {
@@ -48,8 +44,17 @@ label {
     width: 75%;
 }
 
-.page-editor {
-    footer {
-        display: none;
+.header {
+    // This is because the drafttail editor goes to 30 when in focus
+    z-index: 31 !important;
+}
+
+.struct-block {
+    .fields {
+        float: none !important;
     }
+}
+
+.sequence-container.sequence-type-list {
+    width: 100% !important;
 }

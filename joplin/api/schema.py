@@ -5,10 +5,13 @@ from graphene_django.converter import convert_django_field
 from graphene_django.debug import DjangoDebug
 from graphene_django.filter import DjangoFilterConnectionField
 from graphene.types import Scalar
+from graphene.types.generic import GenericScalar
 from wagtail.core.fields import StreamField
 from wagtail.core.models import Page, PageRevision
+from django_filters import FilterSet, OrderingFilter
+from wagtail.core.blocks import PageChooserBlock, TextBlock, ListBlock
 
-from base.models import TranslatedImage, ThreeOneOne, ServicePage, ServicePageContact, ServicePageTopic, ServicePageRelatedDepartments, InformationPageRelatedDepartments, ProcessPage, ProcessPageStep, ProcessPageContact, ProcessPageTopic, InformationPage, InformationPageContact, InformationPageTopic, DepartmentPage, DepartmentPageContact, DepartmentPageDirector, Theme, TopicCollectionPage, TopicPage, Contact, Location, ContactDayAndDuration, Department, DepartmentContact, TopicPageTopicCollection
+from base.models import TranslatedImage, ThreeOneOne, ServicePage, ServicePageContact, ServicePageTopic, ServicePageRelatedDepartments, InformationPageRelatedDepartments, ProcessPage, ProcessPageStep, ProcessPageContact, ProcessPageTopic, InformationPage, InformationPageContact, InformationPageTopic, DepartmentPage, DepartmentPageContact, DepartmentPageDirector, Theme, TopicCollectionPage, TopicPage, Contact, Location, ContactDayAndDuration, Department, DepartmentContact, TopicPageTopicCollection, OfficialDocumentPage, OfficialDocumentPageRelatedDepartments, OfficialDocumentPageTopic, OfficialDocumentPageOfficialDocument, GuidePage, GuidePageTopic, GuidePageRelatedDepartments, GuidePageContact, JanisPage
 
 class StreamFieldType(Scalar):
     @staticmethod
@@ -89,6 +92,11 @@ class ServicePageContactNode(DjangoObjectType):
         model = ServicePageContact
         interfaces = [graphene.Node]
 
+class GuidePageContactNode(DjangoObjectType):
+    class Meta:
+        model = GuidePageContact
+        interfaces = [graphene.Node]
+
 class ServicePageTopicNode(DjangoObjectType):
     class Meta:
         model = ServicePageTopic
@@ -102,6 +110,16 @@ class ServicePageRelatedDepartmentsNode(DjangoObjectType):
 class InformationPageRelatedDepartmentsNode(DjangoObjectType):
     class Meta:
         model = InformationPageRelatedDepartments
+        interfaces = [graphene.Node]
+
+class OfficialDocumentPageRelatedDepartmentsNode(DjangoObjectType):
+    class Meta:
+        model = OfficialDocumentPageRelatedDepartments
+        interfaces = [graphene.Node]
+
+class GuidePageRelatedDepartmentsNode(DjangoObjectType):
+    class Meta:
+        model = GuidePageRelatedDepartments
         interfaces = [graphene.Node]
 
 class TranslatedImageNode(DjangoObjectType):
@@ -153,6 +171,89 @@ class DepartmentPageNode(DjangoObjectType):
         filter_fields = ['id', 'slug', 'live']
         interfaces = [graphene.Node]
 
+class OfficialDocumentFilter(FilterSet):
+    order_by = OrderingFilter(
+        fields=(
+            ('date'),
+        )
+    )
+
+    class Meta:
+        model = OfficialDocumentPageOfficialDocument
+        fields = ['date']
+
+class OfficialDocumentPageOfficialDocumentNode(DjangoObjectType):
+    class Meta:
+        model = OfficialDocumentPageOfficialDocument
+        filter_fields = ['date']
+        interfaces = [graphene.Node]
+
+class OfficialDocumentPageNode(DjangoObjectType):
+    official_documents = DjangoFilterConnectionField(OfficialDocumentPageOfficialDocumentNode, filterset_class=OfficialDocumentFilter)
+
+    class Meta:
+        model = OfficialDocumentPage
+        filter_fields = ['id', 'slug', 'live']
+        interfaces = [graphene.Node]
+
+class GuidePageSectionPageBlock(graphene.ObjectType):
+    value = GenericScalar()
+    service_page = graphene.Field(ServicePageNode)
+    information_page = graphene.Field(InformationPageNode)
+
+    def resolve_service_page(self, info):
+        service_page = None
+        # TODO: don't catch everything
+        try:
+            service_page = ServicePage.objects.get(id=self.value)
+        except:
+            pass
+            # print("Looks like this one isn't a service page")
+
+        return service_page
+
+    def resolve_information_page(self, info):
+        information_page = None
+        # TODO: don't catch everything
+        try:
+            information_page = InformationPage.objects.get(id=self.value)
+        except:
+            pass
+            # print("Looks like this one isn't an info page")
+
+        return information_page
+
+class GuidePageSection(graphene.ObjectType):
+    value = GenericScalar()
+    pages = graphene.List(GuidePageSectionPageBlock)
+    heading = graphene.String()
+
+    def resolve_heading(self, info):
+        return self.value['section_heading']
+
+    def resolve_pages(self, info):
+        repr_pages = []
+        for page_id in self.value['pages']:
+            repr_pages.append(GuidePageSectionPageBlock(value=page_id))
+
+        return repr_pages
+
+class GuidePageNode(DjangoObjectType):
+    sections = graphene.List(GuidePageSection)
+
+    class Meta:
+        model = GuidePage
+        filter_fields = ['id', 'slug', 'live']
+        interfaces = [graphene.Node]
+
+    def resolve_sections(self, info):
+        repr_sections = []
+        for block in self.sections.stream_data:
+            value = block.get('value')
+            repr_sections.append(GuidePageSection(value=value))
+
+        return repr_sections
+
 class PageRevisionNode(DjangoObjectType):
     as_service_page = graphene.NonNull(ServicePageNode)
     as_process_page = graphene.NonNull(ProcessPageNode)
@@ -160,6 +261,7 @@ class PageRevisionNode(DjangoObjectType):
     as_department_page = graphene.NonNull(DepartmentPageNode)
     as_topic_page = graphene.NonNull(TopicNode)
     as_topic_collection_page = graphene.NonNull(TopicCollectionNode)
+    as_official_document_page = graphene.NonNull(OfficialDocumentPageNode)
 
     def resolve_as_service_page(self, resolve_info, *args, **kwargs):
         return self.as_page_object();
@@ -177,6 +279,9 @@ class PageRevisionNode(DjangoObjectType):
         return self.as_page_object();
 
     def resolve_as_topic_collection_page(self, resolve_info, *args, **kwargs):
+        return self.as_page_object();
+
+    def resolve_as_official_document_page(self, resolve_info, *args, **kwargs):
         return self.as_page_object();
 
     class Meta:
@@ -219,6 +324,16 @@ class DepartmentPageDirectorNode(DjangoObjectType):
         model = DepartmentPageDirector
         interfaces = [graphene.Node]
 
+class OfficialDocumentPageTopicNode(DjangoObjectType):
+    class Meta:
+        model = OfficialDocumentPageTopic
+        interfaces = [graphene.Node]
+
+class GuidePageTopicNode(DjangoObjectType):
+    class Meta:
+        model = GuidePageTopic
+        interfaces = [graphene.Node]
+
 def get_page_with_preview_data(page, session):
     # Wagtail saves preview data in the session. We want to mimick what they're doing to generate the built-in preview.
     # https://github.com/wagtail/wagtail/blob/db6d36845f3f2c5d7009a22421c2efab9968aa24/wagtail/admin/views/pages.py#L544
@@ -257,6 +372,8 @@ class Query(graphene.ObjectType):
     all_topic_collections = DjangoFilterConnectionField(TopicCollectionNode)
     all_departments = DjangoFilterConnectionField(DepartmentNode)
     all_311 = DjangoFilterConnectionField(ThreeOneOneNode)
+    all_official_document_pages = DjangoFilterConnectionField(OfficialDocumentPageNode)
+    all_guide_pages = DjangoFilterConnectionField(GuidePageNode)
 
     def resolve_page_revision(self, resolve_info, id=None):
         revision = graphene.Node.get_node_from_global_id(resolve_info, id)

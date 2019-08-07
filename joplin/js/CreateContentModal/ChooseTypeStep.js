@@ -26,20 +26,6 @@ const ChooseTypeStep = ({ handleTypeSelect }) => (
           className="ChooseTypeStep__option"
           onClick={() =>
             handleTypeSelect({
-              type: 'process',
-            })
-          }
-        >
-          <img src={processPageImage} alt="Service Page" />
-          <h3 className="ChooseTypeStep__option-header">Process Page</h3>
-          <p>
-            Processes which require several steps, which may not go in order
-          </p>
-        </div>
-        <div
-          className="ChooseTypeStep__option"
-          onClick={() =>
-            handleTypeSelect({
               type: 'information',
             })
           }
@@ -77,8 +63,34 @@ const ChooseTypeStep = ({ handleTypeSelect }) => (
             })
           }
         >
-          <h3 className="ChooseTypeStep__option-header">Topic Collection Page</h3>
+          <h3 className="ChooseTypeStep__option-header">
+            Topic Collection Page
+          </h3>
           <p>A collection of topics.</p>
+        </div>
+        <div
+          className="ChooseTypeStep__option"
+          onClick={() =>
+            handleTypeSelect({
+              type: 'official_document',
+            })
+          }
+        >
+          <h3 className="ChooseTypeStep__option-header">
+            Official Document Page
+          </h3>
+          <p>A collection of official documents.</p>
+        </div>
+        <div
+          className="ChooseTypeStep__option"
+          onClick={() =>
+            handleTypeSelect({
+              type: 'guide',
+            })
+          }
+        >
+          <h3 className="ChooseTypeStep__option-header">Guide Page</h3>
+          <p>A guide that references existing pages.</p>
         </div>
       </div>
     </div>

@@ -14,6 +14,11 @@ from wagtail.core.models import PageRevision
 
 from html.parser import HTMLParser
 
+import wagtail.admin.rich_text.editors.draftail.features as draftail_features
+from wagtail.admin.rich_text.converters.html_to_contentstate import BlockElementHandler
+
+
+
 # Following this: https://docs.python.org/3/library/html.parser.html#examples
 class CheckForDataInHTMLParser(HTMLParser):
     has_data = False
@@ -35,7 +40,7 @@ def before_edit_page(request, page):
 def configure_main_menu(request, menu_items):
     """
     Each item in the nav has icons. Here are the names for the icons within the Material icon font set that we have in Joplin:
-    Content: "text_fields"
+    Content: "create"
     Map: "map"
     Locations: "location_on"
     Images: "photo"
@@ -54,13 +59,12 @@ def configure_main_menu(request, menu_items):
 
     # replace wagtail icon with material-icons class to use that font
     for item in menu_items:
-            item.label = ''
             item.classnames = item.classnames.replace('icon ', 'material-icons ', 1)
 
 @hooks.register('register_admin_menu_item')
 def register_page_list_menu_item():
     home = HomePage.objects.first()
-    return MenuItem('Home', reverse('wagtailadmin_explore', args=[home.pk]), classnames='icon icon-home', order=10)
+    return MenuItem('Pages', reverse('wagtailadmin_explore', args=[home.pk]), classnames='icon icon-home', order=10)
 
 @hooks.register('register_admin_menu_item')
 def register_map_menu_item():
@@ -136,7 +140,7 @@ def joplin_page_listing_buttons(page, page_perms, is_parent=False):
         if parser.has_data:
             yield Button(
                 _('📝'),
-                'javascript:alert("Wouldn\'t it be cool if this linked to the notes?");',
+                'javascript:null;',
                 attrs={'title': _("Notes for authors entered"), 'class':'has-author-notes'},
                 priority=70
             )
@@ -189,3 +193,37 @@ def joplin_page_listing_more_buttons(page, page_perms, is_parent=False):
             attrs={'title': _("View revision history for '{title}'").format(title=page.get_admin_display_title())},
             priority=60
         )
+    if page_perms.can_delete():
+        yield Button(
+            _('Delete'),
+            reverse('wagtailadmin_pages:delete', args=[page.id]),
+            attrs={'title': _("Delete page '{title}'").format(title=page.get_admin_display_title())},
+        )
+
+
+
+@hooks.register('register_rich_text_features')
+def register_help_text_feature(features):
+    """
+    Registering the `help-text` feature, which uses the `help-text` Draft.js block type,
+    and is stored as HTML with a `<div class="help-text">` tag.
+    """
+    feature_name = 'rich-text-button-link'
+    type_ = 'rich-text-button-link'
+
+    control = {
+        'type': type_,
+        'label': 'Button',
+        'description': 'Make me look like a button',
+        # Optionally, we can tell Draftail what element to use when displaying those blocks in the editor.
+        'element': 'div',
+    }
+
+    features.register_editor_plugin(
+        'draftail', feature_name, draftail_features.BlockFeature(control)
+    )
+
+    features.register_converter_rule('contentstate', feature_name, {
+        'from_database_format': {'div.rich-text-button-link': BlockElementHandler(type_)},
+        'to_database_format': {'block_map': {type_: {'element': 'div', 'props': {'class': 'usa-button-primary rich-text-button-link'}}}},
+    })
