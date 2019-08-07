@@ -135,7 +135,7 @@ def joplin_page_listing_buttons(page, page_perms, is_parent=False):
         if parser.has_data:
             yield Button(
                 _('📝'),
-                'javascript:alert("Wouldn\'t it be cool if this linked to the notes?");',
+                'javascript:null;',
                 attrs={'title': _("Notes for authors entered"), 'class':'has-author-notes'},
                 priority=70
             )
