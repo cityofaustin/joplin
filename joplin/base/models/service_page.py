@@ -15,7 +15,7 @@ from .janis_page import JanisPage
 from .contact import Contact
 
 from .constants import WYSIWYG_GENERAL, SHORT_DESCRIPTION_LENGTH
-WYSIWYG_SERVICE_STEP = ['ul', 'ol', 'link', 'code']
+WYSIWYG_SERVICE_STEP = ['ul', 'ol', 'link', 'code', 'rich-text-button-link']
 
 class ServicePage(JanisPage):
     janis_url_page_type = "services"
