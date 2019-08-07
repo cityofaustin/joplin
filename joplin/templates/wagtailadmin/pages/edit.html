@@ -25,6 +25,12 @@
         styleGuideUrl: "{{ style_guide_url }}"
       }
     </script>
+    <!-- Not a good pattern, not trying to keep it around -->
+    <style>
+      footer {
+          display: none;
+      }
+    </style>
     {% render_bundle 'editor' %}
     <div class="header secondary">
         <div>

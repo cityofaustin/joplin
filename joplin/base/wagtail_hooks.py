@@ -140,7 +140,7 @@ def joplin_page_listing_buttons(page, page_perms, is_parent=False):
         if parser.has_data:
             yield Button(
                 _('📝'),
-                'javascript:alert("Wouldn\'t it be cool if this linked to the notes?");',
+                'javascript:null;',
                 attrs={'title': _("Notes for authors entered"), 'class':'has-author-notes'},
                 priority=70
             )
@@ -193,6 +193,12 @@ def joplin_page_listing_more_buttons(page, page_perms, is_parent=False):
             attrs={'title': _("View revision history for '{title}'").format(title=page.get_admin_display_title())},
             priority=60
         )
+	if page_perms.can_delete():
+        yield Button(
+            _('Delete'),
+            reverse('wagtailadmin_pages:delete', args=[page.id]),
+            attrs={'title': _("Delete page '{title}'").format(title=page.get_admin_display_title())},
+
 
 @hooks.register('register_rich_text_features')
 def register_help_text_feature(features):
