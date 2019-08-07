@@ -43,3 +43,8 @@ label {
     top: 0px;
     width: 75%;
 }
+
+.header {
+    // This is because the drafttail editor goes to 30 when in focus
+    z-index: 31 !important;
+}
