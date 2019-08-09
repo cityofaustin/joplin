@@ -1,4 +1,4 @@
-wagtail==2.6
+wagtail==2.6.1
 django-cors-headers==2.2.0
 django-extensions==2.1.9
 django-filter==2.1.0
