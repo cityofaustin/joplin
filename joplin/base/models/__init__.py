@@ -22,7 +22,7 @@ from base import blocks as custom_blocks
 from base import forms as custom_forms
 
 from .translated_image import TranslatedImage
-from .contact import Contact, ContactDayAndDuration
+from .contact import Contact, ContactDayAndDuration, PhoneNumber
 from .day_and_duration import DayAndDuration
 from .location import Location
 from .map import Map
@@ -47,7 +47,8 @@ SHORT_DESCRIPTION_LENGTH = 300
 
 class TopicCollectionPageTopicCollection(ClusterableModel):
     page = ParentalKey(TopicCollectionPage, related_name='topiccollections')
-    topiccollection = models.ForeignKey('base.TopicCollectionPage',  verbose_name='Select a Topic Collection', related_name='+', on_delete=models.CASCADE)
+    topiccollection = models.ForeignKey(
+        'base.TopicCollectionPage',  verbose_name='Select a Topic Collection', related_name='+', on_delete=models.CASCADE)
 
     panels = [
         PageChooserPanel('topiccollection'),
@@ -55,6 +56,7 @@ class TopicCollectionPageTopicCollection(ClusterableModel):
 
     def __str__(self):
         return self.topiccollection.text
+
 
 @register_snippet
 class ThreeOneOne(ClusterableModel):
@@ -77,7 +79,8 @@ class ProcessPage(JanisPage):
     )
 
     description = models.TextField(blank=True)
-    image = models.ForeignKey(TranslatedImage, null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
+    image = models.ForeignKey(TranslatedImage, null=True,
+                              blank=True, on_delete=models.SET_NULL, related_name='+')
     # TODO: Add images array field
 
     base_form_class = custom_forms.ProcessPageForm
@@ -91,15 +94,19 @@ class ProcessPage(JanisPage):
         InlinePanel('process_steps', label="Process steps"),
     ]
 
+
 class ProcessPageStep(Orderable):
     page = ParentalKey(ProcessPage, related_name='process_steps')
     title = models.CharField(max_length=DEFAULT_MAX_LENGTH)
     short_title = models.CharField(max_length=DEFAULT_MAX_LENGTH)
     link_title = models.CharField(max_length=DEFAULT_MAX_LENGTH)
     description = models.TextField(blank=True)
-    image = models.ForeignKey(TranslatedImage, null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
-    overview_steps = RichTextField(features=WYSIWYG_GENERAL, verbose_name='Write out the steps a resident needs to take to use the service', blank=True)
-    detailed_content = RichTextField(features=WYSIWYG_GENERAL, verbose_name='Write any detailed content describing the process', blank=True)
+    image = models.ForeignKey(TranslatedImage, null=True,
+                              blank=True, on_delete=models.SET_NULL, related_name='+')
+    overview_steps = RichTextField(
+        features=WYSIWYG_GENERAL, verbose_name='Write out the steps a resident needs to take to use the service', blank=True)
+    detailed_content = RichTextField(
+        features=WYSIWYG_GENERAL, verbose_name='Write any detailed content describing the process', blank=True)
     quote = models.TextField(blank=True)
 
     panels = [
@@ -113,9 +120,11 @@ class ProcessPageStep(Orderable):
         FieldPanel('quote'),
     ]
 
+
 class ProcessPageContact(ClusterableModel):
     process = ParentalKey(ProcessPage, related_name='contacts')
-    contact = models.ForeignKey(Contact, related_name='+', on_delete=models.CASCADE)
+    contact = models.ForeignKey(
+        Contact, related_name='+', on_delete=models.CASCADE)
 
     panels = [
         SnippetChooserPanel('contact'),
@@ -124,9 +133,11 @@ class ProcessPageContact(ClusterableModel):
     def __str__(self):
         return self.contact.name
 
+
 class ProcessPageTopic(ClusterableModel):
     page = ParentalKey(ProcessPage, related_name='topics')
-    topic = models.ForeignKey('base.TopicPage',  verbose_name='Select a Topic', related_name='+', on_delete=models.CASCADE)
+    topic = models.ForeignKey(
+        'base.TopicPage',  verbose_name='Select a Topic', related_name='+', on_delete=models.CASCADE)
 
     panels = [
         PageChooserPanel('topic'),
@@ -135,12 +146,14 @@ class ProcessPageTopic(ClusterableModel):
     def __str__(self):
         return self.topic.text
 
+
 @register_snippet
 class Department(ClusterableModel):
     slug = models.SlugField()
     name = models.CharField(max_length=DEFAULT_MAX_LENGTH)
     mission = models.TextField()
-    image = models.ForeignKey(TranslatedImage, null=True, on_delete=models.SET_NULL, related_name='+')
+    image = models.ForeignKey(
+        TranslatedImage, null=True, on_delete=models.SET_NULL, related_name='+')
 
     panels = [
         FieldPanel('name'),
@@ -155,7 +168,8 @@ class Department(ClusterableModel):
 
 class DepartmentContact(ClusterableModel):
     department = ParentalKey(Department, related_name='contacts')
-    contact = models.ForeignKey(Contact, related_name='+', on_delete=models.CASCADE)
+    contact = models.ForeignKey(
+        Contact, related_name='+', on_delete=models.CASCADE)
 
     panels = [
         SnippetChooserPanel('contact'),
