@@ -44,9 +44,13 @@ label {
     width: 75%;
 }
 
-.header {
-    // This is because the drafttail editor goes to 30 when in focus
+// This is because the drafttail editor goes to 30 when in focus
+.header.secondary {
     z-index: 31 !important;
+}
+
+.header.coa-header {
+    z-index: 32 !important;
 }
 
 .struct-block {
