@@ -10,12 +10,12 @@ from wagtail.snippets.edit_handlers import SnippetChooserPanel
 
 from base.forms import InformationPageForm
 
-from .janis_page import JanisBasePage
+from .janis_page import JanisPage
 from .contact import Contact
 
 from .constants import WYSIWYG_GENERAL
 
-class InformationPage(JanisBasePage):
+class InformationPage(JanisPage):
     janis_url_page_type = "information"
 
     description = models.TextField(blank=True, verbose_name='Write a description of this page')

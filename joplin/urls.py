@@ -9,7 +9,7 @@ from wagtail.admin import urls as wagtailadmin_urls
 from wagtail.core import urls as wagtail_urls
 from wagtail.documents import urls as wagtaildocs_urls
 from base.views import joplin_views
-from django.urls import reverse
+
 from base.models import HomePage
 
 
@@ -18,19 +18,13 @@ def home(request):
     return redirect('wagtailadmin_explore', page.id)
 
 
-def login(request):
-    return redirect(reverse('wagtailadmin_login'), permanent=True)
-
-
 urlpatterns = [
     url(r'^django-admin/', include('smuggler.urls')),
     url(r'^django-admin/', admin.site.urls),
     path('admin/docs/', include('django.contrib.admindocs.urls')),
     path('admin/', home),
-    path('', login),
     url(r'admin/pages/(\d+)/publish/$', joplin_views.publish, name='publish'),
-    url(r'admin/pages/new_from_modal/$',
-        joplin_views.new_page_from_modal, name='new_page_from_modal'),
+    url(r'admin/pages/new_from_modal/$', joplin_views.new_page_from_modal, name='new_page_from_modal'),
     url(r'^admin/', include(wagtailadmin_urls)),
     url(r'^documents/', include(wagtaildocs_urls)),
 
@@ -52,5 +46,4 @@ if settings.DEBUG:
 
     # Serve static and media files from development server
     urlpatterns += staticfiles_urlpatterns()
-    urlpatterns += static(settings.MEDIA_URL,
-                          document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

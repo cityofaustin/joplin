@@ -1,6 +1,5 @@
-import os
 import graphene
-
+import os
 
 from django.db import models
 
@@ -14,15 +13,6 @@ from wagtail.core.fields import RichTextField
 
 
 class JanisBasePage(Page):
-    """
-    This is base page class made for our pages to inherit from.
-    It is abstract, which for Django means that it isn't stored as it's own table
-    in the DB.
-    We use it to add functionality that we know will be desired by all other pages,
-    such as setting the preview fields and urls for janis stuff to make our headless
-    setup work smoothly
-    """
-
     parent_page_types = ['base.HomePage']
     subpage_types = []
     search_fields = Page.search_fields + [
@@ -57,7 +47,7 @@ class JanisBasePage(Page):
             if self.topiccollections and self.topiccollections.all():
                 theme_slug = self.topiccollections.all()[0].topiccollection.theme.slug;
                 tc_slug = self.topiccollections.all()[0].topiccollection.slug;
-                return os.environ["JANIS_URL"] + "/en/" + theme_slug + "/" + tc_slug + "/" + page_slug
+                return os.environ["JANIS_URL"] + "/en/" + theme_slug + "/" + tc_slug + "/" + page_slug            
 
 
         if self.janis_url_page_type == "services" or self.janis_url_page_type == "information":
@@ -100,6 +90,11 @@ class JanisBasePage(Page):
             "global_id": global_id
         }
 
+    class Meta:
+        abstract = True
+
+
+class JanisPage(JanisBasePage):
     @cached_classmethod
     def get_edit_handler(cls):
         if hasattr(cls, 'edit_handler'):

@@ -185,8 +185,8 @@ $(function() {
     document
       .querySelectorAll(".object")
       .forEach(elem => {
-        if(elem.querySelectorAll(".title-wrapper").length) {
-          var headerText = elem.querySelectorAll(".title-wrapper")[0].innerText;
+        if(elem.querySelectorAll("h2").length) {
+          var headerText = elem.querySelectorAll("h2")[0].innerText;
           var langString = headerText.match(languageRegex);
           if (langString != null && langString != languageStrings[currentLang] && langString != lowerLanguageStrings[currentLang]) {
             elem.classList.add("hidden");

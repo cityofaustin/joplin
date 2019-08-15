@@ -12,7 +12,7 @@ from wagtail.images.edit_handlers import ImageChooserPanel
 
 from base.forms import GuidePageForm
 
-from .janis_page import JanisBasePage
+from .janis_page import JanisPage
 from .information_page import InformationPage
 from .service_page import ServicePage
 from .contact import Contact
@@ -20,7 +20,7 @@ from .translated_image import TranslatedImage
 
 from .constants import WYSIWYG_GENERAL
 
-class GuidePage(JanisBasePage):
+class GuidePage(JanisPage):
     janis_url_page_type = "guide"
 
     description = models.TextField(blank=True, verbose_name='Write a description of the guide')

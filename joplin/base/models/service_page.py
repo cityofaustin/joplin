@@ -11,13 +11,13 @@ from wagtail.snippets.edit_handlers import SnippetChooserPanel
 from base.blocks import SnippetChooserBlockWithAPIGoodness, WhatDoIDoWithBlock, CollectionScheduleBlock, RecollectBlock
 from base.forms import ServicePageForm
 
-from .janis_page import JanisBasePage
+from .janis_page import JanisPage
 from .contact import Contact
 
 from .constants import WYSIWYG_GENERAL, SHORT_DESCRIPTION_LENGTH
 WYSIWYG_SERVICE_STEP = ['ul', 'ol', 'link', 'code', 'rich-text-button-link']
 
-class ServicePage(JanisBasePage):
+class ServicePage(JanisPage):
     janis_url_page_type = "services"
 
     steps = StreamField(

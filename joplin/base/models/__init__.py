@@ -27,7 +27,7 @@ from .day_and_duration import DayAndDuration
 from .location import Location
 from .map import Map
 
-from .janis_page import JanisBasePage
+from .janis_page import JanisPage, JanisBasePage
 from .home_page import HomePage
 from .theme import Theme
 from .topic_collection_page import TopicCollectionPage
@@ -65,7 +65,7 @@ class ThreeOneOne(ClusterableModel):
         return self.title
 
 
-class ProcessPage(JanisBasePage):
+class ProcessPage(JanisPage):
     janis_url_page_type = "processes"
 
     department = models.ForeignKey(
