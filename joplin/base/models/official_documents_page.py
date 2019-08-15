@@ -8,7 +8,7 @@ from base.forms import OfficialDocumentPageForm
 from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, MultiFieldPanel, PageChooserPanel
 from wagtail.core.models import Orderable
 
-from .janis_page import JanisPage
+from .janis_page import JanisBasePage
 
 from .constants import DEFAULT_MAX_LENGTH
 
@@ -18,7 +18,7 @@ This page can be assigned to multiple topics or departments.
 The Documents will be displayed in date descending order (newest first by the "date" field).
 Eventually the OfficialDocumentPageOfficialDocument should be replaced by a model using Wagtail Documents
 """
-class OfficialDocumentPage(JanisPage):
+class OfficialDocumentPage(JanisBasePage):
     janis_url_page_type = "official_document"
     base_form_class = OfficialDocumentPageForm
 
