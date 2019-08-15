@@ -34,6 +34,10 @@ fieldset {
     max-width: none !important;
 }
 
+label {
+    width: auto !important;
+}
+
 .messages {
     position: fixed;
     top: 0px;
