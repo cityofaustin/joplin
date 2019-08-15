@@ -77,7 +77,8 @@ INSTALLED_APPS = [
     'webpack_loader',
     'dbbackup',
     'smuggler',
-    'session_security'
+    'session_security',
+    'storages'
 ]
 
 MIDDLEWARE = [
