@@ -186,7 +186,15 @@ WEBPACK_LOADER = {
 
 SMUGGLER_FIXTURE_DIR = os.path.join(BASE_DIR, 'joplin/db/smuggler')
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+if ISSTAGING:
+    STATIC_ROOT = os.path.join(BASE_DIR, 'static/staging')
+if ISPRODUCTION:
+    STATIC_ROOT = os.path.join(BASE_DIR, 'static/production')
+if ISREVIEWAPP:
+    STATIC_ROOT = os.path.join(BASE_DIR, 'static/reviewapp')
+else:
+    STATIC_ROOT = os.path.join(BASE_DIR, 'static/local')
 STATIC_URL = '/static/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
