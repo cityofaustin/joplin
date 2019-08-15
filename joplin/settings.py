@@ -28,7 +28,8 @@ BASE_DIR = os.path.dirname(PROJECT_DIR)
 
 DEBUG = bool(strtobool(os.environ.get('DEBUG', str(False))))
 MODELTRANSLATION_DEBUG = DEBUG
-USE_ANALYTICS = bool(strtobool(os.environ.get('USE_ANALYTICS', str(not DEBUG))))
+USE_ANALYTICS = bool(
+    strtobool(os.environ.get('USE_ANALYTICS', str(not DEBUG))))
 
 
 # Application definition
@@ -155,13 +156,13 @@ SUPPORTED_LANGS = (
     'vi',
     'ar',
 )
-LANGUAGES = [lang for lang in global_settings.LANGUAGES if lang[0] in SUPPORTED_LANGS]
+LANGUAGES = [lang for lang in global_settings.LANGUAGES if lang[0]
+             in SUPPORTED_LANGS]
 
 TIME_ZONE = 'UTC'
 USE_TZ = True
 
 MODELTRANSLATION_DEFAULT_LANGUAGE = 'en'
-
 
 
 # Static files (CSS, JavaScript, Images)
@@ -250,7 +251,6 @@ DBBACKUP_CONNECTORS = {
 }
 
 
-
 #
 # Production, Staging & Review Apps
 #
@@ -287,7 +287,12 @@ if(ISPRODUCTION or ISSTAGING or ISREVIEWAPP):
     }
 
     # Specifying the location of files
-    STATICFILES_LOCATION = 'static'
+    if ISSTAGING:
+        STATICFILES_LOCATION = 'static/staging'
+    if ISPRODUCTION:
+        STATICFILES_LOCATION = 'static/production'
+    if ISREVIEWAPP:
+        STATICFILES_LOCATION = 'static/reviewapp'
     MEDIAFILES_LOCATION = 'media'
 
     # We now change the storage mode to S3 via Boto for default, static and dbbackup
@@ -295,7 +300,7 @@ if(ISPRODUCTION or ISSTAGING or ISREVIEWAPP):
     DEFAULT_FILE_STORAGE = 'custom_storages.MediaStorage'
     DBBACKUP_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
-JANIS_SLUG_URL=""
+JANIS_SLUG_URL = ""
 
 if ISPRODUCTION:
     JANIS_SLUG_URL = 'https://api.github.com/repos/cityofaustin/janis/tarball/production'
@@ -303,8 +308,8 @@ if ISPRODUCTION:
 if ISSTAGING:
     JANIS_SLUG_URL = 'https://api.github.com/repos/cityofaustin/janis/tarball/master'
 
-### security logout ward after half of expire value (four hours currently)
-SESSION_SECURITY_WARN_AFTER=14400/2
-SESSION_SECURITY_EXPIRE_AFTER=14400
+# security logout ward after half of expire value (four hours currently)
+SESSION_SECURITY_WARN_AFTER = 14400 / 2
+SESSION_SECURITY_EXPIRE_AFTER = 14400
 # lets us run timeout while staying logged in with closed browser tab (for now)
-SESSION_SECURITY_INSECURE=True
+SESSION_SECURITY_INSECURE = True
