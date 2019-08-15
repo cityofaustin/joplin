@@ -47,6 +47,8 @@ case "${DEPLOYMENT_MODE}" in
       load_backup_data
     else
       load_test_admin
+    echo "Collecting static files"
+    python ./joplin/manage.py collectstatic --noinput;
     fi
   ;;
   REVIEW)

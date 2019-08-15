@@ -128,6 +128,7 @@ DEPLOYMENT_MODE = os.environ.get('DEPLOYMENT_MODE', 'LOCAL')
 ISPRODUCTION = DEPLOYMENT_MODE == "PRODUCTION"
 ISSTAGING = DEPLOYMENT_MODE == "STAGING"
 ISREVIEWAPP = DEPLOYMENT_MODE == "REVIEW"
+ISLOCAL = DEPLOYMENT_MODE == "LOCAL"
 
 
 # Database
@@ -193,7 +194,7 @@ if ISPRODUCTION:
     STATIC_ROOT = os.path.join(BASE_DIR, 'static/production')
 if ISREVIEWAPP:
     STATIC_ROOT = os.path.join(BASE_DIR, 'static/reviewapp')
-else:
+if ISLOCAL:
     STATIC_ROOT = os.path.join(BASE_DIR, 'static/local')
 STATIC_URL = '/static/'
 
