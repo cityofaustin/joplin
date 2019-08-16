@@ -18,6 +18,7 @@ heroku config:set   \
   AWS_S3_BUCKET=joplin-austin-gov-static \
   AWS_S3_BUCKET_ARCHIVE=$CI_AWS_S3_BUCKET_ARCHIVE \
   AWS_S3_BUCKET_ARCHIVE_LOCATION=$CI_AWS_S3_BUCKET_ARCHIVE_LOCATION \
+  CIRCLE_BRANCH=$CIRCLE_BRANCH \
   DEBUG=1 \
   HEROKU_JANIS_APP_NAME="janis-staging" \
   JANIS_URL="https://janis-staging.herokuapp.com" \

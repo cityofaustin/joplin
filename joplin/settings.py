@@ -287,9 +287,10 @@ if(ISPRODUCTION or ISSTAGING or ISREVIEWAPP):
     }
 
     # Specifying the location of files
-
     if ISPRODUCTION:
         STATICFILES_LOCATION = 'static'
+    elif ISSTAGING:
+        STATICFILES_LOCATION = 'staging/static'
     else:
         STATICFILES_LOCATION = f"{os.getenv('CIRCLE_BRANCH')}/static"
 
