@@ -261,7 +261,7 @@ if(ISPRODUCTION or ISSTAGING or ISREVIEWAPP):
     APPLICATION_NAME = os.getenv('APPLICATION_NAME')
     AWS_ACCESS_KEY_ID = os.getenv('AWS_S3_KEYID')
     AWS_SECRET_ACCESS_KEY = os.getenv('AWS_S3_ACCESSKEY')
-    AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_S3_BUCKET')
+    AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_S3_BUCKET_STATIC')
     AWS_ARCHIVE_BUCKET_NAME = os.getenv('AWS_S3_BUCKET_ARCHIVE')
     AWS_BACKUPS_LOCATION = os.getenv('AWS_S3_BUCKET_ARCHIVE_LOCATION')
     AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
@@ -288,13 +288,15 @@ if(ISPRODUCTION or ISSTAGING or ISREVIEWAPP):
 
     # Specifying the location of files
     if ISPRODUCTION:
-        STATICFILES_LOCATION = 'static'
+        STATICFILES_LOCATION = 'production/static'
+        MEDIAFILES_LOCATION = 'production/media'
     elif ISSTAGING:
         STATICFILES_LOCATION = 'staging/static'
+        MEDIAFILES_LOCATION = 'staging/media'
     else:
+        # All non-production apps share a staging/media folder
         STATICFILES_LOCATION = f"{os.getenv('CIRCLE_BRANCH')}/static"
-
-    MEDIAFILES_LOCATION = 'media'
+        MEDIAFILES_LOCATION = 'staging/media'
 
     # We now change the storage mode to S3 via Boto for default, static and dbbackup
     STATICFILES_STORAGE = 'custom_storages.StaticStorage'
