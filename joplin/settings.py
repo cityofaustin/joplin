@@ -185,7 +185,7 @@ WEBPACK_LOADER = {
 }
 
 SMUGGLER_FIXTURE_DIR = os.path.join(BASE_DIR, 'joplin/db/smuggler')
-# The absolute path to the directory where collectstatic will collect static files for deployment.
+# The absolute path to the directory where django.contrib.staticfiles will collect static files for deployment.
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
 
@@ -291,6 +291,7 @@ if(ISPRODUCTION or ISSTAGING or ISREVIEWAPP):
     MEDIAFILES_LOCATION = 'media'
 
     # We now change the storage mode to S3 via Boto for default, static and dbbackup
+    STATICFILE_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
     DEFAULT_FILE_STORAGE = 'custom_storages.MediaStorage'
     DBBACKUP_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
