@@ -287,7 +287,12 @@ if(ISPRODUCTION or ISSTAGING or ISREVIEWAPP):
     }
 
     # Specifying the location of files
-    STATICFILES_LOCATION = 'static'
+
+    if ISPRODUCTION:
+        STATICFILES_LOCATION = 'static'
+    else:
+        STATICFILES_LOCATION = f"{os.getenv('CIRCLE_BRANCH')}/static"
+
     MEDIAFILES_LOCATION = 'media'
 
     # We now change the storage mode to S3 via Boto for default, static and dbbackup
