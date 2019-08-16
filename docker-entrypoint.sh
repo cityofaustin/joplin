@@ -48,18 +48,18 @@ case "${DEPLOYMENT_MODE}" in
     else
       load_test_admin
     echo "Collecting static files"
-    python ./joplin/manage.py collectstatic --noinput;
+    python ./joplin/manage.py collectstatic --noinput --verbosity 2;
     fi
   ;;
   REVIEW)
     load_backup_data
     # Let's try being reckless and doing that static thing here too.
     echo "Collecting static files"
-    python ./joplin/manage.py collectstatic --noinput;
+    python ./joplin/manage.py collectstatic --noinput --verbosity 2;
   ;;
   STAGING|PRODUCTION)
     echo "Collecting static files"
-    python ./joplin/manage.py collectstatic --noinput;
+    python ./joplin/manage.py collectstatic --noinput --verbosity 2;
   ;;
 esac
 
