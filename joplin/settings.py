@@ -303,6 +303,8 @@ if(ISPRODUCTION or ISSTAGING or ISREVIEWAPP):
         STATICFILES_LOCATION = 'static/production'
     if ISREVIEWAPP:
         STATICFILES_LOCATION = 'static/reviewapp'
+    if ISREVIEWAPP:
+        STATICFILES_LOCATION = 'static/local'
     MEDIAFILES_LOCATION = 'media'
 
     # We now change the storage mode to S3 via Boto for default, static and dbbackup
