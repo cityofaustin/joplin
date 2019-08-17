@@ -154,6 +154,8 @@ https://docs.djangoproject.com/en/2.2/topics/migrations/
 
 The migration-test script makes sure that your migration changes will work even when they are applied to a database running the last migration. This is basically a dry run of a merge to the master branch of Joplin. If they do work, then the script will create a new datadump (to be used by `LOAD_DATA="on"`) with the new migrations applied. This will prevent future datadump schema version conflicts (which will happen if your datadump is from a different migration version than the Joplin instance its going into).
 
+Note: This process does not update staging. It updates the data that is seeded into local and PR builds. Staging data is persistent by design and would need to be manually updated. 
+
 Options:
   - "LOAD_PROD_DATA=on" will source data from production and build migrations from "cityofaustin/joplin-app:production-latest" image
     - Default is to source data from current seeding.datadump.json and build migrations from "cityofaustin/joplin-app:master-latest" image

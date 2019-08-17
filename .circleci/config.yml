@@ -41,6 +41,9 @@ jobs:
       - setup_remote_docker:
           version: 18.09.3
       - run:
+          name: "Print App Environment Variables"
+          command: bash ./.circleci/scripts/print_vars.sh
+      - run:
           name: "Build Joplin Docker Image"
           command: bash ./.circleci/scripts/build_image.sh
       - run:

@@ -5,10 +5,10 @@ from wagtail.images.edit_handlers import ImageChooserPanel
 
 from base.forms import TopicCollectionPageForm
 
-from .janis_page import JanisPage
+from .janis_page import JanisBasePage
 from .translated_image import TranslatedImage
 
-class TopicCollectionPage(JanisPage):
+class TopicCollectionPage(JanisBasePage):
     janis_url_page_type = "topiccollection"
 
     description = models.TextField(blank=True)
