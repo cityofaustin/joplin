@@ -295,7 +295,7 @@ if(ISPRODUCTION or ISSTAGING or ISREVIEWAPP):
         MEDIAFILES_LOCATION = 'staging/media'
     else:
         # All non-production apps share a staging/media folder
-        STATICFILES_LOCATION = f"{os.getenv('CIRCLE_BRANCH')}/static"
+        STATICFILES_LOCATION = f"review/{os.getenv('CIRCLE_BRANCH')}/static"
         MEDIAFILES_LOCATION = 'staging/media'
 
     # We now change the storage mode to S3 via Boto for default, static and dbbackup
