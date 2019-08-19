@@ -1,10 +1,13 @@
 // stop the annoying uppercase: TODO: font size
-.object h2 {
+// TODO: had to port these from h2 to title-wrapper for 2.6,
+// maybe there is other niceness we are missing out on from the refactor
+// by just hiding these 
+.object .title-wrapper {
     background: inherit;
     text-transform: none;
 }
-.object > h2:before,
-.object > h2 label:before {
+.object > .title-wrapper:before,
+.object > .title-wrapper label:before {
     display: none;
 }
 .object {
@@ -44,9 +47,13 @@ label {
     width: 75%;
 }
 
-.header {
-    // This is because the drafttail editor goes to 30 when in focus
+// This is because the drafttail editor goes to 30 when in focus
+.header.secondary {
     z-index: 31 !important;
+}
+
+.header.coa-header {
+    z-index: 32 !important;
 }
 
 .struct-block {

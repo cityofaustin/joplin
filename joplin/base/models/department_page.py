@@ -12,13 +12,13 @@ from wagtail.snippets.edit_handlers import SnippetChooserPanel
 
 from base.forms import DepartmentPageForm
 
-from .janis_page import JanisPage
+from .janis_page import JanisBasePage
 from .translated_image import TranslatedImage
 from .contact import Contact
 
 from .constants import DEFAULT_MAX_LENGTH, WYSIWYG_GENERAL
 
-class DepartmentPage(JanisPage):
+class DepartmentPage(JanisBasePage):
     janis_url_page_type = "department"
 
     def __str__(self):
