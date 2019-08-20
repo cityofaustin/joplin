@@ -52,16 +52,17 @@ class Contact(ClusterableModel):
 
 
 class PhoneNumber(Orderable):
-    phone_description = models.CharField(max_length=DEFAULT_MAX_LENGTH)
+    phone_description = models.CharField(
+        max_length=DEFAULT_MAX_LENGTH, blank=True)
     phone_number = PhoneNumberField()
     contact = ParentalKey(Contact, related_name='phone_number')
 
     content_panels = [
         FieldRowPanel(
             [
-                FieldPanel('phone_description'),
                 FieldPanel('phone_number',
                            widget=PhoneNumberInternationalFallbackWidget),
+                FieldPanel('phone_description')
             ]
         ),
     ]
