@@ -1,7 +1,8 @@
 from django.db import models
+from django import forms
 
 from modelcluster.models import ClusterableModel
-from modelcluster.fields import ParentalKey
+from modelcluster.fields import ParentalKey, ParentalManyToManyField
 
 from wagtail.core.fields import RichTextField, StreamField
 from wagtail.core.blocks import ListBlock, RichTextBlock, StructBlock, TextBlock
@@ -17,8 +18,10 @@ from .contact import Contact
 from .constants import WYSIWYG_GENERAL, SHORT_DESCRIPTION_LENGTH
 WYSIWYG_SERVICE_STEP = ['ul', 'ol', 'link', 'code', 'rich-text-button-link']
 
+
 class ServicePage(JanisBasePage):
     janis_url_page_type = "services"
+    related_topics = ParentalManyToManyField('base.TopicPage', blank=True)
 
     steps = StreamField(
         [
@@ -28,7 +31,8 @@ class ServicePage(JanisBasePage):
             )),
             ('step_with_options_accordian', StructBlock(
                 [
-                    ('options_description', TextBlock('Describe the set of options')),
+                    ('options_description', TextBlock(
+                        'Describe the set of options')),
                     ('options', ListBlock(
                         StructBlock([
                             ('option_name', TextBlock(
@@ -84,30 +88,34 @@ class ServicePage(JanisBasePage):
         InlinePanel('topics', label='Topics'),
         InlinePanel('related_departments', label='Related Departments'),
         MultiFieldPanel(
-        [
-            HelpPanel(steps.help_text, classname="coa-helpPanel"),
-            StreamFieldPanel('steps')
-        ],
-        heading=steps.verbose_name,
-        classname='coa-multiField-nopadding'
+            [
+                HelpPanel(steps.help_text, classname="coa-helpPanel"),
+                StreamFieldPanel('steps')
+            ],
+            heading=steps.verbose_name,
+            classname='coa-multiField-nopadding'
         ),
         StreamFieldPanel('dynamic_content'),
         MultiFieldPanel(
-        [
-            HelpPanel(additional_content.help_text, classname="coa-helpPanel"),
-            FieldPanel('additional_content')
-        ],
-        heading=additional_content.verbose_name,
-        classname='coa-multiField-nopadding'
-        )
-        ,
+            [
+                HelpPanel(additional_content.help_text,
+                          classname="coa-helpPanel"),
+                FieldPanel('additional_content')
+            ],
+            heading=additional_content.verbose_name,
+            classname='coa-multiField-nopadding'
+        ),
         InlinePanel('contacts', label='Contacts'),
+        FieldPanel('related_topics', widget=forms.CheckboxSelectMultiple)
     ]
+
 
 class ServicePageTopic(ClusterableModel):
     page = ParentalKey(ServicePage, related_name='topics')
-    topic = models.ForeignKey('base.TopicPage',  verbose_name='Select a Topic', related_name='+', on_delete=models.CASCADE)
-    toplink = models.BooleanField(default=False, verbose_name='Make this service a top link for this topic')
+    topic = models.ForeignKey(
+        'base.TopicPage',  verbose_name='Select a Topic', related_name='+', on_delete=models.CASCADE)
+    toplink = models.BooleanField(
+        default=False, verbose_name='Make this service a top link for this topic')
 
     panels = [
         MultiFieldPanel(
@@ -121,9 +129,11 @@ class ServicePageTopic(ClusterableModel):
     def __str__(self):
         return self.topic.title
 
+
 class ServicePageContact(ClusterableModel):
     page = ParentalKey(ServicePage, related_name='contacts')
-    contact = models.ForeignKey(Contact, related_name='+', on_delete=models.CASCADE)
+    contact = models.ForeignKey(
+        Contact, related_name='+', on_delete=models.CASCADE)
 
     panels = [
         SnippetChooserPanel('contact'),
@@ -132,8 +142,10 @@ class ServicePageContact(ClusterableModel):
     def __str__(self):
         return self.contact.name
 
+
 class ServicePageRelatedDepartments(ClusterableModel):
-    page = ParentalKey(ServicePage, related_name='related_departments', default=None)
+    page = ParentalKey(
+        ServicePage, related_name='related_departments', default=None)
     related_department = models.ForeignKey(
         "base.departmentPage",
         on_delete=models.PROTECT,
