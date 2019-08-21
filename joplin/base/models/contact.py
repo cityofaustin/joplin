@@ -58,13 +58,11 @@ class PhoneNumber(Orderable):
     contact = ParentalKey(Contact, related_name='phone_number')
 
     content_panels = [
-        FieldRowPanel(
-            [
-                FieldPanel('phone_number',
-                           widget=PhoneNumberInternationalFallbackWidget),
-                FieldPanel('phone_description')
-            ]
-        ),
+
+        FieldPanel('phone_number',
+                   widget=PhoneNumberInternationalFallbackWidget),
+        FieldPanel('phone_description')
+
     ]
 
 
