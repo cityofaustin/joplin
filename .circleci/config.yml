@@ -7,7 +7,7 @@ jobs:
     steps:
       - checkout
       - run:
-          name: 'Test that CLI utilities work'
+          name: "Test that CLI utilities work"
           command: bash ./.circleci/scripts/cli_test.sh
   backup_database:
     docker:
@@ -15,7 +15,7 @@ jobs:
     steps:
       - checkout
       - run:
-          name: 'Backup Database and Store in S3'
+          name: "Backup Database and Store in S3"
           command: bash ./.circleci/scripts/backup_database.sh
   build_heroku_infrastructure:
     docker:
@@ -23,7 +23,7 @@ jobs:
     steps:
       - checkout
       - run:
-          name: 'Create App and Database for Heroku Pipeline'
+          name: "Create App and Database for Heroku Pipeline"
           command: bash ./.circleci/scripts/build_heroku_infrastructure.sh
   set_pr_vars:
     docker:
@@ -31,7 +31,7 @@ jobs:
     steps:
       - checkout
       - run:
-          name: 'Set environment vars for PR App'
+          name: "Set environment vars for PR App"
           command: bash ./.circleci/scripts/set_pr_vars.sh
   build_and_release:
     docker:
@@ -41,16 +41,16 @@ jobs:
       - setup_remote_docker:
           version: 18.09.3
       - run:
-          name: 'Print App Environment Variables'
+          name: "Print App Environment Variables"
           command: bash ./.circleci/scripts/print_vars.sh
       - run:
-          name: 'Build Joplin Docker Image'
+          name: "Build Joplin Docker Image"
           command: bash ./.circleci/scripts/build_image.sh
       - run:
-          name: 'Release Image to Heroku'
+          name: "Release Image to Heroku"
           command: bash ./.circleci/scripts/release.sh
       - run:
-          name: 'Run Migrations'
+          name: "Run Migrations"
           command: bash ./.circleci/scripts/migrate.sh
 
 workflows:
