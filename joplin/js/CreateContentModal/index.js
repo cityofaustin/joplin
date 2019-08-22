@@ -34,6 +34,7 @@ class CreateContentModal extends Component {
       titleCharacterCount: 0,
       creatingContent: false,
       content_or_topic: 'content',
+      missingTitle: false,
     };
   }
 
@@ -54,7 +55,7 @@ class CreateContentModal extends Component {
       previousViableStep = stepsEnum.CHOOSE_TYPE;
     }
 
-    this.setState({ activeStep: previousViableStep });
+    this.setState({ activeStep: previousViableStep, missingTitle: false });
   };
 
   handleNextButton = e => {
@@ -63,7 +64,12 @@ class CreateContentModal extends Component {
       if (this.state.titleCharacterCount > MAX_TITLE_LENGTH) return false;
 
       // Validate title min length
-      if (this.state.titleCharacterCount <= 0) return false;
+      if (this.state.titleCharacterCount <= 0) {
+        this.setState({
+          missingTitle: true,
+        });
+        return false;
+      }
 
       this.setState(
         {
@@ -102,6 +108,7 @@ class CreateContentModal extends Component {
     this.setState({
       title: e.target.value,
       titleCharacterCount: e.target.value.length,
+      missingTitle: false,
     });
   };
 
@@ -138,6 +145,7 @@ class CreateContentModal extends Component {
       activeStep: 0,
       redirectUrl: null,
       titleCharacterCount: 0,
+      missingTitle: false,
     });
   };
 
@@ -180,6 +188,11 @@ class CreateContentModal extends Component {
                         characterCount={this.state.titleCharacterCount}
                         maxCharacterCount={MAX_TITLE_LENGTH}
                       />
+                    )}
+                    {this.state.missingTitle && (
+                      <p className="CreateContentModal__error">
+                        Please enter a page title to continue.
+                      </p>
                     )}
                     <ButtonBar
                       handleBackButton={this.handleBackButton}
