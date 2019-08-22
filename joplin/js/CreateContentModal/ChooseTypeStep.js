@@ -114,7 +114,7 @@ const ChooseTypeStep = ({
                 className="ChooseTypeStep__option"
                 onClick={() =>
                   handleTypeSelect({
-                    type: 'official_document',
+                    type: 'documents',
                   })
                 }
               >

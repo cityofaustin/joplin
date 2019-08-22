@@ -28,7 +28,7 @@ const ChooseTitleStep = ({
       )}
       {pageType === 'guide' && <span>Write a name for your guide.</span>}
       {pageType === 'documents' && (
-        <span>Write a name for this list of documents.</span>
+        <span>Write the name for this list of documents.</span>
       )}
     </h2>
     <label htmlFor="page-title" className="ChooseTitleStep__input-label">
@@ -63,18 +63,19 @@ const ChooseTitleStep = ({
 
     {pageType !== 'department' && (
       <div>
-        {pageType === 'service' && (
-          <span className="ChooseTitleStep__input-help">
-            Example: Drop off hazardous wastes and other recyclables
-          </span>
-        )}
-        {pageType === 'guide' && (
-          <span className="ChooseTitleStep__input-help">
-            Example: Guide for starting a community garden
-          </span>
-        )}
+        <span className="ChooseTitleStep__input-help">
+          {pageType === 'service' &&
+            'Example: Drop off hazardous wastes and other recyclables'}
+          {pageType === 'guide' &&
+            'Example: Guide for starting a community garden'}
+          {pageType === 'information' && 'Example: Hepatitis in Austin'}
+        </span>
+
         <ul className="ChooseTitleStep__bullet-list">
           {pageType === 'guide' && <li>Use the word "guide" in your title.</li>}
+          {pageType === 'information' && (
+            <li>Use primary and secondary keywords.</li>
+          )}
           <li>Use simple, accessible language.</li>
           <li>
             Use words you think residents may search to find the {pageType}.
