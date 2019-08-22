@@ -1,4 +1,5 @@
 from django.db import models
+from django import forms
 
 from modelcluster.models import ClusterableModel
 from modelcluster.fields import ParentalKey, ParentalManyToManyField
@@ -58,6 +59,7 @@ class TopicPage(JanisBasePage):
         StreamFieldPanel('external_services'),
         InlinePanel('topiccollections',
                     label='Topic Collections this page belongs to'),
+        FieldPanel('related_pages', widget=forms.CheckboxSelectMultiple)
     ]
 
 
