@@ -65,7 +65,7 @@ def new_page_from_modal(request):
             data['what_we_do'] = 'What we do'
             data['mission'] = 'Mission'
             page = DepartmentPage(**data)
-        if body['type'] == 'official_document':
+        if body['type'] == 'documents':
             page = OfficialDocumentPage(**data)
         if body['type'] == 'guide':
             page = GuidePage(**data)

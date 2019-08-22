@@ -6,12 +6,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 
 import ChooseTypeStep from './ChooseTypeStep.js';
-import ChooseTopicOrDepartmentStep from './ChooseTopicOrDepartmentStep.js';
-import ChooseTopicCollectionOrThemeStep from './ChooseTopicCollectionOrThemeStep.js';
 import ChooseTitleStep from './ChooseTitleStep.js';
-import ChooseTopicStep from './ChooseTopicStep.js';
-import ChooseThemeStep from './ChooseThemeStep.js';
-import ChooseDepartmentStep from './ChooseDepartmentStep.js';
+
 import ButtonBar from './ButtonBar.js';
 
 import './index.scss';
@@ -22,11 +18,7 @@ const DEPARTMENT_LIST = window.departments;
 
 const stepsEnum = {
   CHOOSE_TYPE: 0,
-  CHOOSE_TOPIC_COLLECTION_OR_THEME: 1,
-  CHOOSE_DEPT_OR_TOPIC: 2,
-  CHOOSE_DEPARTMENT: 3,
-  CHOOSE_THEME: 4,
-  CHOOSE_TITLE: 5,
+  CHOOSE_TITLE: 1,
 };
 
 class CreateContentModal extends Component {
@@ -41,6 +33,8 @@ class CreateContentModal extends Component {
       activeStep: 0,
       titleCharacterCount: 0,
       creatingContent: false,
+      content_or_topic: 'content',
+      missingTitle: false,
     };
   }
 
@@ -49,39 +43,8 @@ class CreateContentModal extends Component {
   };
 
   incrementActiveStep = () => {
-    // If we're on the choose type step
-    if (this.state.activeStep === stepsEnum.CHOOSE_TYPE) {
-      // Department pages, topic pages, and service pages go straight to title
-      if (
-        this.state.type === 'department' ||
-        this.state.type === 'service' ||
-        this.state.type === 'topic'
-      ) {
-        this.setState({ activeStep: stepsEnum.CHOOSE_TITLE });
-        return;
-      }
-
-      // Topic collection pages to to the select topic collection/theme step
-      if (this.state.type === 'topiccollection') {
-        this.setState({
-          activeStep: stepsEnum.CHOOSE_TOPIC_COLLECTION_OR_THEME,
-        });
-        return;
-      }
-
-      // Process and information pages to to the select dept/topic step
-      this.setState({ activeStep: stepsEnum.CHOOSE_DEPT_OR_TOPIC });
-      return;
-    }
-
-    // If we're on choose department or choose theme, we need to go to choose title
-    if (
-      this.state.activeStep === stepsEnum.CHOOSE_DEPARTMENT ||
-      this.state.activeStep === stepsEnum.CHOOSE_THEME
-    ) {
-      this.setState({ activeStep: stepsEnum.CHOOSE_TITLE });
-      return;
-    }
+    const nextStep = this.state.activeStep + 1;
+    this.setState({ activeStep: nextStep });
   };
 
   decrementActiveStep = () => {
@@ -92,38 +55,7 @@ class CreateContentModal extends Component {
       previousViableStep = stepsEnum.CHOOSE_TYPE;
     }
 
-    // we should only go to the theme select page if we have a theme
-    if (previousViableStep === stepsEnum.CHOOSE_THEME && !this.state.theme) {
-      previousViableStep--;
-    }
-
-    // Only topic collection pages can have a theme
-    if (
-      previousViableStep === stepsEnum.CHOOSE_THEME &&
-      this.state.type !== 'topiccollection'
-    ) {
-      previousViableStep--;
-    }
-
-    // we should only go to the dept select page if we have a department
-    if (
-      previousViableStep === stepsEnum.CHOOSE_DEPARTMENT &&
-      !this.state.department
-    ) {
-      previousViableStep--;
-    }
-
-    // We should never go back to the choose dept or topic page
-    if (previousViableStep === stepsEnum.CHOOSE_DEPT_OR_TOPIC) {
-      previousViableStep--;
-    }
-
-    // We should never go back to the choose topic collection or theme page
-    if (previousViableStep === stepsEnum.CHOOSE_TOPIC_COLLECTION_OR_THEME) {
-      previousViableStep--;
-    }
-
-    this.setState({ activeStep: previousViableStep });
+    this.setState({ activeStep: previousViableStep, missingTitle: false });
   };
 
   handleNextButton = e => {
@@ -132,7 +64,12 @@ class CreateContentModal extends Component {
       if (this.state.titleCharacterCount > MAX_TITLE_LENGTH) return false;
 
       // Validate title min length
-      if (this.state.titleCharacterCount <= 0) return false;
+      if (this.state.titleCharacterCount <= 0) {
+        this.setState({
+          missingTitle: true,
+        });
+        return false;
+      }
 
       this.setState(
         {
@@ -161,23 +98,9 @@ class CreateContentModal extends Component {
     );
   };
 
-  handleTopicOrDepartmentSelect = (dataObj, e) => {
+  handleContentOrTopicSelect = (dataObj, e) => {
     this.setState({
-      activeStep:
-        dataObj.topicOrDept === 'topic'
-          ? stepsEnum.CHOOSE_TITLE
-          : stepsEnum.CHOOSE_DEPARTMENT,
-      department: null,
-    });
-  };
-
-  handleTopicCollectionOrThemeSelect = (dataObj, e) => {
-    this.setState({
-      activeStep:
-        dataObj.topicCollectionOrTheme === 'topiccollection'
-          ? stepsEnum.CHOOSE_TITLE
-          : stepsEnum.CHOOSE_THEME,
-      theme: null,
+      content_or_topic: dataObj.content_or_topic,
     });
   };
 
@@ -185,15 +108,8 @@ class CreateContentModal extends Component {
     this.setState({
       title: e.target.value,
       titleCharacterCount: e.target.value.length,
+      missingTitle: false,
     });
-  };
-
-  handleThemeSelect = id => {
-    this.setState({ theme: id });
-  };
-
-  handleDepartmentSelect = id => {
-    this.setState({ department: id });
   };
 
   redirectToEditPage = id => {
@@ -229,6 +145,7 @@ class CreateContentModal extends Component {
       activeStep: 0,
       redirectUrl: null,
       titleCharacterCount: 0,
+      missingTitle: false,
     });
   };
 
@@ -257,6 +174,10 @@ class CreateContentModal extends Component {
                     {this.state.activeStep === stepsEnum.CHOOSE_TYPE && (
                       <ChooseTypeStep
                         handleTypeSelect={this.handleTypeSelect}
+                        handleContentOrTopicSelect={
+                          this.handleContentOrTopicSelect
+                        }
+                        content_or_topic={this.state.content_or_topic}
                       />
                     )}
                     {this.state.activeStep === stepsEnum.CHOOSE_TITLE && (
@@ -268,35 +189,10 @@ class CreateContentModal extends Component {
                         maxCharacterCount={MAX_TITLE_LENGTH}
                       />
                     )}
-                    {this.state.activeStep ===
-                      stepsEnum.CHOOSE_DEPT_OR_TOPIC && (
-                      <ChooseTopicOrDepartmentStep
-                        handleTopicOrDepartmentSelect={
-                          this.handleTopicOrDepartmentSelect
-                        }
-                      />
-                    )}
-                    {this.state.activeStep ===
-                      stepsEnum.CHOOSE_TOPIC_COLLECTION_OR_THEME && (
-                      <ChooseTopicCollectionOrThemeStep
-                        handleTopicCollectionOrThemeSelect={
-                          this.handleTopicCollectionOrThemeSelect
-                        }
-                      />
-                    )}
-                    {this.state.activeStep === stepsEnum.CHOOSE_DEPARTMENT && (
-                      <ChooseDepartmentStep
-                        department={this.state.department}
-                        handleDepartmentSelect={this.handleDepartmentSelect}
-                        departments={DEPARTMENT_LIST}
-                      />
-                    )}
-                    {this.state.activeStep === stepsEnum.CHOOSE_THEME && (
-                      <ChooseThemeStep
-                        theme={this.state.theme}
-                        handleThemeSelect={this.handleThemeSelect}
-                        themeTopicTree={THEME_TOPIC_TREE}
-                      />
+                    {this.state.missingTitle && (
+                      <p className="CreateContentModal__error">
+                        Please enter a page title to continue.
+                      </p>
                     )}
                     <ButtonBar
                       handleBackButton={this.handleBackButton}
