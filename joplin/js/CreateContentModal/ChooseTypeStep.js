@@ -41,7 +41,8 @@ class ChooseTypeStep extends React.Component {
               >
                 Content pages
               </a>
-            )}{' '}
+            )}
+            <p className="CreateContentModal__content_or_topic--padding" />
             {topic ? (
               'Topic or topic collections'
             ) : (

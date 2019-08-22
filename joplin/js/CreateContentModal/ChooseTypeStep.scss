@@ -1,29 +1,43 @@
 @import '../../css/variables';
 
-
 .ChooseTypeStep__options-wrapper {
-  display: flex;
-  flex-wrap: wrap;
+    display: flex;
+    flex-wrap: wrap;
 }
 
 .ChooseTypeStep__option {
-  max-height: 200px;
-  border: 1px solid $coa-color-gray;
-  margin: 1px;
-  cursor: pointer;
-  flex: 1 0 48%;
-  max-width: calc(100% * (1/2) - 44px);
-  text-align: center;
-  color: $coa-color-dark-gray;
-  padding: 40px 20px 20px;
-  background: $coa-color-white;
+    max-height: 200px;
+    border: 1px solid $coa-color-gray;
+    margin: 1px;
+    cursor: pointer;
+    flex: 1 0 48%;
+    max-width: calc(100% * (1 / 2) - 44px);
+    text-align: center;
+    color: $coa-color-dark-gray;
+    padding: 40px 20px 20px;
+    background: $coa-color-white;
 }
 
 .ChooseTypeStep__option:hover {
-  background: $coa-color-gray;
+    background: $coa-color-gray;
 }
 
 .ChooseTypeStep__option-header {
-  font-size: 14px;
-  font-weight: bold;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.CreateContentModal__content_or_topic {
+    a {
+        color: #0050d8;
+        text-decoration: underline;
+    }
+    text-align: left;
+    margin-bottom: 1rem;
+    padding-left: 0.2rem;
+}
+
+.CreateContentModal__content_or_topic--padding {
+    display: inline;
+    padding-left: 1rem;
 }
