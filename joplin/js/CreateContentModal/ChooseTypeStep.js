@@ -3,7 +3,12 @@ import React from 'react';
 import './ChooseTypeStep.scss';
 
 import servicePageImage from '../../static/images/service_page.png';
-import processPageImage from '../../static/images/process_page_icon.svg';
+import infoPageImage from '../../static/images/info_page.png';
+import departmentPageImage from '../../static/images/department_page.png';
+import guideImage from '../../static/images/guide.png';
+import documentsImage from '../../static/images/documents.png';
+import topicCollectionImage from '../../static/images/topic_collection.png';
+import topicsImage from '../../static/images/topics.png';
 
 class ChooseTypeStep extends React.Component {
   constructor(props) {
@@ -83,7 +88,11 @@ class ChooseTypeStep extends React.Component {
                   <h3 className="ChooseTypeStep__option-header">
                     Information Page
                   </h3>
-                  <p>A page with information.</p>
+                  <img src={infoPageImage} alt="Information Page" />
+                  <p>
+                    Provides supplementary information and resources to support
+                    service delivery
+                  </p>
                 </div>
                 <div
                   className="ChooseTypeStep__option"
@@ -96,7 +105,23 @@ class ChooseTypeStep extends React.Component {
                   <h3 className="ChooseTypeStep__option-header">
                     Department Page
                   </h3>
+                  <img src={departmentPageImage} alt="Department Page" />
                   <p>Basic information and contact details for a department.</p>
+                </div>
+                <div
+                  className="ChooseTypeStep__option"
+                  onClick={() =>
+                    handleTypeSelect({
+                      type: 'guide',
+                    })
+                  }
+                >
+                  <h3 className="ChooseTypeStep__option-header">Guide</h3>
+                  <img src={guideImage} alt="Guide" />
+                  <p>
+                    A collection of pages for a complicated process, organized
+                    into sections
+                  </p>
                 </div>
                 <div
                   className="ChooseTypeStep__option"
@@ -107,20 +132,10 @@ class ChooseTypeStep extends React.Component {
                   }
                 >
                   <h3 className="ChooseTypeStep__option-header">
-                    Official Document Page
+                    Official document list
                   </h3>
-                  <p>A collection of official documents.</p>
-                </div>
-                <div
-                  className="ChooseTypeStep__option"
-                  onClick={() =>
-                    handleTypeSelect({
-                      type: 'guide',
-                    })
-                  }
-                >
-                  <h3 className="ChooseTypeStep__option-header">Guide Page</h3>
-                  <p>A guide that references existing pages.</p>
+                  <img src={documentsImage} alt="Documents" />
+                  <p>Summaries and links to official documents</p>
                 </div>
               </React.Fragment>
             )}
@@ -130,25 +145,33 @@ class ChooseTypeStep extends React.Component {
                   className="ChooseTypeStep__option"
                   onClick={() =>
                     handleTypeSelect({
-                      type: 'topic',
-                    })
-                  }
-                >
-                  <h3 className="ChooseTypeStep__option-header">Topic Page</h3>
-                  <p>Basic information and links for a topic.</p>
-                </div>
-                <div
-                  className="ChooseTypeStep__option"
-                  onClick={() =>
-                    handleTypeSelect({
                       type: 'topiccollection',
                     })
                   }
                 >
                   <h3 className="ChooseTypeStep__option-header">
-                    Topic Collection Page
+                    Topic Collection
                   </h3>
-                  <p>A collection of topics.</p>
+                  <img src={topicCollectionImage} alt="Topic Collection" />
+                  <p>
+                    Topic collections are landing pages that show similar topics
+                    within a larger subject
+                  </p>
+                </div>
+                <div
+                  className="ChooseTypeStep__option"
+                  onClick={() =>
+                    handleTypeSelect({
+                      type: 'topic',
+                    })
+                  }
+                >
+                  <h3 className="ChooseTypeStep__option-header">Topics</h3>
+                  <img src={topicsImage} alt="Topics" />
+                  <p>
+                    Topics are landing pages that contain links to all pages on
+                    a particular subject
+                  </p>
                 </div>
               </React.Fragment>
             )}
