@@ -33,6 +33,7 @@ class CreateContentModal extends Component {
       activeStep: 0,
       titleCharacterCount: 0,
       creatingContent: false,
+      content_or_topic: 'content',
     };
   }
 
@@ -89,6 +90,12 @@ class CreateContentModal extends Component {
         this.incrementActiveStep();
       },
     );
+  };
+
+  handleContentOrTopicSelect = (dataObj, e) => {
+    this.setState({
+      content_or_topic: dataObj.content_or_topic,
+    });
   };
 
   handleTitleInputChange = e => {
@@ -159,6 +166,10 @@ class CreateContentModal extends Component {
                     {this.state.activeStep === stepsEnum.CHOOSE_TYPE && (
                       <ChooseTypeStep
                         handleTypeSelect={this.handleTypeSelect}
+                        handleContentOrTopicSelect={
+                          this.handleContentOrTopicSelect
+                        }
+                        content_or_topic={this.state.content_or_topic}
                       />
                     )}
                     {this.state.activeStep === stepsEnum.CHOOSE_TITLE && (
