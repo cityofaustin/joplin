@@ -12,17 +12,23 @@ const ChooseTitleStep = ({
 }) => (
   <div className="CreateContentModal__step">
     <h2 className="CreateContentModal__header">
+      {pageType === 'service' && (
+        <span>
+          Write an actionable title for your service page, starting with a verb.
+        </span>
+      )}
+      {pageType === 'information' && (
+        <span>Write a clear, descriptive title.</span>
+      )}
       {pageType === 'department' && (
         <span>
           Write the full name of the department without abbreviations or
           acronyms.
         </span>
       )}
-      {pageType !== 'department' && (
-        <span>
-          Write an actionable title for your  {pageType.replace("_", " ")} page, starting with a
-          verb.
-        </span>
+      {pageType === 'guide' && <span>Write a name for your guide.</span>}
+      {pageType === 'documents' && (
+        <span>Write a name for this list of documents.</span>
       )}
     </h2>
     <label htmlFor="page-title" className="ChooseTitleStep__input-label">
@@ -44,19 +50,38 @@ const ChooseTitleStep = ({
       onChange={handleTitleInputChange}
     />
 
-    {pageType !== 'department' && (
+    {pageType === 'department' && (
       <div>
         <span className="ChooseTitleStep__input-help">
-          Example: Drop off hazardous wastes and other recyclables
+          Example: Public Health
         </span>
         <ul className="ChooseTitleStep__bullet-list">
-          <li>Use simple, accessible language</li>
+          <li>You don't need to include "Austin" in your department name.</li>
+        </ul>
+      </div>
+    )}
+
+    {pageType !== 'department' && (
+      <div>
+        {pageType === 'service' && (
+          <span className="ChooseTitleStep__input-help">
+            Example: Drop off hazardous wastes and other recyclables
+          </span>
+        )}
+        {pageType === 'guide' && (
+          <span className="ChooseTitleStep__input-help">
+            Example: Guide for starting a community garden
+          </span>
+        )}
+        <ul className="ChooseTitleStep__bullet-list">
+          {pageType === 'guide' && <li>Use the word "guide" in your title.</li>}
+          <li>Use simple, accessible language.</li>
           <li>
-            Use words you think residents may search to find the {pageType}
+            Use words you think residents may search to find the {pageType}.
           </li>
           <li>
             You don’t need to worry about including your department’s name in
-            the title
+            the title.
           </li>
         </ul>
       </div>
