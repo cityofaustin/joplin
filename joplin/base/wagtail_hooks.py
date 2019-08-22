@@ -9,14 +9,13 @@ from wagtail.contrib.modeladmin.options import ModelAdmin, ModelAdminGroup, mode
 from wagtail.admin.widgets import Button, ButtonWithDropdownFromHook, PageListingButton
 from wagtail.core import hooks
 
-from base.models import HomePage, Location, Contact
+from base.models import HomePage, Location, Contact, ServicePage, TopicPage
 from wagtail.core.models import PageRevision
 
 from html.parser import HTMLParser
 
 import wagtail.admin.rich_text.editors.draftail.features as draftail_features
 from wagtail.admin.rich_text.converters.html_to_contentstate import BlockElementHandler
-
 
 
 # Following this: https://docs.python.org/3/library/html.parser.html#examples
@@ -33,7 +32,26 @@ def before_edit_page(request, page):
     print(f'BeforeEditHook page: "{page}" of type "{type(page)}"')
 
     assert request.user.is_authenticated
-    print(f'BeforeEditHook {request.user.email} is in groups {[group.name for group in request.user.groups.all()]}')
+    print(
+        f'BeforeEditHook {request.user.email} is in groups {[group.name for group in request.user.groups.all()]}')
+    if page._meta.object_name == 'ServicePage':
+        topics_list = page.related_topics.all()
+        print(topics_list)
+    # import pdb
+    # pdb.set_trace()
+
+
+@hooks.register('after_edit_page')
+def after_edit_page(request, page):
+    # BIG FAT TODO: iterate through the related calls instead of the first one
+    if page._meta.object_name == 'ServicePage':
+        tpage = page.related_topics.all()[0]
+        tpage.related_pages.add(page)
+        tpage.save()
+    if page._meta.object_name == 'TopicPage':
+        spage = page.related_pages.all()[0]
+        spage.related_topics.add(page)
+        spage.save()
 
 
 @hooks.register('construct_main_menu')
@@ -48,35 +66,41 @@ def configure_main_menu(request, menu_items):
     Users: "account_circle"
     """
     menu_items[:] = [item for item in menu_items if item.name not in
-    # here were excluding some default generated menu items per UX
-        [
-        'explorer',
-        'documents',
-        'settings',
-        'snippets'
-        ]
-    ]
+                     # here were excluding some default generated menu items per UX
+                     [
+                         'explorer',
+                         'documents',
+                         'settings',
+                         'snippets'
+                     ]
+                     ]
 
     # replace wagtail icon with material-icons class to use that font
     for item in menu_items:
-            item.classnames = item.classnames.replace('icon ', 'material-icons ', 1)
+        item.classnames = item.classnames.replace(
+            'icon ', 'material-icons ', 1)
+
 
 @hooks.register('register_admin_menu_item')
 def register_page_list_menu_item():
     home = HomePage.objects.first()
     return MenuItem('Pages', reverse('wagtailadmin_explore', args=[home.pk]), classnames='icon icon-home', order=10)
 
+
 @hooks.register('register_admin_menu_item')
 def register_map_menu_item():
     return MenuItem('Maps', "/admin/snippets/base/map/", classnames='material-icons icon-maps', order=20)
+
 
 @hooks.register('register_admin_menu_item')
 def register_locations_menu_item():
     return MenuItem('Locations', "/admin/snippets/base/location/", classnames='material-icons icon-locations', order=30)
 
+
 @hooks.register('register_admin_menu_item')
 def register_contacts_menu_item():
     return MenuItem('Contacts', "/admin/snippets/base/contact/", classnames='material-icons icon-contacts', order=40)
+
 
 @hooks.register('register_admin_menu_item')
 def register_users_menu_item():
@@ -105,21 +129,24 @@ def joplin_page_listing_buttons(page, page_perms, is_parent=False):
         yield PageListingButton(
             _('Edit'),
             reverse('wagtailadmin_pages:edit', args=[page.id]),
-            attrs={'title': _("Edit '{title}'").format(title=page.get_admin_display_title())},
+            attrs={'title': _("Edit '{title}'").format(
+                title=page.get_admin_display_title())},
             priority=10
         )
     if page.has_unpublished_changes:
         yield PageListingButton(
             _('View draft'),
             page.janis_preview_url(),
-            attrs={'title': _("Preview draft version of '{title}'").format(title=page.get_admin_display_title()), 'target': '_blank'},
+            attrs={'title': _("Preview draft version of '{title}'").format(
+                title=page.get_admin_display_title()), 'target': '_blank'},
             priority=20
         )
     if page.live and page.url and hasattr(page, 'janis_url'):
         yield PageListingButton(
             _('View live'),
             page.janis_url(),
-            attrs={'target': "_blank", 'title': _("View live version of '{title}'").format(title=page.get_admin_display_title())},
+            attrs={'target': "_blank", 'title': _("View live version of '{title}'").format(
+                title=page.get_admin_display_title())},
             priority=30
         )
 
@@ -141,7 +168,8 @@ def joplin_page_listing_buttons(page, page_perms, is_parent=False):
             yield Button(
                 _('📝'),
                 'javascript:null;',
-                attrs={'title': _("Notes for authors entered"), 'class':'has-author-notes'},
+                attrs={'title': _("Notes for authors entered"),
+                       'class': 'has-author-notes'},
                 priority=70
             )
 
@@ -151,7 +179,8 @@ def joplin_page_listing_buttons(page, page_perms, is_parent=False):
         page=page,
         page_perms=page_perms,
         is_parent=is_parent,
-        attrs={'target': '_blank', 'title': _("View more options for '{title}'").format(title=page.get_admin_display_title())},
+        attrs={'target': '_blank', 'title': _("View more options for '{title}'").format(
+            title=page.get_admin_display_title())},
         priority=50
     )
 
@@ -162,7 +191,8 @@ def joplin_page_listing_more_buttons(page, page_perms, is_parent=False):
         yield Button(
             _('Copy'),
             reverse('wagtailadmin_pages:copy', args=[page.id]),
-            attrs={'title': _("Copy page '{title}'").format(title=page.get_admin_display_title())},
+            attrs={'title': _("Copy page '{title}'").format(
+                title=page.get_admin_display_title())},
             priority=20
         )
     # if not page.live:
@@ -176,30 +206,33 @@ def joplin_page_listing_more_buttons(page, page_perms, is_parent=False):
         yield Button(
             _('Unpublish'),
             reverse('wagtailadmin_pages:unpublish', args=[page.id]),
-            attrs={'title': _("Unpublish page '{title}'").format(title=page.get_admin_display_title())},
+            attrs={'title': _("Unpublish page '{title}'").format(
+                title=page.get_admin_display_title())},
             priority=40
         )
     if page_perms.can_publish() and page.has_unpublished_changes:
         yield Button(
             _('Publish'),
             reverse('publish', args=[page.id]),
-            attrs={'title': _("Publish page '{title}'").format(title=page.get_admin_display_title())},
+            attrs={'title': _("Publish page '{title}'").format(
+                title=page.get_admin_display_title())},
             priority=50
         )
     if not page.is_root():
         yield Button(
             _('Revisions'),
             reverse('wagtailadmin_pages:revisions_index', args=[page.id]),
-            attrs={'title': _("View revision history for '{title}'").format(title=page.get_admin_display_title())},
+            attrs={'title': _("View revision history for '{title}'").format(
+                title=page.get_admin_display_title())},
             priority=60
         )
     if page_perms.can_delete():
         yield Button(
             _('Delete'),
             reverse('wagtailadmin_pages:delete', args=[page.id]),
-            attrs={'title': _("Delete page '{title}'").format(title=page.get_admin_display_title())},
+            attrs={'title': _("Delete page '{title}'").format(
+                title=page.get_admin_display_title())},
         )
-
 
 
 @hooks.register('register_rich_text_features')

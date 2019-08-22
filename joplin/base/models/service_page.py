@@ -1,7 +1,8 @@
 from django.db import models
+from django import forms
 
 from modelcluster.models import ClusterableModel
-from modelcluster.fields import ParentalKey
+from modelcluster.fields import ParentalKey, ParentalManyToManyField
 
 from wagtail.core.fields import RichTextField, StreamField
 from wagtail.core.blocks import ListBlock, RichTextBlock, StructBlock, TextBlock
@@ -20,6 +21,7 @@ WYSIWYG_SERVICE_STEP = ['ul', 'ol', 'link', 'code', 'rich-text-button-link']
 
 class ServicePage(JanisBasePage):
     janis_url_page_type = "services"
+    related_topics = ParentalManyToManyField('base.TopicPage', blank=True)
 
     steps = StreamField(
         [
@@ -104,6 +106,7 @@ class ServicePage(JanisBasePage):
             classname='coa-multiField-nopadding'
         ),
         InlinePanel('contacts', label='Contacts'),
+        FieldPanel('related_topics', widget=forms.CheckboxSelectMultiple)
     ]
 
 
@@ -122,6 +125,7 @@ class ServicePageTopic(ClusterableModel):
             ]
         ),
     ]
+
 
 
 class ServicePageContact(ClusterableModel):
