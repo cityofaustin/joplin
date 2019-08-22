@@ -6,16 +6,15 @@
 }
 
 .ChooseTypeStep__option {
-    max-height: 200px;
-    border: 1px solid $coa-color-gray;
+    border: 1px solid #ededed;
     margin: 1px;
     cursor: pointer;
     flex: 1 0 48%;
-    max-width: calc(100% * (1 / 2) - 44px);
+    max-width: calc(100% * (1 / 2) - 2px);
     text-align: center;
-    color: $coa-color-dark-gray;
-    padding: 40px 20px 20px;
-    background: $coa-color-white;
+    color: #4a4a4a;
+    padding: 10px 10px 10px;
+    background: #ffffff;
 }
 
 .ChooseTypeStep__option:hover {

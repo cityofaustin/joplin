@@ -2,7 +2,7 @@ import React from 'react';
 
 import './ChooseTypeStep.scss';
 
-import servicePageImage from '../../static/images/service_page_icon.svg';
+import servicePageImage from '../../static/images/service_page.png';
 import processPageImage from '../../static/images/process_page_icon.svg';
 
 class ChooseTypeStep extends React.Component {
@@ -66,10 +66,10 @@ class ChooseTypeStep extends React.Component {
                     })
                   }
                 >
-                  <img src={servicePageImage} alt="Service Page" />
                   <h3 className="ChooseTypeStep__option-header">
                     Service Page
                   </h3>
+                  <img src={servicePageImage} alt="Service Page" />
                   <p>A step by step guide to a particular city service.</p>
                 </div>
                 <div
