@@ -37,20 +37,21 @@ def before_edit_page(request, page):
     if page._meta.object_name == 'ServicePage':
         topics_list = page.related_topics.all()
         print(topics_list)
-    import pdb
-    pdb.set_trace()
+    # import pdb
+    # pdb.set_trace()
 
 
-@hooks.register('before_edit_page')
+@hooks.register('after_edit_page')
 def after_edit_page(request, page):
+    # BIG FAT TODO: iterate through the related calls instead of the first one
     if page._meta.object_name == 'ServicePage':
-        import pdb
-        pdb.set_trace()
-        topics_list = page.related_topics.all()
-        tpage = TopicPage.objects.all()[0]
-        page.related_topics.add(tpage)
-
-        print(topics_list)
+        tpage = page.related_topics.all()[0]
+        tpage.related_pages.add(page)
+        tpage.save()
+    if page._meta.object_name == 'TopicPage':
+        spage = page.related_pages.all()[0]
+        spage.related_topics.add(page)
+        spage.save()
 
 
 @hooks.register('construct_main_menu')
