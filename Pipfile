@@ -25,6 +25,8 @@ django-smuggler = "==0.9.1"
 PyYAML = ">=4.2b1"
 # pygraphviz = "*" # Breaks on OSX/undockerized
 django-session-security = "==2.6.5"
+django-phonenumber-field = "==3.0.1"
+phonenumberslite = "==8.10.16"
 
 [requires]
 python_version = "3.7"
