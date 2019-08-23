@@ -17,6 +17,11 @@ function load_test_admin {
   python ./joplin/manage.py loaddata ./joplin/db/system-generated/local_admin_user.json
 }
 
+function sanitize_revision_data {
+  echo "Sanitizing Revisions data"
+  psql $DATABASE_URL -f ./scripts/sanitize_revision_data.sql
+}
+
 if [ $DEPLOYMENT_MODE == "LOCAL" ]; then
   # We are on a local instance, wait until the deployment is available for connections.
   # Loop sleep every second until a connection is available.
@@ -36,6 +41,7 @@ case "${DEPLOYMENT_MODE}" in
     if [ "$LOAD_PROD_DATA" == "on" ]; then
       # Option for migration_test.sh to source directly from production
       python ./joplin/manage.py loaddata ./joplin/db/system-generated/tmp_production.datadump.json
+      sanitize_revision_data
       load_test_admin
     elif [ "$LOAD_DATA" == "on" ]; then
       load_backup_data

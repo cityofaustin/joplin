@@ -28,7 +28,8 @@ BASE_DIR = os.path.dirname(PROJECT_DIR)
 
 DEBUG = bool(strtobool(os.environ.get('DEBUG', str(False))))
 MODELTRANSLATION_DEBUG = DEBUG
-USE_ANALYTICS = bool(strtobool(os.environ.get('USE_ANALYTICS', str(not DEBUG))))
+USE_ANALYTICS = bool(
+    strtobool(os.environ.get('USE_ANALYTICS', str(not DEBUG))))
 
 
 # Application definition
@@ -63,7 +64,6 @@ INSTALLED_APPS = [
     'corsheaders',
     'modeltranslation',
     'graphene_django',
-    'django_extensions',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -71,13 +71,15 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
+    'django_extensions',
+    'django.contrib.admindocs',
     'wagtail.contrib.modeladmin',
     'webpack_loader',
     'dbbackup',
     'smuggler',
     'debug_toolbar',
-
+    'session_security',
+    'phonenumber_field'
 ]
 
 MIDDLEWARE = [
@@ -93,6 +95,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'wagtail.core.middleware.SiteMiddleware',
     'wagtail.contrib.redirects.middleware.RedirectMiddleware',
+    'session_security.middleware.SessionSecurityMiddleware',
 ]
 
 ROOT_URLCONF = 'urls'
@@ -155,13 +158,13 @@ SUPPORTED_LANGS = (
     'vi',
     'ar',
 )
-LANGUAGES = [lang for lang in global_settings.LANGUAGES if lang[0] in SUPPORTED_LANGS]
+LANGUAGES = [lang for lang in global_settings.LANGUAGES if lang[0]
+             in SUPPORTED_LANGS]
 
 TIME_ZONE = 'UTC'
 USE_TZ = True
 
 MODELTRANSLATION_DEFAULT_LANGUAGE = 'en'
-
 
 
 # Static files (CSS, JavaScript, Images)
@@ -270,7 +273,6 @@ DBBACKUP_CONNECTORS = {
 }
 
 
-
 #
 # Production, Staging & Review Apps
 #
@@ -281,7 +283,7 @@ if(ISPRODUCTION or ISSTAGING or ISREVIEWAPP):
     APPLICATION_NAME = os.getenv('APPLICATION_NAME')
     AWS_ACCESS_KEY_ID = os.getenv('AWS_S3_KEYID')
     AWS_SECRET_ACCESS_KEY = os.getenv('AWS_S3_ACCESSKEY')
-    AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_S3_BUCKET')
+    AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_S3_BUCKET_STATIC')
     AWS_ARCHIVE_BUCKET_NAME = os.getenv('AWS_S3_BUCKET_ARCHIVE')
     AWS_BACKUPS_LOCATION = os.getenv('AWS_S3_BUCKET_ARCHIVE_LOCATION')
     AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
@@ -307,18 +309,36 @@ if(ISPRODUCTION or ISSTAGING or ISREVIEWAPP):
     }
 
     # Specifying the location of files
-    STATICFILES_LOCATION = 'static'
-    MEDIAFILES_LOCATION = 'media'
+    if ISPRODUCTION:
+        STATICFILES_LOCATION = 'production/static'
+        MEDIAFILES_LOCATION = 'production/media'
+    elif ISSTAGING:
+        STATICFILES_LOCATION = 'staging/static'
+        MEDIAFILES_LOCATION = 'staging/media'
+    else:
+        # All non-production apps share a staging/media folder
+        STATICFILES_LOCATION = f"review/{os.getenv('CIRCLE_BRANCH')}/static"
+        MEDIAFILES_LOCATION = 'staging/media'
 
     # We now change the storage mode to S3 via Boto for default, static and dbbackup
     STATICFILES_STORAGE = 'custom_storages.StaticStorage'
     DEFAULT_FILE_STORAGE = 'custom_storages.MediaStorage'
     DBBACKUP_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
-JANIS_SLUG_URL=""
+JANIS_SLUG_URL = ""
 
 if ISPRODUCTION:
     JANIS_SLUG_URL = 'https://api.github.com/repos/cityofaustin/janis/tarball/production'
 
 if ISSTAGING:
     JANIS_SLUG_URL = 'https://api.github.com/repos/cityofaustin/janis/tarball/master'
+
+# security logout ward after half of expire value (four hours currently)
+SESSION_SECURITY_WARN_AFTER = 14400 / 2
+SESSION_SECURITY_EXPIRE_AFTER = 14400
+# lets us run timeout while staying logged in with closed browser tab (for now)
+SESSION_SECURITY_INSECURE = True
+
+PHONENUMBER_DEFAULT_REGION = 'US'
+
+PHONENUMBER_DB_FORMAT = "RFC3966"

@@ -180,11 +180,13 @@ $(function() {
 
     // Hide stuff that isn't our language
     // This is hacky but it seems to be working
+
+    // Top level fields
     document
       .querySelectorAll(".object")
       .forEach(elem => {
-        if(elem.querySelectorAll("h2").length) {
-          var headerText = elem.querySelectorAll("h2")[0].innerText;
+        if(elem.querySelectorAll(".title-wrapper").length) {
+          var headerText = elem.querySelectorAll(".title-wrapper")[0].innerText;
           var langString = headerText.match(languageRegex);
           if (langString != null && langString != languageStrings[currentLang] && langString != lowerLanguageStrings[currentLang]) {
             elem.classList.add("hidden");
@@ -194,6 +196,7 @@ $(function() {
         }
       });
 
+    // Fields inside of InlinePanels
     document
     .querySelectorAll(".field")
     .forEach(elem => {
@@ -202,9 +205,9 @@ $(function() {
         var langString = labelText.match(languageRegex);
 
         if (langString != null && langString != lowerLanguageStrings[currentLang]) {
-          elem.classList.add("hidden");
+          elem.parentElement.classList.add("hidden");
         } else {
-          elem.classList.remove("hidden");
+          elem.parentElement.classList.remove("hidden");
         }
       }
     });
@@ -279,6 +282,11 @@ $(function() {
   sharebutton.click(function() {
     localStorage.share_lang = state.currentLang;
   });
+
+  // Apply current language to new InlinePanels
+  $('.add').click(function() {
+    changeLanguage(state.currentLang)
+  })
 
   var messages = $('.messages');
   messages.fadeOut(10000);

@@ -4,7 +4,8 @@ __pycache__/
 *.sqlite3
 .vscode/
 venv
-.idea
+.idea/*
+!.idea/runConfigurations/*
 *node_modules
 *webpack_bundles
 *webpack-stats.json
@@ -14,3 +15,4 @@ media/*/*.png
 media/*/*.jpeg
 *.log
 joplin/db/smuggler/*
+env.sh

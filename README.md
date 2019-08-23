@@ -16,6 +16,7 @@ Joplin is the Authoring Interface for adding and editing content for alpha.austi
 -   [Updating the Data Model](#updating-the-data-model)
 -   [CircleCI Deployments](#circleci-deployments)
 -   [Useful Commands](#useful-commands)
+-   [Debugging With Pycharm](#debugging-with-pycharm)
 -   [Design](#design)
 -   [Misc](#misc)
 
@@ -80,6 +81,17 @@ HARD_REBUILD="on" ./scripts/serve-local.sh
 -   It takes 90 seconds to do a HARD_REBUILD.
 -   If worse comes to worse, you can always delete your local joplin docker images with `docker rmi`.
 
+**Run undockerized**
+
+You might prefer to run the Django app on your host computer to enable better access to debugging tools. This script will still run joplin_assets and joplin_db on docker containers, but will run a django `runserver` command directly on your host computer.
+
+```
+pipenv install --requirements deploy/requirements.txt
+sh scripts/undockered.sh
+```
+
+Note! To run additional pipenv commands like `pipenv run ./joplin/manage.py migrate` you must have the variable `export DATABASE_URL=postgres://joplin@127.0.0.1:5433/joplin` in your bash scope.
+
 **Run with custom smuggler data**
 
 If you don't want to load the default data used in `LOAD_DATA="on"`, you have to ability to source data from any environment you'd like using a django plugin called [smuggler](https://github.com/semente/django-smuggler).
@@ -141,6 +153,8 @@ https://docs.djangoproject.com/en/2.2/topics/migrations/
 **About migration-test script**
 
 The migration-test script makes sure that your migration changes will work even when they are applied to a database running the last migration. This is basically a dry run of a merge to the master branch of Joplin. If they do work, then the script will create a new datadump (to be used by `LOAD_DATA="on"`) with the new migrations applied. This will prevent future datadump schema version conflicts (which will happen if your datadump is from a different migration version than the Joplin instance its going into).
+
+Note: This process does not update staging. It updates the data that is seeded into local and PR builds. Staging data is persistent by design and would need to be manually updated. 
 
 Options:
   - "LOAD_PROD_DATA=on" will source data from production and build migrations from "cityofaustin/joplin-app:production-latest" image
@@ -207,15 +221,21 @@ If deploying on master or production, we first take a backup of the database and
 
 Once the name is generated then it proceeds to generate a full URL link where the final file will be stored in S3. It connects to the database and generates a full backup and automatically saves it to S3 using the established nomenclature.
 
-**3. create_review_app**
+**3. build_heroku_infrastructure**
 
-`.circleci/scripts/create_review_app.sh`
+`.circleci/scripts/build_heroku_infrastructure.sh`
 
-Builds infrastructure for a new heroku app. This step is only done for PR/Review/Dev branches because staging and production branches already have heroku apps in place.
+Builds infrastructure for a new heroku app. Rebuilds database for an existing heroku app if the database does not exist. This step is not done on the production branch because production should already have a heroku app and database in place.
 
-**4. build_and_release**
+**4. set_pr_vars**
 
-`.circleci/scripts/build.sh`
+`.circleci/scripts/set_pr_vars.sh`
+
+Adds environment variables to PR apps. Environment vars for staging and production are handled manually within Heroku console.
+
+**5. build_and_release**
+
+`.circleci/scripts/build_image.sh`
 Builds the Joplin docker image and pushes to cityofaustin's dockerhub repo and the heroku app.
 
 `.circleci/scripts/release.sh`
@@ -260,6 +280,15 @@ The migration process currently consists of 3 commands:
         # Then Rebuild (be sure to have the heroku cli installed in your machine)
         REBUILD=on ./scripts/serve-local.sh
         ```
+
+---
+
+## Debugging with Pycharm
+
+1. Run `sh scripts/undockered.sh` to initialize an undockered Joplin instance. This will run your initial data migration and seeding for you. It will also spin up joplin_db and joplin_assets containers. These are steps that our Pycharm debugging script can't do on its own.
+2. Shut down `^C` your undockered Joplin runserver. The joplin_db and joplin_assets containers should still be running.
+3. Open Pycharm.
+4. Open your 'Undockered Joplin' Run Configuration `Run > Debug 'Undockered Joplin'`. This run configuration should be git committed in your .idea/ folder. It will run a Joplin `runserver` command with the benefit of Pycharm's debugger.
 
 ---
 
