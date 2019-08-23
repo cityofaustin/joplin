@@ -41,6 +41,7 @@ ENV DEPLOYMENT_MODE "LOCAL"
 # Run Migrations
 ENTRYPOINT ["./docker-entrypoint.sh"]
 # Start the Joplin server
+# we add an extra timeout and debug level to be generous with our server log
 CMD ["gunicorn", "joplin.wsgi:application", "--pythonpath", "/app/joplin", "--reload", "--timeout=90", "--log-level=DEBUG"]
 
 ########################################################
