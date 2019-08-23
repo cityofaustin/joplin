@@ -304,6 +304,10 @@ if(ISPRODUCTION or ISSTAGING or ISREVIEWAPP):
 
     # We now change the storage mode to S3 via Boto for default, static and dbbackup
     STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+    """
+    we could probably have media use this config as well to avoid the extra custom_storages.py
+    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+    """
     DEFAULT_FILE_STORAGE = 'custom_storages.MediaStorage'
     DBBACKUP_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
