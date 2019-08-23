@@ -289,18 +289,21 @@ if(ISPRODUCTION or ISSTAGING or ISREVIEWAPP):
 
     # Specifying the location of files
     if ISPRODUCTION:
-        STATICFILES_LOCATION = 'production/static'
+        AWS_LOCATION = 'production/static'
+        AWS_IS_GZIPPED = True
         MEDIAFILES_LOCATION = 'production/media'
     elif ISSTAGING:
-        STATICFILES_LOCATION = 'staging/static'
+        AWS_LOCATION = 'staging/static'
+        AWS_IS_GZIPPED = True
         MEDIAFILES_LOCATION = 'staging/media'
     else:
         # All non-production apps share a staging/media folder
-        STATICFILES_LOCATION = f"review/{os.getenv('CIRCLE_BRANCH')}/static"
+        AWS_LOCATION = f"review/{os.getenv('CIRCLE_BRANCH')}/static"
+        AWS_IS_GZIPPED = True
         MEDIAFILES_LOCATION = 'staging/media'
 
     # We now change the storage mode to S3 via Boto for default, static and dbbackup
-    STATICFILES_STORAGE = 'custom_storages.StaticStorage'
+    STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
     DEFAULT_FILE_STORAGE = 'custom_storages.MediaStorage'
     DBBACKUP_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
