@@ -13,7 +13,7 @@ RUN echo 'deb http://apt.postgresql.org/pub/repos/apt/ stretch-pgdg main' >  /et
 
 # Set Environment Variables
 ENV PYTHONUNBUFFERED=1
-ENV WEB_CONCURRENCY=4
+ENV WEB_CONCURRENCY=2
 ENV PORT ${PORT:-80}
 EXPOSE $PORT
 
