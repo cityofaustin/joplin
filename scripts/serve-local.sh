@@ -32,6 +32,10 @@ if [ "$RELOAD_DATA" == "on" ]; then
   export LOAD_DATA="on"
 fi
 
+if [ "$DEBUG_TOOLBAR" == "on" ]; then
+  export DEBUG_TOOLBAR=1
+fi
+
 if [ "$UNDOCK" == "on" ]; then
   export NO_BUILD="on"
 fi

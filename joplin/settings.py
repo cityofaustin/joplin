@@ -202,7 +202,8 @@ ALLOWED_HOSTS = [
     '.herokuapp.com',
 ]
 
-DEBUG_TOOLBAR = True
+DEBUG_TOOLBAR = bool(strtobool(os.environ.get('DEBUG_TOOLBAR', str(False))))
+
 
 if DEBUG_TOOLBAR:
     ALLOWED_HOSTS = ALLOWED_HOSTS + [
