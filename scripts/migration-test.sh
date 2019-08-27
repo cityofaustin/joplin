@@ -38,6 +38,7 @@ if [ "$LOAD_PROD_DATA" = "on" ]; then
   # Replace all user passwords with default admin test password
   # TODO: once prod has scripts/export_heroku_data.sh, run sanitation script on production container itself
   heroku run -xa joplin python ./joplin/manage.py dumpdata --indent 2 --natural-foreign --natural-primary -- | \
+    python ./scripts/remove_logs_from_json_stream.py | \
     jq '(.[] | select(.model == "users.user") | .fields.password) |= "pbkdf2_sha256$150000$GJQ1UoZlgrC4$Ir0Uww/i9f2VKzHznU4B1uaHbdCxRnZ69w12cIvxWP0="' \
     > $TMP_PROD_DATADUMP
 else
@@ -136,7 +137,9 @@ function handle_input {
     echo "#### Glad that worked. We'll create a new migration_datadump for you."
 
     # Build new migration datadump
-    docker exec -it ${COMPOSE_PROJECT_NAME}_app_1 python joplin/manage.py dumpdata --indent 2 --natural-foreign --natural-primary > ./joplin/db/system-generated/seeding.datadump.json
+    docker exec -it ${COMPOSE_PROJECT_NAME}_app_1 python joplin/manage.py dumpdata --indent 2 --natural-foreign --natural-primary | \
+      python ./scripts/remove_logs_from_json_stream.py \
+      > ./joplin/db/system-generated/seeding.datadump.json
 
     # Write new metadata file
     DATADUMP_METADATA=$CURRENT_DIR/../joplin/db/system-generated/seeding_datadump_metadata.txt
