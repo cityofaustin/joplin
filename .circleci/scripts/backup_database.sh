@@ -11,7 +11,10 @@ if [ $APP_DB_EXISTS == "true" ]; then
 
   print_header "Creating Database Backup in S3"
 
-  # Get backup
+  # Create a new backup
+  heroku pg:backups:capture -a $APPNAME
+
+  # Download the new backup
   LOCAL_DUMP_FILENAME=$APPNAME.dump
   heroku pg:backups:download -a $APPNAME -o $LOCAL_DUMP_FILENAME
 
