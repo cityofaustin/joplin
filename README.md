@@ -154,7 +154,7 @@ https://docs.djangoproject.com/en/2.2/topics/migrations/
 
 The migration-test script makes sure that your migration changes will work even when they are applied to a database running the last migration. This is basically a dry run of a merge to the master branch of Joplin. If they do work, then the script will create a new datadump (to be used by `LOAD_DATA="on"`) with the new migrations applied. This will prevent future datadump schema version conflicts (which will happen if your datadump is from a different migration version than the Joplin instance its going into).
 
-Note: This process does not update staging. It updates the data that is seeded into local and PR builds. Staging data is persistent by design and would need to be manually updated. 
+Note: This process does not update staging. It updates the data that is seeded into local and PR builds. Staging data is persistent by design and would need to be manually updated.
 
 Options:
   - "LOAD_PROD_DATA=on" will source data from production and build migrations from "cityofaustin/joplin-app:production-latest" image
@@ -283,12 +283,29 @@ The migration process currently consists of 3 commands:
 
 ---
 
-## Debugging with Pycharm
+## Debugging
+
+### Use the Django Debug Toolbar!
+
+The django debug toolbar is super handy for debugging and performance testing. 
+Simply run with the flag DEBUG_TOOLBAR=on, such as ```DEBUG_TOOLBAR=on ./scripts/serve-local.sh```
+
+### With Pycharm
 
 1. Run `sh scripts/undockered.sh` to initialize an undockered Joplin instance. This will run your initial data migration and seeding for you. It will also spin up joplin_db and joplin_assets containers. These are steps that our Pycharm debugging script can't do on its own.
 2. Shut down `^C` your undockered Joplin runserver. The joplin_db and joplin_assets containers should still be running.
 3. Open Pycharm.
 4. Open your 'Undockered Joplin' Run Configuration `Run > Debug 'Undockered Joplin'`. This run configuration should be git committed in your .idea/ folder. It will run a Joplin `runserver` command with the benefit of Pycharm's debugger.
+
+### Without Docker or Pycharm
+
+1. Run `sh scripts/undockered.sh` to initialize an undockered Joplin instance.
+2. Add ```import pdb; pdb.set_trace()``` to set a breakpoint & enjoy!
+
+### With Docker
+1. Running pdb breakpoints inside the container is possible, but prone to complications. YMMV
+
+
 
 ---
 
