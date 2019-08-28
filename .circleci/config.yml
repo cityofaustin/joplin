@@ -68,6 +68,7 @@ workflows:
                 - production
       - build_heroku_infrastructure:
           requires:
+            - backup_database
             - test
           filters:
             branches:
