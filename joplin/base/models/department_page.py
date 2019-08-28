@@ -90,7 +90,7 @@ class DepartmentPageContact(ClusterableModel):
         return self.contact.name
 
 
-class DepartmentPageTopServices(Orderable):
+class DepartmentPageTopService(Orderable):
     department = ParentalKey(DepartmentPage, related_name='top_service_pages')
     page = models.ForeignKey('wagtailcore.Page',  verbose_name='Select a page', related_name='+', on_delete=models.CASCADE)
 

@@ -34,7 +34,7 @@ from .topic_collection_page import TopicCollectionPage
 from .topic_page import TopicPage, TopicPageTopicCollection
 from .service_page import ServicePage, ServicePageTopic, ServicePageContact, ServicePageRelatedDepartments
 from .information_page import InformationPage, InformationPageRelatedDepartments, InformationPageTopic, InformationPageContact
-from .department_page import DepartmentPage, DepartmentPageDirector, DepartmentPageContact
+from .department_page import DepartmentPage, DepartmentPageDirector, DepartmentPageContact, DepartmentPageTopService
 from .official_documents_page import OfficialDocumentPage, OfficialDocumentPageOfficialDocument, OfficialDocumentPageRelatedDepartments, OfficialDocumentPageTopic
 from .guide_page import GuidePage, GuidePageTopic, GuidePageRelatedDepartments, GuidePageContact
 
