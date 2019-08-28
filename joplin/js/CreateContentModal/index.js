@@ -130,6 +130,9 @@ class CreateContentModal extends Component {
         { headers: { 'X-CSRFToken': Cookies.get('csrftoken') } },
       )
       .then(response => {
+        // TODO: see if there's a better way to handle this
+        window.onbeforeunload = null;
+        
         this.redirectToEditPage(response.data.id);
       })
       .catch(error => {
