@@ -360,6 +360,43 @@ class DepartmentPageDirectorNode(DjangoObjectType):
 
 
 class DepartmentPageTopServiceNode(DjangoObjectType):
+    service_page = graphene.Field(ServicePageNode)
+    information_page = graphene.Field(InformationPageNode)
+    guide_page = graphene.Field(GuidePageNode)
+
+    def resolve_service_page(self, info):
+        service_page = None
+        # TODO: don't catch everything
+        try:
+            service_page = ServicePage.objects.get(id=self.page_id)
+        except:
+            pass
+            # print("Looks like this one isn't a service page")
+
+        return service_page
+
+    def resolve_information_page(self, info):
+        information_page = None
+        # TODO: don't catch everything
+        try:
+            information_page = InformationPage.objects.get(id=self.page_id)
+        except:
+            pass
+            # print("Looks like this one isn't an information page")
+
+        return information_page
+
+    def resolve_guide_page(self, info):
+        guide_page = None
+        # TODO: don't catch everything
+        try:
+            guide_page = GuidePage.objects.get(id=self.page_id)
+        except:
+            pass
+            # print("Looks like this one isn't a guide page")
+
+        return guide_page
+
     class Meta:
         model = DepartmentPageTopService
         interfaces = [graphene.Node]
