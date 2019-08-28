@@ -1,65 +1,67 @@
-.object h2 {
-  background: inherit;
+// stop the annoying uppercase: TODO: font size
+// TODO: had to port these from h2 to title-wrapper for 2.6,
+// maybe there is other niceness we are missing out on from the refactor
+// by just hiding these 
+.object .title-wrapper {
+    background: inherit;
+    text-transform: none;
 }
-.object > h2:before,
-.object > h2 label:before {
-  display: none;
+.object > .title-wrapper:before,
+.object > .title-wrapper label:before {
+    display: none;
 }
 .object {
-  border-bottom: 1px dashed grey !important;
-}
-
-.tab-nav.merged {
-  background-color: #eee;
-}
-
-footer {
-  display: none;
-}
-
-.object-help.help {
-  opacity: 1 !important;
-  width: auto;
-  float: left;
-  position: relative;
-  padding: 0;
-}
-
-.icon-help-inverse {
-  display: none;
+    border-bottom: 1px dashed grey !important;
 }
 
 .icon-help-inverse.show {
-  display: inline;
-  float: right;
-  margin-right: 0.4rem;
-}
-
-.header {
-  position: fixed;
-  z-index: 3;
-  left: 60px;
-  width: calc(100% - 60px - 1.5rem);
-}
-
-.header.secondary {
-  top: 80px;
-  height: 100px;
+    display: inline;
+    float: right;
+    margin: 0.5rem 4rem 0 0;
 }
 
 .actions {
-  margin: 0 0 0 auto !important;
+    margin: 0 0 0 auto;
 }
 
 .tab-nav.merged {
-  display: none;
-}
-
-.messages {
-  position: absolute;
-  width: 100%;
+    display: none;
+    background-color: #eee;
 }
 
 .editor__save-button {
-  min-width: 130px;
+    min-width: 145px;
+}
+
+fieldset {
+    max-width: none !important;
+}
+
+label {
+    width: auto !important;
+}
+
+.messages {
+    position: fixed;
+    top: 0px;
+    width: 75%;
+}
+
+// This is because the drafttail editor goes to 30 when in focus
+.header.secondary {
+    z-index: 31 !important;
+}
+
+.header.coa-header {
+    z-index: 32 !important;
+}
+
+.struct-block {
+    .fields {
+        float: none !important;
+    }
+}
+
+.sequence-container.sequence-type-list {
+    width: 100% !important;
 }

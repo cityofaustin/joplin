@@ -1,8 +1,8 @@
-from modeltranslation.translator import register, TranslationOptions
+from wagtail_modeltranslation.translation import register, TranslationOptions
 from wagtail.core.models import Page
 from wagtail.images.models import Image
 
-from .models import ThreeOneOne, Topic, Theme, ServicePage, ServicePageStep, ProcessPage, ProcessPageStep, TranslatedImage, Department, Map
+from .models import ThreeOneOne, TopicPage, TopicCollectionPage, Theme, ServicePage, ProcessPage, ProcessPageStep, DepartmentPage, DepartmentPageDirector, InformationPage, OfficialDocumentPage, OfficialDocumentPageOfficialDocument, TranslatedImage, Department, Map, HomePage, GuidePage
 
 
 @register(Image)
@@ -24,12 +24,16 @@ class ThreeOneOneTranslationOptions(TranslationOptions):
     )
 
 
-@register(Topic)
-class TopicTranslationOptions(TranslationOptions):
+@register(TopicPage)
+class TopicPageTranslationOptions(TranslationOptions):
     fields = (
-        'text',
         'description',
-        'call_to_action',
+    )
+
+@register(TopicCollectionPage)
+class TopicCollectionPageTranslationOptions(TranslationOptions):
+    fields = (
+        'description',
     )
 
 
@@ -56,29 +60,22 @@ class MapTranslationOptions(TranslationOptions):
     )
 
 
-@register(Page)
-class PageTranslationOptions(TranslationOptions):
+@register(HomePage)
+class HomePageTranslationOptions(TranslationOptions):
     pass
-
 
 @register(ServicePage)
 class ServicePageTranslationOptions(TranslationOptions):
     fields = (
-        'title',
         'additional_content',
-    )
-
-@register(ServicePageStep)
-class ServicePageTranslationOptions(TranslationOptions):
-    fields = (
-        'step_description',
+        'steps',
+        'short_description',
     )
 
 @register(ProcessPage)
 class ProcessPageTranslationOptions(TranslationOptions):
     fields = (
-        'title',
-        'description'
+        'description',
     )
 
 @register(ProcessPageStep)
@@ -90,5 +87,48 @@ class ProcessPageStepTranslationOptions(TranslationOptions):
         'description',
         'overview_steps',
         'detailed_content',
-        'quote'
+        'quote',
+    )
+
+@register(DepartmentPage)
+class DepartmentPageTranslationOptions(TranslationOptions):
+    fields = (
+        'what_we_do',
+        'mission',
+    )
+
+@register(DepartmentPageDirector)
+class DepartmentPageDirectorTranslationOptions(TranslationOptions):
+    fields = (
+        'about',
+        'title'
+    )
+
+@register(InformationPage)
+class InformationPageTranslationOptions(TranslationOptions):
+    fields = (
+        'description',
+        'options',
+        'additional_content',
+    )
+
+@register(OfficialDocumentPage)
+class OfficialDocumentPageTranslationOptions(TranslationOptions):
+    fields = (
+        'description',
+    )
+
+@register(OfficialDocumentPageOfficialDocument)
+class OfficialDocumentPageOfficialDocumentTranslationOptions(TranslationOptions):
+    fields = (
+        'title',
+        'summary',
+        'name',
+        'authoring_office'
+    )
+
+@register(GuidePage)
+class GuidePageTranslationOptions(TranslationOptions):
+    fields = (
+        'description',
     )

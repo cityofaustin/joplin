@@ -2,30 +2,90 @@
 
 set -o errexit
 
-DB_FILE='./joplin/db.sqlite3'
-LOAD_DATA="$LOAD_DATA"
-if [ -z "$LOAD_DATA" ] && [ ! -f "$DB_FILE" ]; then
-    echo "DB file $DB_FILE not found, loading initial data"
-    LOAD_DATA=on
+CURRENT_DIR=`dirname $BASH_SOURCE`
+source $CURRENT_DIR/docker-helpers.sh
+
+# Allows us to use BUILDKIT features like adding a --target to docker build
+# Only works for "docker build" not "docker-compose ... --build"
+export DOCKER_BUILDKIT=1
+
+# Env Vars for use within Joplin
+export JOPLIN_DB_HOST_PORT=5433
+export JOPLIN_DB_CONTAINER_PORT=5432
+export JOPLIN_APP_HOST_PORT=8000
+export JOPLIN_APP_CONTAINER_PORT=80
+export JANIS_URL=http://localhost:3000
+export DATABASE_URL="postgres://joplin@db:${JOPLIN_DB_CONTAINER_PORT}/joplin"
+
+# Build Args for use during build process
+export COMPOSE_PROJECT_NAME=joplin
+export DOCKER_TAG_APP="joplin-app:local"
+export DOCKER_TAG_ASSETS="joplin-assets:local"
+export DOCKER_TARGET_APP=joplin-local
+
+# Stop any existing joplin containers that might still be running
+echo "Stopping any $COMPOSE_PROJECT_NAME containers that might still be running"
+stop_project_containers $COMPOSE_PROJECT_NAME
+
+# Aside from the database dropping step, RELOAD_DATA does the same thing as LOAD_DATA
+if [ "$RELOAD_DATA" == "on" ]; then
+  export LOAD_DATA="on"
 fi
 
-if [ "$LOAD_DATA" == "on" ] && [ -f "$DB_FILE" ]; then
-    read -p "$DB_FILE exists. Do you want to delete it before loading data? [y/N] " -n 1 -r
-    echo
-    if [[ $REPLY =~ ^[Yy]$ ]]; then
-        echo "Deleting $DB_FILE at user request..."
-        rm "$DB_FILE"
-    fi
+if [ "$UNDOCK" == "on" ]; then
+  export NO_BUILD="on"
 fi
 
-# Get the heroku key. We eat stderr because the heroku cli will warn us that these tokens
-# are short-lived. That's OK in our case because we're just running this locally.
-HEROKU_KEY=$(heroku auth:token 2> /dev/null)
+if [ "$HARD_REBUILD" == "on" ]; then
+  unset NO_BUILD
+fi
 
-if [ "$REBUILD" == "on" ]; then
-    docker build --no-cache -f Dockerfile.base -t joplin-base .
-    docker-compose -f docker-compose.local.yml up --build
+# Delete old database containers for HARD_REBUILDs or RELOADs
+if [ "$HARD_REBUILD" == "on" ] || [ "$RELOAD_DATA" == "on" ] || [ "$DROP_DB" == "on" ]; then
+  echo "Deleting old joplin_db containes"
+  docker ps -aq -f name=joplin_db_1 | while read CONTAINER ; do docker rm -f $CONTAINER ; done
+fi
+
+if [ "$NO_BUILD" != "on" ]; then
+  if [ "$HARD_REBUILD" == "on" ]; then
+    echo 'HARD_REBUILD="on": Rebuilding containers without cache'
+    echo "Rebuilding ${DOCKER_TAG_APP}"
+    docker build --no-cache -f app.Dockerfile -t $DOCKER_TAG_APP --target $DOCKER_TARGET_APP .
+    echo "Rebuilding ${DOCKER_TAG_ASSETS}"
+    docker build --no-cache -f assets.Dockerfile -t $DOCKER_TAG_ASSETS .
+  else
+    echo "Rebuilding ${DOCKER_TAG_APP}"
+    docker build -f app.Dockerfile -t $DOCKER_TAG_APP --target $DOCKER_TARGET_APP .
+    echo "Rebuilding ${DOCKER_TAG_ASSETS}"
+    docker build -f assets.Dockerfile -t $DOCKER_TAG_ASSETS .
+  fi
+fi
+
+if [ "$UNDOCK" != "on" ]; then
+  echo "Spinning up containers"
+  if [ "$JANIS" == "on" ]; then
+    # Env Vars for use in Janis
+    export HOST_IP=$(ifconfig en0 | awk '$1 == "inet" {print $2}')
+    export CMS_API="http://$HOST_IP:$JOPLIN_APP_HOST_PORT/api/graphql"
+    export CMS_MEDIA="http://$HOST_IP:$JOPLIN_APP_HOST_PORT/media"
+    export DOCKER_TAG_JANIS="janis:local"
+    export JANIS_APP_HOST_PORT=3000
+
+    docker-compose -f docker-compose.yml -f docker-compose.local_override.yml -f docker-compose.janis.yml up
+  else
+    docker-compose -f docker-compose.yml -f docker-compose.local_override.yml up
+  fi
 else
-    docker build -f Dockerfile.base -t joplin-base .
-    docker-compose -f docker-compose.local.yml up
+  # Required vars that are added in docker-compose.yml
+  export STYLEGUIDE_URL="https://cityofaustin.github.io/digital-services-style-guide"
+  export DEBUG=1
+
+  # Django will access DATABASE_URL from HOST, not a container in the same network
+  export DATABASE_URL="postgres://joplin@127.0.0.1:${JOPLIN_DB_HOST_PORT}/joplin"
+
+  # Only run containers for db and assets
+  docker-compose -f docker-compose.yml -f docker-compose.local_override.yml up -d db assets
+
+  sh $CURRENT_DIR/../scripts/setup-undockered-data.sh
+  pipenv run $CURRENT_DIR/../joplin/manage.py runserver 0.0.0.0:$JOPLIN_APP_HOST_PORT
 fi

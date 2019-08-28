@@ -5,10 +5,13 @@ from graphene_django.converter import convert_django_field
 from graphene_django.debug import DjangoDebug
 from graphene_django.filter import DjangoFilterConnectionField
 from graphene.types import Scalar
+from graphene.types.generic import GenericScalar
 from wagtail.core.fields import StreamField
 from wagtail.core.models import Page, PageRevision
+from django_filters import FilterSet, OrderingFilter
+from wagtail.core.blocks import PageChooserBlock, TextBlock, ListBlock
 
-from base.models import TranslatedImage, ThreeOneOne, ServicePage, ServicePageStep, ServicePageContact, ProcessPage, ProcessPageStep, ProcessPageContact, Theme, Topic, Contact, Location, ContactDayAndDuration, Department, DepartmentContact
+from base.models import TranslatedImage, ThreeOneOne, ServicePage, ServicePageContact, ServicePageTopic, ServicePageRelatedDepartments, InformationPageRelatedDepartments, ProcessPage, ProcessPageStep, ProcessPageContact, ProcessPageTopic, InformationPage, InformationPageContact, InformationPageTopic, DepartmentPage, DepartmentPageContact, DepartmentPageDirector, Theme, TopicCollectionPage, TopicPage, Contact, Location, ContactDayAndDuration, Department, DepartmentContact, TopicPageTopicCollection, OfficialDocumentPage, OfficialDocumentPageRelatedDepartments, OfficialDocumentPageTopic, OfficialDocumentPageOfficialDocument, GuidePage, GuidePageTopic, GuidePageRelatedDepartments, GuidePageContact, JanisBasePage, PhoneNumber
 
 
 class StreamFieldType(Scalar):
@@ -36,10 +39,23 @@ class ThemeNode(DjangoObjectType):
         interfaces = [graphene.Node]
 
 
+class TopicCollectionNode(DjangoObjectType):
+    class Meta:
+        model = TopicCollectionPage
+        filter_fields = ['id', 'slug', 'live']
+        interfaces = [graphene.Node]
+
+
+class TopicPageTopicCollectionNode(DjangoObjectType):
+    class Meta:
+        model = TopicPageTopicCollection
+        interfaces = [graphene.Node]
+
+
 class TopicNode(DjangoObjectType):
     class Meta:
-        model = Topic
-        filter_fields = ['id', 'slug', 'text']
+        model = TopicPage
+        filter_fields = ['id', 'slug', 'live']
         interfaces = [graphene.Node]
 
 
@@ -62,21 +78,63 @@ class LocationNode(DjangoObjectType):
         interfaces = [graphene.Node]
 
 
-class ContactDayAndDurationNode(DjangoObjectType):
-    class Meta:
-        model = ContactDayAndDuration
-        interfaces = [graphene.Node]
-
-
 class ContactNode(DjangoObjectType):
     class Meta:
         model = Contact
         interfaces = [graphene.Node]
 
 
+class ContactPhoneNumbers(DjangoObjectType):
+    class Meta:
+        model = PhoneNumber
+        interfaces = [graphene.Node]
+
+
+class ContactDayAndDurationNode(DjangoObjectType):
+    class Meta:
+        model = ContactDayAndDuration
+        interfaces = [graphene.Node]
+
+
 class ServicePageContactNode(DjangoObjectType):
     class Meta:
         model = ServicePageContact
+        interfaces = [graphene.Node]
+
+
+class GuidePageContactNode(DjangoObjectType):
+    class Meta:
+        model = GuidePageContact
+        interfaces = [graphene.Node]
+
+
+class ServicePageTopicNode(DjangoObjectType):
+    class Meta:
+        model = ServicePageTopic
+        interfaces = [graphene.Node]
+
+
+class ServicePageRelatedDepartmentsNode(DjangoObjectType):
+    class Meta:
+        model = ServicePageRelatedDepartments
+        interfaces = [graphene.Node]
+
+
+class InformationPageRelatedDepartmentsNode(DjangoObjectType):
+    class Meta:
+        model = InformationPageRelatedDepartments
+        interfaces = [graphene.Node]
+
+
+class OfficialDocumentPageRelatedDepartmentsNode(DjangoObjectType):
+    class Meta:
+        model = OfficialDocumentPageRelatedDepartments
+        interfaces = [graphene.Node]
+
+
+class GuidePageRelatedDepartmentsNode(DjangoObjectType):
+    class Meta:
+        model = GuidePageRelatedDepartments
         interfaces = [graphene.Node]
 
 
@@ -101,50 +159,215 @@ class Language(graphene.Enum):
 
 
 class ServicePageNode(DjangoObjectType):
-    related = graphene.List('api.schema.ServicePageNode')
+    # related = graphene.List('api.schema.ServicePageNode')
 
-    def resolve_related(self, resolve_info, *args, **kwargs):
-        return self.topic.services.exclude(id=self.id)
+    # def resolve_related(self, resolve_info, *args, **kwargs):
+    #     return self.topic.servicepage_set.exclude(id=self.id)
 
     class Meta:
         model = ServicePage
-        filter_fields = ['id', 'slug', 'topic', 'topic__slug']
+        filter_fields = ['id', 'slug', 'live']
         interfaces = [graphene.Node]
 
-class ServicePageStepNode(DjangoObjectType):
-    class Meta:
-        model = ServicePageStep
-        interfaces = [graphene.Node]
 
 class ProcessPageNode(DjangoObjectType):
     class Meta:
         model = ProcessPage
-        filter_fields = ['id', 'slug', 'topic', 'topic__slug']
+        filter_fields = ['id', 'slug', 'department', 'live']
         interfaces = [graphene.Node]
+
+
+class InformationPageNode(DjangoObjectType):
+    class Meta:
+        model = InformationPage
+        filter_fields = ['id', 'slug', 'live']
+        interfaces = [graphene.Node]
+
+
+class DepartmentPageNode(DjangoObjectType):
+    class Meta:
+        model = DepartmentPage
+        filter_fields = ['id', 'slug', 'live']
+        interfaces = [graphene.Node]
+
+
+class OfficialDocumentFilter(FilterSet):
+    order_by = OrderingFilter(
+        fields=(
+            ('date'),
+        )
+    )
+
+    class Meta:
+        model = OfficialDocumentPageOfficialDocument
+        fields = ['date']
+
+
+class OfficialDocumentPageOfficialDocumentNode(DjangoObjectType):
+    class Meta:
+        model = OfficialDocumentPageOfficialDocument
+        filter_fields = ['date']
+        interfaces = [graphene.Node]
+
+
+class OfficialDocumentPageNode(DjangoObjectType):
+    official_documents = DjangoFilterConnectionField(
+        OfficialDocumentPageOfficialDocumentNode, filterset_class=OfficialDocumentFilter)
+
+    class Meta:
+        model = OfficialDocumentPage
+        filter_fields = ['id', 'slug', 'live']
+        interfaces = [graphene.Node]
+
+
+class GuidePageSectionPageBlock(graphene.ObjectType):
+    value = GenericScalar()
+    service_page = graphene.Field(ServicePageNode)
+    information_page = graphene.Field(InformationPageNode)
+
+    def resolve_service_page(self, info):
+        service_page = None
+        # TODO: don't catch everything
+        try:
+            service_page = ServicePage.objects.get(id=self.value)
+        except:
+            pass
+            # print("Looks like this one isn't a service page")
+
+        return service_page
+
+    def resolve_information_page(self, info):
+        information_page = None
+        # TODO: don't catch everything
+        try:
+            information_page = InformationPage.objects.get(id=self.value)
+        except:
+            pass
+            # print("Looks like this one isn't an info page")
+
+        return information_page
+
+
+class GuidePageSection(graphene.ObjectType):
+    value = GenericScalar()
+    pages = graphene.List(GuidePageSectionPageBlock)
+    heading = graphene.String()
+
+    def resolve_heading(self, info):
+        return self.value['section_heading']
+
+    def resolve_pages(self, info):
+        repr_pages = []
+        for page_id in self.value['pages']:
+            repr_pages.append(GuidePageSectionPageBlock(value=page_id))
+
+        return repr_pages
+
+
+class GuidePageNode(DjangoObjectType):
+    sections = graphene.List(GuidePageSection)
+
+    class Meta:
+        model = GuidePage
+        filter_fields = ['id', 'slug', 'live']
+        interfaces = [graphene.Node]
+
+    def resolve_sections(self, info):
+        repr_sections = []
+        for block in self.sections.stream_data:
+            value = block.get('value')
+            repr_sections.append(GuidePageSection(value=value))
+
+        return repr_sections
+
 
 class PageRevisionNode(DjangoObjectType):
     as_service_page = graphene.NonNull(ServicePageNode)
     as_process_page = graphene.NonNull(ProcessPageNode)
+    as_information_page = graphene.NonNull(InformationPageNode)
+    as_department_page = graphene.NonNull(DepartmentPageNode)
+    as_topic_page = graphene.NonNull(TopicNode)
+    as_topic_collection_page = graphene.NonNull(TopicCollectionNode)
+    as_official_document_page = graphene.NonNull(OfficialDocumentPageNode)
 
     def resolve_as_service_page(self, resolve_info, *args, **kwargs):
-        return self.as_page_object();
+        return self.as_page_object()
 
     def resolve_as_process_page(self, resolve_info, *args, **kwargs):
-        return self.as_page_object();
+        return self.as_page_object()
+
+    def resolve_as_information_page(self, resolve_info, *args, **kwargs):
+        return self.as_page_object()
+
+    def resolve_as_department_page(self, resolve_info, *args, **kwargs):
+        return self.as_page_object()
+
+    def resolve_as_topic_page(self, resolve_info, *args, **kwargs):
+        return self.as_page_object()
+
+    def resolve_as_topic_collection_page(self, resolve_info, *args, **kwargs):
+        return self.as_page_object()
+
+    def resolve_as_official_document_page(self, resolve_info, *args, **kwargs):
+        return self.as_page_object()
 
     class Meta:
         model = PageRevision
         filter_fields = ['id']
         interfaces = [graphene.Node]
 
+
 class ProcessPageStepNode(DjangoObjectType):
     class Meta:
         model = ProcessPageStep
         interfaces = [graphene.Node]
 
+
 class ProcessPageContactNode(DjangoObjectType):
     class Meta:
         model = ProcessPageContact
+        interfaces = [graphene.Node]
+
+
+class ProcessPageTopicNode(DjangoObjectType):
+    class Meta:
+        model = ProcessPageTopic
+        interfaces = [graphene.Node]
+
+
+class InformationPageContactNode(DjangoObjectType):
+    class Meta:
+        model = InformationPageContact
+        interfaces = [graphene.Node]
+
+
+class InformationPageTopicNode(DjangoObjectType):
+    class Meta:
+        model = InformationPageTopic
+        interfaces = [graphene.Node]
+
+
+class DepartmentPageContactNode(DjangoObjectType):
+    class Meta:
+        model = DepartmentPageContact
+        interfaces = [graphene.Node]
+
+
+class DepartmentPageDirectorNode(DjangoObjectType):
+    class Meta:
+        model = DepartmentPageDirector
+        interfaces = [graphene.Node]
+
+
+class OfficialDocumentPageTopicNode(DjangoObjectType):
+    class Meta:
+        model = OfficialDocumentPageTopic
+        interfaces = [graphene.Node]
+
+
+class GuidePageTopicNode(DjangoObjectType):
+    class Meta:
+        model = GuidePageTopic
         interfaces = [graphene.Node]
 
 
@@ -173,15 +396,23 @@ def get_page_with_preview_data(page, session):
 class Query(graphene.ObjectType):
     debug = graphene.Field(DjangoDebug, name='__debug')
 
-    service_page = graphene.Field(ServicePageNode, id=graphene.ID(), pk=graphene.Int(), slug=graphene.String(), show_preview=graphene.Boolean(default_value=False), language=Language())
+    service_page = graphene.Field(ServicePageNode, id=graphene.ID(), pk=graphene.Int(
+    ), slug=graphene.String(), show_preview=graphene.Boolean(default_value=False), language=Language())
+    department_page = graphene.Node.Field(DepartmentPageNode)
     all_service_pages = DjangoFilterConnectionField(ServicePageNode)
     page_revision = graphene.Field(PageRevisionNode, id=graphene.ID())
     all_page_revisions = DjangoFilterConnectionField(PageRevisionNode)
     all_processes = DjangoFilterConnectionField(ProcessPageNode)
+    all_information_pages = DjangoFilterConnectionField(InformationPageNode)
+    all_department_pages = DjangoFilterConnectionField(DepartmentPageNode)
     all_themes = DjangoFilterConnectionField(ThemeNode)
     all_topics = DjangoFilterConnectionField(TopicNode)
+    all_topic_collections = DjangoFilterConnectionField(TopicCollectionNode)
     all_departments = DjangoFilterConnectionField(DepartmentNode)
     all_311 = DjangoFilterConnectionField(ThreeOneOneNode)
+    all_official_document_pages = DjangoFilterConnectionField(
+        OfficialDocumentPageNode)
+    all_guide_pages = DjangoFilterConnectionField(GuidePageNode)
 
     def resolve_page_revision(self, resolve_info, id=None):
         revision = graphene.Node.get_node_from_global_id(resolve_info, id)
@@ -190,7 +421,8 @@ class Query(graphene.ObjectType):
 
     def resolve_service_page(self, resolve_info, id=None, pk=None, slug=None, show_preview=None, language=None):
         if not language:
-            request_lang = django.utils.translation.get_language_from_request(resolve_info.context)
+            request_lang = django.utils.translation.get_language_from_request(
+                resolve_info.context)
             language = request_lang or Language.ENGLISH
 
         django.utils.translation.activate(language)
@@ -206,7 +438,8 @@ class Query(graphene.ObjectType):
             raise Exception('Please provide id or pk')
 
         if show_preview:
-            page = get_page_with_preview_data(page, resolve_info.context.session) or page
+            page = get_page_with_preview_data(
+                page, resolve_info.context.session) or page
 
         return page
 

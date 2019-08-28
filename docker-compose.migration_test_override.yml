@@ -1,0 +1,13 @@
+version: '3.7'
+services:
+  app:
+    environment:
+      DEPLOYMENT_MODE: "LOCAL"
+    entrypoint: "./docker-entrypoint.sh"
+    # Override gunicorn CMD
+    command: ["echo", "\"No server needed at this step of the migration test: exiting app\""]
+    volumes:
+      # Use local docker-entrypoint.sh instead of docker-entrypoint from older master image
+      - "./docker-entrypoint.sh:/app/docker-entrypoint.sh"
+      # Use local scripts in case there were updates that are not in older master image
+      - "./scripts:/app/scripts"

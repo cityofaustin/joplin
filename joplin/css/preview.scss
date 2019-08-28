@@ -1,97 +1,138 @@
-$preview-height: calc(100vh - 242px);
-$flexcontainer-margin: 204px;
+@import './variables';
+
+$flexcontainer-margin: 100px;
+$preview-height: calc(100vh - #{$flexcontainer-margin});
 $fixedcontent-width: 375px;
 $sidebar-width: 377px;
 
 .preview-container {
-  position: fixed;
-  right: 10px;
-  bottom: 0;
+    position: fixed;
+    right: 10px;
+    bottom: 0;
 }
 
 /* This container helps the thumbnail behave as if it were an unscaled IMG element */
 .thumbnail-container {
-  width: 100%;
-  overflow: hidden;
-  position: relative;
-  background: #f9f9f9;
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+    background: #f9f9f9;
 }
 /* Image Icon for the Background */
 .thumbnail-container::before {
-  position: absolute;
-  left: calc(50% - 16px);
-  top: calc(50% - 18px);
-  opacity: 0.2;
-  display: block;
-  -ms-zoom: 2;
-  -o-transform: scale(2);
-  -moz-transform: scale(2);
-  -webkit-transform: scale(2);
-  content: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/PjwhRE9DVFlQRSBzdmcgIFBVQkxJQyAnLS8vVzNDLy9EVEQgU1ZHIDEuMS8vRU4nICAnaHR0cDovL3d3dy53My5vcmcvR3JhcGhpY3MvU1ZHLzEuMS9EVEQvc3ZnMTEuZHRkJz48c3ZnIGVuYWJsZS1iYWNrZ3JvdW5kPSJuZXcgMCAwIDMyIDMyIiBoZWlnaHQ9IjMycHgiIGlkPSJMYXllcl8xIiB2ZXJzaW9uPSIxLjEiIHZpZXdCb3g9IjAgMCAzMiAzMiIgd2lkdGg9IjMycHgiIHhtbDpzcGFjZT0icHJlc2VydmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiPjxnIGlkPSJwaG90b18xXyI+PHBhdGggZD0iTTI3LDBINUMyLjc5MSwwLDEsMS43OTEsMSw0djI0YzAsMi4yMDksMS43OTEsNCw0LDRoMjJjMi4yMDksMCw0LTEuNzkxLDQtNFY0QzMxLDEuNzkxLDI5LjIwOSwwLDI3LDB6ICAgIE0yOSwyOGMwLDEuMTAyLTAuODk4LDItMiwySDVjLTEuMTAzLDAtMi0wLjg5OC0yLTJWNGMwLTEuMTAzLDAuODk3LTIsMi0yaDIyYzEuMTAyLDAsMiwwLjg5NywyLDJWMjh6IiBmaWxsPSIjMzMzMzMzIi8+PHBhdGggZD0iTTI2LDRINkM1LjQ0Nyw0LDUsNC40NDcsNSw1djE4YzAsMC41NTMsMC40NDcsMSwxLDFoMjBjMC41NTMsMCwxLTAuNDQ3LDEtMVY1QzI3LDQuNDQ3LDI2LjU1Myw0LDI2LDR6ICAgIE0yNiw1djEzLjg2OWwtMy4yNS0zLjUzQzIyLjU1OSwxNS4xMjMsMjIuMjg3LDE1LDIyLDE1cy0wLjU2MSwwLjEyMy0wLjc1LDAuMzM5bC0yLjYwNCwyLjk1bC03Ljg5Ni04Ljk1ICAgQzEwLjU2LDkuMTIzLDEwLjI4Nyw5LDEwLDlTOS40NCw5LjEyMyw5LjI1LDkuMzM5TDYsMTMuMDg3VjVIMjZ6IE02LDE0LjZsNC00LjZsOC4wNjYsOS4xNDNsMC41OCwwLjY1OEwyMS40MDgsMjNINlYxNC42eiAgICBNMjIuNzQsMjNsLTMuNDI4LTMuOTU1TDIyLDE2bDQsNC4zNzlWMjNIMjIuNzR6IiBmaWxsPSIjMzMzMzMzIi8+PHBhdGggZD0iTTIwLDEzYzEuNjU2LDAsMy0xLjM0MywzLTNzLTEuMzQ0LTMtMy0zYy0xLjY1OCwwLTMsMS4zNDMtMywzUzE4LjM0MiwxMywyMCwxM3ogTTIwLDhjMS4xMDIsMCwyLDAuODk3LDIsMiAgIHMtMC44OTgsMi0yLDJjLTEuMTA0LDAtMi0wLjg5Ny0yLTJTMTguODk2LDgsMjAsOHoiIGZpbGw9IiMzMzMzMzMiLz48L2c+PC9zdmc+");
+    position: absolute;
+    left: calc(50% - 16px);
+    top: calc(50% - 18px);
+    opacity: 0.2;
+    display: block;
+    -ms-zoom: 2;
+    -o-transform: scale(2);
+    -moz-transform: scale(2);
+    -webkit-transform: scale(2);
+    content: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/PjwhRE9DVFlQRSBzdmcgIFBVQkxJQyAnLS8vVzNDLy9EVEQgU1ZHIDEuMS8vRU4nICAnaHR0cDovL3d3dy53My5vcmcvR3JhcGhpY3MvU1ZHLzEuMS9EVEQvc3ZnMTEuZHRkJz48c3ZnIGVuYWJsZS1iYWNrZ3JvdW5kPSJuZXcgMCAwIDMyIDMyIiBoZWlnaHQ9IjMycHgiIGlkPSJMYXllcl8xIiB2ZXJzaW9uPSIxLjEiIHZpZXdCb3g9IjAgMCAzMiAzMiIgd2lkdGg9IjMycHgiIHhtbDpzcGFjZT0icHJlc2VydmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiPjxnIGlkPSJwaG90b18xXyI+PHBhdGggZD0iTTI3LDBINUMyLjc5MSwwLDEsMS43OTEsMSw0djI0YzAsMi4yMDksMS43OTEsNCw0LDRoMjJjMi4yMDksMCw0LTEuNzkxLDQtNFY0QzMxLDEuNzkxLDI5LjIwOSwwLDI3LDB6ICAgIE0yOSwyOGMwLDEuMTAyLTAuODk4LDItMiwySDVjLTEuMTAzLDAtMi0wLjg5OC0yLTJWNGMwLTEuMTAzLDAuODk3LTIsMi0yaDIyYzEuMTAyLDAsMiwwLjg5NywyLDJWMjh6IiBmaWxsPSIjMzMzMzMzIi8+PHBhdGggZD0iTTI2LDRINkM1LjQ0Nyw0LDUsNC40NDcsNSw1djE4YzAsMC41NTMsMC40NDcsMSwxLDFoMjBjMC41NTMsMCwxLTAuNDQ3LDEtMVY1QzI3LDQuNDQ3LDI2LjU1Myw0LDI2LDR6ICAgIE0yNiw1djEzLjg2OWwtMy4yNS0zLjUzQzIyLjU1OSwxNS4xMjMsMjIuMjg3LDE1LDIyLDE1cy0wLjU2MSwwLjEyMy0wLjc1LDAuMzM5bC0yLjYwNCwyLjk1bC03Ljg5Ni04Ljk1ICAgQzEwLjU2LDkuMTIzLDEwLjI4Nyw5LDEwLDlTOS40NCw5LjEyMyw5LjI1LDkuMzM5TDYsMTMuMDg3VjVIMjZ6IE02LDE0LjZsNC00LjZsOC4wNjYsOS4xNDNsMC41OCwwLjY1OEwyMS40MDgsMjNINlYxNC42eiAgICBNMjIuNzQsMjNsLTMuNDI4LTMuOTU1TDIyLDE2bDQsNC4zNzlWMjNIMjIuNzR6IiBmaWxsPSIjMzMzMzMzIi8+PHBhdGggZD0iTTIwLDEzYzEuNjU2LDAsMy0xLjM0MywzLTNzLTEuMzQ0LTMtMy0zYy0xLjY1OCwwLTMsMS4zNDMtMywzUzE4LjM0MiwxMywyMCwxM3ogTTIwLDhjMS4xMDIsMCwyLDAuODk3LDIsMiAgIHMtMC44OTgsMi0yLDJjLTEuMTA0LDAtMi0wLjg5Ny0yLTJTMTguODk2LDgsMjAsOHoiIGZpbGw9IiMzMzMzMzMiLz48L2c+PC9zdmc+');
 }
 .thumbnail-container .tab-nav {
-  margin: 0.1em 0;
+    margin: 0.1em 0;
 }
 /* This is a masking container for the zoomed iframe element */
 .thumbnail {
-  -ms-zoom: 1;
-  -moz-transform: scale(1);
-  -moz-transform-origin: 0 0;
-  -o-transform: scale(1);
-  -o-transform-origin: 0 0;
-  -webkit-transform: scale(1);
-  -webkit-transform-origin: 0 0;
+    -ms-zoom: 1;
+    -moz-transform: scale(1);
+    -moz-transform-origin: 0 0;
+    -o-transform: scale(1);
+    -o-transform-origin: 0 0;
+    -webkit-transform: scale(1);
+    -webkit-transform-origin: 0 0;
 }
 /* This is our screen sizing */
 .thumbnail,
 .thumbnail iframe {
-  width: 100%;
-  height: $preview-height;
+    width: 100%;
+    height: $preview-height;
 }
 /* This facilitates the fade-in transition instead of flicker. It also helps us maintain the illusion that this is an image, since some webpages will have a preloading animation or wait for some images to download */
 .thumbnail iframe {
-  opacity: 0;
-  transition: all 300ms ease-in-out;
+    opacity: 0;
+    transition: all 300ms ease-in-out;
 }
 
 /* Improving the sidebar experience with flexbox */
 .flex-container {
-  display: flex;
-  margin-top: $flexcontainer-margin;
+    display: flex;
+    margin-top: $flexcontainer-margin;
 }
 .edit-page-form-container {
-  flex: auto;
+    flex: auto;
 }
 .sidebar-container {
-  min-width: $sidebar-width;
+    min-width: $sidebar-width;
 }
 
-.sidebar-buttons {
-  display: flex;
-  background: #eeeeee;
-  border-top: 1px solid black;
+.coa-sidebar-buttons {
+    display: flex;
+    background: #eeeeee;
+    border-top: 1px solid black;
+    z-index: 1;
+    position: absolute;
+    bottom: 0;
+    height: 130px;
+    width: 100%;
 }
 
-.sidebar-button-container {
-  margin: auto;
+.coa-sidebar-button {
+    flex: 1;
+    font-size: 12px;
+    font-weight: bold;
+    text-align: center;
+    color: $coa-color-white;
+    background: $coa-color-dark-gray;
+    bottom: 89px;
+    height: 42px;
+    span {
+        padding: 10px 0;
+        display: inline-block;
+    }
+    &:hover {
+        color: $coa-color-lightest-blue;
+    }
+}
+
+.coa-sidebar-button--active {
+    background: $coa-color-lightest-blue;
+    color: $coa-color-darkest-gray;
+    &:hover {
+        color: $coa-color-light-blue;
+    }
 }
 
 .fixed-content {
-  position: fixed;
-  border-left: 2px solid black;
-  min-width: $fixedcontent-width;
+    position: fixed;
+    border-left: 2px solid black;
+    min-width: $fixedcontent-width;
 }
 
 .tab-nav {
-  margin-top: 0px;
-  margin-bottom: 0px;
+    margin-top: 0px;
+    margin-bottom: 0px;
 }
 
 #page-share-url-copied {
-  background: white;
-  position: fixed;
-  border: 1px solid black;
-  padding: 5px;
-  margin: 5px;
-  border-radius: 10px;
+    background: white;
+    position: fixed;
+    border: 0.1px solid $wagtail-dark-turquoise;
+    padding: 5px;
+    margin: 5px;
+    border-radius: 3px;
+    overflow: auto;
+    right: 0px;
+    box-shadow: 0 3px 3px 0 rgba(0, 0, 0, 0.2);
+
+    .icon-success {
+        color: green;
+    }
+}
+
+#share-preview-url {
+    font-size: 10px;
+    color: $coa-color-dark-gray2;
 }

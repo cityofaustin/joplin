@@ -1,0 +1,71 @@
+.coa-page-action {
+    color: $coa-color-dark-gray;
+    font-style: normal;
+    font-weight: bold;
+}
+
+.coa-secondary-button {
+    background: $coa-color-white;
+    color: $wagtail-turquoise;
+    font-weight: bold;
+}
+
+.coa-button--margin {
+    margin: auto 5px;
+}
+
+// select any label right after a radio button
+#language-select input[type='radio'] + label {
+    border: 0.5px solid $wagtail-turquoise;
+    line-height: 200%;
+}
+
+#language-select input[type='radio']:checked + label {
+    background: $wagtail-turquoise;
+    color: $coa-color-white;
+}
+
+// hide display on input types
+#language-select > input[type='radio'] {
+    display: none;
+}
+
+.coa-multiField-nopadding li {
+    padding: 0;
+}
+
+.coa-helpPanel fieldset {
+    padding: 0;
+}
+
+// tech debt: hiding help and labels instead of removing
+// nested these to hopefully avoid css scoping issues
+.coa-multiField-nopadding {
+    .help {
+        display: none;
+    }
+
+    .field label {
+        display: none;
+    }
+}
+
+.coa-icon-share {
+    &:before {
+        background-image: url('../static/images/share.svg');
+        content: '';
+        width: 22px;
+        height: 31px;
+        background-size: 22px 31px;
+        display: inline-block;
+        font-style: normal;
+        font-variant: normal;
+        text-rendering: auto;
+        -webkit-font-smoothing: antialiased;
+    }
+    &:hover {
+        &:before {
+            background-image: url('../static/images/share_white.svg');
+        }
+    }
+}

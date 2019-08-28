@@ -1,0 +1,58 @@
+// COA Global Nav (left sidebar)
+
+.nav-main .menu-item a::before {
+    font-size: 2rem;
+}
+
+.nav-main .menu-active > a {
+    border-left-color: $coa-color-lightest-blue;
+    color: $coa-color-lightest-blue;
+}
+
+.wrapper {
+    padding-top: $header-height;
+    padding-left: $nav-wrapper-width;
+    height: inherit;
+}
+.nav-wrapper,
+.nav-wrapper .inner {
+    width: $nav-wrapper-width;
+}
+
+.nav-main {
+    position: static;
+    overflow: hidden;
+}
+.nav-main a {
+    padding-left: 10px;
+}
+.nav-main .footer {
+    display: none;
+}
+
+.nav-main .menu-item {
+
+    .icon-home:before {
+        content: 'create';
+    }
+
+    .icon-maps:before {
+        content: 'map';
+    }
+    .icon-locations:before {
+        content: 'location_on';
+    }
+    .icon-image:before {
+        content: 'photo';
+    }
+    .icon-contacts:before {
+        content: 'contact_phone';
+    }
+    .icon-users:before {
+        content: 'account_circle';
+    }
+}
+
+.nav-main .menu-item  .material-icons span {
+    font-family: "Open Sans";
+}

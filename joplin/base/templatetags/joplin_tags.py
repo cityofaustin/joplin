@@ -3,7 +3,7 @@ import graphene
 import os
 import json
 
-from base.models import Topic, Theme
+from base.models import TopicPage, Theme, DepartmentPage
 from wagtail.core import hooks
 import itertools
 
@@ -19,8 +19,14 @@ def get_revision_preview_url(*args, **kwargs):
     return os.environ["JANIS_URL"] + "/en/preview/" + url_page_type + "/" + global_id
 
 STYLEGUIDE_PAGES = {
-  'service page': '/writing-service-pages/',
-  'process page': '/writing-process-pages/'
+  'service page': '/pick-the-perfect-content-type/service-page',
+  'process page': '/pick-the-perfect-content-type/process-page',
+  'information page': '/pick-the-perfect-content-type/information-page',
+  'department page': 'pick-the-perfect-content-type/department-page',
+  'topic page': '',
+  'topic collection page': '',
+  'official document page': '',
+  'guide page': ''
 }
 
 @register.simple_tag
@@ -36,19 +42,27 @@ def themes_topics_tree(context):
     for theme in Theme.objects.all():
         themes[theme.pk] = {
             'text': theme.text,
+            'id': theme.id,
             'topics': []
         }
-
-    for topic in Topic.objects.all():
-        themes[topic.theme.id]['topics'].append({
-            'text': topic.text,
-            'id': topic.id,
-        })
 
     return {
         'themes': json.dumps(themes)
     }
 
+@register.inclusion_tag('wagtailadmin/departments_list.html', takes_context=True)
+def departments_list(context):
+    departments = []
+
+    for department in DepartmentPage.objects.all():
+        departments.append({
+            'title': department.title,
+            'id': department.id,
+        })
+
+    return {
+        'departments': json.dumps(departments)
+    }
 
 @register.inclusion_tag("wagtailadmin/pages/listing/_buttons.html",
                         takes_context=True)
