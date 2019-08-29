@@ -63,6 +63,3 @@ class TopicPageTopicCollection(ClusterableModel):
     panels = [
         PageChooserPanel('topiccollection'),
     ]
-
-    def __str__(self):
-        return self.topiccollection.text

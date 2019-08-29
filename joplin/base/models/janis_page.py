@@ -46,29 +46,46 @@ class JanisBasePage(Page):
         page_slug = self.slug
 
         if self.janis_url_page_type == "department":
+
             return os.environ["JANIS_URL"] + "/en/" + page_slug
 
         if self.janis_url_page_type == "topiccollection":
-            theme_slug = self.theme.slug;
-            return os.environ["JANIS_URL"] + "/en/" + theme_slug + "/" + page_slug
+            try:
+                theme_slug = self.theme.slug
+                return os.environ["JANIS_URL"] + "/en/" + theme_slug + "/" + page_slug
+            except Exception as e:
+                pdb.set_trace()
+                print("!janis url error!:", self.title, e)
 
         if self.janis_url_page_type == "topic":
             # If we have a topic collection
-            if self.topiccollections and self.topiccollections.all():
-                theme_slug = self.topiccollections.all()[0].topiccollection.theme.slug;
-                tc_slug = self.topiccollections.all()[0].topiccollection.slug;
-                return os.environ["JANIS_URL"] + "/en/" + theme_slug + "/" + tc_slug + "/" + page_slug
+            try:
+                if self.topiccollections:
+                    primary_topic_collection = self.topiccollections.first().topiccollection
+                    theme_slug = primary_topic_collection.theme.slug
+                    topic_collection_slug = primary_topic_collection.slug
+                    return os.environ["JANIS_URL"] + "/en/" + theme_slug + "/" + topic_collection_slug + "/" + page_slug
+            except Exception as e:
+                pdb.set_trace()
+                print("!janis url error!:", self.title, e)
 
-
-        if self.janis_url_page_type == "services" or self.janis_url_page_type == "information":
+        if self.janis_url_page_type == "services" or self.janis_url_page_type == "information" or janis_url_page_type == "guide":
             # If we have topics, use the first one
-            if self.topics and self.topics.all():
-                topic_slug = self.topics.all()[0].topic.slug
-                # Make sure we have a topic collection too
-                if self.topics.all()[0].topic.topiccollections.all():
-                    theme_slug = self.topics.all()[0].topic.topiccollections.all()[0].topiccollection.theme.slug;
-                    tc_slug = self.topics.all()[0].topic.topiccollections.all()[0].topiccollection.slug;
-                    return os.environ["JANIS_URL"] + "/en/" + theme_slug + "/" + tc_slug + "/" + topic_slug + "/" + page_slug
+            try:
+                # this is wasteful but needed for info page edge case
+                if self.topics.first():
+                    primary_topic = self.topics.first().topic
+                    topic_slug = primary_topic.slug
+                    # Make sure we have a topic collection too
+                    if primary_topic.topiccollections:
+                        primary_topic_collection = primary_topic.topiccollections.first().topiccollection
+                        theme_slug = primary_topic_collection.theme.slug
+                        topic_collection_slug = primary_topic_collection.slug
+                        return os.environ["JANIS_URL"] + "/en/" + theme_slug + "/" + topic_collection_slug + "/" + topic_slug + "/" + page_slug
+            except Exception as e:
+                import pdb
+                pdb.set_trace()
+                print("!janis url error!:", self.title, e)
 
             # TODO: bring back departments now that we can have multiple
 
