@@ -43,14 +43,18 @@ class JanisBasePage(Page):
     )
 
     def janis_url(self):
+        """
+        This function parses various attributes of content types to construct the
+        expected url structure for janis
+
+        It probably could use some refactoring.
+        """
         page_slug = self.slug
 
         if self.janis_url_page_type == "department":
             return os.environ["JANIS_URL"] + "/en/" + page_slug
 
         if self.janis_url_page_type == "topiccollection":
-            # import pdb
-            # pdb.set_trace()
             try:
                 theme_slug = self.theme.slug
                 return os.environ["JANIS_URL"] + "/en/" + theme_slug + "/" + page_slug
