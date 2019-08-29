@@ -43,35 +43,30 @@ class JanisBasePage(Page):
     )
 
     def janis_url(self):
+        """
+        This function parses various attributes of content types to construct the
+        expected url structure for janis
+         It probably could use some refactoring.
+        """
         page_slug = self.slug
 
-        if self.janis_url_page_type == "department":
+        try:
+            if self.janis_url_page_type == "department":
 
-            return os.environ["JANIS_URL"] + "/en/" + page_slug
+                return os.environ["JANIS_URL"] + "/en/" + page_slug
 
-        if self.janis_url_page_type == "topiccollection":
-            try:
+            elif self.janis_url_page_type == "topiccollection":
                 theme_slug = self.theme.slug
                 return os.environ["JANIS_URL"] + "/en/" + theme_slug + "/" + page_slug
-            except Exception as e:
-                print("!janis url error!:", self.title, e)
-
-        if self.janis_url_page_type == "topic":
-            # If we have a topic collection
-            try:
+            elif self.janis_url_page_type == "topic":
+                # If we have a topic collection
                 if self.topiccollections:
                     primary_topic_collection = self.topiccollections.first().topiccollection
                     theme_slug = primary_topic_collection.theme.slug
                     topic_collection_slug = primary_topic_collection.slug
                     return os.environ["JANIS_URL"] + "/en/" + theme_slug + "/" + topic_collection_slug + "/" + page_slug
-            except Exception as e:
-                print("!janis url error!:", self.title, e)
-
-        if self.janis_url_page_type == "services" or self.janis_url_page_type == "information" or janis_url_page_type == "guide":
-            # If we have topics, use the first one
-            try:
-                # this is wasteful but needed for info page edge case
-                if self.topics.first():
+            elif self.janis_url_page_type in ["services", "information", "guide"]:
+                if self.topics.exists():
                     primary_topic = self.topics.first().topic
                     topic_slug = primary_topic.slug
                     # Make sure we have a topic collection too
@@ -80,14 +75,11 @@ class JanisBasePage(Page):
                         theme_slug = primary_topic_collection.theme.slug
                         topic_collection_slug = primary_topic_collection.slug
                         return os.environ["JANIS_URL"] + "/en/" + theme_slug + "/" + topic_collection_slug + "/" + topic_slug + "/" + page_slug
-            except Exception as e:
-                print("!janis url error!:", self.title, e)
-
-            # TODO: bring back departments now that we can have multiple
-
-        # We don't have a valid live url
-        # TODO: add something to make this clear to users
-        return "#"
+            else:
+                return "#"
+        except Exception as e:
+            print("!janis url error!:", self.title, e)
+            return "#"
 
     def janis_preview_url(self):
         revision = self.get_latest_revision()
@@ -122,7 +114,8 @@ class JanisBasePage(Page):
             ObjectList(cls.content_panels + [
                 FieldPanel('author_notes')
             ], heading='Content'),
-            ObjectList(Page.promote_panels + cls.promote_panels, heading='Search Info')
+            ObjectList(Page.promote_panels + cls.promote_panels,
+                       heading='Search Info')
         ])
 
         return edit_handler.bind_to_model(cls)
