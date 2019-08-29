@@ -66,7 +66,7 @@ class JanisBasePage(Page):
                     topic_collection_slug = primary_topic_collection.slug
                     return os.environ["JANIS_URL"] + "/en/" + theme_slug + "/" + topic_collection_slug + "/" + page_slug
             elif self.janis_url_page_type in ["services", "information", "guide"]:
-                if self.topics.exists():
+                if self.topics.first():
                     primary_topic = self.topics.first().topic
                     topic_slug = primary_topic.slug
                     # Make sure we have a topic collection too
