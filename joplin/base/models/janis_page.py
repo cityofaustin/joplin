@@ -54,7 +54,6 @@ class JanisBasePage(Page):
                 theme_slug = self.theme.slug
                 return os.environ["JANIS_URL"] + "/en/" + theme_slug + "/" + page_slug
             except Exception as e:
-                pdb.set_trace()
                 print("!janis url error!:", self.title, e)
 
         if self.janis_url_page_type == "topic":
@@ -66,7 +65,6 @@ class JanisBasePage(Page):
                     topic_collection_slug = primary_topic_collection.slug
                     return os.environ["JANIS_URL"] + "/en/" + theme_slug + "/" + topic_collection_slug + "/" + page_slug
             except Exception as e:
-                pdb.set_trace()
                 print("!janis url error!:", self.title, e)
 
         if self.janis_url_page_type == "services" or self.janis_url_page_type == "information" or janis_url_page_type == "guide":
@@ -83,8 +81,6 @@ class JanisBasePage(Page):
                         topic_collection_slug = primary_topic_collection.slug
                         return os.environ["JANIS_URL"] + "/en/" + theme_slug + "/" + topic_collection_slug + "/" + topic_slug + "/" + page_slug
             except Exception as e:
-                import pdb
-                pdb.set_trace()
                 print("!janis url error!:", self.title, e)
 
             # TODO: bring back departments now that we can have multiple
