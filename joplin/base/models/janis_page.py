@@ -49,23 +49,24 @@ class JanisBasePage(Page):
          It probably could use some refactoring.
         """
         page_slug = self.slug
+        content_type = self.content_type.name
 
         try:
-            if self.janis_url_page_type == "department":
+            if content_type == "department page":
 
                 return os.environ["JANIS_URL"] + "/en/" + page_slug
 
-            elif self.janis_url_page_type == "topiccollection":
+            elif content_type== "topic collection page":
                 theme_slug = self.theme.slug
                 return os.environ["JANIS_URL"] + "/en/" + theme_slug + "/" + page_slug
-            elif self.janis_url_page_type == "topic":
+            elif content_type== "topic page":
                 # If we have a topic collection
                 if self.topiccollections:
                     primary_topic_collection = self.topiccollections.first().topiccollection
                     theme_slug = primary_topic_collection.theme.slug
                     topic_collection_slug = primary_topic_collection.slug
                     return os.environ["JANIS_URL"] + "/en/" + theme_slug + "/" + topic_collection_slug + "/" + page_slug
-            elif self.janis_url_page_type in ["services", "information", "guide"]:
+            elif content_type in ["service page", "information page", "guide page"]:
                 if self.topics.first():
                     primary_topic = self.topics.first().topic
                     topic_slug = primary_topic.slug
