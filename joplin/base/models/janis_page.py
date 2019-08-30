@@ -44,55 +44,83 @@ class JanisBasePage(Page):
 
     def janis_url(self):
         """
-        This function parses various attributes of content types to construct the
-        expected url structure for janis
+        This function parses various attributes of related content types to construct the
+        expected url structure for janis.
 
-        It probably could use some refactoring.
+        For attributes with multiple relations, it ONLY takes the FIRST one.
         """
-        page_slug = self.slug
 
-        if self.janis_url_page_type == "department":
-            return os.environ["JANIS_URL"] + "/en/" + page_slug
+        try:
+            """
+             These use ternary operators with some appropriate conditionals
+             the idea is: return this value in these cases or tell use you got
+             nothing (see the privacy policy info page for example).
 
-        if self.janis_url_page_type == "topiccollection":
-            try:
-                theme_slug = self.theme.slug
-                return os.environ["JANIS_URL"] + "/en/" + theme_slug + "/" + page_slug
-            except Exception as e:
-                print("!janis url error!:", self.title, e)
+             'None' responses get filtered out and removed from the URL path.
 
-        if self.janis_url_page_type == "topic":
-            # If we have a topic collection
-            try:
-                if self.topiccollections and self.topiccollections.all():
-                    theme_slug = self.topiccollections.all()[
-                        0].topiccollection.theme.slug
-                    tc_slug = self.topiccollections.all()[
-                        0].topiccollection.slug
-                    return os.environ["JANIS_URL"] + "/en/" + theme_slug + "/" + tc_slug + "/" + page_slug
-            except Exception as e:
-                print("!janis url error!:", self.title, e)
+             TODO:
+             make this more abstract(potentially not by content type)
+             further check if the order of conditionals affects performance
+             Better utilization of querysets may be possible for better performance
+            """
+            page_slug = self.slug or None
+            has_no_theme = [
+                'service page',
+                'topic page',
+                'information page',
+                'department page'
+            ]
+            has_no_topic_collection = has_no_theme
 
-        if self.janis_url_page_type == "services" or self.janis_url_page_type == "information":
-            # If we have topics, use the first one
-            try:
-                if self.topics and self.topics.all():
-                    topic_slug = self.topics.all()[0].topic.slug
-                    # Make sure we have a topic collection too
-                    if self.topics.all()[0].topic.topiccollections.all():
-                        theme_slug = self.topics.all()[0].topic.topiccollections.all()[
-                            0].topiccollection.theme.slug
-                        tc_slug = self.topics.all()[0].topic.topiccollections.all()[
-                            0].topiccollection.slug
-                        return os.environ["JANIS_URL"] + "/en/" + theme_slug + "/" + tc_slug + "/" + topic_slug + "/" + page_slug
-            except Exception as e:
-                print("!janis url error!:", self.title, e)
+            has_no_topic = [
+                'topic page',
+                'topic collection page',
+                'department page'
+            ]
 
-            # TODO: bring back departments now that we can have multiple
+            theme_slug = (
+                self.theme.slug
+                if self.content_type.name not in has_no_theme
+                else None
+            )
+            # https://docs.djangoproject.com/en/2.2/ref/models/querysets/#first
+            topic_collection_slug = (
+                self.topiccollections.first().topiccollection.slug
+                if
+                (
+                    self.content_type.name not in has_no_topic_collection and
+                    # https://docs.djangoproject.com/en/2.2/ref/models/querysets/#exists
+                    self.topiccollections.exists()
+                )
+                else None
+            )
+            topic_slug = (
+                self.topics.first().topic.slug
+                if
+                (
+                    self.content_type.name not in has_no_topic and
+                    self.topics.exists()
+                )
+                else None
+            )
 
-        # We don't have a valid live url
-        # TODO: add something to make this clear to users
-        return "#"
+            # add hardcoded language path to base url
+            base_url = os.environ["JANIS_URL"] + '/en'
+            # collect all our path elements
+            paths_list = [
+                base_url,
+                theme_slug,
+                topic_collection_slug,
+                topic_slug,
+                page_slug]
+            # join them together, filtering out empty ones
+            janis_url = '/'.join(filter(None, (paths_list)))
+            return janis_url
+        except Exception as e:
+            # right now this is a catch-all,
+            print("!janis url error!:", self.title, e)
+            return "#"
+            pass
 
     def janis_preview_url(self):
         revision = self.get_latest_revision()

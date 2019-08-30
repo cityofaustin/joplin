@@ -27,6 +27,8 @@ urlpatterns = [
     url(r'^django-admin/', include('smuggler.urls')),
     url(r'^django-admin/', admin.site.urls),
     path('admin/docs/', include('django.contrib.admindocs.urls')),
+    # uncomment this path to expiriment with the default dashboard,
+    # which can be customized using wagtail hooks
     path('admin/', home),
     path('', login),
     url(r'admin/pages/(\d+)/publish/$', joplin_views.publish, name='publish'),
