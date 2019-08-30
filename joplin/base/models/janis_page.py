@@ -46,7 +46,8 @@ class JanisBasePage(Page):
         """
         This function parses various attributes of content types to construct the
         expected url structure for janis
-         It probably could use some refactoring.
+
+        For attributes with multiple relations, it ONLY takes the FIRST one. 
         """
 
         try:
