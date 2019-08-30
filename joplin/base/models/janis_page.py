@@ -44,20 +44,24 @@ class JanisBasePage(Page):
 
     def janis_url(self):
         """
-        This function parses various attributes of content types to construct the
-        expected url structure for janis
+        This function parses various attributes of related content types to construct the
+        expected url structure for janis.
 
         For attributes with multiple relations, it ONLY takes the FIRST one.
         """
 
         try:
             """
-             these use ternary operators with some appropriat conditionals
+             These use ternary operators with some appropriate conditionals
              the idea is: return this value in these cases or tell use you got
-             nothing (see the privacy policy info page for example)
+             nothing (see the privacy policy info page for example).
 
-             TODO: make this more abstract, check if the order of conditionals
-             affects performance
+             'None' responses get filtered out and removed from the URL path.
+
+             TODO:
+             make this more abstract(potentially not by content type)
+             further check if the order of conditionals affects performance
+             Better utilization of querysets may be possible for better performance
             """
             page_slug = self.slug or None
             has_no_theme = [
@@ -74,12 +78,20 @@ class JanisBasePage(Page):
                 'department page'
             ]
 
-            theme_slug = self.theme.slug if self.content_type.name not in has_no_theme else None
-            topic_collection_slug = self.topiccollections.first().topiccollection.slug if (
-                self.content_type.name not in has_no_topic_collection and self.topiccollections.exists()
+            theme_slug = self.theme.slug if
+            self.content_type.name not in has_no_theme
+            else None
+            # https://docs.djangoproject.com/en/2.2/ref/models/querysets/#first
+            topic_collection_slug = self.topiccollections.first().topiccollection.slug if
+            (
+                self.content_type.name not in has_no_topic_collection and
+                # https://docs.djangoproject.com/en/2.2/ref/models/querysets/#exists
+                self.topiccollections.exists()
             ) else None
             topic_slug = self.topics.first().topic.slug if (
-                self.content_type.name not in has_no_topic and self.topics.exists()
+                self.content_type.name not in has_no_topic and
+
+                self.topics.exists()
             ) else None
 
             # add hardcoded language path to base url
