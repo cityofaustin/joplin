@@ -8,11 +8,11 @@ from base.forms import TopicCollectionPageForm
 from .janis_page import JanisBasePage
 from .translated_image import TranslatedImage
 
+
 class TopicCollectionPage(JanisBasePage):
     janis_url_page_type = "topiccollection"
 
     description = models.TextField(blank=True)
-
 
     theme = models.ForeignKey(
         'base.Theme',

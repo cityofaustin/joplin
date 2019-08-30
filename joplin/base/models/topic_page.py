@@ -13,6 +13,7 @@ from base.forms import TopicPageForm
 from .janis_page import JanisBasePage
 from .translated_image import TranslatedImage
 
+
 class TopicPage(JanisBasePage):
     janis_url_page_type = "topic"
 
@@ -56,13 +57,11 @@ class TopicPage(JanisBasePage):
         InlinePanel('topiccollections', label='Topic Collections this page belongs to'),
     ]
 
+
 class TopicPageTopicCollection(ClusterableModel):
     page = ParentalKey(TopicPage, related_name='topiccollections')
-    topiccollection = models.ForeignKey('base.TopicCollectionPage',  verbose_name='Select a Topic Collection', related_name='+', on_delete=models.CASCADE)
+    topiccollection = models.ForeignKey('base.TopicCollectionPage', verbose_name='Select a Topic Collection', related_name='+', on_delete=models.CASCADE)
 
     panels = [
         PageChooserPanel('topiccollection'),
     ]
-
-    def __str__(self):
-        return self.topiccollection.text

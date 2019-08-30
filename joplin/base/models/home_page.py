@@ -4,6 +4,7 @@ from wagtail.core.models import Page
 
 from .translated_image import TranslatedImage
 
+
 class HomePage(Page):
     parent_page_types = []
     # subpage_types = ['base.ServicePage', 'base.ProcessPage', 'base.InformationPage', 'base.DepartmentPage']

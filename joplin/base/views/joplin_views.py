@@ -8,6 +8,7 @@ from django.urls import reverse
 from base.models import ServicePage, ProcessPage, InformationPage, TopicPage, TopicCollectionPage, DepartmentPage, Theme, OfficialDocumentPage, GuidePage
 import json
 
+
 def publish(request, page_id):
     page = get_object_or_404(Page, id=page_id).specific
 
@@ -34,6 +35,7 @@ def publish(request, page_id):
         'next': next_url,
     })
 
+
 def new_page_from_modal(request):
     user_perms = UserPagePermissionsProxy(request.user)
     if not user_perms.can_edit_pages():
@@ -58,7 +60,7 @@ def new_page_from_modal(request):
         if body['type'] == 'topic':
             page = TopicPage(**data)
         if body['type'] == 'topiccollection':
-            if body['theme'] != None:
+            if body['theme'] is not None:
                 data['theme'] = Theme.objects.get(id=body['theme'])
             page = TopicCollectionPage(**data)
         if body['type'] == 'department':
@@ -76,7 +78,7 @@ def new_page_from_modal(request):
 
         # Save our draft
         page.save_revision()
-        page.unpublish() # Not sure why it seems to go live by default
+        page.unpublish()  # Not sure why it seems to go live by default
 
         # Respond with the id of the new page
         response = HttpResponse(json.dumps({'id': page.id}), content_type="application/json")

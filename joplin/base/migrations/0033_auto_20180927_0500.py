@@ -4,6 +4,7 @@ from django.db import migrations
 from pprint import pprint
 from wagtail.core.blocks.stream_block import StreamValue
 
+
 def better_steps(apps, schema_editor):
     '''
     We can't import the models directly as they may be a newer
@@ -13,17 +14,17 @@ def better_steps(apps, schema_editor):
     ServicePageStep = apps.get_model('base', 'ServicePageStep')
 
     for page in ServicePage.objects.all():
-      pageSteps = []
-      for step in ServicePageStep.objects.all():
-        if step.page_id == page.id:
-          streamStep = {
-            'type': 'basic_step',
-            'value': step.step_description
-          }
-          pageSteps.append(streamStep)
-      stream_block = page.steps.stream_block
-      page.steps = StreamValue(stream_block, pageSteps, is_lazy=True)
-      page.save()
+        pageSteps = []
+        for step in ServicePageStep.objects.all():
+            if step.page_id == page.id:
+                streamStep = {
+                    'type': 'basic_step',
+                    'value': step.step_description
+                }
+                pageSteps.append(streamStep)
+        stream_block = page.steps.stream_block
+        page.steps = StreamValue(stream_block, pageSteps, is_lazy=True)
+        page.save()
 
 
 class Migration(migrations.Migration):
