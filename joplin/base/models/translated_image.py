@@ -2,6 +2,7 @@ from django.db import models
 
 from wagtail.images.models import AbstractImage, Image, AbstractRendition
 
+
 class TranslatedImage(AbstractImage):
     admin_form_fields = Image.admin_form_fields
 

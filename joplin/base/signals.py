@@ -32,6 +32,7 @@ def generate_responsive_images(sender, **kwargs):
         logger.debug(f'Generating image rendition for {width}px')
         image.get_rendition(f'width-{width}')
 
+
 def create_build_aws(instance, publish=False, request=None):
     """
         Triggers a build in Amazon Elastic Container Service, it requires:
@@ -59,7 +60,7 @@ def create_build_aws(instance, publish=False, request=None):
     try:
         slack_message = "'%s' was %s by user: %s " % (instance.title, publish_action, request.user.email)
         print(slack_message)
-    except:
+    except BaseException:
         slack_message = ""
 
     logger.debug("create_build_aws() Message: " + slack_message)
@@ -68,15 +69,15 @@ def create_build_aws(instance, publish=False, request=None):
 
         # First we initialize our AWS handler (client)
         client = boto3.client(
-             'ecs',
-             aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
-             aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY
+            'ecs',
+            aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+            aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY
         )
 
         # Now we request to run a container (task) on AWS ECS on Fargate
         response = client.run_task(
             cluster='janis-cluster',
-            taskDefinition=settings.AWS_ECS_TASK_DEFINITION, # ie. 'janis-worker:10'
+            taskDefinition=settings.AWS_ECS_TASK_DEFINITION,  # ie. 'janis-worker:10'
             launchType='FARGATE',
             count=1,
             platformVersion='LATEST',
@@ -94,15 +95,15 @@ def create_build_aws(instance, publish=False, request=None):
                         'environment': [
                             {
                                 'name': 'DEPLOYMENT_MODE',
-                                'value': settings.DEPLOYMENT_MODE # 'PRODUCTION' OR 'STAGING'
+                                'value': settings.DEPLOYMENT_MODE  # 'PRODUCTION' OR 'STAGING'
                             },
                             {
                                 'name': 'AWS_BUCKET_NAME',
-                                'value': settings.AWS_ECS_DEPLOYMENT_BUCKET # ie. 'janis-lab'
+                                'value': settings.AWS_ECS_DEPLOYMENT_BUCKET  # ie. 'janis-lab'
                             },
                             {
                                 'name': 'AWS_CF_DISTRO',
-                                'value': settings.AWS_CLOUDFRONT_DISTRIBUTION #'E455RV7LE5UVG'
+                                'value': settings.AWS_CLOUDFRONT_DISTRIBUTION  # 'E455RV7LE5UVG'
                             },
                             {
                                 'name': 'CMS_API',
@@ -189,12 +190,12 @@ def get_http_request():
 @receiver(page_published)
 def page_published_signal(sender, **kwargs):
     logger.debug(f'page_published {sender}')
-    #create_build_if_configured()
+    # create_build_if_configured()
     create_build_aws(kwargs['instance'], publish=True, request=get_http_request())
 
 
 @receiver(page_unpublished)
 def page_unpublished_signal(sender, **kwargs):
     logger.debug(f'page_unpublished {sender}')
-    #create_build_if_configured()
+    # create_build_if_configured()
     create_build_aws(kwargs['instance'], publish=False, request=get_http_request())

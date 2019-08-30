@@ -18,6 +18,8 @@ This page can be assigned to multiple topics or departments.
 The Documents will be displayed in date descending order (newest first by the "date" field).
 Eventually the OfficialDocumentPageOfficialDocument should be replaced by a model using Wagtail Documents
 """
+
+
 class OfficialDocumentPage(JanisBasePage):
     janis_url_page_type = "official_document"
     base_form_class = OfficialDocumentPageForm
@@ -35,10 +37,13 @@ class OfficialDocumentPage(JanisBasePage):
         InlinePanel('official_documents', label="Documents", heading="Entries will be listed by document date (newest first)."),
     ]
 
+
 """
 An OfficialDocumentPageOfficialDocument is an Official Document belonging to a single OfficialDocumentPage.
 One OfficialDocumentPage can have many OfficialDocumentPageOfficialDocuments.
 """
+
+
 class OfficialDocumentPageOfficialDocument(Orderable):
     page = ParentalKey(OfficialDocumentPage, related_name='official_documents')
     date = models.DateField(verbose_name="Document date", null=True)
@@ -75,7 +80,7 @@ class OfficialDocumentPageRelatedDepartments(ClusterableModel):
 
 class OfficialDocumentPageTopic(ClusterableModel):
     page = ParentalKey(OfficialDocumentPage, related_name='topics')
-    topic = models.ForeignKey('base.TopicPage',  verbose_name='Select a Topic', related_name='+', on_delete=models.CASCADE)
+    topic = models.ForeignKey('base.TopicPage', verbose_name='Select a Topic', related_name='+', on_delete=models.CASCADE)
     toplink = models.BooleanField(default=False, verbose_name='Make this list a top link for this topic')
 
     panels = [

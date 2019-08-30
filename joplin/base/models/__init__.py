@@ -48,7 +48,7 @@ SHORT_DESCRIPTION_LENGTH = 300
 class TopicCollectionPageTopicCollection(ClusterableModel):
     page = ParentalKey(TopicCollectionPage, related_name='topiccollections')
     topiccollection = models.ForeignKey(
-        'base.TopicCollectionPage',  verbose_name='Select a Topic Collection', related_name='+', on_delete=models.CASCADE)
+        'base.TopicCollectionPage', verbose_name='Select a Topic Collection', related_name='+', on_delete=models.CASCADE)
 
     panels = [
         PageChooserPanel('topiccollection'),
@@ -137,7 +137,7 @@ class ProcessPageContact(ClusterableModel):
 class ProcessPageTopic(ClusterableModel):
     page = ParentalKey(ProcessPage, related_name='topics')
     topic = models.ForeignKey(
-        'base.TopicPage',  verbose_name='Select a Topic', related_name='+', on_delete=models.CASCADE)
+        'base.TopicPage', verbose_name='Select a Topic', related_name='+', on_delete=models.CASCADE)
 
     panels = [
         PageChooserPanel('topic'),

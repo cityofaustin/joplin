@@ -63,6 +63,7 @@ def configure_main_menu(request, menu_items):
             'icon ', 'material-icons ', 1)
 
 
+
 @hooks.register('register_admin_menu_item')
 def register_page_list_menu_item():
     home = HomePage.objects.first()
