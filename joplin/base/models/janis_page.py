@@ -78,21 +78,31 @@ class JanisBasePage(Page):
                 'department page'
             ]
 
-            theme_slug = self.theme.slug if
-            self.content_type.name not in has_no_theme
-            else None
+            theme_slug = (
+                self.theme.slug
+                if self.content_type.name not in has_no_theme
+                else None
+            )
             # https://docs.djangoproject.com/en/2.2/ref/models/querysets/#first
-            topic_collection_slug = self.topiccollections.first().topiccollection.slug if
-            (
-                self.content_type.name not in has_no_topic_collection and
-                # https://docs.djangoproject.com/en/2.2/ref/models/querysets/#exists
-                self.topiccollections.exists()
-            ) else None
-            topic_slug = self.topics.first().topic.slug if (
-                self.content_type.name not in has_no_topic and
-
-                self.topics.exists()
-            ) else None
+            topic_collection_slug = (
+                self.topiccollections.first().topiccollection.slug
+                if
+                (
+                    self.content_type.name not in has_no_topic_collection and
+                    # https://docs.djangoproject.com/en/2.2/ref/models/querysets/#exists
+                    self.topiccollections.exists()
+                )
+                else None
+            )
+            topic_slug = (
+                self.topics.first().topic.slug
+                if
+                (
+                    self.content_type.name not in has_no_topic and
+                    self.topics.exists()
+                )
+                else None
+            )
 
             # add hardcoded language path to base url
             base_url = os.environ["JANIS_URL"] + '/en'
