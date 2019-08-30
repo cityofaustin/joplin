@@ -51,19 +51,48 @@ class JanisBasePage(Page):
 
         try:
             page_slug = self.slug or None
+            """
+             these use ternary operators with some appropriat conditionals
+             the idea is: return this value in these cases or tell use you got
+             nothing (see the privacy policy info page for example)
+            """
+
             theme_slug = self.theme.slug if self.content_type.name not in [
-                'service page', 'topic page', 'information page', 'department page'] else None
-            topic_collection_slug = self.topiccollections.first().topiccollection.slug if (self.content_type.name not in [
-                'service page', 'topic page', 'information page', 'department page'] and self.topiccollections.exists()) else None
-            topic_slug = self.topics.first().topic.slug if (self.content_type.name not in [
-                'topic page', 'topic collection page', 'department page'] and self.topics.exists()) else None
+                'service page',
+                'topic page',
+                'information page',
+                'department page'] else None
+            topic_collection_slug = self.topiccollections.first().topiccollection.slug if (
+                self.content_type.name not in [
+                    'service page',
+                    'topic page',
+                    'information page',
+                    'department page'
+                ] and self.topiccollections.exists()
+            ) else None
+            topic_slug = self.topics.first().topic.slug if (
+                self.content_type.name not in [
+                    'topic page',
+                    'topic collection page',
+                    'department page'
+                ] and self.topics.exists()
+            ) else None
+
+            # add hardcoded language path to base url
             base_url = os.environ["JANIS_URL"] + '/en'
-            janis_url = '/'.join(filter(None, ([base_url, theme_slug, topic_collection_slug, topic_slug, page_slug])))
+            # collect all our path elements
+            paths_list = [
+                base_url,
+                theme_slug,
+                topic_collection_slug,
+                topic_slug,
+                page_slug]
+            # join them together, filtering out empty ones
+            janis_url = '/'.join(filter(None, (paths_list)))
             return janis_url
         except Exception as e:
             print("!janis url error!:", self.title, e)
             return "#"
-
 
     def janis_preview_url(self):
         revision = self.get_latest_revision()
