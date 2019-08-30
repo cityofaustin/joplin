@@ -15,6 +15,7 @@ from base.forms import DepartmentPageForm
 from .janis_page import JanisBasePage
 from .translated_image import TranslatedImage
 from .contact import Contact
+from .widgets import countMe, countMeTextArea
 
 from .constants import DEFAULT_MAX_LENGTH, WYSIWYG_GENERAL
 
@@ -72,8 +73,8 @@ class DepartmentPage(JanisBasePage):
     base_form_class = DepartmentPageForm
 
     content_panels = [
-        FieldPanel('title_en'),
-        FieldPanel('title_es'),
+        FieldPanel('title_en', widget=countMe),
+        FieldPanel('title_es', widget=countMe),
         FieldPanel('title_ar'),
         FieldPanel('title_vi'),
         FieldPanel('what_we_do'),

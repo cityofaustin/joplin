@@ -12,5 +12,8 @@ AUTHOR_LIMITS = {
 
 countConfig = {'data-count': 'characters',
                'data-max-count': 58, 'data-count-direction': 'down'}
+
+countConfigTextArea = {'data-count': 'characters',
+                       'data-max-count': 254, 'data-count-direction': 'down'}
 countMe = widgets.CountableTextInputWidget(attrs=countConfig)
-countMeTextArea = widgets.CountableWidget(attrs=countConfig)
+countMeTextArea = widgets.CountableWidget(attrs=countConfigTextArea)

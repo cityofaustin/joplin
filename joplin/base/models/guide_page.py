@@ -19,6 +19,7 @@ from .contact import Contact
 from .translated_image import TranslatedImage
 
 from .constants import WYSIWYG_GENERAL
+from .widgets import countMe, countMeTextArea
 
 
 class GuidePage(JanisBasePage):
@@ -44,15 +45,15 @@ class GuidePage(JanisBasePage):
     base_form_class = GuidePageForm
 
     content_panels = [
-        FieldPanel('title_en'),
-        FieldPanel('title_es'),
+        FieldPanel('title_en', widget=countMe),
+        FieldPanel('title_es', widget=countMe),
         FieldPanel('title_ar'),
         FieldPanel('title_vi'),
-        FieldPanel('description'),
+        FieldPanel('description', widget=countMeTextArea),
         InlinePanel('topics', label='Topics'),
         InlinePanel('related_departments', label='Related Departments'),
         ImageChooserPanel('image'),
-        StreamFieldPanel('sections'),
+        StreamFieldPanel('sections', widget=countMe),
         InlinePanel('contacts', label='Contacts'),
     ]
 

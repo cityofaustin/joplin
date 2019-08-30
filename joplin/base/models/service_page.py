@@ -15,7 +15,7 @@ from .janis_page import JanisBasePage
 from .contact import Contact
 
 from .constants import WYSIWYG_GENERAL, DEFAULT_MAX_LENGTH, SHORT_DESCRIPTION_LENGTH
-from .widgets import countMe
+from .widgets import countMe, countMeTextArea
 
 WYSIWYG_SERVICE_STEP = ['ul', 'ol', 'link', 'code', 'rich-text-button-link']
 
@@ -82,10 +82,10 @@ class ServicePage(JanisBasePage):
     content_panels = [
 
         FieldPanel('title_en', widget=countMe),
-        FieldPanel('title_es'),
+        FieldPanel('title_es', widget=countMe),
         FieldPanel('title_ar'),
         FieldPanel('title_vi'),
-        FieldPanel('short_description'),
+        FieldPanel('short_description', widget=countMeTextArea),
         InlinePanel('topics', label='Topics'),
         InlinePanel('related_departments', label='Related Departments'),
         MultiFieldPanel(

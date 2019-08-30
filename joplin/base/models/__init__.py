@@ -37,6 +37,7 @@ from .information_page import InformationPage, InformationPageRelatedDepartments
 from .department_page import DepartmentPage, DepartmentPageDirector, DepartmentPageContact
 from .official_documents_page import OfficialDocumentPage, OfficialDocumentPageOfficialDocument, OfficialDocumentPageRelatedDepartments, OfficialDocumentPageTopic
 from .guide_page import GuidePage, GuidePageTopic, GuidePageRelatedDepartments, GuidePageContact
+from .widgets import countMe, countMeTextArea
 
 WYSIWYG_GENERAL = ['h1', 'h2', 'h3', 'h4', 'bold', 'link', 'ul', 'ol', 'code']
 DEFAULT_MAX_LENGTH = 255
@@ -88,7 +89,7 @@ class ProcessPage(JanisBasePage):
     content_panels = [
         InlinePanel('topics', label='Topics'),
         FieldPanel('department'),
-        FieldPanel('description'),
+        FieldPanel('description', widget=countMeTextArea),
         ImageChooserPanel('image'),
         InlinePanel('contacts', label='Contacts'),
         InlinePanel('process_steps', label="Process steps"),
@@ -113,7 +114,7 @@ class ProcessPageStep(Orderable):
         FieldPanel('title'),
         FieldPanel('short_title'),
         FieldPanel('link_title'),
-        FieldPanel('description'),
+        FieldPanel('description', widget=countMeTextArea),
         ImageChooserPanel('image'),
         FieldPanel('overview_steps'),
         FieldPanel('detailed_content'),
