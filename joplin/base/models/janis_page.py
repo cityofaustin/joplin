@@ -47,7 +47,7 @@ class JanisBasePage(Page):
         This function parses various attributes of content types to construct the
         expected url structure for janis
 
-        For attributes with multiple relations, it ONLY takes the FIRST one. 
+        For attributes with multiple relations, it ONLY takes the FIRST one.
         """
 
         try:
@@ -98,6 +98,7 @@ class JanisBasePage(Page):
             # right now this is a catch-all,
             print("!janis url error!:", self.title, e)
             return "#"
+            pass
 
     def janis_preview_url(self):
         revision = self.get_latest_revision()
