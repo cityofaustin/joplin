@@ -48,39 +48,56 @@ class JanisBasePage(Page):
         expected url structure for janis
          It probably could use some refactoring.
         """
-        page_slug = self.slug
-        content_type = self.content_type.name
-        base_url = os.environ["JANIS_URL"] + "/en/"
+
         try:
-            if content_type == "department page":
-
-                return f"{base_url}/{page_slug}"
-
-            elif content_type == "topic collection page":
-                theme_slug = self.theme.slug
-                return f"{base_url}/{theme_slug}/{page_slug}/"
-            elif content_type == "topic page":
-                # If we have a topic collection
-                if self.topiccollections:
-                    primary_topic_collection = self.topiccollections.first().topiccollection
-                    theme_slug = primary_topic_collection.theme.slug
-                    topic_collection_slug = primary_topic_collection.slug
-                    return f"{base_url}/{theme_slug}/{topic_collection_slug}/{page_slug}"
-            elif content_type in ["service page", "information page", "guide page"]:
-                if self.topics.first():
-                    primary_topic = self.topics.first().topic
-                    topic_slug = primary_topic.slug
-                    # Make sure we have a topic collection too
-                    if primary_topic.topiccollections:
-                        primary_topic_collection = primary_topic.topiccollections.first().topiccollection
-                        theme_slug = primary_topic_collection.theme.slug
-                        topic_collection_slug = primary_topic_collection.slug
-                        return f"{base_url}/{theme_slug}/{topic_collection_slug}/{topic_slug}/{page_slug}"
-            else:
-                return "#"
+            page_slug = self.slug or None
+            theme_slug = self.theme.slug if self.content_type.name not in [
+                'service page', 'topic page', 'information page', 'department page'] else None
+            topic_collection_slug = self.topiccollections.first().topiccollection.slug if (self.content_type.name not in [
+                'service page', 'topic page', 'information page', 'department page'] and self.topiccollections.exists()) else None
+            topic_slug = self.topics.first().topic.slug if (self.content_type.name not in [
+                'topic page', 'topic collection page', 'department page'] and self.topics.exists()) else None
+            base_url = os.environ["JANIS_URL"] + '/en'
+            janis_url = '/'.join(filter(None, ([base_url, theme_slug, topic_collection_slug, topic_slug, page_slug])))
+            return janis_url
         except Exception as e:
             print("!janis url error!:", self.title, e)
+            import pdb; pdb.set_trace()
             return "#"
+
+        # page_slug = self.slug
+        # content_type = self.content_type.name
+        # base_url = os.environ["JANIS_URL"] + "/en/"
+        # try:
+        #     if content_type == "department page":
+        #
+        #         return f"{base_url}/{page_slug}"
+        #
+        #     elif content_type == "topic collection page":
+        #         theme_slug = self.theme.slug
+        #         return f"{base_url}/{theme_slug}/{page_slug}/"
+        #     elif content_type == "topic page":
+        #         # If we have a topic collection
+        #         if self.topiccollections:
+        #             primary_topic_collection = self.topiccollections.first().topiccollection
+        #             theme_slug = primary_topic_collection.theme.slug
+        #             topic_collection_slug = primary_topic_collection.slug
+        #             return f"{base_url}/{theme_slug}/{topic_collection_slug}/{page_slug}"
+        #     elif content_type in ["service page", "information page", "guide page"]:
+        #         if self.topics.first():
+        #             primary_topic = self.topics.first().topic
+        #             topic_slug = primary_topic.slug
+        #             # Make sure we have a topic collection too
+        #             if primary_topic.topiccollections:
+        #                 primary_topic_collection = primary_topic.topiccollections.first().topiccollection
+        #                 theme_slug = primary_topic_collection.theme.slug
+        #                 topic_collection_slug = primary_topic_collection.slug
+        #                 return f"{base_url}/{theme_slug}/{topic_collection_slug}/{topic_slug}/{page_slug}"
+        #     else:
+        #         return "#"
+        # except Exception as e:
+        #     print("!janis url error!:", self.title, e)
+        #     return "#"
 
     def janis_preview_url(self):
         revision = self.get_latest_revision()
