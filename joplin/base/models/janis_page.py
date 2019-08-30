@@ -50,32 +50,35 @@ class JanisBasePage(Page):
         """
 
         try:
-            page_slug = self.slug or None
             """
              these use ternary operators with some appropriat conditionals
              the idea is: return this value in these cases or tell use you got
              nothing (see the privacy policy info page for example)
-            """
 
-            theme_slug = self.theme.slug if self.content_type.name not in [
+             TODO: make this more abstract, check if the order of conditionals
+             affects performance
+            """
+            page_slug = self.slug or None
+            has_no_theme = [
                 'service page',
                 'topic page',
                 'information page',
-                'department page'] else None
+                'department page'
+            ]
+            has_no_topic_collection = has_no_theme
+
+            has_no_topic = [
+                'topic page',
+                'topic collection page',
+                'department page'
+            ]
+
+            theme_slug = self.theme.slug if self.content_type.name not in has_no_theme else None
             topic_collection_slug = self.topiccollections.first().topiccollection.slug if (
-                self.content_type.name not in [
-                    'service page',
-                    'topic page',
-                    'information page',
-                    'department page'
-                ] and self.topiccollections.exists()
+                self.content_type.name not in has_no_topic_collection and self.topiccollections.exists()
             ) else None
             topic_slug = self.topics.first().topic.slug if (
-                self.content_type.name not in [
-                    'topic page',
-                    'topic collection page',
-                    'department page'
-                ] and self.topics.exists()
+                self.content_type.name not in has_no_topic and self.topics.exists()
             ) else None
 
             # add hardcoded language path to base url
@@ -91,6 +94,7 @@ class JanisBasePage(Page):
             janis_url = '/'.join(filter(None, (paths_list)))
             return janis_url
         except Exception as e:
+            # right now this is a catch-all,
             print("!janis url error!:", self.title, e)
             return "#"
 
