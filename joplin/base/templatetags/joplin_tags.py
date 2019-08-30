@@ -9,6 +9,7 @@ import itertools
 
 register = template.Library()
 
+
 @register.simple_tag
 def get_revision_preview_url(*args, **kwargs):
     revision = kwargs['revision']
@@ -18,21 +19,24 @@ def get_revision_preview_url(*args, **kwargs):
     # TODO: Add other languages
     return os.environ["JANIS_URL"] + "/en/preview/" + url_page_type + "/" + global_id
 
+
 STYLEGUIDE_PAGES = {
-  'service page': '/pick-the-perfect-content-type/service-page',
-  'process page': '/pick-the-perfect-content-type/process-page',
-  'information page': '/pick-the-perfect-content-type/information-page',
-  'department page': 'pick-the-perfect-content-type/department-page',
-  'topic page': '',
-  'topic collection page': '',
-  'official document page': '',
-  'guide page': ''
+    'service page': '/pick-the-perfect-content-type/service-page',
+    'process page': '/pick-the-perfect-content-type/process-page',
+    'information page': '/pick-the-perfect-content-type/information-page',
+    'department page': 'pick-the-perfect-content-type/department-page',
+    'topic page': '',
+    'topic collection page': '',
+    'official document page': '',
+    'guide page': ''
 }
+
 
 @register.simple_tag
 def get_style_guide_url(*args, **kwargs):
-  content_type = kwargs['content_type'].name
-  return os.environ['STYLEGUIDE_URL'] + STYLEGUIDE_PAGES[content_type]
+    content_type = kwargs['content_type'].name
+    return os.environ['STYLEGUIDE_URL'] + STYLEGUIDE_PAGES[content_type]
+
 
 @register.inclusion_tag('wagtailadmin/themes_topics_tree.html', takes_context=True)
 def themes_topics_tree(context):
@@ -49,6 +53,7 @@ def themes_topics_tree(context):
     return {
         'themes': json.dumps(themes)
     }
+
 
 @register.inclusion_tag('wagtailadmin/departments_list.html', takes_context=True)
 def departments_list(context):

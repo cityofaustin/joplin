@@ -18,7 +18,6 @@ import wagtail.admin.rich_text.editors.draftail.features as draftail_features
 from wagtail.admin.rich_text.converters.html_to_contentstate import BlockElementHandler
 
 
-
 # Following this: https://docs.python.org/3/library/html.parser.html#examples
 class CheckForDataInHTMLParser(HTMLParser):
     has_data = False
@@ -48,35 +47,40 @@ def configure_main_menu(request, menu_items):
     Users: "account_circle"
     """
     menu_items[:] = [item for item in menu_items if item.name not in
-    # here were excluding some default generated menu items per UX
-        [
-        'explorer',
-        'documents',
-        'settings',
-        'snippets'
-        ]
-    ]
+                     # here were excluding some default generated menu items per UX
+                     [
+                         'explorer',
+                         'documents',
+                         'settings',
+                         'snippets'
+                     ]
+                     ]
 
     # replace wagtail icon with material-icons class to use that font
     for item in menu_items:
-            item.classnames = item.classnames.replace('icon ', 'material-icons ', 1)
+        item.classnames = item.classnames.replace('icon ', 'material-icons ', 1)
+
 
 @hooks.register('register_admin_menu_item')
 def register_page_list_menu_item():
     home = HomePage.objects.first()
     return MenuItem('Pages', reverse('wagtailadmin_explore', args=[home.pk]), classnames='icon icon-home', order=10)
 
+
 @hooks.register('register_admin_menu_item')
 def register_map_menu_item():
     return MenuItem('Maps', "/admin/snippets/base/map/", classnames='material-icons icon-maps', order=20)
+
 
 @hooks.register('register_admin_menu_item')
 def register_locations_menu_item():
     return MenuItem('Locations', "/admin/snippets/base/location/", classnames='material-icons icon-locations', order=30)
 
+
 @hooks.register('register_admin_menu_item')
 def register_contacts_menu_item():
     return MenuItem('Contacts', "/admin/snippets/base/contact/", classnames='material-icons icon-contacts', order=40)
+
 
 @hooks.register('register_admin_menu_item')
 def register_users_menu_item():
@@ -141,7 +145,7 @@ def joplin_page_listing_buttons(page, page_perms, is_parent=False):
             yield Button(
                 _('📝'),
                 'javascript:null;',
-                attrs={'title': _("Notes for authors entered"), 'class':'has-author-notes'},
+                attrs={'title': _("Notes for authors entered"), 'class': 'has-author-notes'},
                 priority=70
             )
 
@@ -199,7 +203,6 @@ def joplin_page_listing_more_buttons(page, page_perms, is_parent=False):
             reverse('wagtailadmin_pages:delete', args=[page.id]),
             attrs={'title': _("Delete page '{title}'").format(title=page.get_admin_display_title())},
         )
-
 
 
 @hooks.register('register_rich_text_features')

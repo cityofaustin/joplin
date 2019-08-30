@@ -5,6 +5,7 @@ from modelcluster.models import ClusterableModel
 
 from .constants import DEFAULT_MAX_LENGTH
 
+
 @register_snippet
 class Theme(ClusterableModel):
     slug = models.SlugField()
