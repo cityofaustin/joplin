@@ -16,9 +16,12 @@ services:
       LOAD_DATA: $LOAD_DATA
       HEROKU_KEY: $HEROKU_KEY
       DEBUG: 1
+      DEBUG_TOOLBAR: $DEBUG_TOOLBAR
       JANIS_URL: $JANIS_URL
       STYLEGUIDE_URL: https://cityofaustin.github.io/digital-services-style-guide
       DATABASE_URL: $DATABASE_URL
     depends_on:
       - "db"
+    stdin_open: true
+    tty: true
   # "assets" service is used in docker-compose.local_override.yml
