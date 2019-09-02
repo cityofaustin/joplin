@@ -17,8 +17,6 @@ from .translated_image import TranslatedImage
 class TopicPage(JanisBasePage):
     janis_url_page_type = "topic"
 
-    description = models.TextField(blank=True)
-
     image = models.ForeignKey(TranslatedImage, null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
 
     external_services = StreamField(
@@ -46,12 +44,7 @@ class TopicPage(JanisBasePage):
 
     base_form_class = TopicPageForm
 
-    content_panels = [
-        FieldPanel('title_en'),
-        FieldPanel('title_es'),
-        FieldPanel('title_ar'),
-        FieldPanel('title_vi'),
-        FieldPanel('description'),
+    content_panels = JanisBasePage.content_panels + [
         ImageChooserPanel('image'),
         StreamFieldPanel('external_services'),
         InlinePanel('topiccollections', label='Topic Collections this page belongs to'),

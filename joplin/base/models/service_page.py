@@ -14,6 +14,7 @@ from base.forms import ServicePageForm
 from .janis_page import JanisBasePage
 from .contact import Contact
 
+
 from .constants import WYSIWYG_GENERAL, SHORT_DESCRIPTION_LENGTH
 WYSIWYG_SERVICE_STEP = ['ul', 'ol', 'link', 'code', 'rich-text-button-link']
 
@@ -78,10 +79,6 @@ class ServicePage(JanisBasePage):
     )
 
     content_panels = [
-        FieldPanel('title_en'),
-        FieldPanel('title_es'),
-        FieldPanel('title_ar'),
-        FieldPanel('title_vi'),
         FieldPanel('short_description'),
         InlinePanel('topics', label='Topics'),
         InlinePanel('related_departments', label='Related Departments'),

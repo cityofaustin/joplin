@@ -43,12 +43,7 @@ class GuidePage(JanisBasePage):
 
     base_form_class = GuidePageForm
 
-    content_panels = [
-        FieldPanel('title_en'),
-        FieldPanel('title_es'),
-        FieldPanel('title_ar'),
-        FieldPanel('title_vi'),
-        FieldPanel('description'),
+    content_panels = JanisBasePage.content_panels + [
         InlinePanel('topics', label='Topics'),
         InlinePanel('related_departments', label='Related Departments'),
         ImageChooserPanel('image'),

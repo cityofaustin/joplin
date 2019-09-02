@@ -85,7 +85,7 @@ class ProcessPage(JanisBasePage):
 
     base_form_class = custom_forms.ProcessPageForm
 
-    content_panels = [
+    content_panels = JanisBasePage.content_panels + [
         InlinePanel('topics', label='Topics'),
         FieldPanel('department'),
         FieldPanel('description'),

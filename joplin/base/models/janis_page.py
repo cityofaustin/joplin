@@ -8,9 +8,42 @@ from wagtail.search import index
 from wagtail.utils.decorators import cached_classmethod
 
 from wagtail.admin.edit_handlers import FieldPanel, ObjectList, TabbedInterface
+from wagtail.admin.edit_handlers import FieldPanel, HelpPanel, InlinePanel, MultiFieldPanel, PageChooserPanel, StreamFieldPanel
 
 from wagtail.core.models import Page
 from wagtail.core.fields import RichTextField
+
+"""
+common fields shared by all pages
+title
+
+Homepage (index, list of themes & departments)
+JanisBasePage:
+    Theme (index, pages by theme) <--currently a snippet
+        TopicCollection (index page, list of topics)
+            TopicPage (list of pages by topic)
+                related topic collections
+                external services
+                Shared between all ResidentPages:
+                    Title
+                    RelatedTopics
+                    RelatedTopicsDepartment(s)
+                    Top link
+                    Author Notes
+                    Contact(s) (except Docs page?)
+                ServicePage
+                InformationPage
+                GuidePage
+                DocumentPage
+    Department (info about department, index of related services)
+        ServicePage
+        InformationPage
+        GuidePage
+        DocumentPage
+
+
+
+"""
 
 
 class JanisBasePage(Page):
@@ -23,7 +56,6 @@ class JanisBasePage(Page):
     setup work smoothly
     """
 
-    parent_page_types = ['base.HomePage']
     subpage_types = []
     search_fields = Page.search_fields + [
         index.RelatedFields('owner', [
@@ -34,6 +66,7 @@ class JanisBasePage(Page):
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    description = models.TextField(blank=True)
 
     author_notes = RichTextField(
         # max_length=DEFAULT_MAX_LENGTH,
@@ -146,8 +179,20 @@ class JanisBasePage(Page):
             "global_id": global_id
         }
 
+    content_panels = [
+        FieldPanel('title_en'),
+        FieldPanel('title_es'),
+        FieldPanel('title_ar'),
+        FieldPanel('title_vi'),
+        FieldPanel('description')
+    ]
+
     @cached_classmethod
     def get_edit_handler(cls):
+        """
+        this appears to be for setting up previews via the api,
+        but could/should probably be revisited
+        """
         if hasattr(cls, 'edit_handler'):
             return cls.edit_handler.bind_to_model(cls)
 

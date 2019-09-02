@@ -26,11 +26,7 @@ class OfficialDocumentPage(JanisBasePage):
 
     description = models.TextField(blank=True)
 
-    content_panels = [
-        FieldPanel('title_en'),
-        FieldPanel('title_es'),
-        FieldPanel('title_ar'),
-        FieldPanel('title_vi'),
+    content_panels = JanisBasePage.content_panels + [
         FieldPanel('description'),
         InlinePanel('topics', label='Topics'),
         InlinePanel('related_departments', label='Related Departments'),

@@ -71,11 +71,7 @@ class DepartmentPage(JanisBasePage):
 
     base_form_class = DepartmentPageForm
 
-    content_panels = [
-        FieldPanel('title_en'),
-        FieldPanel('title_es'),
-        FieldPanel('title_ar'),
-        FieldPanel('title_vi'),
+    content_panels = JanisBasePage.content_panels + [
         FieldPanel('what_we_do'),
         ImageChooserPanel('image'),
         FieldPanel('mission'),

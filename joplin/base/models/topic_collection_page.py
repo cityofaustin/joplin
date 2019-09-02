@@ -12,8 +12,6 @@ from .translated_image import TranslatedImage
 class TopicCollectionPage(JanisBasePage):
     janis_url_page_type = "topiccollection"
 
-    description = models.TextField(blank=True)
-
     theme = models.ForeignKey(
         'base.Theme',
         on_delete=models.PROTECT,
@@ -25,12 +23,7 @@ class TopicCollectionPage(JanisBasePage):
 
     base_form_class = TopicCollectionPageForm
 
-    content_panels = [
-        FieldPanel('title_en'),
-        FieldPanel('title_es'),
-        FieldPanel('title_ar'),
-        FieldPanel('title_vi'),
-        FieldPanel('description'),
+    content_panels = JanisBasePage.content_panels + [
         FieldPanel('theme'),
         ImageChooserPanel('image'),
         InlinePanel('topiccollections', label='Topic Collections this page belongs to'),

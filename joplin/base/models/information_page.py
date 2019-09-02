@@ -42,14 +42,9 @@ class InformationPage(JanisBasePage):
 
     base_form_class = InformationPageForm
 
-    content_panels = [
-        FieldPanel('title_en'),
-        FieldPanel('title_es'),
-        FieldPanel('title_ar'),
-        FieldPanel('title_vi'),
+    content_panels = JanisBasePage.content_panels + [
         InlinePanel('topics', label='Topics'),
         InlinePanel('related_departments', label='Related Departments'),
-        FieldPanel('description'),
         StreamFieldPanel('options'),
         FieldPanel('additional_content'),
         InlinePanel('contacts', label='Contacts'),
