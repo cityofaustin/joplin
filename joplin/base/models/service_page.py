@@ -78,7 +78,7 @@ class ServicePage(JanisBasePage):
         verbose_name='Write a description of this service'
     )
 
-    content_panels = [
+    content_panels = JanisBasePage.content_panels + [
         FieldPanel('short_description'),
         InlinePanel('topics', label='Topics'),
         InlinePanel('related_departments', label='Related Departments'),

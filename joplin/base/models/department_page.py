@@ -22,9 +22,6 @@ from .constants import DEFAULT_MAX_LENGTH, WYSIWYG_GENERAL
 class DepartmentPage(JanisBasePage):
     janis_url_page_type = "department"
 
-    def __str__(self):
-        return self.title_en
-
     what_we_do = RichTextField(
         features=WYSIWYG_GENERAL,
         verbose_name='What we do',
@@ -32,10 +29,12 @@ class DepartmentPage(JanisBasePage):
     )
 
     image = models.ForeignKey(TranslatedImage, null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
-    mission = models.TextField(
-        verbose_name='Mission',
+    description = models.TextField(
+        max_length=400, blank=True, verbose_name='Mission'
     )
-
+    mission = models.TextField(
+        verbose_name='Mission(old)',
+    )
     job_listings = models.URLField(
         verbose_name='Job listings url',
         help_text='Link to a page with job listings.',
@@ -70,11 +69,10 @@ class DepartmentPage(JanisBasePage):
     )
 
     base_form_class = DepartmentPageForm
-
     content_panels = JanisBasePage.content_panels + [
+        FieldPanel('mission'),
         FieldPanel('what_we_do'),
         ImageChooserPanel('image'),
-        FieldPanel('mission'),
         InlinePanel('contacts', label='Contacts'),
         InlinePanel('department_directors', label="Department Directors"),
         FieldPanel('job_listings'),

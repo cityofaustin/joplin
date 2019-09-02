@@ -24,10 +24,7 @@ class OfficialDocumentPage(JanisBasePage):
     janis_url_page_type = "official_document"
     base_form_class = OfficialDocumentPageForm
 
-    description = models.TextField(blank=True)
-
     content_panels = JanisBasePage.content_panels + [
-        FieldPanel('description'),
         InlinePanel('topics', label='Topics'),
         InlinePanel('related_departments', label='Related Departments'),
         InlinePanel('official_documents', label="Documents", heading="Entries will be listed by document date (newest first)."),
