@@ -63,7 +63,6 @@ def configure_main_menu(request, menu_items):
             'icon ', 'material-icons ', 1)
 
 
-
 @hooks.register('register_admin_menu_item')
 def register_page_list_menu_item():
     home = HomePage.objects.first()
@@ -206,10 +205,11 @@ def joplin_page_listing_more_buttons(page, page_perms, is_parent=False):
 
 
 @hooks.register('register_rich_text_features')
-def register_help_text_feature(features):
+def register_button_feature(features):
     """
-    Registering the `help-text` feature, which uses the `help-text` Draft.js block type,
-    and is stored as HTML with a `<div class="help-text">` tag.
+    Registering the `button` feature, which allows you to assign the given
+    css classes to a highlighted element, which makes it look like a button
+    on the frontend
     """
     feature_name = 'rich-text-button-link'
     type_ = 'rich-text-button-link'
