@@ -64,7 +64,6 @@ INSTALLED_APPS = [
     'corsheaders',
     'modeltranslation',
     'graphene_django',
-    'countable_field',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -79,7 +78,8 @@ INSTALLED_APPS = [
     'smuggler',
 
     'session_security',
-    'phonenumber_field'
+    'phonenumber_field',
+    'countable_field'
 ]
 
 MIDDLEWARE = [
