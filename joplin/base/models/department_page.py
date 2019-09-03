@@ -18,6 +18,7 @@ from .contact import Contact
 
 from .constants import DEFAULT_MAX_LENGTH, WYSIWYG_GENERAL
 
+
 class DepartmentPage(JanisBasePage):
     janis_url_page_type = "department"
 
@@ -84,6 +85,7 @@ class DepartmentPage(JanisBasePage):
         StreamFieldPanel('top_services'),
     ]
 
+
 class DepartmentPageDirector(Orderable):
     page = ParentalKey(DepartmentPage, related_name='department_directors')
     name = models.CharField(max_length=DEFAULT_MAX_LENGTH)
@@ -97,6 +99,7 @@ class DepartmentPageDirector(Orderable):
         ImageChooserPanel('photo'),
         FieldPanel('about'),
     ]
+
 
 class DepartmentPageContact(ClusterableModel):
     page = ParentalKey(DepartmentPage, related_name='contacts')

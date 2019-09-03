@@ -7,6 +7,7 @@ from wagtail.admin.edit_handlers import FieldPanel, MultiFieldPanel
 
 from .constants import DEFAULT_MAX_LENGTH
 
+
 @register_snippet
 class Location(ClusterableModel):
     TX = 'TX'

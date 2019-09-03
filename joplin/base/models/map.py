@@ -4,6 +4,7 @@ from modelcluster.models import ClusterableModel
 
 from wagtail.snippets.models import register_snippet
 
+
 @register_snippet
 class Map(ClusterableModel):
     description = models.TextField()

@@ -4,6 +4,7 @@ from modelcluster.models import ClusterableModel
 
 from wagtail.admin.edit_handlers import FieldPanel
 
+
 class DayAndDuration(ClusterableModel):
     MONDAY = 'Monday'
     TUESDAY = 'Tuesday'

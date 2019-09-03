@@ -230,7 +230,7 @@ class GuidePageSectionPageBlock(graphene.ObjectType):
         # TODO: don't catch everything
         try:
             service_page = ServicePage.objects.get(id=self.value)
-        except:
+        except BaseException:
             pass
             # print("Looks like this one isn't a service page")
 
@@ -241,7 +241,7 @@ class GuidePageSectionPageBlock(graphene.ObjectType):
         # TODO: don't catch everything
         try:
             information_page = InformationPage.objects.get(id=self.value)
-        except:
+        except BaseException:
             pass
             # print("Looks like this one isn't an info page")
 

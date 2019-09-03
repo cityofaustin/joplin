@@ -11,6 +11,7 @@ from wagtail.documents import urls as wagtaildocs_urls
 from base.views import joplin_views
 from django.urls import reverse
 from base.models import HomePage
+import debug_toolbar
 
 
 def home(request):
@@ -26,6 +27,8 @@ urlpatterns = [
     url(r'^django-admin/', include('smuggler.urls')),
     url(r'^django-admin/', admin.site.urls),
     path('admin/docs/', include('django.contrib.admindocs.urls')),
+    # uncomment this path to expiriment with the default dashboard,
+    # which can be customized using wagtail hooks
     path('admin/', home),
     path('', login),
     url(r'admin/pages/(\d+)/publish/$', joplin_views.publish, name='publish'),
@@ -33,7 +36,7 @@ urlpatterns = [
         joplin_views.new_page_from_modal, name='new_page_from_modal'),
     url(r'^admin/', include(wagtailadmin_urls)),
     url(r'^documents/', include(wagtaildocs_urls)),
-
+    path('__debug__/', include(debug_toolbar.urls)),
     url(r'^api/graphql', csrf_exempt(GraphQLView.as_view())),
     url(r'^api/graphiql', csrf_exempt(GraphQLView.as_view(graphiql=True, pretty=True))),
     url(r'session_security/', include('session_security.urls')),

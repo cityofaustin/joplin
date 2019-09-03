@@ -15,6 +15,7 @@ from .contact import Contact
 
 from .constants import WYSIWYG_GENERAL
 
+
 class InformationPage(JanisBasePage):
     janis_url_page_type = "information"
 
@@ -54,6 +55,7 @@ class InformationPage(JanisBasePage):
         InlinePanel('contacts', label='Contacts'),
     ]
 
+
 class InformationPageRelatedDepartments(ClusterableModel):
     page = ParentalKey(InformationPage, related_name='related_departments', default=None)
     related_department = models.ForeignKey(
@@ -66,6 +68,7 @@ class InformationPageRelatedDepartments(ClusterableModel):
         PageChooserPanel("related_department"),
     ]
 
+
 class InformationPageContact(ClusterableModel):
     page = ParentalKey(InformationPage, related_name='contacts')
     contact = models.ForeignKey(Contact, related_name='+', on_delete=models.CASCADE)
@@ -77,9 +80,10 @@ class InformationPageContact(ClusterableModel):
     def __str__(self):
         return self.contact.name
 
+
 class InformationPageTopic(ClusterableModel):
     page = ParentalKey(InformationPage, related_name='topics')
-    topic = models.ForeignKey('base.TopicPage',  verbose_name='Select a Topic', related_name='+', on_delete=models.CASCADE)
+    topic = models.ForeignKey('base.TopicPage', verbose_name='Select a Topic', related_name='+', on_delete=models.CASCADE)
     toplink = models.BooleanField(default=False, verbose_name='Make this page a top link for this topic')
 
     panels = [

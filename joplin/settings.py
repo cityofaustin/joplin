@@ -77,6 +77,7 @@ INSTALLED_APPS = [
     'webpack_loader',
     'dbbackup',
     'smuggler',
+
     'session_security',
     'phonenumber_field'
 ]
@@ -91,11 +92,11 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
-
     'wagtail.core.middleware.SiteMiddleware',
     'wagtail.contrib.redirects.middleware.RedirectMiddleware',
     'session_security.middleware.SessionSecurityMiddleware',
 ]
+
 
 ROOT_URLCONF = 'urls'
 
@@ -201,6 +202,51 @@ ALLOWED_HOSTS = [
     '.herokuapp.com',
 ]
 
+DEBUG_TOOLBAR = bool(strtobool(os.environ.get('DEBUG_TOOLBAR', str(False))))
+
+
+if DEBUG_TOOLBAR:
+    ALLOWED_HOSTS = ALLOWED_HOSTS + [
+        '127.0.0.1',
+    ]
+    INSTALLED_APPS = INSTALLED_APPS + [
+        'debug_toolbar',
+    ]
+
+    MIDDLEWARE = MIDDLEWARE + [
+        'debug_toolbar.middleware.DebugToolbarMiddleware'
+    ]
+    """
+    for django debug toolbar
+    this is what exposes the toolbar to the docker gateway so it actually shows up
+    i.e.
+    docker inspect joplin_app_1 | grep -e '"Gateway"' or just rely on the fancy thing
+    below
+    """
+
+    INTERNAL_IPS = ['127.0.0.1']
+
+    # adds docker gateway automagically
+
+    import socket
+    hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
+    INTERNAL_IPS += [ip[:-1] + '1' for ip in ips]
+
+    DEBUG_TOOLBAR_PANELS = [
+        'debug_toolbar.panels.versions.VersionsPanel',
+        'debug_toolbar.panels.timer.TimerPanel',
+        'debug_toolbar.panels.settings.SettingsPanel',
+        'debug_toolbar.panels.headers.HeadersPanel',
+        'debug_toolbar.panels.request.RequestPanel',
+        'debug_toolbar.panels.sql.SQLPanel',
+        'debug_toolbar.panels.staticfiles.StaticFilesPanel',
+        'debug_toolbar.panels.cache.CachePanel',
+        'debug_toolbar.panels.signals.SignalsPanel',
+        'debug_toolbar.panels.logging.LoggingPanel',
+        'debug_toolbar.panels.redirects.RedirectsPanel',
+    ]
+
+
 if DEBUG:
     ALLOWED_HOSTS.append('*')
 
@@ -289,18 +335,25 @@ if(ISPRODUCTION or ISSTAGING or ISREVIEWAPP):
 
     # Specifying the location of files
     if ISPRODUCTION:
-        STATICFILES_LOCATION = 'production/static'
+        AWS_LOCATION = 'production/static'
+        AWS_IS_GZIPPED = True
         MEDIAFILES_LOCATION = 'production/media'
     elif ISSTAGING:
-        STATICFILES_LOCATION = 'staging/static'
+        AWS_LOCATION = 'staging/static'
+        AWS_IS_GZIPPED = True
         MEDIAFILES_LOCATION = 'staging/media'
     else:
         # All non-production apps share a staging/media folder
-        STATICFILES_LOCATION = f"review/{os.getenv('CIRCLE_BRANCH')}/static"
+        AWS_LOCATION = f"review/{os.getenv('CIRCLE_BRANCH')}/static"
+        AWS_IS_GZIPPED = True
         MEDIAFILES_LOCATION = 'staging/media'
 
     # We now change the storage mode to S3 via Boto for default, static and dbbackup
-    STATICFILES_STORAGE = 'custom_storages.StaticStorage'
+    STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+    """
+    we could probably have media use this config as well to avoid the extra custom_storages.py
+    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+    """
     DEFAULT_FILE_STORAGE = 'custom_storages.MediaStorage'
     DBBACKUP_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
