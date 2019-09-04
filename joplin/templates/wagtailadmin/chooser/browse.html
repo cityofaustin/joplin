@@ -1,11 +1,20 @@
 {% load i18n %}
 {% if page_types_restricted %}
-    {% trans "Choose" as choose_str %}
+    {% if page_type_string == "base.departmentpage" %}
+    {% trans "Choose a department that offers this page" as choose_str %}
+    {% include "wagtailadmin/shared/header.html" with title=choose_str  search_url="wagtailadmin_choose_page_search" query_parameters="page_type="|add:page_type_string icon="doc-empty-inverse" %}
+
+    {% else %}
+        {% trans "Choose" as choose_str %}
+        {% include "wagtailadmin/shared/header.html" with title=choose_str subtitle=page_type_names|join:", " search_url="wagtailadmin_choose_page_search" query_parameters="page_type="|add:page_type_string icon="doc-empty-inverse" %}
+
+    {% endif %}
 {% else %}
     {% trans "Choose a page" as choose_str %}
+    {% include "wagtailadmin/shared/header.html" with title=choose_str subtitle=page_type_names|join:", " search_url="wagtailadmin_choose_page_search" query_parameters="page_type="|add:page_type_string icon="doc-empty-inverse" %}
+
 {% endif %}
 
-{% include "wagtailadmin/shared/header.html" with title=choose_str subtitle=page_type_names|join:", " search_url="wagtailadmin_choose_page_search" query_parameters="page_type="|add:page_type_string icon="doc-empty-inverse" %}
 
 
 
