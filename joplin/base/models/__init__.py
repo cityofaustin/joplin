@@ -37,18 +37,19 @@ from .information_page import InformationPage, InformationPageRelatedDepartments
 from .department_page import DepartmentPage, DepartmentPageDirector, DepartmentPageContact, DepartmentPageTopService
 from .official_documents_page import OfficialDocumentPage, OfficialDocumentPageOfficialDocument, OfficialDocumentPageRelatedDepartments, OfficialDocumentPageTopic
 from .guide_page import GuidePage, GuidePageTopic, GuidePageRelatedDepartments, GuidePageContact
+from .widgets import countMe, countMeTextArea
 
 WYSIWYG_GENERAL = ['h1', 'h2', 'h3', 'h4', 'bold', 'link', 'ul', 'ol', 'code']
 DEFAULT_MAX_LENGTH = 255
 SHORT_DESCRIPTION_LENGTH = 300
 
-
 # TODO: Remove everything below this comment
+
 
 class TopicCollectionPageTopicCollection(ClusterableModel):
     page = ParentalKey(TopicCollectionPage, related_name='topiccollections')
     topiccollection = models.ForeignKey(
-        'base.TopicCollectionPage',  verbose_name='Select a Topic Collection', related_name='+', on_delete=models.CASCADE)
+        'base.TopicCollectionPage', verbose_name='Select a Topic Collection', related_name='+', on_delete=models.CASCADE)
 
     panels = [
         PageChooserPanel('topiccollection'),
@@ -88,7 +89,7 @@ class ProcessPage(JanisBasePage):
     content_panels = [
         InlinePanel('topics', label='Topics'),
         FieldPanel('department'),
-        FieldPanel('description'),
+        FieldPanel('description', widget=countMeTextArea),
         ImageChooserPanel('image'),
         InlinePanel('contacts', label='Contacts'),
         InlinePanel('process_steps', label="Process steps"),
@@ -113,7 +114,7 @@ class ProcessPageStep(Orderable):
         FieldPanel('title'),
         FieldPanel('short_title'),
         FieldPanel('link_title'),
-        FieldPanel('description'),
+        FieldPanel('description', widget=countMeTextArea),
         ImageChooserPanel('image'),
         FieldPanel('overview_steps'),
         FieldPanel('detailed_content'),
@@ -137,7 +138,7 @@ class ProcessPageContact(ClusterableModel):
 class ProcessPageTopic(ClusterableModel):
     page = ParentalKey(ProcessPage, related_name='topics')
     topic = models.ForeignKey(
-        'base.TopicPage',  verbose_name='Select a Topic', related_name='+', on_delete=models.CASCADE)
+        'base.TopicPage', verbose_name='Select a Topic', related_name='+', on_delete=models.CASCADE)
 
     panels = [
         PageChooserPanel('topic'),

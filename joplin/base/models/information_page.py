@@ -14,6 +14,9 @@ from .janis_page import JanisBasePage
 from .contact import Contact
 
 from .constants import WYSIWYG_GENERAL
+from .widgets import countMe, countMeTextArea, AUTHOR_LIMITS
+from countable_field import widgets
+
 
 class InformationPage(JanisBasePage):
     janis_url_page_type = "information"
@@ -42,17 +45,22 @@ class InformationPage(JanisBasePage):
     base_form_class = InformationPageForm
 
     content_panels = [
-        FieldPanel('title_en'),
-        FieldPanel('title_es'),
+        FieldPanel('title_en', widget=countMe),
+        FieldPanel('title_es', widget=countMe),
         FieldPanel('title_ar'),
         FieldPanel('title_vi'),
         InlinePanel('topics', label='Topics'),
         InlinePanel('related_departments', label='Related Departments'),
-        FieldPanel('description'),
+        FieldPanel('description', widget=countMeTextArea),
         StreamFieldPanel('options'),
-        FieldPanel('additional_content'),
+        FieldPanel('additional_content', widget=widgets.CountableWidget(attrs={
+            'data-count': 'characters',
+            'data-max-count': AUTHOR_LIMITS['additional_content'],
+            'data-count-direction': 'down'
+        })),
         InlinePanel('contacts', label='Contacts'),
     ]
+
 
 class InformationPageRelatedDepartments(ClusterableModel):
     page = ParentalKey(InformationPage, related_name='related_departments', default=None)
@@ -66,6 +74,7 @@ class InformationPageRelatedDepartments(ClusterableModel):
         PageChooserPanel("related_department"),
     ]
 
+
 class InformationPageContact(ClusterableModel):
     page = ParentalKey(InformationPage, related_name='contacts')
     contact = models.ForeignKey(Contact, related_name='+', on_delete=models.CASCADE)
@@ -77,9 +86,10 @@ class InformationPageContact(ClusterableModel):
     def __str__(self):
         return self.contact.name
 
+
 class InformationPageTopic(ClusterableModel):
     page = ParentalKey(InformationPage, related_name='topics')
-    topic = models.ForeignKey('base.TopicPage',  verbose_name='Select a Topic', related_name='+', on_delete=models.CASCADE)
+    topic = models.ForeignKey('base.TopicPage', verbose_name='Select a Topic', related_name='+', on_delete=models.CASCADE)
     toplink = models.BooleanField(default=False, verbose_name='Make this page a top link for this topic')
 
     panels = [

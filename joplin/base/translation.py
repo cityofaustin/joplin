@@ -30,6 +30,7 @@ class TopicPageTranslationOptions(TranslationOptions):
         'description',
     )
 
+
 @register(TopicCollectionPage)
 class TopicCollectionPageTranslationOptions(TranslationOptions):
     fields = (
@@ -64,6 +65,7 @@ class MapTranslationOptions(TranslationOptions):
 class HomePageTranslationOptions(TranslationOptions):
     pass
 
+
 @register(ServicePage)
 class ServicePageTranslationOptions(TranslationOptions):
     fields = (
@@ -72,11 +74,13 @@ class ServicePageTranslationOptions(TranslationOptions):
         'short_description',
     )
 
+
 @register(ProcessPage)
 class ProcessPageTranslationOptions(TranslationOptions):
     fields = (
         'description',
     )
+
 
 @register(ProcessPageStep)
 class ProcessPageStepTranslationOptions(TranslationOptions):
@@ -90,6 +94,7 @@ class ProcessPageStepTranslationOptions(TranslationOptions):
         'quote',
     )
 
+
 @register(DepartmentPage)
 class DepartmentPageTranslationOptions(TranslationOptions):
     fields = (
@@ -97,12 +102,14 @@ class DepartmentPageTranslationOptions(TranslationOptions):
         'mission',
     )
 
+
 @register(DepartmentPageDirector)
 class DepartmentPageDirectorTranslationOptions(TranslationOptions):
     fields = (
         'about',
         'title'
     )
+
 
 @register(InformationPage)
 class InformationPageTranslationOptions(TranslationOptions):
@@ -112,11 +119,13 @@ class InformationPageTranslationOptions(TranslationOptions):
         'additional_content',
     )
 
+
 @register(OfficialDocumentPage)
 class OfficialDocumentPageTranslationOptions(TranslationOptions):
     fields = (
         'description',
     )
+
 
 @register(OfficialDocumentPageOfficialDocument)
 class OfficialDocumentPageOfficialDocumentTranslationOptions(TranslationOptions):
@@ -126,6 +135,7 @@ class OfficialDocumentPageOfficialDocumentTranslationOptions(TranslationOptions)
         'name',
         'authoring_office'
     )
+
 
 @register(GuidePage)
 class GuidePageTranslationOptions(TranslationOptions):
