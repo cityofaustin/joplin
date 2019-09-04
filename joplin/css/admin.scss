@@ -38,7 +38,7 @@
 
 .page-explorer header,
 .homepage header,
-.page-editor header {
+.page-editor header:not(.hasform) {
     display: none;
 }
 
