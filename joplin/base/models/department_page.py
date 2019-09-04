@@ -4,8 +4,7 @@ from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
 
 from wagtail.core.fields import RichTextField, StreamField
-from wagtail.core.blocks import CharBlock, StructBlock, URLBlock
-from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, StreamFieldPanel
+from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, StreamFieldPanel, PageChooserPanel
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.core.models import Orderable
 from wagtail.snippets.edit_handlers import SnippetChooserPanel
@@ -13,6 +12,9 @@ from wagtail.snippets.edit_handlers import SnippetChooserPanel
 from base.forms import DepartmentPageForm
 
 from .janis_page import JanisBasePage
+from .information_page import InformationPage
+from .service_page import ServicePage
+from .guide_page import GuidePage
 from .translated_image import TranslatedImage
 from .contact import Contact
 from .widgets import countMe, countMeTextArea
@@ -45,33 +47,6 @@ class DepartmentPage(JanisBasePage):
         blank=True
     )
 
-    top_services = StreamField(
-        [
-            ('link_en', StructBlock([
-                ('url', URLBlock()),
-                ('title', CharBlock()),
-            ], icon='link', label='Link [EN]')),
-            ('link_es', StructBlock([
-                ('url', URLBlock()),
-                ('title', CharBlock()),
-            ], icon='link', label='Link [ES]')),
-            ('link_ar', StructBlock([
-                ('url', URLBlock()),
-                ('title', CharBlock()),
-            ], icon='link', label='Link [AR]')),
-            ('link_vi', StructBlock([
-                ('url', URLBlock()),
-                ('title', CharBlock()),
-            ], icon='link', label='Link [VI]')),
-            # ('page', PageChooserBlock(
-            #     label='Choose a page',
-            #     icon='doc-full'
-            # ))
-        ],
-        verbose_name='Links to top services',
-        blank=True
-    )
-
     base_form_class = DepartmentPageForm
 
     content_panels = [
@@ -89,7 +64,9 @@ class DepartmentPage(JanisBasePage):
         InlinePanel('contacts', label='Contacts'),
         InlinePanel('department_directors', label="Department Directors"),
         FieldPanel('job_listings'),
-        StreamFieldPanel('top_services'),
+        InlinePanel('top_service_pages', heading='Links to top services', label='top link',
+                    help_text='Add links to 1-4 top service pages or guides (4 maximum allowed).',
+                    min_num=None, max_num=4)
     ]
 
 
@@ -112,6 +89,7 @@ class DepartmentPageDirector(Orderable):
     ]
 
 
+
 class DepartmentPageContact(ClusterableModel):
     page = ParentalKey(DepartmentPage, related_name='contacts')
     contact = models.ForeignKey(Contact, related_name='+', on_delete=models.CASCADE)
@@ -122,3 +100,15 @@ class DepartmentPageContact(ClusterableModel):
 
     def __str__(self):
         return self.contact.name
+
+
+class DepartmentPageTopService(Orderable):
+    department = ParentalKey(DepartmentPage, related_name='top_service_pages')
+    page = models.ForeignKey('wagtailcore.Page',  verbose_name='Select a page', related_name='+', on_delete=models.CASCADE)
+
+    panels = [
+        PageChooserPanel('page', page_type=[InformationPage, ServicePage, GuidePage]),
+    ]
+
+    def __str__(self):
+        return self.page.text
