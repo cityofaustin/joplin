@@ -233,9 +233,8 @@ class GuidePageSectionPageBlock(graphene.ObjectType):
         # TODO: don't catch everything
         try:
             service_page = ServicePage.objects.get(id=self.value)
-        except BaseException:
+        except Exception as e:
             pass
-            # print("Looks like this one isn't a service page")
 
         return service_page
 
@@ -244,9 +243,8 @@ class GuidePageSectionPageBlock(graphene.ObjectType):
         # TODO: don't catch everything
         try:
             information_page = InformationPage.objects.get(id=self.value)
-        except BaseException:
+        except Exception as e:
             pass
-            # print("Looks like this one isn't an info page")
 
         return information_page
 
@@ -374,9 +372,8 @@ class DepartmentPageTopServiceNode(DjangoObjectType):
         # TODO: don't catch everything
         try:
             service_page = ServicePage.objects.get(id=self.page_id)
-        except:
+        except Exception as e:
             pass
-            # print("Looks like this one isn't a service page")
 
         return service_page
 
@@ -385,9 +382,8 @@ class DepartmentPageTopServiceNode(DjangoObjectType):
         # TODO: don't catch everything
         try:
             information_page = InformationPage.objects.get(id=self.page_id)
-        except:
+        except Exception as e:
             pass
-            # print("Looks like this one isn't an information page")
 
         return information_page
 
@@ -396,9 +392,8 @@ class DepartmentPageTopServiceNode(DjangoObjectType):
         # TODO: don't catch everything
         try:
             guide_page = GuidePage.objects.get(id=self.page_id)
-        except:
+        except Exception as e:
             pass
-            # print("Looks like this one isn't a guide page")
 
         return guide_page
 
