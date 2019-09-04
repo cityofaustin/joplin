@@ -11,7 +11,6 @@
 
 <div class="nice-padding">
     {% include 'wagtailadmin/chooser/_link_types.html' with current='internal' %}
-BLAHHHHHHHHHH
     {% if page_types_restricted %}
         <p class="help-block help-warning">
             {% blocktrans with type=page_type_names|join:", " count counter=page_type_names|length %}
