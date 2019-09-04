@@ -1,7 +1,7 @@
 {% load i18n %}
 {% if page_types_restricted %}
     {% if page_type_string == "base.departmentpage" %}
-    {% trans "Choose a department that offers this page" as choose_str %}
+    {% trans "Add a department that offers this page" as choose_str %}
     {% include "wagtailadmin/shared/header.html" with title=choose_str  search_url="wagtailadmin_choose_page_search" query_parameters="page_type="|add:page_type_string icon="doc-empty-inverse" %}
     {% elif page_type_string == "base.informationpage,base.servicepage" %}
         {% trans "Select a page for the guide" as choose_str %}
