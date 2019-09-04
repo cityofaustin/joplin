@@ -11,7 +11,8 @@ from wagtail.core.models import Orderable
 from .janis_page import JanisBasePage
 
 from .constants import DEFAULT_MAX_LENGTH
-from .widgets import countMe, countMeTextArea
+from .widgets import countMe, countMeTextArea, AUTHOR_LIMITS
+from countable_field import widgets
 
 """
 This is a page that displays a list of Official Documents (model: umentPageOfficialDocument).
@@ -58,7 +59,11 @@ class OfficialDocumentPageOfficialDocument(Orderable):
         FieldPanel('date'),
         FieldPanel('title', widget=countMe),
         FieldPanel('authoring_office', widget=countMe),
-        FieldPanel('summary', widget=countMeTextArea),
+        FieldPanel('summary', widget=widgets.CountableWidget(attrs={
+            'data-count': 'characters',
+            'data-max-count': AUTHOR_LIMITS['document_summary'],
+            'data-count-direction': 'down'
+        })),
         FieldPanel('name', widget=countMe),
         FieldPanel('link'),
     ]

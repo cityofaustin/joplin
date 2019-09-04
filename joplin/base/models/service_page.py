@@ -15,7 +15,9 @@ from .janis_page import JanisBasePage
 from .contact import Contact
 
 from .constants import WYSIWYG_GENERAL, DEFAULT_MAX_LENGTH, SHORT_DESCRIPTION_LENGTH
-from .widgets import countMe, countMeTextArea
+from .widgets import countMe, countMeTextArea, AUTHOR_LIMITS
+from countable_field import widgets
+
 
 WYSIWYG_SERVICE_STEP = ['ul', 'ol', 'link', 'code', 'rich-text-button-link']
 
@@ -101,7 +103,11 @@ class ServicePage(JanisBasePage):
             [
                 HelpPanel(additional_content.help_text,
                           classname="coa-helpPanel"),
-                FieldPanel('additional_content')
+                FieldPanel('additional_content', widget=widgets.CountableWidget(attrs={
+                    'data-count': 'characters',
+                    'data-max-count': AUTHOR_LIMITS['additional_content'],
+                    'data-count-direction': 'down'
+                }))
             ],
             heading=additional_content.verbose_name,
             classname='coa-multiField-nopadding'

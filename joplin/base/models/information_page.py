@@ -14,7 +14,8 @@ from .janis_page import JanisBasePage
 from .contact import Contact
 
 from .constants import WYSIWYG_GENERAL
-from .widgets import countMe, countMeTextArea
+from .widgets import countMe, countMeTextArea, AUTHOR_LIMITS
+from countable_field import widgets
 
 
 class InformationPage(JanisBasePage):
@@ -52,7 +53,11 @@ class InformationPage(JanisBasePage):
         InlinePanel('related_departments', label='Related Departments'),
         FieldPanel('description', widget=countMeTextArea),
         StreamFieldPanel('options'),
-        FieldPanel('additional_content'),
+        FieldPanel('additional_content', widget=widgets.CountableWidget(attrs={
+            'data-count': 'characters',
+            'data-max-count': AUTHOR_LIMITS['additional_content'],
+            'data-count-direction': 'down'
+        })),
         InlinePanel('contacts', label='Contacts'),
     ]
 
