@@ -221,6 +221,9 @@ class OfficialDocumentPageNode(DjangoObjectType):
 
 
 class GuidePageSectionPageBlock(graphene.ObjectType):
+    # This uses graphene ObjectType resolvers, see:
+    # https://docs.graphene-python.org/en/latest/types/objecttypes/#resolvers
+    
     value = GenericScalar()
     service_page = graphene.Field(ServicePageNode)
     information_page = graphene.Field(InformationPageNode)
@@ -360,6 +363,8 @@ class DepartmentPageDirectorNode(DjangoObjectType):
 
 
 class DepartmentPageTopServiceNode(DjangoObjectType):
+    # This uses graphene ObjectType resolvers, see:
+    # https://docs.graphene-python.org/en/latest/types/objecttypes/#resolvers
     service_page = graphene.Field(ServicePageNode)
     information_page = graphene.Field(InformationPageNode)
     guide_page = graphene.Field(GuidePageNode)
