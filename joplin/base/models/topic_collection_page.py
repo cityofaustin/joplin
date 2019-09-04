@@ -7,6 +7,7 @@ from base.forms import TopicCollectionPageForm
 
 from .janis_page import JanisBasePage
 from .translated_image import TranslatedImage
+from .widgets import countMe, countMeTextArea
 
 
 class TopicCollectionPage(JanisBasePage):
@@ -26,11 +27,11 @@ class TopicCollectionPage(JanisBasePage):
     base_form_class = TopicCollectionPageForm
 
     content_panels = [
-        FieldPanel('title_en'),
-        FieldPanel('title_es'),
+        FieldPanel('title_en', widget=countMe),
+        FieldPanel('title_es', widget=countMe),
         FieldPanel('title_ar'),
         FieldPanel('title_vi'),
-        FieldPanel('description'),
+        FieldPanel('description', widget=countMeTextArea),
         FieldPanel('theme'),
         ImageChooserPanel('image'),
         InlinePanel('topiccollections', label='Topic Collections this page belongs to'),

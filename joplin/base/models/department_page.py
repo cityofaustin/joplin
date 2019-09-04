@@ -15,8 +15,11 @@ from base.forms import DepartmentPageForm
 from .janis_page import JanisBasePage
 from .translated_image import TranslatedImage
 from .contact import Contact
+from .widgets import countMe, countMeTextArea
 
 from .constants import DEFAULT_MAX_LENGTH, WYSIWYG_GENERAL
+from .widgets import countMe, countMeTextArea, AUTHOR_LIMITS
+from countable_field import widgets
 
 
 class DepartmentPage(JanisBasePage):
@@ -72,13 +75,17 @@ class DepartmentPage(JanisBasePage):
     base_form_class = DepartmentPageForm
 
     content_panels = [
-        FieldPanel('title_en'),
-        FieldPanel('title_es'),
+        FieldPanel('title_en', widget=countMe),
+        FieldPanel('title_es', widget=countMe),
         FieldPanel('title_ar'),
         FieldPanel('title_vi'),
         FieldPanel('what_we_do'),
         ImageChooserPanel('image'),
-        FieldPanel('mission'),
+        FieldPanel('mission', widget=widgets.CountableWidget(attrs={
+            'data-count': 'characters',
+            'data-max-count': AUTHOR_LIMITS['mission'],
+            'data-count-direction': 'down'
+        })),
         InlinePanel('contacts', label='Contacts'),
         InlinePanel('department_directors', label="Department Directors"),
         FieldPanel('job_listings'),
@@ -97,7 +104,11 @@ class DepartmentPageDirector(Orderable):
         FieldPanel('name'),
         FieldPanel('title'),
         ImageChooserPanel('photo'),
-        FieldPanel('about'),
+        FieldPanel('about', widget=widgets.CountableWidget(attrs={
+            'data-count': 'characters',
+            'data-max-count': AUTHOR_LIMITS['about_director'],
+            'data-count-direction': 'down'
+        }))
     ]
 
 
