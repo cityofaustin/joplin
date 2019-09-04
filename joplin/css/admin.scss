@@ -44,10 +44,21 @@
 
 .page-editor header.hasform {
     background-color: white;
+    margin-bottom: 0;
+    padding-bottom: 0;
+
     h1 {
         color: black;
         text-transform: none;
     }
+}
+
+.modal-body label[for='id_q'] {
+    display: none;
+}
+
+.page-results h2 {
+    text-transform: none;
 }
 
 .pagination {
