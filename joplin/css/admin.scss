@@ -42,6 +42,14 @@
     display: none;
 }
 
+.page-editor header.hasform {
+    background-color: white;
+    h1 {
+        color: black;
+        text-transform: none;
+    }
+}
+
 .pagination {
     margin-top: $secondary-header-height * 3/2;
 }
