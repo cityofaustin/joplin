@@ -15,6 +15,7 @@ from .janis_page import JanisBasePage
 from .information_page import InformationPage
 from .service_page import ServicePage
 from .guide_page import GuidePage
+from .official_documents_page import OfficialDocumentPage
 from .translated_image import TranslatedImage
 from .contact import Contact
 from .widgets import countMe, countMeTextArea
@@ -107,7 +108,7 @@ class DepartmentPageTopService(Orderable):
     page = models.ForeignKey('wagtailcore.Page',  verbose_name='Select a page', related_name='+', on_delete=models.CASCADE)
 
     panels = [
-        PageChooserPanel('page', page_type=[InformationPage, ServicePage, GuidePage]),
+        PageChooserPanel('page', page_type=[InformationPage, ServicePage, GuidePage, OfficialDocumentPage]),
     ]
 
     def __str__(self):
