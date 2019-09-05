@@ -38,6 +38,7 @@
 
 .page-explorer header,
 .homepage header,
+//,hasform helps distinguish that this is on a page chooser modal
 .page-editor header:not(.hasform) {
     display: none;
 }
