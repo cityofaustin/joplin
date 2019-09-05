@@ -22,7 +22,6 @@ from .constants import DEFAULT_MAX_LENGTH
 class Contact(ClusterableModel):
     name = models.CharField(max_length=DEFAULT_MAX_LENGTH)
     email = models.EmailField()
-    phone = models.CharField(max_length=DEFAULT_MAX_LENGTH)
     location = models.ForeignKey(
         Location, null=True, blank=True, related_name='+', on_delete=models.SET_NULL)
 
