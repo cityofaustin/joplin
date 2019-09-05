@@ -366,6 +366,7 @@ class DepartmentPageTopServiceNode(DjangoObjectType):
     service_page = graphene.Field(ServicePageNode)
     information_page = graphene.Field(InformationPageNode)
     guide_page = graphene.Field(GuidePageNode)
+    official_document_page = graphene.Field(OfficialDocumentPageNode)
 
     def resolve_service_page(self, info):
         service_page = None
@@ -396,6 +397,16 @@ class DepartmentPageTopServiceNode(DjangoObjectType):
             pass
 
         return guide_page
+
+    def resolve_official_document_page(self, info):
+        official_document_page = None
+        # TODO: don't catch everything
+        try:
+            official_document_page = OfficialDocumentPage.objects.get(id=self.page_id)
+        except Exception as e:
+            pass
+
+        return official_document_page
 
     class Meta:
         model = DepartmentPageTopService
