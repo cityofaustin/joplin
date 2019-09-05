@@ -40,7 +40,6 @@ class Contact(ClusterableModel):
     panels = [
         FieldPanel('name'),
         FieldPanel('email'),
-        FieldPanel('phone'),
         InlinePanel('phone_number', label='Phone Numbers'),
         SnippetChooserPanel('location'),
         InlinePanel('hours', label='Hours'),
