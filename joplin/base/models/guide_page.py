@@ -53,7 +53,7 @@ class GuidePage(JanisBasePage):
         InlinePanel('topics', label='Topics'),
         InlinePanel('related_departments', label='Related Departments'),
         ImageChooserPanel('image'),
-        StreamFieldPanel('sections', widget=countMe),
+        StreamFieldPanel('sections'),
         InlinePanel('contacts', label='Contacts'),
     ]
 
