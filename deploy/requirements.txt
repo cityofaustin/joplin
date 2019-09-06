@@ -19,4 +19,4 @@ django-debug-toolbar==2.0
 django-session-security==2.6.5
 django-phonenumber-field==3.0.1
 phonenumberslite==8.10.16
-
+coa-django-countable_field==1.5

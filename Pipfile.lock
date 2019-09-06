@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "04bbff2e8206fc882a5032bdb298015f7dcfe3e2be23fdd5dcee143c3dcd033e"
+            "sha256": "f8edbe16a9e90036d57b3b3024d62cefc5407f1fa50acd9aaf701da80c710847"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -48,10 +48,10 @@
         },
         "botocore": {
             "hashes": [
-                "sha256:63ca29cf8a47b190886923c789a3f2b2a7e1665b5f6e22a97fed057af2e5f1af",
-                "sha256:bebb869754459035fe45eac1f8a93a97dd8698522bc7f7ebde791e32311b035a"
+                "sha256:748fe4ee5cc8b10ef09e52c740b488402d6f6d4d1f0dde0c936da232b42b1bdd",
+                "sha256:9ffd9264e4ad999d2929cfe1c7e413d4cdf76a8bd92f011dce31874f056d2e18"
             ],
-            "version": "==1.12.216"
+            "version": "==1.12.220"
         },
         "certifi": {
             "hashes": [
@@ -89,6 +89,11 @@
             ],
             "index": "pypi",
             "version": "==2.2.0"
+        },
+        "django-countable-field": {
+            "editable": true,
+            "git": "https://github.com/cityofaustin/django-countable-field",
+            "ref": "917db6f3349871cf1edde1574a64ccc91a8511d1"
         },
         "django-dbbackup": {
             "hashes": [

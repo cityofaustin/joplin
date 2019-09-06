@@ -14,7 +14,11 @@ from base.forms import ServicePageForm
 from .janis_page import JanisBasePage
 from .contact import Contact
 
-from .constants import WYSIWYG_GENERAL, SHORT_DESCRIPTION_LENGTH
+from .constants import WYSIWYG_GENERAL, DEFAULT_MAX_LENGTH, SHORT_DESCRIPTION_LENGTH
+from .widgets import countMe, countMeTextArea, AUTHOR_LIMITS
+from countable_field import widgets
+
+
 WYSIWYG_SERVICE_STEP = ['ul', 'ol', 'link', 'code', 'rich-text-button-link']
 
 
@@ -78,11 +82,12 @@ class ServicePage(JanisBasePage):
     )
 
     content_panels = [
-        FieldPanel('title_en'),
-        FieldPanel('title_es'),
+
+        FieldPanel('title_en', widget=countMe),
+        FieldPanel('title_es', widget=countMe),
         FieldPanel('title_ar'),
         FieldPanel('title_vi'),
-        FieldPanel('short_description'),
+        FieldPanel('short_description', widget=countMeTextArea),
         InlinePanel('topics', label='Topics'),
         InlinePanel('related_departments', label='Related Departments'),
         MultiFieldPanel(
@@ -98,7 +103,11 @@ class ServicePage(JanisBasePage):
             [
                 HelpPanel(additional_content.help_text,
                           classname="coa-helpPanel"),
-                FieldPanel('additional_content')
+                FieldPanel('additional_content', widget=widgets.CountableWidget(attrs={
+                    'data-count': 'characters',
+                    'data-max-count': AUTHOR_LIMITS['additional_content'],
+                    'data-count-direction': 'down'
+                }))
             ],
             heading=additional_content.verbose_name,
             classname='coa-multiField-nopadding'
@@ -110,7 +119,7 @@ class ServicePage(JanisBasePage):
 class ServicePageTopic(ClusterableModel):
     page = ParentalKey(ServicePage, related_name='topics')
     topic = models.ForeignKey(
-        'base.TopicPage',  verbose_name='Select a Topic', related_name='+', on_delete=models.CASCADE)
+        'base.TopicPage', verbose_name='Select a Topic', related_name='+', on_delete=models.CASCADE)
     toplink = models.BooleanField(
         default=False, verbose_name='Make this service a top link for this topic')
 

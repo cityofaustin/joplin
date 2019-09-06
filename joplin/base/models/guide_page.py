@@ -19,6 +19,8 @@ from .contact import Contact
 from .translated_image import TranslatedImage
 
 from .constants import WYSIWYG_GENERAL
+from .widgets import countMe, countMeTextArea
+
 
 class GuidePage(JanisBasePage):
     janis_url_page_type = "guide"
@@ -36,18 +38,18 @@ class GuidePage(JanisBasePage):
                 label="Section"
             )),
         ],
-        verbose_name='Add a section header and pages to each section', 
+        verbose_name='Add a section header and pages to each section',
         blank=True
     )
 
     base_form_class = GuidePageForm
 
     content_panels = [
-        FieldPanel('title_en'),
-        FieldPanel('title_es'),
+        FieldPanel('title_en', widget=countMe),
+        FieldPanel('title_es', widget=countMe),
         FieldPanel('title_ar'),
         FieldPanel('title_vi'),
-        FieldPanel('description'),
+        FieldPanel('description', widget=countMeTextArea),
         InlinePanel('topics', label='Topics'),
         InlinePanel('related_departments', label='Related Departments'),
         ImageChooserPanel('image'),
@@ -55,9 +57,10 @@ class GuidePage(JanisBasePage):
         InlinePanel('contacts', label='Contacts'),
     ]
 
+
 class GuidePageTopic(ClusterableModel):
     page = ParentalKey(GuidePage, related_name='topics')
-    topic = models.ForeignKey('base.TopicPage',  verbose_name='Select a Topic', related_name='+', on_delete=models.CASCADE)
+    topic = models.ForeignKey('base.TopicPage', verbose_name='Select a Topic', related_name='+', on_delete=models.CASCADE)
     toplink = models.BooleanField(default=False, verbose_name='Make this page a top link for this topic')
 
     panels = [
@@ -72,6 +75,7 @@ class GuidePageTopic(ClusterableModel):
     def __str__(self):
         return self.topic.text
 
+
 class GuidePageRelatedDepartments(ClusterableModel):
     page = ParentalKey(GuidePage, related_name='related_departments', default=None)
     related_department = models.ForeignKey(
@@ -84,6 +88,7 @@ class GuidePageRelatedDepartments(ClusterableModel):
         PageChooserPanel("related_department"),
     ]
 
+
 class GuidePageContact(ClusterableModel):
     page = ParentalKey(GuidePage, related_name='contacts')
     contact = models.ForeignKey(Contact, related_name='+', on_delete=models.CASCADE)
@@ -94,5 +99,3 @@ class GuidePageContact(ClusterableModel):
 
     def __str__(self):
         return self.contact.name
-
-

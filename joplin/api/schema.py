@@ -11,7 +11,7 @@ from wagtail.core.models import Page, PageRevision
 from django_filters import FilterSet, OrderingFilter
 from wagtail.core.blocks import PageChooserBlock, TextBlock, ListBlock
 
-from base.models import TranslatedImage, ThreeOneOne, ServicePage, ServicePageContact, ServicePageTopic, ServicePageRelatedDepartments, InformationPageRelatedDepartments, ProcessPage, ProcessPageStep, ProcessPageContact, ProcessPageTopic, InformationPage, InformationPageContact, InformationPageTopic, DepartmentPage, DepartmentPageContact, DepartmentPageDirector, Theme, TopicCollectionPage, TopicPage, Contact, Location, ContactDayAndDuration, Department, DepartmentContact, TopicPageTopicCollection, OfficialDocumentPage, OfficialDocumentPageRelatedDepartments, OfficialDocumentPageTopic, OfficialDocumentPageOfficialDocument, GuidePage, GuidePageTopic, GuidePageRelatedDepartments, GuidePageContact, JanisBasePage, PhoneNumber
+from base.models import TranslatedImage, ThreeOneOne, ServicePage, ServicePageContact, ServicePageTopic, ServicePageRelatedDepartments, InformationPageRelatedDepartments, ProcessPage, ProcessPageStep, ProcessPageContact, ProcessPageTopic, InformationPage, InformationPageContact, InformationPageTopic, DepartmentPage, DepartmentPageContact, DepartmentPageDirector, Theme, TopicCollectionPage, TopicPage, Contact, Location, ContactDayAndDuration, Department, DepartmentContact, TopicPageTopicCollection, OfficialDocumentPage, OfficialDocumentPageRelatedDepartments, OfficialDocumentPageTopic, OfficialDocumentPageOfficialDocument, GuidePage, GuidePageTopic, GuidePageRelatedDepartments, GuidePageContact, JanisBasePage, PhoneNumber, DepartmentPageTopService
 
 
 class StreamFieldType(Scalar):
@@ -221,6 +221,9 @@ class OfficialDocumentPageNode(DjangoObjectType):
 
 
 class GuidePageSectionPageBlock(graphene.ObjectType):
+    # This uses graphene ObjectType resolvers, see:
+    # https://docs.graphene-python.org/en/latest/types/objecttypes/#resolvers
+    
     value = GenericScalar()
     service_page = graphene.Field(ServicePageNode)
     information_page = graphene.Field(InformationPageNode)
@@ -230,9 +233,8 @@ class GuidePageSectionPageBlock(graphene.ObjectType):
         # TODO: don't catch everything
         try:
             service_page = ServicePage.objects.get(id=self.value)
-        except:
+        except Exception as e:
             pass
-            # print("Looks like this one isn't a service page")
 
         return service_page
 
@@ -241,9 +243,8 @@ class GuidePageSectionPageBlock(graphene.ObjectType):
         # TODO: don't catch everything
         try:
             information_page = InformationPage.objects.get(id=self.value)
-        except:
+        except Exception as e:
             pass
-            # print("Looks like this one isn't an info page")
 
         return information_page
 
@@ -356,6 +357,59 @@ class DepartmentPageContactNode(DjangoObjectType):
 class DepartmentPageDirectorNode(DjangoObjectType):
     class Meta:
         model = DepartmentPageDirector
+        interfaces = [graphene.Node]
+
+
+class DepartmentPageTopServiceNode(DjangoObjectType):
+    # This uses graphene ObjectType resolvers, see:
+    # https://docs.graphene-python.org/en/latest/types/objecttypes/#resolvers
+    service_page = graphene.Field(ServicePageNode)
+    information_page = graphene.Field(InformationPageNode)
+    guide_page = graphene.Field(GuidePageNode)
+    official_document_page = graphene.Field(OfficialDocumentPageNode)
+
+    def resolve_service_page(self, info):
+        service_page = None
+        # TODO: don't catch everything
+        try:
+            service_page = ServicePage.objects.get(id=self.page_id)
+        except Exception as e:
+            pass
+
+        return service_page
+
+    def resolve_information_page(self, info):
+        information_page = None
+        # TODO: don't catch everything
+        try:
+            information_page = InformationPage.objects.get(id=self.page_id)
+        except Exception as e:
+            pass
+
+        return information_page
+
+    def resolve_guide_page(self, info):
+        guide_page = None
+        # TODO: don't catch everything
+        try:
+            guide_page = GuidePage.objects.get(id=self.page_id)
+        except Exception as e:
+            pass
+
+        return guide_page
+
+    def resolve_official_document_page(self, info):
+        official_document_page = None
+        # TODO: don't catch everything
+        try:
+            official_document_page = OfficialDocumentPage.objects.get(id=self.page_id)
+        except Exception as e:
+            pass
+
+        return official_document_page
+
+    class Meta:
+        model = DepartmentPageTopService
         interfaces = [graphene.Node]
 
 

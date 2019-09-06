@@ -23,6 +23,7 @@ export JOPLIN_APP_CONTAINER_PORT=80
 export JANIS_URL=http://localhost:3000
 export DATABASE_URL="postgres://joplin@db:${JOPLIN_DB_CONTAINER_PORT}/joplin"
 export LOAD_DATA="on"
+export DEBUG_TOOLBAR=0
 
 # Build Args for use during build process
 export COMPOSE_PROJECT_NAME=joplin_migration_test
