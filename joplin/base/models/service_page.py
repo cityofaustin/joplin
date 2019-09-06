@@ -27,12 +27,25 @@ class ServicePage(JanisBasePage):
 
     steps = StreamField(
         [
-            ('basic_step', RichTextBlock(
-                features=WYSIWYG_SERVICE_STEP,
+            # ('basic_step', RichTextBlock(
+            #     features=WYSIWYG_SERVICE_STEP,
+            #     label='Basic Step'
+            # )),
+            ('basic_step', StructBlock(
+                [
+                    ('step_name', TextBlock(
+                        label='Step name'
+                    )),
+                    ('step_description', RichTextBlock(
+                        features=WYSIWYG_SERVICE_STEP,
+                        label='Step Content',
+                    )),
+                ],
                 label='Basic Step'
             )),
             ('step_with_options_accordian', StructBlock(
                 [
+                    # this TextBlock will be styled with an H1 tag
                     ('options_description', TextBlock(
                         'Describe the set of options')),
                     ('options', ListBlock(
