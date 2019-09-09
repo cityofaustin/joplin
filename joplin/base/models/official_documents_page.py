@@ -51,7 +51,7 @@ class OfficialDocumentPageOfficialDocument(Orderable):
     date = models.DateField(verbose_name="Document date", null=True)
     title = models.CharField(verbose_name="Document title", max_length=DEFAULT_MAX_LENGTH)
     authoring_office = models.CharField(verbose_name="Authoring office of document", max_length=DEFAULT_MAX_LENGTH)
-    summary = models.TextField(verbose_name="Document summary", max_length=600, help_text="600 char limit")
+    summary = models.TextField(verbose_name="Document summary")
     name = models.CharField(verbose_name="Name of Document", max_length=DEFAULT_MAX_LENGTH)
     link = models.URLField(verbose_name="Link to Document (URL)")
 
