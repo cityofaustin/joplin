@@ -53,11 +53,7 @@ class InformationPage(JanisBasePage):
         InlinePanel('related_departments', label='Related Departments'),
         FieldPanel('description', widget=countMeTextArea),
         StreamFieldPanel('options'),
-        FieldPanel('additional_content', widget=widgets.CountableWidget(attrs={
-            'data-count': 'characters',
-            'data-max-count': AUTHOR_LIMITS['additional_content'],
-            'data-count-direction': 'down'
-        })),
+        FieldPanel('additional_content'),
         InlinePanel('contacts', label='Contacts'),
     ]
 

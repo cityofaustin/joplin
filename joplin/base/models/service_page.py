@@ -105,11 +105,7 @@ class ServicePage(JanisBasePage):
             [
                 HelpPanel(additional_content.help_text,
                           classname="coa-helpPanel"),
-                FieldPanel('additional_content', widget=widgets.CountableWidget(attrs={
-                    'data-count': 'characters',
-                    'data-max-count': AUTHOR_LIMITS['additional_content'],
-                    'data-count-direction': 'down'
-                }))
+                FieldPanel('additional_content')
             ],
             heading=additional_content.verbose_name,
             classname='coa-multiField-nopadding'
