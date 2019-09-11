@@ -8,7 +8,7 @@ from heroku3.models.build import Build
 
 import boto3
 
-from base.models import TranslatedImage
+from base.models import TranslatedImage, Contact, Location, Map
 
 import logging
 logger = logging.getLogger(__name__)
@@ -33,7 +33,7 @@ def generate_responsive_images(sender, **kwargs):
         image.get_rendition(f'width-{width}')
 
 
-def create_build_aws(instance, publish=False, request=None):
+def create_build_aws(content_type, instance, publish_action='edited', request=None):
     """
         Triggers a build in Amazon Elastic Container Service, it requires:
         1. DEPLOYMENT_MODE
@@ -50,15 +50,9 @@ def create_build_aws(instance, publish=False, request=None):
     logger.debug("create_build_aws() Starting task")
 
     slack_message = ""
-    publish_action = ""
-
-    if (publish):
-        publish_action = "published"
-    else:
-        publish_action = "unpublished"
 
     try:
-        slack_message = "'%s' was %s by user: %s " % (instance.title, publish_action, request.user.email)
+        slack_message = "%s '%s' was %s by user: %s " % (content_type, instance, publish_action, request.user.email)
         print(slack_message)
     except BaseException:
         slack_message = ""
@@ -187,15 +181,31 @@ def get_http_request():
         return None
 
 
+# By creating a signal reciever for each snippet model we have, we can avoid
+# needing to filter out large amounts of unwanted calls in our function logic
+@receiver(post_save, sender=Contact)
+def contact_post_save_signal(sender, **kwargs):
+    logger.debug(f'contact_post_save {sender}')
+    create_build_aws("Contact", kwargs['instance'], request=get_http_request())
+
+@receiver(post_save, sender=Location)
+def location_post_save_signal(sender, **kwargs):
+    logger.debug(f'location_post_save {sender}')
+    create_build_aws("Location", kwargs['instance'], request=get_http_request())
+
+@receiver(post_save, sender=Map)
+def map_post_save_signal(sender, **kwargs):
+    logger.debug(f'map_post_save {sender}')
+    create_build_aws("Map", kwargs['instance'], request=get_http_request())
+
+
 @receiver(page_published)
 def page_published_signal(sender, **kwargs):
     logger.debug(f'page_published {sender}')
-    # create_build_if_configured()
-    create_build_aws(kwargs['instance'], publish=True, request=get_http_request())
+    create_build_aws("Page", kwargs['instance'], publish_action='published', request=get_http_request())
 
 
 @receiver(page_unpublished)
 def page_unpublished_signal(sender, **kwargs):
     logger.debug(f'page_unpublished {sender}')
-    # create_build_if_configured()
-    create_build_aws(kwargs['instance'], publish=False, request=get_http_request())
+    create_build_aws("Page", kwargs['instance'], publish_action='unpublished', request=get_http_request())
