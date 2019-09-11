@@ -8,6 +8,7 @@ from graphene.types import Scalar
 from graphene.types.generic import GenericScalar
 from wagtail.core.fields import StreamField
 from wagtail.core.models import Page, PageRevision
+from wagtail.documents.models import Document
 from django_filters import FilterSet, OrderingFilter
 from wagtail.core.blocks import PageChooserBlock, TextBlock, ListBlock
 
@@ -23,6 +24,14 @@ class StreamFieldType(Scalar):
 @convert_django_field.register(StreamField)
 def convert_stream_field(field, registry=None):
     return StreamFieldType(description=field.help_text, required=not field.null)
+
+
+class DocumentNode(DjangoObjectType):
+    class Meta:
+        model = Document
+        interfaces = [graphene.Node]
+        exclude_fields = ['tags']
+    filename = graphene.String()
 
 
 class ThreeOneOneNode(DjangoObjectType):
