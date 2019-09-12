@@ -35,7 +35,8 @@ class ServicePage(JanisBasePage):
                 [
                     ('options_description', RichTextBlock(
                         features=WYSIWYG_SERVICE_STEP,
-                        label='Describe the set of options',
+                        # richTextPlaceholder.js searches for the class 'odd-placeholder'.
+                        # It will then search for the prefix odd-value and place the remaining text after the "_" as the place holder.
                         classname='odd-placeholder odd-value_Option-description'
                     )),
                     ('options', ListBlock(
