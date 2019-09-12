@@ -6,7 +6,6 @@ import menuActiveState from './EditPage/menuActiveState';
 import toggleActivePanel from './SidebarPreview/toggleActivePanel';
 import richTextPlaceholder from './CreateContentModal/richTextPlaceholder';
 
-
 import _ from 'lodash';
 
 $(function() {
