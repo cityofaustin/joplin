@@ -36,6 +36,7 @@ class ServicePage(JanisBasePage):
                     ('options_description', RichTextBlock(
                         features=WYSIWYG_SERVICE_STEP,
                         label='Describe the set of options',
+                        classname='odd-placeholder odd-value_Option-description'
                     )),
                     ('options', ListBlock(
                         StructBlock([

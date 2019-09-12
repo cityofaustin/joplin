@@ -11,7 +11,60 @@ $(function() {
   insertWizardData();
   menuActiveState();
   toggleActivePanel();
+  handlePlaceholders();
 
+// ----
+//
+  function handlePlaceholders(){
+
+    // Reference: https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver
+
+    const targetNode = document.getElementById('tab-content');
+    const config = { attributes: true, childList: true, subtree: true };
+    const callback = function(mutationsList, observer) {
+      for (let mutation of mutationsList) {
+          if (mutation.type === 'childList') {
+            // 💾 console.log('A child node has been added or removed.');
+            let placeholder = mutation.target.querySelector('.public-DraftEditorPlaceholder-inner');
+            if (placeholder) {
+              let parent = placeholder
+              while (parent = parent.parentNode) {
+                if (
+                  parent.classList &&
+                  parent.classList.contains("odd-placeholder")
+                ) {
+                  //🔥let's get our dynamic placeholder
+                  parent.classList.forEach( classname => {
+                    const subClasses = classname.split('_')
+                    if (subClasses[0] === "odd-value") {
+                      // 🤔 will need to chagne FE 👇
+                      // placeholder.classList.add("odd-placeolder-elm")
+                      placeholder.innerText = subClasses[1].replace(/-/g," ")
+                    }
+                  })
+                }
+              }
+            }
+          }
+          // else if (mutation.type === 'attributes') {
+          //     console.log('The ' + mutation.attributeName + ' attribute was modified.');
+          // }
+      }
+    }
+
+    // Create an observer instance linked to the callback function
+    const observer = new MutationObserver(callback);
+
+    // Start observing the target node for configured mutations
+    observer.observe(targetNode, config);
+
+    // Later, you can stop observing
+    //observer.disconnect();
+  }
+
+
+//
+// ----
   // TODO: This a better way
   const anchors = {
     id_title: '#title',
