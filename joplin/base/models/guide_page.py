@@ -32,7 +32,10 @@ class GuidePage(JanisBasePage):
         [
             ('section', StructBlock(
                 [
-                    ('section_heading', TextBlock('Heading')),
+                    ('section_heading_en', TextBlock(label='Heading [en]')),
+                    ('section_heading_es', TextBlock(label='Heading [es]', required=False)),
+                    ('section_heading_ar', TextBlock(label='Heading [ar]', required=False)),
+                    ('section_heading_vi', TextBlock(label='Heading [vi]', required=False)),
                     ('pages', ListBlock(PageChooserBlock(label="Page", page_type=[InformationPage, ServicePage]), help_text='Select existing pages in the order you want them to display within each heading. Pages should be added only once to any single guide.')),
                 ],
                 label="Section"

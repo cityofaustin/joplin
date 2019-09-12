@@ -215,6 +215,23 @@ $(function() {
       }
     });
 
+    // Fields inside of Struct Blocks
+    document.querySelectorAll('.struct-block').forEach(elem => {
+      elem.querySelectorAll('label').forEach(label => {
+        var labelText = label.innerText;
+        var langString = labelText.match(languageRegex);
+
+        if (
+          langString != null &&
+          langString != lowerLanguageStrings[currentLang]
+        ) {
+          label.parentElement.classList.add('hidden');
+        } else {
+          label.parentElement.classList.remove('hidden');
+        }
+      });
+    });
+
     // Select language radio button if it isn't set already
     // For instance, if the language change is triggered by a refresh from clicking Share or Preview
     $(`#${currentLang}`).prop('checked', true);
@@ -258,6 +275,33 @@ $(function() {
   var viButton = $('#vi');
   viButton.click(function() {
     changeLanguage('vi');
+  });
+
+  // When we add new fields to the page (orderable/streamfields etc.)
+  // only show the appropriate fields based on language
+  // we can do this by observing changes to our sections count
+
+  $('#sections-count').change(function() {
+    changeLanguage(state.currentLang);
+  });
+
+  // Found this here: https://stackoverflow.com/a/31719339
+  MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
+
+  var trackChange = function(element) {
+    var observer = new MutationObserver(function(mutations, observer) {
+      if (mutations[0].attributeName == 'value') {
+        $(element).trigger('change');
+      }
+    });
+    observer.observe(element, {
+      attributes: true,
+    });
+  };
+
+  // make sure observe all of them
+  $('#sections-count').each(function(index, element) {
+    trackChange(element);
   });
 
   // Initialize page in English, hide all other language fields
