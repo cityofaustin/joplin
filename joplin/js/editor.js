@@ -4,7 +4,7 @@ import '../css/preview.scss';
 import insertWizardData from './CreateContentModal/insertWizardData';
 import menuActiveState from './EditPage/menuActiveState';
 import toggleActivePanel from './SidebarPreview/toggleActivePanel';
-import richTextPlaceholder from './CreateContentModal/richTextPlaceholder';
+import richTextPlaceholder from './EditPage/richTextPlaceholder';
 
 import _ from 'lodash';
 

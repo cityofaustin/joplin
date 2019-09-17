@@ -35,9 +35,9 @@ class ServicePage(JanisBasePage):
                 [
                     ('options_description', RichTextBlock(
                         features=WYSIWYG_SERVICE_STEP,
-                        # richTextPlaceholder.js searches for the class 'odd-placeholder'.
-                        # It will then search for the prefix odd-value and place the remaining text after the "_" as the place holder.
-                        classname='odd-placeholder odd-value_Option-description'
+                        # richTextPlaceholder.js searches for the class 'coa-option-description' and replaces placeholder text
+                        # The placeholder text is not part of the richtext input, but rather a div mask.
+                        classname='coa-option-description',
                     )),
                     ('options', ListBlock(
                         StructBlock([
