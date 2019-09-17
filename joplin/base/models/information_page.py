@@ -14,6 +14,8 @@ from .janis_page import JanisBasePage
 from .contact import Contact
 
 from .constants import WYSIWYG_GENERAL
+from .widgets import countMe, countMeTextArea, AUTHOR_LIMITS
+from countable_field import widgets
 
 
 class InformationPage(JanisBasePage):
@@ -43,13 +45,13 @@ class InformationPage(JanisBasePage):
     base_form_class = InformationPageForm
 
     content_panels = [
-        FieldPanel('title_en'),
-        FieldPanel('title_es'),
+        FieldPanel('title_en', widget=countMe),
+        FieldPanel('title_es', widget=countMe),
         FieldPanel('title_ar'),
         FieldPanel('title_vi'),
         InlinePanel('topics', label='Topics'),
         InlinePanel('related_departments', label='Related Departments'),
-        FieldPanel('description'),
+        FieldPanel('description', widget=countMeTextArea),
         StreamFieldPanel('options'),
         FieldPanel('additional_content'),
         InlinePanel('contacts', label='Contacts'),

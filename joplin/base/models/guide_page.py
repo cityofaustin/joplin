@@ -19,6 +19,7 @@ from .contact import Contact
 from .translated_image import TranslatedImage
 
 from .constants import WYSIWYG_GENERAL
+from .widgets import countMe, countMeTextArea
 
 
 class GuidePage(JanisBasePage):
@@ -31,7 +32,10 @@ class GuidePage(JanisBasePage):
         [
             ('section', StructBlock(
                 [
-                    ('section_heading', TextBlock('Heading')),
+                    ('section_heading_en', TextBlock(label='Heading [en]')),
+                    ('section_heading_es', TextBlock(label='Heading [es]', required=False)),
+                    ('section_heading_ar', TextBlock(label='Heading [ar]', required=False)),
+                    ('section_heading_vi', TextBlock(label='Heading [vi]', required=False)),
                     ('pages', ListBlock(PageChooserBlock(label="Page", page_type=[InformationPage, ServicePage]), help_text='Select existing pages in the order you want them to display within each heading. Pages should be added only once to any single guide.')),
                 ],
                 label="Section"
@@ -44,11 +48,11 @@ class GuidePage(JanisBasePage):
     base_form_class = GuidePageForm
 
     content_panels = [
-        FieldPanel('title_en'),
-        FieldPanel('title_es'),
+        FieldPanel('title_en', widget=countMe),
+        FieldPanel('title_es', widget=countMe),
         FieldPanel('title_ar'),
         FieldPanel('title_vi'),
-        FieldPanel('description'),
+        FieldPanel('description', widget=countMeTextArea),
         InlinePanel('topics', label='Topics'),
         InlinePanel('related_departments', label='Related Departments'),
         ImageChooserPanel('image'),

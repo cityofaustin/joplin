@@ -44,6 +44,7 @@ First, install docker (version 18.09 or greater) and clone this repo.
 ```
 LOAD_DATA="on" ./scripts/serve-local.sh
 ```
+
 -   This will add some test content (from `joplin/db/system-generated/seeding.datadump.json`)
 -   Images are also not stored in this repo, and can instead be downloaded using `./scripts/download-media.sh`. This will parse a backup file from the db/smuggler directory and place all referenced images into the local media folder.
 
@@ -58,6 +59,7 @@ DROP_DB=on ./scripts/serve-local.sh
 ```
 RELOAD_DATA=on ./scripts/serve-local.sh
 ```
+
 -   LOAD_DATA=on + DROP_DB=on
 
 **Run with Janis**
@@ -96,7 +98,7 @@ Note! To run additional pipenv commands like `pipenv run ./joplin/manage.py migr
 
 If you don't want to load the default data used in `LOAD_DATA="on"`, you have to ability to source data from any environment you'd like using a django plugin called [smuggler](https://github.com/semente/django-smuggler).
 
-To load in data from smuggler follow these steps.
+To load in data from smuggler follow these steps:
 
 1. Download a json datadump from the Joplin deployment of your choosing by visiting `[joplin URL]/django-admin/dump`.
 2. Place your datadump in the smuggler fixtures directory `joplin/db/smuggler`
@@ -148,7 +150,7 @@ https://docs.djangoproject.com/en/2.2/topics/migrations/
 4. Run that migration with:
     - `docker exec -it joplin_app_1 python joplin/manage.py migrate`
 5. Test that your migration works with
-    - `./scripts/migration-test.sh`    
+    - `./scripts/migration-test.sh`
 
 **About migration-test script**
 
@@ -157,10 +159,11 @@ The migration-test script makes sure that your migration changes will work even 
 Note: This process does not update staging. It updates the data that is seeded into local and PR builds. Staging data is persistent by design and would need to be manually updated.
 
 Options:
-  - "LOAD_PROD_DATA=on" will source data from production and build migrations from "cityofaustin/joplin-app:production-latest" image
-    - Default is to source data from current seeding.datadump.json and build migrations from "cityofaustin/joplin-app:master-latest" image
-  - "DOCKER_TAG_DB_BUILD=[x]" will build initial migrations from the docker image of your choice. Potentially could be used if you intend to merge into a branch other than master.
-  - "JANIS=on" will automatically spin up a Janis container for you. Note: you must have a "janis:local" image available locally.
+
+-   "LOAD_PROD_DATA=on" will source data from production and build migrations from "cityofaustin/joplin-app:production-latest" image
+    -   Default is to source data from current seeding.datadump.json and build migrations from "cityofaustin/joplin-app:master-latest" image
+-   "DOCKER_TAG_DB_BUILD=[x]" will build initial migrations from the docker image of your choice. Potentially could be used if you intend to merge into a branch other than master.
+-   "JANIS=on" will automatically spin up a Janis container for you. Note: you must have a "janis:local" image available locally.
 
 Here's what `migration-test.sh` does at a high level:
 
@@ -287,8 +290,8 @@ The migration process currently consists of 3 commands:
 
 ### Use the Django Debug Toolbar!
 
-The django debug toolbar is super handy for debugging and performance testing. 
-Simply run with the flag DEBUG_TOOLBAR=on, such as ```DEBUG_TOOLBAR=on ./scripts/serve-local.sh```
+The django debug toolbar is super handy for debugging and performance testing.
+Simply run with the flag DEBUG_TOOLBAR=on, such as `DEBUG_TOOLBAR=on ./scripts/serve-local.sh`
 
 ### With Pycharm
 
@@ -300,12 +303,11 @@ Simply run with the flag DEBUG_TOOLBAR=on, such as ```DEBUG_TOOLBAR=on ./scripts
 ### Without Docker or Pycharm
 
 1. Run `sh scripts/undockered.sh` to initialize an undockered Joplin instance.
-2. Add ```import pdb; pdb.set_trace()``` to set a breakpoint & enjoy!
+2. Add `import pdb; pdb.set_trace()` to set a breakpoint & enjoy!
 
 ### With Docker
+
 1. Running pdb breakpoints inside the container is possible, but prone to complications. YMMV
-
-
 
 ---
 
