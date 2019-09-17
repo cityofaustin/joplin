@@ -107,10 +107,19 @@ class JanisBasePage(Page):
             # add hardcoded language path to base url
             base_url = os.environ["JANIS_URL"] + '/en'
             # attributes for the url are needed by not discovered yet lets fetch them
-            # this skips global pages that don't have a topic so they still get added to 'root'
-            if hasattr(self, 'topics') and self.topics.first() is not None and theme_slug is None:
-                topic_collection_slug = self.topics.first().topic.topiccollections.first().topiccollection.slug
-                theme_slug = self.topics.first().topic.topiccollections.first().topiccollection.theme.slug
+            # looking for missing elements, deducing content type from what works and what dosen't
+            if theme_slug is None and self.content_type.name != 'department page':
+                try:
+                    theme_slug = self.topics.first().topic.topiccollections.first().topiccollection.theme.slug or None
+                    topic_collection_slug = self.topics.first().topic.topiccollections.first().topiccollection.slug or None
+                except AttributeError as e:
+                    try:
+                        theme_slug = self.topiccollections.first().topiccollection.theme.slug or None
+                        topic_collection_slug = self.topiccollections.first().topiccollection.slug or None
+                    except AttributeError as e:
+                        # this is for pages just under departments
+                        theme_slug = self.related_departments.all()[0].related_department.slug or None
+
             # collect all our path elements
             paths_list = [
                 base_url,
