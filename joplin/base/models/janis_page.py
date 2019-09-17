@@ -1,6 +1,6 @@
 import os
 import graphene
-
+import traceback
 
 from django.db import models
 
@@ -106,6 +106,11 @@ class JanisBasePage(Page):
 
             # add hardcoded language path to base url
             base_url = os.environ["JANIS_URL"] + '/en'
+            # dirty way of saying its probably a info, guide, service, page
+            # skips global pages that don't have a topic
+            if hasattr(self, 'topics') and self.topics.first() is not None and theme_slug is None:
+                topic_collection_slug = self.topics.first().topic.topiccollections.first().topiccollection.slug
+                theme_slug = self.topics.first().topic.topiccollections.first().topiccollection.theme.slug
             # collect all our path elements
             paths_list = [
                 base_url,
@@ -114,11 +119,13 @@ class JanisBasePage(Page):
                 topic_slug,
                 page_slug]
             # join them together, filtering out empty ones
+
             janis_url = '/'.join(filter(None, (paths_list)))
             return janis_url
         except Exception as e:
             # right now this is a catch-all,
             print("!janis url error!:", self.title, e)
+            print(traceback.format_exc())
             return "#"
             pass
 
