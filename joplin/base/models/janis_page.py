@@ -106,8 +106,8 @@ class JanisBasePage(Page):
 
             # add hardcoded language path to base url
             base_url = os.environ["JANIS_URL"] + '/en'
-            # dirty way of saying its probably a info, guide, service, page
-            # skips global pages that don't have a topic
+            # attributes for the url are needed by not discovered yet lets fetch them
+            # this skips global pages that don't have a topic so they still get added to 'root'
             if hasattr(self, 'topics') and self.topics.first() is not None and theme_slug is None:
                 topic_collection_slug = self.topics.first().topic.topiccollections.first().topiccollection.slug
                 theme_slug = self.topics.first().topic.topiccollections.first().topiccollection.theme.slug
