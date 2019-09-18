@@ -68,7 +68,9 @@ class JanisBasePage(Page):
                 'service page',
                 'topic page',
                 'information page',
-                'department page'
+                'department page',
+                'guide page',
+                'official document page'
             ]
             has_no_topic_collection = has_no_theme
 
