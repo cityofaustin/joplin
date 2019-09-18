@@ -167,9 +167,18 @@ class JanisBasePage(Page):
     class Meta:
         abstract = True
 
-class AdminOnlyFieldPanel(FieldPanel):
-    def render_as_object(self):
-        if not self.request.user.is_superuser:
-            return 'HIDE_ME'
+# playing with things from
+# https://stackoverflow.com/questions/53322697/customizing-dynamically-the-edit-handler-depending-of-the-type-of-user/53421701#53421701
 
-        return super().render_as_object()
+class AdminOnlyFieldPanel(FieldPanel):
+    def bind_to_instance(self, instance=None, form=None, request=None):
+        # form.fields['managers'].widget = HiddenInput()
+        form.fields['managers'].disabled = True
+        return super().bind_to_instance(
+            instance=instance, form=form, request=request)
+
+    # def render_as_object(self):
+    #     if not self.request.user.is_superuser:
+    #         return 'HIDE_ME'
+
+    #     return super().render_as_object()
