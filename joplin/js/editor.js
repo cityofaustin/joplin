@@ -4,6 +4,7 @@ import '../css/preview.scss';
 import insertWizardData from './CreateContentModal/insertWizardData';
 import menuActiveState from './EditPage/menuActiveState';
 import toggleActivePanel from './SidebarPreview/toggleActivePanel';
+import richTextPlaceholder from './EditPage/richTextPlaceholder';
 
 import _ from 'lodash';
 
@@ -11,6 +12,7 @@ $(function() {
   insertWizardData();
   menuActiveState();
   toggleActivePanel();
+  richTextPlaceholder();
 
   // TODO: This a better way
   const anchors = {
