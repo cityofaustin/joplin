@@ -163,3 +163,10 @@ class JanisBasePage(Page):
 
     class Meta:
         abstract = True
+
+class AdminOnlyFieldPanel(FieldPanel):
+    def render_as_object(self):
+        if not self.request.user.is_superuser:
+            return 'HIDE_ME'
+
+        return super().render_as_object()
