@@ -12,11 +12,13 @@
         {% trans "Choose content to feature on the department page" as choose_str %}
     {% else %}
         {% trans "Choose" as choose_str %}
-    {% endif %}
-{% else %}
-    {% trans "Choose a page" as choose_str %}
 {% endif %}
-{% include "wagtailadmin/shared/header.html" with title=choose_str  search_url="wagtailadmin_choose_page_search" query_parameters="page_type="|add:page_type_string icon="doc-empty-inverse" %}
+    {% include "wagtailadmin/shared/header.html" with title=choose_str  search_url="wagtailadmin_choose_page_search" query_parameters="page_type="|add:page_type_string icon="doc-empty-inverse" %}
+
+{% elif not page_types_restricted %}
+    {% trans "Choose a page" as choose_str %}
+    {% include "wagtailadmin/shared/header.html" with title=choose_str subtitle=page_type_names|join:", " search_url="wagtailadmin_choose_page_search" query_parameters="page_type="|add:page_type_string icon="doc-empty-inverse" %}
+{% endif %}
 
 
 <div class="nice-padding">
@@ -45,5 +47,5 @@
     <div class="page-results">
         {% include 'wagtailadmin/chooser/_browse_results.html' %}
     </div>
-    
+
 </div>
