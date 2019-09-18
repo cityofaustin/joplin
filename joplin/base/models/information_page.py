@@ -23,8 +23,6 @@ class InformationPage(JanisBasePage):
 
     description = models.TextField(blank=True, verbose_name='Write a description of this page')
 
-    coaGlobal = models.BooleanField(default=False, verbose_name='Make this a top level page')
-
     options = StreamField(
         [
             ('option', RichTextBlock(
@@ -52,7 +50,6 @@ class InformationPage(JanisBasePage):
         FieldPanel('title_es', widget=countMe),
         FieldPanel('title_ar'),
         FieldPanel('title_vi'),
-        AdminOnlyFieldPanel('coaGlobal', classname="admin-only-field"),
         InlinePanel('topics', label='Topics'),
         InlinePanel('related_departments', label='Related Departments'),
         FieldPanel('description', widget=countMeTextArea),

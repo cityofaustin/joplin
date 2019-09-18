@@ -42,6 +42,8 @@ class JanisBasePage(Page):
         verbose_name='Notes for authors (Not visible on the resident facing site)'
     )
 
+    coa_global = models.BooleanField(default=False, verbose_name='Make this a top level page')
+
     def janis_url(self):
         """
         This function parses various attributes of related content types to construct the
@@ -153,7 +155,8 @@ class JanisBasePage(Page):
 
         edit_handler = TabbedInterface([
             ObjectList(cls.content_panels + [
-                FieldPanel('author_notes')
+                FieldPanel('author_notes'),
+                AdminOnlyFieldPanel('coa_global', classname="admin-only-field"),
             ], heading='Content'),
             ObjectList(Page.promote_panels + cls.promote_panels,
                        heading='Search Info')
