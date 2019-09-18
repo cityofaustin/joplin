@@ -39,6 +39,8 @@
 .page-explorer header,
 .homepage header,
 //,hasform helps distinguish that this is on a page chooser modal
+// we need to unhide headers for modals only, and this was the most specific
+// selector I could find
 .page-editor header:not(.hasform) {
     display: none;
 }
