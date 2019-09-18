@@ -110,6 +110,7 @@ class JanisBasePage(Page):
             base_url = os.environ["JANIS_URL"] + '/en'
             # attributes for the url are needed by not discovered yet lets fetch them
             # looking for missing elements, deducing content type from what works and what dosen't
+            # this is pretty ugly and ought to be cleaned up
             if theme_slug is None and self.content_type.name != 'department page':
                 try:
                     theme_slug = self.topics.first().topic.topiccollections.first().topiccollection.theme.slug or None
