@@ -230,3 +230,10 @@ def register_button_feature(features):
         'from_database_format': {'div.rich-text-button-link': BlockElementHandler(type_)},
         'to_database_format': {'block_map': {type_: {'element': 'div', 'props': {'class': 'usa-button-primary rich-text-button-link'}}}},
     })
+
+
+@hooks.register('construct_page_chooser_queryset')
+def show_live_pages_only(pages, request):
+    pages = pages.filter(live=True)
+
+    return pages
