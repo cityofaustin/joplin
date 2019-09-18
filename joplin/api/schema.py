@@ -180,7 +180,7 @@ class ProcessPageNode(DjangoObjectType):
 class InformationPageNode(DjangoObjectType):
     class Meta:
         model = InformationPage
-        filter_fields = ['id', 'slug', 'live']
+        filter_fields = ['id', 'slug', 'live', 'coa_global']
         interfaces = [graphene.Node]
 
 
