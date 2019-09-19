@@ -29,7 +29,7 @@
         {% blocktrans with type=page_type_names|join:", " count counter=page_type_names|length %}
         Only pages of type "{{ type }}" may be chosen for this field. Search results will exclude pages of other types.
         {% plural %}
-        Only the following page types may be chosen for this field: {{ type }}. Search results will exclude pages of other types.
+        Only the following published page types may be chosen for this field: {{ type }}. Search results will exclude pages of other types.
         {% endblocktrans %}
     </p>
 
