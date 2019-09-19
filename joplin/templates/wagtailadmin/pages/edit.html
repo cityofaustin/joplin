@@ -39,11 +39,23 @@
                 <span class="page_title">{{ page.draft_title }}</span><br>
             </h1>
             <section>
-            <div class="coa-page-action" id="language-select">
+              <div class="field choice_field select">
+                  <label for="id_select">Select:</label>
+                  <div class="field-content">
+                      <div class="input">
+                          <select name="select" id="id_select">
+                              <option id="en" value="choice1">English</option>
+                              <option id="es" value="choice2">Spanish</option>
+                          </select>
+                          <span></span>
+                      </div>
+                  </div>
+              </div>
+            <!-- <div class="coa-page-action" id="language-select">
               <input type="radio" id="en" name="toggle" checked ><label class="coa-secondary-button button-small" for="en">EN</label>
               <input type="radio" id="es" name="toggle"><label class="coa-secondary-button button-small" for="es">ES</label>
               <input type="radio" id="ar" name="toggle"><label class="coa-secondary-button button-small" for="ar">AR</label>
-              <input type="radio" id="vi" name="toggle"><label class="coa-secondary-button button-small" for="vi">VI</label>
+              <input type="radio" id="vi" name="toggle"><label class="coa-secondary-button button-small" for="vi">VI</label> -->
             </section>
         </div>
 

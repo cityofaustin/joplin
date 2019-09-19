@@ -261,7 +261,7 @@ $(function() {
       $('#mobile-preview-iframe').attr('src', janisPreviewUrl);
     }
   }
-
+// document.getElementById('test').selectedOptions[0].text
   var enButton = $('#en');
   enButton.click(function() {
     changeLanguage('en');
