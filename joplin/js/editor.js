@@ -261,22 +261,11 @@ $(function() {
       $('#mobile-preview-iframe').attr('src', janisPreviewUrl);
     }
   }
-// document.getElementById('test').selectedOptions[0].text
-  var enButton = $('#en');
-  enButton.click(function() {
-    changeLanguage('en');
-  });
-  var esButton = $('#es');
-  esButton.click(function() {
-    changeLanguage('es');
-  });
-  var arButton = $('#ar');
-  arButton.click(function() {
-    changeLanguage('ar');
-  });
-  var viButton = $('#vi');
-  viButton.click(function() {
-    changeLanguage('vi');
+
+  $('#language-select').change(function(currentLang) {
+    let selectedLanguage = document.getElementById('language-select')
+      .selectedOptions[0].id;
+    changeLanguage(selectedLanguage);
   });
 
   // When we add new fields to the page (orderable/streamfields etc.)
