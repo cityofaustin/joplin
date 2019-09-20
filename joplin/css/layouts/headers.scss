@@ -41,3 +41,12 @@
 .header .actions * {
     // margin: auto 2px;
 }
+
+.secondary-actions {
+    width: calc(100% - #{$nav-wrapper-width});
+    background: $coa-color-dark-gray2;
+    position: fixed;
+    z-index: 31;
+    display: flex;
+    top: 100px;
+}

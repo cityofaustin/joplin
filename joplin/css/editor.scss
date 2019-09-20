@@ -28,8 +28,12 @@
 }
 
 .tab-nav.merged {
-    display: none;
     background-color: #eee;
+}
+
+.tab-nav {
+  // padding-bottom: 40px;
+  z-index: 32;
 }
 
 .editor__save-button {
@@ -71,4 +75,8 @@ label {
 
 .coa-placeolder-elm {
   color: $coa-color-dark-gray2 !important;
+}
+
+.edit-page-form-container {
+  z-index: 30;
 }

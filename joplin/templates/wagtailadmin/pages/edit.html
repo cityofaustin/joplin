@@ -32,34 +32,32 @@
       }
     </style>
     {% render_bundle 'editor' %}
-    <div class="header secondary">
+    <div class="header secondary ">
+
         <div>
             <h1 class="edit_page_header">
                 <span class="coa-page-action">Edit</span>
                 <span class="page_title">{{ page.draft_title }}</span><br>
             </h1>
-            <section>
-              <div class="field choice_field select">
-                  <div class="field-content">
-                      <div class="input">
-                          <select name="select" id="language-select" >
-                              <option id="en" selected>English</option>
-                              <option id="es" >Spanish</option>
-                              <option id="ar" >Arabic</option>
-                              <option id="vi" >Vietnamese</option>
-                          </select>
-                          <span></span>
-                      </div>
+
+        </div>
+        <section class="left">
+          <div class="field choice_field select">
+              <div class="field-content">
+                  <div class="input">
+                      <select name="select" id="language-select" >
+                          <option id="en" selected>English</option>
+                          <option id="es" >Spanish</option>
+                          <option id="ar" >Arabic</option>
+                          <option id="vi" >Vietnamese</option>
+                      </select>
+                      <span></span>
                   </div>
               </div>
-            </section>
-        </div>
-
+          </div>
+        </section>
         <div class="actions">
 
-            <div>
-                <div>See <a href="{% url 'wagtailadmin_pages:revisions_index' page.id %}" class="underlined">All Revisions</a></div>
-            </div>
 
             <!-- SHARE -->
             <div class="coa-button--margin">
@@ -147,10 +145,24 @@
                 </ul>
               {% endif %}
             </div>
+            <div class="right">
+            <div>
+                <div>See <a href="{% url 'wagtailadmin_pages:revisions_index' page.id %}" class="underlined">All Revisions</a></div>
+            </div>
+            {% trans "Status" %}
+            {% include "wagtailadmin/shared/page_status_tag.html" with page=page_for_status %}
+            </div>
         </div>
+
+
+        <nav class="secondary-actions">
+
+
+        </nav>
     </div>
 
     <div class="flex-container">
+
       <div class="edit-page-form-container">
         {{ block.super }}
       </div>
