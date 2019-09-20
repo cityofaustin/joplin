@@ -12,7 +12,6 @@ export default function (){
   const callback = function(mutationsList) {
 
     for (let mutation of mutationsList) {
-      console.log("mutation :", mutation)
       if (mutation.type === 'childList') {
         let placeholder = mutation.target.querySelector('.public-DraftEditorPlaceholder-inner');
         if (placeholder) {
@@ -34,7 +33,7 @@ export default function (){
         parent.classList &&
         parent.classList.contains(wagtailFlaggedClassname)
       ) {
-         placeholder.classList.add("coa-placeolder-elm")
+         placeholder.classList.add("coa-placeholder-elm")
          placeholder.innerText = "Option description"
         break;
       }
