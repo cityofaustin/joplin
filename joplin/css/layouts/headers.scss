@@ -24,7 +24,6 @@
     padding: 1rem 1.5rem;
     z-index: 3;
     display: flex;
-    height: $secondary-header-height;
     h1 {
         color: $coa-color-orange;
         text-transform: capitalize;
@@ -43,7 +42,8 @@
     width: calc(100% - #{$nav-wrapper-width});
     background: #e5e4de;
     position: fixed;
-    z-index: 31;
+    z-index: 30;
     display: flex;
-    top: 180px;
+    top: 175px;
+    padding-left: 1rem ;
 }

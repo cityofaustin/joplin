@@ -24,7 +24,7 @@
 }
 
 .tab-nav.merged {
-    background-color: #eee;
+    background-color: #e5e4de;
 }
 
 .tab-nav {
@@ -52,11 +52,11 @@ label {
 
 // This is because the drafttail editor goes to 30 when in focus
 .header.secondary {
-    z-index: 31 !important;
+    z-index: 34 !important;
 }
 
 .header.coa-header {
-    z-index: 32 !important;
+    z-index: 35 !important;
 }
 
 .struct-block {

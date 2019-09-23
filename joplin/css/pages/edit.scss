@@ -56,18 +56,35 @@
   right: 15px;
 }
 
+.coa-select {
+  min-width: 140px;
+}
 .tab-nav {
   position: fixed;
-  left: 240px;
+  left: 300px;
+  top: 180px;
+  border-top: none;
+  color: black;
 }
-
-// #page-edit-form > ul > li.active {
-//     background-color: green;
-// }
 
 .tab-nav a {
   background-color: #e5e4de;
+  border-top: .3em solid #e5e4de;
+  color: black;
+}
+
+.tab-nav a:hover {
+  background-color: #e5e4de;
+  border-top: .3em solid #e5e4de;
+  color: black;
 }
 .tab-nav li.active a {
-  background-color: $coa-color-gray;
+  background-color: #ffffff;
+  border-top: .3em solid #fff;
+  height: 100px;
+
+}
+
+.coa-select--arrow {
+  font-size: 10px !important;
 }
