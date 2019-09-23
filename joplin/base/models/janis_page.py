@@ -178,7 +178,9 @@ class JanisBasePage(Page):
             ObjectList(cls.content_panels, heading='Content'),
             ObjectList(cls.notes_content_panel, heading='Notes'),
             ObjectList(Page.promote_panels + cls.promote_panels,
-                       heading='Search Info')
+                       heading='SEO'),
+            ObjectList(Page.settings_panels + cls.settings_panels,
+                       heading='Settings')
         ])
 
         return edit_handler.bind_to_model(cls)
