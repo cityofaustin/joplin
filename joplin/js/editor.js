@@ -164,35 +164,25 @@ $(function() {
   function changeLanguage(currentLang) {
     state.currentLang = currentLang;
 
-    var languageStrings = {
-      en: '[EN]',
-      es: '[ES]',
-      vi: '[VI]',
-      ar: '[AR]',
-    };
-
-    var lowerLanguageStrings = {
-      en: '[en]',
-      es: '[es]',
-      vi: '[vi]',
-      ar: '[ar]',
-    };
-
-    var languageRegex = /\[\w+\]/g;
+    // replace brackets with hidden span tags
+    $('ul[class="objects"]')
+      .find('label:contains(" [")')
+      .each(function() {
+        this.innerHTML = this.innerHTML.replace(
+          '[',
+          " <span style='visibility:hidden;'>",
+        );
+        this.innerHTML = this.innerHTML.replace(']', '</span>');
+      });
 
     // Hide stuff that isn't our language
-    // This is hacky but it seems to be working
-
     // Top level fields
     document.querySelectorAll('.object').forEach(elem => {
       if (elem.querySelectorAll('.title-wrapper').length) {
-        var headerText = elem.querySelectorAll('.title-wrapper')[0].innerText;
-        var langString = headerText.match(languageRegex);
-        if (
-          langString != null &&
-          langString != languageStrings[currentLang] &&
-          langString != lowerLanguageStrings[currentLang]
-        ) {
+        var languageTag = elem
+          .querySelectorAll('.title-wrapper')[0]
+          .getElementsByTagName('span')[0].innerHTML;
+        if (languageTag != null && languageTag != currentLang) {
           elem.classList.add('hidden');
         } else {
           elem.classList.remove('hidden');
@@ -203,13 +193,11 @@ $(function() {
     // Fields inside of InlinePanels
     document.querySelectorAll('.field').forEach(elem => {
       if (elem.querySelectorAll('label').length) {
-        var labelText = elem.querySelectorAll('label')[0].innerText;
-        var langString = labelText.match(languageRegex);
+        var languageTag = elem
+          .querySelectorAll('label')[0]
+          .getElementsByTagName('span')[0].innerHTML;
 
-        if (
-          langString != null &&
-          langString != lowerLanguageStrings[currentLang]
-        ) {
+        if (languageTag != null && languageTag != currentLang) {
           elem.parentElement.classList.add('hidden');
         } else {
           elem.parentElement.classList.remove('hidden');
@@ -220,13 +208,11 @@ $(function() {
     // Fields inside of Struct Blocks
     document.querySelectorAll('.struct-block').forEach(elem => {
       elem.querySelectorAll('label').forEach(label => {
-        var labelText = label.innerText;
-        var langString = labelText.match(languageRegex);
+        var languageTag = elem
+          .querySelectorAll('label')[0]
+          .getElementsByTagName('span')[0].innerHTML;
 
-        if (
-          langString != null &&
-          langString != lowerLanguageStrings[currentLang]
-        ) {
+        if (languageTag != null && languageTag != currentLang) {
           label.parentElement.classList.add('hidden');
         } else {
           label.parentElement.classList.remove('hidden');
