@@ -42,6 +42,10 @@ class JanisBasePage(Page):
         verbose_name='Notes for authors (Not visible on the resident facing site)'
     )
 
+    notes_content_panel = [
+        FieldPanel('author_notes')
+    ]
+
     def janis_url(self):
         """
         This function parses various attributes of related content types to construct the
@@ -171,9 +175,8 @@ class JanisBasePage(Page):
             return cls.edit_handler.bind_to_model(cls)
 
         edit_handler = TabbedInterface([
-            ObjectList(cls.content_panels + [
-                FieldPanel('author_notes')
-            ], heading='Content'),
+            ObjectList(cls.content_panels, heading='Content'),
+            ObjectList(cls.notes_content_panel, heading='Notes'),
             ObjectList(Page.promote_panels + cls.promote_panels,
                        heading='Search Info')
         ])
