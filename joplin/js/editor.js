@@ -170,7 +170,7 @@ $(function() {
       .each(function() {
         this.innerHTML = this.innerHTML.replace(
           '[',
-          " <span style='visibility:hidden;'>",
+          " <span style='display:none;'>",
         );
         this.innerHTML = this.innerHTML.replace(']', '</span>');
       });
