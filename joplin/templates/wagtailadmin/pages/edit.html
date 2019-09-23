@@ -32,32 +32,15 @@
       }
     </style>
     {% render_bundle 'editor' %}
-    <div class="header secondary ">
-
+    <div class="header secondary">
         <div>
             <h1 class="edit_page_header">
                 <span class="coa-page-action">Edit</span>
                 <span class="page_title">{{ page.draft_title }}</span><br>
             </h1>
-
         </div>
-        <section class="left">
-          <div class="field choice_field select">
-              <div class="field-content">
-                  <div class="input">
-                      <select name="select" id="language-select" >
-                          <option id="en" selected>English</option>
-                          <option id="es" >Spanish</option>
-                          <option id="ar" >Arabic</option>
-                          <option id="vi" >Vietnamese</option>
-                      </select>
-                      <span></span>
-                  </div>
-              </div>
-          </div>
-        </section>
-        <div class="actions">
 
+        <div class="actions">
 
             <!-- SHARE -->
             <div class="coa-button--margin">
@@ -120,7 +103,7 @@
               </div>
 
               {% if not page.locked %}
-                <div class="dropdown-toggle icon icon-arrow-down"></div>
+                <div class="dropdown-toggle icon icon-arrow-down coa-dropdown--no-height"></div>
                 <ul role="menu">
                   {# Save Draft should be secondary action if page is live #}
                   {% if page.live %}
@@ -145,20 +128,36 @@
                 </ul>
               {% endif %}
             </div>
-            <div class="right">
-            <div>
-                <div>See <a href="{% url 'wagtailadmin_pages:revisions_index' page.id %}" class="underlined">All Revisions</a></div>
-            </div>
-            {% trans "Status" %}
-            {% include "wagtailadmin/shared/page_status_tag.html" with page=page_for_status %}
-            </div>
+
         </div>
 
+    </div>
+    <div class="secondary-actions">
+    <div class="left">
+      <section>
+        <div class="field choice_field select">
+            <div class="field-content">
+                <div class="input">
+                    <select name="select" id="language-select" >
+                        <option id="en" selected>English</option>
+                        <option id="es" >Spanish</option>
+                        <option id="ar" >Arabic</option>
+                        <option id="vi" >Vietnamese</option>
+                    </select>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+      </section>
+      </div>
+    <div class="coa-header__page-status">
+    <div>
+        <div>See <a href="{% url 'wagtailadmin_pages:revisions_index' page.id %}" class="underlined">All Revisions</a></div>
+    </div>
 
-        <nav class="secondary-actions">
-
-
-        </nav>
+    {% trans "Status" %}
+    {% include "wagtailadmin/shared/page_status_tag.html" with page=page_for_status %}
+    </div>
     </div>
 
     <div class="flex-container">

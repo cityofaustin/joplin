@@ -11,31 +11,12 @@
 }
 
 .coa-button--margin {
-    margin: auto 5px;
+    margin: 5px;
+
 }
 
-// select any label right after a radio button
-#language-select input[type='radio'] + label {
-    border: 0.5px solid $wagtail-turquoise;
-    line-height: 200%;
-}
-
-#language-select input[type='radio']:checked + label {
-    background: $wagtail-turquoise;
-    color: $coa-color-white;
-}
-
-// hide display on input types
-#language-select > input[type='radio'] {
-    display: none;
-}
-
-.coa-multiField-nopadding li {
-    padding: 0;
-}
-
-.coa-helpPanel fieldset {
-    padding: 0;
+.coa-dropdown--no-height {
+  height: initial !important;
 }
 
 // tech debt: hiding help and labels instead of removing
@@ -68,4 +49,25 @@
             background-image: url('../static/images/share_white.svg');
         }
     }
+}
+
+.coa-header__page-status {
+  position: fixed;
+  right: 15px;
+}
+
+.tab-nav {
+  position: fixed;
+  left: 240px;
+}
+
+// #page-edit-form > ul > li.active {
+//     background-color: green;
+// }
+
+.tab-nav a {
+  background-color: #e5e4de;
+}
+.tab-nav li.active a {
+  background-color: $coa-color-gray;
 }

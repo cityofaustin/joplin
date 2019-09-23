@@ -36,17 +36,14 @@
 
 .header .actions {
     display: flex;
-    margin: auto 0 auto auto;
-}
-.header .actions * {
-    // margin: auto 2px;
+    margin: 0 40px auto auto;
 }
 
 .secondary-actions {
     width: calc(100% - #{$nav-wrapper-width});
-    background: $coa-color-dark-gray2;
+    background: #e5e4de;
     position: fixed;
     z-index: 31;
     display: flex;
-    top: 100px;
+    top: 180px;
 }
