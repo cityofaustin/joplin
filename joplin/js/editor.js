@@ -178,56 +178,47 @@ $(function() {
     // Hide stuff that isn't our language
     // Top level fields
 
+    // find the language tag
+    // TODO: have better variable names that don't collide
+    function getLanguageTag(elem, selector, tag) {
+      if (elem.querySelectorAll(selector)[0].getElementsByTagName(tag)[0]) {
+        var languageTag = elem
+          .querySelectorAll(selector)[0]
+          .getElementsByTagName(tag)[0].innerHTML;
+        return languageTag;
+      }
+    }
+    // compare to current and hide accordingly
+    function toggleLanguageField(elem, languageTag, currentLang) {
+      if (languageTag != null && languageTag != currentLang) {
+        elem.classList.add('hidden');
+      } else {
+        elem.classList.remove('hidden');
+      }
+    }
 
+    // top level titles
     document.querySelectorAll('.object').forEach(elem => {
       if (elem.querySelectorAll('.title-wrapper').length) {
-        if (elem.querySelectorAll('.title-wrapper')[0].getElementsByTagName('span')[0]) {
-          var languageTag = elem
-            .querySelectorAll('.title-wrapper')[0]
-            .getElementsByTagName('span')[0].innerHTML;
-        }
-
-        if (languageTag != null && languageTag != currentLang) {
-          elem.classList.add('hidden');
-        } else {
-          elem.classList.remove('hidden');
-        }
+        var languageTag = getLanguageTag(elem, '.title-wrapper', 'span');
+        toggleLanguageField(elem, languageTag, currentLang);
       }
     });
 
     // Fields inside of InlinePanels
     document.querySelectorAll('.field').forEach(elem => {
-      if (elem.querySelectorAll('label').length) {
-         if (elem.querySelectorAll('label')[0].getElementsByTagName('span')[0])
-         {
-           var languageTag = elem
-          .querySelectorAll('label')[0]
-          .getElementsByTagName('span')[0].innerHTML;
-        }
-        if (languageTag != null && languageTag != currentLang) {
-          elem.parentElement.classList.add('hidden');
-        } else {
-          elem.parentElement.classList.remove('hidden');
-        }
+      if (elem.querySelectorAll('.label').length) {
+        var languageTag = getLanguageTag(elem, '.label', 'span');
+        toggleLanguageField(elem, languageTag, currentLang);
       }
     });
 
     // Fields inside of Struct Blocks
     document.querySelectorAll('.struct-block').forEach(elem => {
       elem.querySelectorAll('label').forEach(label => {
-        if (elem
-          .querySelectorAll('label')[0]
-          .getElementsByTagName('span')[0]) {
-            var languageTag = elem
-              .querySelectorAll('label')[0]
-              .getElementsByTagName('span')[0].innerHTML;
-
-          }
-
-        if (languageTag != null && languageTag != currentLang) {
-          label.parentElement.classList.add('hidden');
-        } else {
-          label.parentElement.classList.remove('hidden');
+        if (elem.querySelectorAll('label')[0].getElementsByTagName('span')[0]) {
+          var languageTag = getLanguageTag(elem, '.label', 'span');
+          toggleLanguageField(elem, languageTag, currentLang);
         }
       });
     });
