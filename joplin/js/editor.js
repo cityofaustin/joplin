@@ -206,11 +206,6 @@ $(function() {
       }
     }
 
-    // Select language radio button if it isn't set already
-    // pretty sure this needs to be modified or removed
-    // For instance, if the language change is triggered by a refresh from clicking Share or Preview
-    $(`#${currentLang}`).prop('checked', true);
-
     // ----
     // Switch the language for janisPreviewUrl
     // ----
