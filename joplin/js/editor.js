@@ -165,63 +165,87 @@ $(function() {
     state.currentLang = currentLang;
 
     // replace brackets with hidden span tags
-    $('ul[class="objects"]')
-      .find('label:contains(" [")')
-      .each(function() {
-        this.innerHTML = this.innerHTML.replace(
-          '[',
-          " <span style='display:none;'>",
-        );
-        this.innerHTML = this.innerHTML.replace(']', '</span>');
-      });
+    function replaceLanguageLabels() {
+      var languageLabels = $('ul[class="objects"]').find(
+        'label:contains(" [")',
+      );
+      if (languageLabels.length) {
+        if (typeof state.languageLabels === 'undefined') {
+          state.languageLabels = languageLabels;
+        } else {
+          state.languageLabels.push(languageLabels);
+        }
+        languageLabels.each(function() {
+          this.innerHTML = this.innerHTML.replace(
+            '[',
+            " <span style='display:none;'>",
+          );
+          this.innerHTML = this.innerHTML.replace(']', '</span>');
+        });
+      }
+    }
+    replaceLanguageLabels();
+    var languageTage = null;
+    for (let [index, val] of Object.entries(state.languageLabels)) {
+      if (labelList[index].querySelector) {
+        var languageTag = labelList[index].querySelector('span').innerText;
+        if (languageTag != null && languageTag != currentLang) {
+          labelList[index].parentElement.parentElement.classList.add('hidden');
+        } else {
+          labelList[index].parentElement.parentElement.classList.remove(
+            'hidden',
+          );
+        }
+      }
+    }
 
     // Hide stuff that isn't our language
     // Top level fields
 
     // find the language tag
     // TODO: have better variable names that don't collide
-    function getLanguageTag(elem, selector, tag) {
-      if (elem.querySelectorAll(selector)[0].getElementsByTagName(tag)[0]) {
-        var languageTag = elem
-          .querySelectorAll(selector)[0]
-          .getElementsByTagName(tag)[0].innerHTML;
-        return languageTag;
-      }
-    }
-    // compare to current and hide accordingly
-    function toggleLanguageField(elem, languageTag, currentLang) {
-      if (languageTag != null && languageTag != currentLang) {
-        elem.classList.add('hidden');
-      } else {
-        elem.classList.remove('hidden');
-      }
-    }
-
-    // top level titles
-    document.querySelectorAll('.object').forEach(elem => {
-      if (elem.querySelectorAll('.title-wrapper').length) {
-        var languageTag = getLanguageTag(elem, '.title-wrapper', 'span');
-        toggleLanguageField(elem, languageTag, currentLang);
-      }
-    });
-
-    // Fields inside of InlinePanels
-    document.querySelectorAll('.field').forEach(elem => {
-      if (elem.querySelectorAll('.label').length) {
-        var languageTag = getLanguageTag(elem, '.label', 'span');
-        toggleLanguageField(elem, languageTag, currentLang);
-      }
-    });
-
-    // Fields inside of Struct Blocks
-    document.querySelectorAll('.struct-block').forEach(elem => {
-      elem.querySelectorAll('label').forEach(label => {
-        if (elem.querySelectorAll('label')[0].getElementsByTagName('span')[0]) {
-          var languageTag = getLanguageTag(elem, '.label', 'span');
-          toggleLanguageField(elem, languageTag, currentLang);
-        }
-      });
-    });
+    // function getLanguageTag(elem, selector, tag) {
+    //   if (elem.querySelectorAll(selector)[0].getElementsByTagName(tag)[0]) {
+    //     var languageTag = elem
+    //       .querySelectorAll(selector)[0]
+    //       .getElementsByTagName(tag)[0].innerHTML;
+    //     return languageTag;
+    //   }
+    // }
+    // // compare to current and hide accordingly
+    // function toggleLanguageField(elem, languageTag, currentLang) {
+    //   if (languageTag != null && languageTag != currentLang) {
+    //     elem.classList.add('hidden');
+    //   } else {
+    //     elem.classList.remove('hidden');
+    //   }
+    // }
+    //
+    // // top level titles
+    // document.querySelectorAll('.object').forEach(elem => {
+    //   if (elem.querySelectorAll('.title-wrapper').length) {
+    //     var languageTag = getLanguageTag(elem, '.title-wrapper', 'span');
+    //     toggleLanguageField(elem, languageTag, currentLang);
+    //   }
+    // });
+    //
+    // // Fields inside of InlinePanels
+    // document.querySelectorAll('.field').forEach(elem => {
+    //   if (elem.querySelectorAll('.label').length) {
+    //     var languageTag = getLanguageTag(elem, '.label', 'span');
+    //     toggleLanguageField(elem, languageTag, currentLang);
+    //   }
+    // });
+    //
+    // // Fields inside of Struct Blocks
+    // document.querySelectorAll('.struct-block').forEach(elem => {
+    //   elem.querySelectorAll('label').forEach(label => {
+    //     if (elem.querySelectorAll('label')[0].getElementsByTagName('span')[0]) {
+    //       var languageTag = getLanguageTag(elem, '.label', 'span');
+    //       toggleLanguageField(elem, languageTag, currentLang);
+    //     }
+    //   });
+    // });
 
     // Select language radio button if it isn't set already
     // For instance, if the language change is triggered by a refresh from clicking Share or Preview
