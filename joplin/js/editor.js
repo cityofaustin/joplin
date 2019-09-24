@@ -235,15 +235,25 @@ $(function() {
     }
   }
 
+  if (localStorage.selected_lang) {
+    state.currentLang = localStorage.selected_lang;
+    updateSelectedLanguage(state.currentLang);
+    changeLanguage(state.currentLang);
+    localStorage.removeItem('selected_lang');
+  } else {
+    state.currentLang = 'en';
+    updateSelectedLanguage(state.currentLang);
+    changeLanguage(state.currentLang);
+  }
+
   // watch language select for changes
   $('#language-select').change(function(currentLang) {
     let selectedLanguage = document.getElementById('language-select')
       .selectedOptions[0];
     changeLanguage(selectedLanguage.id);
+    localStorage.selected_lang = state.currentLang;
   });
 
-  // Initialize page in English, hide all other language fields
-  changeLanguage('en');
   function updateSelectedLanguage(currentLang) {
     switch (currentLang) {
       case 'en':
@@ -262,34 +272,28 @@ $(function() {
   }
 
   // Persist language for preview even after page refreshes on save
-  var previewbutton = $('#page-preview-button');
-  if (localStorage.preview_lang) {
-    changeLanguage(localStorage.preview_lang);
-    updateSelectedLanguage(localStorage.preview_lang);
-    window.open(state.janisPreviewUrl, '_blank');
-    localStorage.removeItem('preview_lang');
-  }
-  previewbutton.click(function() {
-    localStorage.preview_lang = state.currentLang;
+  var previewButton = $('#page-preview-button');
+  previewButton.click(function() {
+    if (localStorage.selected_lang) {
+      changeLanguage(localStorage.selected_lang);
+      updateSelectedLanguage(localStorage.selected_lang);
+      window.open(state.janisPreviewUrl, '_blank');
+    }
   });
 
   // Persist language for sharing even after page refreshes on save
-  var sharebutton = $('#page-share-preview-button');
+  var shareButton = $('#page-share-preview-button');
   var urlcopied = $('#page-share-url-copied');
-  if (localStorage.share_lang) {
-    // TODO: Don't just alert with the preview URL
-    changeLanguage(localStorage.share_lang);
-    copyTextToClipboard(state.janisPreviewUrl);
-    updateSelectedLanguage(localStorage.share_lang);
-    urlcopied.removeClass('hidden');
-    urlcopied.fadeOut(10000);
-    localStorage.sharingpreview = false;
-    localStorage.removeItem('share_lang');
-  }
-  sharebutton.click(function() {
-    localStorage.share_lang = state.currentLang;
+  shareButton.click(function() {
+    if (localStorage.selected_lang) {
+      changeLanguage(localStorage.selected_lang);
+      copyTextToClipboard(state.janisPreviewUrl);
+      updateSelectedLanguage(localStorage.selected_lang);
+      urlcopied.removeClass('hidden');
+      urlcopied.fadeOut(10000);
+      localStorage.sharingpreview = false;
+    }
   });
-
   // Apply current language to new InlinePanels
   $('.add').click(function() {
     changeLanguage(state.currentLang);
