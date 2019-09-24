@@ -249,6 +249,8 @@ $(function() {
     localStorage.selected_lang = state.currentLang;
   });
 
+  // case function for setting the selected language on dropdown
+  // maybe there is a less verbose way to do this?
   function updateSelectedLanguage(currentLang) {
     switch (currentLang) {
       case 'en':
