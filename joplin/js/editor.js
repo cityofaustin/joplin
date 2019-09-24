@@ -186,7 +186,8 @@ $(function() {
     }
     replaceLanguageLabels();
     var languageTage = null;
-    for (let [index, val] of Object.entries(state.languageLabels)) {
+    var labelList = state.languageLabels;
+    for (let [index, val] of Object.entries(labelList)) {
       if (labelList[index].querySelector) {
         var languageTag = labelList[index].querySelector('span').innerText;
         if (languageTag != null && languageTag != currentLang) {
@@ -223,6 +224,7 @@ $(function() {
     //
     // // top level titles
     // document.querySelectorAll('.object').forEach(elem => {
+    //   console.log('toplevel');
     //   if (elem.querySelectorAll('.title-wrapper').length) {
     //     var languageTag = getLanguageTag(elem, '.title-wrapper', 'span');
     //     toggleLanguageField(elem, languageTag, currentLang);
@@ -231,6 +233,7 @@ $(function() {
     //
     // // Fields inside of InlinePanels
     // document.querySelectorAll('.field').forEach(elem => {
+    //   console.log('inline');
     //   if (elem.querySelectorAll('.label').length) {
     //     var languageTag = getLanguageTag(elem, '.label', 'span');
     //     toggleLanguageField(elem, languageTag, currentLang);
@@ -239,6 +242,7 @@ $(function() {
     //
     // // Fields inside of Struct Blocks
     // document.querySelectorAll('.struct-block').forEach(elem => {
+    //   console.log('blocks');
     //   elem.querySelectorAll('label').forEach(label => {
     //     if (elem.querySelectorAll('label')[0].getElementsByTagName('span')[0]) {
     //       var languageTag = getLanguageTag(elem, '.label', 'span');
@@ -296,6 +300,7 @@ $(function() {
     var observer = new MutationObserver(function(mutations, observer) {
       if (mutations[0].attributeName == 'value') {
         $(element).trigger('change');
+        console.log(mutations);
       }
     });
     observer.observe(element, {
