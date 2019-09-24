@@ -4,17 +4,17 @@
 
 Fixes # (issue)
 
-* (Issue Link)[]
-* (Janis Related Pull Request Link)[]
-* (Joplin Related Pull Request Link)[]
+* [Issue Link]()
+* [Janis Related Pull Request Link]()
 
 # Testing Notes
 
 ... how can this be tested ?
 
-* (Deployed at)[]
+* [Deployed Link]()
 
 # Checklist:
 - [ ] Request reviewers
 - [ ] Slack-out message for review
+- [ ] Link this PR in the issue
 - [ ] Moved card to *review* in zenhub
