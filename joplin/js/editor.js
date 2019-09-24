@@ -167,15 +167,15 @@ $(function() {
 
     // replace brackets with hidden span tags
     function replaceLanguageLabels() {
-      var languageLabels = $('ul[class="objects"]').find(
+      const languageLabels = $('ul[class="objects"]').find(
         'label:contains(" [")',
       );
       if (languageLabels.length) {
         if (typeof state.languageLabels === 'undefined') {
           state.languageLabels = languageLabels;
         } else {
-          for (let [index, val] of Object.entries(languageLabels)) {
-            state.languageLabels.push(val);
+          for (let label in languageLabels) {
+            state.languageLabels.push(languageLabels[label]);
           }
         }
         languageLabels.each(function() {
@@ -190,15 +190,18 @@ $(function() {
     replaceLanguageLabels();
 
     // TODO: refactor into a function, evaluate performance
-    var languageTage = null;
-    var labelList = state.languageLabels;
-    for (let [index, val] of Object.entries(labelList)) {
-      if (labelList[index].querySelector) {
-        var languageTag = labelList[index].querySelector('span').innerText;
+    // have better variable namepsace seperation
+    let labelList = state.languageLabels;
+    for (let label in labelList) {
+      if (labelList[label].querySelector) {
+        let languageTag = labelList[label].querySelector('span').innerText;
+        // these seem to be nested twice, from the title to the containing element
+        let translatedElement = labelList[label].parentElement.parentElement
+        // toggle visibility of element
         if (languageTag != null && languageTag != currentLang) {
-          labelList[index].parentElement.parentElement.classList.add('hidden');
+          translatedElement.classList.add('hidden');
         } else {
-          labelList[index].parentElement.parentElement.classList.remove(
+          translatedElement.classList.remove(
             'hidden',
           );
         }
