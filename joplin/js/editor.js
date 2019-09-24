@@ -196,14 +196,12 @@ $(function() {
       if (labelList[label].querySelector) {
         let languageTag = labelList[label].querySelector('span').innerText;
         // these seem to be nested twice, from the title to the containing element
-        let translatedElement = labelList[label].parentElement.parentElement
+        let translatedElement = labelList[label].parentElement.parentElement;
         // toggle visibility of element
         if (languageTag != null && languageTag != currentLang) {
           translatedElement.classList.add('hidden');
         } else {
-          translatedElement.classList.remove(
-            'hidden',
-          );
+          translatedElement.classList.remove('hidden');
         }
       }
     }
@@ -237,19 +235,37 @@ $(function() {
     }
   }
 
+  // watch language select for changes
   $('#language-select').change(function(currentLang) {
     let selectedLanguage = document.getElementById('language-select')
-      .selectedOptions[0].id;
-    changeLanguage(selectedLanguage);
+      .selectedOptions[0];
+    changeLanguage(selectedLanguage.id);
   });
 
   // Initialize page in English, hide all other language fields
   changeLanguage('en');
+  function updateSelectedLanguage(currentLang) {
+    switch (currentLang) {
+      case 'en':
+        document.getElementById('language-select').value = 'English';
+        break;
+      case 'es':
+        document.getElementById('language-select').value = 'Spanish';
+        break;
+      case 'vi':
+        document.getElementById('language-select').value = 'Vietnamese';
+        break;
+      case 'ar':
+        document.getElementById('language-select').value = 'Arabic';
+        break;
+    }
+  }
 
   // Persist language for preview even after page refreshes on save
   var previewbutton = $('#page-preview-button');
   if (localStorage.preview_lang) {
     changeLanguage(localStorage.preview_lang);
+    updateSelectedLanguage(localStorage.preview_lang);
     window.open(state.janisPreviewUrl, '_blank');
     localStorage.removeItem('preview_lang');
   }
@@ -264,8 +280,8 @@ $(function() {
     // TODO: Don't just alert with the preview URL
     changeLanguage(localStorage.share_lang);
     copyTextToClipboard(state.janisPreviewUrl);
+    updateSelectedLanguage(localStorage.share_lang);
     urlcopied.removeClass('hidden');
-
     urlcopied.fadeOut(10000);
     localStorage.sharingpreview = false;
     localStorage.removeItem('share_lang');
@@ -286,7 +302,6 @@ $(function() {
   // When we add new fields to the page (orderable/streamfields etc.)
   // only show the appropriate fields based on language
   // we can do this by observing changes to our sections count
-
 
   $('#sections-count').change(function() {
     changeLanguage(state.currentLang);
