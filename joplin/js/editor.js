@@ -196,13 +196,26 @@ $(function() {
       if (labelList[label].querySelector) {
         let languageTag = labelList[label].querySelector('span').innerText;
         // these seem to be nested twice, from the title to the containing element
-        let translatedElement = labelList[label].parentElement.parentElement;
-        // toggle visibility of element
-        if (languageTag != null && languageTag != currentLang) {
-          translatedElement.classList.add('hidden');
+        // TODO: come up with a more elegant and maintable way to check what elements ought to be hidden 
+        if (labelList[label].parentElement.parentElement.parentElement.classList.value !== "struct-block") {
+          const translatedElement = labelList[label].parentElement.parentElement;
+          if (languageTag != null && languageTag != currentLang) {
+            translatedElement.classList.add('hidden');
+          } else {
+            translatedElement.classList.remove('hidden');
+          }
         } else {
-          translatedElement.classList.remove('hidden');
+          const translatedElement = labelList[label].parentElement;
+          if (languageTag != null && languageTag != currentLang) {
+            translatedElement.classList.add('hidden');
+          } else {
+            translatedElement.classList.remove('hidden');
+          }
         }
+
+        // console.log(translatedElement);
+        // toggle visibility of element
+
       }
     }
 
