@@ -88,7 +88,7 @@ $(function() {
       $(label).append(link);
     }
   }
-
+  // TODO: what is this for??
   $('.js-proxy-click').click(function() {
     let $this = $(this);
     $this.text($this.data('clicked-text'));
@@ -115,6 +115,7 @@ $(function() {
     $button.click();
   });
 
+  // TODO; verify this code is still used, move to into a utilities section
   function fallbackCopyTextToClipboard(text) {
     var textArea = document.createElement('textarea');
     textArea.value = text;
@@ -173,7 +174,9 @@ $(function() {
         if (typeof state.languageLabels === 'undefined') {
           state.languageLabels = languageLabels;
         } else {
-          state.languageLabels.push(languageLabels);
+          for (let [index, val] of Object.entries(languageLabels)) {
+            state.languageLabels.push(val);
+          }
         }
         languageLabels.each(function() {
           this.innerHTML = this.innerHTML.replace(
@@ -185,6 +188,8 @@ $(function() {
       }
     }
     replaceLanguageLabels();
+
+    // TODO: refactor into a function, evaluate performance
     var languageTage = null;
     var labelList = state.languageLabels;
     for (let [index, val] of Object.entries(labelList)) {
@@ -200,58 +205,8 @@ $(function() {
       }
     }
 
-    // Hide stuff that isn't our language
-    // Top level fields
-
-    // find the language tag
-    // TODO: have better variable names that don't collide
-    // function getLanguageTag(elem, selector, tag) {
-    //   if (elem.querySelectorAll(selector)[0].getElementsByTagName(tag)[0]) {
-    //     var languageTag = elem
-    //       .querySelectorAll(selector)[0]
-    //       .getElementsByTagName(tag)[0].innerHTML;
-    //     return languageTag;
-    //   }
-    // }
-    // // compare to current and hide accordingly
-    // function toggleLanguageField(elem, languageTag, currentLang) {
-    //   if (languageTag != null && languageTag != currentLang) {
-    //     elem.classList.add('hidden');
-    //   } else {
-    //     elem.classList.remove('hidden');
-    //   }
-    // }
-    //
-    // // top level titles
-    // document.querySelectorAll('.object').forEach(elem => {
-    //   console.log('toplevel');
-    //   if (elem.querySelectorAll('.title-wrapper').length) {
-    //     var languageTag = getLanguageTag(elem, '.title-wrapper', 'span');
-    //     toggleLanguageField(elem, languageTag, currentLang);
-    //   }
-    // });
-    //
-    // // Fields inside of InlinePanels
-    // document.querySelectorAll('.field').forEach(elem => {
-    //   console.log('inline');
-    //   if (elem.querySelectorAll('.label').length) {
-    //     var languageTag = getLanguageTag(elem, '.label', 'span');
-    //     toggleLanguageField(elem, languageTag, currentLang);
-    //   }
-    // });
-    //
-    // // Fields inside of Struct Blocks
-    // document.querySelectorAll('.struct-block').forEach(elem => {
-    //   console.log('blocks');
-    //   elem.querySelectorAll('label').forEach(label => {
-    //     if (elem.querySelectorAll('label')[0].getElementsByTagName('span')[0]) {
-    //       var languageTag = getLanguageTag(elem, '.label', 'span');
-    //       toggleLanguageField(elem, languageTag, currentLang);
-    //     }
-    //   });
-    // });
-
     // Select language radio button if it isn't set already
+    // pretty sure this needs to be modified or removed
     // For instance, if the language change is triggered by a refresh from clicking Share or Preview
     $(`#${currentLang}`).prop('checked', true);
 
@@ -283,34 +238,6 @@ $(function() {
     let selectedLanguage = document.getElementById('language-select')
       .selectedOptions[0].id;
     changeLanguage(selectedLanguage);
-  });
-
-  // When we add new fields to the page (orderable/streamfields etc.)
-  // only show the appropriate fields based on language
-  // we can do this by observing changes to our sections count
-
-  $('#sections-count').change(function() {
-    changeLanguage(state.currentLang);
-  });
-
-  // Found this here: https://stackoverflow.com/a/31719339
-  MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
-
-  var trackChange = function(element) {
-    var observer = new MutationObserver(function(mutations, observer) {
-      if (mutations[0].attributeName == 'value') {
-        $(element).trigger('change');
-        console.log(mutations);
-      }
-    });
-    observer.observe(element, {
-      attributes: true,
-    });
-  };
-
-  // make sure observe all of them
-  $('#sections-count').each(function(index, element) {
-    trackChange(element);
   });
 
   // Initialize page in English, hide all other language fields
@@ -351,4 +278,34 @@ $(function() {
 
   var messages = $('.messages');
   messages.fadeOut(10000);
+
+  // NOT sure the below is tracking anything
+  // When we add new fields to the page (orderable/streamfields etc.)
+  // only show the appropriate fields based on language
+  // we can do this by observing changes to our sections count
+
+
+  $('#sections-count').change(function() {
+    changeLanguage(state.currentLang);
+  });
+
+  // Found this here: https://stackoverflow.com/a/31719339
+  MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
+
+  var trackChange = function(element) {
+    var observer = new MutationObserver(function(mutations, observer) {
+      if (mutations[0].attributeName == 'value') {
+        $(element).trigger('change');
+        console.log(mutations);
+      }
+    });
+    observer.observe(element, {
+      attributes: true,
+    });
+  };
+
+  // make sure observe all of them
+  $('#sections-count').each(function(index, element) {
+    trackChange(element);
+  });
 });
