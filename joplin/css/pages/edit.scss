@@ -70,15 +70,15 @@
 .tab-nav {
     position: fixed;
     left: 300px;
-    top: 180px;
+    top: 185px;
     border-top: none;
     color: black;
     height: 40px;
 }
 
 .tab-nav a {
-    background-color: #e5e4de;
-    border-top: 0.3em solid #e5e4de;
+    background-color: inherit;
+    border-color: #e5e4de;
     color: black;
     text-transform: none;
     font-size: 14px;
@@ -86,15 +86,13 @@
 }
 
 .tab-nav a:hover {
-    background-color: #e5e4de;
     border-top: 0.3em solid #e5e4de;
     color: black;
 }
 .tab-nav li.active a {
     background-color: #ffffff;
-    border-top: 0.3em solid #fff;
-    height: 100px;
-    border-bottom: 0.6em solid #fff;
+    border-color: #ffffff;
+    border-bottom: 0.2em solid #fff;
 }
 
 .coa-select--arrow {
