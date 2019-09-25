@@ -12,11 +12,10 @@
 
 .coa-button--margin {
     margin: 5px;
-
 }
 
 .coa-dropdown--no-height {
-  height: initial !important;
+    height: initial !important;
 }
 
 // tech debt: hiding help and labels instead of removing
@@ -51,40 +50,53 @@
     }
 }
 
+.coa-header__page-info {
+    position: absolute;
+    right: 0px;
+    bottom: 0px;
+    display: inline-flex;
+    font-size: 14px;
+    margin-bottom: 8px;
+    margin-right: 37px;
+}
+
 .coa-header__page-status {
-  position: fixed;
-  right: 15px;
+    margin-left: 33px;
 }
 
 .coa-select {
-  min-width: 140px;
+    min-width: 140px;
 }
 .tab-nav {
-  position: fixed;
-  left: 300px;
-  top: 180px;
-  border-top: none;
-  color: black;
+    position: fixed;
+    left: 300px;
+    top: 180px;
+    border-top: none;
+    color: black;
+    height: 40px;
 }
 
 .tab-nav a {
-  background-color: #e5e4de;
-  border-top: .3em solid #e5e4de;
-  color: black;
+    background-color: #e5e4de;
+    border-top: 0.3em solid #e5e4de;
+    color: black;
+    text-transform: none;
+    font-size: 14px;
+    font-weight: 400;
 }
 
 .tab-nav a:hover {
-  background-color: #e5e4de;
-  border-top: .3em solid #e5e4de;
-  color: black;
+    background-color: #e5e4de;
+    border-top: 0.3em solid #e5e4de;
+    color: black;
 }
 .tab-nav li.active a {
-  background-color: #ffffff;
-  border-top: .3em solid #fff;
-  height: 100px;
-
+    background-color: #ffffff;
+    border-top: 0.3em solid #fff;
+    height: 100px;
+    border-bottom: 0.6em solid #fff;
 }
 
 .coa-select--arrow {
-  font-size: 10px !important;
+    font-size: 10px !important;
 }

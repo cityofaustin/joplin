@@ -150,14 +150,15 @@
         </div>
       </section>
       </div>
-    <div class="coa-header__page-status">
-    <div>
-        <div>See <a href="{% url 'wagtailadmin_pages:revisions_index' page.id %}" class="underlined">All Revisions</a></div>
+    <section class="coa-header__page-info">
+    <div class="coa-header__page-revisions">
+        <a href="{% url 'wagtailadmin_pages:revisions_index' page.id %}" class="underlined">Revisions</a>
     </div>
-
-    {% trans "Status" %}
+    <div class="coa-header__page-status">
+    {% trans "Status:" %}
     {% include "wagtailadmin/shared/page_status_tag.html" with page=page_for_status %}
     </div>
+    </section>
     </div>
 
     <div class="flex-container">

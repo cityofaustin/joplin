@@ -169,6 +169,27 @@ class JanisBasePage(Page):
             "global_id": global_id
         }
 
+    @property
+    def status_string(self):
+        """
+        override wagtail default
+        see https://github.com/wagtail/wagtail/blob/f44d27642b4a6932de73273d8320bbcb76330c21/wagtail/core/models.py#L1010
+        """
+        if not self.live:
+            if self.expired:
+                return ("Expired")
+            elif self.approved_schedule:
+                return ("Scheduled")
+            else:
+                return ("Draft")
+        else:
+            if self.approved_schedule:
+                return ("Live, Scheduled")
+            elif self.has_unpublished_changes:
+                return ("Live, Draft")
+            else:
+                return ("Live")
+
     @cached_classmethod
     def get_edit_handler(cls):
         if hasattr(cls, 'edit_handler'):
