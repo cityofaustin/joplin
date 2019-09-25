@@ -88,7 +88,7 @@ $(function() {
       $(label).append(link);
     }
   }
-
+  // TODO: what is this for??
   $('.js-proxy-click').click(function() {
     let $this = $(this);
     $this.text($this.data('clicked-text'));
@@ -115,6 +115,7 @@ $(function() {
     $button.click();
   });
 
+  // TODO; verify this code is still used, move to into a utilities section
   function fallbackCopyTextToClipboard(text) {
     var textArea = document.createElement('textarea');
     textArea.value = text;
@@ -165,67 +166,58 @@ $(function() {
     state.currentLang = currentLang;
 
     // replace brackets with hidden span tags
-    $('ul[class="objects"]')
-      .find('label:contains(" [")')
-      .each(function() {
-        this.innerHTML = this.innerHTML.replace(
-          '[',
-          " <span style='display:none;'>",
-        );
-        this.innerHTML = this.innerHTML.replace(']', '</span>');
-      });
-
-    // Hide stuff that isn't our language
-    // Top level fields
-
-    // find the language tag
-    // TODO: have better variable names that don't collide
-    function getLanguageTag(elem, selector, tag) {
-      if (elem.querySelectorAll(selector)[0].getElementsByTagName(tag)[0]) {
-        var languageTag = elem
-          .querySelectorAll(selector)[0]
-          .getElementsByTagName(tag)[0].innerHTML;
-        return languageTag;
-      }
-    }
-    // compare to current and hide accordingly
-    function toggleLanguageField(elem, languageTag, currentLang) {
-      if (languageTag != null && languageTag != currentLang) {
-        elem.classList.add('hidden');
-      } else {
-        elem.classList.remove('hidden');
-      }
-    }
-
-    // top level titles
-    document.querySelectorAll('.object').forEach(elem => {
-      if (elem.querySelectorAll('.title-wrapper').length) {
-        var languageTag = getLanguageTag(elem, '.title-wrapper', 'span');
-        toggleLanguageField(elem, languageTag, currentLang);
-      }
-    });
-
-    // Fields inside of InlinePanels
-    document.querySelectorAll('.field').forEach(elem => {
-      if (elem.querySelectorAll('.label').length) {
-        var languageTag = getLanguageTag(elem, '.label', 'span');
-        toggleLanguageField(elem, languageTag, currentLang);
-      }
-    });
-
-    // Fields inside of Struct Blocks
-    document.querySelectorAll('.struct-block').forEach(elem => {
-      elem.querySelectorAll('label').forEach(label => {
-        if (elem.querySelectorAll('label')[0].getElementsByTagName('span')[0]) {
-          var languageTag = getLanguageTag(elem, '.label', 'span');
-          toggleLanguageField(elem, languageTag, currentLang);
+    function replaceLanguageLabels() {
+      const languageLabels = $('ul[class="objects"]').find(
+        'label:contains(" [")',
+      );
+      if (languageLabels.length) {
+        if (typeof state.languageLabels === 'undefined') {
+          state.languageLabels = languageLabels;
+        } else {
+          for (let label in languageLabels) {
+            state.languageLabels.push(languageLabels[label]);
+          }
         }
-      });
-    });
+        languageLabels.each(function() {
+          this.innerHTML = this.innerHTML.replace(
+            '[',
+            " <span style='display:none;'>",
+          );
+          this.innerHTML = this.innerHTML.replace(']', '</span>');
+        });
+      }
+    }
+    replaceLanguageLabels();
 
-    // Select language radio button if it isn't set already
-    // For instance, if the language change is triggered by a refresh from clicking Share or Preview
-    $(`#${currentLang}`).prop('checked', true);
+    // TODO: refactor into a function, evaluate performance
+    // have better variable namepsace seperation
+    let labelList = state.languageLabels;
+    for (let label in labelList) {
+      if (labelList[label].querySelector) {
+        let languageTag = labelList[label].querySelector('span').innerText;
+        // these seem to be nested twice, from the title to the containing element
+        // TODO: come up with a more elegant and maintable way to check what elements ought to be hidden 
+        if (labelList[label].parentElement.parentElement.parentElement.classList.value !== "struct-block") {
+          const translatedElement = labelList[label].parentElement.parentElement;
+          if (languageTag != null && languageTag != currentLang) {
+            translatedElement.classList.add('hidden');
+          } else {
+            translatedElement.classList.remove('hidden');
+          }
+        } else {
+          const translatedElement = labelList[label].parentElement;
+          if (languageTag != null && languageTag != currentLang) {
+            translatedElement.classList.add('hidden');
+          } else {
+            translatedElement.classList.remove('hidden');
+          }
+        }
+
+        // console.log(translatedElement);
+        // toggle visibility of element
+
+      }
+    }
 
     // ----
     // Switch the language for janisPreviewUrl
@@ -251,12 +243,76 @@ $(function() {
     }
   }
 
+  if (localStorage.selected_lang) {
+    state.currentLang = localStorage.selected_lang;
+    updateSelectedLanguage(state.currentLang);
+    changeLanguage(state.currentLang);
+    localStorage.removeItem('selected_lang');
+  } else {
+    state.currentLang = 'en';
+    updateSelectedLanguage(state.currentLang);
+    changeLanguage(state.currentLang);
+  }
+
+  // watch language select for changes
   $('#language-select').change(function(currentLang) {
     let selectedLanguage = document.getElementById('language-select')
-      .selectedOptions[0].id;
-    changeLanguage(selectedLanguage);
+      .selectedOptions[0];
+    changeLanguage(selectedLanguage.id);
+    localStorage.selected_lang = state.currentLang;
   });
 
+  // case function for setting the selected language on dropdown
+  // maybe there is a less verbose way to do this?
+  function updateSelectedLanguage(currentLang) {
+    switch (currentLang) {
+      case 'en':
+        document.getElementById('language-select').value = 'English';
+        break;
+      case 'es':
+        document.getElementById('language-select').value = 'Spanish';
+        break;
+      case 'vi':
+        document.getElementById('language-select').value = 'Vietnamese';
+        break;
+      case 'ar':
+        document.getElementById('language-select').value = 'Arabic';
+        break;
+    }
+  }
+
+  // Persist language for preview even after page refreshes on save
+  var previewButton = $('#page-preview-button');
+  previewButton.click(function() {
+    if (localStorage.selected_lang) {
+      changeLanguage(localStorage.selected_lang);
+      updateSelectedLanguage(localStorage.selected_lang);
+      window.open(state.janisPreviewUrl, '_blank');
+    }
+  });
+
+  // Persist language for sharing even after page refreshes on save
+  var shareButton = $('#page-share-preview-button');
+  var urlcopied = $('#page-share-url-copied');
+  shareButton.click(function() {
+    if (localStorage.selected_lang) {
+      changeLanguage(localStorage.selected_lang);
+      copyTextToClipboard(state.janisPreviewUrl);
+      updateSelectedLanguage(localStorage.selected_lang);
+      urlcopied.removeClass('hidden');
+      urlcopied.fadeOut(10000);
+      localStorage.sharingpreview = false;
+    }
+  });
+  // Apply current language to new InlinePanels
+  $('.add').click(function() {
+    changeLanguage(state.currentLang);
+  });
+
+  var messages = $('.messages');
+  messages.fadeOut(10000);
+
+  // NOT sure the below is tracking anything
   // When we add new fields to the page (orderable/streamfields etc.)
   // only show the appropriate fields based on language
   // we can do this by observing changes to our sections count
@@ -272,6 +328,7 @@ $(function() {
     var observer = new MutationObserver(function(mutations, observer) {
       if (mutations[0].attributeName == 'value') {
         $(element).trigger('change');
+        console.log(mutations);
       }
     });
     observer.observe(element, {
@@ -283,43 +340,4 @@ $(function() {
   $('#sections-count').each(function(index, element) {
     trackChange(element);
   });
-
-  // Initialize page in English, hide all other language fields
-  changeLanguage('en');
-
-  // Persist language for preview even after page refreshes on save
-  var previewbutton = $('#page-preview-button');
-  if (localStorage.preview_lang) {
-    changeLanguage(localStorage.preview_lang);
-    window.open(state.janisPreviewUrl, '_blank');
-    localStorage.removeItem('preview_lang');
-  }
-  previewbutton.click(function() {
-    localStorage.preview_lang = state.currentLang;
-  });
-
-  // Persist language for sharing even after page refreshes on save
-  var sharebutton = $('#page-share-preview-button');
-  var urlcopied = $('#page-share-url-copied');
-  if (localStorage.share_lang) {
-    // TODO: Don't just alert with the preview URL
-    changeLanguage(localStorage.share_lang);
-    copyTextToClipboard(state.janisPreviewUrl);
-    urlcopied.removeClass('hidden');
-
-    urlcopied.fadeOut(10000);
-    localStorage.sharingpreview = false;
-    localStorage.removeItem('share_lang');
-  }
-  sharebutton.click(function() {
-    localStorage.share_lang = state.currentLang;
-  });
-
-  // Apply current language to new InlinePanels
-  $('.add').click(function() {
-    changeLanguage(state.currentLang);
-  });
-
-  var messages = $('.messages');
-  messages.fadeOut(10000);
 });
