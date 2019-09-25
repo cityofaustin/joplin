@@ -86,7 +86,8 @@
 }
 
 .tab-nav a:hover {
-    border-top: 0.3em solid #e5e4de;
+    border-top: 0.3em solid $coa-color-lightest-blue;
+    background-color: $coa-color-lightest-blue;
     color: black;
 }
 .tab-nav li.active a {
@@ -118,10 +119,14 @@
     cursor: pointer;
     width: 130px;
     border-radius: 3px;
-    background-color: inital;
+    background: inherit;
 }
 
 .coa-language-select-wrapper {
   margin-left: 5px;
   display: inline-flex;
+}
+
+.coa-language-select-wrapper :hover {
+    background-color: $coa-color-lightest-blue;
 }
