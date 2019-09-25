@@ -21,6 +21,6 @@ heroku config:set   \
   CIRCLE_BRANCH=$CIRCLE_BRANCH \
   DEBUG=1 \
   HEROKU_JANIS_APP_NAME="janis-staging" \
-  JANIS_URL="https://janis-staging.herokuapp.com" \
+  JANIS_URL="https://janis.austintexas.io" \
   STYLEGUIDE_URL="https://cityofaustin.github.io/digital-services-style-guide" \
   --app $APPNAME > /dev/null

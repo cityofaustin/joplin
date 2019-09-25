@@ -230,11 +230,15 @@ Once the name is generated then it proceeds to generate a full URL link where th
 
 Builds infrastructure for a new heroku app. Rebuilds database for an existing heroku app if the database does not exist. This step is not done on the production branch because production should already have a heroku app and database in place.
 
+`create_review_app.sh` is where your environment variables get set in heroku for a new app.
+
 **4. set_pr_vars**
 
 `.circleci/scripts/set_pr_vars.sh`
 
 Adds environment variables to PR apps. Environment vars for staging and production are handled manually within Heroku console.
+
+`set_pr_vars.sh` is where environment variables get updated after your app has been created.
 
 **5. build_and_release**
 

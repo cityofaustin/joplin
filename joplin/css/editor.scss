@@ -1,7 +1,10 @@
 // stop the annoying uppercase: TODO: font size
 // TODO: had to port these from h2 to title-wrapper for 2.6,
 // maybe there is other niceness we are missing out on from the refactor
-// by just hiding these 
+// by just hiding these
+
+@import './css/variables';
+
 .object .title-wrapper {
     background: inherit;
     text-transform: none;
@@ -64,4 +67,8 @@ label {
 
 .sequence-container.sequence-type-list {
     width: 100% !important;
+}
+
+.coa-placeholder-elm {
+  color: $coa-color-dark-gray2 !important;
 }

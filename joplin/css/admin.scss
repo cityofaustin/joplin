@@ -38,8 +38,30 @@
 
 .page-explorer header,
 .homepage header,
-.page-editor header {
+//,hasform helps distinguish that this is on a page chooser modal
+// we need to unhide headers for modals only, and this was the most specific
+// selector I could find
+.page-editor header:not(.hasform) {
     display: none;
+}
+
+.page-editor header.hasform {
+    background-color: white;
+    margin-bottom: 0;
+    padding-bottom: 0;
+
+    h1 {
+        color: black;
+        text-transform: none;
+    }
+}
+
+.modal-body label[for='id_q'] {
+    display: none;
+}
+
+.page-results h2 {
+    text-transform: none;
 }
 
 .pagination {
