@@ -88,8 +88,13 @@ HARD_REBUILD="on" ./scripts/serve-local.sh
 You might prefer to run the Django app on your host computer to enable better access to debugging tools. This script will still run joplin_assets and joplin_db on docker containers, but will run a django `runserver` command directly on your host computer.
 
 ```
-pipenv install --requirements deploy/requirements.txt
 sh scripts/undockered.sh
+```
+
+If you run into pipenv errors or are running this for the first time, you can build/rebuild a pipenv with:
+
+```
+REBUILD_PIPENV=on ./undockered.sh
 ```
 
 Note! To run additional pipenv commands like `pipenv run ./joplin/manage.py migrate` you must have the variable `export DATABASE_URL=postgres://joplin@127.0.0.1:5433/joplin` in your bash scope.
@@ -340,3 +345,8 @@ You can set environment variables to get Heroku to rebuild Janis when pages are 
 ```
 HEROKU_JANIS_APP_NAME=janis-staging ./scripts/serve-local.sh
 ```
+
+#### Syncing prod data to staging
+1. Create a new seeding data backup sourced from prod, using `migration_test.sh`
+2. Drop the staging database (go to heroku and delete the database on staging) 
+3. Push code with with new backup to master. This will rebuild the database and then seed it with your latest seeding datadump
