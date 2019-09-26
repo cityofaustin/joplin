@@ -342,6 +342,6 @@ HEROKU_JANIS_APP_NAME=janis-staging ./scripts/serve-local.sh
 ```
 
 #### Syncing prod data to staging
-Step 1. Create a new seeding data backup sourced from prod, using `migration_test.sh`
-Step 2. Drop the staging database (go to heroku and delete the database on staging)
-Step 3. Push code with with new backup to master. This will rebuild the database and then seed it with your latest seeding datadump
+1. Create a new seeding data backup sourced from prod, using `migration_test.sh`
+2. Drop the staging database (go to heroku and delete the database on staging) 
+3. Push code with with new backup to master. This will rebuild the database and then seed it with your latest seeding datadump
