@@ -166,7 +166,7 @@ class ServicePageNode(DjangoObjectType):
 
     class Meta:
         model = ServicePage
-        filter_fields = ['id', 'slug', 'live']
+        filter_fields = ['id', 'slug', 'live', 'coa_global']
         interfaces = [graphene.Node]
 
 
@@ -180,7 +180,7 @@ class ProcessPageNode(DjangoObjectType):
 class InformationPageNode(DjangoObjectType):
     class Meta:
         model = InformationPage
-        filter_fields = ['id', 'slug', 'live']
+        filter_fields = ['id', 'slug', 'live', 'coa_global']
         interfaces = [graphene.Node]
 
 
@@ -216,7 +216,7 @@ class OfficialDocumentPageNode(DjangoObjectType):
 
     class Meta:
         model = OfficialDocumentPage
-        filter_fields = ['id', 'slug', 'live']
+        filter_fields = ['id', 'slug', 'live', 'coa_global']
         interfaces = [graphene.Node]
 
 
@@ -279,7 +279,7 @@ class GuidePageNode(DjangoObjectType):
 
     class Meta:
         model = GuidePage
-        filter_fields = ['id', 'slug', 'live']
+        filter_fields = ['id', 'slug', 'live', 'coa_global']
         interfaces = [graphene.Node]
 
     def resolve_sections(self, info):
