@@ -73,7 +73,6 @@
 
 .tab-nav {
     position: fixed;
-    left: 292px;
     top: 175px;
     border-top: none;
     color: black;
@@ -103,32 +102,25 @@
 
 .coa-select--arrow::after {
     color: black !important;
-    color: #fff;
-    line-height: 2.8em;
     cursor: pointer !important;
-    height: 100%;
-    border-left: none !important;
     position: absolute;
     top: 6px !important;
-    right: -20px !important;
-    padding: 0px 5px 0px 0px !important;
-    text-align: right !important;
     font-size: 24px !important;
 }
 
 #language-select {
     background-color: #e5e4de;
     font-size: 14px;
-    padding: 12px 10px 4px 20px;
+    padding: 20px;
     cursor: pointer;
-    width: 180px;
+    width: 18px;
     border-radius: 3px;
     background: inherit;
 }
 
 .coa-language-select-wrapper {
-  margin-left: 5px;
   display: inline-flex;
+  background-color: white;
 }
 
 .coa-language-select-wrapper :hover {

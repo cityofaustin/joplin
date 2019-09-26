@@ -15,8 +15,7 @@ $(function() {
   richTextPlaceholder();
 
   var language = document.getElementById('language-select-wrapper');
-  debugger;
-  var content = document.querySelector('#page-edit-form > ul > li.active');
+  var content = document.getElementsByClassName("tab-nav merged")[0].firstElementChild
   content.appendChild(language);
 
   // TODO: This a better way
