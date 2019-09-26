@@ -67,6 +67,10 @@
 .coa-select {
     min-width: 140px;
 }
+.tab-nav > li {
+  display: inline-flex;
+}
+
 .tab-nav {
     position: fixed;
     left: 292px;
@@ -117,7 +121,7 @@
     font-size: 14px;
     padding: 12px 10px 4px 20px;
     cursor: pointer;
-    width: 130px;
+    width: 180px;
     border-radius: 3px;
     background: inherit;
 }
@@ -129,4 +133,18 @@
 
 .coa-language-select-wrapper :hover {
     background-color: $coa-color-lightest-blue;
+}
+
+.account-selector-collapsed {
+    cursor: pointer;
+    width: 15px;
+    height: 15px;
+    font-size: 0; // hides the text for the current selection
+    border: 0;
+    background: white; // TODO: replace with an appropriate image
+    -moz-appearance: none;
+    -webkit-appearance: none;
+}
+.account-selector-collapsed::-ms-expand {
+    display: none;
 }

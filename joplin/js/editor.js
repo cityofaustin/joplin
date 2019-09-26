@@ -14,6 +14,11 @@ $(function() {
   toggleActivePanel();
   richTextPlaceholder();
 
+  var language = document.getElementById('language-select-wrapper');
+  debugger;
+  var content = document.querySelector('#page-edit-form > ul > li.active');
+  content.appendChild(language);
+
   // TODO: This a better way
   const anchors = {
     id_title: '#title',
@@ -196,9 +201,13 @@ $(function() {
       if (labelList[label].querySelector) {
         let languageTag = labelList[label].querySelector('span').innerText;
         // these seem to be nested twice, from the title to the containing element
-        // TODO: come up with a more elegant and maintable way to check what elements ought to be hidden 
-        if (labelList[label].parentElement.parentElement.parentElement.classList.value !== "struct-block") {
-          const translatedElement = labelList[label].parentElement.parentElement;
+        // TODO: come up with a more elegant and maintable way to check what elements ought to be hidden
+        if (
+          labelList[label].parentElement.parentElement.parentElement.classList
+            .value !== 'struct-block'
+        ) {
+          const translatedElement =
+            labelList[label].parentElement.parentElement;
           if (languageTag != null && languageTag != currentLang) {
             translatedElement.classList.add('hidden');
           } else {
@@ -215,7 +224,6 @@ $(function() {
 
         // console.log(translatedElement);
         // toggle visibility of element
-
       }
     }
 
@@ -259,24 +267,40 @@ $(function() {
     let selectedLanguage = document.getElementById('language-select')
       .selectedOptions[0];
     changeLanguage(selectedLanguage.id);
+            updateSelectedLanguage(state.currentLang);
     localStorage.selected_lang = state.currentLang;
   });
 
   // case function for setting the selected language on dropdown
   // maybe there is a less verbose way to do this?
   function updateSelectedLanguage(currentLang) {
+
+    var contentLink = document.getElementsByClassName("tab-nav merged")[0].firstElementChild.firstElementChild
+
     switch (currentLang) {
       case 'en':
         document.getElementById('language-select').value = 'English';
+        contentLink.innerText = document.getElementById(
+          'language-select',
+        ).value;
         break;
       case 'es':
         document.getElementById('language-select').value = 'Spanish';
+        contentLink.innerText = document.getElementById(
+          'language-select',
+        ).value;
         break;
       case 'vi':
         document.getElementById('language-select').value = 'Vietnamese';
+        contentLink.innerText = document.getElementById(
+          'language-select',
+        ).value;
         break;
       case 'ar':
         document.getElementById('language-select').value = 'Arabic';
+        contentLink.innerText = document.getElementById(
+          'language-select',
+        ).value;
         break;
     }
   }
@@ -307,6 +331,7 @@ $(function() {
   // Apply current language to new InlinePanels
   $('.add').click(function() {
     changeLanguage(state.currentLang);
+        updateSelectedLanguage(state.currentLang);
   });
 
   var messages = $('.messages');
@@ -319,6 +344,7 @@ $(function() {
 
   $('#sections-count').change(function() {
     changeLanguage(state.currentLang);
+        updateSelectedLanguage(state.currentLang);
   });
 
   // Found this here: https://stackoverflow.com/a/31719339
