@@ -344,12 +344,4 @@ $(function() {
 
   var messages = $('.messages');
   messages.fadeOut(10000);
-
-  // TODO: not use JS to hide these
-  var adminOnlyFields = $('.admin-only-field');
-  for(var field of adminOnlyFields) {
-    if(field.innerText.includes('HIDE_ME')) {
-      field.classList.add('hidden');
-    }
-  }
 });
