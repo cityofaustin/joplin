@@ -165,9 +165,14 @@ $(function() {
     return janisPreviewUrl;
   }
 
+  function setTabToContent(){
+    $('.tab-nav a').first().tab('show');
+    window.history.replaceState(null, null, $('.tab-nav a').first().attr('href'));
+  }
   // Changes language and update janisPreviewUrl for our language
   function changeLanguage(currentLang) {
     state.currentLang = currentLang;
+    setTabToContent();
 
     // replace brackets with hidden span tags
     function replaceLanguageLabels() {
@@ -303,6 +308,8 @@ $(function() {
         break;
     }
   }
+
+
 
   // Persist language for preview even after page refreshes on save
   var previewButton = $('#page-preview-button');

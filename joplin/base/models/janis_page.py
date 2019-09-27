@@ -184,9 +184,9 @@ class JanisBasePage(Page):
                 return ("Draft")
         else:
             if self.approved_schedule:
-                return ("Live, Scheduled")
+                return ("Live + Scheduled")
             elif self.has_unpublished_changes:
-                return ("Live, Draft")
+                return ("Live + Draft")
             else:
                 return ("Live")
 

@@ -4,10 +4,10 @@
     {% for child in self.children %}
         <li class="{{ child.classes|join:" " }} {% if forloop.first %}active{% endif %}" role="tab" aria-controls="tab-{{ child.heading|cautious_slugify }}">
             <a href="#tab-{{ child.heading|cautious_slugify }}" class="{% if forloop.first %}active {% endif %}">
+              {% if forloop.first %}
               <div class="content-tab">
               {{ child.heading }}
               </div>
-              {% if forloop.first %}
               <div id="language-select-wrapper" class="field choice_field select coa-language-select-wrapper">
                   <div class="field-content">
                       <div id="language-input" class="input">
@@ -21,6 +21,8 @@
                       </div>
                   </div>
               </div>
+              {% else %}
+              {{ child.heading }}
               {% endif %}
             </a>
         </li>
