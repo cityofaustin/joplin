@@ -55,8 +55,7 @@ class OfficialDocumentPageOfficialDocument(Orderable):
     authoring_office = models.CharField(verbose_name="Authoring office of document", max_length=DEFAULT_MAX_LENGTH)
     summary = models.TextField(verbose_name="Document summary")
     name = models.CharField(verbose_name="Name of Document", max_length=DEFAULT_MAX_LENGTH)
-    link = models.URLField(verbose_name="Link to Document (URL)", null=True, blank=True)
-    document = models.ForeignKey(Document, null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
+    document = models.ForeignKey(Document, on_delete=models.SET_NULL, related_name='+')
 
     panels = [
         FieldPanel('date'),
