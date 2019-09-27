@@ -48,17 +48,17 @@
         },
         "botocore": {
             "hashes": [
-                "sha256:748fe4ee5cc8b10ef09e52c740b488402d6f6d4d1f0dde0c936da232b42b1bdd",
-                "sha256:9ffd9264e4ad999d2929cfe1c7e413d4cdf76a8bd92f011dce31874f056d2e18"
+                "sha256:cc8fc0250917ea27db82028b97ba467bed17ef0ac9da39e0c8b43249214756bb",
+                "sha256:ec1cfc1e2cf4f74890ffe4731453373574405ef13e4acfb2f3bd61560182735c"
             ],
-            "version": "==1.12.220"
+            "version": "==1.12.229"
         },
         "certifi": {
             "hashes": [
-                "sha256:046832c04d4e752f37383b628bc601a7ea7211496b4638f6514d0e5b9acc4939",
-                "sha256:945e3ba63a0b9f577b1395204e13c3a231f9bc0223888be653286534e5873695"
+                "sha256:e4f3620cfea4f83eedc95b24abd9cd56f3c4b146dd0177e83a21b4eb49e21e50",
+                "sha256:fd7c7c74727ddcf00e9acd26bba8da604ffec95bf1c2144e67aff7a8b50e6cef"
             ],
-            "version": "==2019.6.16"
+            "version": "==2019.9.11"
         },
         "chardet": {
             "hashes": [
@@ -77,10 +77,10 @@
         },
         "django": {
             "hashes": [
-                "sha256:16a5d54411599780ac9dfe3b9b38f90f785c51259a584e0b24b6f14a7f69aae8",
-                "sha256:9a2f98211ab474c710fcdad29c82f30fc14ce9917c7a70c3682162a624de4035"
+                "sha256:148a4a2d1a85b23883b0a4e99ab7718f518a83675e4485e44dc0c1d36988c5fa",
+                "sha256:deb70aa038e59b58593673b15e9a711d1e5ccd941b5973b30750d5d026abfd56"
             ],
-            "version": "==2.2.4"
+            "version": "==2.2.5"
         },
         "django-cors-headers": {
             "hashes": [
@@ -93,7 +93,7 @@
         "django-countable-field": {
             "editable": true,
             "git": "https://github.com/cityofaustin/django-countable-field",
-            "ref": "917db6f3349871cf1edde1574a64ccc91a8511d1"
+            "ref": "f6db746141fec561f80de76aee97ce63efa6826e"
         },
         "django-dbbackup": {
             "hashes": [
@@ -194,10 +194,10 @@
         },
         "djangorestframework": {
             "hashes": [
-                "sha256:42979bd5441bb4d8fd69d0f385024a114c3cae7df0f110600b718751250f6929",
-                "sha256:aedb48010ebfab9651aaab1df5fd3b4848eb4182afc909852a2110c24f89a359"
+                "sha256:5488aed8f8df5ec1d70f04b2114abc52ae6729748a176c453313834a9ee179c8",
+                "sha256:dc81cbf9775c6898a580f6f1f387c4777d12bd87abf0f5406018d32ccae71090"
             ],
-            "version": "==3.10.2"
+            "version": "==3.10.3"
         },
         "docutils": {
             "hashes": [

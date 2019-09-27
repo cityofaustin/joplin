@@ -1,0 +1,51 @@
+{% load i18n %}
+{% if page_types_restricted %}
+    {% if page_type_string == "base.departmentpage" %}
+        {% trans "Add a department that offers this page" as choose_str %}
+    {% elif page_type_string == "base.topiccollectionpage" %}
+        {% trans "Select a topic collection" as choose_str %}
+    {% elif page_type_string == "base.topicpage" %}
+        {% trans "Select a topic " as choose_str %}
+    {% elif page_type_string == "base.informationpage,base.servicepage" %}
+        {% trans "Select a page for the guide" as choose_str %}
+    {% elif page_type_string == "base.informationpage,base.servicepage,base.guidepage,base.officialdocumentpage" %}
+        {% trans "Choose content to feature on the department page" as choose_str %}
+    {% else %}
+        {% trans "Choose" as choose_str %}
+{% endif %}
+    {% include "wagtailadmin/shared/header.html" with title=choose_str  search_url="wagtailadmin_choose_page_search" query_parameters="page_type="|add:page_type_string icon="doc-empty-inverse" %}
+
+{% elif not page_types_restricted %}
+    {% trans "Choose a page" as choose_str %}
+    {% include "wagtailadmin/shared/header.html" with title=choose_str subtitle=page_type_names|join:", " search_url="wagtailadmin_choose_page_search" query_parameters="page_type="|add:page_type_string icon="doc-empty-inverse" %}
+{% endif %}
+
+
+<div class="nice-padding">
+    {% include 'wagtailadmin/chooser/_link_types.html' with current='internal' %}
+    {% if page_types_restricted %}
+
+    <p class="help-block help-warning">
+        {% blocktrans with type=page_type_names|join:", " count counter=page_type_names|length %}
+        Only pages of type "{{ type }}" may be chosen for this field. Search results will exclude pages of other types.
+        {% plural %}
+        Only the following published page types may be chosen for this field: {{ type }}. Search results will exclude pages of other types.
+        {% endblocktrans %}
+    </p>
+
+    {% endif %}
+
+    <form class="col search-form" action="/admin/choose-page/search/?{{ "page_type="|add:page_type_string }}" method="get" novalidate role="search">
+        <ul class="fields">
+            {% for field in search_form %}
+            {% include "wagtailadmin/shared/field_as_li.html" with field=field field_classes="field-small iconfield" input_classes="icon-search" %}
+            {% endfor %}
+            <li class="submit visuallyhidden"><input type="submit" value="Search" class="button" /></li>
+        </ul>
+    </form>
+
+    <div class="page-results">
+        {% include 'wagtailadmin/chooser/_browse_results.html' %}
+    </div>
+
+</div>

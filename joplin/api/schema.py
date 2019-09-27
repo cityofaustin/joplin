@@ -175,7 +175,7 @@ class ServicePageNode(DjangoObjectType):
 
     class Meta:
         model = ServicePage
-        filter_fields = ['id', 'slug', 'live']
+        filter_fields = ['id', 'slug', 'live', 'coa_global']
         interfaces = [graphene.Node]
 
 
@@ -189,7 +189,7 @@ class ProcessPageNode(DjangoObjectType):
 class InformationPageNode(DjangoObjectType):
     class Meta:
         model = InformationPage
-        filter_fields = ['id', 'slug', 'live']
+        filter_fields = ['id', 'slug', 'live', 'coa_global']
         interfaces = [graphene.Node]
 
 
@@ -225,7 +225,7 @@ class OfficialDocumentPageNode(DjangoObjectType):
 
     class Meta:
         model = OfficialDocumentPage
-        filter_fields = ['id', 'slug', 'live']
+        filter_fields = ['id', 'slug', 'live', 'coa_global']
         interfaces = [graphene.Node]
 
 
@@ -264,7 +264,16 @@ class GuidePageSection(graphene.ObjectType):
     heading = graphene.String()
 
     def resolve_heading(self, info):
-        return self.value['section_heading']
+        # We're doing our own translations in our model here
+        # so let's make sure the API still works as expected 
+        if django.utils.translation.get_language() == 'en':
+            return self.value['section_heading_en']
+        elif django.utils.translation.get_language() == 'es':
+            return self.value['section_heading_es']
+        elif django.utils.translation.get_language() == 'ar':
+            return self.value['section_heading_ar']
+        elif django.utils.translation.get_language() == 'vi':
+            return self.value['section_heading_vi']
 
     def resolve_pages(self, info):
         repr_pages = []
@@ -279,7 +288,7 @@ class GuidePageNode(DjangoObjectType):
 
     class Meta:
         model = GuidePage
-        filter_fields = ['id', 'slug', 'live']
+        filter_fields = ['id', 'slug', 'live', 'coa_global']
         interfaces = [graphene.Node]
 
     def resolve_sections(self, info):

@@ -1,6 +1,6 @@
 import os
 import graphene
-
+import traceback
 
 from django.db import models
 
@@ -42,6 +42,8 @@ class JanisBasePage(Page):
         verbose_name='Notes for authors (Not visible on the resident facing site)'
     )
 
+    coa_global = models.BooleanField(default=False, verbose_name='Make this a top level page')
+
     def janis_url(self):
         """
         This function parses various attributes of related content types to construct the
@@ -68,7 +70,9 @@ class JanisBasePage(Page):
                 'service page',
                 'topic page',
                 'information page',
-                'department page'
+                'department page',
+                'guide page',
+                'official document page'
             ]
             has_no_topic_collection = has_no_theme
 
@@ -106,6 +110,21 @@ class JanisBasePage(Page):
 
             # add hardcoded language path to base url
             base_url = os.environ["JANIS_URL"] + '/en'
+            # attributes for the url are needed by not discovered yet lets fetch them
+            # looking for missing elements, deducing content type from what works and what dosen't
+            # this is pretty ugly and ought to be cleaned up
+            if theme_slug is None and self.content_type.name != 'department page':
+                try:
+                    theme_slug = self.topics.first().topic.topiccollections.first().topiccollection.theme.slug or None
+                    topic_collection_slug = self.topics.first().topic.topiccollections.first().topiccollection.slug or None
+                except AttributeError as e:
+                    try:
+                        theme_slug = self.topiccollections.first().topiccollection.theme.slug or None
+                        topic_collection_slug = self.topiccollections.first().topiccollection.slug or None
+                    except AttributeError as e:
+                        # this is for pages just under departments
+                        theme_slug = self.related_departments.all()[0].related_department.slug or None
+
             # collect all our path elements
             paths_list = [
                 base_url,
@@ -114,11 +133,13 @@ class JanisBasePage(Page):
                 topic_slug,
                 page_slug]
             # join them together, filtering out empty ones
+
             janis_url = '/'.join(filter(None, (paths_list)))
             return janis_url
         except Exception as e:
             # right now this is a catch-all,
             print("!janis url error!:", self.title, e)
+            print(traceback.format_exc())
             return "#"
             pass
 
@@ -153,7 +174,8 @@ class JanisBasePage(Page):
 
         edit_handler = TabbedInterface([
             ObjectList(cls.content_panels + [
-                FieldPanel('author_notes')
+                FieldPanel('author_notes'),
+                AdminOnlyFieldPanel('coa_global', classname="admin-only-field"),
             ], heading='Content'),
             ObjectList(Page.promote_panels + cls.promote_panels,
                        heading='Search Info')
@@ -163,3 +185,10 @@ class JanisBasePage(Page):
 
     class Meta:
         abstract = True
+
+class AdminOnlyFieldPanel(FieldPanel):
+    def render_as_object(self):
+        if not self.request.user.is_superuser:
+            return 'HIDE_ME'
+
+        return super().render_as_object()

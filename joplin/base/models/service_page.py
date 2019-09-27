@@ -33,8 +33,12 @@ class ServicePage(JanisBasePage):
             )),
             ('step_with_options_accordian', StructBlock(
                 [
-                    ('options_description', TextBlock(
-                        'Describe the set of options')),
+                    ('options_description', RichTextBlock(
+                        features=WYSIWYG_SERVICE_STEP,
+                        # richTextPlaceholder.js searches for the class 'coa-option-description' and replaces placeholder text
+                        # The placeholder text is not part of the richtext input, but rather a div mask.
+                        classname='coa-option-description',
+                    )),
                     ('options', ListBlock(
                         StructBlock([
                             ('option_name', TextBlock(

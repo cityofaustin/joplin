@@ -28,7 +28,7 @@ django-session-security = "==2.6.5"
 django-phonenumber-field = "==3.0.1"
 phonenumberslite = "==8.10.16"
 django-debug-toolbar = "==2.0"
-django-countable-field = {editable = true,git = "https://github.com/cityofaustin/django-countable-field"}
+django-countable-field = {editable = true, git = "https://github.com/cityofaustin/django-countable-field"}
 
 [requires]
 python_version = "3.7"
