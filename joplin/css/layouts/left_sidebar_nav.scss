@@ -31,7 +31,6 @@
 }
 
 .nav-main .menu-item {
-
     .icon-home:before {
         content: 'create';
     }
@@ -51,8 +50,11 @@
     .icon-users:before {
         content: 'account_circle';
     }
+    .icon-doc-full-inverse:before {
+        content: 'description';
+    }
 }
 
-.nav-main .menu-item  .material-icons span {
-    font-family: "Open Sans";
+.nav-main .menu-item .material-icons span {
+    font-family: 'Open Sans';
 }
