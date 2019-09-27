@@ -1,0 +1,36 @@
+
+{% load wagtailadmin_tags %}
+<ul class="tab-nav merged" role="tablist">
+    {% for child in self.children %}
+        <li class="{{ child.classes|join:" " }} {% if forloop.first %}active{% endif %}" role="tab" aria-controls="tab-{{ child.heading|cautious_slugify }}">
+            <a href="#tab-{{ child.heading|cautious_slugify }}" class="{% if forloop.first %}active {% endif %}">
+              <div class="content-tab">
+              {{ child.heading }}
+              </div>
+              {% if forloop.first %}
+              <div id="language-select-wrapper" class="field choice_field select coa-language-select-wrapper">
+                  <div class="field-content">
+                      <div id="language-input" class="input">
+                          <select name="select" id="language-select" class="account-selector-collapsed" >
+                              <option id="en" selected>English</option>
+                              <option id="es" >Spanish</option>
+                              <option id="ar" >Arabic</option>
+                              <option id="vi" >Vietnamese</option>
+                          </select>
+                          <span class="coa-select--arrow"></span>
+                      </div>
+                  </div>
+              </div>
+              {% endif %}
+            </a>
+        </li>
+    {% endfor %}
+</ul>
+
+<div class="tab-content">
+    {% for child in self.children %}
+        <section id="tab-{{ child.heading|cautious_slugify }}" class="{{ child.classes|join:" " }} {% if forloop.first %}active{% endif %}" role="tabpanel" aria-labelledby="tab-label-{{ child.heading|cautious_slugify }}">
+            {{ child.render_as_object }}
+        </section>
+    {% endfor %}
+</div>

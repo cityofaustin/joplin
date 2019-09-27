@@ -109,18 +109,21 @@
 }
 
 #language-select {
-    background-color: #e5e4de;
     font-size: 14px;
     padding: 20px;
     cursor: pointer;
     width: 18px;
     border-radius: 3px;
-    background: inherit;
+    background: none;
 }
 
+#language-input {
+  position: absolute;
+  top: 0px;
+  right: -5px;
+}
 .coa-language-select-wrapper {
   display: inline-flex;
-  background-color: white;
 }
 
 .coa-language-select-wrapper :hover {
@@ -133,7 +136,6 @@
     height: 15px;
     font-size: 0; // hides the text for the current selection
     border: 0;
-    background: white; // TODO: replace with an appropriate image
     -moz-appearance: none;
     -webkit-appearance: none;
 }
