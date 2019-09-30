@@ -11,6 +11,7 @@ from wagtail.admin.edit_handlers import FieldPanel, ObjectList, TabbedInterface
 
 from wagtail.core.models import Page
 from wagtail.core.fields import RichTextField
+from flags.state import flag_enabled
 
 
 class JanisBasePage(Page):
@@ -195,14 +196,18 @@ class JanisBasePage(Page):
         if hasattr(cls, 'edit_handler'):
             return cls.edit_handler.bind_to_model(cls)
 
-        edit_handler = TabbedInterface([
+        editor_panels = [
             ObjectList(cls.content_panels, heading='Content'),
             ObjectList(cls.notes_content_panel, heading='Notes'),
-            ObjectList(Page.promote_panels + cls.promote_panels,
-                       heading='SEO'),
-            ObjectList(Page.settings_panels + cls.settings_panels,
-                       heading='Settings')
-        ])
+        ]
+
+        if flag_enabled('SHOW_EXTRA_PANELS'):
+            editor_panels += (ObjectList(Page.promote_panels + cls.promote_panels,
+                                         heading='SEO'),
+                              ObjectList(Page.settings_panels + cls.settings_panels,
+                                         heading='Settings'))
+
+        edit_handler = TabbedInterface(editor_panels)
 
         return edit_handler.bind_to_model(cls)
 
