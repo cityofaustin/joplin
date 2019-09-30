@@ -273,6 +273,7 @@ JANIS_URL = os.getenv('JANIS_URL', 'http://localhost:3000')
 
 JANIS_CMS_API = os.getenv('JANIS_CMS_API')
 JANIS_CMS_MEDIA = os.getenv('JANIS_CMS_MEDIA')
+JANIS_CMS_DOCS = os.getenv('JANIS_CMS_DOCS')
 
 GRAPHENE = {
     'SCHEMA': 'api.schema.schema',
