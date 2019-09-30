@@ -360,7 +360,6 @@ $(function() {
     var observer = new MutationObserver(function(mutations, observer) {
       if (mutations[0].attributeName == 'value') {
         $(element).trigger('change');
-        console.log(mutations);
       }
     });
     observer.observe(element, {
