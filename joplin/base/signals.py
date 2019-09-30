@@ -108,6 +108,10 @@ def create_build_aws(content_type, instance, publish_action='edited', request=No
                                 'value': settings.JANIS_CMS_MEDIA  # 'https://joplin-austin-gov.s3.amazonaws.com/media'
                             },
                             {
+                                'name': 'CMS_DOCS',
+                                'value': settings.JANIS_CMS_DOCS  # 'https://joplin-austin-gov-static.s3.amazonaws.com/production/media/documents'
+                            },
+                            {
                                 'name': 'SLACK_MESSAGE',
                                 'value': slack_message
                             }

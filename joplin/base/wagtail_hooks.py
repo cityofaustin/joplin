@@ -51,7 +51,6 @@ def configure_main_menu(request, menu_items):
                      # here were excluding some default generated menu items per UX
                      [
                          'explorer',
-                         'documents',
                          'settings',
                          'snippets'
                      ]

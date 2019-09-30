@@ -47,6 +47,8 @@ class JanisBasePage(Page):
         FieldPanel('author_notes')
     ]
 
+    coa_global = models.BooleanField(default=False, verbose_name='Make this a top level page')
+
     def janis_url(self):
         """
         This function parses various attributes of related content types to construct the
@@ -199,6 +201,7 @@ class JanisBasePage(Page):
         editor_panels = [
             ObjectList(cls.content_panels, heading='Content'),
             ObjectList(cls.notes_content_panel, heading='Notes'),
+            AdminOnlyFieldPanel('coa_global', classname="admin-only-field"),
         ]
 
         if flag_enabled('SHOW_EXTRA_PANELS'):
@@ -213,3 +216,11 @@ class JanisBasePage(Page):
 
     class Meta:
         abstract = True
+
+
+class AdminOnlyFieldPanel(FieldPanel):
+    def render_as_object(self):
+        if not self.request.user.is_superuser:
+            return 'HIDE_ME'
+
+        return super().render_as_object()

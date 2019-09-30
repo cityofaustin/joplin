@@ -10,6 +10,7 @@ from wagtail.core.fields import StreamField
 from wagtail.core.models import Page, PageRevision
 from django_filters import FilterSet, OrderingFilter
 from wagtail.core.blocks import PageChooserBlock, TextBlock, ListBlock
+from wagtail.documents.models import Document
 
 from base.models import TranslatedImage, ThreeOneOne, ServicePage, ServicePageContact, ServicePageTopic, ServicePageRelatedDepartments, InformationPageRelatedDepartments, ProcessPage, ProcessPageStep, ProcessPageContact, ProcessPageTopic, InformationPage, InformationPageContact, InformationPageTopic, DepartmentPage, DepartmentPageContact, DepartmentPageDirector, Theme, TopicCollectionPage, TopicPage, Contact, Location, ContactDayAndDuration, Department, DepartmentContact, TopicPageTopicCollection, OfficialDocumentPage, OfficialDocumentPageRelatedDepartments, OfficialDocumentPageTopic, OfficialDocumentPageOfficialDocument, GuidePage, GuidePageTopic, GuidePageRelatedDepartments, GuidePageContact, JanisBasePage, PhoneNumber, DepartmentPageTopService
 
@@ -23,6 +24,14 @@ class StreamFieldType(Scalar):
 @convert_django_field.register(StreamField)
 def convert_stream_field(field, registry=None):
     return StreamFieldType(description=field.help_text, required=not field.null)
+
+
+class DocumentNode(DjangoObjectType):
+    class Meta:
+        model = Document
+        interfaces = [graphene.Node]
+        exclude_fields = ['tags']
+    filename = graphene.String()
 
 
 class ThreeOneOneNode(DjangoObjectType):
@@ -166,7 +175,7 @@ class ServicePageNode(DjangoObjectType):
 
     class Meta:
         model = ServicePage
-        filter_fields = ['id', 'slug', 'live']
+        filter_fields = ['id', 'slug', 'live', 'coa_global']
         interfaces = [graphene.Node]
 
 
@@ -180,7 +189,7 @@ class ProcessPageNode(DjangoObjectType):
 class InformationPageNode(DjangoObjectType):
     class Meta:
         model = InformationPage
-        filter_fields = ['id', 'slug', 'live']
+        filter_fields = ['id', 'slug', 'live', 'coa_global']
         interfaces = [graphene.Node]
 
 
@@ -216,7 +225,7 @@ class OfficialDocumentPageNode(DjangoObjectType):
 
     class Meta:
         model = OfficialDocumentPage
-        filter_fields = ['id', 'slug', 'live']
+        filter_fields = ['id', 'slug', 'live', 'coa_global']
         interfaces = [graphene.Node]
 
 
@@ -279,7 +288,7 @@ class GuidePageNode(DjangoObjectType):
 
     class Meta:
         model = GuidePage
-        filter_fields = ['id', 'slug', 'live']
+        filter_fields = ['id', 'slug', 'live', 'coa_global']
         interfaces = [graphene.Node]
 
     def resolve_sections(self, info):
