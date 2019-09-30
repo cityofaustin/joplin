@@ -2,7 +2,7 @@ import os
 import graphene
 import traceback
 
-from django.db import models
+from django.db import models, ProgrammingError
 
 from wagtail.search import index
 from wagtail.utils.decorators import cached_classmethod
@@ -204,11 +204,15 @@ class JanisBasePage(Page):
 
         ]
 
-        if flag_enabled('SHOW_EXTRA_PANELS'):
-            editor_panels += (ObjectList(Page.promote_panels + cls.promote_panels,
-                                         heading='SEO'),
-                              ObjectList(Page.settings_panels + cls.settings_panels,
-                                         heading='Settings'))
+        try:
+            if flag_enabled('SHOW_EXTRA_PANELS'):
+                editor_panels += (ObjectList(Page.promote_panels + cls.promote_panels,
+                                             heading='SEO'),
+                                  ObjectList(Page.settings_panels + cls.settings_panels,
+                                             heading='Settings'))
+        except ProgrammingError as e:
+            print("some problem, maybe with flags")
+            pass
 
         edit_handler = TabbedInterface(editor_panels)
 
