@@ -199,9 +199,9 @@ class JanisBasePage(Page):
             return cls.edit_handler.bind_to_model(cls)
 
         editor_panels = [
-            ObjectList(cls.content_panels, heading='Content'),
-            ObjectList(cls.notes_content_panel, heading='Notes'),
-            AdminOnlyFieldPanel('coa_global', classname="admin-only-field"),
+            ObjectList(cls.content_panels + [AdminOnlyFieldPanel('coa_global', classname="admin-only-field")], heading='Content'),
+            ObjectList(cls.notes_content_panel, heading='Notes')
+
         ]
 
         if flag_enabled('SHOW_EXTRA_PANELS'):
