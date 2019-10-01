@@ -138,7 +138,9 @@ function handle_input {
     echo "#### Glad that worked. We'll create a new migration_datadump for you."
 
     # Build new migration datadump
-    docker exec -it ${COMPOSE_PROJECT_NAME}_app_1 python joplin/manage.py dumpdata --indent 2 --natural-foreign --natural-primary | \
+    # Excluding wagtailcore.GroupCollectionPermission because of IntegrityError issues
+    # see: https://docs.djangoproject.com/en/2.2/topics/serialization/#natural-keys for details
+    docker exec -it ${COMPOSE_PROJECT_NAME}_app_1 python joplin/manage.py dumpdata --exclude=wagtailcore.GroupCollectionPermission --indent 2 --natural-foreign --natural-primary | \
       python ./scripts/remove_logs_from_json_stream.py \
       > ./joplin/db/system-generated/seeding.datadump.json
 

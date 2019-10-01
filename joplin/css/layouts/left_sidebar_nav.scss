@@ -31,7 +31,6 @@
 }
 
 .nav-main .menu-item {
-
     .icon-home:before {
         content: 'create';
     }
@@ -46,13 +45,16 @@
         content: 'photo';
     }
     .icon-contacts:before {
-        content: 'contact_phone';
+        content: 'perm_contact_calendar';
     }
     .icon-users:before {
         content: 'account_circle';
     }
+    .icon-doc-full-inverse:before {
+        content: 'description';
+    }
 }
 
-.nav-main .menu-item  .material-icons span {
-    font-family: "Open Sans";
+.nav-main .menu-item .material-icons span {
+    font-family: 'Open Sans';
 }
