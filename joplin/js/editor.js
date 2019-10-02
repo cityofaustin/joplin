@@ -325,10 +325,21 @@ $(function() {
   var shareButton = $('#page-share-preview-button');
   var urlcopied = $('#page-share-url-copied');
   shareButton.click(function() {
+    // Not quite sure how the state/localstorage stuff is
+    // working here but hopefully this gets us some links
+    let lang = null;
     if (localStorage.selected_lang) {
-      changeLanguage(localStorage.selected_lang);
+      lang = localStorage.selected_lang;
+    }
+
+    if (state.currentLang) {
+      lang = state.currentLang;
+    }
+
+    if (lang) {
+      changeLanguage(lang);
       copyTextToClipboard(state.janisPreviewUrl);
-      updateSelectedLanguage(localStorage.selected_lang);
+      updateSelectedLanguage(lang);
       urlcopied.removeClass('hidden');
       urlcopied.fadeOut(10000);
       localStorage.sharingpreview = false;
