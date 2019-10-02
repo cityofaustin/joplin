@@ -2,7 +2,7 @@ import os
 import graphene
 import traceback
 
-from django.db import models
+from django.db import models, ProgrammingError
 
 from wagtail.search import index
 from wagtail.utils.decorators import cached_classmethod
@@ -11,6 +11,7 @@ from wagtail.admin.edit_handlers import FieldPanel, ObjectList, TabbedInterface
 
 from wagtail.core.models import Page
 from wagtail.core.fields import RichTextField
+from flags.state import flag_enabled
 
 
 class JanisBasePage(Page):
@@ -41,6 +42,10 @@ class JanisBasePage(Page):
         blank=True,
         verbose_name='Notes for authors (Not visible on the resident facing site)'
     )
+
+    notes_content_panel = [
+        FieldPanel('author_notes')
+    ]
 
     coa_global = models.BooleanField(default=False, verbose_name='Make this a top level page')
 
@@ -167,24 +172,55 @@ class JanisBasePage(Page):
             "global_id": global_id
         }
 
+    @property
+    def status_string(self):
+        """
+        override wagtail default
+        see https://github.com/wagtail/wagtail/blob/f44d27642b4a6932de73273d8320bbcb76330c21/wagtail/core/models.py#L1010
+        """
+        if not self.live:
+            if self.expired:
+                return ("Expired")
+            elif self.approved_schedule:
+                return ("Scheduled")
+            else:
+                return ("Draft")
+        else:
+            if self.approved_schedule:
+                return ("Live + Scheduled")
+            elif self.has_unpublished_changes:
+                return ("Live + Draft")
+            else:
+                return ("Live")
+
     @cached_classmethod
     def get_edit_handler(cls):
         if hasattr(cls, 'edit_handler'):
             return cls.edit_handler.bind_to_model(cls)
 
-        edit_handler = TabbedInterface([
-            ObjectList(cls.content_panels + [
-                FieldPanel('author_notes'),
-                AdminOnlyFieldPanel('coa_global', classname="admin-only-field"),
-            ], heading='Content'),
-            ObjectList(Page.promote_panels + cls.promote_panels,
-                       heading='Search Info')
-        ])
+        editor_panels = [
+            ObjectList(cls.content_panels + [AdminOnlyFieldPanel('coa_global', classname="admin-only-field")], heading='Content'),
+            ObjectList(cls.notes_content_panel, heading='Notes')
+
+        ]
+
+        try:
+            if flag_enabled('SHOW_EXTRA_PANELS'):
+                editor_panels += (ObjectList(Page.promote_panels + cls.promote_panels,
+                                             heading='SEO'),
+                                  ObjectList(Page.settings_panels + cls.settings_panels,
+                                             heading='Settings'))
+        except ProgrammingError as e:
+            print("some problem, maybe with flags")
+            pass
+
+        edit_handler = TabbedInterface(editor_panels)
 
         return edit_handler.bind_to_model(cls)
 
     class Meta:
         abstract = True
+
 
 class AdminOnlyFieldPanel(FieldPanel):
     def render_as_object(self):

@@ -79,7 +79,8 @@ INSTALLED_APPS = [
 
     'session_security',
     'phonenumber_field',
-    'countable_field'
+    'countable_field',
+    'flags',
 ]
 
 MIDDLEWARE = [
@@ -95,6 +96,7 @@ MIDDLEWARE = [
     'wagtail.core.middleware.SiteMiddleware',
     'wagtail.contrib.redirects.middleware.RedirectMiddleware',
     'session_security.middleware.SessionSecurityMiddleware',
+    'flags.middleware.FlagConditionsMiddleware',
 ]
 
 
@@ -375,3 +377,7 @@ SESSION_SECURITY_INSECURE = True
 PHONENUMBER_DEFAULT_REGION = 'US'
 
 PHONENUMBER_DB_FORMAT = "RFC3966"
+
+FLAGS = {
+    'SHOW_EXTRA_PANELS': [{'condition': 'boolean', 'value': False}]
+}
