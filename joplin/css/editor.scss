@@ -23,13 +23,12 @@
     margin: 0.5rem 4rem 0 0;
 }
 
-.actions {
-    margin: 0 0 0 auto;
+.tab-nav.merged {
+    background-color: #e5e4de;
 }
 
-.tab-nav.merged {
-    display: none;
-    background-color: #eee;
+.tab-nav {
+    z-index: 32;
 }
 
 .editor__save-button {
@@ -52,11 +51,11 @@ label {
 
 // This is because the drafttail editor goes to 30 when in focus
 .header.secondary {
-    z-index: 31 !important;
+    z-index: 34 !important;
 }
 
 .header.coa-header {
-    z-index: 32 !important;
+    z-index: 35 !important;
 }
 
 .struct-block {
@@ -70,5 +69,5 @@ label {
 }
 
 .coa-placeholder-elm {
-  color: $coa-color-dark-gray2 !important;
+    color: $coa-color-dark-gray2 !important;
 }

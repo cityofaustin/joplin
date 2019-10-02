@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "f8edbe16a9e90036d57b3b3024d62cefc5407f1fa50acd9aaf701da80c710847"
+            "sha256": "da9fe8d2c59e30dd441915a93855b75b7158e156a36d2bc97ad70021239d4265"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -48,10 +48,10 @@
         },
         "botocore": {
             "hashes": [
-                "sha256:cc8fc0250917ea27db82028b97ba467bed17ef0ac9da39e0c8b43249214756bb",
-                "sha256:ec1cfc1e2cf4f74890ffe4731453373574405ef13e4acfb2f3bd61560182735c"
+                "sha256:14ff881779776a5b08e4bb8d7e0cd6ca86e36fc80decc536d605c406fb81c993",
+                "sha256:5df4a8f8bb579daed58368d6c15cdd72455bfee7dc86be243e2ef4dff5ba1177"
             ],
-            "version": "==1.12.229"
+            "version": "==1.12.239"
         },
         "certifi": {
             "hashes": [
@@ -93,7 +93,7 @@
         "django-countable-field": {
             "editable": true,
             "git": "https://github.com/cityofaustin/django-countable-field",
-            "ref": "f6db746141fec561f80de76aee97ce63efa6826e"
+            "ref": "f5886fbc00ddf357e9f6e433704378976b9dc808"
         },
         "django-dbbackup": {
             "hashes": [
@@ -125,6 +125,14 @@
             ],
             "index": "pypi",
             "version": "==2.1.0"
+        },
+        "django-flags": {
+            "hashes": [
+                "sha256:3d698b057be1bed669a19d45b56e9bf9e70cc67476792d96d7d56befc5115af6",
+                "sha256:73afca86c28b386af96c1b7900d52ae341b488672f7a60b6b99a7b58949b070b"
+            ],
+            "index": "pypi",
+            "version": "==4.2.4"
         },
         "django-modelcluster": {
             "hashes": [
@@ -209,9 +217,9 @@
         },
         "draftjs-exporter": {
             "hashes": [
-                "sha256:503f222c81de9a0619158d8f88b638f9069af8de233dc020faa782c7a3b22100"
+                "sha256:5839cbc29d7bce2fb99837a404ca40c3a07313f2a20e2700de7ad6aa9a9a18fb"
             ],
-            "version": "==2.1.6"
+            "version": "==2.1.7"
         },
         "graphene": {
             "hashes": [
@@ -450,11 +458,11 @@
         },
         "urllib3": {
             "hashes": [
-                "sha256:b246607a25ac80bedac05c6f282e3cdaf3afb65420fd024ac94435cabe6e18d1",
-                "sha256:dbe59173209418ae49d485b87d1681aefa36252ee85884c31346debd19463232"
+                "sha256:3de946ffbed6e6746608990594d08faac602528ac7015ac28d33cee6a45b7398",
+                "sha256:9a107b99a5393caf59c7aa3c1249c16e6879447533d0887f4336dde834c7be86"
             ],
             "markers": "python_version >= '3.4'",
-            "version": "==1.25.3"
+            "version": "==1.25.6"
         },
         "wagtail": {
             "hashes": [
