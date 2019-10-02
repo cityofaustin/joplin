@@ -72,6 +72,11 @@
     height: 40px;
 }
 
+.languages-tab {
+    padding-left: 30px !important;
+    padding-right: 60px !important;
+}
+
 .tab-nav {
     position: fixed;
     top: $edit-page-tab-bar-top;
@@ -99,6 +104,7 @@
     border-color: #ffffff;
     border-bottom: 0.2em solid #fff;
     border-radius: 3px 3px 0px 0px;
+    border-radius: 0;
 }
 
 .coa-select--arrow::after {
@@ -111,18 +117,21 @@
 
 #language-select {
     font-size: 14px;
-    padding: 20px;
+    padding: 16px;
     cursor: pointer;
     width: 18px;
-    border-radius: 3px;
     background: none;
 }
 
 #language-input {
     position: absolute;
     top: 0px;
-    right: -5px;
+    right: 0px;
+    &:hover {
+        background: none;
+    }
 }
+
 .coa-language-select-wrapper {
     display: inline-flex;
 }
