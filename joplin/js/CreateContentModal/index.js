@@ -132,7 +132,7 @@ class CreateContentModal extends Component {
       .then(response => {
         // TODO: see if there's a better way to handle this
         window.onbeforeunload = null;
-        
+
         this.redirectToEditPage(response.data.id);
       })
       .catch(error => {
@@ -168,7 +168,7 @@ class CreateContentModal extends Component {
                 {this.state.creatingContent ? (
                   <div className="CreateContentModal__step">
                     <h2 className="CreateContentModal__header">
-                      Creating Page.
+                      Creating page
                     </h2>
                     <FontAwesomeIcon icon={faSpinner} spin size="5x" />
                   </div>

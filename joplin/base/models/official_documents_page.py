@@ -7,6 +7,8 @@ from base.forms import OfficialDocumentPageForm
 
 from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, MultiFieldPanel, PageChooserPanel
 from wagtail.core.models import Orderable
+from wagtail.documents.models import Document
+from wagtail.documents.edit_handlers import DocumentChooserPanel
 
 from .janis_page import JanisBasePage
 
@@ -53,7 +55,7 @@ class OfficialDocumentPageOfficialDocument(Orderable):
     authoring_office = models.CharField(verbose_name="Authoring office of document", max_length=DEFAULT_MAX_LENGTH)
     summary = models.TextField(verbose_name="Document summary")
     name = models.CharField(verbose_name="Name of Document", max_length=DEFAULT_MAX_LENGTH)
-    link = models.URLField(verbose_name="Link to Document (URL)")
+    document = models.ForeignKey(Document, null=True, blank=False, on_delete=models.SET_NULL, related_name='+')
 
     panels = [
         FieldPanel('date'),
@@ -65,7 +67,7 @@ class OfficialDocumentPageOfficialDocument(Orderable):
             'data-count-direction': 'down'
         })),
         FieldPanel('name', widget=countMe),
-        FieldPanel('link'),
+        DocumentChooserPanel('document')
     ]
 
     class Meta:

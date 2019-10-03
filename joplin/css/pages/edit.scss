@@ -11,31 +11,11 @@
 }
 
 .coa-button--margin {
-    margin: auto 5px;
+    margin: 5px;
 }
 
-// select any label right after a radio button
-#language-select input[type='radio'] + label {
-    border: 0.5px solid $wagtail-turquoise;
-    line-height: 200%;
-}
-
-#language-select input[type='radio']:checked + label {
-    background: $wagtail-turquoise;
-    color: $coa-color-white;
-}
-
-// hide display on input types
-#language-select > input[type='radio'] {
-    display: none;
-}
-
-.coa-multiField-nopadding li {
-    padding: 0;
-}
-
-.coa-helpPanel fieldset {
-    padding: 0;
+.coa-dropdown--no-height {
+    height: initial !important;
 }
 
 // tech debt: hiding help and labels instead of removing
@@ -68,4 +48,108 @@
             background-image: url('../static/images/share_white.svg');
         }
     }
+}
+
+.coa-header__page-info {
+    position: absolute;
+    right: 0px;
+    bottom: 0px;
+    display: inline-flex;
+    font-size: 14px;
+    margin-bottom: 8px;
+    margin-right: 37px;
+}
+
+.coa-header__page-status {
+    margin-left: 33px;
+}
+
+.coa-select {
+    min-width: 140px;
+}
+.tab-nav > li {
+    display: inline-flex;
+    height: 40px;
+}
+
+.languages-tab {
+    // I don't like this but I haven't figured out a good way to avoid it here
+    padding-left: 30px !important;
+    padding-right: 60px !important;
+}
+
+.tab-nav {
+    position: fixed;
+    top: $edit-page-tab-bar-top;
+    border-top: none;
+    color: black;
+    height: 40px;
+}
+
+.tab-nav a {
+    background-color: inherit;
+    border-color: #e5e4de;
+    color: black;
+    text-transform: none;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+.tab-nav a:hover {
+    border-top: 0.3em solid $coa-color-lightest-blue;
+    background-color: $coa-color-lightest-blue;
+    color: black;
+}
+.tab-nav li.active a {
+    background-color: #ffffff;
+    border-color: #ffffff;
+    border-bottom: 0.2em solid #fff;
+    border-radius: 3px 3px 0px 0px;
+    border-radius: 0;
+}
+
+.coa-select--arrow::after {
+    color: black !important;
+    cursor: pointer !important;
+    position: absolute;
+    top: 6px !important;
+    font-size: 24px !important;
+}
+
+#language-select {
+    font-size: 14px;
+    padding: 16px;
+    cursor: pointer;
+    width: 18px;
+    background: none;
+}
+
+#language-input {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    &:hover {
+        background: none;
+    }
+}
+
+.coa-language-select-wrapper {
+    display: inline-flex;
+}
+
+.coa-language-select-wrapper :hover {
+    background-color: $coa-color-lightest-blue;
+}
+
+.account-selector-collapsed {
+    cursor: pointer;
+    width: 15px;
+    height: 15px;
+    font-size: 0; // hides the text for the current selection
+    border: 0;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+}
+.account-selector-collapsed::-ms-expand {
+    display: none;
 }

@@ -21,10 +21,10 @@
     width: calc(100% - #{$nav-wrapper-width});
     background: $coa-color-gray;
     position: fixed;
+    height: 80px;
     padding: 1rem 1.5rem;
     z-index: 3;
     display: flex;
-    height: $secondary-header-height;
     h1 {
         color: $coa-color-orange;
         text-transform: capitalize;
@@ -36,8 +36,16 @@
 
 .header .actions {
     display: flex;
-    margin: auto 0 auto auto;
+    margin: 0 40px auto auto;
 }
-.header .actions * {
-    // margin: auto 2px;
+
+.secondary-actions {
+    width: calc(100% - #{$nav-wrapper-width});
+    background: #e5e4de;
+    position: fixed;
+    z-index: 30;
+    display: flex;
+    top: $edit-page-tab-bar-top;
+    padding-left: 1rem;
+    height: 40px;
 }
