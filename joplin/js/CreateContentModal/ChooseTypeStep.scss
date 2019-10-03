@@ -10,7 +10,9 @@
     margin: 1px;
     cursor: pointer;
     flex: 1 0 48%;
-    max-width: calc(100% * (1 / 2) - 2px);
+    // max-width: calc(100% * (1 / 2) - 2px);
+    // For some reason this was broken, the 24 feels magic numbery but it works for now
+    max-width: calc(100% * 0.5 - 24px);
     text-align: center;
     color: #4a4a4a;
     padding: 0px 10px 0px;
