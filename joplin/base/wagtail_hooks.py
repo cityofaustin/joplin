@@ -15,7 +15,7 @@ from wagtail.core.models import PageRevision
 from html.parser import HTMLParser
 
 import wagtail.admin.rich_text.editors.draftail.features as draftail_features
-from wagtail.admin.rich_text.converters.html_to_contentstate import BlockElementHandler
+from wagtail.admin.rich_text.converters.html_to_contentstate import BlockElementHandler, InlineStyleElementHandler
 
 
 # Following this: https://docs.python.org/3/library/html.parser.html#examples
@@ -212,6 +212,7 @@ def register_button_feature(features):
     """
     feature_name = 'rich-text-button-link'
     type_ = 'rich-text-button-link'
+    tag = 'div'
 
     control = {
         'type': type_,
@@ -226,7 +227,7 @@ def register_button_feature(features):
     )
 
     features.register_converter_rule('contentstate', feature_name, {
-        'from_database_format': {'div.rich-text-button-link': BlockElementHandler(type_)},
+        'from_database_format': {tag: BlockElementHandler(type_)},
         'to_database_format': {'block_map': {type_: {'element': 'div', 'props': {'class': 'usa-button-primary rich-text-button-link'}}}},
     })
 
