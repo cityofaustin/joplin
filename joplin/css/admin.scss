@@ -56,6 +56,18 @@
     }
 }
 
+.modal-body {
+    .tab-nav {
+        position: initial;
+    }
+}
+
+.modal-content {
+    .button.close.icon {
+        top: 5px;
+    }
+}
+
 .modal-body label[for='id_q'] {
     display: none;
 }
