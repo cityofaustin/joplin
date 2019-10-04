@@ -15,7 +15,7 @@ from wagtail.core.models import PageRevision
 from html.parser import HTMLParser
 
 import wagtail.admin.rich_text.editors.draftail.features as draftail_features
-from wagtail.admin.rich_text.converters.html_to_contentstate import BlockElementHandler, InlineStyleElementHandler
+from wagtail.admin.rich_text.converters.html_to_contentstate import BlockElementHandler
 
 
 # Following this: https://docs.python.org/3/library/html.parser.html#examples
