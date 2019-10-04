@@ -11,14 +11,24 @@ from wagtail.core.models import Page, PageRevision
 from django_filters import FilterSet, OrderingFilter
 from wagtail.core.blocks import PageChooserBlock, TextBlock, ListBlock
 from wagtail.documents.models import Document
-
+from wagtail.core.rich_text import expand_db_html
 from base.models import TranslatedImage, ThreeOneOne, ServicePage, ServicePageContact, ServicePageTopic, ServicePageRelatedDepartments, InformationPageRelatedDepartments, ProcessPage, ProcessPageStep, ProcessPageContact, ProcessPageTopic, InformationPage, InformationPageContact, InformationPageTopic, DepartmentPage, DepartmentPageContact, DepartmentPageDirector, Theme, TopicCollectionPage, TopicPage, Contact, Location, ContactDayAndDuration, Department, DepartmentContact, TopicPageTopicCollection, OfficialDocumentPage, OfficialDocumentPageRelatedDepartments, OfficialDocumentPageTopic, OfficialDocumentPageOfficialDocument, GuidePage, GuidePageTopic, GuidePageRelatedDepartments, GuidePageContact, JanisBasePage, PhoneNumber, DepartmentPageTopPage, DepartmentPageRelatedPage
 
 
 class StreamFieldType(Scalar):
     @staticmethod
     def serialize(dt):
-        return [{'type': item.block_type, 'value': item.block.get_api_representation(item.value), 'id': item.id} for item in dt]
+        serialized = [{'type': item.block_type, 'value': item.block.get_api_representation(item.value), 'id': item.id} for item in dt]
+
+
+"""
+todo
+        for item in serialized:
+            loop through all the values and try running expand_db_html on them to return an href
+            still need to find a way to actually attach the janis_url to the selection tho..
+"""
+
+return serialized
 
 
 @convert_django_field.register(StreamField)
@@ -429,6 +439,7 @@ class DepartmentPageTopPageNode(DjangoObjectType):
     class Meta:
         model = DepartmentPageTopPage
         interfaces = [graphene.Node]
+
 
 class DepartmentPageRelatedPageNode(DjangoObjectType):
     # This uses graphene ObjectType resolvers, see:
