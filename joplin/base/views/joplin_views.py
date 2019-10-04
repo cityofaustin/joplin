@@ -45,7 +45,6 @@ def new_page_from_modal(request):
         # Get the page data
         body = json.loads(request.body)
         print(body['type'])
-
         data = {}
         data['title'] = body['title']
         data['owner'] = request.user
