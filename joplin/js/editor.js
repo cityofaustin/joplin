@@ -309,16 +309,26 @@ $(function() {
     }
   }
 
-
-
   // Persist language for preview even after page refreshes on save
-  var previewButton = $('#page-preview-button');
-  previewButton.click(function() {
+  var previewbutton = $('#page-preview-button');
+  if (localStorage.preview_lang) {
+    changeLanguage(localStorage.preview_lang);
+    updateSelectedLanguage(localStorage.preview_lang);
+    window.open(state.janisPreviewUrl, '_blank');
+    localStorage.removeItem('preview_lang');
+  }
+
+  previewbutton.click(function() {
+    let lang = null;
     if (localStorage.selected_lang) {
-      changeLanguage(localStorage.selected_lang);
-      updateSelectedLanguage(localStorage.selected_lang);
-      window.open(state.janisPreviewUrl, '_blank');
+      lang = localStorage.selected_lang;
     }
+
+    if (state.currentLang) {
+      lang = state.currentLang;
+    }
+
+    localStorage.preview_lang = lang;
   });
 
   // Persist language for sharing even after page refreshes on save
