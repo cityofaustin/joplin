@@ -71,3 +71,28 @@ label {
 .coa-placeholder-elm {
     color: $coa-color-dark-gray2 !important;
 }
+
+/**
+ * Add some spacing to the rich-text-button-link inside of Draftail (our custom rich text feature defined in wagtail_hooks)
+ */
+.Draftail-block--rich-text-button-link {
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    position: relative;
+    margin: 16px 0;
+}
+
+/**
+ * Add CSS-based text to the top  and bottom of the Draftail rich-text-button-link section.
+ */
+.Draftail-block--rich-text-button-link::before {
+    content: 'This link will be rendered a button on the public-facing website.';
+    color: #555;
+    font-size: 12px;
+}
+
+.Draftail-block--rich-text-button-link::after {
+    content: 'If you would like multiple buttons, please style each one as a button separately.';
+    color: #555;
+    font-size: 12px;
+}

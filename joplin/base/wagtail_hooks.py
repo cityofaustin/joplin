@@ -212,6 +212,7 @@ def register_button_feature(features):
     """
     feature_name = 'rich-text-button-link'
     type_ = 'rich-text-button-link'
+    tag = 'div'
 
     control = {
         'type': type_,
@@ -226,7 +227,7 @@ def register_button_feature(features):
     )
 
     features.register_converter_rule('contentstate', feature_name, {
-        'from_database_format': {'div.rich-text-button-link': BlockElementHandler(type_)},
+        'from_database_format': {tag: BlockElementHandler(type_)},
         'to_database_format': {'block_map': {type_: {'element': 'div', 'props': {'class': 'usa-button-primary rich-text-button-link'}}}},
     })
 
