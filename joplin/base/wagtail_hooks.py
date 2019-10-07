@@ -18,6 +18,55 @@ import wagtail.admin.rich_text.editors.draftail.features as draftail_features
 from wagtail.admin.rich_text.converters.html_to_contentstate import BlockElementHandler
 
 
+class InternalLinkHandler(LinkHandler):
+    identifier = 'page'
+    import pdb
+    pdb.set_trace()
+
+    @staticmethod
+    def get_model():
+        return Page
+
+    @classmethod
+    def get_instance(cls, attrs):
+        return super().get_instance(attrs).specific
+
+    @classmethod
+    def expand_db_attributes(cls, attrs):
+        print("expanding!")
+        try:
+            import pdb
+            pdb.set_trace()
+            page = cls.get_instance(attrs)
+            return '<a href="%s">' % escape(page.janis_url)
+        except Page.DoesNotExist:
+            import pdb
+            pdb.set_trace()
+            return "<a>"
+
+
+@hooks.register('register_rich_text_features', order=1)
+def register_link_handler(features):
+    features.register_link_type(InternalLinkHandler)
+
+
+class NoFollowExternalLinkHandler(LinkHandler):
+    identifier = 'external'
+    print("external link!")
+    import pdb
+    pdb.set_trace()
+
+    @classmethod
+    def expand_db_attributes(cls, attrs):
+        href = attrs["href"]
+        return '<a href="%s" rel="nofollow" class="external">' % escape(href)
+
+
+@hooks.register('register_rich_text_features', order=1)
+def register_external_link(features):
+    features.register_link_type(NoFollowExternalLinkHandler)
+
+
 # Following this: https://docs.python.org/3/library/html.parser.html#examples
 class CheckForDataInHTMLParser(HTMLParser):
     has_data = False
