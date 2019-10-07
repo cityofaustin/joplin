@@ -6,7 +6,7 @@ from graphene_django.debug import DjangoDebug
 from graphene_django.filter import DjangoFilterConnectionField
 from graphene.types import Scalar
 from graphene.types.generic import GenericScalar
-from wagtail.core.fields import StreamField
+from wagtail.core.fields import StreamField, RichTextField
 from wagtail.core.models import Page, PageRevision
 from django_filters import FilterSet, OrderingFilter
 from wagtail.core.blocks import PageChooserBlock, TextBlock, ListBlock
@@ -15,20 +15,33 @@ from wagtail.core.rich_text import expand_db_html
 from base.models import TranslatedImage, ThreeOneOne, ServicePage, ServicePageContact, ServicePageTopic, ServicePageRelatedDepartments, InformationPageRelatedDepartments, ProcessPage, ProcessPageStep, ProcessPageContact, ProcessPageTopic, InformationPage, InformationPageContact, InformationPageTopic, DepartmentPage, DepartmentPageContact, DepartmentPageDirector, Theme, TopicCollectionPage, TopicPage, Contact, Location, ContactDayAndDuration, Department, DepartmentContact, TopicPageTopicCollection, OfficialDocumentPage, OfficialDocumentPageRelatedDepartments, OfficialDocumentPageTopic, OfficialDocumentPageOfficialDocument, GuidePage, GuidePageTopic, GuidePageRelatedDepartments, GuidePageContact, JanisBasePage, PhoneNumber, DepartmentPageTopPage, DepartmentPageRelatedPage
 
 
+class RichTextFieldType(Scalar):
+    """Serialises RichText content into fully baked HTML
+    see https://github.com/wagtail/wagtail/issues/2695#issuecomment-373002412 """
+
+    @staticmethod
+    def serialize(value):
+        return expand_db_html(value)
+
+
+@convert_django_field.register(RichTextField)
+def convert_stream_field(field, registry=None):
+    return RichTextFieldType(
+        description=field.help_text, required=not field.null
+    )
+
+
 class StreamFieldType(Scalar):
+    """
+    todo
+            for item in serialized:
+                loop through all the values and try running expand_db_html on them to return an href
+                still need to find a way to actually attach the janis_url to the selection tho..
+    """
     @staticmethod
     def serialize(dt):
         serialized = [{'type': item.block_type, 'value': item.block.get_api_representation(item.value), 'id': item.id} for item in dt]
-
-
-"""
-todo
-        for item in serialized:
-            loop through all the values and try running expand_db_html on them to return an href
-            still need to find a way to actually attach the janis_url to the selection tho..
-"""
-
-return serialized
+        return serialized
 
 
 @convert_django_field.register(StreamField)
