@@ -53,7 +53,7 @@ def serialize_block(StreamField):
     block_content = format_block_content(StreamField)
     serialized_block = {
         'type': StreamField.block_type,
-        'value': block_content or None,
+        'value': block_content,
         'id': StreamField.id
     }
     return serialized_block
@@ -73,7 +73,14 @@ class StreamFieldType(Scalar):
 
         serialized_blocks = []
         for StreamField in StreamFields:
-            serialized_blocks.append(serialize_block(StreamField))
+            import pdb
+            pdb.set_trace()
+            print(len(StreamField.block.all_blocks()))
+            if len(StreamField.block.all_blocks()) == 1:
+                serialized_blocks.append(serialize_block(StreamField))
+            else:
+                for child_block in StreamField.block.all_blocks():
+                    serialized_blocks.append(serialize_block(child_block))
 
         # serialized = [
         #     {
