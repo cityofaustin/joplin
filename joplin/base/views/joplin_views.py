@@ -63,8 +63,6 @@ def new_page_from_modal(request):
                 data['theme'] = Theme.objects.get(id=body['theme'])
             page = TopicCollectionPage(**data)
         if body['type'] == 'department':
-            data['what_we_do'] = 'What we do'
-            data['mission'] = 'Mission'
             page = DepartmentPage(**data)
         if body['type'] == 'documents':
             page = OfficialDocumentPage(**data)
