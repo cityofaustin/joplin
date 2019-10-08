@@ -65,8 +65,11 @@ class DepartmentPage(JanisBasePage):
         InlinePanel('contacts', label='Contacts'),
         InlinePanel('department_directors', label="Department Directors"),
         FieldPanel('job_listings'),
-        InlinePanel('top_service_pages', heading='Links to top services', label='top link',
+        InlinePanel('top_pages', heading='Links to top services', label='top link',
                     help_text='Add links to 1-4 top service pages or guides (4 maximum allowed).',
+                    min_num=None, max_num=4),
+        InlinePanel('related_pages', heading='Links to related pages', label='related page',
+                    help_text='Add links to 1-4 related information pages or guides (4 maximum allowed).',
                     min_num=None, max_num=4)
     ]
 
@@ -103,8 +106,19 @@ class DepartmentPageContact(ClusterableModel):
         return self.contact.name
 
 
-class DepartmentPageTopService(Orderable):
-    department = ParentalKey(DepartmentPage, related_name='top_service_pages')
+class DepartmentPageTopPage(Orderable):
+    department = ParentalKey(DepartmentPage, related_name='top_pages')
+    page = models.ForeignKey('wagtailcore.Page',  verbose_name='Select a page', related_name='+', on_delete=models.CASCADE)
+
+    panels = [
+        PageChooserPanel('page', page_type=[InformationPage, ServicePage, GuidePage, OfficialDocumentPage]),
+    ]
+
+    def __str__(self):
+        return self.page.text
+
+class DepartmentPageRelatedPage(Orderable):
+    department = ParentalKey(DepartmentPage, related_name='related_pages')
     page = models.ForeignKey('wagtailcore.Page',  verbose_name='Select a page', related_name='+', on_delete=models.CASCADE)
 
     panels = [
