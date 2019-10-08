@@ -9,7 +9,7 @@ from graphene.types.generic import GenericScalar
 from wagtail.core.fields import StreamField, RichTextField
 from wagtail.core.models import Page, PageRevision
 from django_filters import FilterSet, OrderingFilter
-from wagtail.core.blocks import PageChooserBlock, TextBlock, ListBlock
+from wagtail.core.blocks import PageChooserBlock, TextBlock, ListBlock, RichTextBlock
 from wagtail.documents.models import Document
 from wagtail.core.rich_text import expand_db_html
 from base.models import TranslatedImage, ThreeOneOne, ServicePage, ServicePageContact, ServicePageTopic, ServicePageRelatedDepartments, InformationPageRelatedDepartments, ProcessPage, ProcessPageStep, ProcessPageContact, ProcessPageTopic, InformationPage, InformationPageContact, InformationPageTopic, DepartmentPage, DepartmentPageContact, DepartmentPageDirector, Theme, TopicCollectionPage, TopicPage, Contact, Location, ContactDayAndDuration, Department, DepartmentContact, TopicPageTopicCollection, OfficialDocumentPage, OfficialDocumentPageRelatedDepartments, OfficialDocumentPageTopic, OfficialDocumentPageOfficialDocument, GuidePage, GuidePageTopic, GuidePageRelatedDepartments, GuidePageContact, JanisBasePage, PhoneNumber, DepartmentPageTopPage, DepartmentPageRelatedPage
@@ -31,17 +31,59 @@ def convert_stream_field(field, registry=None):
     )
 
 
+def format_block_content(StreamField):
+    """
+    given a block, try to get it's html api representation
+    """
+    try:
+        block_content = expand_db_html(StreamField.block.get_api_representation(StreamField.value))
+        print(block_content)
+    except Exception as e:
+        print(e)
+        block_content = StreamField.block.get_api_representation(StreamField.value)
+    finally:
+        return block_content
+
+
+def return_child_blocks(block):
+    return item.block.child_blocks()
+
+
+def serialize_block(StreamField):
+    block_content = format_block_content(StreamField)
+    serialized_block = {
+        'type': StreamField.block_type,
+        'value': block_content or None,
+        'id': StreamField.id
+    }
+    return serialized_block
+
+
 class StreamFieldType(Scalar):
     """
     todo
             for item in serialized:
                 loop through all the values and try running expand_db_html on them to return an href
                 still need to find a way to actually attach the janis_url to the selection tho..
+
+
     """
     @staticmethod
-    def serialize(dt):
-        serialized = [{'type': item.block_type, 'value': item.block.get_api_representation(item.value), 'id': item.id} for item in dt]
-        return serialized
+    def serialize(StreamFields):
+
+        serialized_blocks = []
+        for StreamField in StreamFields:
+            serialized_blocks.append(serialize_block(StreamField))
+
+        # serialized = [
+        #     {
+        #         'type': item.block_type,
+        #         'value': expand_db_html(item.block.get_api_representation(item.value)),
+        #         'id': item.id
+        #     } for item in dt
+        # ]
+
+        return serialized_blocks
 
 
 @convert_django_field.register(StreamField)
