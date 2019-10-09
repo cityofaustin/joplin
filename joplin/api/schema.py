@@ -28,7 +28,7 @@ class RichTextFieldType(Scalar):
 
 
 @convert_django_field.register(RichTextField)
-def convert_stream_field(field, registry=None):
+def convert_rich_text_field(field, registry=None):
     return RichTextFieldType(
         description=field.help_text, required=not field.null
     )
