@@ -305,7 +305,7 @@ def get_all_janis_urls(page):
         dept_url = f'/{department.related_department.slug}/{page.slug}/'
         urls.append(dept_url)
 
-    
+
 
     # urls = ['one', 'two']
     # x = page.janis_url()
@@ -343,6 +343,34 @@ class PageRevisionNode(DjangoObjectType):
         model = PageRevision
         filter_fields = ['id']
         interfaces = [graphene.Node]
+
+
+class JanisPageNode(graphene.ObjectType):
+    value = GenericScalar()
+    as_service_page = graphene.NonNull(ServicePageNode)
+    as_information_page = graphene.NonNull(InformationPageNode)
+    as_department_page = graphene.NonNull(DepartmentPageNode)
+    as_topic_page = graphene.NonNull(TopicNode)
+    as_topic_collection_page = graphene.NonNull(TopicCollectionNode)
+    as_official_document_page = graphene.NonNull(OfficialDocumentPageNode)
+
+    def resolve_as_service_page(self, resolve_info, *args, **kwargs):
+        return self
+
+    def resolve_as_information_page(self, resolve_info, *args, **kwargs):
+        return self
+
+    def resolve_as_department_page(self, resolve_info, *args, **kwargs):
+        return self
+
+    def resolve_as_topic_page(self, resolve_info, *args, **kwargs):
+        return self
+
+    def resolve_as_topic_collection_page(self, resolve_info, *args, **kwargs):
+        return self
+
+    def resolve_as_official_document_page(self, resolve_info, *args, **kwargs):
+        return self
 
 
 class InformationPageContactNode(DjangoObjectType):
@@ -511,11 +539,10 @@ def get_page_with_preview_data(page, session):
 class Query(graphene.ObjectType):
     debug = graphene.Field(DjangoDebug, name='__debug')
 
-    service_page = graphene.Field(ServicePageNode, id=graphene.ID(), pk=graphene.Int(
-    ), slug=graphene.String(), show_preview=graphene.Boolean(default_value=False), language=Language())
     department_page = graphene.Node.Field(DepartmentPageNode)
     all_service_pages = DjangoFilterConnectionField(ServicePageNode)
     page_revision = graphene.Field(PageRevisionNode, id=graphene.ID())
+    page = graphene.Field(JanisPageNode, id=graphene.ID())
     all_page_revisions = DjangoFilterConnectionField(PageRevisionNode)
     all_information_pages = DjangoFilterConnectionField(InformationPageNode)
     all_department_pages = DjangoFilterConnectionField(DepartmentPageNode)
@@ -532,6 +559,11 @@ class Query(graphene.ObjectType):
         revision = graphene.Node.get_node_from_global_id(resolve_info, id)
 
         return revision
+
+    def resolve_page(self, resolve_info, id=None):
+        page = graphene.Node.get_node_from_global_id(resolve_info, id)
+
+        return page
 
     def resolve_service_page(self, resolve_info, id=None, pk=None, slug=None, show_preview=None, language=None):
         if not language:
