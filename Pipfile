@@ -29,7 +29,9 @@ django-phonenumber-field = "==3.0.1"
 phonenumberslite = "==8.10.16"
 django-debug-toolbar = "==2.0"
 django-countable-field = {editable = true,git = "https://github.com/cityofaustin/django-countable-field"}
-django-flags = "*"
+django-flags = "==4.2.4"
+coa-django-countable-field = "==1.6"
+wagtail-grapple = "*"
 
 [requires]
 python_version = "3.7"

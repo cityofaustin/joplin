@@ -63,7 +63,9 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'modeltranslation',
-    'graphene_django',
+    "grapple",
+    "graphene_django",
+    "channels",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -380,4 +382,10 @@ PHONENUMBER_DB_FORMAT = "RFC3966"
 
 FLAGS = {
     'SHOW_EXTRA_PANELS': [{'condition': 'boolean', 'value': False}]
+}
+
+# Grapple Config:
+GRAPHENE = {"SCHEMA": "grapple.schema.schema"}
+GRAPPLE_APPS = {
+    "base": ""
 }
