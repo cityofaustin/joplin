@@ -9,13 +9,25 @@ from graphene.types.generic import GenericScalar
 from wagtail.core.fields import StreamField, RichTextField
 from wagtail.core.models import Page, PageRevision
 from django_filters import FilterSet, OrderingFilter
-from wagtail.core.blocks import *
+from wagtail.core.blocks import PageChooserBlock, TextBlock, ListBlock
 from wagtail.documents.models import Document
 from wagtail.core.rich_text import expand_db_html
 from base.models import TranslatedImage, ThreeOneOne, ServicePage, ServicePageContact, ServicePageTopic, ServicePageRelatedDepartments, InformationPageRelatedDepartments, ProcessPage, ProcessPageStep, ProcessPageContact, ProcessPageTopic, InformationPage, InformationPageContact, InformationPageTopic, DepartmentPage, DepartmentPageContact, DepartmentPageDirector, Theme, TopicCollectionPage, TopicPage, Contact, Location, ContactDayAndDuration, Department, DepartmentContact, TopicPageTopicCollection, OfficialDocumentPage, OfficialDocumentPageRelatedDepartments, OfficialDocumentPageTopic, OfficialDocumentPageOfficialDocument, GuidePage, GuidePageTopic, GuidePageRelatedDepartments, GuidePageContact, JanisBasePage, PhoneNumber, DepartmentPageTopPage, DepartmentPageRelatedPage
 
 
-class RichTextFielStreamValueype(Scalar):
+def get_block_by_key(json_input, lookup_key):
+    if isinstance(json_input, dict):
+        for k, v in json_input.items():
+            if k == lookup_key:
+                yield v
+            else:
+                yield from item_generator(v, lookup_key)
+    elif isinstance(json_input, list):
+        for item in json_input:
+            yield from item_generator(item, lookup_key)
+
+
+class RichTextFieldType(Scalar):
     """Serialises RichText content into fully baked HTML
     see https://github.com/wagtail/wagtail/issues/2695#issuecomment-373002412 """
 
@@ -26,44 +38,35 @@ class RichTextFielStreamValueype(Scalar):
 
 @convert_django_field.register(RichTextField)
 def convert_stream_field(field, registry=None):
-    return RichTextFielStreamValueype(
+    return RichTextFieldType(
         description=field.help_text, required=not field.null
     )
 
 
-class StreamFielStreamValueype(Scalar):
+class StreamFieldType(Scalar):
     """
     todo
             for item in serialized:
                 loop through all the values and try running expand_db_html on them to return an href
                 still need to find a way to actually attach the janis_url to the selection tho..
     """
+    RichTextBlocks = [
+        'options',
+
+    ]
+
     @staticmethod
-    def serialize(StreamValue):
-        # import pdb
-        # pdb.set_trace()
-        serialized = []
+    def serialize(dt):
+        serialized = [{'type': item.block_type, 'value': item.block.get_api_representation(item.value), 'id': item.id} for item in dt]
 
-        for item in StreamValue:
-            block = item.block
-            if block.child_blocks:
-                for child_block in block.all_blocks():
-                    if isinstance(child_block, RichTextBlock):
-                        import pdb
-                        pdb.set_trace()
+        expand_db_html(i)
 
-            item = {
-                'type': item.block_type,
-                'value': item.block.get_api_representation(item.value),
-                'id': item.id
-            }
-            serialized.append(item)
-        return serialized
+        return dt.stream_data
 
 
 @convert_django_field.register(StreamField)
 def convert_stream_field(field, registry=None):
-    return StreamFielStreamValueype(description=field.help_text, required=not field.null)
+    return StreamFieldType(description=field.help_text, required=not field.null)
 
 
 class DocumentNode(DjangoObjectType):
