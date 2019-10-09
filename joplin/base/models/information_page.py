@@ -52,6 +52,7 @@ class InformationPage(JanisBasePage):
         InlinePanel('topics', label='Topics'),
         InlinePanel('related_departments', label='Related Departments'),
         FieldPanel('description', widget=countMeTextArea),
+        # hidden for now, see: https://austininnovation.slack.com/archives/C8T4YD23T/p1570659780017500?thread_ts=1570659723.017100&cid=C8T4YD23T
         # StreamFieldPanel('options'),
         FieldPanel('additional_content'),
         InlinePanel('contacts', label='Contacts'),

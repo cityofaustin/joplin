@@ -57,7 +57,6 @@ class StreamFieldType(Scalar):
                     for child_block in block.all_blocks():
                         if isinstance(child_block, RichTextBlock):
                             rt_names.append(child_block.name)
-            # serialized = [{'type': item.block_type, 'value': item.block.get_api_representation(item.value), 'id': item.id} for item in StreamValue]
 
             # todo: make things less nested
             for block_key in rt_names:
@@ -72,6 +71,7 @@ class StreamFieldType(Scalar):
                                 altered_value = nested_alter(elem, key, expand_db_html)
             # todo: this is a hardcoded hack, need a way to approach shallow data too
             nested_alter(data, 'options_description', expand_db_html)
+            # serialized = [{'type': item.block_type, 'value': item.block.get_api_representation(item.value), 'id': item.id} for item in StreamValue]
 
         except Exception as e:
             print(e)
