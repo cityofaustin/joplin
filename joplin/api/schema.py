@@ -373,6 +373,14 @@ class JanisPageNode(graphene.ObjectType):
         return self
 
 
+class SiteStructure(graphene.ObjectType):
+    value = GenericScalar()
+    name = graphene.String()
+
+    def resolve_name(self, resolve_info, *args, **kwargs):
+        return "blarg"
+
+
 class InformationPageContactNode(DjangoObjectType):
     class Meta:
         model = InformationPageContact
@@ -543,6 +551,7 @@ class Query(graphene.ObjectType):
     all_service_pages = DjangoFilterConnectionField(ServicePageNode)
     page_revision = graphene.Field(PageRevisionNode, id=graphene.ID())
     page = graphene.Field(JanisPageNode, id=graphene.ID())
+    site_structure = graphene.Field(SiteStructure)
     all_page_revisions = DjangoFilterConnectionField(PageRevisionNode)
     all_information_pages = DjangoFilterConnectionField(InformationPageNode)
     all_department_pages = DjangoFilterConnectionField(DepartmentPageNode)
@@ -554,6 +563,10 @@ class Query(graphene.ObjectType):
     all_official_document_pages = DjangoFilterConnectionField(
         OfficialDocumentPageNode)
     all_guide_pages = DjangoFilterConnectionField(GuidePageNode)
+
+    def resolve_site_structure(self, resolve_info):
+        site_structure = SiteStructure()
+        return site_structure
 
     def resolve_page_revision(self, resolve_info, id=None):
         revision = graphene.Node.get_node_from_global_id(resolve_info, id)
