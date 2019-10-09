@@ -80,6 +80,7 @@ class StreamFieldType(Scalar):
     def serialize(StreamValue):
         data = StreamValue.stream_data
         rt_names = []
+        # get lists of potential keys
         try:
             for item in StreamValue:
                 block = item.block
@@ -95,35 +96,17 @@ class StreamFieldType(Scalar):
                 print(block_key)
                 out = []
                 values = nested_lookup(block_key, data)
-                for index, value in enumerate(values):
-                    print(index)
-                    if isinstance(value, list):
-                        import pdb
-                        pdb.set_trace()
-                        for index, elem, in enumerate(value):
-                            for key in rt_names:
-                                try:
-                                    altered_elem = expand_db_html(elem[key])
-                                    out.append(altered_elem)
-                                except Exception:
-                                    pass
-                    else:
-                        altered_elem = expand_db_html(elem)
-                        out.append(altered_elem)
                 import pdb
                 pdb.set_trace()
+                for value in values:
+                    if isinstance(value, list):
+                        for elem in value:
+                            for key in rt_names:
+                                altered_value = nested_alter(elem, key, expand_db_html)
+                    else:
+                        for key in rt_names:
+                            altered_value = nested_alter(value, key, expand_db_html)
 
-                # for elem in data:
-                #     # altered_document = nested_alter(elem, block_key, expand_db_html)
-                #     value = nested_lookup(block_key, data)
-                #     out.append(altered_document)
-
-            # for block in rt_names:
-            #     for i in get_block_by_key(StreamValue.stream_data, block):
-            #         pair = {block: expand_db_html(i)}
-            #         print(pair)
-            #         for i, v in enumerate(StreamValue.stream_data):
-            #             deep_update(StreamValue.stream_data[i], pair)
         except Exception as e:
             print(e)
             print(traceback.format_exc())
