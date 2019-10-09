@@ -15,6 +15,7 @@ from wagtail.core.rich_text import expand_db_html
 from base.models import TranslatedImage, ThreeOneOne, ServicePage, ServicePageContact, ServicePageTopic, ServicePageRelatedDepartments, InformationPageRelatedDepartments, ProcessPage, ProcessPageStep, ProcessPageContact, ProcessPageTopic, InformationPage, InformationPageContact, InformationPageTopic, DepartmentPage, DepartmentPageContact, DepartmentPageDirector, Theme, TopicCollectionPage, TopicPage, Contact, Location, ContactDayAndDuration, Department, DepartmentContact, TopicPageTopicCollection, OfficialDocumentPage, OfficialDocumentPageRelatedDepartments, OfficialDocumentPageTopic, OfficialDocumentPageOfficialDocument, GuidePage, GuidePageTopic, GuidePageRelatedDepartments, GuidePageContact, JanisBasePage, PhoneNumber, DepartmentPageTopPage, DepartmentPageRelatedPage
 import collections
 import traceback
+from nested_lookup import nested_lookup, nested_alter, nested_update
 
 
 def get_block_by_key(json_input, lookup_key):
@@ -43,6 +44,14 @@ def deep_update(source, overrides):
     return source
 
 
+def try_html_expansion(value):
+    try:
+        expand_db_html(value)
+    except Exception as e:
+        print(e)
+        print(traceback.format_exc())
+
+
 class RichTextFieldType(Scalar):
     """Serialises RichText content into fully baked HTML
     see https://github.com/wagtail/wagtail/issues/2695#issuecomment-373002412 """
@@ -69,7 +78,7 @@ class StreamFieldType(Scalar):
 
     @staticmethod
     def serialize(StreamValue):
-
+        data = StreamValue.stream_data
         rt_names = []
         try:
             for item in StreamValue:
@@ -82,18 +91,45 @@ class StreamFieldType(Scalar):
                             rt_names.append(child_block.name)
             # serialized = [{'type': item.block_type, 'value': item.block.get_api_representation(item.value), 'id': item.id} for item in StreamValue]
 
-            for block in rt_names:
-                for i in get_block_by_key(StreamValue.stream_data, block):
-                    pair = {block: expand_db_html(i)}
-                    print(pair)
-                    for i, v in enumerate(StreamValue.stream_data):
-                        deep_update(StreamValue.stream_data[i], pair)
+            for block_key in ['options']:
+                print(block_key)
+                out = []
+                values = nested_lookup(block_key, data)
+                for index, value in enumerate(values):
+                    print(index)
+                    if isinstance(value, list):
+                        import pdb
+                        pdb.set_trace()
+                        for index, elem, in enumerate(value):
+                            for key in rt_names:
+                                try:
+                                    altered_elem = expand_db_html(elem[key])
+                                    out.append(altered_elem)
+                                except Exception:
+                                    pass
+                    else:
+                        altered_elem = expand_db_html(elem)
+                        out.append(altered_elem)
+                import pdb
+                pdb.set_trace()
+
+                # for elem in data:
+                #     # altered_document = nested_alter(elem, block_key, expand_db_html)
+                #     value = nested_lookup(block_key, data)
+                #     out.append(altered_document)
+
+            # for block in rt_names:
+            #     for i in get_block_by_key(StreamValue.stream_data, block):
+            #         pair = {block: expand_db_html(i)}
+            #         print(pair)
+            #         for i, v in enumerate(StreamValue.stream_data):
+            #             deep_update(StreamValue.stream_data[i], pair)
         except Exception as e:
             print(e)
             print(traceback.format_exc())
             pass
 
-        return StreamValue.stream_data
+        return data
 
 
 @convert_django_field.register(StreamField)
