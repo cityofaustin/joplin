@@ -9,13 +9,13 @@ from graphene.types.generic import GenericScalar
 from wagtail.core.fields import StreamField, RichTextField
 from wagtail.core.models import Page, PageRevision
 from django_filters import FilterSet, OrderingFilter
-from wagtail.core.blocks import PageChooserBlock, TextBlock, ListBlock
+from wagtail.core.blocks import *
 from wagtail.documents.models import Document
 from wagtail.core.rich_text import expand_db_html
 from base.models import TranslatedImage, ThreeOneOne, ServicePage, ServicePageContact, ServicePageTopic, ServicePageRelatedDepartments, InformationPageRelatedDepartments, ProcessPage, ProcessPageStep, ProcessPageContact, ProcessPageTopic, InformationPage, InformationPageContact, InformationPageTopic, DepartmentPage, DepartmentPageContact, DepartmentPageDirector, Theme, TopicCollectionPage, TopicPage, Contact, Location, ContactDayAndDuration, Department, DepartmentContact, TopicPageTopicCollection, OfficialDocumentPage, OfficialDocumentPageRelatedDepartments, OfficialDocumentPageTopic, OfficialDocumentPageOfficialDocument, GuidePage, GuidePageTopic, GuidePageRelatedDepartments, GuidePageContact, JanisBasePage, PhoneNumber, DepartmentPageTopPage, DepartmentPageRelatedPage
 
 
-class RichTextFieldType(Scalar):
+class RichTextFielStreamValueype(Scalar):
     """Serialises RichText content into fully baked HTML
     see https://github.com/wagtail/wagtail/issues/2695#issuecomment-373002412 """
 
@@ -26,12 +26,12 @@ class RichTextFieldType(Scalar):
 
 @convert_django_field.register(RichTextField)
 def convert_stream_field(field, registry=None):
-    return RichTextFieldType(
+    return RichTextFielStreamValueype(
         description=field.help_text, required=not field.null
     )
 
 
-class StreamFieldType(Scalar):
+class StreamFielStreamValueype(Scalar):
     """
     todo
             for item in serialized:
@@ -39,14 +39,31 @@ class StreamFieldType(Scalar):
                 still need to find a way to actually attach the janis_url to the selection tho..
     """
     @staticmethod
-    def serialize(dt):
-        serialized = [{'type': item.block_type, 'value': item.block.get_api_representation(item.value), 'id': item.id} for item in dt]
+    def serialize(StreamValue):
+        # import pdb
+        # pdb.set_trace()
+        serialized = []
+
+        for item in StreamValue:
+            block = item.block
+            if block.child_blocks:
+                for child_block in block.all_blocks():
+                    if isinstance(child_block, RichTextBlock):
+                        import pdb
+                        pdb.set_trace()
+
+            item = {
+                'type': item.block_type,
+                'value': item.block.get_api_representation(item.value),
+                'id': item.id
+            }
+            serialized.append(item)
         return serialized
 
 
 @convert_django_field.register(StreamField)
 def convert_stream_field(field, registry=None):
-    return StreamFieldType(description=field.help_text, required=not field.null)
+    return StreamFielStreamValueype(description=field.help_text, required=not field.null)
 
 
 class DocumentNode(DjangoObjectType):
