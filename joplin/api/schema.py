@@ -51,12 +51,15 @@ class StreamFieldType(Scalar):
         try:
             for item in StreamValue:
                 block = item.block
-                if isinstance(block, RichTextBlock):
-                    rt_names.append(block.name)
-                elif block.child_blocks:
-                    for child_block in block.all_blocks():
-                        if isinstance(child_block, RichTextBlock):
-                            rt_names.append(child_block.name)
+                try:
+                    if isinstance(block, RichTextBlock):
+                        rt_names.append(block.name)
+                    elif block.child_blocks:
+                        for child_block in block.all_blocks():
+                            if isinstance(child_block, RichTextBlock):
+                                rt_names.append(child_block.name)
+                except AttributeError as e:
+                    pass
 
             # todo: make things less nested
             for block_key in rt_names:
