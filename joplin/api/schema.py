@@ -5,6 +5,7 @@ from graphene_django.converter import convert_django_field
 from graphene_django.debug import DjangoDebug
 from graphene_django.filter import DjangoFilterConnectionField
 from graphene.types import Scalar
+from graphene.types.json import JSONString
 from graphene.types.generic import GenericScalar
 from wagtail.core.fields import StreamField
 from wagtail.core.models import Page, PageRevision
@@ -376,9 +377,42 @@ class JanisPageNode(graphene.ObjectType):
 class SiteStructure(graphene.ObjectType):
     value = GenericScalar()
     name = graphene.String()
+    structure_json = JSONString()
 
     def resolve_name(self, resolve_info, *args, **kwargs):
         return "blarg"
+
+    # json isn't a great way to do this, we should
+    # figure out how to make it queryable
+    def resolve_structure_json(self, resolve_info, *args, **kwargs):
+        # our structure here can be id: page dict
+        site_structure = {}
+        topic_collections = TopicCollectionPage.objects.all()
+        for topic_collection in topic_collections:
+            topic_collection_global_id = graphene.Node.to_global_id('TopicCollectionNode', topic_collection.id)
+            topic_collection_structure = {'url': f'/{topic_collection.theme.slug}/{topic_collection.slug}/', 'type': 'topic collection', 'children': {}}
+
+            site_structure[topic_collection_global_id] = topic_collection_structure
+
+        # getting kinda confused as to how to best approach this, taking a step back for a sec
+
+        # topics = TopicPage.objects.all()
+        # for topic in topics:
+        #     topic_global_id = graphene.Node.to_global_id('TopicNode', topic.id)
+        #     topic_tcs = topic.topiccollections.all()
+        #     for tc in topic_tcs:
+        #         tc_global_id = graphene.Node.to_global_id('TopicCollectionNode', tc.id)
+        #         topic_structure = {'url': f'/{topic_collection.theme.slug}/{topic_collection.slug}/{topic.slug}/',
+        #                            'type': 'topic', 'children': {}}
+        #         if tc.topiccollection.id == topic_collection.id:
+        #
+        #
+        #
+        #             x = tc
+        #             b = x
+
+
+        return site_structure
 
 
 class InformationPageContactNode(DjangoObjectType):
