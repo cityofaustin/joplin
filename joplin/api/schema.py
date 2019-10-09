@@ -308,6 +308,7 @@ class PageRevisionNode(DjangoObjectType):
     as_topic_page = graphene.NonNull(TopicNode)
     as_topic_collection_page = graphene.NonNull(TopicCollectionNode)
     as_official_document_page = graphene.NonNull(OfficialDocumentPageNode)
+    as_guide_page = graphene.NonNull(GuidePageNode)
 
     def resolve_as_service_page(self, resolve_info, *args, **kwargs):
         return self.as_page_object()
@@ -328,6 +329,9 @@ class PageRevisionNode(DjangoObjectType):
         return self.as_page_object()
 
     def resolve_as_official_document_page(self, resolve_info, *args, **kwargs):
+        return self.as_page_object()
+
+    def resolve_as_guide_page(self, resolve_info, *args, **kwargs):
         return self.as_page_object()
 
     class Meta:
