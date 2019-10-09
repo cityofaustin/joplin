@@ -386,11 +386,11 @@ class SiteStructure(graphene.ObjectType):
     # figure out how to make it queryable
     def resolve_structure_json(self, resolve_info, *args, **kwargs):
         # our structure here can be id: page dict
-        site_structure = {}
+        site_structure = []
         topic_collections = TopicCollectionPage.objects.all()
         for topic_collection in topic_collections:
             topic_collection_global_id = graphene.Node.to_global_id('TopicCollectionNode', topic_collection.id)
-            site_structure[f'/{topic_collection.theme.slug}/{topic_collection.slug}/'] = {'type': 'topic collection', 'id': topic_collection_global_id}
+            site_structure.append({'url' :f'/{topic_collection.theme.slug}/{topic_collection.slug}/', 'type': 'topic collection', 'id': topic_collection_global_id});
 
         topics = TopicPage.objects.all()
         for topic in topics:
@@ -398,24 +398,24 @@ class SiteStructure(graphene.ObjectType):
             topic_tcs = topic.topiccollections.all()
             for tc in topic_tcs:
                 topic_tc_global_id = graphene.Node.to_global_id('TopicCollectionNode', tc.topiccollection.id)
-                site_structure[f'/{tc.topiccollection.theme.slug}/{tc.topiccollection.slug}/{topic.slug}/'] = {'type': 'topic', 'id': topic_global_id, 'parent_topic_collection': topic_tc_global_id}
+                site_structure.append({'url' :f'/{tc.topiccollection.theme.slug}/{tc.topiccollection.slug}/{topic.slug}/', 'type': 'topic', 'id': topic_global_id, 'parent_topic_collection': topic_tc_global_id})
 
         departments = DepartmentPage.objects.all()
         for department in departments:
             department_global_id = graphene.Node.to_global_id('DepartmentNode', department.id)
-            site_structure[f'/{department.slug}/'] = {'type': 'department', 'id': department_global_id}
+            site_structure.append({'url' :f'/{department.slug}/', 'type': 'department', 'id': department_global_id})
 
         service_pages = ServicePage.objects.all()
         for service_page in service_pages:
             service_page_global_id = graphene.Node.to_global_id('ServicePageNode', service_page.id)
 
             if service_page.coa_global:
-                site_structure[f'/{service_page.slug}/'] = {'type': 'service page', 'id': service_page_global_id}
+                site_structure.append({'url' :f'/{service_page.slug}/', 'type': 'service page', 'id': service_page_global_id})
 
             service_page_departments = service_page.related_departments.all()
             for service_page_department in service_page_departments:
                 service_page_department_global_id = graphene.Node.to_global_id('DepartmentNode', service_page_department.related_department.id)
-                site_structure[f'/{service_page_department.related_department.slug}/{service_page.slug}/'] = {'type': 'service page', 'id': service_page_global_id, 'parent_department': service_page_department_global_id}
+                site_structure.append({'url' :f'/{service_page_department.related_department.slug}/{service_page.slug}/', 'type': 'service page', 'id': service_page_global_id, 'parent_department': service_page_department_global_id})
 
             service_page_topics = service_page.topics.all()
             for service_page_topic in service_page_topics:
@@ -423,19 +423,19 @@ class SiteStructure(graphene.ObjectType):
                 service_page_topic_tcs = service_page_topic.topic.topiccollections.all()
                 for tc in service_page_topic_tcs:
                     service_page_topic_tc_global_id = graphene.Node.to_global_id('TopicCollectionNode', tc.topiccollection.id)
-                    site_structure[f'/{tc.topiccollection.theme.slug}/{tc.topiccollection.slug}/{service_page_topic.topic.slug}/{service_page.slug}/'] = {'type': 'service page', 'id': service_page_global_id, 'parent_topic': service_page_topic_global_id, 'grandparent_topic_collection': service_page_topic_tc_global_id}
+                    site_structure.append({'url' :f'/{tc.topiccollection.theme.slug}/{tc.topiccollection.slug}/{service_page_topic.topic.slug}/{service_page.slug}/', 'type': 'service page', 'id': service_page_global_id, 'parent_topic': service_page_topic_global_id, 'grandparent_topic_collection': service_page_topic_tc_global_id})
 
         guide_pages = InformationPage.objects.all()
         for information_page in guide_pages:
             information_page_global_id = graphene.Node.to_global_id('InformationPageNode', information_page.id)
 
             if information_page.coa_global:
-                site_structure[f'/{information_page.slug}/'] = {'type': 'information page', 'id': information_page_global_id}
+                site_structure.append({'url' :f'/{information_page.slug}/', 'type': 'information page', 'id': information_page_global_id})
 
             information_page_departments = information_page.related_departments.all()
             for information_page_department in information_page_departments:
                 information_page_department_global_id = graphene.Node.to_global_id('DepartmentNode', information_page_department.related_department.id)
-                site_structure[f'/{information_page_department.related_department.slug}/{information_page.slug}/'] = {'type': 'information page', 'id': information_page_global_id, 'parent_department': information_page_department_global_id}
+                site_structure.append({'url' :f'/{information_page_department.related_department.slug}/{information_page.slug}/', 'type': 'information page', 'id': information_page_global_id, 'parent_department': information_page_department_global_id})
 
             information_page_topics = information_page.topics.all()
             for information_page_topic in information_page_topics:
@@ -443,19 +443,19 @@ class SiteStructure(graphene.ObjectType):
                 information_page_topic_tcs = information_page_topic.topic.topiccollections.all()
                 for tc in information_page_topic_tcs:
                     information_page_topic_tc_global_id = graphene.Node.to_global_id('TopicCollectionNode', tc.topiccollection.id)
-                    site_structure[f'/{tc.topiccollection.theme.slug}/{tc.topiccollection.slug}/{information_page_topic.topic.slug}/{information_page.slug}/'] = {'type': 'information page', 'id': information_page_global_id, 'parent_topic': information_page_topic_global_id, 'grandparent_topic_collection': information_page_topic_tc_global_id}
+                    site_structure.append({'url' :f'/{tc.topiccollection.theme.slug}/{tc.topiccollection.slug}/{information_page_topic.topic.slug}/{information_page.slug}/', 'type': 'information page', 'id': information_page_global_id, 'parent_topic': information_page_topic_global_id, 'grandparent_topic_collection': information_page_topic_tc_global_id})
 
         official_document_pages = OfficialDocumentPage.objects.all()
         for official_document_page in official_document_pages:
             official_document_page_global_id = graphene.Node.to_global_id('OfficialDocumentPageNode', official_document_page.id)
 
             if official_document_page.coa_global:
-                site_structure[f'/{official_document_page.slug}/'] = {'type': 'official document page', 'id': official_document_page_global_id}
+                site_structure.append({'url' :f'/{official_document_page.slug}/', 'type': 'official document page', 'id': official_document_page_global_id})
 
             official_document_page_departments = official_document_page.related_departments.all()
             for official_document_page_department in official_document_page_departments:
                 official_document_page_department_global_id = graphene.Node.to_global_id('DepartmentNode', official_document_page_department.related_department.id)
-                site_structure[f'/{official_document_page_department.related_department.slug}/{official_document_page.slug}/'] = {'type': 'official document page', 'id': official_document_page_global_id, 'parent_department': official_document_page_department_global_id}
+                site_structure.append({'url' :f'/{official_document_page_department.related_department.slug}/{official_document_page.slug}/', 'type': 'official document page', 'id': official_document_page_global_id, 'parent_department': official_document_page_department_global_id})
 
             official_document_page_topics = official_document_page.topics.all()
             for official_document_page_topic in official_document_page_topics:
@@ -463,19 +463,19 @@ class SiteStructure(graphene.ObjectType):
                 official_document_page_topic_tcs = official_document_page_topic.topic.topiccollections.all()
                 for tc in official_document_page_topic_tcs:
                     official_document_page_topic_tc_global_id = graphene.Node.to_global_id('TopicCollectionNode', tc.topiccollection.id)
-                    site_structure[f'/{tc.topiccollection.theme.slug}/{tc.topiccollection.slug}/{official_document_page_topic.topic.slug}/{official_document_page.slug}/'] = {'type': 'official document page', 'id': official_document_page_global_id, 'parent_topic': official_document_page_topic_global_id, 'grandparent_topic_collection': official_document_page_topic_tc_global_id}
+                    site_structure.append({'url' :f'/{tc.topiccollection.theme.slug}/{tc.topiccollection.slug}/{official_document_page_topic.topic.slug}/{official_document_page.slug}/', 'type': 'official document page', 'id': official_document_page_global_id, 'parent_topic': official_document_page_topic_global_id, 'grandparent_topic_collection': official_document_page_topic_tc_global_id})
 
         guide_pages = GuidePage.objects.all()
         for guide_page in guide_pages:
             guide_page_global_id = graphene.Node.to_global_id('GuidePageNode', guide_page.id)
 
             if guide_page.coa_global:
-                site_structure[f'/{guide_page.slug}/'] = {'type': 'guide page', 'id': guide_page_global_id}
+                site_structure.append({'url' :f'/{guide_page.slug}/', 'type': 'guide page', 'id': guide_page_global_id})
 
             guide_page_departments = guide_page.related_departments.all()
             for guide_page_department in guide_page_departments:
                 guide_page_department_global_id = graphene.Node.to_global_id('DepartmentNode', guide_page_department.related_department.id)
-                site_structure[f'/{guide_page_department.related_department.slug}/{guide_page.slug}/'] = {'type': 'guide page', 'id': guide_page_global_id, 'parent_department': guide_page_department_global_id}
+                site_structure.append({'url' :f'/{guide_page_department.related_department.slug}/{guide_page.slug}/', 'type': 'guide page', 'id': guide_page_global_id, 'parent_department': guide_page_department_global_id})
 
             guide_page_topics = guide_page.topics.all()
             for guide_page_topic in guide_page_topics:
@@ -483,7 +483,7 @@ class SiteStructure(graphene.ObjectType):
                 guide_page_topic_tcs = guide_page_topic.topic.topiccollections.all()
                 for tc in guide_page_topic_tcs:
                     guide_page_topic_tc_global_id = graphene.Node.to_global_id('TopicCollectionNode', tc.topiccollection.id)
-                    site_structure[f'/{tc.topiccollection.theme.slug}/{tc.topiccollection.slug}/{guide_page_topic.topic.slug}/{guide_page.slug}/'] = {'type': 'guide page', 'id': guide_page_global_id, 'parent_topic': guide_page_topic_global_id, 'grandparent_topic_collection': guide_page_topic_tc_global_id}
+                    site_structure.append({'url' :f'/{tc.topiccollection.theme.slug}/{tc.topiccollection.slug}/{guide_page_topic.topic.slug}/{guide_page.slug}/', 'type': 'guide page', 'id': guide_page_global_id, 'parent_topic': guide_page_topic_global_id, 'grandparent_topic_collection': guide_page_topic_tc_global_id})
 
 
         return site_structure
