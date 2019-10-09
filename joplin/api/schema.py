@@ -9,22 +9,38 @@ from graphene.types.generic import GenericScalar
 from wagtail.core.fields import StreamField, RichTextField
 from wagtail.core.models import Page, PageRevision
 from django_filters import FilterSet, OrderingFilter
-from wagtail.core.blocks import PageChooserBlock, TextBlock, ListBlock
+from wagtail.core.blocks import *
 from wagtail.documents.models import Document
 from wagtail.core.rich_text import expand_db_html
 from base.models import TranslatedImage, ThreeOneOne, ServicePage, ServicePageContact, ServicePageTopic, ServicePageRelatedDepartments, InformationPageRelatedDepartments, ProcessPage, ProcessPageStep, ProcessPageContact, ProcessPageTopic, InformationPage, InformationPageContact, InformationPageTopic, DepartmentPage, DepartmentPageContact, DepartmentPageDirector, Theme, TopicCollectionPage, TopicPage, Contact, Location, ContactDayAndDuration, Department, DepartmentContact, TopicPageTopicCollection, OfficialDocumentPage, OfficialDocumentPageRelatedDepartments, OfficialDocumentPageTopic, OfficialDocumentPageOfficialDocument, GuidePage, GuidePageTopic, GuidePageRelatedDepartments, GuidePageContact, JanisBasePage, PhoneNumber, DepartmentPageTopPage, DepartmentPageRelatedPage
+import collections
+import traceback
 
 
 def get_block_by_key(json_input, lookup_key):
     if isinstance(json_input, dict):
-        for k, v in json_input.items():
+        for k, v in list(json_input.items()):
             if k == lookup_key:
                 yield v
             else:
-                yield from item_generator(v, lookup_key)
+                yield from get_block_by_key(v, lookup_key)
     elif isinstance(json_input, list):
         for item in json_input:
-            yield from item_generator(item, lookup_key)
+            yield from get_block_by_key(item, lookup_key)
+
+
+def deep_update(source, overrides):
+    """
+    Update a nested dictionary or similar mapping.
+    Modify ``source`` in place.
+    """
+    for key, value in list(overrides.items()):
+        if isinstance(value, collections.Mapping) and value:
+            returned = deep_update(source.get(key, {}), value)
+            source[key] = returned
+        else:
+            source[key] = overrides[key]
+    return source
 
 
 class RichTextFieldType(Scalar):
@@ -50,18 +66,34 @@ class StreamFieldType(Scalar):
                 loop through all the values and try running expand_db_html on them to return an href
                 still need to find a way to actually attach the janis_url to the selection tho..
     """
-    RichTextBlocks = [
-        'options',
-
-    ]
 
     @staticmethod
-    def serialize(dt):
-        serialized = [{'type': item.block_type, 'value': item.block.get_api_representation(item.value), 'id': item.id} for item in dt]
+    def serialize(StreamValue):
 
-        expand_db_html(i)
+        rt_names = []
+        try:
+            for item in StreamValue:
+                block = item.block
+                if isinstance(block, RichTextBlock):
+                    rt_names.append(block.name)
+                elif block.child_blocks:
+                    for child_block in block.all_blocks():
+                        if isinstance(child_block, RichTextBlock):
+                            rt_names.append(child_block.name)
+            # serialized = [{'type': item.block_type, 'value': item.block.get_api_representation(item.value), 'id': item.id} for item in StreamValue]
 
-        return dt.stream_data
+            for block in rt_names:
+                for i in get_block_by_key(StreamValue.stream_data, block):
+                    pair = {block: expand_db_html(i)}
+                    print(pair)
+                    for i, v in enumerate(StreamValue.stream_data):
+                        deep_update(StreamValue.stream_data[i], pair)
+        except Exception as e:
+            print(e)
+            print(traceback.format_exc())
+            pass
+
+        return StreamValue.stream_data
 
 
 @convert_django_field.register(StreamField)

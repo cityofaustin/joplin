@@ -265,25 +265,9 @@ class InternalLinkHandler(LinkHandler):
         except Exception as e:
             print("!janis url hook error!:", self.title, e)
             print(traceback.format_exc())
-            # import pdb
-            # pdb.set_trace()
             pass
 
 
 @hooks.register('register_rich_text_features', order=1)
 def register_link_handler(features):
     features.register_link_type(InternalLinkHandler)
-
-
-class NoFollowExternalLinkHandler(LinkHandler):
-    identifier = 'external'
-
-    @classmethod
-    def expand_db_attributes(cls, attrs):
-        href = attrs["href"]
-        return 'test'
-
-
-@hooks.register('register_rich_text_features', order=1)
-def register_external_link(features):
-    features.register_link_type(NoFollowExternalLinkHandler)
