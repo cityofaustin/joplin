@@ -18,40 +18,6 @@ import traceback
 from nested_lookup import nested_lookup, nested_alter, nested_update, get_occurrence_of_key, get_occurrence_of_value
 
 
-def get_block_by_key(json_input, lookup_key):
-    if isinstance(json_input, dict):
-        for k, v in list(json_input.items()):
-            if k == lookup_key:
-                yield v
-            else:
-                yield from get_block_by_key(v, lookup_key)
-    elif isinstance(json_input, list):
-        for item in json_input:
-            yield from get_block_by_key(item, lookup_key)
-
-
-def deep_update(source, overrides):
-    """
-    Update a nested dictionary or similar mapping.
-    Modify ``source`` in place.
-    """
-    for key, value in list(overrides.items()):
-        if isinstance(value, collections.Mapping) and value:
-            returned = deep_update(source.get(key, {}), value)
-            source[key] = returned
-        else:
-            source[key] = overrides[key]
-    return source
-
-
-def try_html_expansion(value):
-    try:
-        expand_db_html(value)
-    except Exception as e:
-        print(e)
-        print(traceback.format_exc())
-
-
 class RichTextFieldType(Scalar):
     """Serialises RichText content into fully baked HTML
     see https://github.com/wagtail/wagtail/issues/2695#issuecomment-373002412 """
@@ -93,6 +59,7 @@ class StreamFieldType(Scalar):
                             rt_names.append(child_block.name)
             # serialized = [{'type': item.block_type, 'value': item.block.get_api_representation(item.value), 'id': item.id} for item in StreamValue]
 
+            # todo: make things less nested
             for block_key in rt_names:
                 print(block_key)
                 out = []
@@ -103,10 +70,7 @@ class StreamFieldType(Scalar):
                             for key in rt_names:
                                 print('alter elem', key, elem, value)
                                 altered_value = nested_alter(elem, key, expand_db_html)
-                    # else:
-                    #     import pdb
-                    #     pdb.set_trace()
-                    #     altered_value = nested_update(data, key=block_key, value=expand_db_html(value), in_place=True)
+            # todo: this is a hardcoded hack, need a way to approach shallow data too
             nested_alter(data, 'options_description', expand_db_html)
 
         except Exception as e:
