@@ -15,7 +15,7 @@ from wagtail.core.rich_text import expand_db_html
 from base.models import TranslatedImage, ThreeOneOne, ServicePage, ServicePageContact, ServicePageTopic, ServicePageRelatedDepartments, InformationPageRelatedDepartments, ProcessPage, ProcessPageStep, ProcessPageContact, ProcessPageTopic, InformationPage, InformationPageContact, InformationPageTopic, DepartmentPage, DepartmentPageContact, DepartmentPageDirector, Theme, TopicCollectionPage, TopicPage, Contact, Location, ContactDayAndDuration, Department, DepartmentContact, TopicPageTopicCollection, OfficialDocumentPage, OfficialDocumentPageRelatedDepartments, OfficialDocumentPageTopic, OfficialDocumentPageOfficialDocument, GuidePage, GuidePageTopic, GuidePageRelatedDepartments, GuidePageContact, JanisBasePage, PhoneNumber, DepartmentPageTopPage, DepartmentPageRelatedPage
 import collections
 import traceback
-from nested_lookup import nested_lookup, nested_alter, nested_update
+from nested_lookup import nested_lookup, nested_alter, nested_update, get_occurrence_of_key, get_occurrence_of_value
 
 
 def get_block_by_key(json_input, lookup_key):
@@ -80,6 +80,7 @@ class StreamFieldType(Scalar):
     def serialize(StreamValue):
         data = StreamValue.stream_data
         rt_names = []
+        rt_names.append('options')
         # get lists of potential keys
         try:
             for item in StreamValue:
@@ -92,20 +93,21 @@ class StreamFieldType(Scalar):
                             rt_names.append(child_block.name)
             # serialized = [{'type': item.block_type, 'value': item.block.get_api_representation(item.value), 'id': item.id} for item in StreamValue]
 
-            for block_key in ['options']:
+            for block_key in rt_names:
                 print(block_key)
                 out = []
                 values = nested_lookup(block_key, data)
-                import pdb
-                pdb.set_trace()
                 for value in values:
-                    if isinstance(value, list):
+                    if not isinstance(value, str):
                         for elem in value:
                             for key in rt_names:
+                                print('alter elem', key, elem, value)
                                 altered_value = nested_alter(elem, key, expand_db_html)
-                    else:
-                        for key in rt_names:
-                            altered_value = nested_alter(value, key, expand_db_html)
+                    # else:
+                    #     import pdb
+                    #     pdb.set_trace()
+                    #     altered_value = nested_update(data, key=block_key, value=expand_db_html(value), in_place=True)
+            nested_alter(data, 'options_description', expand_db_html)
 
         except Exception as e:
             print(e)
