@@ -12,7 +12,7 @@ from django_filters import FilterSet, OrderingFilter
 from wagtail.core.blocks import PageChooserBlock, TextBlock, ListBlock
 from wagtail.documents.models import Document
 
-from base.models import TranslatedImage, ThreeOneOne, ServicePage, ServicePageContact, ServicePageTopic, ServicePageRelatedDepartments, InformationPageRelatedDepartments, ProcessPage, ProcessPageStep, ProcessPageContact, ProcessPageTopic, InformationPage, InformationPageContact, InformationPageTopic, DepartmentPage, DepartmentPageContact, DepartmentPageDirector, Theme, TopicCollectionPage, TopicPage, Contact, Location, ContactDayAndDuration, Department, DepartmentContact, TopicPageTopicCollection, OfficialDocumentPage, OfficialDocumentPageRelatedDepartments, OfficialDocumentPageTopic, OfficialDocumentPageOfficialDocument, GuidePage, GuidePageTopic, GuidePageRelatedDepartments, GuidePageContact, JanisBasePage, PhoneNumber, DepartmentPageTopPage, DepartmentPageRelatedPage
+from base.models import JanisBasePage, TranslatedImage, ThreeOneOne, ServicePage, ServicePageContact, ServicePageTopic, ServicePageRelatedDepartments, InformationPageRelatedDepartments, ProcessPage, ProcessPageStep, ProcessPageContact, ProcessPageTopic, InformationPage, InformationPageContact, InformationPageTopic, DepartmentPage, DepartmentPageContact, DepartmentPageDirector, Theme, TopicCollectionPage, TopicPage, Contact, Location, ContactDayAndDuration, Department, DepartmentContact, TopicPageTopicCollection, OfficialDocumentPage, OfficialDocumentPageRelatedDepartments, OfficialDocumentPageTopic, OfficialDocumentPageOfficialDocument, GuidePage, GuidePageTopic, GuidePageRelatedDepartments, GuidePageContact, JanisBasePage, PhoneNumber, DepartmentPageTopPage, DepartmentPageRelatedPage
 
 
 class StreamFieldType(Scalar):
@@ -179,13 +179,6 @@ class ServicePageNode(DjangoObjectType):
         interfaces = [graphene.Node]
 
 
-class ProcessPageNode(DjangoObjectType):
-    class Meta:
-        model = ProcessPage
-        filter_fields = ['id', 'slug', 'department', 'live']
-        interfaces = [graphene.Node]
-
-
 class InformationPageNode(DjangoObjectType):
     class Meta:
         model = InformationPage
@@ -285,6 +278,7 @@ class GuidePageSection(graphene.ObjectType):
 
 class GuidePageNode(DjangoObjectType):
     sections = graphene.List(GuidePageSection)
+    janis_urls = graphene.List(graphene.String)
 
     class Meta:
         model = GuidePage
@@ -299,10 +293,28 @@ class GuidePageNode(DjangoObjectType):
 
         return repr_sections
 
+    def resolve_janis_urls(self, info):
+        return get_all_janis_urls(self)
+
+
+def get_all_janis_urls(page):
+    urls = []
+
+    # If we're under a department
+    for department in page.related_departments.all():
+        dept_url = f'/{department.related_department.slug}/{page.slug}/'
+        urls.append(dept_url)
+
+    
+
+    # urls = ['one', 'two']
+    # x = page.janis_url()
+
+    return urls
+
 
 class PageRevisionNode(DjangoObjectType):
     as_service_page = graphene.NonNull(ServicePageNode)
-    as_process_page = graphene.NonNull(ProcessPageNode)
     as_information_page = graphene.NonNull(InformationPageNode)
     as_department_page = graphene.NonNull(DepartmentPageNode)
     as_topic_page = graphene.NonNull(TopicNode)
@@ -310,9 +322,6 @@ class PageRevisionNode(DjangoObjectType):
     as_official_document_page = graphene.NonNull(OfficialDocumentPageNode)
 
     def resolve_as_service_page(self, resolve_info, *args, **kwargs):
-        return self.as_page_object()
-
-    def resolve_as_process_page(self, resolve_info, *args, **kwargs):
         return self.as_page_object()
 
     def resolve_as_information_page(self, resolve_info, *args, **kwargs):
@@ -333,24 +342,6 @@ class PageRevisionNode(DjangoObjectType):
     class Meta:
         model = PageRevision
         filter_fields = ['id']
-        interfaces = [graphene.Node]
-
-
-class ProcessPageStepNode(DjangoObjectType):
-    class Meta:
-        model = ProcessPageStep
-        interfaces = [graphene.Node]
-
-
-class ProcessPageContactNode(DjangoObjectType):
-    class Meta:
-        model = ProcessPageContact
-        interfaces = [graphene.Node]
-
-
-class ProcessPageTopicNode(DjangoObjectType):
-    class Meta:
-        model = ProcessPageTopic
         interfaces = [graphene.Node]
 
 
@@ -526,7 +517,6 @@ class Query(graphene.ObjectType):
     all_service_pages = DjangoFilterConnectionField(ServicePageNode)
     page_revision = graphene.Field(PageRevisionNode, id=graphene.ID())
     all_page_revisions = DjangoFilterConnectionField(PageRevisionNode)
-    all_processes = DjangoFilterConnectionField(ProcessPageNode)
     all_information_pages = DjangoFilterConnectionField(InformationPageNode)
     all_department_pages = DjangoFilterConnectionField(DepartmentPageNode)
     all_themes = DjangoFilterConnectionField(ThemeNode)
