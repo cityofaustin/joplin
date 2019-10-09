@@ -390,27 +390,34 @@ class SiteStructure(graphene.ObjectType):
         topic_collections = TopicCollectionPage.objects.all()
         for topic_collection in topic_collections:
             topic_collection_global_id = graphene.Node.to_global_id('TopicCollectionNode', topic_collection.id)
-            topic_collection_structure = {'url': f'/{topic_collection.theme.slug}/{topic_collection.slug}/', 'type': 'topic collection', 'children': {}}
+            site_structure[f'/{topic_collection.theme.slug}/{topic_collection.slug}/'] = {'type': 'topic collection', 'id': topic_collection_global_id}
 
-            site_structure[topic_collection_global_id] = topic_collection_structure
+        topics = TopicPage.objects.all()
+        for topic in topics:
+            topic_global_id = graphene.Node.to_global_id('TopicNode', topic.id)
+            topic_tcs = topic.topiccollections.all()
+            for tc in topic_tcs:
+                topic_tc_global_id = graphene.Node.to_global_id('TopicCollectionNode', tc.topiccollection.id)
+                site_structure[f'/{tc.topiccollection.theme.slug}/{tc.topiccollection.slug}/{topic.slug}/'] = {'type': 'topic', 'id': topic_global_id, 'parent': topic_tc_global_id}
 
-        # getting kinda confused as to how to best approach this, taking a step back for a sec
+        departments = DepartmentPage.objects.all()
+        for department in departments:
+            department_global_id = graphene.Node.to_global_id('DepartmentNode', department.id)
+            site_structure[f'/{department.slug}/'] = {'type': 'department', 'id': department_global_id}
 
-        # topics = TopicPage.objects.all()
-        # for topic in topics:
-        #     topic_global_id = graphene.Node.to_global_id('TopicNode', topic.id)
-        #     topic_tcs = topic.topiccollections.all()
-        #     for tc in topic_tcs:
-        #         tc_global_id = graphene.Node.to_global_id('TopicCollectionNode', tc.id)
-        #         topic_structure = {'url': f'/{topic_collection.theme.slug}/{topic_collection.slug}/{topic.slug}/',
-        #                            'type': 'topic', 'children': {}}
-        #         if tc.topiccollection.id == topic_collection.id:
-        #
-        #
-        #
-        #             x = tc
-        #             b = x
+        service_pages = ServicePage.objects.all()
+        for service_page in service_pages:
+            service_page_global_id = graphene.Node.to_global_id('ServicePageNode', service_page.id)
 
+            service_page_departments = service_page.related_departments.all()
+            for service_page_department in service_page_departments:
+                service_page_department_global_id = graphene.Node.to_global_id('DepartmentNode', service_page_department.related_department.id)
+                site_structure[f'/{service_page_department.related_department.slug}/{service_page.slug}/'] = {'type': 'service page', 'id': service_page_global_id, 'parent': service_page_department_global_id}
+
+            service_page_topics = service_page.topics.all()
+            for service_page_topic in service_page_topics:
+                service_page_topic_global_id = graphene.Node.to_global_id('TopicNode', service_page_department.related_department.id)
+                # not sure what to do about nesting here...
 
         return site_structure
 
