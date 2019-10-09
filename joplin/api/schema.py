@@ -70,7 +70,7 @@ class StreamFieldType(Scalar):
                     if not isinstance(value, str):
                         for elem in value:
                             for key in rt_names:
-                                print('alter elem', key, elem, value)
+                                print('alter elem', key)
                                 altered_value = nested_alter(elem, key, expand_db_html)
             # todo: this is a hardcoded hack, need a way to approach shallow data too
             nested_alter(data, 'options_description', expand_db_html)
