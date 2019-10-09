@@ -398,7 +398,7 @@ class SiteStructure(graphene.ObjectType):
             topic_tcs = topic.topiccollections.all()
             for tc in topic_tcs:
                 topic_tc_global_id = graphene.Node.to_global_id('TopicCollectionNode', tc.topiccollection.id)
-                site_structure[f'/{tc.topiccollection.theme.slug}/{tc.topiccollection.slug}/{topic.slug}/'] = {'type': 'topic', 'id': topic_global_id, 'parent': topic_tc_global_id}
+                site_structure[f'/{tc.topiccollection.theme.slug}/{tc.topiccollection.slug}/{topic.slug}/'] = {'type': 'topic', 'id': topic_global_id, 'parent_topic_collection': topic_tc_global_id}
 
         departments = DepartmentPage.objects.all()
         for department in departments:
@@ -412,12 +412,33 @@ class SiteStructure(graphene.ObjectType):
             service_page_departments = service_page.related_departments.all()
             for service_page_department in service_page_departments:
                 service_page_department_global_id = graphene.Node.to_global_id('DepartmentNode', service_page_department.related_department.id)
-                site_structure[f'/{service_page_department.related_department.slug}/{service_page.slug}/'] = {'type': 'service page', 'id': service_page_global_id, 'parent': service_page_department_global_id}
+                site_structure[f'/{service_page_department.related_department.slug}/{service_page.slug}/'] = {'type': 'service page', 'id': service_page_global_id, 'parent_department': service_page_department_global_id}
 
             service_page_topics = service_page.topics.all()
             for service_page_topic in service_page_topics:
-                service_page_topic_global_id = graphene.Node.to_global_id('TopicNode', service_page_department.related_department.id)
-                # not sure what to do about nesting here...
+                service_page_topic_global_id = graphene.Node.to_global_id('TopicNode', service_page_topic.topic.id)
+                service_page_topic_tcs = service_page_topic.topic.topiccollections.all()
+                for tc in service_page_topic_tcs:
+                    service_page_topic_tc_global_id = graphene.Node.to_global_id('TopicCollectionNode', tc.topiccollection.id)
+                    site_structure[f'/{tc.topiccollection.theme.slug}/{tc.topiccollection.slug}/{service_page_topic.topic.slug}/{service_page.slug}/'] = {'type': 'service page', 'id': service_page_global_id, 'parent_topic': service_page_topic_global_id, 'grandparent_topic_collection': service_page_topic_tc_global_id}
+
+        information_pages = InformationPage.objects.all()
+        for information_page in information_pages:
+            information_page_global_id = graphene.Node.to_global_id('InformationPageNode', information_page.id)
+
+            information_page_departments = information_page.related_departments.all()
+            for information_page_department in information_page_departments:
+                information_page_department_global_id = graphene.Node.to_global_id('DepartmentNode', information_page_department.related_department.id)
+                site_structure[f'/{information_page_department.related_department.slug}/{information_page.slug}/'] = {'type': 'information page', 'id': information_page_global_id, 'parent_department': information_page_department_global_id}
+
+            information_page_topics = information_page.topics.all()
+            for information_page_topic in information_page_topics:
+                information_page_topic_global_id = graphene.Node.to_global_id('TopicNode', information_page_topic.topic.id)
+                information_page_topic_tcs = information_page_topic.topic.topiccollections.all()
+                for tc in information_page_topic_tcs:
+                    information_page_topic_tc_global_id = graphene.Node.to_global_id('TopicCollectionNode', tc.topiccollection.id)
+                    site_structure[f'/{tc.topiccollection.theme.slug}/{tc.topiccollection.slug}/{information_page_topic.topic.slug}/{information_page.slug}/'] = {'type': 'information page', 'id': information_page_global_id, 'parent_topic': information_page_topic_global_id, 'grandparent_topic_collection': information_page_topic_tc_global_id}
+
 
         return site_structure
 
