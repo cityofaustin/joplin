@@ -1,4 +1,6 @@
-import re, sys, fileinput
+import re
+import sys
+import fileinput
 
 '''
     The "datadump" command might pipe over deprecation warning messages from python.
@@ -11,11 +13,13 @@ import re, sys, fileinput
 '''
 
 start_of_json_pattern = re.compile("^\[")
-in_json=False
+in_json = False
 
 for line in fileinput.input():
+    import pdb
+    pdb.set_trace()
     if in_json:
         sys.stdout.write(line)
     elif start_of_json_pattern.match(line):
-        in_json=True
+        in_json = True
         sys.stdout.write(line)
