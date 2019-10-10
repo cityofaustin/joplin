@@ -47,44 +47,42 @@ class StreamFieldType(Scalar):
         print(type(StreamValue))
         try:
             data = StreamValue.stream_data
+            rt_names = []
+            rt_names.append('options')
+            # get lists of potential keys
+            try:
+                for item in StreamValue:
+                    block = item.block
+                    try:
+                        if isinstance(block, RichTextBlock):
+                            rt_names.append(block.name)
+                        elif block.child_blocks:
+                            for child_block in block.all_blocks():
+                                if isinstance(child_block, RichTextBlock):
+                                    rt_names.append(child_block.name)
+                    except AttributeError as e:
+                        pass
+
+                # todo: make things less nested
+                for block_key in rt_names:
+                    print(block_key)
+                    out = []
+                    values = nested_lookup(block_key, data)
+                    for value in values:
+                        if not isinstance(value, str):
+                            for elem in value:
+                                for key in rt_names:
+                                    print('alter elem', key)
+                                    altered_value = nested_alter(elem, key, expand_db_html)
+                # todo: this is a hardcoded hack, need a way to approach shallow data too
+                nested_alter(data, 'options_description', expand_db_html)
+            except Exception as e:
+                print(e)
+                print(traceback.format_exc())
+                pass
+
         except AttributeError:
             return [{'type': item.block_type, 'value': item.block.get_api_representation(item.value), 'id': item.id} for item in StreamValue]
-
-        rt_names = []
-        rt_names.append('options')
-        # get lists of potential keys
-        try:
-            for item in StreamValue:
-                block = item.block
-                try:
-                    if isinstance(block, RichTextBlock):
-                        rt_names.append(block.name)
-                    elif block.child_blocks:
-                        for child_block in block.all_blocks():
-                            if isinstance(child_block, RichTextBlock):
-                                rt_names.append(child_block.name)
-                except AttributeError as e:
-                    pass
-
-            # todo: make things less nested
-            for block_key in rt_names:
-                print(block_key)
-                out = []
-                values = nested_lookup(block_key, data)
-                for value in values:
-                    if not isinstance(value, str):
-                        for elem in value:
-                            for key in rt_names:
-                                print('alter elem', key)
-                                altered_value = nested_alter(elem, key, expand_db_html)
-            # todo: this is a hardcoded hack, need a way to approach shallow data too
-            nested_alter(data, 'options_description', expand_db_html)
-            # serialized = [{'type': item.block_type, 'value': item.block.get_api_representation(item.value), 'id': item.id} for item in StreamValue]
-
-        except Exception as e:
-            print(e)
-            print(traceback.format_exc())
-            pass
 
         return data
 
