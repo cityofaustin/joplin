@@ -44,7 +44,12 @@ class StreamFieldType(Scalar):
 
     @staticmethod
     def serialize(StreamValue):
-        data = StreamValue.stream_data
+        print(type(StreamValue))
+        try:
+            data = StreamValue.stream_data
+        except AttributeError:
+            return [{'type': item.block_type, 'value': item.block.get_api_representation(item.value), 'id': item.id} for item in StreamValue]
+
         rt_names = []
         rt_names.append('options')
         # get lists of potential keys
