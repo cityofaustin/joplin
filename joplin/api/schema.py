@@ -44,6 +44,19 @@ class StreamFieldType(Scalar):
 
     @staticmethod
     def serialize(StreamValue):
+        """
+        This is a rats nest of loops and conditionals, but the general idea is two functions:
+            1)loop through all the objects in the StreamValue, and
+                if it is a RichTextBlock,
+                add its name to a list of keys
+                ( this dosen't quite capture all the use cases as needed so it needs work)
+            2) use each of the above names as keys to sort through the stream_data
+                (which is a python dict represention of the StreamField, alot like JSON)
+                use the nested_lookup to recursivley return a list of all values that match the key
+                run a nested_alter using expand_db_html as a callback to edit those values in stream_data
+                (otherwise the values tend to get overwritten)
+
+        """
         print(type(StreamValue))
         try:
             data = StreamValue.stream_data
@@ -79,18 +92,15 @@ class StreamFieldType(Scalar):
                     if elem['type'] == 'basic_step':
                         altered_value = nested_alter(elem, 'value', expand_db_html)
 
-                # todo: this is a hardcoded hack, need a way to approach shallow data toort
+                # todo: this is a hardcoded hack, need a way to approach shallow data too
                 nested_alter(data, 'options_description', expand_db_html)
             except Exception as e:
                 print(e)
                 print(traceback.format_exc())
-                import pdb
-                pdb.set_trace()
                 pass
 
         except AttributeError as e:
-            import pdb
-            pdb.set_trace()
+
             return [{'type': item.block_type, 'value': item.block.get_api_representation(item.value), 'id': item.id} for item in StreamValue]
 
         return data
