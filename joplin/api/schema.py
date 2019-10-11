@@ -66,22 +66,31 @@ class StreamFieldType(Scalar):
                 # todo: make things less nested
                 for block_key in rt_names:
                     print(block_key)
-                    out = []
                     values = nested_lookup(block_key, data)
+
                     for value in values:
                         if not isinstance(value, str):
                             for elem in value:
                                 for key in rt_names:
                                     print('alter elem', key)
                                     altered_value = nested_alter(elem, key, expand_db_html)
-                # todo: this is a hardcoded hack, need a way to approach shallow data too
+                # fallback to 'value'
+                for elem in data:
+                    if elem['type'] == 'basic_step':
+                        altered_value = nested_alter(elem, 'value', expand_db_html)
+
+                # todo: this is a hardcoded hack, need a way to approach shallow data toort
                 nested_alter(data, 'options_description', expand_db_html)
             except Exception as e:
                 print(e)
                 print(traceback.format_exc())
+                import pdb
+                pdb.set_trace()
                 pass
 
-        except AttributeError:
+        except AttributeError as e:
+            import pdb
+            pdb.set_trace()
             return [{'type': item.block_type, 'value': item.block.get_api_representation(item.value), 'id': item.id} for item in StreamValue]
 
         return data
