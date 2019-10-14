@@ -8,30 +8,12 @@ from heroku3.models.build import Build
 
 import boto3
 
-from base.models import TranslatedImage, Contact, Location, Map
+from base.models import Contact, Location, Map
 
 import logging
 logger = logging.getLogger(__name__)
 
-IMAGE_WIDTHS = (
-    640,  # iPhone 5/SE
-    720,  # 720p non retina displays
-    750,  # iPhone 6/7/8/X
-    828,  # iPhone 6/7/8 Plus
-    1080,  # 1080p non retina displays
-    1440,  # 1440p non retina displays/720 retina displays
-    2160,  # 1080p retina displays
-)
 JANIS_SLUG_URL = settings.JANIS_SLUG_URL
-
-
-@receiver(post_save, sender=TranslatedImage)
-def generate_responsive_images(sender, **kwargs):
-    image = kwargs['instance']
-    for width in IMAGE_WIDTHS:
-        logger.debug(f'Generating image rendition for {width}px')
-        image.get_rendition(f'width-{width}')
-
 
 def create_build_aws(content_type, instance, publish_action='edited', request=None):
     """
@@ -202,12 +184,10 @@ def map_post_save_signal(sender, **kwargs):
     logger.debug(f'map_post_save {sender}')
     create_build_aws("Map", kwargs['instance'], request=get_http_request())
 
-
 @receiver(page_published)
 def page_published_signal(sender, **kwargs):
     logger.debug(f'page_published {sender}')
     create_build_aws("Page", kwargs['instance'], publish_action='published', request=get_http_request())
-
 
 @receiver(page_unpublished)
 def page_unpublished_signal(sender, **kwargs):
