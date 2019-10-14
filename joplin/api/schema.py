@@ -34,6 +34,23 @@ def convert_rich_text_field(field, registry=None):
     )
 
 
+def find_rich_text_names(StreamValue):
+    rich_text_names = []
+    rich_text_names.append('options')
+    for item in StreamValue:
+        block = item.block
+        try:
+            if isinstance(block, RichTextBlock):
+                rich_text_names.append(block.name)
+            elif block.child_blocks:
+                for child_block in block.all_blocks():
+                    if isinstance(child_block, RichTextBlock):
+                        rich_text_names.append(child_block.name)
+        except AttributeError as e:
+            pass
+    return rich_text_names
+
+
 class StreamFieldType(Scalar):
     """
     todo
@@ -59,34 +76,23 @@ class StreamFieldType(Scalar):
         """
         print(type(StreamValue))
         try:
-            data = StreamValue.stream_data
-            rt_names = []
-            rt_names.append('options')
+
             # get lists of potential keys
             try:
-                for item in StreamValue:
-                    block = item.block
-                    try:
-                        if isinstance(block, RichTextBlock):
-                            rt_names.append(block.name)
-                        elif block.child_blocks:
-                            for child_block in block.all_blocks():
-                                if isinstance(child_block, RichTextBlock):
-                                    rt_names.append(child_block.name)
-                    except AttributeError as e:
-                        pass
+                rich_text_names = find_rich_text_names(StreamValue)
 
                 # todo: make things less nested
-                for block_key in rt_names:
-                    print(block_key)
-                    values = nested_lookup(block_key, data)
+                for block_key in rich_text_names:
+                    data = StreamValue.stream_data
+                    if len(data) is not 0:
+                        values = nested_lookup(block_key, StreamValue.stream_data)
 
-                    for value in values:
-                        if not isinstance(value, str):
-                            for elem in value:
-                                for key in rt_names:
-                                    print('alter elem', key)
-                                    altered_value = nested_alter(elem, key, expand_db_html)
+                        for value in values:
+                            if not isinstance(value, str):
+                                for elem in value:
+                                    for key in rich_text_names:
+                                        print('alter elem', key)
+                                        altered_value = nested_alter(elem, key, expand_db_html)
                 # fallback to 'value'
                 for elem in data:
                     if elem['type'] == 'basic_step':
@@ -100,7 +106,11 @@ class StreamFieldType(Scalar):
                 pass
 
         except AttributeError as e:
-
+            print(e)
+            print(traceback.format_exc())
+            import pdb
+            pdb.set_trace()
+            # fallback to previous style of serializing, this may not get used but might be there for edge cases
             return [{'type': item.block_type, 'value': item.block.get_api_representation(item.value), 'id': item.id} for item in StreamValue]
 
         return data
