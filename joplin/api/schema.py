@@ -35,6 +35,11 @@ def convert_rich_text_field(field, registry=None):
 
 
 def find_rich_text_names(StreamValue):
+    """
+    returns a list of keys of StreamField blocks that are of RichText type
+    these are the ones we need to expand_db_html on
+    TODO: this dosen't actually get us all the values we need to modify 
+    """
     rich_text_names = []
     rich_text_names.append('options')
     for item in StreamValue:
