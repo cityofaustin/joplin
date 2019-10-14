@@ -23,4 +23,5 @@ heroku config:set   \
   HEROKU_JANIS_APP_NAME="janis-staging" \
   JANIS_URL="https://janis.austintexas.io" \
   STYLEGUIDE_URL="https://cityofaustin.github.io/digital-services-style-guide" \
+  CI_COA_PUBLISHER_URL="$CI_COA_PUBLISHER_URL" \
   --app $APPNAME > /dev/null
