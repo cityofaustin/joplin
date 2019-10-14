@@ -23,24 +23,24 @@ def netlify_publish():
 @receiver(post_save, sender=Contact)
 def contact_post_save_signal(sender, **kwargs):
     logger.debug(f'contact_post_save {sender}')
-    create_build_aws("Contact", kwargs['instance'], request=get_http_request())
+    netlify_publish("Contact", kwargs['instance'], request=get_http_request())
 
 @receiver(post_save, sender=Location)
 def location_post_save_signal(sender, **kwargs):
     logger.debug(f'location_post_save {sender}')
-    create_build_aws("Location", kwargs['instance'], request=get_http_request())
+    netlify_publish("Location", kwargs['instance'], request=get_http_request())
 
 @receiver(post_save, sender=Map)
 def map_post_save_signal(sender, **kwargs):
     logger.debug(f'map_post_save {sender}')
-    create_build_aws("Map", kwargs['instance'], request=get_http_request())
+    netlify_publish("Map", kwargs['instance'], request=get_http_request())
 
 @receiver(page_published)
 def page_published_signal(sender, **kwargs):
     logger.debug(f'page_published {sender}')
-    create_build_aws("Page", kwargs['instance'], publish_action='published', request=get_http_request())
+    netlify_publish("Page", kwargs['instance'], publish_action='published', request=get_http_request())
 
 @receiver(page_unpublished)
 def page_unpublished_signal(sender, **kwargs):
     logger.debug(f'page_unpublished {sender}')
-    create_build_aws("Page", kwargs['instance'], publish_action='unpublished', request=get_http_request())
+    netlify_publish("Page", kwargs['instance'], publish_action='unpublished', request=get_http_request())
