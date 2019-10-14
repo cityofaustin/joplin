@@ -1,3 +1,5 @@
+from django.db import models
+from wagtail.contrib.settings.models import BaseSetting, register_setting
 from django.conf import settings
 from django.contrib.staticfiles.templatetags.staticfiles import static
 from django.urls import reverse
@@ -51,7 +53,6 @@ def configure_main_menu(request, menu_items):
                      # here were excluding some default generated menu items per UX
                      [
                          'explorer',
-                         'settings',
                          'snippets'
                      ]
                      ]
@@ -238,3 +239,9 @@ def show_live_pages_only(pages, request):
     pages = pages.filter(live=True)
 
     return pages
+
+
+@register_setting
+class JanisBranchSettings(BaseSetting):
+    janis_branch = models.URLField(
+        help_text='branch to build janis on publish')
