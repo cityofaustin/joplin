@@ -379,5 +379,5 @@ PHONENUMBER_DEFAULT_REGION = 'US'
 PHONENUMBER_DB_FORMAT = "RFC3966"
 
 FLAGS = {
-    'SHOW_EXTRA_PANELS': [{'condition': 'boolean', 'value': False}]
+    'SHOW_EXTRA_PANELS': [{'condition': 'boolean', 'value': True}]
 }
