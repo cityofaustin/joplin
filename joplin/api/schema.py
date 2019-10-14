@@ -74,44 +74,41 @@ class StreamFieldType(Scalar):
                 (otherwise the values tend to get overwritten)
 
         """
-        print(type(StreamValue))
+        # get lists of potential keys
         try:
-
-            # get lists of potential keys
-            try:
-                rich_text_names = find_rich_text_names(StreamValue)
-
-                # todo: make things less nested
-                for block_key in rich_text_names:
-                    data = StreamValue.stream_data
-                    if len(data) is not 0:
-                        values = nested_lookup(block_key, StreamValue.stream_data)
-
-                        for value in values:
-                            if not isinstance(value, str):
-                                for elem in value:
-                                    for key in rich_text_names:
-                                        print('alter elem', key)
-                                        altered_value = nested_alter(elem, key, expand_db_html)
-                # fallback to 'value'
-                for elem in data:
-                    if elem['type'] == 'basic_step':
-                        altered_value = nested_alter(elem, 'value', expand_db_html)
-
-                # todo: this is a hardcoded hack, need a way to approach shallow data too
-                nested_alter(data, 'options_description', expand_db_html)
-            except Exception as e:
-                print(e)
-                print(traceback.format_exc())
-                pass
-
-        except AttributeError as e:
+            rich_text_names = find_rich_text_names(StreamValue)
+        except Exception as e:
             print(e)
             print(traceback.format_exc())
-            import pdb
-            pdb.set_trace()
-            # fallback to previous style of serializing, this may not get used but might be there for edge cases
-            return [{'type': item.block_type, 'value': item.block.get_api_representation(item.value), 'id': item.id} for item in StreamValue]
+            pass
+
+            # todo: make things less nested
+        for block_key in rich_text_names:
+            if not isinstance(StreamValue, str):
+                data = StreamValue.stream_data
+            else:
+                data = ''
+            # sometimes data is just a string, and there isno stream_data
+            if len(data) is not 0:
+                # get all the vales that match the key
+                values = nested_lookup(block_key, StreamValue.stream_data)
+                for value in values:
+                    """
+                    if the value isnt a string, there is another nested list
+                    we need to alter each element of that list on its own to
+                    avoid accidentially overriding values
+                    """
+                    if not isinstance(value, str):
+                        for elem in value:
+                            for key in rich_text_names:
+                                print('alter elem', key)
+                                altered_value = nested_alter(elem, key, expand_db_html)
+            # fallback to 'value', which handles general cases
+            for elem in data:
+                if elem['type'] == 'basic_step':
+                    altered_value = nested_alter(elem, 'value', expand_db_html)
+            # todo: this is a hardcoded hack, need a way to approach shallow data too
+            nested_alter(data, 'options_description', expand_db_html)
 
         return data
 
