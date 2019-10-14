@@ -38,6 +38,7 @@ from .department_page import DepartmentPage, DepartmentPageDirector, DepartmentP
 from .official_documents_page import OfficialDocumentPage, OfficialDocumentPageOfficialDocument, OfficialDocumentPageRelatedDepartments, OfficialDocumentPageTopic
 from .guide_page import GuidePage, GuidePageTopic, GuidePageRelatedDepartments, GuidePageContact
 from .widgets import countMe, countMeTextArea
+from .site_settings import *
 
 WYSIWYG_GENERAL = ['h1', 'h2', 'h3', 'h4', 'bold', 'link', 'ul', 'ol', 'code']
 DEFAULT_MAX_LENGTH = 255

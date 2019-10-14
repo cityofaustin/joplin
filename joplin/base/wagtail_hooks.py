@@ -53,6 +53,7 @@ def configure_main_menu(request, menu_items):
                      # here were excluding some default generated menu items per UX
                      [
                          'explorer',
+                         'settings',
                          'snippets'
                      ]
                      ]
@@ -87,6 +88,11 @@ def register_contacts_menu_item():
 @hooks.register('register_admin_menu_item')
 def register_users_menu_item():
     return MenuItem('Users', "/admin/users/", classnames="material-icons icon-users", order=50)
+
+
+@hooks.register('register_admin_menu_item')
+def register_options_menu_item():
+    return MenuItem('Options', "/admin/settings/base/janisbranchsettings/2/", classnames="material-icons icon-settings", order=60)
 
 
 # example of rendering custom nested menu items
@@ -239,9 +245,3 @@ def show_live_pages_only(pages, request):
     pages = pages.filter(live=True)
 
     return pages
-
-
-@register_setting
-class JanisBranchSettings(BaseSetting):
-    janis_branch = models.URLField(
-        help_text='branch to build janis on publish')
