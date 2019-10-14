@@ -239,9 +239,3 @@ def show_live_pages_only(pages, request):
     pages = pages.filter(live=True)
 
     return pages
-
-
-@register_setting
-class JanisBranchSettings(BaseSetting):
-    janis_branch = models.URLField(
-        help_text='branch to build janis on publish')
