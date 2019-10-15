@@ -5,11 +5,17 @@ from wagtail.admin.views import pages
 from wagtail.admin import messages
 from django.utils.translation import ugettext as _
 from django.urls import reverse
+from django.conf import settings
 from base.models import ServicePage, ProcessPage, InformationPage, TopicPage, TopicCollectionPage, DepartmentPage, Theme, OfficialDocumentPage, GuidePage
+from base.models.site_settings import JanisBranchSettings
 import json
 
-
+# This method is used on the home Pages page.
+# When you want to publish a page directly from the home page, this route is called.
+# The publish button on the edit/ page sends a "action-publish" message directly to wagtail.
+# "action-publish" does not use this endpoint.
 def publish(request, page_id):
+    print("~~~~~ def in publish")
     page = get_object_or_404(Page, id=page_id).specific
 
     user_perms = UserPagePermissionsProxy(request.user)
@@ -21,10 +27,32 @@ def publish(request, page_id):
     if request.method == 'POST':
 
         page.get_latest_revision().publish()
+        print("~~~~~~ Did a publish??")
+        print(f"ANd what is settings.DEPLOYMENT_MODE? [{settings.DEPLOYMENT_MODE}]")
 
-        messages.success(request, _("Page '{0}' published.").format(page.get_admin_display_title()), buttons=[
-            messages.button(reverse('wagtailadmin_pages:edit', args=(page.id,)), _('Edit'))
-        ])
+        # TODO: clean up copypasta when coa-publisher phases out previously AWS publish pipeline
+        # Show success message if there is a publish_janis_branch set (for netlify builds)
+        # Or default to show success message on Staging and Production (follow existing AWS implementation pattern)
+        try:
+            publish_janis_branch = getattr(JanisBranchSettings.objects.first(), 'publish_janis_branch')
+        except:
+            publish_janis_branch = None
+        if settings.ISSTAGING or settings.ISPRODUCTION:
+            messages.success(request, _("Page '{0}' published.").format(page.get_admin_display_title()), buttons=[
+                messages.button(reverse('wagtailadmin_pages:edit', args=(page.id,)), _('Edit'))
+            ])
+        elif settings.DEPLOYMENT_MODE == "LOCAL":
+            messages.warning(request, _("Page '{0}' not published. You're running on a local environment.").format(page.get_admin_display_title()), buttons=[
+                messages.button(reverse('wagtailadmin_pages:edit', args=(page.id,)), _('Edit'))
+            ])
+        elif publish_janis_branch:
+            messages.success(request, _("Page '{0}' published.").format(page.get_admin_display_title()), buttons=[
+                messages.button(reverse('wagtailadmin_pages:edit', args=(page.id,)), _('Edit'))
+            ])
+        else:
+            messages.warning(request, _("Page '{0}' not published. No `publish_janis_branch` was set.").format(page.get_admin_display_title()), buttons=[
+                messages.button(reverse('wagtailadmin_pages:edit', args=(page.id,)), _('Edit'))
+            ])
 
         if next_url:
             return redirect(next_url)

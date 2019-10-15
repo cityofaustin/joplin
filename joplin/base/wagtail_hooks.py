@@ -89,11 +89,11 @@ def register_contacts_menu_item():
 def register_users_menu_item():
     return MenuItem('Users', "/admin/users/", classnames="material-icons icon-users", order=50)
 
-
-@hooks.register('register_admin_menu_item')
-def register_options_menu_item():
-    return MenuItem('Options', "/admin/settings/base/janisbranchsettings/2/", classnames="material-icons icon-settings", order=60)
-
+# Allow users to edit JanisBranchSettings on PR branches only
+if not settings.ISSTAGING and not settings.ISPRODUCTION:
+    @hooks.register('register_admin_menu_item')
+    def register_options_menu_item():
+        return MenuItem('Options', "/admin/settings/base/janisbranchsettings/2/", classnames="material-icons icon-settings", order=60)
 
 # example of rendering custom nested menu items
 # class LocationModelAdmin(ModelAdmin):

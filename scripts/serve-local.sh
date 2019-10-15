@@ -24,8 +24,10 @@ export DOCKER_TAG_ASSETS="joplin-assets:local"
 export DOCKER_TARGET_APP=joplin-local
 
 # Stop any existing joplin containers that might still be running
-echo "Stopping any $COMPOSE_PROJECT_NAME containers that might still be running"
-stop_project_containers $COMPOSE_PROJECT_NAME
+if [ "$NO_STOP" != "on" ]; then
+  echo "Stopping any $COMPOSE_PROJECT_NAME containers that might still be running"
+  stop_project_containers $COMPOSE_PROJECT_NAME
+fi
 
 # Aside from the database dropping step, RELOAD_DATA does the same thing as LOAD_DATA
 if [ "$RELOAD_DATA" == "on" ]; then
@@ -94,6 +96,7 @@ else
   # Only run containers for db and assets
   docker-compose -f docker-compose.yml -f docker-compose.local_override.yml up -d db assets
 
-  sh $CURRENT_DIR/../scripts/setup-undockered-data.sh
+  export DEPLOYMENT_MODE=LOCAL
+  pipenv run sh $CURRENT_DIR/../docker-entrypoint.sh
   pipenv run $CURRENT_DIR/../joplin/manage.py runserver 0.0.0.0:$JOPLIN_APP_HOST_PORT
 fi

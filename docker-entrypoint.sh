@@ -11,6 +11,12 @@ function load_backup_data {
   python ./joplin/manage.py loaddata ./joplin/db/system-generated/seeding.datadump.json
 }
 
+# Add initial configs to handle Publishing and Previewing on PR Apps
+function load_janis_branch_settings {
+  echo "Adding Janis Branch settings"
+  python ./joplin/manage.py loaddata ./joplin/db/system-generated/janis_branch_settings.json
+}
+
 # Add initial admin user to Database
 function load_test_admin {
   echo "Adding test admin user for local development."
@@ -48,9 +54,11 @@ case "${DEPLOYMENT_MODE}" in
     else
       load_test_admin
     fi
+    load_janis_branch_settings
   ;;
   REVIEW)
     load_backup_data
+    load_janis_branch_settings
     # Let's try being reckless and doing that static thing here too.
     echo "Collecting static files"
     python ./joplin/manage.py collectstatic --noinput;
