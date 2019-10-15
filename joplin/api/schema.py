@@ -15,7 +15,8 @@ from wagtail.core.rich_text import expand_db_html
 from base.models import TranslatedImage, ThreeOneOne, ServicePage, ServicePageContact, ServicePageTopic, ServicePageRelatedDepartments, InformationPageRelatedDepartments, ProcessPage, ProcessPageStep, ProcessPageContact, ProcessPageTopic, InformationPage, InformationPageContact, InformationPageTopic, DepartmentPage, DepartmentPageContact, DepartmentPageDirector, Theme, TopicCollectionPage, TopicPage, Contact, Location, ContactDayAndDuration, Department, DepartmentContact, TopicPageTopicCollection, OfficialDocumentPage, OfficialDocumentPageRelatedDepartments, OfficialDocumentPageTopic, OfficialDocumentPageOfficialDocument, GuidePage, GuidePageTopic, GuidePageRelatedDepartments, GuidePageContact, JanisBasePage, PhoneNumber, DepartmentPageTopPage, DepartmentPageRelatedPage
 import collections
 import traceback
-from nested_lookup import nested_lookup, nested_alter, nested_update, get_occurrence_of_key, get_occurrence_of_value
+from nested_lookup import nested_lookup, nested_alter, nested_update, get_all_keys
+import pdb
 
 
 class RichTextFieldType(Scalar):
@@ -38,7 +39,7 @@ def find_rich_text_names(StreamValue):
     """
     returns a list of keys of StreamField blocks that are of RichText type
     these are the ones we need to expand_db_html on
-    TODO: this dosen't actually get us all the values we need to modify 
+    TODO: this dosen't actually get us all the values we need to modify
     """
     rich_text_names = []
     rich_text_names.append('options')
@@ -54,6 +55,41 @@ def find_rich_text_names(StreamValue):
         except AttributeError as e:
             pass
     return rich_text_names
+
+
+def modify_dict(dict, values):
+    try:
+        for k, v in dict.items():
+            nested_alter(values, k, try_expand_db_html)
+    except Exception as e:
+        print(e)
+        import pdb
+        pdb.set_trace()
+
+
+def try_expand_db_html(item):
+    try:
+        return expand_db_html(item)
+    except Exception as e:
+        print('Exception!', e)
+        pass
+
+
+def iterate(values):
+    expvalues = []
+    for value in values:
+        print(type(value))
+        if isinstance(value, str):
+            expvalue = try_expand_db_html(value)
+            print(expvalue)
+            expvalues.append(expvalue)
+        elif isinstance(value, dict):
+            print('found a dict')
+            iterate(value.values())
+        elif isinstance(value, list):
+            print('found a list')
+            iterate(value)
+    return expvalues
 
 
 class StreamFieldType(Scalar):
