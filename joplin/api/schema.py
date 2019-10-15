@@ -77,8 +77,10 @@ def expand_all_strings(values, keys, key, data):
     """
     expvalues = []
     for elem in values:
+
         if isinstance(elem, str):
-            nested_alter(data, key, try_expand_db_html)
+            altered_elem = nested_alter(data, key, try_expand_db_html)
+            expvalues.append(altered_elem)
         elif isinstance(elem, tuple):
             if not isinstance(elem[1], list):
                 nested_alter(data, elem[0], try_expand_db_html)
@@ -93,26 +95,18 @@ def expand_all_strings(values, keys, key, data):
 
 
 class StreamFieldType(Scalar):
-    """
-    todo
-            for item in serialized:
-                loop through all the values and try running expand_db_html on them to return an href
-                still need to find a way to actually attach the janis_url to the selection tho..
-    """
-
     @staticmethod
     def serialize(StreamValue):
         """
-        This is a rats nest of loops and conditionals, but the general idea is two functions:
+        This is a rats nest of loops and conditionals, but the general idea/ideal is two functions:
             1)loop through all the objects in the StreamValue, and
                 if it is a RichTextBlock,
                 add its name to a list of keys
-                ( this dosen't quite capture all the use cases as needed so it needs work)
             2) use each of the above names as keys to sort through the stream_data
                 (which is a python dict represention of the StreamField, alot like JSON)
                 use the nested_lookup to recursivley return a list of all values that match the key
                 run a nested_alter using expand_db_html as a callback to edit those values in stream_data
-                (otherwise the values tend to get overwritten)
+                do this recursivley depending on the type of data you find
 
         """
         # get lists of potential keys
@@ -123,31 +117,42 @@ class StreamFieldType(Scalar):
             print(traceback.format_exc())
             pass
 
-        # sometimes data is just a string, and there is no stream_data
+        """
+        sometimes data is just a string or empty, and there is no stream_data
+        ie if you query a value that dosen't exist in the model anymore (this happened in janis with info pages)
+        """
+
         if not isinstance(StreamValue, str):
             data = StreamValue.stream_data
         else:
             data = ''
         if len(data) is not 0:
             for block_key in rich_text_names:
-                if block_key != 'basic_step':
-                    values = nested_lookup(block_key, StreamValue.stream_data)
-                else:
-                    for elem in data:
-                        if elem['type'] == 'basic_step':
-                            altered_value = nested_alter(elem, 'value', expand_db_html)
+
                 try:
-                    # no more nests for that value
-                    if isinstance(values[0], str) and len(values) == 1:
+                    # return nested values or nothing (like basic steps)
+                    values = nested_lookup(block_key, StreamValue.stream_data) or None
+                    if not values:
+                        for elem in data:
+                            # elem is a dictionary with the streamfield type & value
+                            if isinstance(elem['value'], str):
+                                # if its value is string, it can be altered and has no nested values
+                                altered_value = nested_alter(elem, 'value', expand_db_html)
+                    elif isinstance(values[0], str) and len(values) == 1:
+                        # there are no more nests for this value
                         altered_value = nested_alter(data, block_key, expand_db_html)
+                    elif block_key == 'option_description':
+                        # got broken again
+                        pass
+
+                    else:
+                        # extra try block here just cause expand_all_strings can be so hairy
+                        try:
+                            expand_all_strings(values, rich_text_names, block_key, data)
+                        except Exception as e:
+                            print('Exception', e)
                 except Exception as e:
                     print(e)
-                else:
-                    try:
-                        expand_all_strings(values, rich_text_names, block_key, data)
-                    except Exception as e:
-                        print('Exception', e)
-
         return data
 
 
