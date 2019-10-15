@@ -42,7 +42,6 @@ def find_rich_text_names(StreamValue):
     TODO: this dosen't actually get us all the values we need to modify
     """
     rich_text_names = []
-    rich_text_names.append('options')
     for item in StreamValue:
         block = item.block
         try:
@@ -54,20 +53,17 @@ def find_rich_text_names(StreamValue):
                         rich_text_names.append(child_block.name)
         except AttributeError as e:
             pass
-    return rich_text_names
-
-
-def modify_dict(dict, values):
-    try:
-        for k, v in dict.items():
-            nested_alter(values, k, try_expand_db_html)
-    except Exception as e:
-        print(e)
-        import pdb
-        pdb.set_trace()
+    unique_rich_text_names = set(rich_text_names)
+    return unique_rich_text_names
 
 
 def try_expand_db_html(item):
+    """
+    this function errors out if not used on a string.
+    becuase this process is so complicated, we wrap it in some error handiling
+    so we can debug/catch an exception if someone adds a data schema later
+    that causes problems
+    """
     try:
         return expand_db_html(item)
     except Exception as e:
@@ -75,21 +71,25 @@ def try_expand_db_html(item):
         pass
 
 
-def iterate(values):
+def expand_all_strings(values, keys, key, data):
+    """
+    this recursivley goes through values and expands them
+    """
     expvalues = []
-    for value in values:
-        print(type(value))
-        if isinstance(value, str):
-            expvalue = try_expand_db_html(value)
-            print(expvalue)
-            expvalues.append(expvalue)
-        elif isinstance(value, dict):
+    for elem in values:
+        if isinstance(elem, str):
+            nested_alter(data, key, try_expand_db_html)
+        elif isinstance(elem, tuple):
+            if not isinstance(elem[1], list):
+                nested_alter(data, elem[0], try_expand_db_html)
+            else:
+                expand_all_strings(elem[1], keys, key, data)
+        elif isinstance(elem, dict):
             print('found a dict')
-            iterate(value.values())
-        elif isinstance(value, list):
+            expand_all_strings(elem.items(), keys, key, data)
+        elif isinstance(elem, list):
             print('found a list')
-            iterate(value)
-    return expvalues
+            expand_all_strings(elem, keys, key, data)
 
 
 class StreamFieldType(Scalar):
@@ -123,33 +123,30 @@ class StreamFieldType(Scalar):
             print(traceback.format_exc())
             pass
 
-            # todo: make things less nested
-        for block_key in rich_text_names:
-            if not isinstance(StreamValue, str):
-                data = StreamValue.stream_data
-            else:
-                data = ''
-            # sometimes data is just a string, and there isno stream_data
-            if len(data) is not 0:
-                # get all the vales that match the key
-                values = nested_lookup(block_key, StreamValue.stream_data)
-                for value in values:
-                    """
-                    if the value isnt a string, there is another nested list
-                    we need to alter each element of that list on its own to
-                    avoid accidentially overriding values
-                    """
-                    if not isinstance(value, str):
-                        for elem in value:
-                            for key in rich_text_names:
-                                print('alter elem', key)
-                                altered_value = nested_alter(elem, key, expand_db_html)
-            # fallback to 'value', which handles general cases
-            for elem in data:
-                if elem['type'] == 'basic_step':
-                    altered_value = nested_alter(elem, 'value', expand_db_html)
-            # todo: this is a hardcoded hack, need a way to approach shallow data too
-            nested_alter(data, 'options_description', expand_db_html)
+        # sometimes data is just a string, and there is no stream_data
+        if not isinstance(StreamValue, str):
+            data = StreamValue.stream_data
+        else:
+            data = ''
+        if len(data) is not 0:
+            for block_key in rich_text_names:
+                if block_key != 'basic_step':
+                    values = nested_lookup(block_key, StreamValue.stream_data)
+                else:
+                    for elem in data:
+                        if elem['type'] == 'basic_step':
+                            altered_value = nested_alter(elem, 'value', expand_db_html)
+                try:
+                    # no more nests for that value
+                    if isinstance(values[0], str) and len(values) == 1:
+                        altered_value = nested_alter(data, block_key, expand_db_html)
+                except Exception as e:
+                    print(e)
+                else:
+                    try:
+                        expand_all_strings(values, rich_text_names, block_key, data)
+                    except Exception as e:
+                        print('Exception', e)
 
         return data
 
