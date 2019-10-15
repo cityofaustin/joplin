@@ -132,7 +132,8 @@ def joplin_page_listing_buttons(page, page_perms, is_parent=False):
         )
 
     # make the author notes icon appear if latest revision has notes
-    if page.get_latest_revision_as_page().author_notes:
+    latest_revision_as_page = page.get_latest_revision_as_page()
+    if hasattr(latest_revision_as_page, 'author_notes') and latest_revision_as_page.author_notes:
         yield Button(
             _('📝'),
             'javascript:null;',
