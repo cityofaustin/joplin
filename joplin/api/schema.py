@@ -13,7 +13,7 @@ from django_filters import FilterSet, OrderingFilter
 from wagtail.core.blocks import PageChooserBlock, TextBlock, ListBlock
 from wagtail.documents.models import Document
 
-from base.models import JanisBasePage, TranslatedImage, ThreeOneOne, ServicePage, ServicePageContact, ServicePageTopic, ServicePageRelatedDepartments, InformationPageRelatedDepartments, ProcessPage, ProcessPageStep, ProcessPageContact, ProcessPageTopic, InformationPage, InformationPageContact, InformationPageTopic, DepartmentPage, DepartmentPageContact, DepartmentPageDirector, Theme, TopicCollectionPage, TopicPage, Contact, Location, ContactDayAndDuration, Department, DepartmentContact, TopicPageTopicCollection, OfficialDocumentPage, OfficialDocumentPageRelatedDepartments, OfficialDocumentPageTopic, OfficialDocumentPageOfficialDocument, GuidePage, GuidePageTopic, GuidePageRelatedDepartments, GuidePageContact, JanisBasePage, PhoneNumber, DepartmentPageTopPage, DepartmentPageRelatedPage
+from base.models import JanisBasePage, TranslatedImage, ThreeOneOne, ServicePage, ServicePageContact, ServicePageTopic, ServicePageRelatedDepartments, InformationPageRelatedDepartments, ProcessPage, ProcessPageStep, ProcessPageContact, ProcessPageTopic, InformationPage, InformationPageContact, InformationPageTopic, DepartmentPage, DepartmentPageContact, DepartmentPageDirector, Theme, TopicCollectionPage, TopicPage, Contact, Location, ContactDayAndDuration, Department, DepartmentContact, TopicPageTopicCollection, OfficialDocumentPage, OfficialDocumentPageRelatedDepartments, OfficialDocumentPageTopic, OfficialDocumentPageOfficialDocument, GuidePage, GuidePageTopic, GuidePageRelatedDepartments, GuidePageContact, JanisBasePage, PhoneNumber, DepartmentPageTopPage, DepartmentPageRelatedPage, TopicPageTopPage
 
 
 class StreamFieldType(Scalar):
@@ -54,12 +54,6 @@ class TopicPageTopicCollectionNode(DjangoObjectType):
         model = TopicPageTopicCollection
         interfaces = [graphene.Node]
         filter_fields = ['topiccollection']
-
-
-# class TopicPageTopicCollectionFilter(FilterSet):
-#     class Meta:
-#         model = TopicPageTopicCollection
-#         fields = 
 
 
 class TopicCollectionNode(DjangoObjectType):
@@ -129,6 +123,7 @@ class ServicePageTopicNode(DjangoObjectType):
     class Meta:
         model = ServicePageTopic
         interfaces = [graphene.Node]
+        filter_fields = ['topic']
 
 
 class ServicePageRelatedDepartmentsNode(DjangoObjectType):
@@ -520,6 +515,59 @@ class DepartmentPageDirectorNode(DjangoObjectType):
         interfaces = [graphene.Node]
 
 
+class TopicPageTopPageNode(DjangoObjectType):
+    # This uses graphene ObjectType resolvers, see:
+    # https://docs.graphene-python.org/en/latest/types/objecttypes/#resolvers
+    service_page = graphene.Field(ServicePageNode)
+    information_page = graphene.Field(InformationPageNode)
+    guide_page = graphene.Field(GuidePageNode)
+    official_document_page = graphene.Field(OfficialDocumentPageNode)
+
+    def resolve_service_page(self, info):
+        service_page = None
+        # TODO: don't catch everything
+        try:
+            service_page = ServicePage.objects.get(id=self.page_id)
+        except Exception as e:
+            pass
+
+        return service_page
+
+    def resolve_information_page(self, info):
+        information_page = None
+        # TODO: don't catch everything
+        try:
+            information_page = InformationPage.objects.get(id=self.page_id)
+        except Exception as e:
+            pass
+
+        return information_page
+
+    def resolve_guide_page(self, info):
+        guide_page = None
+        # TODO: don't catch everything
+        try:
+            guide_page = GuidePage.objects.get(id=self.page_id)
+        except Exception as e:
+            pass
+
+        return guide_page
+
+    def resolve_official_document_page(self, info):
+        official_document_page = None
+        # TODO: don't catch everything
+        try:
+            official_document_page = OfficialDocumentPage.objects.get(id=self.page_id)
+        except Exception as e:
+            pass
+
+        return official_document_page
+
+    class Meta:
+        model = TopicPageTopPage
+        interfaces = [graphene.Node]
+
+
 class DepartmentPageTopPageNode(DjangoObjectType):
     # This uses graphene ObjectType resolvers, see:
     # https://docs.graphene-python.org/en/latest/types/objecttypes/#resolvers
@@ -679,6 +727,7 @@ class Query(graphene.ObjectType):
         OfficialDocumentPageNode)
     all_guide_pages = DjangoFilterConnectionField(GuidePageNode)
     all_topic_page_topic_collections = DjangoFilterConnectionField(TopicPageTopicCollectionNode)
+    all_service_page_topics = DjangoFilterConnectionField(ServicePageTopicNode)
 
     def resolve_site_structure(self, resolve_info):
         site_structure = SiteStructure()
