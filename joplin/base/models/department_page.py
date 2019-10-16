@@ -40,6 +40,7 @@ class DepartmentPage(JanisBasePage):
     image = models.ForeignKey(TranslatedImage, null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
     mission = models.TextField(
         verbose_name='Mission',
+        blank=True
     )
 
     job_listings = models.URLField(
