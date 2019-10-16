@@ -49,16 +49,23 @@ class ThemeNode(DjangoObjectType):
         interfaces = [graphene.Node]
 
 
+class TopicPageTopicCollectionNode(DjangoObjectType):
+    class Meta:
+        model = TopicPageTopicCollection
+        interfaces = [graphene.Node]
+        filter_fields = ['topiccollection']
+
+
+# class TopicPageTopicCollectionFilter(FilterSet):
+#     class Meta:
+#         model = TopicPageTopicCollection
+#         fields = 
+
+
 class TopicCollectionNode(DjangoObjectType):
     class Meta:
         model = TopicCollectionPage
         filter_fields = ['id', 'slug', 'live']
-        interfaces = [graphene.Node]
-
-
-class TopicPageTopicCollectionNode(DjangoObjectType):
-    class Meta:
-        model = TopicPageTopicCollection
         interfaces = [graphene.Node]
 
 
@@ -671,6 +678,7 @@ class Query(graphene.ObjectType):
     all_official_document_pages = DjangoFilterConnectionField(
         OfficialDocumentPageNode)
     all_guide_pages = DjangoFilterConnectionField(GuidePageNode)
+    all_topic_page_topic_collections = DjangoFilterConnectionField(TopicPageTopicCollectionNode)
 
     def resolve_site_structure(self, resolve_info):
         site_structure = SiteStructure()
