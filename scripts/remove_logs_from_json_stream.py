@@ -16,8 +16,6 @@ start_of_json_pattern = re.compile("^\[")
 in_json = False
 
 for line in fileinput.input():
-    import pdb
-    pdb.set_trace()
     if in_json:
         sys.stdout.write(line)
     elif start_of_json_pattern.match(line):
