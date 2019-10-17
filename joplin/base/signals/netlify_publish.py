@@ -16,7 +16,8 @@ def netlify_publish():
     except:
         publish_janis_branch = None
 
-    if publish_janis_branch and CMS_API:
+    # Can't publish from LOCAL environment. A deployed Janis couldn't ping your localhost:8000
+    if publish_janis_branch and not settings.ISLOCAL:
         requests.post(
             url=f"CI_COA_PUBLISHER_URL/publish",
             data=json.dumps({
