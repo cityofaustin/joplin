@@ -501,6 +501,7 @@ class InformationPageTopicNode(DjangoObjectType):
     class Meta:
         model = InformationPageTopic
         interfaces = [graphene.Node]
+        filter_fields = ['topic']
 
 
 class DepartmentPageContactNode(DjangoObjectType):
@@ -518,6 +519,37 @@ class DepartmentPageDirectorNode(DjangoObjectType):
 class TopicPageTopPageNode(DjangoObjectType):
     title = graphene.String()
     slug = graphene.String()
+    page_id = graphene.ID()
+
+    def resolve_page_id(self, info):
+        # TODO: don't catch everything
+        try:
+            service_page_global_id = graphene.Node.to_global_id('ServicePageNode', self.page_id)
+            return service_page_global_id
+        except Exception as e:
+            pass
+
+        # TODO: don't catch everything
+        try:
+            information_page_global_id = graphene.Node.to_global_id('InformationPageNode', self.page_id)
+            return information_page_global_id
+        except Exception as e:
+            pass
+
+        # TODO: don't catch everything
+        try:
+            guide_page_global_id = graphene.Node.to_global_id('GuidePageNode', self.page_id)
+            return guide_page_global_id
+        except Exception as e:
+            pass
+
+        # TODO: don't catch everything
+        try:
+            official_document_page_global_id = graphene.Node.to_global_id('OfficialDocumentPageNode', self.page_id)
+            return official_document_page_global_id
+        except Exception as e:
+            pass
+
 
     def resolve_title(self, resolve_info, *args, **kwargs):
         service_page = None
@@ -699,12 +731,14 @@ class OfficialDocumentPageTopicNode(DjangoObjectType):
     class Meta:
         model = OfficialDocumentPageTopic
         interfaces = [graphene.Node]
+        filter_fields = ['topic']
 
 
 class GuidePageTopicNode(DjangoObjectType):
     class Meta:
         model = GuidePageTopic
         interfaces = [graphene.Node]
+        filter_fields = ['topic']
 
 
 def get_page_with_preview_data(page, session):
@@ -750,6 +784,9 @@ class Query(graphene.ObjectType):
     all_guide_pages = DjangoFilterConnectionField(GuidePageNode)
     all_topic_page_topic_collections = DjangoFilterConnectionField(TopicPageTopicCollectionNode)
     all_service_page_topics = DjangoFilterConnectionField(ServicePageTopicNode)
+    all_information_page_topics = DjangoFilterConnectionField(InformationPageTopicNode)
+    all_official_document_page_topics = DjangoFilterConnectionField(OfficialDocumentPageTopicNode)
+    all_guide_page_topics = DjangoFilterConnectionField(GuidePageTopicNode)
 
     def resolve_site_structure(self, resolve_info):
         site_structure = SiteStructure()
