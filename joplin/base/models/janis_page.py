@@ -147,17 +147,33 @@ class JanisBasePage(Page):
             return "#"
             pass
 
+    def janis_preview_url(self, revision=None, lang="en"):
+        return f"{self.janis_preview_url_start()}/{lang}/{self.janis_preview_url_end(revision=revision)}"
+
+    # Use hardcoded JANIS_URL for staging and prod
+    # Otherwise use configurable preview_janis_branch setting
+    def janis_preview_url_start(self):
+        if settings.ISSTAGING or settings.ISPRODUCTION:
+            return os.getenv("JANIS_URL")
+        else:
+            return JanisBranchSettings.objects.first().branch_preview_url_base()
+
     # Optional "revision" parameter to get the janis_preview_url for a specific revision
     # Otherwise, it will return the janis_preview_url for the latest revision
-    def janis_preview_url(self, revision=None):
+    def janis_preview_url_end(self, revision=None):
         if revision:
             url_page_type = revision.page.janis_url_page_type
         else:
             revision = self.get_latest_revision()
             url_page_type = self.janis_url_page_type
         global_id = graphene.Node.to_global_id('PageRevisionNode', revision.id)
-        base_url = self.janis_url_base()
-        return base_url + "/en/preview/" + url_page_type + "/" + global_id
+        url_end = f"preview/{url_page_type}/{global_id}"
+        if settings.ISSTAGING or settings.ISPRODUCTION:
+            return url_end
+        else:
+            # Pass address of CMS_API if we are not running on Staging or Production
+            # Janis will query from its default CMS_API if a param is not provided
+            return url_end + f"?CMS_API={settings.CMS_API}"
 
     # Default preview_url before janis_preview_url gets set
     def fallback_preview_url(self):
@@ -172,16 +188,12 @@ class JanisBasePage(Page):
             return JanisBranchSettings.objects.first().branch_preview_url_base()
 
     # data needed to construct preview URLs for any language
-    # [janis_url_base]/[lang]/preview/[url_page_type]/[global_id]
+    # [janis_preview_url_start]/[lang]/[janis_preview_url_end]
     # ex: http://localhost:3000/es/preview/information/UGFnZVJldmlzaW9uTm9kZToyMjg=
-    def preview_url_data(self):
-        revision = self.get_latest_revision()
-        global_id = graphene.Node.to_global_id('PageRevisionNode', revision.id)
-
+    def preview_url_data(self, revision=None):
         return {
-            "janis_url_base": self.janis_url_base(),
-            "url_page_type": self.janis_url_page_type,
-            "global_id": global_id
+            "janis_preview_url_start": self.janis_preview_url_start(),
+            "janis_preview_url_end": self.janis_preview_url_end(revision=revision),
         }
 
     @property

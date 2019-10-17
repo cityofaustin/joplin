@@ -8,12 +8,6 @@ from base.models.site_settings import JanisBranchSettings
 import os, logging, requests, json
 logger = logging.getLogger(__name__)
 
-# The CMS_API endpoint of the current Django App for published Janis to use
-if settings.DEPLOYMENT_MODE != "LOCAL":
-    CMS_API = f"https://{os.getenv('APPLICATION_NAME','')}.herokuapp.com/api/graphql"
-else:
-    CMS_API = None
-
 def netlify_publish():
     logger.debug("netlify_publish() Starting task")
     CI_COA_PUBLISHER_URL = os.getenv("CI_COA_PUBLISHER_URL")
@@ -27,7 +21,7 @@ def netlify_publish():
             url=f"CI_COA_PUBLISHER_URL/publish",
             data=json.dumps({
                 "janis_branch": publish_janis_branch,
-                "CMS_API": CMS_API,
+                "CMS_API": settings.CMS_API,
             }),
         )
         logger.debug("Sent publish request to coa-publisher.")

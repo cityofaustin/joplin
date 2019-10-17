@@ -382,3 +382,10 @@ PHONENUMBER_DB_FORMAT = "RFC3966"
 FLAGS = {
     'SHOW_EXTRA_PANELS': [{'condition': 'boolean', 'value': False}]
 }
+
+# The CMS_API endpoint of the current Django App for published Janis to use
+if not ISLOCAL:
+    CMS_API = f"https://{os.getenv('APPLICATION_NAME','')}.herokuapp.com/api/graphql"
+else:
+    # $JOPLIN_APP_HOST_PORT is set by scripts/serve-local.sh
+    CMS_API = f"http://localhost:{os.getenv('JOPLIN_APP_HOST_PORT')}/api/graphql"

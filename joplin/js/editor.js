@@ -9,6 +9,7 @@ import richTextPlaceholder from './EditPage/richTextPlaceholder';
 import _ from 'lodash';
 
 $(function() {
+  debugger;
   insertWizardData();
   menuActiveState();
   toggleActivePanel();
@@ -155,12 +156,11 @@ $(function() {
 
   function getPreviewUrl(currentLang) {
     const previewUrlData = djangoData.previewUrlData;
-    const janisUrlBase = previewUrlData.janis_url_base;
-    const urlPageType = previewUrlData.url_page_type;
-    const globalId = previewUrlData.global_id;
+    const janisPreviewUrlStart = previewUrlData.janis_preview_url_start;
+    const janisPreviewUrlEnd = previewUrlData.janis_preview_url_end;
     let janisPreviewUrl = djangoData.fallBackPreviewUrl;
-    if (janisUrlBase && urlPageType && globalId) {
-      janisPreviewUrl = `${janisUrlBase}/${currentLang}/preview/${urlPageType}/${globalId}`;
+    if (janisPreviewUrlStart && janisPreviewUrlEnd) {
+      janisPreviewUrl = `${janisPreviewUrlStart}/${currentLang}/${janisPreviewUrlEnd}`;
     }
     return janisPreviewUrl;
   }
