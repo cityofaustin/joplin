@@ -26,6 +26,14 @@ Joplin is the Authoring Interface for adding and editing content for alpha.austi
 
 First, install docker (version 18.09 or greater) and clone this repo.
 
+**Add .env file**
+
+Copy the template and modify for your local environment as you see fit.
+```
+cp template.env .env
+```
+This will automatically load environment variables into your pipenv environment. (If you choose to run Joplin on your host machine without docker). Commands like `pipenv run ./joplin/manage.py migrate` will then know which database to use.
+
 **Run without data**
 
 ```
@@ -96,8 +104,6 @@ If you run into pipenv errors or are running this for the first time, you can bu
 ```
 REBUILD_PIPENV=on ./undockered.sh
 ```
-
-Note! To run additional pipenv commands like `pipenv run ./joplin/manage.py migrate` you must have the variable `export DATABASE_URL=postgres://joplin@127.0.0.1:5433/joplin` in your bash scope.
 
 **Run with custom smuggler data**
 
@@ -348,5 +354,5 @@ HEROKU_JANIS_APP_NAME=janis-staging ./scripts/serve-local.sh
 
 #### Syncing prod data to staging
 1. Create a new seeding data backup sourced from prod, using `migration_test.sh`
-2. Drop the staging database (go to heroku and delete the database on staging) 
+2. Drop the staging database (go to heroku and delete the database on staging)
 3. Push code with with new backup to master. This will rebuild the database and then seed it with your latest seeding datadump
