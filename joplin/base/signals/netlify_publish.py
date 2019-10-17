@@ -10,7 +10,6 @@ logger = logging.getLogger(__name__)
 
 def netlify_publish():
     logger.debug("netlify_publish() Starting task")
-    CI_COA_PUBLISHER_URL = os.getenv("CI_COA_PUBLISHER_URL")
     try:
         publish_janis_branch = getattr(JanisBranchSettings.objects.first(), 'publish_janis_branch')
     except:
@@ -19,7 +18,7 @@ def netlify_publish():
     # Can't publish from LOCAL environment. A deployed Janis couldn't ping your localhost:8000
     if publish_janis_branch:
         requests.post(
-            url=f"CI_COA_PUBLISHER_URL/publish",
+            url=f"{os.getenv("CI_COA_PUBLISHER_URL")}/publish",
             data=json.dumps({
                 "janis_branch": publish_janis_branch,
                 "CMS_API": settings.CMS_API,
