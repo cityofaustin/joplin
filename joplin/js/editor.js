@@ -9,7 +9,6 @@ import richTextPlaceholder from './EditPage/richTextPlaceholder';
 import _ from 'lodash';
 
 $(function() {
-  debugger;
   insertWizardData();
   menuActiveState();
   toggleActivePanel();
@@ -158,11 +157,7 @@ $(function() {
     const previewUrlData = djangoData.previewUrlData;
     const janisPreviewUrlStart = previewUrlData.janis_preview_url_start;
     const janisPreviewUrlEnd = previewUrlData.janis_preview_url_end;
-    let janisPreviewUrl = djangoData.fallBackPreviewUrl;
-    if (janisPreviewUrlStart && janisPreviewUrlEnd) {
-      janisPreviewUrl = `${janisPreviewUrlStart}/${currentLang}/${janisPreviewUrlEnd}`;
-    }
-    return janisPreviewUrl;
+    return `${janisPreviewUrlStart}/${currentLang}/${janisPreviewUrlEnd}`;
   }
 
   function setTabToContent(){

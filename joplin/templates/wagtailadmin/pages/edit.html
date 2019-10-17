@@ -21,7 +21,6 @@
 
       var djangoData = {
         previewUrlData: previewUrlData,
-        fallBackPreviewUrl: "{{ page.fallback_preview_url }}",
         styleGuideUrl: "{{ style_guide_url }}"
       }
     </script>
@@ -64,7 +63,7 @@
                 </button>
                 <div id="page-share-url-copied" class="hidden" >
                   <div> <span class="icon icon-success"></span> Draft preview URL copied to clipboard</div>
-                  <div id="share-preview-url">{{ page.fallback_preview_url }}</div>
+                  <div id="share-preview-url">{{ page.janis_preview_url }}</div>
                 </div>
             </div>
 

@@ -175,10 +175,6 @@ class JanisBasePage(Page):
             # Janis will query from its default CMS_API if a param is not provided
             return url_end + f"?CMS_API={settings.CMS_API}"
 
-    # Default preview_url before janis_preview_url gets set
-    def fallback_preview_url(self):
-        return "https://alpha.austin.gov"
-
     # Use hardcoded JANIS_URL for staging and prod
     # Otherwise use configurable preview_janis_branch setting
     def janis_url_base(self):
