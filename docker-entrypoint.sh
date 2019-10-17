@@ -14,13 +14,13 @@ function load_backup_data {
 # Add initial configs to handle Publishing and Previewing on PR Apps
 function load_janis_branch_settings {
   echo "Adding Janis Branch settings"
-  python ./joplin/manage.py loaddata ./joplin/db/system-generated/janis_branch_settings.json
+  python ./joplin/manage.py loaddata ./joplin/db/fixtures/janis_branch_settings.json
 }
 
 # Add initial admin user to Database
 function load_test_admin {
   echo "Adding test admin user for local development."
-  python ./joplin/manage.py loaddata ./joplin/db/system-generated/local_admin_user.json
+  python ./joplin/manage.py loaddata ./joplin/db/fixtures/local_admin_user.json
 }
 
 function sanitize_revision_data {
