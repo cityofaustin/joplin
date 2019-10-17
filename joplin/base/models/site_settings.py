@@ -46,4 +46,4 @@ class JanisBranchSettings(BaseSetting):
             return self.preview_janis_url
         else:
             # Netlify site names are limited to 63 characters
-            return f"http://{('janis-' + self.preview_janis_branch)[:63]}.netlify.com"
+            return f"https://{('janis-' + self.preview_janis_branch)[:63]}.netlify.com"
