@@ -15,7 +15,6 @@ import json
 # The publish button on the edit/ page sends a "action-publish" message directly to wagtail.
 # "action-publish" does not use this endpoint.
 def publish(request, page_id):
-    print("~~~~~ def in publish")
     page = get_object_or_404(Page, id=page_id).specific
 
     user_perms = UserPagePermissionsProxy(request.user)
@@ -27,8 +26,6 @@ def publish(request, page_id):
     if request.method == 'POST':
 
         page.get_latest_revision().publish()
-        print("~~~~~~ Did a publish??")
-        print(f"ANd what is settings.DEPLOYMENT_MODE? [{settings.DEPLOYMENT_MODE}]")
 
         # TODO: clean up copypasta when coa-publisher phases out previously AWS publish pipeline
         # Show success message if there is a publish_janis_branch set (for netlify builds)
@@ -41,7 +38,7 @@ def publish(request, page_id):
             messages.success(request, _("Page '{0}' published.").format(page.get_admin_display_title()), buttons=[
                 messages.button(reverse('wagtailadmin_pages:edit', args=(page.id,)), _('Edit'))
             ])
-        elif settings.DEPLOYMENT_MODE == "LOCAL":
+        elif settings.ISLOCAL:
             messages.warning(request, _("Page '{0}' not published. You're running on a local environment.").format(page.get_admin_display_title()), buttons=[
                 messages.button(reverse('wagtailadmin_pages:edit', args=(page.id,)), _('Edit'))
             ])

@@ -1,1 +1,1 @@
-[{"model": "base.janisbranchsettings", "pk": 1, "fields": {"site": 2, "preview_janis_branch": "https://janis.austintexas.io", "publish_janis_branch": null}}]
+[{"model": "base.janisbranchsettings", "pk": 1, "fields": {"site": 2, "preview_input": "1", "preview_janis_url": "https://janis.austintexas.io", "preview_janis_branch": "", "publish_janis_branch": ""}}]

@@ -3,16 +3,15 @@ import graphene
 import traceback
 
 from django.db import models, ProgrammingError
-
+from django.conf import settings
 from wagtail.search import index
 from wagtail.utils.decorators import cached_classmethod
-
 from wagtail.admin.edit_handlers import FieldPanel, ObjectList, TabbedInterface
-
 from wagtail.core.models import Page
 from wagtail.core.fields import RichTextField
 from flags.state import flag_enabled
 
+from base.models.site_settings import JanisBranchSettings
 
 class JanisBasePage(Page):
     """
@@ -148,16 +147,29 @@ class JanisBasePage(Page):
             return "#"
             pass
 
-    def janis_preview_url(self):
-        revision = self.get_latest_revision()
-        url_page_type = self.janis_url_page_type
+    # Optional "revision" parameter to get the janis_preview_url for a specific revision
+    # Otherwise, it will return the janis_preview_url for the latest revision
+    def janis_preview_url(self, revision=None):
+        if revision:
+            url_page_type = revision.page.janis_url_page_type
+        else:
+            revision = self.get_latest_revision()
+            url_page_type = self.janis_url_page_type
         global_id = graphene.Node.to_global_id('PageRevisionNode', revision.id)
-
-        return os.environ["JANIS_URL"] + "/en/preview/" + url_page_type + "/" + global_id
+        base_url = self.janis_url_base()
+        return base_url + "/en/preview/" + url_page_type + "/" + global_id
 
     # Default preview_url before janis_preview_url gets set
     def fallback_preview_url(self):
         return "https://alpha.austin.gov"
+
+    # Use hardcoded JANIS_URL for staging and prod
+    # Otherwise use configurable preview_janis_branch setting
+    def janis_url_base(self):
+        if settings.ISSTAGING or settings.ISPRODUCTION:
+            return os.getenv("JANIS_URL")
+        else:
+            return JanisBranchSettings.objects.first().branch_preview_url_base()
 
     # data needed to construct preview URLs for any language
     # [janis_url_base]/[lang]/preview/[url_page_type]/[global_id]
@@ -167,7 +179,7 @@ class JanisBasePage(Page):
         global_id = graphene.Node.to_global_id('PageRevisionNode', revision.id)
 
         return {
-            "janis_url_base": os.environ["JANIS_URL"],
+            "janis_url_base": self.janis_url_base(),
             "url_page_type": self.janis_url_page_type,
             "global_id": global_id
         }
