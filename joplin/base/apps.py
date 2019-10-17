@@ -9,5 +9,5 @@ class BaseConfig(AppConfig):
         from base.signals import image_publish
         if settings.ISSTAGING or settings.ISPRODUCTION:
             from base.signals import aws_publish
-        else:
+        elif settings.ISREVIEWAPP:
             from base.signals import netlify_publish
