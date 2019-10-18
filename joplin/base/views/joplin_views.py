@@ -6,7 +6,7 @@ from wagtail.admin import messages
 from django.utils.translation import ugettext as _
 from django.urls import reverse
 from django.conf import settings
-from base.models import ServicePage, ProcessPage, InformationPage, TopicPage, TopicCollectionPage, DepartmentPage, Theme, OfficialDocumentPage, GuidePage
+from base.models import ServicePage, ProcessPage, InformationPage, TopicPage, TopicCollectionPage, DepartmentPage, Theme, OfficialDocumentPage, GuidePage, FormPage
 from base.models.site_settings import JanisBranchSettings
 import json
 
@@ -77,24 +77,26 @@ def new_page_from_modal(request):
         # Create the page
         if body['type'] == 'service':
             page = ServicePage(**data)
-        if body['type'] == 'process':
+        elif body['type'] == 'process':
             page = ProcessPage(**data)
-        if body['type'] == 'information':
+        elif body['type'] == 'information':
             page = InformationPage(**data)
-        if body['type'] == 'topic':
+        elif body['type'] == 'topic':
             page = TopicPage(**data)
-        if body['type'] == 'topiccollection':
+        elif body['type'] == 'topiccollection':
             if body['theme'] is not None:
                 data['theme'] = Theme.objects.get(id=body['theme'])
             page = TopicCollectionPage(**data)
-        if body['type'] == 'department':
+        elif body['type'] == 'department':
             data['what_we_do'] = 'What we do'
             data['mission'] = 'Mission'
             page = DepartmentPage(**data)
-        if body['type'] == 'documents':
+        elif body['type'] == 'documents':
             page = OfficialDocumentPage(**data)
-        if body['type'] == 'guide':
+        elif body['type'] == 'guide':
             page = GuidePage(**data)
+        elif body['type'] == 'form':
+            page = FormPage(**data)
 
         # Add it as a child of home
         home = Page.objects.get(id=3)

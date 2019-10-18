@@ -37,6 +37,7 @@ from .information_page import InformationPage, InformationPageRelatedDepartments
 from .department_page import DepartmentPage, DepartmentPageDirector, DepartmentPageContact, DepartmentPageTopPage, DepartmentPageRelatedPage
 from .official_documents_page import OfficialDocumentPage, OfficialDocumentPageOfficialDocument, OfficialDocumentPageRelatedDepartments, OfficialDocumentPageTopic
 from .guide_page import GuidePage, GuidePageTopic, GuidePageRelatedDepartments, GuidePageContact
+from .form_page import FormPage
 from .widgets import countMe, countMeTextArea
 from .site_settings import *
 
