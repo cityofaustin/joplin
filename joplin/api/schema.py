@@ -57,7 +57,7 @@ def find_rich_text_names(StreamValue):
     return unique_rich_text_names
 
 
-def try_expand_db_html(item):
+def try_expand_db_html(parsed_item):
     """
     this function errors out if not used on a string.
     becuase this process is so complicated, we wrap it in some error handiling
@@ -65,10 +65,46 @@ def try_expand_db_html(item):
     that causes problems
     """
     try:
-        return expand_db_html(item)
+        return expand_db_html(parsed_item)
     except Exception as e:
         print('Exception!', e)
-        pass
+        return parsed_item
+
+
+def expand_dict_values(item):
+    return {key: try_expand_db_html(value) for (key, value) in item.items()}
+
+
+def try_get_api_representation(item):
+    item = item.block.get_api_representation(item.value)
+    if isinstance(item, str):
+        parsed_item = try_expand_db_html(item)
+        return parsed_item
+    else:
+        for value in item.values():
+            if isinstance(value, str):
+                parsed_item = try_expand_db_html(value)
+                continue
+            if isinstance(value, list):
+                parsed_item = [expand_dict_values(item) for item in value]
+            if isinstance(value, dict):
+                try_get_api_representation(value)
+    return parsed_item
+
+
+def expand_all_values(values):
+    """
+    this recursivley goes through values and expands them
+    """
+    for elem in values:
+        if isinstance(elem, str):
+            print(elem)
+        elif isinstance(elem, dict):
+            print('found a dict')
+            expand_all_values(elem)
+        elif isinstance(elem, list):
+            print('found a list')
+            expand_all_values(elem)
 
 
 def expand_all_strings(values, keys, key, data):
@@ -109,51 +145,53 @@ class StreamFieldType(Scalar):
                 do this recursivley depending on the type of data you find
 
         """
-        # get lists of potential keys
-        try:
-            rich_text_names = find_rich_text_names(StreamValue)
-        except Exception as e:
-            print(e)
-            print(traceback.format_exc())
-            pass
-
-        """
-        sometimes data is just a string or empty, and there is no stream_data
-        ie if you query a value that dosen't exist in the model anymore (this happened in janis with info pages)
-        """
-
-        if not isinstance(StreamValue, str):
-            data = StreamValue.stream_data
-        else:
-            data = ''
-        if len(data) is not 0:
-            for block_key in rich_text_names:
-
-                try:
-                    # return nested values or nothing (like basic steps)
-                    values = nested_lookup(block_key, StreamValue.stream_data) or None
-                    if not values:
-                        for elem in data:
-                            # elem is a dictionary with the streamfield type & value
-                            if isinstance(elem['value'], str):
-                                # if its value is string, it can be altered and has no nested values
-                                altered_value = nested_alter(elem, 'value', expand_db_html)
-                    elif isinstance(values[0], str) and len(values) == 1:
-                        # there are no more nests for this value
-                        altered_value = nested_alter(data, block_key, expand_db_html)
-                    elif block_key == 'option_description':
-                        # got broken again
-                        pass
-
-                    else:
-                        # extra try block here just cause expand_all_strings can be so hairy
-                        try:
-                            expand_all_strings(values, rich_text_names, block_key, data)
-                        except Exception as e:
-                            print('Exception', e)
-                except Exception as e:
-                    print(e)
-        return data
+        # import pdb
+        # pdb.set_trace()
+        # # get lists of potential keys
+        # try:
+        #     rich_text_names = find_rich_text_names(StreamValue)
+        # except Exception as e:
+        #     print(e)
+        #     print(traceback.format_exc())
+        #     pass
+        #
+        # """
+        # sometimes data is just a string or empty, and there is no stream_data
+        # ie if you query a value that dosen't exist in the model anymore (this happened in janis with info pages)
+        # """
+        #
+        # if not isinstance(StreamValue, str):
+        #     data = StreamValue.stream_data
+        # else:
+        #     data = ''
+        # if len(data) is not 0:
+        #     for block_key in rich_text_names:
+        #
+        #         try:
+        #             # return nested values or nothing (like basic steps)
+        #             values = nested_lookup(block_key, StreamValue.stream_data) or None
+        #             if not values:
+        #                 for elem in data:
+        #                     # elem is a dictionary with the streamfield type & value
+        #                     if isinstance(elem['value'], str):
+        #                         # if its value is string, it can be altered and has no nested values
+        #                         altered_value = nested_alter(elem, 'value', expand_db_html)
+        #             elif isinstance(values[0], str) and len(values) == 1:
+        #                 # there are no more nests for this value
+        #                 altered_value = nested_alter(data, block_key, expand_db_html)
+        #             elif block_key == 'option_description':
+        #                 # got broken again
+        #                 pass
+        #
+        #             else:
+        #                 # extra try block here just cause expand_all_strings can be so hairy
+        #                 try:
+        #                     expand_all_strings(values, rich_text_names, block_key, data)
+        #                 except Exception as e:
+        #                     print('Exception', e)
+        #         except Exception as e:
+        #             print(e)
+        return [{'type': item.block_type, 'value': try_get_api_representation(item), 'id': item.id} for item in StreamValue]
 
 
 @convert_django_field.register(StreamField)
