@@ -20,7 +20,7 @@ import pdb
 
 class RichTextFieldType(Scalar):
     """Serialises RichText content into fully baked HTML
-    see https://github.com/wagtail/wagtail/issues/2695#issuecomment-373002412 """
+    see https://github.com/wagtail/wagtail/issues/2695#issuecomment-464462575 """
 
     @staticmethod
     def serialize(value):
