@@ -15,7 +15,6 @@ from wagtail.core.rich_text import expand_db_html
 from base.models import TranslatedImage, ThreeOneOne, ServicePage, ServicePageContact, ServicePageTopic, ServicePageRelatedDepartments, InformationPageRelatedDepartments, ProcessPage, ProcessPageStep, ProcessPageContact, ProcessPageTopic, InformationPage, InformationPageContact, InformationPageTopic, DepartmentPage, DepartmentPageContact, DepartmentPageDirector, Theme, TopicCollectionPage, TopicPage, Contact, Location, ContactDayAndDuration, Department, DepartmentContact, TopicPageTopicCollection, OfficialDocumentPage, OfficialDocumentPageRelatedDepartments, OfficialDocumentPageTopic, OfficialDocumentPageOfficialDocument, GuidePage, GuidePageTopic, GuidePageRelatedDepartments, GuidePageContact, JanisBasePage, PhoneNumber, DepartmentPageTopPage, DepartmentPageRelatedPage
 import collections
 import traceback
-from nested_lookup import nested_lookup, nested_alter, nested_update, get_all_keys
 import pdb
 
 
@@ -35,31 +34,9 @@ def convert_rich_text_field(field, registry=None):
     )
 
 
-def find_rich_text_names(StreamValue):
-    """
-    returns a list of keys of StreamField blocks that are of RichText type
-    these are the ones we need to expand_db_html on
-    TODO: this dosen't actually get us all the values we need to modify
-    """
-    rich_text_names = []
-    for item in StreamValue:
-        block = item.block
-        try:
-            if isinstance(block, RichTextBlock):
-                rich_text_names.append(block.name)
-            elif block.child_blocks:
-                for child_block in block.all_blocks():
-                    if isinstance(child_block, RichTextBlock):
-                        rich_text_names.append(child_block.name)
-        except AttributeError as e:
-            pass
-    unique_rich_text_names = set(rich_text_names)
-    return unique_rich_text_names
-
-
 def try_expand_db_html(parsed_item):
     """
-    this function errors out if not used on a string.
+    expand_db_html errors out if not used on a string.
     becuase this process is so complicated, we wrap it in some error handiling
     so we can debug/catch an exception if someone adds a data schema later
     that causes problems
@@ -67,131 +44,65 @@ def try_expand_db_html(parsed_item):
     try:
         return expand_db_html(parsed_item)
     except Exception as e:
-        print('Exception!', e)
+        print('Streamfield API Exception!', e)
+        print(traceback.format_exc())
         return parsed_item
 
 
 def expand_dict_values(item):
+    """
+    dict comprehension that expands db html on each item in a dict
+    """
     return {key: try_expand_db_html(value) for (key, value) in item.items()}
 
 
-def try_get_api_representation(item):
-    item = item.block.get_api_representation(item.value)
-    if isinstance(item, str):
-        parsed_item = try_expand_db_html(item)
+def expand_by_type(key, value):
+    """
+    recursive function to
+    handle the streamfield black items differently depending on type
+    and loop through again if its a dict
+    """
+    if isinstance(value, str):
+        parsed_item = try_expand_db_html(value)
         return parsed_item
-    else:
-        for value in item.values():
-            if isinstance(value, str):
-                parsed_item = try_expand_db_html(value)
-                continue
-            if isinstance(value, list):
-                parsed_item = [expand_dict_values(item) for item in value]
-            if isinstance(value, dict):
-                try_get_api_representation(value)
-    return parsed_item
+    elif isinstance(value, list):
+        parsed_item = [expand_dict_values(item) for item in value]
+        return parsed_item
+    elif isinstance(value, dict):
+        try_get_api_representation(value)
 
 
-def expand_all_values(values):
-    """
-    this recursivley goes through values and expands them
-    """
-    for elem in values:
-        if isinstance(elem, str):
-            print(elem)
-        elif isinstance(elem, dict):
-            print('found a dict')
-            expand_all_values(elem)
-        elif isinstance(elem, list):
-            print('found a list')
-            expand_all_values(elem)
+def try_get_api_representation(StreamChild):
+    try:
+        block = StreamChild.block.get_api_representation(StreamChild.value)
+        # if the block is just a string (no dict at all), just return it expanded
+        if isinstance(block, str):
+            parsed_block = try_expand_db_html(block)
+            return parsed_block
+        else:
+            parsed_block = {key: expand_by_type(key, value) for (key, value) in block.items()}
 
-
-def expand_all_strings(values, keys, key, data):
-    """
-    this recursivley goes through values and expands them
-    """
-    expvalues = []
-    for elem in values:
-
-        if isinstance(elem, str):
-            altered_elem = nested_alter(data, key, try_expand_db_html)
-            expvalues.append(altered_elem)
-        elif isinstance(elem, tuple):
-            if not isinstance(elem[1], list):
-                nested_alter(data, elem[0], try_expand_db_html)
-            else:
-                expand_all_strings(elem[1], keys, key, data)
-        elif isinstance(elem, dict):
-            print('found a dict')
-            expand_all_strings(elem.items(), keys, key, data)
-        elif isinstance(elem, list):
-            print('found a list')
-            expand_all_strings(elem, keys, key, data)
+        return parsed_block
+    except Exception as e:
+        print('Streamfield API Exception!', e)
+        print(traceback.format_exc())
+        return block
 
 
 class StreamFieldType(Scalar):
     @staticmethod
     def serialize(StreamValue):
         """
-        This is a rats nest of loops and conditionals, but the general idea/ideal is two functions:
-            1)loop through all the objects in the StreamValue, and
-                if it is a RichTextBlock,
-                add its name to a list of keys
-            2) use each of the above names as keys to sort through the stream_data
-                (which is a python dict represention of the StreamField, alot like JSON)
-                use the nested_lookup to recursivley return a list of all values that match the key
-                run a nested_alter using expand_db_html as a callback to edit those values in stream_data
-                do this recursivley depending on the type of data you find
-
+        Write new docstring
         """
-        # import pdb
-        # pdb.set_trace()
-        # # get lists of potential keys
-        # try:
-        #     rich_text_names = find_rich_text_names(StreamValue)
-        # except Exception as e:
-        #     print(e)
-        #     print(traceback.format_exc())
-        #     pass
-        #
-        # """
-        # sometimes data is just a string or empty, and there is no stream_data
-        # ie if you query a value that dosen't exist in the model anymore (this happened in janis with info pages)
-        # """
-        #
-        # if not isinstance(StreamValue, str):
-        #     data = StreamValue.stream_data
-        # else:
-        #     data = ''
-        # if len(data) is not 0:
-        #     for block_key in rich_text_names:
-        #
-        #         try:
-        #             # return nested values or nothing (like basic steps)
-        #             values = nested_lookup(block_key, StreamValue.stream_data) or None
-        #             if not values:
-        #                 for elem in data:
-        #                     # elem is a dictionary with the streamfield type & value
-        #                     if isinstance(elem['value'], str):
-        #                         # if its value is string, it can be altered and has no nested values
-        #                         altered_value = nested_alter(elem, 'value', expand_db_html)
-        #             elif isinstance(values[0], str) and len(values) == 1:
-        #                 # there are no more nests for this value
-        #                 altered_value = nested_alter(data, block_key, expand_db_html)
-        #             elif block_key == 'option_description':
-        #                 # got broken again
-        #                 pass
-        #
-        #             else:
-        #                 # extra try block here just cause expand_all_strings can be so hairy
-        #                 try:
-        #                     expand_all_strings(values, rich_text_names, block_key, data)
-        #                 except Exception as e:
-        #                     print('Exception', e)
-        #         except Exception as e:
-        #             print(e)
-        return [{'type': item.block_type, 'value': try_get_api_representation(item), 'id': item.id} for item in StreamValue]
+        expanded_streamfields = [
+            {
+                'type': StreamChild.block_type,
+                'value': try_get_api_representation(StreamChild),
+                'id': StreamChild.id
+            } for StreamChild in StreamValue
+        ]
+        return expanded_streamfields
 
 
 @convert_django_field.register(StreamField)
