@@ -13,15 +13,15 @@ from wagtail.core.blocks import *
 from wagtail.documents.models import Document
 from wagtail.core.rich_text import expand_db_html
 from base.models import TranslatedImage, ThreeOneOne, ServicePage, ServicePageContact, ServicePageTopic, ServicePageRelatedDepartments, InformationPageRelatedDepartments, ProcessPage, ProcessPageStep, ProcessPageContact, ProcessPageTopic, InformationPage, InformationPageContact, InformationPageTopic, DepartmentPage, DepartmentPageContact, DepartmentPageDirector, Theme, TopicCollectionPage, TopicPage, Contact, Location, ContactDayAndDuration, Department, DepartmentContact, TopicPageTopicCollection, OfficialDocumentPage, OfficialDocumentPageRelatedDepartments, OfficialDocumentPageTopic, OfficialDocumentPageOfficialDocument, GuidePage, GuidePageTopic, GuidePageRelatedDepartments, GuidePageContact, JanisBasePage, PhoneNumber, DepartmentPageTopPage, DepartmentPageRelatedPage
-import collections
 import traceback
 import pdb
 
 
 class RichTextFieldType(Scalar):
-    """Serialises RichText content into fully baked HTML
-    see https://github.com/wagtail/wagtail/issues/2695#issuecomment-464462575 """
-
+    """
+    Serialises RichText content into fully baked HTML
+    see https://github.com/wagtail/wagtail/issues/2695#issuecomment-464462575
+    """
     @staticmethod
     def serialize(value):
         return expand_db_html(value)
@@ -93,7 +93,7 @@ class StreamFieldType(Scalar):
     @staticmethod
     def serialize(StreamValue):
         """
-        Write new docstring
+        Returns Streamfields for the api, also expanding db html to make sure links work
         """
         expanded_streamfields = [
             {
