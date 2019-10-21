@@ -30,7 +30,7 @@ ordering: the current sort parameter
     <th class="title">
         {% if sortable %}
             <a href="{% url 'wagtailadmin_explore' 3 %}?ordering={% if ordering == 'title' %}-{% endif %}title" class="icon icon-arrow-{% if ordering == 'title' %}down-after{% elif ordering == '-title' %}up-after{% else %}down-after{% endif %} {% if ordering == 'title' or ordering == '-title' %}teal{% endif %}">
-                {% trans 'Title' %}
+                {% trans '🔥Title' %}
             </a>
         {% else %}
             {% trans 'Title' %}
