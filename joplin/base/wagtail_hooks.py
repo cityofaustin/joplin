@@ -91,8 +91,8 @@ def register_contacts_menu_item():
 def register_users_menu_item():
     return MenuItem('Users', "/admin/users/", classnames="material-icons icon-users", order=50)
 
-# Allow users to edit JanisBranchSettings on PR branches only
-if not settings.ISSTAGING and not settings.ISPRODUCTION:
+# Allow users to edit JanisBranchSettings on PR branches and Local only
+if settings.ISLOCAL or settings.ISREVIEW:
     # Need to add custom js webpack bundle
     class BranchSettingsMenuItem(MenuItem):
         @property
@@ -134,13 +134,16 @@ def joplin_page_listing_buttons(page, page_perms, is_parent=False):
             priority=10
         )
     if page.has_unpublished_changes:
-        yield PageListingButton(
-            _('View draft'),
-            page.janis_preview_url(),
-            attrs={'title': _("Preview draft version of '{title}'").format(
-                title=page.get_admin_display_title()), 'target': '_blank'},
-            priority=20
-        )
+        try:
+            yield PageListingButton(
+                _('View draft'),
+                page.janis_preview_url(),
+                attrs={'title': _("Preview draft version of '{title}'").format(
+                    title=page.get_admin_display_title()), 'target': '_blank'},
+                priority=20
+            )
+        except Exception as e:
+            raise e
     if page.live and page.url and hasattr(page, 'janis_url'):
         yield PageListingButton(
             _('View live'),

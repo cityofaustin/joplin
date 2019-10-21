@@ -10,9 +10,9 @@ from wagtail.contrib.settings.models import BaseSetting, register_setting
 class JanisBranchSettings(BaseSetting):
     preview_input = models.CharField(
         verbose_name="Preview Input Options",
-        choices=(('1', 'Url'), ('2', 'Branch Name')),
-        max_length=1,
-        default="1",
+        choices=(('url', 'Url'), ('branch_name', 'Branch Name')),
+        max_length=11,
+        default="url",
         blank=False,
     )
     preview_janis_url = models.URLField(
@@ -42,7 +42,7 @@ class JanisBranchSettings(BaseSetting):
 
     # Convert branch name to a netlify URL
     def branch_preview_url_base(self):
-        if self.preview_input == "1":
+        if self.preview_input == "url":
             return self.preview_janis_url
         else:
             # Netlify site names are limited to 63 characters
