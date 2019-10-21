@@ -161,18 +161,12 @@ class CreateContentModal extends Component {
         role="dialog"
         aria-labelledby="createNewContentModalLabel"
       >
-      ⭐️
         <div className="CreateContentModal__wrapper">
-        ⭐️⭐️
           <div className="modal-dialog" role="document">
-          ⭐️⭐️⭐️
             <div className="modal-content CreateContentModal">
-            ⭐️⭐️⭐️⭐️
               <div className="modal-body">
-              ⭐️⭐️⭐️⭐️⭐️
                 {this.state.creatingContent ? (
                   <div className="CreateContentModal__step">
-                  ⭐️⭐️⭐️⭐️⭐️⭐️
                     <h2 className="CreateContentModal__header">
                       Creating page
                     </h2>
@@ -180,7 +174,6 @@ class CreateContentModal extends Component {
                   </div>
                 ) : (
                   <div>
-                  ⭐️⭐️⭐️⭐️⭐️⭐️
                     {this.state.activeStep === stepsEnum.CHOOSE_TYPE && (
                       <ChooseTypeStep
                         handleTypeSelect={this.handleTypeSelect}
