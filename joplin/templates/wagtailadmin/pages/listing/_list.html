@@ -2,6 +2,42 @@
 {% load l10n %}
 {% load wagtailadmin_tags %}
 
+<!-- NEW 🚒 -->
+{% load wagtailadmin_tags staticfiles i18n %}
+
+{% block content %}
+    <div class="header secondary">
+
+        <div>
+            <h1>Pages</h1>
+        </div>
+
+        <div>
+            <!-- From wagtail/admin/templates/wagtailadmin/shared/menu_search.html -->
+            <form class="nav-search" action="{% url 'wagtailadmin_pages:search' %}" method="get">
+                <div>
+                    <label for="menu-search-q">{% trans "Search" %}</label>
+                    <input type="text" id="menu-search-q" name="q" placeholder="{% trans 'Search👀' %}" />
+                    <button class="button" type="submit">{% trans "Search" %}</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="actions">
+          <!-- <div> -->
+            <!-- Button trigger modal -->
+            <button type="button" class="button" data-toggle="modal" data-target="#createNewContentModal">
+              Create New Content🔥
+            </button>
+          <!-- </div> -->
+        </div>
+
+    </div>
+    {{ block.super }}
+{% endblock %}
+<!-- NEW 🚒 -->
+
+
 <table class="listing {% if full_width %}full-width{% endif %} {% block table_classname %}{% endblock %}">
     {% if show_ordering_column %}
         <col width="65px" />
@@ -30,7 +66,7 @@
                         <td class="ord">{% if orderable and ordering == "ord" %}<div class="handle icon icon-grip text-replace">{% trans 'Drag' %}</div>{% endif %}</td>
                     {% endif %}
                     <td class="title" valign="top" data-listing-page-title>
-                        {% block page_title %}
+                      🏆{% block page_title %}
                         {% endblock %}
                     </td>
                     {% if show_parent %}

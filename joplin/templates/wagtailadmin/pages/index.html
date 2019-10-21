@@ -3,15 +3,12 @@
 
 {% block content %}
     <div class="header secondary">
-        <div><h1>Pages📃</h1></div>
 
-        <div class="actions">
-            <div>
-              <!-- Button trigger modal -->
-              <button type="button" class="button" data-toggle="modal" data-target="#createNewContentModal">
-                Create New Content🔥
-              </button>
-            </div>
+        <div>
+            <h1>Pages</h1>
+        </div>
+
+        <div>
             <!-- From wagtail/admin/templates/wagtailadmin/shared/menu_search.html -->
             <form class="nav-search" action="{% url 'wagtailadmin_pages:search' %}" method="get">
                 <div>
@@ -21,6 +18,16 @@
                 </div>
             </form>
         </div>
+
+        <div class="actions">
+          <!-- <div> -->
+            <!-- Button trigger modal -->
+            <button type="button" class="button" data-toggle="modal" data-target="#createNewContentModal">
+              Create New Content🔥
+            </button>
+          <!-- </div> -->
+        </div>
+
     </div>
     {{ block.super }}
 {% endblock %}
