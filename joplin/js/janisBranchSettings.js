@@ -1,7 +1,7 @@
 // If "URL" is selected, then only show input field for preview_janis_url
 // Else, "Branch Name" is selected and we should show field for preview_janis_branch
 const togglePreviewSettings = (previewInputValue) => {
-  if (previewInputValue === "1") {
+  if (previewInputValue === "url") {
     $(".preview_janis_url-container").show()
     $(".preview_janis_branch-container").hide()
   } else {

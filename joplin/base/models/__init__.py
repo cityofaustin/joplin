@@ -39,7 +39,7 @@ from .official_documents_page import OfficialDocumentPage, OfficialDocumentPageO
 from .guide_page import GuidePage, GuidePageTopic, GuidePageRelatedDepartments, GuidePageContact
 from .form_page import FormPage
 from .widgets import countMe, countMeTextArea
-from .site_settings import *
+from .site_settings import JanisBranchSettings
 
 WYSIWYG_GENERAL = ['h1', 'h2', 'h3', 'h4', 'bold', 'link', 'ul', 'ol', 'code']
 DEFAULT_MAX_LENGTH = 255

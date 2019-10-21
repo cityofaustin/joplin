@@ -1,1 +1,1 @@
-[{"model": "base.janisbranchsettings", "pk": 1, "fields": {"site": 2, "preview_input": "1", "preview_janis_url": "https://janis.austintexas.io", "preview_janis_branch": "", "publish_janis_branch": ""}}]
+[{"model": "base.janisbranchsettings", "pk": 1, "fields": {"site": 2, "preview_input": "url", "preview_janis_url": "http://janis-austin-gov-staging.s3-website-us-east-1.amazonaws.com", "preview_janis_branch": "", "publish_janis_branch": ""}}]

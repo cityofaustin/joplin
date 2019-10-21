@@ -9,5 +9,6 @@ class BaseConfig(AppConfig):
         from base.signals import image_publish
         if settings.ISSTAGING or settings.ISPRODUCTION:
             from base.signals import aws_publish
-        elif settings.ISREVIEWAPP:
+        # Can't publish from LOCAL environment. A deployed Janis couldn't ping your localhost:8000
+        elif settings.ISREVIEW:
             from base.signals import netlify_publish
