@@ -155,14 +155,9 @@ $(function() {
 
   function getPreviewUrl(currentLang) {
     const previewUrlData = djangoData.previewUrlData;
-    const janisUrlBase = previewUrlData.janis_url_base;
-    const urlPageType = previewUrlData.url_page_type;
-    const globalId = previewUrlData.global_id;
-    let janisPreviewUrl = djangoData.fallBackPreviewUrl;
-    if (janisUrlBase && urlPageType && globalId) {
-      janisPreviewUrl = `${janisUrlBase}/${currentLang}/preview/${urlPageType}/${globalId}`;
-    }
-    return janisPreviewUrl;
+    const janisPreviewUrlStart = previewUrlData.janis_preview_url_start;
+    const janisPreviewUrlEnd = previewUrlData.janis_preview_url_end;
+    return `${janisPreviewUrlStart}/${currentLang}/${janisPreviewUrlEnd}`;
   }
 
   function setTabToContent(){
