@@ -16,3 +16,4 @@ media/*/*.jpeg
 *.log
 joplin/db/smuggler/*
 env.sh
+.env

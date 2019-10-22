@@ -7,6 +7,7 @@ from django.contrib.staticfiles.templatetags.staticfiles import static
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from django.utils.html import format_html_join
+from webpack_loader import utils as webpack_loader_utils
 
 from wagtail.admin.menu import MenuItem
 from wagtail.contrib.modeladmin.options import ModelAdmin, ModelAdminGroup, modeladmin_register
@@ -92,6 +93,22 @@ def register_users_menu_item():
     return MenuItem('Users', "/admin/users/", classnames="material-icons icon-users", order=50)
 
 
+# Allow users to edit JanisBranchSettings on PR branches and Local only
+if settings.ISLOCAL or settings.ISREVIEW:
+    # Need to add custom js webpack bundle
+    class BranchSettingsMenuItem(MenuItem):
+        @property
+        def media(self):
+            super_media = super(BranchSettingsMenuItem, self).media
+            js = super_media._js
+            css = super_media._css
+            js.append(webpack_loader_utils.get_files('janisBranchSettings')[0]['url'])
+            return forms.Media(css=css, js=js)
+
+    @hooks.register('register_admin_menu_item')
+    def register_options_menu_item():
+        return BranchSettingsMenuItem('Options', "/admin/settings/base/janisbranchsettings/2/", classnames="material-icons icon-settings", order=60)
+
 # example of rendering custom nested menu items
 # class LocationModelAdmin(ModelAdmin):
 #     model = Location
@@ -108,6 +125,7 @@ def register_users_menu_item():
 #
 # modeladmin_register(ReallyAwesomeGroup)
 
+
 @hooks.register('register_joplin_page_listing_buttons')
 def joplin_page_listing_buttons(page, page_perms, is_parent=False):
     if page_perms.can_edit():
@@ -119,13 +137,16 @@ def joplin_page_listing_buttons(page, page_perms, is_parent=False):
             priority=10
         )
     if page.has_unpublished_changes:
-        yield PageListingButton(
-            _('View draft'),
-            page.janis_preview_url(),
-            attrs={'title': _("Preview draft version of '{title}'").format(
-                title=page.get_admin_display_title()), 'target': '_blank'},
-            priority=20
-        )
+        try:
+            yield PageListingButton(
+                _('View draft'),
+                page.janis_preview_url(),
+                attrs={'title': _("Preview draft version of '{title}'").format(
+                    title=page.get_admin_display_title()), 'target': '_blank'},
+                priority=20
+            )
+        except Exception as e:
+            raise e
     if page.live and page.url and hasattr(page, 'janis_url'):
         yield PageListingButton(
             _('View live'),
@@ -136,7 +157,8 @@ def joplin_page_listing_buttons(page, page_perms, is_parent=False):
         )
 
     # make the author notes icon appear if latest revision has notes
-    if page.get_latest_revision_as_page().author_notes:
+    latest_revision_as_page = page.get_latest_revision_as_page()
+    if hasattr(latest_revision_as_page, 'author_notes') and latest_revision_as_page.author_notes:
         yield Button(
             _('📝'),
             'javascript:null;',

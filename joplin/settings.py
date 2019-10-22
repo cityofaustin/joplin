@@ -53,7 +53,7 @@ INSTALLED_APPS = [
     'wagtail.contrib.forms',
     'wagtail.contrib.redirects',
     'wagtail.contrib.styleguide',
-
+    'wagtail.contrib.settings',
     'wagtail_modeltranslation',
     'wagtail_modeltranslation.makemigrations',
     'wagtail_modeltranslation.migrate',
@@ -129,9 +129,10 @@ WSGI_APPLICATION = 'wsgi.application'
 
 # Detect whether it is a staging or production environment
 DEPLOYMENT_MODE = os.environ.get('DEPLOYMENT_MODE', 'LOCAL')
+ISLOCAL = DEPLOYMENT_MODE == "LOCAL"
 ISPRODUCTION = DEPLOYMENT_MODE == "PRODUCTION"
 ISSTAGING = DEPLOYMENT_MODE == "STAGING"
-ISREVIEWAPP = DEPLOYMENT_MODE == "REVIEW"
+ISREVIEW = DEPLOYMENT_MODE == "REVIEW"
 
 
 # Database
@@ -304,7 +305,7 @@ DBBACKUP_CONNECTORS = {
 #
 # Production, Staging & Review Apps
 #
-if(ISPRODUCTION or ISSTAGING or ISREVIEWAPP):
+if(ISPRODUCTION or ISSTAGING or ISREVIEW):
     #
     # AWS Buckets only if not local.
     #
@@ -379,5 +380,12 @@ PHONENUMBER_DEFAULT_REGION = 'US'
 PHONENUMBER_DB_FORMAT = "RFC3966"
 
 FLAGS = {
-    'SHOW_EXTRA_PANELS': [{'condition': 'boolean', 'value': False}]
+    'SHOW_EXTRA_PANELS': [{'condition': 'boolean', 'value': True}]
 }
+
+# The CMS_API endpoint of the current Django App for published Janis to use
+if ISLOCAL:
+    # $JOPLIN_APP_HOST_PORT is set by scripts/serve-local.sh
+    CMS_API = f"http://localhost:{os.getenv('JOPLIN_APP_HOST_PORT')}/api/graphql"
+else:
+    CMS_API = f"https://{os.getenv('APPLICATION_NAME','')}.herokuapp.com/api/graphql"
