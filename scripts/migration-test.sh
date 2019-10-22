@@ -38,7 +38,7 @@ if [ "$LOAD_PROD_DATA" = "on" ]; then
   echo "Pulling datadump from Production"
   # Replace all user passwords with default admin test password
   # TODO: once prod has scripts/export_heroku_data.sh, run sanitation script on production container itself
-  heroku run -xa joplin python ./joplin/manage.py dumpdata --indent 2 --natural-foreign --natural-primary -- | \
+  heroku run -xa joplin python ./joplin/manage.py dumpdata --exclude=wagtailcore.GroupCollectionPermission --indent 2 --natural-foreign --natural-primary -- | \
     python ./scripts/remove_logs_from_json_stream.py | \
     jq '(.[] | select(.model == "users.user") | .fields.password) |= "pbkdf2_sha256$150000$GJQ1UoZlgrC4$Ir0Uww/i9f2VKzHznU4B1uaHbdCxRnZ69w12cIvxWP0="' \
     > $TMP_PROD_DATADUMP

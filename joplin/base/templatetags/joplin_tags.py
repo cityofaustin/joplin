@@ -1,4 +1,6 @@
 from django import template
+from django.conf import settings
+from base.models.site_settings import JanisBranchSettings
 import graphene
 import os
 import json
@@ -9,16 +11,10 @@ import itertools
 
 register = template.Library()
 
-
 @register.simple_tag
 def get_revision_preview_url(*args, **kwargs):
     revision = kwargs['revision']
-    url_page_type = revision.page.janis_url_page_type
-
-    global_id = graphene.Node.to_global_id('PageRevisionNode', revision.id)
-    # TODO: Add other languages
-    return os.environ["JANIS_URL"] + "/en/preview/" + url_page_type + "/" + global_id
-
+    return revision.page.janis_preview_url(revision)
 
 STYLEGUIDE_PAGES = {
     'service page': '/pick-the-perfect-content-type/service-page',
