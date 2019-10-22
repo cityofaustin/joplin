@@ -140,9 +140,8 @@ function handle_input {
     # Build new migration datadump
     # Excluding wagtailcore.GroupCollectionPermission because of IntegrityError issues
     # see: https://docs.djangoproject.com/en/2.2/topics/serialization/#natural-keys for details
-    docker exec -it ${COMPOSE_PROJECT_NAME}_app_1 python joplin/manage.py dumpdata --exclude=wagtailcore.GroupCollectionPermission --indent 2 --natural-foreign --natural-primary | \
-      python ./scripts/remove_logs_from_json_stream.py \
-      > ./joplin/db/system-generated/seeding.datadump.json
+    docker exec -it ${COMPOSE_PROJECT_NAME}_app_1 python joplin/manage.py dumpdata --exclude=wagtailcore.GroupCollectionPermission --indent 2 --natural-foreign --natural-primary \
+    --output ./joplin/db/system-generated/seeding.datadump.json
 
     # Write new metadata file
     DATADUMP_METADATA=$CURRENT_DIR/../joplin/db/system-generated/seeding_datadump_metadata.txt
