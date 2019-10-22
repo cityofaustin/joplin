@@ -13,6 +13,7 @@ from flags.state import flag_enabled
 
 from base.models.site_settings import JanisBranchSettings
 
+
 class JanisBasePage(Page):
     """
     This is base page class made for our pages to inherit from.
@@ -216,7 +217,7 @@ class JanisBasePage(Page):
     @cached_classmethod
     def get_edit_handler(cls):
         if hasattr(cls, 'edit_handler'):
-            return cls.edit_handler.bind_to_model(cls)
+            return cls.edit_handler.bind_to(model=cls)
 
         editor_panels = [
             ObjectList(cls.content_panels + [AdminOnlyFieldPanel('coa_global', classname="admin-only-field")], heading='Content'),
@@ -236,7 +237,7 @@ class JanisBasePage(Page):
 
         edit_handler = TabbedInterface(editor_panels)
 
-        return edit_handler.bind_to_model(cls)
+        return edit_handler.bind_to(model=cls)
 
     class Meta:
         abstract = True
