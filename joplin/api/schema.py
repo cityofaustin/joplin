@@ -349,7 +349,7 @@ class PageRevisionNode(DjangoObjectType):
         return self.as_page_object()
 
     def resolve_as_form_page(self, resolve_info, *args, **kwargs):
-        return self.as_form_page()
+        return self.as_page_object()
 
     class Meta:
         model = PageRevision
