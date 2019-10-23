@@ -388,8 +388,8 @@ class SiteStructure(graphene.ObjectType):
                     service_page_topic_tc_global_id = graphene.Node.to_global_id('TopicCollectionNode', tc.topiccollection.id)
                     site_structure.append({'url' :f'/{tc.topiccollection.theme.slug}/{tc.topiccollection.slug}/{service_page_topic.topic.slug}/{service_page.slug}/', 'type': 'service page', 'id': service_page_global_id, 'parent_topic': service_page_topic_global_id, 'grandparent_topic_collection': service_page_topic_tc_global_id})
 
-        guide_pages = InformationPage.objects.all()
-        for information_page in guide_pages:
+        information_pages = InformationPage.objects.all()
+        for information_page in information_pages:
             information_page_global_id = graphene.Node.to_global_id('InformationPageNode', information_page.id)
 
             if information_page.coa_global:
