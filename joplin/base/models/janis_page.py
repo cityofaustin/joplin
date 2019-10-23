@@ -13,6 +13,7 @@ from flags.state import flag_enabled
 
 from base.models.site_settings import JanisBranchSettings
 
+
 class JanisBasePage(Page):
     """
     This is base page class made for our pages to inherit from.
@@ -113,7 +114,7 @@ class JanisBasePage(Page):
             )
 
             # add hardcoded language path to base url
-            base_url = os.environ["JANIS_URL"] + '/en'
+            base_url = f"{self.janis_url_base('janis_publish_url')}/en"
             # attributes for the url are needed by not discovered yet lets fetch them
             # looking for missing elements, deducing content type from what works and what dosen't
             # this is pretty ugly and ought to be cleaned up
@@ -147,20 +148,11 @@ class JanisBasePage(Page):
             return "#"
             pass
 
-    def janis_preview_url(self, revision=None, lang="en"):
-        return f"{self.janis_preview_url_start()}/{lang}/{self.janis_preview_url_end(revision=revision)}"
-
-    # Use hardcoded JANIS_URL for staging and prod
-    # Otherwise use configurable preview_janis_branch setting
-    def janis_preview_url_start(self):
-        if settings.ISSTAGING or settings.ISPRODUCTION:
-            return os.getenv("JANIS_URL")
-        else:
-            return JanisBranchSettings.objects.first().branch_preview_url_base()
-
-    # Optional "revision" parameter to get the janis_preview_url for a specific revision
-    # Otherwise, it will return the janis_preview_url for the latest revision
     def janis_preview_url_end(self, revision=None):
+        """
+            Optional "revision" parameter to get the janis_preview_url for a specific revision
+            Otherwise, it will return the janis_preview_url for the latest revision
+        """
         if revision:
             url_page_type = revision.page.janis_url_page_type
         else:
@@ -175,13 +167,24 @@ class JanisBasePage(Page):
             # Janis will query from its default CMS_API if a param is not provided
             return url_end + f"?CMS_API={settings.CMS_API}"
 
-    # Use hardcoded JANIS_URL for staging and prod
-    # Otherwise use configurable preview_janis_branch setting
-    def janis_url_base(self):
+    def janis_url_base(self, branch):
+        """
+        returns a valid url of the base URL in janis:
+            Use hardcoded JANIS_URL for staging and prod
+            Otherwise, use configurable branch setting
+        """
         if settings.ISSTAGING or settings.ISPRODUCTION:
             return os.getenv("JANIS_URL")
         else:
-            return JanisBranchSettings.objects.first().branch_preview_url_base()
+            branch_settings = JanisBranchSettings.objects.first()
+            return branch_settings.url_base(branch)
+
+    # alias for url base function
+    janis_preview_url_start = janis_url_base
+
+    # TODO this function and prevew_url_data are pretty similar, we can probably consolidate them
+    def janis_preview_url(self, revision=None, lang="en"):
+        return f"{self.janis_preview_url_start('preview_janis_branch')}/{lang}/{self.janis_preview_url_end(revision=revision)}"
 
     # data needed to construct preview URLs for any language
     # [janis_preview_url_start]/[lang]/[janis_preview_url_end]
