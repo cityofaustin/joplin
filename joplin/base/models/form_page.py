@@ -18,9 +18,9 @@ class FormPage(JanisBasePage):
     base_form_class = FormPageForm
 
     description = models.TextField(verbose_name='Form description', blank=True)
-    script_tag = models.TextField(
-        verbose_name='Enter the script tag from Formstack',
-        help_text='The script tag may be found by going to Share. Use the code in the embedded javascript box.',
+    form_url = models.URLField(
+        verbose_name='Enter the URL of your Formstack form',
+        help_text='This link can be found under Share > "Link to this form on your website or email:"',
         blank=True,
     )
 
@@ -32,7 +32,7 @@ class FormPage(JanisBasePage):
         InlinePanel('topics', label='Topics'),
         InlinePanel('related_departments', label='Related Departments'),
         FieldPanel('description', widget=countMeTextArea),
-        FieldPanel('script_tag'),
+        FieldPanel('form_url'),
     ]
 
 class FormPageRelatedDepartments(ClusterableModel):

@@ -148,5 +148,5 @@ class GuidePageTranslationOptions(TranslationOptions):
 class FormPageTranslationOptions(TranslationOptions):
     fields = (
         'description',
-        'script_tag',
+        'form_url',
     )
