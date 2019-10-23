@@ -12,7 +12,7 @@ from django_filters import FilterSet, OrderingFilter
 from wagtail.core.blocks import PageChooserBlock, TextBlock, ListBlock
 from wagtail.documents.models import Document
 
-from base.models import TranslatedImage, ThreeOneOne, ServicePage, ServicePageContact, ServicePageTopic, ServicePageRelatedDepartments, InformationPageRelatedDepartments, ProcessPage, ProcessPageStep, ProcessPageContact, ProcessPageTopic, InformationPage, InformationPageContact, InformationPageTopic, DepartmentPage, DepartmentPageContact, DepartmentPageDirector, Theme, TopicCollectionPage, TopicPage, Contact, Location, ContactDayAndDuration, Department, DepartmentContact, TopicPageTopicCollection, OfficialDocumentPage, OfficialDocumentPageRelatedDepartments, OfficialDocumentPageTopic, OfficialDocumentPageOfficialDocument, GuidePage, GuidePageTopic, GuidePageRelatedDepartments, GuidePageContact, JanisBasePage, PhoneNumber, DepartmentPageTopPage, DepartmentPageRelatedPage
+from base.models import TranslatedImage, ThreeOneOne, ServicePage, ServicePageContact, ServicePageTopic, ServicePageRelatedDepartments, InformationPageRelatedDepartments, ProcessPage, ProcessPageStep, ProcessPageContact, ProcessPageTopic, InformationPage, InformationPageContact, InformationPageTopic, DepartmentPage, DepartmentPageContact, DepartmentPageDirector, Theme, TopicCollectionPage, TopicPage, Contact, Location, ContactDayAndDuration, Department, DepartmentContact, TopicPageTopicCollection, OfficialDocumentPage, OfficialDocumentPageRelatedDepartments, OfficialDocumentPageTopic, OfficialDocumentPageOfficialDocument, GuidePage, GuidePageTopic, GuidePageRelatedDepartments, GuidePageContact, JanisBasePage, PhoneNumber, DepartmentPageTopPage, DepartmentPageRelatedPage, FormPage, FormPageRelatedDepartments, FormPageTopic
 
 
 class StreamFieldType(Scalar):
@@ -147,6 +147,12 @@ class GuidePageRelatedDepartmentsNode(DjangoObjectType):
         interfaces = [graphene.Node]
 
 
+class FormPageRelatedDepartmentsNode(DjangoObjectType):
+    class Meta:
+        model = FormPageRelatedDepartments
+        interfaces = [graphene.Node]
+
+
 class TranslatedImageNode(DjangoObjectType):
     class Meta:
         model = TranslatedImage
@@ -197,6 +203,13 @@ class DepartmentPageNode(DjangoObjectType):
     class Meta:
         model = DepartmentPage
         filter_fields = ['id', 'slug', 'live']
+        interfaces = [graphene.Node]
+
+
+class FormPageNode(DjangoObjectType):
+    class Meta:
+        model = FormPage
+        filter_fields = ['id', 'slug', 'live', 'coa_global']
         interfaces = [graphene.Node]
 
 
@@ -309,6 +322,7 @@ class PageRevisionNode(DjangoObjectType):
     as_topic_collection_page = graphene.NonNull(TopicCollectionNode)
     as_official_document_page = graphene.NonNull(OfficialDocumentPageNode)
     as_guide_page = graphene.NonNull(GuidePageNode)
+    as_form_page = graphene.NonNull(FormPageNode)
 
     def resolve_as_service_page(self, resolve_info, *args, **kwargs):
         return self.as_page_object()
@@ -333,6 +347,9 @@ class PageRevisionNode(DjangoObjectType):
 
     def resolve_as_guide_page(self, resolve_info, *args, **kwargs):
         return self.as_page_object()
+
+    def resolve_as_form_page(self, resolve_info, *args, **kwargs):
+        return self.as_form_page()
 
     class Meta:
         model = PageRevision
@@ -370,6 +387,12 @@ class InformationPageTopicNode(DjangoObjectType):
         interfaces = [graphene.Node]
 
 
+class FormPageTopicNode(DjangoObjectType):
+    class Meta:
+        model = FormPageTopic
+        interfaces = [graphene.Node]
+
+
 class DepartmentPageContactNode(DjangoObjectType):
     class Meta:
         model = DepartmentPageContact
@@ -389,6 +412,7 @@ class DepartmentPageTopPageNode(DjangoObjectType):
     information_page = graphene.Field(InformationPageNode)
     guide_page = graphene.Field(GuidePageNode)
     official_document_page = graphene.Field(OfficialDocumentPageNode)
+    form_page = graphene.Field(FormPageNode)
 
     def resolve_service_page(self, info):
         service_page = None
@@ -429,6 +453,16 @@ class DepartmentPageTopPageNode(DjangoObjectType):
             pass
 
         return official_document_page
+
+    def resolve_form_page(self, info):
+        form_page = None
+        # TODO: don't catch everything
+        try:
+            form_page = FormPage.objects.get(id=self.page_id)
+        except Exception as e:
+            pass
+
+        return form_page
 
     class Meta:
         model = DepartmentPageTopPage
@@ -441,6 +475,7 @@ class DepartmentPageRelatedPageNode(DjangoObjectType):
     information_page = graphene.Field(InformationPageNode)
     guide_page = graphene.Field(GuidePageNode)
     official_document_page = graphene.Field(OfficialDocumentPageNode)
+    form_page = graphene.Field(FormPageNode)
 
     def resolve_service_page(self, info):
         service_page = None
@@ -481,6 +516,16 @@ class DepartmentPageRelatedPageNode(DjangoObjectType):
             pass
 
         return official_document_page
+
+    def resolve_form_page(self, info):
+        form_page = None
+        # TODO: don't catch everything
+        try:
+            form_page = FormPage.objects.get(id=self.page_id)
+        except Exception as e:
+            pass
+
+        return form_page
 
     class Meta:
         model = DepartmentPageRelatedPage
@@ -541,6 +586,7 @@ class Query(graphene.ObjectType):
     all_official_document_pages = DjangoFilterConnectionField(
         OfficialDocumentPageNode)
     all_guide_pages = DjangoFilterConnectionField(GuidePageNode)
+    all_form_pages = DjangoFilterConnectionField(FormPageNode)
 
     def resolve_page_revision(self, resolve_info, id=None):
         revision = graphene.Node.get_node_from_global_id(resolve_info, id)

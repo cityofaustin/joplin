@@ -1,7 +1,9 @@
 from django.db import models
 
 from wagtail.core.fields import RichTextField
-from wagtail.admin.edit_handlers import FieldPanel
+from modelcluster.fields import ParentalKey
+from modelcluster.models import ClusterableModel
+from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, MultiFieldPanel, PageChooserPanel
 
 from base.forms import FormPageForm
 
@@ -27,6 +29,37 @@ class FormPage(JanisBasePage):
         FieldPanel('title_es', widget=countMe),
         FieldPanel('title_ar'),
         FieldPanel('title_vi'),
+        InlinePanel('topics', label='Topics'),
+        InlinePanel('related_departments', label='Related Departments'),
         FieldPanel('description', widget=countMeTextArea),
         FieldPanel('script_tag'),
     ]
+
+class FormPageRelatedDepartments(ClusterableModel):
+    page = ParentalKey(FormPage, related_name='related_departments', default=None)
+    related_department = models.ForeignKey(
+        "base.departmentPage",
+        on_delete=models.PROTECT,
+    )
+
+    panels = [
+        # Use a SnippetChooserPanel because blog.BlogAuthor is registered as a snippet
+        PageChooserPanel("related_department"),
+    ]
+
+class FormPageTopic(ClusterableModel):
+    page = ParentalKey(FormPage, related_name='topics')
+    topic = models.ForeignKey('base.TopicPage', verbose_name='Select a Topic', related_name='+', on_delete=models.CASCADE)
+    toplink = models.BooleanField(default=False, verbose_name='Make this page a top link for this topic')
+
+    panels = [
+        MultiFieldPanel(
+            [
+                PageChooserPanel('topic'),
+                FieldPanel('toplink'),
+            ]
+        ),
+    ]
+
+    def __str__(self):
+        return self.topic.text

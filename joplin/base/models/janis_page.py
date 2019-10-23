@@ -76,14 +76,15 @@ class JanisBasePage(Page):
                 'information page',
                 'department page',
                 'guide page',
-                'official document page'
+                'official document page',
+                'form page',
             ]
             has_no_topic_collection = has_no_theme
 
             has_no_topic = [
                 'topic page',
                 'topic collection page',
-                'department page'
+                'department page',
             ]
 
             theme_slug = (
