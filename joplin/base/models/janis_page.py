@@ -114,7 +114,7 @@ class JanisBasePage(Page):
             )
 
             # add hardcoded language path to base url
-            base_url = f"{self.janis_url_base('janis_publish_url')}/en"
+            base_url = f"{self.janis_url_base('publish_janis_branch')}/en"
             # attributes for the url are needed by not discovered yet lets fetch them
             # looking for missing elements, deducing content type from what works and what dosen't
             # this is pretty ugly and ought to be cleaned up
