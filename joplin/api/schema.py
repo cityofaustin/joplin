@@ -49,19 +49,19 @@ class ThemeNode(DjangoObjectType):
         interfaces = [graphene.Node]
 
 
-class TopicPageTopicCollectionNode(DjangoObjectType):
-    class Meta:
-        model = TopicPageTopicCollection
-        interfaces = [graphene.Node]
-        filter_fields = ['topiccollection']
-
-
 class TopicCollectionNode(DjangoObjectType):
     class Meta:
         model = TopicCollectionPage
         filter_fields = ['id', 'slug', 'live']
         interfaces = [graphene.Node]
 
+
+class TopicPageTopicCollectionNode(DjangoObjectType):
+    class Meta:
+        model = TopicPageTopicCollection
+        interfaces = [graphene.Node]
+        filter_fields = ['topiccollection']
+        
 
 class TopicNode(DjangoObjectType):
     class Meta:
