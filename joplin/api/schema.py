@@ -864,34 +864,5 @@ class Query(graphene.ObjectType):
 
         return revision
 
-    def resolve_page(self, resolve_info, id=None):
-        page = graphene.Node.get_node_from_global_id(resolve_info, id)
-
-        return page
-
-    def resolve_service_page(self, resolve_info, id=None, pk=None, slug=None, show_preview=None, language=None):
-        if not language:
-            request_lang = django.utils.translation.get_language_from_request(
-                resolve_info.context)
-            language = request_lang or Language.ENGLISH
-
-        django.utils.translation.activate(language)
-        resolve_info.context.LANGUAGE_CODE = django.utils.translation.get_language()
-
-        if id:
-            page = graphene.Node.get_node_from_global_id(resolve_info, id)
-        elif pk:
-            page = Page.objects.get(pk=pk).specific
-        elif slug:
-            page = Page.objects.get(slug=slug).specific
-        else:
-            raise Exception('Please provide id or pk')
-
-        if show_preview:
-            page = get_page_with_preview_data(
-                page, resolve_info.context.session) or page
-
-        return page
-
 
 schema = graphene.Schema(query=Query)
