@@ -191,7 +191,7 @@ class JanisBasePage(Page):
     # ex: http://localhost:3000/es/preview/information/UGFnZVJldmlzaW9uTm9kZToyMjg=
     def preview_url_data(self, revision=None):
         return {
-            "janis_preview_url_start": self.janis_preview_url_start(),
+            "janis_preview_url_start": self.janis_preview_url_start('preview_janis_branch'),
             "janis_preview_url_end": self.janis_preview_url_end(revision=revision),
         }
 
