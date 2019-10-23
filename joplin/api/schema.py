@@ -61,7 +61,7 @@ class TopicPageTopicCollectionNode(DjangoObjectType):
         model = TopicPageTopicCollection
         interfaces = [graphene.Node]
         filter_fields = ['topiccollection']
-        
+
 
 class TopicNode(DjangoObjectType):
     class Meta:
@@ -343,11 +343,7 @@ class PageRevisionNode(DjangoObjectType):
 
 class SiteStructure(graphene.ObjectType):
     value = GenericScalar()
-    name = graphene.String()
     structure_json = JSONString()
-
-    def resolve_name(self, resolve_info, *args, **kwargs):
-        return "blarg"
 
     # json isn't a great way to do this, we should
     # figure out how to make it queryable
