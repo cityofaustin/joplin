@@ -171,11 +171,6 @@ class Language(graphene.Enum):
 
 
 class ServicePageNode(DjangoObjectType):
-    # related = graphene.List('api.schema.ServicePageNode')
-
-    # def resolve_related(self, resolve_info, *args, **kwargs):
-    #     return self.topic.servicepage_set.exclude(id=self.id)
-
     class Meta:
         model = ServicePage
         filter_fields = ['id', 'slug', 'live', 'coa_global']
@@ -232,6 +227,20 @@ class GuidePageSectionPageBlock(graphene.ObjectType):
     value = GenericScalar()
     service_page = graphene.Field(ServicePageNode)
     information_page = graphene.Field(InformationPageNode)
+    url = graphene.String()
+
+    def resolve_url(self, resolve_info, *args, **kwargs):
+        page = None
+        try:
+            page = ServicePage.objects.get(id=self.value)
+        except Exception as e:
+            try:
+                page = InformationPage.objects.get(id=self.value)
+            except Exception as e:
+                pass
+            pass
+        
+        return page.janis_url()
 
     def resolve_service_page(self, info):
         service_page = None
@@ -281,7 +290,6 @@ class GuidePageSection(graphene.ObjectType):
 
 class GuidePageNode(DjangoObjectType):
     sections = graphene.List(GuidePageSection)
-    janis_urls = graphene.List(graphene.String)
 
     class Meta:
         model = GuidePage
@@ -295,25 +303,6 @@ class GuidePageNode(DjangoObjectType):
             repr_sections.append(GuidePageSection(value=value))
 
         return repr_sections
-
-    def resolve_janis_urls(self, info):
-        return get_all_janis_urls(self)
-
-
-def get_all_janis_urls(page):
-    urls = []
-
-    # If we're under a department
-    for department in page.related_departments.all():
-        dept_url = f'/{department.related_department.slug}/{page.slug}/'
-        urls.append(dept_url)
-
-
-
-    # urls = ['one', 'two']
-    # x = page.janis_url()
-
-    return urls
 
 
 class PageRevisionNode(DjangoObjectType):
@@ -350,34 +339,6 @@ class PageRevisionNode(DjangoObjectType):
         model = PageRevision
         filter_fields = ['id']
         interfaces = [graphene.Node]
-
-
-class JanisPageNode(graphene.ObjectType):
-    value = GenericScalar()
-    as_service_page = graphene.NonNull(ServicePageNode)
-    as_information_page = graphene.NonNull(InformationPageNode)
-    as_department_page = graphene.NonNull(DepartmentPageNode)
-    as_topic_page = graphene.NonNull(TopicNode)
-    as_topic_collection_page = graphene.NonNull(TopicCollectionNode)
-    as_official_document_page = graphene.NonNull(OfficialDocumentPageNode)
-
-    def resolve_as_service_page(self, resolve_info, *args, **kwargs):
-        return self
-
-    def resolve_as_information_page(self, resolve_info, *args, **kwargs):
-        return self
-
-    def resolve_as_department_page(self, resolve_info, *args, **kwargs):
-        return self
-
-    def resolve_as_topic_page(self, resolve_info, *args, **kwargs):
-        return self
-
-    def resolve_as_topic_collection_page(self, resolve_info, *args, **kwargs):
-        return self
-
-    def resolve_as_official_document_page(self, resolve_info, *args, **kwargs):
-        return self
 
 
 class SiteStructure(graphene.ObjectType):
@@ -879,7 +840,6 @@ class Query(graphene.ObjectType):
     department_page = graphene.Node.Field(DepartmentPageNode)
     all_service_pages = DjangoFilterConnectionField(ServicePageNode)
     page_revision = graphene.Field(PageRevisionNode, id=graphene.ID())
-    page = graphene.Field(JanisPageNode, id=graphene.ID())
     site_structure = graphene.Field(SiteStructure)
     all_page_revisions = DjangoFilterConnectionField(PageRevisionNode)
     all_information_pages = DjangoFilterConnectionField(InformationPageNode)
