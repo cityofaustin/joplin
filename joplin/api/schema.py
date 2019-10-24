@@ -7,19 +7,103 @@ from graphene_django.filter import DjangoFilterConnectionField
 from graphene.types import Scalar
 from graphene.types.json import JSONString
 from graphene.types.generic import GenericScalar
-from wagtail.core.fields import StreamField
+from wagtail.core.fields import StreamField, RichTextField
 from wagtail.core.models import Page, PageRevision
 from django_filters import FilterSet, OrderingFilter
-from wagtail.core.blocks import PageChooserBlock, TextBlock, ListBlock
+from wagtail.core.blocks import *
 from wagtail.documents.models import Document
-
+from wagtail.core.rich_text import expand_db_html
 from base.models import JanisBasePage, TranslatedImage, ThreeOneOne, ServicePage, ServicePageContact, ServicePageTopic, ServicePageRelatedDepartments, InformationPageRelatedDepartments, ProcessPage, ProcessPageStep, ProcessPageContact, ProcessPageTopic, InformationPage, InformationPageContact, InformationPageTopic, DepartmentPage, DepartmentPageContact, DepartmentPageDirector, Theme, TopicCollectionPage, TopicPage, Contact, Location, ContactDayAndDuration, Department, DepartmentContact, TopicPageTopicCollection, OfficialDocumentPage, OfficialDocumentPageRelatedDepartments, OfficialDocumentPageTopic, OfficialDocumentPageOfficialDocument, GuidePage, GuidePageTopic, GuidePageRelatedDepartments, GuidePageContact, JanisBasePage, PhoneNumber, DepartmentPageTopPage, DepartmentPageRelatedPage, TopicPageTopPage
+import traceback
+import pdb
+
+
+class RichTextFieldType(Scalar):
+    """
+    Serialises RichText content into fully baked HTML
+    see https://github.com/wagtail/wagtail/issues/2695#issuecomment-464462575
+    """
+    @staticmethod
+    def serialize(value):
+        return expand_db_html(value)
+
+
+@convert_django_field.register(RichTextField)
+def convert_rich_text_field(field, registry=None):
+    return RichTextFieldType(
+        description=field.help_text, required=not field.null
+    )
+
+
+def try_expand_db_html(parsed_item):
+    """
+    expand_db_html errors out if not used on a string.
+    becuase this process is so complicated, we wrap it in some error handiling
+    so we can debug/catch an exception if someone adds a data schema later
+    that causes problems
+    """
+    try:
+        return expand_db_html(parsed_item)
+    except Exception as e:
+        print('Streamfield API Exception!', e)
+        print(traceback.format_exc())
+        return parsed_item
+
+
+def expand_dict_values(item):
+    """
+    dict comprehension that expands db html on each item in a dict
+    """
+    return {key: try_expand_db_html(value) for (key, value) in item.items()}
+
+
+def expand_by_type(key, value):
+    """
+    recursive function to
+    handle the streamfield black items differently depending on type
+    and loop through again if its a dict
+    """
+    if isinstance(value, str):
+        parsed_item = try_expand_db_html(value)
+        return parsed_item
+    elif isinstance(value, list):
+        parsed_item = [expand_dict_values(item) for item in value]
+        return parsed_item
+    elif isinstance(value, dict):
+        try_get_api_representation(value)
+
+
+def try_get_api_representation(StreamChild):
+    try:
+        block = StreamChild.block.get_api_representation(StreamChild.value)
+        # if the block is just a string (no dict at all), just return it expanded
+        if isinstance(block, str):
+            parsed_block = try_expand_db_html(block)
+            return parsed_block
+        else:
+            parsed_block = {key: expand_by_type(key, value) for (key, value) in block.items()}
+
+        return parsed_block
+    except Exception as e:
+        print('Streamfield API Exception!', e)
+        print(traceback.format_exc())
+        return block
 
 
 class StreamFieldType(Scalar):
     @staticmethod
-    def serialize(dt):
-        return [{'type': item.block_type, 'value': item.block.get_api_representation(item.value), 'id': item.id} for item in dt]
+    def serialize(StreamValue):
+        """
+        Returns Streamfields for the api, also expanding db html to make sure links work
+        """
+        expanded_streamfields = [
+            {
+                'type': StreamChild.block_type,
+                'value': try_get_api_representation(StreamChild),
+                'id': StreamChild.id
+            } for StreamChild in StreamValue
+        ]
+        return expanded_streamfields
 
 
 @convert_django_field.register(StreamField)

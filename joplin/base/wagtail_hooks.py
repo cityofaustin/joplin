@@ -1,6 +1,10 @@
 from django.db import models
 from django import forms
 from wagtail.contrib.settings.models import BaseSetting, register_setting
+from django.utils.html import escape
+from wagtail.core.models import Page
+from wagtail.core.rich_text import LinkHandler
+from wagtail.core.rich_text.pages import PageLinkHandler
 from django.conf import settings
 from django.contrib.staticfiles.templatetags.staticfiles import static
 from django.urls import reverse
@@ -91,6 +95,7 @@ def register_contacts_menu_item():
 def register_users_menu_item():
     return MenuItem('Users', "/admin/users/", classnames="material-icons icon-users", order=50)
 
+
 # Allow users to edit JanisBranchSettings on PR branches and Local only
 if settings.ISLOCAL or settings.ISREVIEW:
     # Need to add custom js webpack bundle
@@ -122,6 +127,7 @@ if settings.ISLOCAL or settings.ISREVIEW:
 #
 #
 # modeladmin_register(ReallyAwesomeGroup)
+
 
 @hooks.register('register_joplin_page_listing_buttons')
 def joplin_page_listing_buttons(page, page_perms, is_parent=False):
@@ -260,3 +266,32 @@ def show_live_pages_only(pages, request):
     pages = pages.filter(live=True)
 
     return pages
+
+
+class InternalLinkHandler(LinkHandler):
+    identifier = 'page'
+
+    @staticmethod
+    def get_model():
+        return Page
+
+    @classmethod
+    def get_instance(cls, attrs):
+        return super().get_instance(attrs).specific
+
+    @classmethod
+    def expand_db_attributes(cls, attrs):
+        try:
+            page = cls.get_instance(attrs)
+            return '<a href="%s">' % escape(page.janis_url())
+        except Page.DoesNotExist:
+            return "<a>"
+        except Exception as e:
+            print("!janis url hook error!:", self.title, e)
+            print(traceback.format_exc())
+            pass
+
+
+@hooks.register('register_rich_text_features', order=1)
+def register_link_handler(features):
+    features.register_link_type(InternalLinkHandler)

@@ -18,6 +18,7 @@ Joplin is the Authoring Interface for adding and editing content for alpha.austi
 -   [Useful Commands](#useful-commands)
 -   [Debugging With Pycharm](#debugging-with-pycharm)
 -   [Design](#design)
+-   [Related Repos](#related-repos)
 -   [Misc](#misc)
 
 ---
@@ -29,9 +30,11 @@ First, install docker (version 18.09 or greater) and clone this repo.
 **Add .env file**
 
 Copy the template and modify for your local environment as you see fit.
+
 ```
 cp template.env .env
 ```
+
 This will automatically load environment variables into your pipenv environment. (If you choose to run Joplin on your host machine without docker). Commands like `pipenv run ./joplin/manage.py migrate` will then know which database to use.
 
 **Run without data**
@@ -338,6 +341,28 @@ We're using webpack to bundle syles and scripts, and webpack_loader to include t
 
 ---
 
+## Related Repos
+
+There are a couple notable dependencies used by this project:
+
+### Forked projects
+
+There are a couple existing projects that we use for Joplin and needed to fork to add functionality for our purposes. In these cases these forks are hopefully temporary, as we'd like to be able to contribute back to the main projects.
+
+https://github.com/cityofaustin/django-countable-field
+
+Provides support for multiple Django field types. It used used to add a character count widget to designated fields.
+
+https://github.com/cityofaustin/wagtail-modeltranslation
+
+We use wagtail-modeltranslation to handle translated fields, this fork corrects a single line of code to make it compatible with current and future versions of wagtail.
+
+### Publisher
+
+https://github.com/cityofaustin/publisher
+
+Microservice that handles publishing versions of Janis based on branches of Joplin.
+
 ## Misc
 
 #### Static File Uploads
@@ -353,6 +378,7 @@ HEROKU_JANIS_APP_NAME=janis-staging ./scripts/serve-local.sh
 ```
 
 #### Syncing prod data to staging
-1. Create a new seeding data backup sourced from prod, using `migration_test.sh`
+
+1. Create a new seeding data backup sourced from prod, using `LOAD_PROD_DATA=on migration_test.sh`
 2. Drop the staging database (go to heroku and delete the database on staging)
 3. Push code with with new backup to master. This will rebuild the database and then seed it with your latest seeding datadump
