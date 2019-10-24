@@ -10,13 +10,21 @@ from wagtail.core import urls as wagtail_urls
 from wagtail.documents import urls as wagtaildocs_urls
 from base.views import joplin_views
 from django.urls import reverse
-from base.models import HomePage
+# from base.models import HomePage
 import debug_toolbar
 
 
 def home(request):
-    page = HomePage.objects.first()
-    return redirect('wagtailadmin_explore', page.id)
+    # page = HomePage.objects.first()
+    print('\n😬😬\n')
+    print(request)
+    # print(HomePage)
+    # print(page, page.id)
+    print('\n😬\n')
+    # return redirect('wagtailadmin_explore', page.id)
+    return redirect('pages/search/')
+
+
 
 
 def login(request):
@@ -34,6 +42,9 @@ urlpatterns = [
     url(r'admin/pages/(\d+)/publish/$', joplin_views.publish, name='publish'),
     url(r'admin/pages/new_from_modal/$',
         joplin_views.new_page_from_modal, name='new_page_from_modal'),
+    # 🔥
+    url(r'admin/pages/search/$', joplin_views.search, name='search'),
+    # 🔥
     url(r'^admin/', include(wagtailadmin_urls)),
     url(r'^documents/', include(wagtaildocs_urls)),
     path('__debug__/', include(debug_toolbar.urls)),
