@@ -436,7 +436,7 @@ class SiteStructure(graphene.ObjectType):
         site_structure = []
         topic_collections = TopicCollectionPage.objects.all()
         for topic_collection in topic_collections:
-            if not tc.topiccollection.theme:
+            if not topic_collection.theme:
                 continue
 
             topic_collection_global_id = graphene.Node.to_global_id('TopicCollectionNode', topic_collection.id)
