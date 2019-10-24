@@ -172,6 +172,9 @@ class JanisBasePage(Page):
         returns a valid url of the base URL in janis:
             Use hardcoded JANIS_URL for staging and prod
             Otherwise, use configurable branch setting
+
+        TODO: this and url_base in site settings could probably
+        be revisited for semantics to be less confusing
         """
         if settings.ISSTAGING or settings.ISPRODUCTION:
             return os.getenv("JANIS_URL")
