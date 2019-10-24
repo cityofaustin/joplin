@@ -436,6 +436,9 @@ class SiteStructure(graphene.ObjectType):
         site_structure = []
         topic_collections = TopicCollectionPage.objects.all()
         for topic_collection in topic_collections:
+            if not tc.topiccollection.theme:
+                continue
+
             topic_collection_global_id = graphene.Node.to_global_id('TopicCollectionNode', topic_collection.id)
             site_structure.append({'url' :f'/{topic_collection.theme.slug}/{topic_collection.slug}/', 'type': 'topic collection', 'id': topic_collection_global_id});
 
@@ -543,7 +546,7 @@ class SiteStructure(graphene.ObjectType):
                 for tc in guide_page_topic_tcs:
                     if not tc.topiccollection.theme:
                         continue
-                        
+
                     guide_page_topic_tc_global_id = graphene.Node.to_global_id('TopicCollectionNode', tc.topiccollection.id)
                     site_structure.append({'url' :f'/{tc.topiccollection.theme.slug}/{tc.topiccollection.slug}/{guide_page_topic.topic.slug}/{guide_page.slug}/', 'type': 'guide page', 'id': guide_page_global_id, 'parent_topic': guide_page_topic_global_id, 'grandparent_topic_collection': guide_page_topic_tc_global_id})
 
