@@ -167,7 +167,7 @@ class JanisBasePage(Page):
             # Janis will query from its default CMS_API if a param is not provided
             return url_end + f"?CMS_API={settings.CMS_API}"
 
-    def janis_url_base(self, branch):
+    def janis_url_base(self, janis_branch):
         """
         returns a valid url of the base URL in janis:
             Use hardcoded JANIS_URL for staging and prod
@@ -180,7 +180,7 @@ class JanisBasePage(Page):
             return os.getenv("JANIS_URL")
         else:
             branch_settings = JanisBranchSettings.objects.first()
-            return branch_settings.url_base(branch)
+            return branch_settings.url_base(janis_branch)
 
     # alias for url base function
     janis_preview_url_start = janis_url_base

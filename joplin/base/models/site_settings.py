@@ -41,7 +41,7 @@ class JanisBranchSettings(BaseSetting):
     ]
 
     # Convert branch name to a netlify URL
-    def url_base(self, branch):
+    def url_base(self, janis_branch):
         """
         Returns base url depending on branch setting
         """
@@ -51,7 +51,7 @@ class JanisBranchSettings(BaseSetting):
         else:
             try:
                 # Netlify site names are limited to 63 characters
-                return f"https://{('janis-' + getattr(self, branch))[:63]}.netlify.com"
+                return f"https://{('janis-' + getattr(self, janis_branch))[:63]}.netlify.com"
             except AttributeError as e:
                 # TODO: better handiling, I think this defaults back to staging/prod as is
                 print("something missing", e)
