@@ -281,7 +281,6 @@ class InternalLinkHandler(LinkHandler):
 
     @classmethod
     def expand_db_attributes(cls, attrs):
-        print("expanding!")
         try:
             page = cls.get_instance(attrs)
             return '<a href="%s">' % escape(page.janis_url())
