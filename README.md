@@ -18,6 +18,7 @@ Joplin is the Authoring Interface for adding and editing content for alpha.austi
 -   [Useful Commands](#useful-commands)
 -   [Debugging With Pycharm](#debugging-with-pycharm)
 -   [Design](#design)
+-   [Related Repos](#related-repos)
 -   [Misc](#misc)
 
 ---
@@ -339,6 +340,28 @@ To get a full set of icons that Wagtail has available you'll need to upload [Wag
 We're using webpack to bundle syles and scripts, and webpack_loader to include them in our templates. To create a new bundle it should be defined as an entry in `webpack.build.js` and `webpack.dev.js`, then included in a template using `{% load render_bundle from webpack_loader %}` and `{% render_bundle 'YOUR_BUNDLE_NAME_HERE' %}`.
 
 ---
+
+## Related Repos
+
+There are a couple notable dependencies used by this project:
+
+### Forked projects
+
+There are a couple existing projects that we use for Joplin and needed to fork to add functionality for our purposes. In these cases these forks are hopefully temporary, as we'd like to be able to contribute back to the main projects.
+
+https://github.com/cityofaustin/django-countable-field
+
+Provides support for multiple Django field types. It used used to add a character count widget to designated fields.
+
+https://github.com/cityofaustin/wagtail-modeltranslation
+
+We use wagtail-modeltranslation to handle translated fields, this fork corrects a single line of code to make it compatible with current and future versions of wagtail.
+
+### Publisher
+
+https://github.com/cityofaustin/publisher
+
+Microservice that handles publishing versions of Janis based on branches of Joplin.
 
 ## Misc
 
