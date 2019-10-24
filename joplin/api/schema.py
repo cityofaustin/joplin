@@ -444,6 +444,9 @@ class SiteStructure(graphene.ObjectType):
             topic_global_id = graphene.Node.to_global_id('TopicNode', topic.id)
             topic_tcs = topic.topiccollections.all()
             for tc in topic_tcs:
+                if not tc.topiccollection.theme:
+                    continue
+
                 topic_tc_global_id = graphene.Node.to_global_id('TopicCollectionNode', tc.topiccollection.id)
                 site_structure.append({'url' :f'/{tc.topiccollection.theme.slug}/{tc.topiccollection.slug}/{topic.slug}/', 'type': 'topic', 'id': topic_global_id, 'parent_topic_collection': topic_tc_global_id})
 
@@ -469,6 +472,9 @@ class SiteStructure(graphene.ObjectType):
                 service_page_topic_global_id = graphene.Node.to_global_id('TopicNode', service_page_topic.topic.id)
                 service_page_topic_tcs = service_page_topic.topic.topiccollections.all()
                 for tc in service_page_topic_tcs:
+                    if not tc.topiccollection.theme:
+                        continue
+
                     service_page_topic_tc_global_id = graphene.Node.to_global_id('TopicCollectionNode', tc.topiccollection.id)
                     site_structure.append({'url' :f'/{tc.topiccollection.theme.slug}/{tc.topiccollection.slug}/{service_page_topic.topic.slug}/{service_page.slug}/', 'type': 'service page', 'id': service_page_global_id, 'parent_topic': service_page_topic_global_id, 'grandparent_topic_collection': service_page_topic_tc_global_id})
 
@@ -489,6 +495,9 @@ class SiteStructure(graphene.ObjectType):
                 information_page_topic_global_id = graphene.Node.to_global_id('TopicNode', information_page_topic.topic.id)
                 information_page_topic_tcs = information_page_topic.topic.topiccollections.all()
                 for tc in information_page_topic_tcs:
+                    if not tc.topiccollection.theme:
+                        continue
+
                     information_page_topic_tc_global_id = graphene.Node.to_global_id('TopicCollectionNode', tc.topiccollection.id)
                     site_structure.append({'url' :f'/{tc.topiccollection.theme.slug}/{tc.topiccollection.slug}/{information_page_topic.topic.slug}/{information_page.slug}/', 'type': 'information page', 'id': information_page_global_id, 'parent_topic': information_page_topic_global_id, 'grandparent_topic_collection': information_page_topic_tc_global_id})
 
@@ -509,6 +518,9 @@ class SiteStructure(graphene.ObjectType):
                 official_document_page_topic_global_id = graphene.Node.to_global_id('TopicNode', official_document_page_topic.topic.id)
                 official_document_page_topic_tcs = official_document_page_topic.topic.topiccollections.all()
                 for tc in official_document_page_topic_tcs:
+                    if not tc.topiccollection.theme:
+                        continue
+
                     official_document_page_topic_tc_global_id = graphene.Node.to_global_id('TopicCollectionNode', tc.topiccollection.id)
                     site_structure.append({'url' :f'/{tc.topiccollection.theme.slug}/{tc.topiccollection.slug}/{official_document_page_topic.topic.slug}/{official_document_page.slug}/', 'type': 'official document page', 'id': official_document_page_global_id, 'parent_topic': official_document_page_topic_global_id, 'grandparent_topic_collection': official_document_page_topic_tc_global_id})
 
@@ -529,6 +541,9 @@ class SiteStructure(graphene.ObjectType):
                 guide_page_topic_global_id = graphene.Node.to_global_id('TopicNode', guide_page_topic.topic.id)
                 guide_page_topic_tcs = guide_page_topic.topic.topiccollections.all()
                 for tc in guide_page_topic_tcs:
+                    if not tc.topiccollection.theme:
+                        continue
+                        
                     guide_page_topic_tc_global_id = graphene.Node.to_global_id('TopicCollectionNode', tc.topiccollection.id)
                     site_structure.append({'url' :f'/{tc.topiccollection.theme.slug}/{tc.topiccollection.slug}/{guide_page_topic.topic.slug}/{guide_page.slug}/', 'type': 'guide page', 'id': guide_page_global_id, 'parent_topic': guide_page_topic_global_id, 'grandparent_topic_collection': guide_page_topic_tc_global_id})
 
