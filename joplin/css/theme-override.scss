@@ -1,0 +1,24 @@
+@import './variables';
+@import './utilities/border-box-reset';
+@import './layouts/headers';
+@import './layouts/left_sidebar_nav';
+@import './layouts/listing';
+@import './buttons';
+@import './pages/edit';
+
+// Wagtail overrides for a particular theme
+
+.header.coa-header {
+  background-color: $coa-color-primary;
+}
+
+.menu-active.menu-active {
+  background-color: $coa-color-primary-active;
+}
+.inner {
+  background-color: $coa-color-primary !important;
+}
+
+.dropdown-toggle {
+  background-color: $coa-color-primary !important;
+}

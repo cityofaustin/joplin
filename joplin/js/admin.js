@@ -1,4 +1,5 @@
 import '../css/admin.scss';
+import '../css/theme-override.scss';
 
 $(function() {
   // HACK: I can't find a way to configure this to be closed via python
