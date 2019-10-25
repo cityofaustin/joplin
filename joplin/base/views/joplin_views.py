@@ -59,7 +59,7 @@ def publish(request, page_id):
         if next_url:
             return redirect(next_url)
         # return redirect('wagtailadmin_explore', page.get_parent().id)
-        return redirect('pages/search/', page.id)
+        return redirect('pages/search/')
 
 
     return render(request, 'wagtailadmin/pages/confirm_publish.html', {
@@ -115,7 +115,7 @@ def new_page_from_modal(request):
 
 def search(request):
     print('\n😬🚀\n')
-    print(request)
+    print(request.GET)
     print('\n😬🚀\n')
     pages = all_pages = Page.objects.all().prefetch_related('content_type').specific()
     q = MATCH_ALL
@@ -158,18 +158,24 @@ def search(request):
 
     if 'q' in request.GET:
         form = SearchForm(request.GET)
-        if form.is_valid():
-            q = form.cleaned_data['q']
-            pagination_query_params['q'] = q
-
-            all_pages = all_pages.search(q, order_by_relevance=not ordering, operator='and')
-            pages = pages.search(q, order_by_relevance=not ordering, operator='and')
-
-            if pages.supports_facet:
-                content_types = [
-                    (ContentType.objects.get(id=content_type_id), count)
-                    for content_type_id, count in all_pages.facet('content_type_id').items()
-                ]
+        # if form.is_valid():
+        #     q = form.cleaned_data['q']
+        #     pagination_query_params['q'] = q
+        #     print('😈\n')
+        #     print('😈\n',q)
+        #     print('😈\n',form)
+        #     print('😈\n',ordering)
+        #     print('😈\n',pages[0])
+        #     print('😎\n')
+        #     all_pages = all_pages.search(q, order_by_relevance=not ordering, operator='and')
+        #     print('😈\n',all_pages)
+        #     pages = pages.search(q, order_by_relevance=not ordering, operator='and')
+        #
+        #     if pages.supports_facet:
+        #         content_types = [
+        #             (ContentType.objects.get(id=content_type_id), count)
+        #             for content_type_id, count in all_pages.facet('content_type_id').items()
+        #         ]
 
     else:
         form = SearchForm()

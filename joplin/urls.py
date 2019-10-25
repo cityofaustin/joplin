@@ -18,13 +18,11 @@ def home(request):
     # page = HomePage.objects.first()
     print('\n😬😬\n')
     print(request)
+    print('\n😬\n')
     # print(HomePage)
     # print(page, page.id)
-    print('\n😬\n')
     # return redirect('wagtailadmin_explore', page.id)
     return redirect('pages/search/')
-
-
 
 
 def login(request):
@@ -43,7 +41,7 @@ urlpatterns = [
     url(r'admin/pages/new_from_modal/$',
         joplin_views.new_page_from_modal, name='new_page_from_modal'),
     # 🔥
-    url(r'admin/pages/search/$', joplin_views.search, name='search'),
+    url(r'admin/pages/search/$', joplin_views.search, name='search' ),
     # 🔥
     url(r'^admin/', include(wagtailadmin_urls)),
     url(r'^documents/', include(wagtaildocs_urls)),
