@@ -12,7 +12,8 @@ module.exports = {
   entry: {
     admin: path.resolve(__dirname, "./js/admin.js"),
     editor: path.resolve(__dirname, "./js/editor.js"),
-    createContentModal: path.resolve(__dirname, "./js/CreateContentModal/index.js")
+    createContentModal: path.resolve(__dirname, "./js/CreateContentModal/index.js"),
+    janisBranchSettings: path.resolve(__dirname, "./js/janisBranchSettings.js"),
   },
   module: {
     rules: [

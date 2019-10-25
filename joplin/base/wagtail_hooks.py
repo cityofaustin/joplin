@@ -1,8 +1,16 @@
+from django.db import models
+from django import forms
+from wagtail.contrib.settings.models import BaseSetting, register_setting
+from django.utils.html import escape
+from wagtail.core.models import Page
+from wagtail.core.rich_text import LinkHandler
+from wagtail.core.rich_text.pages import PageLinkHandler
 from django.conf import settings
 from django.contrib.staticfiles.templatetags.staticfiles import static
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from django.utils.html import format_html_join
+from webpack_loader import utils as webpack_loader_utils
 
 from wagtail.admin.menu import MenuItem
 from wagtail.contrib.modeladmin.options import ModelAdmin, ModelAdminGroup, modeladmin_register
@@ -88,6 +96,22 @@ def register_users_menu_item():
     return MenuItem('Users', "/admin/users/", classnames="material-icons icon-users", order=50)
 
 
+# Allow users to edit JanisBranchSettings on PR branches and Local only
+if settings.ISLOCAL or settings.ISREVIEW:
+    # Need to add custom js webpack bundle
+    class BranchSettingsMenuItem(MenuItem):
+        @property
+        def media(self):
+            super_media = super(BranchSettingsMenuItem, self).media
+            js = super_media._js
+            css = super_media._css
+            js.append(webpack_loader_utils.get_files('janisBranchSettings')[0]['url'])
+            return forms.Media(css=css, js=js)
+
+    @hooks.register('register_admin_menu_item')
+    def register_options_menu_item():
+        return BranchSettingsMenuItem('Options', "/admin/settings/base/janisbranchsettings/2/", classnames="material-icons icon-settings", order=60)
+
 # example of rendering custom nested menu items
 # class LocationModelAdmin(ModelAdmin):
 #     model = Location
@@ -104,6 +128,7 @@ def register_users_menu_item():
 #
 # modeladmin_register(ReallyAwesomeGroup)
 
+
 @hooks.register('register_joplin_page_listing_buttons')
 def joplin_page_listing_buttons(page, page_perms, is_parent=False):
     if page_perms.can_edit():
@@ -115,13 +140,16 @@ def joplin_page_listing_buttons(page, page_perms, is_parent=False):
             priority=10
         )
     if page.has_unpublished_changes:
-        yield PageListingButton(
-            _('View draft'),
-            page.janis_preview_url(),
-            attrs={'title': _("Preview draft version of '{title}'").format(
-                title=page.get_admin_display_title()), 'target': '_blank'},
-            priority=20
-        )
+        try:
+            yield PageListingButton(
+                _('View draft'),
+                page.janis_preview_url(),
+                attrs={'title': _("Preview draft version of '{title}'").format(
+                    title=page.get_admin_display_title()), 'target': '_blank'},
+                priority=20
+            )
+        except Exception as e:
+            raise e
     if page.live and page.url and hasattr(page, 'janis_url'):
         yield PageListingButton(
             _('View live'),
@@ -238,3 +266,32 @@ def show_live_pages_only(pages, request):
     pages = pages.filter(live=True)
 
     return pages
+
+
+class InternalLinkHandler(LinkHandler):
+    identifier = 'page'
+
+    @staticmethod
+    def get_model():
+        return Page
+
+    @classmethod
+    def get_instance(cls, attrs):
+        return super().get_instance(attrs).specific
+
+    @classmethod
+    def expand_db_attributes(cls, attrs):
+        try:
+            page = cls.get_instance(attrs)
+            return '<a href="%s">' % escape(page.janis_url())
+        except Page.DoesNotExist:
+            return "<a>"
+        except Exception as e:
+            print("!janis url hook error!:", self.title, e)
+            print(traceback.format_exc())
+            pass
+
+
+@hooks.register('register_rich_text_features', order=1)
+def register_link_handler(features):
+    features.register_link_type(InternalLinkHandler)
