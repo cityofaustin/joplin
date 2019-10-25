@@ -6,8 +6,6 @@
 @import './buttons';
 @import './pages/edit';
 
-// Wagtail overrides for a particular theme
-
 .header.coa-header {
   background-color: $coa-color-primary;
 }
@@ -21,4 +19,8 @@
 
 .dropdown-toggle {
   background-color: $coa-color-primary !important;
+}
+
+#wagtail > div.wrapper, #wagtail > div.wrapper > main {
+  background-color: $coa-color-primary;
 }

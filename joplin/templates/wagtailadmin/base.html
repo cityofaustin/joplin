@@ -10,10 +10,18 @@
 
 
 {{ block.super }}
+
+<script>
+    const ISPRODUCTION = '{{ISPRODUCTION}}';
+</script>
 {% render_bundle 'admin' %}
+{% if ISPRODUCTION == False %}
+  {% render_bundle 'theme' %}
+{% endif %}
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet">
 {% include 'session_security/all.html' %}
+{{DEPLOYMENT_MODE}}
 <div class="header coa-header">
     <div>
         <img class="wagtail-logo wagtail-logo__full" src="{% static 'images/coa_seal_transparent_white.png' %}" alt="Welcome to City of Austin CMS" width="60" />
@@ -34,4 +42,5 @@
         </div>
     </div>
 </div>
+
 {% endblock %}
