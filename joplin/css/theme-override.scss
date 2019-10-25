@@ -1,10 +1,4 @@
 @import './variables';
-@import './utilities/border-box-reset';
-@import './layouts/headers';
-@import './layouts/left_sidebar_nav';
-@import './layouts/listing';
-@import './buttons';
-@import './pages/edit';
 
 .header.coa-header {
   background-color: $coa-color-primary;
