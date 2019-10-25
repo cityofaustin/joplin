@@ -89,9 +89,6 @@ def new_page_from_modal(request):
         return response
 
 def search(request):
-    print('\n😬🚀\n')
-    print(request.GET)
-    print('\n😬🚀\n')
     pages = all_pages = Page.objects.all().prefetch_related('content_type').specific()
     q = MATCH_ALL
     content_types = []
@@ -99,10 +96,25 @@ def search(request):
     ordering = None
 
     if 'ordering' in request.GET:
-        if request.GET['ordering'] in ['title', '-title', 'latest_revision_created_at', '-latest_revision_created_at', 'live', '-live']:
+        if request.GET['ordering'] in ['content_type', '-content_type', 'owner', '-owner', 'title', '-title', 'latest_revision_created_at', '-latest_revision_created_at', 'live', '-live']:
             ordering = request.GET['ordering']
 
             if ordering == 'title':
+                pages = pages.order_by('title')
+            elif ordering == '-title':
+                pages = pages.order_by('-title')
+
+            if ordering == 'content_type':
+                pages = pages.order_by('content_type')
+            elif ordering == '-content_type':
+                pages = pages.order_by('-content_type')
+
+            if ordering == 'owner':
+                pages = pages.order_by('owner')
+            elif ordering == '-owner':
+                pages = pages.order_by('-owner')
+
+            if ordering == '-"title':
                 pages = pages.order_by('title')
             elif ordering == '-title':
                 pages = pages.order_by('-title')
@@ -131,29 +143,37 @@ def search(request):
     else:
         selected_content_type = None
 
+    query = ''
     if 'q' in request.GET:
         form = SearchForm(request.GET)
-        # if form.is_valid():
-        #     q = form.cleaned_data['q']
-        #     pagination_query_params['q'] = q
-        #     print('😈\n')
-        #     print('😈\n',q)
-        #     print('😈\n',form)
-        #     print('😈\n',ordering)
-        #     print('😈\n',pages[0])
-        #     print('😎\n')
-        #     all_pages = all_pages.search(q, order_by_relevance=not ordering, operator='and')
-        #     print('😈\n',all_pages)
-        #     pages = pages.search(q, order_by_relevance=not ordering, operator='and')
-        #
-        #     if pages.supports_facet:
-        #         content_types = [
-        #             (ContentType.objects.get(id=content_type_id), count)
-        #             for content_type_id, count in all_pages.facet('content_type_id').items()
-        #         ]
+        if form.is_valid():
 
+            q = form.cleaned_data['q']
+            pagination_query_params['q'] = q
+            query = q
+            # all_pages = all_pages.search(q, order_by_relevance=not ordering, operator='and')
+
+            pages = pages.search(q) # * Code Modified From...
+            # pages = pages.search(q, order_by_relevance=not ordering, operator='and')
+
+            # if pages.supports_facet:
+            #     content_types = [
+            #         (ContentType.objects.get(id=content_type_id), count)
+            #         for content_type_id, count in all_pages.facet('content_type_id').items()
+            #     ]
     else:
         form = SearchForm()
+        for page in pages:
+            if page.title == "Root" or page.title == "Home":
+                pages = pages.not_page(page)
+                all_pages = all_pages.not_page(page)
+    print(q)
+
+    all_pages = all_pages.search(q, order_by_relevance=not ordering, operator='and')
+    content_types = [
+        (ContentType.objects.get(id=content_type_id), count)
+        for content_type_id, count in all_pages.facet('content_type_id').items()
+    ]
 
     paginator = Paginator(pages, per_page=20)
     pages = paginator.get_page(request.GET.get('p'))
@@ -173,7 +193,7 @@ def search(request):
             'search_form': form,
             'pages': pages,
             'all_pages': all_pages,
-            'query_string': q,
+            'query_string': query,
             'content_types': content_types,
             'selected_content_type': selected_content_type,
             'ordering': ordering,

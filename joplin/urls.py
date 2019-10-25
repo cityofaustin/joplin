@@ -16,11 +16,6 @@ import debug_toolbar
 
 def home(request):
     # page = HomePage.objects.first()
-    print('\n😬😬\n')
-    print(request)
-    print('\n😬\n')
-    # print(HomePage)
-    # print(page, page.id)
     # return redirect('wagtailadmin_explore', page.id)
     return redirect('pages/search/')
 
@@ -40,9 +35,7 @@ urlpatterns = [
     url(r'admin/pages/(\d+)/publish/$', joplin_views.publish, name='publish'),
     url(r'admin/pages/new_from_modal/$',
         joplin_views.new_page_from_modal, name='new_page_from_modal'),
-    # 🔥
     url(r'admin/pages/search/$', joplin_views.search, name='search' ),
-    # 🔥
     url(r'^admin/', include(wagtailadmin_urls)),
     url(r'^documents/', include(wagtaildocs_urls)),
     path('__debug__/', include(debug_toolbar.urls)),

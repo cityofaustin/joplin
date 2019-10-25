@@ -18,6 +18,7 @@
   {% include "wagtailadmin/shared/header.html" with title=search_str search_url="wagtailadmin_pages:search" icon="search" %}
 
   <div id="page-results">
-      {% include "wagtailadmin/pages/search_results.html" %}
+      {% include "wagtailadmin/pages/search_results.html" with query_string=query_string %}
   </div>
+
 {% endblock %}
