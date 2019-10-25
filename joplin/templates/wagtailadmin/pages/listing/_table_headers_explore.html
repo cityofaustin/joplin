@@ -20,9 +20,9 @@ ordering: the current sort parameter
         <th class="ord">
             {% if orderable %}
                 {% if ordering == "ord" %}
-                    <a href="{% url 'wagtailadmin_explore' parent_page.id %}" class="icon icon-order text-replace" title="{% trans 'Disable ordering of child pages' %}">{% trans 'Order' %}</a>
+                    <a href="?{{ request.GET.urlencode }}" class="icon icon-order text-replace" title="{% trans 'Disable ordering of child pages' %}">{% trans 'Order' %}</a>
                 {% else %}
-                    <a href="{% url 'wagtailadmin_explore' parent_page.id %}?ordering=ord" class="icon icon-order text-replace" title="{% trans 'Enable ordering of child pages' %}">{% trans 'Order' %}</a>
+                    <a href="?{{ request.GET.urlencode }}&ordering=ord" class="icon icon-order text-replace" title="{% trans 'Enable ordering of child pages' %}">{% trans 'Order' %}</a>
                 {% endif %}
             {% endif %}
         </th>
@@ -30,9 +30,8 @@ ordering: the current sort parameter
     <th class="title">
         {% if sortable %}
             <a href="?{{ request.GET.urlencode }}&ordering={% if ordering == 'title' %}-{% endif %}title" class="icon icon-arrow-{% if ordering == 'title' %}down-after{% elif ordering == '-title' %}up-after{% else %}down-after{% endif %} {% if ordering == 'title' or ordering == '-title' %}teal{% endif %}">
-                {% trans '🔥Title' %}
+                {% trans 'Title' %}
             </a>
-            <button onClick="handleSortQuery()">AHHH</button>
         {% else %}
             {% trans 'Title' %}
         {% endif %}
@@ -51,7 +50,8 @@ ordering: the current sort parameter
     </th>
     <th class="type">
         {% if sortable %}
-            <a href="{% url 'wagtailadmin_explore' 3 %}?ordering={% if ordering == 'content_type' %}-{% endif %}content_type" class="icon icon-arrow-{% if ordering == '-content_type' %}up-after{% else %}down-after{% endif %} {% if ordering == 'content_type' or ordering == '-content_type' %}teal {% endif %}">
+            <a href="?{{ request.GET.urlencode }}&ordering={% if ordering == 'content_type' %}-{% endif %}content_type"
+              class="icon icon-arrow-{% if ordering == '-content_type' %}up-after{% else %}down-after{% endif %} {% if ordering == 'content_type' or ordering == '-content_type' %}teal {% endif %}">
                 {% trans 'Type' %}
             </a>
         {% else %}
@@ -60,7 +60,7 @@ ordering: the current sort parameter
     </th>
     <th class="author">
         {% if sortable %}
-            <a href="{% url 'wagtailadmin_explore' 3 %}?ordering={% if ordering == 'author' %}-{% endif %}author" class="icon icon-arrow-{% if ordering == '-author' %}up-after{% else %}down-after{% endif %} {% if ordering == 'author' or ordering == '-author' %}teal {% endif %}">
+            <a href="?{{ request.GET.urlencode }}&ordering={% if ordering == 'owner' %}-{% endif %}owner" class="icon icon-arrow-{% if ordering == '-owner' %}up-after{% else %}down-after{% endif %} {% if ordering == 'owner' or ordering == '-owner' %}teal {% endif %}">
                 {% trans 'Author' %}
             </a>
         {% else %}
@@ -69,7 +69,7 @@ ordering: the current sort parameter
     </th>
     <th class="status">
         {% if sortable %}
-            <a href="{% url 'wagtailadmin_explore' 3 %}?ordering={% if ordering == 'live' %}-{% endif %}live" class="icon icon-arrow-{% if ordering == '-live' %}up-after{% else %}down-after{% endif %} {% if ordering == 'live' or ordering == '-live' %}teal {% endif %}">
+            <a href="?{{ request.GET.urlencode }}&ordering={% if ordering == 'live' %}-{% endif %}live" class="icon icon-arrow-{% if ordering == '-live' %}up-after{% else %}down-after{% endif %} {% if ordering == 'live' or ordering == '-live' %}teal {% endif %}">
                 {% trans 'Status' %}
             </a>
         {% else %}
@@ -77,12 +77,3 @@ ordering: the current sort parameter
         {% endif %}
     </th>
 </tr>
-
-<script type="text/javascript">
-
-function handleSortQuery(ordering){
-  console.log(window.location.href)
-  console.log(ordering)
-}
-
-</script>

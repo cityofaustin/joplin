@@ -25,32 +25,32 @@
         {% if pages %}
             {% for page in pages %}
                 {% page_permissions page as page_perms %}
-                <tr {% if ordering == "ord" %}id="page_{{ page.id|unlocalize }}" data-page-title="{{ page.get_admin_display_title }}"{% endif %} class="{% if not page.live %}unpublished{% endif %} {% block page_row_classname %}{% endblock %}">
-                    {% if show_ordering_column %}
-                        <td class="ord">{% if orderable and ordering == "ord" %}<div class="handle icon icon-grip text-replace">{% trans 'Drag' %}</div>{% endif %}</td>
-                    {% endif %}
-                    <td class="title" valign="top" data-listing-page-title>
-                      🏆{% block page_title %}
+                  <tr {% if ordering == "ord" %}id="page_{{ page.id|unlocalize }}" data-page-title="{{ page.get_admin_display_title }}"{% endif %} class="{% if not page.live %}unpublished{% endif %} {% block page_row_classname %}{% endblock %}">
+                      {% if show_ordering_column %}
+                          <td class="ord">{% if orderable and ordering == "ord" %}<div class="handle icon icon-grip text-replace">{% trans 'Drag' %}</div>{% endif %}</td>
+                      {% endif %}
+                      <td class="title" valign="top" data-listing-page-title>
+                        {% block page_title %}
                         {% endblock %}
-                    </td>
-                    {% if show_parent %}
-                        {% with page.get_parent as parent %}
-                            <td class="parent" valign="top">
-                                {% if parent %}
-                                    <a href="{% url 'wagtailadmin_explore' parent.id %}">{{ parent.get_admin_display_title }}</a>
-                                {% endif %}
-                            </td>
-                        {% endwith %}
-                    {% endif %}
-                    <td class="updated" valign="top">{% if page.latest_revision_created_at %}<div class="human-readable-date" title="{{ page.latest_revision_created_at|date:"d M Y H:i" }}">{% blocktrans with time_period=page.latest_revision_created_at|timesince %}{{ time_period }} ago{% endblocktrans %}</div>{% endif %}</td>
-                    <td class="type" valign="top">{{ page.content_type.model_class.get_verbose_name }}</td>
-                    <td class="author" valign="top">{{ page.owner.last_name|default:"Unknown" }} </td>
-                    <td class="status" valign="top">
-                        {% include "wagtailadmin/shared/page_status_tag.html" with page=page %}
-                    </td>
-                    {% block page_navigation %}
-                    {% endblock %}
-                </tr>
+                      </td>
+                      {% if show_parent %}
+                          {% with page.get_parent as parent %}
+                              <td class="parent" valign="top">
+                                  {% if parent %}
+                                      <a href="{% url 'wagtailadmin_explore' parent.id %}">{{ parent.get_admin_display_title }}</a>
+                                  {% endif %}
+                              </td>
+                          {% endwith %}
+                      {% endif %}
+                      <td class="updated" valign="top">{% if page.latest_revision_created_at %}<div class="human-readable-date" title="{{ page.latest_revision_created_at|date:"d M Y H:i" }}">{% blocktrans with time_period=page.latest_revision_created_at|timesince %}{{ time_period }} ago{% endblocktrans %}</div>{% endif %}</td>
+                      <td class="type" valign="top">{{ page.content_type.model_class.get_verbose_name }}</td>
+                      <td class="author" valign="top">{{ page.owner.last_name|default:"Unknown" }} </td>
+                      <td class="status" valign="top">
+                          {% include "wagtailadmin/shared/page_status_tag.html" with page=page %}
+                      </td>
+                      {% block page_navigation %}
+                      {% endblock %}
+                  </tr>
             {% endfor %}
         {% else %}
             {% block no_results %}{% endblock %}
