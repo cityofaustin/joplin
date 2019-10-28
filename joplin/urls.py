@@ -15,6 +15,7 @@ from django.urls import reverse
 import debug_toolbar
 
 def home(request):
+    # This "HomePage" function was how we controlled our initial data flow before switching over to "pages/searc/" as our default page after sign in. 
     # page = HomePage.objects.first()
     # return redirect('wagtailadmin_explore', page.id)
     return redirect('pages/search/')
