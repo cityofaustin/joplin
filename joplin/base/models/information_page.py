@@ -87,15 +87,9 @@ class InformationPageContact(ClusterableModel):
 class InformationPageTopic(ClusterableModel):
     page = ParentalKey(InformationPage, related_name='topics')
     topic = models.ForeignKey('base.TopicPage', verbose_name='Select a Topic', related_name='+', on_delete=models.CASCADE)
-    toplink = models.BooleanField(default=False, verbose_name='Make this page a top link for this topic')
 
     panels = [
-        MultiFieldPanel(
-            [
-                PageChooserPanel('topic'),
-                FieldPanel('toplink'),
-            ]
-        ),
+        PageChooserPanel('topic'),
     ]
 
     def __str__(self):
