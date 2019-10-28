@@ -324,7 +324,10 @@ class GuidePageSectionPageBlock(graphene.ObjectType):
                 pass
             pass
         
-        return page.janis_url()
+        if page:
+            return page.janis_url()
+        else:
+            return '#'
 
     def resolve_service_page(self, info):
         service_page = None
