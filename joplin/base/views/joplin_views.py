@@ -1,13 +1,8 @@
 from django.shortcuts import get_object_or_404, redirect, render
 from django.http import HttpResponse
-from django.http.request import QueryDict
-from django.contrib.contenttypes.models import ContentType
-from django.core.paginator import Paginator
 from wagtail.core.models import Page, UserPagePermissionsProxy
 from wagtail.admin.views import pages
 from wagtail.admin import messages
-from wagtail.search.query import MATCH_ALL
-from wagtail.admin.forms.search import SearchForm
 from django.utils.translation import ugettext as _
 from django.urls import reverse
 from django.conf import settings
