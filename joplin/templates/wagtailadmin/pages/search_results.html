@@ -2,19 +2,24 @@
 <div>
     {% if pages %}
         <div class="coa-search-results-nav">
+
+          <!-- Save for Joplin if we want to show the COUNT of returned searches...
+          <!--
           <h2>
-              {% blocktrans count counter=all_pages.count %}
-                  There is one matching page
-              {% plural %}
-                  There are {{ counter }} matching pages
-              {% endblocktrans %}
+            {% blocktrans count counter=all_pages.count %}
+                There is one matching page
+            {% plural %}
+                There are {{ counter }} matching pages
+            {% endblocktrans %}
           </h2>
+          -->
 
           <!-- {% search_other %} -->
 
           <nav class="listing-filter" aria-labelledby="page-types-title">
               <h3 id="page-types-title" class="filter-title">{% trans "Page types" %}</h3>
               <ul class="filter-options">
+
                   {% if not selected_content_type %}
                       <li style="background-color: #E6E6E6">All ({{ all_pages.count }})</li>
                   {% else %}
@@ -32,8 +37,8 @@
           </nav>
         </div>
 
-
-        {% include "wagtailadmin/pages/listing/_list_explore.html" with show_parent=0 sortable=1 sortable_by_type=0 show_ordering_column=0 full_width=1 ordering=request.GET.ordering %}
+        <!-- This is where Joplin search results are modified for the UI for search results on our search results page. -->
+        {% include "wagtailadmin/pages/listing/_list_explore.html" with show_parent=0 sortable=1 sortable_by_type=0 full_width=1 ordering=request.GET.ordering show_ordering_column=0 orderable=0 %}
 
         {% url 'wagtailadmin_pages:search' as pagination_base_url %}
         {% paginate pages base_url=pagination_base_url %}

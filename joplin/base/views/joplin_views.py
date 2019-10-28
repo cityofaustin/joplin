@@ -99,22 +99,19 @@ def search(request):
         if request.GET['ordering'] in ['content_type', '-content_type', 'owner', '-owner', 'title', '-title', 'latest_revision_created_at', '-latest_revision_created_at', 'live', '-live']:
             ordering = request.GET['ordering']
 
-            if ordering == 'title':
-                pages = pages.order_by('title')
-            elif ordering == '-title':
-                pages = pages.order_by('-title')
-
+            # The content_type order column was added so Joplin search results could order alphabetically by content_type
             if ordering == 'content_type':
                 pages = pages.order_by('content_type')
             elif ordering == '-content_type':
                 pages = pages.order_by('-content_type')
 
+            # The owner order column was added so Joplin search results could order alphabetically by owner
             if ordering == 'owner':
                 pages = pages.order_by('owner')
             elif ordering == '-owner':
                 pages = pages.order_by('-owner')
 
-            if ordering == '-"title':
+            if ordering == 'title':
                 pages = pages.order_by('title')
             elif ordering == '-title':
                 pages = pages.order_by('-title')
@@ -144,6 +141,11 @@ def search(request):
         selected_content_type = None
 
     query = ''
+
+    # JOPLIN NOTE: Some of this the original state of the query condition
+    # has been modified because we needed data of the query condition
+    # for in our inital display on the main content page.
+    # For Original Code > See: https://github.com/wagtail/wagtail/blob/a459e91692659aba04e662978857d14061aecaee/wagtail/admin/views/pages.py#L917
     if 'q' in request.GET:
         form = SearchForm(request.GET)
         if form.is_valid():
@@ -151,23 +153,16 @@ def search(request):
             q = form.cleaned_data['q']
             pagination_query_params['q'] = q
             query = q
-            # all_pages = all_pages.search(q, order_by_relevance=not ordering, operator='and')
-
             pages = pages.search(q) # * Code Modified From...
-            # pages = pages.search(q, order_by_relevance=not ordering, operator='and')
 
-            # if pages.supports_facet:
-            #     content_types = [
-            #         (ContentType.objects.get(id=content_type_id), count)
-            #         for content_type_id, count in all_pages.facet('content_type_id').items()
-            #     ]
     else:
         form = SearchForm()
+        # JOPLIN NOTE: This is where we "hide" the home and root page on initial load of main content page.
+        # - However, these pages will be available in any search that matches title.
         for page in pages:
             if page.title == "Root" or page.title == "Home":
                 pages = pages.not_page(page)
                 all_pages = all_pages.not_page(page)
-    print(q)
 
     all_pages = all_pages.search(q, order_by_relevance=not ordering, operator='and')
     content_types = [

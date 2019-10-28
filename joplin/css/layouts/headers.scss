@@ -35,8 +35,22 @@
 }
 
 .coa-search-results-nav {
-  padding: 20px;
-  // background-color: red;
+  padding: 0px;
+  border-bottom: 1px solid #e6e6e6;
+}
+
+// Wagtail really wants to put some crazy padding on this class.
+// So, Joplin needs to "cut-in-line" with cascase override `!important` here.
+.listing-filter {
+  margin: 0 !important;
+  padding: 20px !important;
+}
+
+.coa-search-results-h1 {
+  font-size: 28px;
+  margin: 0px;
+  padding-right: 20px;
+  font-weight: 400;
 }
 
 // Header Actions section
@@ -46,11 +60,6 @@
     margin: 0 40px auto auto;
     // height: 50px;
 }
-//
-// .header.secondary div {
-//   background-color: green;
-//   // height: 40px;
-// }
 
 .secondary-actions {
     width: calc(100% - #{$nav-wrapper-width});

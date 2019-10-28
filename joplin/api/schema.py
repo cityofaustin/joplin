@@ -1,6 +1,5 @@
 import django.utils.translation
 import graphene
-import logging
 from graphene_django import DjangoObjectType
 from graphene_django.converter import convert_django_field
 from graphene_django.debug import DjangoDebug
