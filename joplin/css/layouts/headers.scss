@@ -20,11 +20,8 @@
 .header.secondary {
     width: calc(100% - #{$nav-wrapper-width});
     background: $coa-color-gray;
-    // position: fixed;
     height: 80px;
-    // padding: 1rem 1.5rem;
     padding: 1.5rem;
-    // z-index: 3;
     display: flex;
     width: 100%;
     height: 40px;
@@ -58,7 +55,6 @@
 .header .actions {
     display: flex;
     margin: 0 40px auto auto;
-    // height: 50px;
 }
 
 .secondary-actions {
