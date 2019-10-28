@@ -3,7 +3,7 @@
     {% if pages %}
         <div class="coa-search-results-nav">
 
-          <!-- Save for Joplin if we want to show the COUNT of returned searches...
+          <!-- Saved for Joplin: if we want to show the COUNT of returned searches...
           <!--
           <h2>
             {% blocktrans count counter=all_pages.count %}
@@ -37,7 +37,10 @@
           </nav>
         </div>
 
-        <!-- This is where Joplin search results are modified for the UI for search results on our search results page. -->
+        <!--
+          This is where Joplin search results are modified for the UI for search results
+          on our search results page.
+        -->
         {% include "wagtailadmin/pages/listing/_list_explore.html" with show_parent=0 sortable=1 sortable_by_type=0 full_width=1 ordering=request.GET.ordering show_ordering_column=1 orderable=1 %}
 
         {% url 'wagtailadmin_pages:search' as pagination_base_url %}
