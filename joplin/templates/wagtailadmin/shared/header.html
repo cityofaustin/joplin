@@ -17,33 +17,35 @@
     add_link - if present, display an 'add' button. This is a URL route name (taking no parameters) to be used as the link URL for the button
     add_text - text for the 'add' button
 {% endcomment %}
-
-<div class="header secondary">
-
-    <div>
-        <h1 class="coa-search-results-h1">
-          Pages
-        </h1>
-    </div>
-
-    <div>
-        <!-- From wagtail/admin/templates/wagtailadmin/shared/menu_search.html -->
-        <form class="nav-search" action="{% url 'wagtailadmin_pages:search' %}" method="get">
-            <div>
-                <label for="menu-search-q">{% trans "Search" %}</label>
-                <input type="text" id="menu-search-q" name="q" placeholder="{% trans 'Search' %}" />
-                <button class="button" type="submit">{% trans "Search" %}</button>
+<header class="{% if merged %}merged{% endif %} {% if tabbed %}tab-merged{% endif %} {% if search_form %}hasform{% endif %}" role="banner">
+    {% block breadcrumb %}{% endblock %}
+    <div class="row nice-padding">
+        <div class="left">
+            <div class="col header-title">
+                <h1 class="icon icon-{{ icon }}">
+                {{ title }}{% if subtitle %} <span>{{ subtitle }}</span>{% endif %}</h1>
             </div>
-        </form>
-    </div>
+            {% comment %}
+            this is from vanilla wagtail, but lets hide it so we can position search elsewhere for the page chooser
 
-    <div class="actions">
-      <!-- <div> -->
-        <!-- Button trigger modal -->
-        <button type="button" class="button" data-toggle="modal" data-target="#createNewContentModal">
-          Create New Content
-        </button>
-      <!-- </div> -->
+            {% if search_url %}
+                <form class="col search-form" action="{% url search_url %}{% if query_parameters %}?{{ query_parameters }}{% endif %}" method="get" novalidate role="search">
+                    <ul class="fields">
+                        {% for field in search_form %}
+                            {% include "wagtailadmin/shared/field_as_li.html" with field=field field_classes="field-small iconfield" input_classes="icon-search" %}
+                        {% endfor %}
+                        <li class="submit visuallyhidden"><input type="submit" value="Search" class="button" /></li>
+                    </ul>
+                </form>
+            {% endif %}
+            {% endcomment %}
+        </div>
+        <div class="right">
+            {% if add_link %}
+                <div class="addbutton">
+                    <a href="{% url add_link %}" class="button bicolor icon icon-plus">{{ add_text }}</a>
+                </div>
+            {% endif %}
+        </div>
     </div>
-
-</div>
+</header>
