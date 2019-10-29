@@ -14,8 +14,8 @@ from wagtail.core.blocks import *
 from wagtail.documents.models import Document
 from wagtail.core.rich_text import expand_db_html
 from base.models import JanisBasePage, TranslatedImage, ThreeOneOne, ServicePage, ServicePageContact, ServicePageTopic, ServicePageRelatedDepartments, InformationPageRelatedDepartments, ProcessPage, ProcessPageStep, ProcessPageContact, ProcessPageTopic, InformationPage, InformationPageContact, InformationPageTopic, DepartmentPage, DepartmentPageContact, DepartmentPageDirector, Theme, TopicCollectionPage, TopicPage, Contact, Location, ContactDayAndDuration, Department, DepartmentContact, TopicPageTopicCollection, OfficialDocumentPage, OfficialDocumentPageRelatedDepartments, OfficialDocumentPageTopic, OfficialDocumentPageOfficialDocument, GuidePage, GuidePageTopic, GuidePageRelatedDepartments, GuidePageContact, JanisBasePage, PhoneNumber, DepartmentPageTopPage, DepartmentPageRelatedPage, TopicPageTopPage, FormPage, FormPageRelatedDepartments, FormPageTopic
+from .content_type_map import content_type_map
 import traceback
-import pdb
 
 class RichTextFieldType(Scalar):
     """
@@ -444,28 +444,6 @@ class PageRevisionNode(DjangoObjectType):
         interfaces = [graphene.Node]
 
 def get_structure_for_content_type(content_type):
-    content_type_map = {
-        "service page": {
-            "node": "DepartmentNode",
-            "model": ServicePage,
-        },
-        "information page": {
-            "node": "InformationPageNode",
-            "model": InformationPage,
-        },
-        "official document page": {
-            "node": "OfficialDocumentPageNode",
-            "model": OfficialDocumentPage,
-        },
-        "guide page": {
-            "node": "GuidePageNode",
-            "model": GuidePage,
-        },
-        "form page": {
-            "node": "FormPageNode",
-            "model": FormPage,
-        },
-    }
     site_structure = []
     content_type_data = content_type_map.get(content_type, None)
     if not content_type_data:
@@ -569,6 +547,21 @@ class DepartmentPageDirectorNode(DjangoObjectType):
         model = DepartmentPageDirector
         interfaces = [graphene.Node]
 
+# Get the original page object from a page chooser node
+# Works for any content_type defined in content_type_map
+def get_page_from_content_type(self):
+    content_type = self.page.content_type.name
+    model = content_type_map[content_type]["model"]
+    page = model.objects.get(id=self.page_id)
+    return page
+
+# Get a page global_id from a page chooser node
+# Works for any content_type defined in content_type_map
+def get_global_id_from_content_type(self):
+    content_type = self.page.content_type.name
+    node = content_type_map[content_type]["node"]
+    global_id = graphene.Node.to_global_id(node, self.page_id)
+    return global_id
 
 class DepartmentPageTopPageNode(DjangoObjectType):
     title = graphene.String()
@@ -576,110 +569,13 @@ class DepartmentPageTopPageNode(DjangoObjectType):
     page_id = graphene.ID()
 
     def resolve_page_id(self, info):
-        # TODO: don't catch everything
-        try:
-            service_page_global_id = graphene.Node.to_global_id('ServicePageNode', self.page_id)
-            return service_page_global_id
-        except Exception as e:
-            pass
-
-        # TODO: don't catch everything
-        try:
-            information_page_global_id = graphene.Node.to_global_id('InformationPageNode', self.page_id)
-            return information_page_global_id
-        except Exception as e:
-            pass
-
-        # TODO: don't catch everything
-        try:
-            guide_page_global_id = graphene.Node.to_global_id('GuidePageNode', self.page_id)
-            return guide_page_global_id
-        except Exception as e:
-            pass
-
-        # TODO: don't catch everything
-        try:
-            official_document_page_global_id = graphene.Node.to_global_id('OfficialDocumentPageNode', self.page_id)
-            return official_document_page_global_id
-        except Exception as e:
-            pass
-
+        return get_global_id_from_content_type(self)
 
     def resolve_title(self, resolve_info, *args, **kwargs):
-        service_page = None
-        # TODO: don't catch everything
-        try:
-            service_page = ServicePage.objects.get(id=self.page_id)
-            return service_page.title
-        except Exception as e:
-            pass
-
-        information_page = None
-        # TODO: don't catch everything
-        try:
-            information_page = InformationPage.objects.get(id=self.page_id)
-            return information_page.title
-        except Exception as e:
-            pass
-
-        guide_page = None
-        # TODO: don't catch everything
-        try:
-            guide_page = GuidePage.objects.get(id=self.page_id)
-            return guide_page.title
-        except Exception as e:
-            pass
-
-        official_document_page = None
-        # TODO: don't catch everything
-        try:
-            official_document_page = OfficialDocumentPage.objects.get(id=self.page_id)
-            return official_document_page.title
-        except Exception as e:
-            pass
+        return get_page_from_content_type(self).title
 
     def resolve_slug(self, resolve_info, *args, **kwargs):
-        service_page = None
-        # TODO: don't catch everything
-        try:
-            service_page = ServicePage.objects.get(id=self.page_id)
-            return service_page.slug
-        except Exception as e:
-            pass
-
-        information_page = None
-        # TODO: don't catch everything
-        try:
-            information_page = InformationPage.objects.get(id=self.page_id)
-            return information_page.slug
-        except Exception as e:
-            pass
-
-        guide_page = None
-        # TODO: don't catch everything
-        try:
-            guide_page = GuidePage.objects.get(id=self.page_id)
-            return guide_page.slug
-        except Exception as e:
-            pass
-
-        official_document_page = None
-        # TODO: don't catch everything
-        try:
-            official_document_page = OfficialDocumentPage.objects.get(id=self.page_id)
-            return official_document_page.slug
-        except Exception as e:
-            pass
-
-    def resolve_form_page(self, info):
-        form_page = None
-        # TODO: don't catch everything
-        try:
-            form_page = FormPage.objects.get(id=self.page_id)
-        except Exception as e:
-            pass
-
-        return form_page
+        return get_page_from_content_type(self).slug
 
     class Meta:
         model = DepartmentPageTopPage
@@ -692,100 +588,13 @@ class DepartmentPageRelatedPageNode(DjangoObjectType):
     page_id = graphene.ID()
 
     def resolve_page_id(self, info):
-        # TODO: don't catch everything
-        try:
-            service_page_global_id = graphene.Node.to_global_id('ServicePageNode', self.page_id)
-            return service_page_global_id
-        except Exception as e:
-            pass
-
-        # TODO: don't catch everything
-        try:
-            information_page_global_id = graphene.Node.to_global_id('InformationPageNode', self.page_id)
-            return information_page_global_id
-        except Exception as e:
-            pass
-
-        # TODO: don't catch everything
-        try:
-            guide_page_global_id = graphene.Node.to_global_id('GuidePageNode', self.page_id)
-            return guide_page_global_id
-        except Exception as e:
-            pass
-
-        # TODO: don't catch everything
-        try:
-            official_document_page_global_id = graphene.Node.to_global_id('OfficialDocumentPageNode', self.page_id)
-            return official_document_page_global_id
-        except Exception as e:
-            pass
-
+        return get_global_id_from_content_type(self)
 
     def resolve_title(self, resolve_info, *args, **kwargs):
-        service_page = None
-        # TODO: don't catch everything
-        try:
-            service_page = ServicePage.objects.get(id=self.page_id)
-            return service_page.title
-        except Exception as e:
-            pass
-
-        information_page = None
-        # TODO: don't catch everything
-        try:
-            information_page = InformationPage.objects.get(id=self.page_id)
-            return information_page.title
-        except Exception as e:
-            pass
-
-        guide_page = None
-        # TODO: don't catch everything
-        try:
-            guide_page = GuidePage.objects.get(id=self.page_id)
-            return guide_page.title
-        except Exception as e:
-            pass
-
-        official_document_page = None
-        # TODO: don't catch everything
-        try:
-            official_document_page = OfficialDocumentPage.objects.get(id=self.page_id)
-            return official_document_page.title
-        except Exception as e:
-            pass
+        return get_page_from_content_type(self).title
 
     def resolve_slug(self, resolve_info, *args, **kwargs):
-        service_page = None
-        # TODO: don't catch everything
-        try:
-            service_page = ServicePage.objects.get(id=self.page_id)
-            return service_page.slug
-        except Exception as e:
-            pass
-
-        information_page = None
-        # TODO: don't catch everything
-        try:
-            information_page = InformationPage.objects.get(id=self.page_id)
-            return information_page.slug
-        except Exception as e:
-            pass
-
-        guide_page = None
-        # TODO: don't catch everything
-        try:
-            guide_page = GuidePage.objects.get(id=self.page_id)
-            return guide_page.slug
-        except Exception as e:
-            pass
-
-        official_document_page = None
-        # TODO: don't catch everything
-        try:
-            official_document_page = OfficialDocumentPage.objects.get(id=self.page_id)
-            return official_document_page.slug
-        except Exception as e:
-            pass
+        return get_page_from_content_type(self).slug
 
     class Meta:
         model = DepartmentPageRelatedPage
@@ -798,110 +607,13 @@ class TopicPageTopPageNode(DjangoObjectType):
     page_id = graphene.ID()
 
     def resolve_page_id(self, info):
-        # TODO: don't catch everything
-        try:
-            service_page_global_id = graphene.Node.to_global_id('ServicePageNode', self.page_id)
-            return service_page_global_id
-        except Exception as e:
-            pass
-
-        # TODO: don't catch everything
-        try:
-            information_page_global_id = graphene.Node.to_global_id('InformationPageNode', self.page_id)
-            return information_page_global_id
-        except Exception as e:
-            pass
-
-        # TODO: don't catch everything
-        try:
-            guide_page_global_id = graphene.Node.to_global_id('GuidePageNode', self.page_id)
-            return guide_page_global_id
-        except Exception as e:
-            pass
-
-        # TODO: don't catch everything
-        try:
-            official_document_page_global_id = graphene.Node.to_global_id('OfficialDocumentPageNode', self.page_id)
-            return official_document_page_global_id
-        except Exception as e:
-            pass
-
+        return get_global_id_from_content_type(self)
 
     def resolve_title(self, resolve_info, *args, **kwargs):
-        service_page = None
-        # TODO: don't catch everything
-        try:
-            service_page = ServicePage.objects.get(id=self.page_id)
-            return service_page.title
-        except Exception as e:
-            pass
-
-        information_page = None
-        # TODO: don't catch everything
-        try:
-            information_page = InformationPage.objects.get(id=self.page_id)
-            return information_page.title
-        except Exception as e:
-            pass
-
-        guide_page = None
-        # TODO: don't catch everything
-        try:
-            guide_page = GuidePage.objects.get(id=self.page_id)
-            return guide_page.title
-        except Exception as e:
-            pass
-
-        official_document_page = None
-        # TODO: don't catch everything
-        try:
-            official_document_page = OfficialDocumentPage.objects.get(id=self.page_id)
-            return official_document_page.title
-        except Exception as e:
-            pass
+        return get_page_from_content_type(self).title
 
     def resolve_slug(self, resolve_info, *args, **kwargs):
-        service_page = None
-        # TODO: don't catch everything
-        try:
-            service_page = ServicePage.objects.get(id=self.page_id)
-            return service_page.slug
-        except Exception as e:
-            pass
-
-        information_page = None
-        # TODO: don't catch everything
-        try:
-            information_page = InformationPage.objects.get(id=self.page_id)
-            return information_page.slug
-        except Exception as e:
-            pass
-
-        guide_page = None
-        # TODO: don't catch everything
-        try:
-            guide_page = GuidePage.objects.get(id=self.page_id)
-            return guide_page.slug
-        except Exception as e:
-            pass
-
-        official_document_page = None
-        # TODO: don't catch everything
-        try:
-            official_document_page = OfficialDocumentPage.objects.get(id=self.page_id)
-            return official_document_page.slug
-        except Exception as e:
-            pass
-
-    def resolve_form_page(self, info):
-        form_page = None
-        # TODO: don't catch everything
-        try:
-            form_page = FormPage.objects.get(id=self.page_id)
-        except Exception as e:
-            pass
-
-        return form_page
+        return get_page_from_content_type(self).slug
 
     class Meta:
         model = TopicPageTopPage
@@ -975,7 +687,6 @@ class Query(graphene.ObjectType):
 
     def resolve_page_revision(self, resolve_info, id=None):
         revision = graphene.Node.get_node_from_global_id(resolve_info, id)
-
         return revision
 
 
