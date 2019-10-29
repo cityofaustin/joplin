@@ -12,6 +12,7 @@
 {{ block.super }}
 
 <script>
+// passing the constant from context_processors into a JS variable (boolean)
     const ISPRODUCTION = '{{ISPRODUCTION}}';
 </script>
 {% render_bundle 'admin' %}
