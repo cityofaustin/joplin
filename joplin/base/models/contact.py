@@ -11,7 +11,7 @@ from wagtail.snippets.edit_handlers import SnippetChooserPanel
 from wagtail.core.models import Orderable
 from phonenumber_field.modelfields import PhoneNumberField
 from phonenumber_field.widgets import PhoneNumberInternationalFallbackWidget
-
+from base.blocks import MapBlock
 from .location import Location
 from .day_and_duration import DayAndDuration
 
@@ -20,6 +20,7 @@ from .constants import DEFAULT_MAX_LENGTH
 
 @register_snippet
 class Contact(ClusterableModel):
+
     name = models.CharField(max_length=DEFAULT_MAX_LENGTH)
     email = models.EmailField(blank=True)
     location = models.ForeignKey(
@@ -36,6 +37,15 @@ class Contact(ClusterableModel):
         blank=True
     )
 
+    map = StreamField(
+        [
+            (
+                'location', MapBlock()
+            )
+        ],
+        blank=True
+    )
+
     panels = [
         FieldPanel('name'),
         FieldPanel('email'),
@@ -43,6 +53,7 @@ class Contact(ClusterableModel):
         SnippetChooserPanel('location'),
         InlinePanel('hours', label='Hours'),
         StreamFieldPanel('social_media'),
+        StreamFieldPanel('map')
     ]
 
     def __str__(self):
