@@ -64,15 +64,9 @@ class GuidePage(JanisBasePage):
 class GuidePageTopic(ClusterableModel):
     page = ParentalKey(GuidePage, related_name='topics')
     topic = models.ForeignKey('base.TopicPage', verbose_name='Select a Topic', related_name='+', on_delete=models.CASCADE)
-    toplink = models.BooleanField(default=False, verbose_name='Make this page a top link for this topic')
 
     panels = [
-        MultiFieldPanel(
-            [
-                PageChooserPanel('topic'),
-                FieldPanel('toplink'),
-            ]
-        ),
+        PageChooserPanel('topic'),
     ]
 
     def __str__(self):
@@ -87,7 +81,6 @@ class GuidePageRelatedDepartments(ClusterableModel):
     )
 
     panels = [
-        # Use a SnippetChooserPanel because blog.BlogAuthor is registered as a snippet
         PageChooserPanel("related_department"),
     ]
 
