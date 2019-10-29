@@ -7,6 +7,12 @@ from wagtail.core.fields import StreamField
 from wagtail.core.blocks import CharBlock, StructBlock, URLBlock
 from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, PageChooserPanel, StreamFieldPanel
 from wagtail.images.edit_handlers import ImageChooserPanel
+from wagtail.core.models import Orderable
+
+from .information_page import InformationPage
+from .service_page import ServicePage
+from .guide_page import GuidePage
+from .official_documents_page import OfficialDocumentPage
 
 from base.forms import TopicPageForm
 
@@ -32,7 +38,22 @@ class TopicPage(JanisBasePage):
         FieldPanel('description', widget=countMeTextArea),
         ImageChooserPanel('image'),
         InlinePanel('topiccollections', label='Topic Collections this page belongs to'),
+        InlinePanel('top_pages', heading='Links to top pages', label='top link',
+                    help_text='Add links to 1-4 top pages or guides (4 maximum allowed).',
+                    min_num=None, max_num=4),
     ]
+
+
+class TopicPageTopPage(Orderable):
+    topic = ParentalKey(TopicPage, related_name='top_pages')
+    page = models.ForeignKey('wagtailcore.Page',  verbose_name='Select a page', related_name='+', on_delete=models.CASCADE)
+
+    panels = [
+        PageChooserPanel('page', page_type=[InformationPage, ServicePage, GuidePage, OfficialDocumentPage]),
+    ]
+
+    def __str__(self):
+        return self.page.text
 
 
 class TopicPageTopicCollection(ClusterableModel):
