@@ -1,5 +1,6 @@
 import django.utils.translation
 import graphene
+from django.core.exceptions import ObjectDoesNotExist
 from graphene_django import DjangoObjectType
 from graphene_django.converter import convert_django_field
 from graphene_django.debug import DjangoDebug
@@ -13,7 +14,20 @@ from django_filters import FilterSet, OrderingFilter
 from wagtail.core.blocks import *
 from wagtail.documents.models import Document
 from wagtail.core.rich_text import expand_db_html
-from base.models import JanisBasePage, TranslatedImage, ThreeOneOne, ServicePage, ServicePageContact, ServicePageTopic, ServicePageRelatedDepartments, InformationPageRelatedDepartments, ProcessPage, ProcessPageStep, ProcessPageContact, ProcessPageTopic, InformationPage, InformationPageContact, InformationPageTopic, DepartmentPage, DepartmentPageContact, DepartmentPageDirector, Theme, TopicCollectionPage, TopicPage, Contact, Location, ContactDayAndDuration, Department, DepartmentContact, TopicPageTopicCollection, OfficialDocumentPage, OfficialDocumentPageRelatedDepartments, OfficialDocumentPageTopic, OfficialDocumentPageOfficialDocument, GuidePage, GuidePageTopic, GuidePageRelatedDepartments, GuidePageContact, JanisBasePage, PhoneNumber, DepartmentPageTopPage, DepartmentPageRelatedPage, TopicPageTopPage, FormPage, FormPageRelatedDepartments, FormPageTopic
+from base.models import (
+    JanisBasePage,
+    TranslatedImage,
+    ThreeOneOne,
+    ServicePage, ServicePageContact, ServicePageTopic, ServicePageRelatedDepartments,
+    InformationPage, InformationPageContact, InformationPageTopic, InformationPageRelatedDepartments,
+    ProcessPage, ProcessPageStep, ProcessPageContact, ProcessPageTopic,
+    DepartmentPage, DepartmentPageContact, DepartmentPageDirector, DepartmentPageTopPage, DepartmentPageRelatedPage,
+    Theme, TopicCollectionPage, TopicPage, TopicPageTopicCollection, TopicPageTopPage,
+    Contact, Location, PhoneNumber, ContactDayAndDuration, Department, DepartmentContact,
+    OfficialDocumentPage, OfficialDocumentPageRelatedDepartments, OfficialDocumentPageTopic, OfficialDocumentPageOfficialDocument,
+    GuidePage, GuidePageTopic, GuidePageRelatedDepartments, GuidePageContact,
+    FormPage, FormPageRelatedDepartments, FormPageTopic,
+)
 from .content_type_map import content_type_map
 import traceback
 
@@ -316,51 +330,55 @@ class OfficialDocumentPageNode(DjangoObjectType):
         interfaces = [graphene.Node]
 
 
+def resolve_guide_page_section_as(model, self):
+    page = None
+    try:
+        page = model.objects.get(id=self.value)
+    except ObjectDoesNotExist:
+        pass
+    return page
+
 class GuidePageSectionPageBlock(graphene.ObjectType):
     # This uses graphene ObjectType resolvers, see:
     # https://docs.graphene-python.org/en/latest/types/objecttypes/#resolvers
 
     value = GenericScalar()
+    url = graphene.String()
     service_page = graphene.Field(ServicePageNode)
     information_page = graphene.Field(InformationPageNode)
-    url = graphene.String()
+    form_page = graphene.Field(FormPageNode)
+
+    def __resolve_guide_page_section_as(self, model):
+        page = None
+        try:
+            page = model.objects.get(id=self.value)
+        except ObjectDoesNotExist:
+            pass
+        return page
 
     def resolve_url(self, resolve_info, *args, **kwargs):
         page = None
-        try:
-            page = ServicePage.objects.get(id=self.value)
-        except Exception as e:
-            try:
-                page = InformationPage.objects.get(id=self.value)
-            except Exception as e:
-                pass
-            pass
-
+        for model in [
+            ServicePage,
+            InformationPage,
+            FormPage,
+        ]:
+            page = self.__resolve_guide_page_section_as(model)
+            if page:
+                break
         if page:
             return page.janis_url()
         else:
             return '#'
 
     def resolve_service_page(self, info):
-        service_page = None
-        # TODO: don't catch everything
-        try:
-            service_page = ServicePage.objects.get(id=self.value)
-        except Exception as e:
-            pass
-
-        return service_page
+        return self.__resolve_guide_page_section_as(ServicePage)
 
     def resolve_information_page(self, info):
-        information_page = None
-        # TODO: don't catch everything
-        try:
-            information_page = InformationPage.objects.get(id=self.value)
-        except Exception as e:
-            pass
+        return self.__resolve_guide_page_section_as(InformationPage)
 
-        return information_page
-
+    def resolve_form_page(self, info):
+        return self.__resolve_guide_page_section_as(FormPage)
 
 class GuidePageSection(graphene.ObjectType):
     value = GenericScalar()
