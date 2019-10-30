@@ -14,8 +14,10 @@ from wagtail.admin.forms.search import SearchForm
  the page data the out of the box wagtail provides.
 """
 
+
 def search(request):
-    pages = all_pages = Page.objects.all().prefetch_related('content_type').specific()
+    # excluding Root(1) and Home(3) pages from search
+    pages = all_pages = Page.objects.all().exclude(id__in=[1, 3]).prefetch_related('content_type').specific()
     q = MATCH_ALL
     content_types = []
     pagination_query_params = QueryDict({}, mutable=True)
@@ -71,10 +73,6 @@ def search(request):
           - This is where we 'hide' the 'home' and 'root' page on initial load of main content page.
           - However, these pages will be available in any search that matches title.
         """
-        for page in pages:
-            if page.title == "Root" or page.title == "Home":
-                pages = pages.not_page(page)
-                all_pages = all_pages.not_page(page)
 
     # "Content Type Builder" Joplin Note: Moved from query condition above.
     all_pages = all_pages.search(q, order_by_relevance=not ordering, operator='and')
