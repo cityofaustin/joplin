@@ -11,11 +11,17 @@ from wagtail.documents import urls as wagtaildocs_urls
 from base.views import joplin_views
 from base.views import joplin_search_views
 from django.urls import reverse
-# from base.models import HomePage
 import debug_toolbar
 
 def home(request):
-    # This "HomePage" function was how we controlled our initial data flow before switching over to "pages/searc/" as our default page after sign in. 
+    """
+            * Search page as our 'HomePage' *
+        This "HomePage" function was how Joplin controlled our initial data flow before
+        switching over to "pages/search/" as our default page after sign in. If we want
+        to revert back to that or similar behavior, we could change our return statement
+        back to `return redirect('wagtailadmin_explore', page.id)`, and use
+        HomePage.objects.first() for the page.id.
+    """
     # page = HomePage.objects.first()
     # return redirect('wagtailadmin_explore', page.id)
     return redirect('pages/search/')

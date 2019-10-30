@@ -6,6 +6,14 @@ from wagtail.core.models import Page
 from wagtail.search.query import MATCH_ALL
 from wagtail.admin.forms.search import SearchForm
 
+"""
+ Joplin Note:
+ - The search method was brought in from wagtail admins views/pages.py file...
+ - See referenced file here: https://github.com/wagtail/wagtail/blob/a459e91692659aba04e662978857d14061aecaee/wagtail/admin/views/pages.py#L917
+ - Joplin needs more control over our searches in how we sort/filter and display
+ the page data the out of the box wagtail provides.
+"""
+
 def search(request):
     pages = all_pages = Page.objects.all().prefetch_related('content_type').specific()
     q = MATCH_ALL
@@ -16,33 +24,7 @@ def search(request):
     if 'ordering' in request.GET:
         if request.GET['ordering'] in ['content_type', '-content_type', 'owner', '-owner', 'title', '-title', 'latest_revision_created_at', '-latest_revision_created_at', 'live', '-live']:
             ordering = request.GET['ordering']
-
-            # The content_type order column was added so Joplin search results could order alphabetically by content_type
-            if ordering == 'content_type':
-                pages = pages.order_by('content_type')
-            elif ordering == '-content_type':
-                pages = pages.order_by('-content_type')
-
-            # The owner order column was added so Joplin search results could order alphabetically by owner
-            if ordering == 'owner':
-                pages = pages.order_by('owner')
-            elif ordering == '-owner':
-                pages = pages.order_by('-owner')
-
-            if ordering == 'title':
-                pages = pages.order_by('title')
-            elif ordering == '-title':
-                pages = pages.order_by('-title')
-
-            if ordering == 'latest_revision_created_at':
-                pages = pages.order_by('latest_revision_created_at')
-            elif ordering == '-latest_revision_created_at':
-                pages = pages.order_by('-latest_revision_created_at')
-
-            if ordering == 'live':
-                pages = pages.order_by('live')
-            elif ordering == '-live':
-                pages = pages.order_by('-live')
+            pages = pages.order_by(ordering)
 
     if 'content_type' in request.GET:
         pagination_query_params['content_type'] = request.GET['content_type']
@@ -60,10 +42,13 @@ def search(request):
 
     query = ''
 
-    # JOPLIN NOTE: Some of this the original state of the query condition
-    # has been modified because we needed data of the query condition
-    # for in our inital display on the main content page.
-    # For Original Code > See: https://github.com/wagtail/wagtail/blob/a459e91692659aba04e662978857d14061aecaee/wagtail/admin/views/pages.py#L917
+    """
+     JOPLIN NOTE:
+      - Some of this the original state of the query condition has been modified
+      because we needed data from the query condition for in our inital display
+      on the main content page.
+      - For Original code See: https://github.com/wagtail/wagtail/blob/a459e91692659aba04e662978857d14061aecaee/wagtail/admin/views/pages.py#L917
+    """
     if 'q' in request.GET:
         form = SearchForm(request.GET)
         if form.is_valid():
@@ -72,15 +57,20 @@ def search(request):
             pagination_query_params['q'] = q
             query = q
             pages = pages.search(q)
-            # In the original code from wagtail, the content type builder was only created for queries.
-            # But Joplin wants the contents types for the original render of page too
-            # SO, we've moved outside of the condition below:
-            # See: "Content Type Builder"
+            """
+             - In the original code from wagtail, the content type builder was
+             only created for queries. But Joplin wants the contents types for
+             the original render of page too.
+             - SO, we've moved that outside of this condition. See: "Content Type Builder"
+            """
 
     else:
         form = SearchForm()
-        # JOPLIN NOTE: This is where we "hide" the home and root page on initial load of main content page.
-        # - However, these pages will be available in any search that matches title.
+        """
+          JOPLIN NOTE:
+          - This is where we 'hide' the 'home' and 'root' page on initial load of main content page.
+          - However, these pages will be available in any search that matches title.
+        """
         for page in pages:
             if page.title == "Root" or page.title == "Home":
                 pages = pages.not_page(page)
