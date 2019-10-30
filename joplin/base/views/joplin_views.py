@@ -1,6 +1,7 @@
 from django.shortcuts import get_object_or_404, redirect, render
 from django.http import HttpResponse
 from wagtail.core.models import Page, UserPagePermissionsProxy
+from django.core.exceptions import PermissionDenied
 from wagtail.admin.views import pages
 from wagtail.admin import messages
 from django.utils.translation import ugettext as _
