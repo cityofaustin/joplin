@@ -1,0 +1,7 @@
+{% extends "wagtailadmin/pages/index.html" %}
+{% load wagtailadmin_tags staticfiles i18n %}
+
+{% block content %}
+{% include "wagtailadmin/pages/coa_header.html" %}
+    {{ block.super }}
+{% endblock %}
