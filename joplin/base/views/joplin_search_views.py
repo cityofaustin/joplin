@@ -14,6 +14,7 @@ from wagtail.admin.forms.search import SearchForm
  the page data the out of the box wagtail provides.
 """
 
+
 def search(request):
     pages = all_pages = Page.objects.all().prefetch_related('content_type').specific()
     q = MATCH_ALL
@@ -47,7 +48,8 @@ def search(request):
       - Some of this the original state of the query condition has been modified
       because we needed data from the query condition for in our inital display
       on the main content page.
-      - For Original code See: https://github.com/wagtail/wagtail/blob/a459e91692659aba04e662978857d14061aecaee/wagtail/admin/views/pages.py#L917
+      - For Original code See:
+      https://github.com/wagtail/wagtail/blob/a459e91692659aba04e662978857d14061aecaee/wagtail/admin/views/pages.py#L917
     """
     if 'q' in request.GET:
         form = SearchForm(request.GET)
