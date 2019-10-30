@@ -12,6 +12,11 @@ from wagtail.admin.forms.search import SearchForm
  - See referenced file here: https://github.com/wagtail/wagtail/blob/a459e91692659aba04e662978857d14061aecaee/wagtail/admin/views/pages.py#L917
  - Joplin needs more control over our searches in how we sort/filter and display
  the page data the out of the box wagtail provides.
+ The main things that we changed from vanilla:
+ - we 'run' the query as soon as you visit the page (before any search),
+   so we can populate it with summary counts and sort stuff
+ - excluding certain pages from the pages to query
+
 """
 
 
@@ -68,11 +73,6 @@ def search(request):
 
     else:
         form = SearchForm()
-        """
-          JOPLIN NOTE:
-          - This is where we 'hide' the 'home' and 'root' page on initial load of main content page.
-          - However, these pages will be available in any search that matches title.
-        """
 
     # "Content Type Builder" Joplin Note: Moved from query condition above.
     all_pages = all_pages.search(q, order_by_relevance=not ordering, operator='and')
