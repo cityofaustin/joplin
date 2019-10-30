@@ -474,18 +474,20 @@ def get_structure_for_content_type(content_type):
         if page.coa_global:
             site_structure.append({'url' :f'/{page.slug}/', 'type': content_type, 'id': page_global_id})
 
-        if page.get("related_departments", None):
+        # For content_type models that have related departments
+        if hasattr(page, "related_departments"):
             page_departments = page.related_departments.all()
             for page_department in page_departments:
                 page_department_global_id = graphene.Node.to_global_id('DepartmentNode', page_department.related_department.id)
                 site_structure.append({'url' :f'/{page_department.related_department.slug}/{page.slug}/', 'type': content_type, 'id': page_global_id, 'parent_department': page_department_global_id})
 
-        if page.get("topics", None):
+        # For content_type models that have topics
+        if hasattr(page, "topics"):
             page_topics = page.topics.all()
             for page_topic in page_topics:
                 page_topic_global_id = graphene.Node.to_global_id('TopicNode', page_topic.topic.id)
                 page_topic_tcs = page_topic.topic.topiccollections.all()
-                for tc in information_page_topic_tcs:
+                for tc in page_topic_tcs:
                     if not tc.topiccollection.theme:
                         continue
 
@@ -552,6 +554,7 @@ class FormPageTopicNode(DjangoObjectType):
     class Meta:
         model = FormPageTopic
         interfaces = [graphene.Node]
+        filter_fields = ['topic']
 
 
 class DepartmentPageContactNode(DjangoObjectType):
@@ -698,6 +701,7 @@ class Query(graphene.ObjectType):
     all_information_page_topics = DjangoFilterConnectionField(InformationPageTopicNode)
     all_official_document_page_topics = DjangoFilterConnectionField(OfficialDocumentPageTopicNode)
     all_guide_page_topics = DjangoFilterConnectionField(GuidePageTopicNode)
+    all_form_page_topics = DjangoFilterConnectionField(FormPageTopicNode)
 
     def resolve_site_structure(self, resolve_info):
         site_structure = SiteStructure()
