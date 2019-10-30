@@ -13,6 +13,7 @@ from base.views import joplin_search_views
 from django.urls import reverse
 import debug_toolbar
 
+
 def home(request):
     """
             * Search page as our 'HomePage' *
@@ -24,7 +25,7 @@ def home(request):
     """
     # page = HomePage.objects.first()
     # return redirect('wagtailadmin_explore', page.id)
-    return redirect('pages/search/')
+    return redirect('pages/search-content/')
 
 
 def login(request):
@@ -42,7 +43,7 @@ urlpatterns = [
     url(r'admin/pages/(\d+)/publish/$', joplin_views.publish, name='publish'),
     url(r'admin/pages/new_from_modal/$',
         joplin_views.new_page_from_modal, name='new_page_from_modal'),
-    url(r'admin/pages/search/$', joplin_search_views.search, name='search' ),
+    path('admin/search-content/', joplin_search_views.search_content, name='search-content'),
     url(r'^admin/', include(wagtailadmin_urls)),
     url(r'^documents/', include(wagtaildocs_urls)),
     path('__debug__/', include(debug_toolbar.urls)),

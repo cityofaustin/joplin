@@ -15,7 +15,7 @@ from wagtail.admin.forms.search import SearchForm
 """
 
 
-def search(request):
+def search_content(request):
     # excluding Root(1) and Home(3) pages from search
     pages = all_pages = Page.objects.all().exclude(id__in=[1, 3]).prefetch_related('content_type').specific()
     q = MATCH_ALL

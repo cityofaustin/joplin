@@ -73,7 +73,7 @@ def configure_main_menu(request, menu_items):
 @hooks.register('register_admin_menu_item')
 def register_page_list_menu_item():
     # home = HomePage.objects.first()
-    return MenuItem('Pages', '/admin/pages/search/', classnames='icon icon-home', order=10)
+    return MenuItem('Pages', '/admin/search-content/', classnames='icon icon-home', order=10)
 
 
 @hooks.register('register_admin_menu_item')
