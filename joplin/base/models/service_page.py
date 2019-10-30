@@ -118,18 +118,10 @@ class ServicePage(JanisBasePage):
 
 class ServicePageTopic(ClusterableModel):
     page = ParentalKey(ServicePage, related_name='topics')
-    topic = models.ForeignKey(
-        'base.TopicPage', verbose_name='Select a Topic', related_name='+', on_delete=models.CASCADE)
-    toplink = models.BooleanField(
-        default=False, verbose_name='Make this service a top link for this topic')
+    topic = models.ForeignKey('base.TopicPage', verbose_name='Select a Topic', related_name='+', on_delete=models.CASCADE)
 
     panels = [
-        MultiFieldPanel(
-            [
-                PageChooserPanel('topic'),
-                FieldPanel('toplink'),
-            ]
-        ),
+        PageChooserPanel('topic'),
     ]
 
 

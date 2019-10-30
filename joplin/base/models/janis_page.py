@@ -241,9 +241,9 @@ class JanisBasePage(Page):
 
         try:
             if flag_enabled('SHOW_EXTRA_PANELS'):
-                editor_panels += (ObjectList(Page.promote_panels + cls.promote_panels,
+                editor_panels += (ObjectList(cls.promote_panels,
                                              heading='SEO'),
-                                  ObjectList(Page.settings_panels + cls.settings_panels,
+                                  ObjectList(cls.settings_panels,
                                              heading='Settings'))
         except ProgrammingError as e:
             print("some problem, maybe with flags")
