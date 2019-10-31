@@ -1,6 +1,5 @@
 import django.utils.translation
 import graphene
-from django.core.exceptions import ObjectDoesNotExist
 from graphene_django import DjangoObjectType
 from graphene_django.converter import convert_django_field
 from graphene_django.debug import DjangoDebug
@@ -14,22 +13,10 @@ from django_filters import FilterSet, OrderingFilter
 from wagtail.core.blocks import *
 from wagtail.documents.models import Document
 from wagtail.core.rich_text import expand_db_html
-from base.models import (
-    JanisBasePage,
-    TranslatedImage,
-    ThreeOneOne,
-    ServicePage, ServicePageContact, ServicePageTopic, ServicePageRelatedDepartments,
-    InformationPage, InformationPageContact, InformationPageTopic, InformationPageRelatedDepartments,
-    ProcessPage, ProcessPageStep, ProcessPageContact, ProcessPageTopic,
-    DepartmentPage, DepartmentPageContact, DepartmentPageDirector, DepartmentPageTopPage, DepartmentPageRelatedPage,
-    Theme, TopicCollectionPage, TopicPage, TopicPageTopicCollection, TopicPageTopPage,
-    Contact, Location, PhoneNumber, ContactDayAndDuration, Department, DepartmentContact,
-    OfficialDocumentPage, OfficialDocumentPageRelatedDepartments, OfficialDocumentPageTopic, OfficialDocumentPageOfficialDocument,
-    GuidePage, GuidePageTopic, GuidePageRelatedDepartments, GuidePageContact,
-    FormPage, FormPageRelatedDepartments, FormPageTopic,
-)
-from .content_type_map import content_type_map
+from base.models import JanisBasePage, TranslatedImage, ThreeOneOne, ServicePage, ServicePageContact, ServicePageTopic, ServicePageRelatedDepartments, InformationPageRelatedDepartments, ProcessPage, ProcessPageStep, ProcessPageContact, ProcessPageTopic, InformationPage, InformationPageContact, InformationPageTopic, DepartmentPage, DepartmentPageContact, DepartmentPageDirector, Theme, TopicCollectionPage, TopicPage, Contact, Location, ContactDayAndDuration, Department, DepartmentContact, TopicPageTopicCollection, OfficialDocumentPage, OfficialDocumentPageRelatedDepartments, OfficialDocumentPageTopic, OfficialDocumentPageOfficialDocument, GuidePage, GuidePageTopic, GuidePageRelatedDepartments, GuidePageContact, JanisBasePage, PhoneNumber, DepartmentPageTopPage, DepartmentPageRelatedPage, TopicPageTopPage
 import traceback
+import pdb
+
 
 class RichTextFieldType(Scalar):
     """
@@ -247,12 +234,6 @@ class GuidePageRelatedDepartmentsNode(DjangoObjectType):
         interfaces = [graphene.Node]
 
 
-class FormPageRelatedDepartmentsNode(DjangoObjectType):
-    class Meta:
-        model = FormPageRelatedDepartments
-        interfaces = [graphene.Node]
-
-
 class TranslatedImageNode(DjangoObjectType):
     class Meta:
         model = TranslatedImage
@@ -294,13 +275,6 @@ class DepartmentPageNode(DjangoObjectType):
         interfaces = [graphene.Node]
 
 
-class FormPageNode(DjangoObjectType):
-    class Meta:
-        model = FormPage
-        filter_fields = ['id', 'slug', 'live', 'coa_global']
-        interfaces = [graphene.Node]
-
-
 class OfficialDocumentFilter(FilterSet):
     order_by = OrderingFilter(
         fields=(
@@ -330,55 +304,51 @@ class OfficialDocumentPageNode(DjangoObjectType):
         interfaces = [graphene.Node]
 
 
-def resolve_guide_page_section_as(model, self):
-    page = None
-    try:
-        page = model.objects.get(id=self.value)
-    except ObjectDoesNotExist:
-        pass
-    return page
-
 class GuidePageSectionPageBlock(graphene.ObjectType):
     # This uses graphene ObjectType resolvers, see:
     # https://docs.graphene-python.org/en/latest/types/objecttypes/#resolvers
 
     value = GenericScalar()
-    url = graphene.String()
     service_page = graphene.Field(ServicePageNode)
     information_page = graphene.Field(InformationPageNode)
-    form_page = graphene.Field(FormPageNode)
-
-    def __resolve_guide_page_section_as(self, model):
-        page = None
-        try:
-            page = model.objects.get(id=self.value)
-        except ObjectDoesNotExist:
-            pass
-        return page
+    url = graphene.String()
 
     def resolve_url(self, resolve_info, *args, **kwargs):
         page = None
-        for model in [
-            ServicePage,
-            InformationPage,
-            FormPage,
-        ]:
-            page = self.__resolve_guide_page_section_as(model)
-            if page:
-                break
+        try:
+            page = ServicePage.objects.get(id=self.value)
+        except Exception as e:
+            try:
+                page = InformationPage.objects.get(id=self.value)
+            except Exception as e:
+                pass
+            pass
+        
         if page:
             return page.janis_url()
         else:
             return '#'
 
     def resolve_service_page(self, info):
-        return self.__resolve_guide_page_section_as(ServicePage)
+        service_page = None
+        # TODO: don't catch everything
+        try:
+            service_page = ServicePage.objects.get(id=self.value)
+        except Exception as e:
+            pass
+
+        return service_page
 
     def resolve_information_page(self, info):
-        return self.__resolve_guide_page_section_as(InformationPage)
+        information_page = None
+        # TODO: don't catch everything
+        try:
+            information_page = InformationPage.objects.get(id=self.value)
+        except Exception as e:
+            pass
 
-    def resolve_form_page(self, info):
-        return self.__resolve_guide_page_section_as(FormPage)
+        return information_page
+
 
 class GuidePageSection(graphene.ObjectType):
     value = GenericScalar()
@@ -430,7 +400,6 @@ class PageRevisionNode(DjangoObjectType):
     as_topic_collection_page = graphene.NonNull(TopicCollectionNode)
     as_official_document_page = graphene.NonNull(OfficialDocumentPageNode)
     as_guide_page = graphene.NonNull(GuidePageNode)
-    as_form_page = graphene.NonNull(FormPageNode)
 
     def resolve_as_service_page(self, resolve_info, *args, **kwargs):
         return self.as_page_object()
@@ -453,47 +422,11 @@ class PageRevisionNode(DjangoObjectType):
     def resolve_as_guide_page(self, resolve_info, *args, **kwargs):
         return self.as_page_object()
 
-    def resolve_as_form_page(self, resolve_info, *args, **kwargs):
-        return self.as_page_object()
-
     class Meta:
         model = PageRevision
         filter_fields = ['id']
         interfaces = [graphene.Node]
 
-def get_structure_for_content_type(content_type):
-    site_structure = []
-    content_type_data = content_type_map.get(content_type, None)
-    if not content_type_data:
-        raise Exception(f'content_type [{content_type}] is not included in content_type_map')
-
-    pages = content_type_data["model"].objects.all()
-    for page in pages:
-        page_global_id = graphene.Node.to_global_id(content_type_data["node"], page.id)
-
-        if page.coa_global:
-            site_structure.append({'url' :f'/{page.slug}/', 'type': content_type, 'id': page_global_id})
-
-        # For content_type models that have related departments
-        if hasattr(page, "related_departments"):
-            page_departments = page.related_departments.all()
-            for page_department in page_departments:
-                page_department_global_id = graphene.Node.to_global_id('DepartmentNode', page_department.related_department.id)
-                site_structure.append({'url' :f'/{page_department.related_department.slug}/{page.slug}/', 'type': content_type, 'id': page_global_id, 'parent_department': page_department_global_id})
-
-        # For content_type models that have topics
-        if hasattr(page, "topics"):
-            page_topics = page.topics.all()
-            for page_topic in page_topics:
-                page_topic_global_id = graphene.Node.to_global_id('TopicNode', page_topic.topic.id)
-                page_topic_tcs = page_topic.topic.topiccollections.all()
-                for tc in page_topic_tcs:
-                    if not tc.topiccollection.theme:
-                        continue
-
-                    page_topic_tc_global_id = graphene.Node.to_global_id('TopicCollectionNode', tc.topiccollection.id)
-                    site_structure.append({'url' :f'/{tc.topiccollection.theme.slug}/{tc.topiccollection.slug}/{page_topic.topic.slug}/{page.slug}/', 'type': content_type, 'id': page_global_id, 'parent_topic': page_topic_global_id, 'grandparent_topic_collection': page_topic_tc_global_id})
-    return site_structure
 
 class SiteStructure(graphene.ObjectType):
     value = GenericScalar()
@@ -528,11 +461,98 @@ class SiteStructure(graphene.ObjectType):
             department_global_id = graphene.Node.to_global_id('DepartmentNode', department.id)
             site_structure.append({'url' :f'/{department.slug}/', 'type': 'department', 'id': department_global_id})
 
-        site_structure.extend(get_structure_for_content_type('service page'))
-        site_structure.extend(get_structure_for_content_type('information page'))
-        site_structure.extend(get_structure_for_content_type('official document page'))
-        site_structure.extend(get_structure_for_content_type('guide page'))
-        site_structure.extend(get_structure_for_content_type('form page'))
+        service_pages = ServicePage.objects.all()
+        for service_page in service_pages:
+            service_page_global_id = graphene.Node.to_global_id('ServicePageNode', service_page.id)
+
+            if service_page.coa_global:
+                site_structure.append({'url' :f'/{service_page.slug}/', 'type': 'service page', 'id': service_page_global_id})
+
+            service_page_departments = service_page.related_departments.all()
+            for service_page_department in service_page_departments:
+                service_page_department_global_id = graphene.Node.to_global_id('DepartmentNode', service_page_department.related_department.id)
+                site_structure.append({'url' :f'/{service_page_department.related_department.slug}/{service_page.slug}/', 'type': 'service page', 'id': service_page_global_id, 'parent_department': service_page_department_global_id})
+
+            service_page_topics = service_page.topics.all()
+            for service_page_topic in service_page_topics:
+                service_page_topic_global_id = graphene.Node.to_global_id('TopicNode', service_page_topic.topic.id)
+                service_page_topic_tcs = service_page_topic.topic.topiccollections.all()
+                for tc in service_page_topic_tcs:
+                    if not tc.topiccollection.theme:
+                        continue
+
+                    service_page_topic_tc_global_id = graphene.Node.to_global_id('TopicCollectionNode', tc.topiccollection.id)
+                    site_structure.append({'url' :f'/{tc.topiccollection.theme.slug}/{tc.topiccollection.slug}/{service_page_topic.topic.slug}/{service_page.slug}/', 'type': 'service page', 'id': service_page_global_id, 'parent_topic': service_page_topic_global_id, 'grandparent_topic_collection': service_page_topic_tc_global_id})
+
+        information_pages = InformationPage.objects.all()
+        for information_page in information_pages:
+            information_page_global_id = graphene.Node.to_global_id('InformationPageNode', information_page.id)
+
+            if information_page.coa_global:
+                site_structure.append({'url' :f'/{information_page.slug}/', 'type': 'information page', 'id': information_page_global_id})
+
+            information_page_departments = information_page.related_departments.all()
+            for information_page_department in information_page_departments:
+                information_page_department_global_id = graphene.Node.to_global_id('DepartmentNode', information_page_department.related_department.id)
+                site_structure.append({'url' :f'/{information_page_department.related_department.slug}/{information_page.slug}/', 'type': 'information page', 'id': information_page_global_id, 'parent_department': information_page_department_global_id})
+
+            information_page_topics = information_page.topics.all()
+            for information_page_topic in information_page_topics:
+                information_page_topic_global_id = graphene.Node.to_global_id('TopicNode', information_page_topic.topic.id)
+                information_page_topic_tcs = information_page_topic.topic.topiccollections.all()
+                for tc in information_page_topic_tcs:
+                    if not tc.topiccollection.theme:
+                        continue
+
+                    information_page_topic_tc_global_id = graphene.Node.to_global_id('TopicCollectionNode', tc.topiccollection.id)
+                    site_structure.append({'url' :f'/{tc.topiccollection.theme.slug}/{tc.topiccollection.slug}/{information_page_topic.topic.slug}/{information_page.slug}/', 'type': 'information page', 'id': information_page_global_id, 'parent_topic': information_page_topic_global_id, 'grandparent_topic_collection': information_page_topic_tc_global_id})
+
+        official_document_pages = OfficialDocumentPage.objects.all()
+        for official_document_page in official_document_pages:
+            official_document_page_global_id = graphene.Node.to_global_id('OfficialDocumentPageNode', official_document_page.id)
+
+            if official_document_page.coa_global:
+                site_structure.append({'url' :f'/{official_document_page.slug}/', 'type': 'official document page', 'id': official_document_page_global_id})
+
+            official_document_page_departments = official_document_page.related_departments.all()
+            for official_document_page_department in official_document_page_departments:
+                official_document_page_department_global_id = graphene.Node.to_global_id('DepartmentNode', official_document_page_department.related_department.id)
+                site_structure.append({'url' :f'/{official_document_page_department.related_department.slug}/{official_document_page.slug}/', 'type': 'official document page', 'id': official_document_page_global_id, 'parent_department': official_document_page_department_global_id})
+
+            official_document_page_topics = official_document_page.topics.all()
+            for official_document_page_topic in official_document_page_topics:
+                official_document_page_topic_global_id = graphene.Node.to_global_id('TopicNode', official_document_page_topic.topic.id)
+                official_document_page_topic_tcs = official_document_page_topic.topic.topiccollections.all()
+                for tc in official_document_page_topic_tcs:
+                    if not tc.topiccollection.theme:
+                        continue
+
+                    official_document_page_topic_tc_global_id = graphene.Node.to_global_id('TopicCollectionNode', tc.topiccollection.id)
+                    site_structure.append({'url' :f'/{tc.topiccollection.theme.slug}/{tc.topiccollection.slug}/{official_document_page_topic.topic.slug}/{official_document_page.slug}/', 'type': 'official document page', 'id': official_document_page_global_id, 'parent_topic': official_document_page_topic_global_id, 'grandparent_topic_collection': official_document_page_topic_tc_global_id})
+
+        guide_pages = GuidePage.objects.all()
+        for guide_page in guide_pages:
+            guide_page_global_id = graphene.Node.to_global_id('GuidePageNode', guide_page.id)
+
+            if guide_page.coa_global:
+                site_structure.append({'url' :f'/{guide_page.slug}/', 'type': 'guide page', 'id': guide_page_global_id})
+
+            guide_page_departments = guide_page.related_departments.all()
+            for guide_page_department in guide_page_departments:
+                guide_page_department_global_id = graphene.Node.to_global_id('DepartmentNode', guide_page_department.related_department.id)
+                site_structure.append({'url' :f'/{guide_page_department.related_department.slug}/{guide_page.slug}/', 'type': 'guide page', 'id': guide_page_global_id, 'parent_department': guide_page_department_global_id})
+
+            guide_page_topics = guide_page.topics.all()
+            for guide_page_topic in guide_page_topics:
+                guide_page_topic_global_id = graphene.Node.to_global_id('TopicNode', guide_page_topic.topic.id)
+                guide_page_topic_tcs = guide_page_topic.topic.topiccollections.all()
+                for tc in guide_page_topic_tcs:
+                    if not tc.topiccollection.theme:
+                        continue
+
+                    guide_page_topic_tc_global_id = graphene.Node.to_global_id('TopicCollectionNode', tc.topiccollection.id)
+                    site_structure.append({'url' :f'/{tc.topiccollection.theme.slug}/{tc.topiccollection.slug}/{guide_page_topic.topic.slug}/{guide_page.slug}/', 'type': 'guide page', 'id': guide_page_global_id, 'parent_topic': guide_page_topic_global_id, 'grandparent_topic_collection': guide_page_topic_tc_global_id})
+
 
         return site_structure
 
@@ -550,13 +570,6 @@ class InformationPageTopicNode(DjangoObjectType):
         filter_fields = ['topic']
 
 
-class FormPageTopicNode(DjangoObjectType):
-    class Meta:
-        model = FormPageTopic
-        interfaces = [graphene.Node]
-        filter_fields = ['topic']
-
-
 class DepartmentPageContactNode(DjangoObjectType):
     class Meta:
         model = DepartmentPageContact
@@ -568,21 +581,6 @@ class DepartmentPageDirectorNode(DjangoObjectType):
         model = DepartmentPageDirector
         interfaces = [graphene.Node]
 
-# Get the original page object from a page chooser node
-# Works for any content_type defined in content_type_map
-def get_page_from_content_type(self):
-    content_type = self.page.content_type.name
-    model = content_type_map[content_type]["model"]
-    page = model.objects.get(id=self.page_id)
-    return page
-
-# Get a page global_id from a page chooser node
-# Works for any content_type defined in content_type_map
-def get_global_id_from_content_type(self):
-    content_type = self.page.content_type.name
-    node = content_type_map[content_type]["node"]
-    global_id = graphene.Node.to_global_id(node, self.page_id)
-    return global_id
 
 class DepartmentPageTopPageNode(DjangoObjectType):
     title = graphene.String()
@@ -590,13 +588,100 @@ class DepartmentPageTopPageNode(DjangoObjectType):
     page_id = graphene.ID()
 
     def resolve_page_id(self, info):
-        return get_global_id_from_content_type(self)
+        # TODO: don't catch everything
+        try:
+            service_page_global_id = graphene.Node.to_global_id('ServicePageNode', self.page_id)
+            return service_page_global_id
+        except Exception as e:
+            pass
+
+        # TODO: don't catch everything
+        try:
+            information_page_global_id = graphene.Node.to_global_id('InformationPageNode', self.page_id)
+            return information_page_global_id
+        except Exception as e:
+            pass
+
+        # TODO: don't catch everything
+        try:
+            guide_page_global_id = graphene.Node.to_global_id('GuidePageNode', self.page_id)
+            return guide_page_global_id
+        except Exception as e:
+            pass
+
+        # TODO: don't catch everything
+        try:
+            official_document_page_global_id = graphene.Node.to_global_id('OfficialDocumentPageNode', self.page_id)
+            return official_document_page_global_id
+        except Exception as e:
+            pass
+
 
     def resolve_title(self, resolve_info, *args, **kwargs):
-        return get_page_from_content_type(self).title
+        service_page = None
+        # TODO: don't catch everything
+        try:
+            service_page = ServicePage.objects.get(id=self.page_id)
+            return service_page.title
+        except Exception as e:
+            pass
+
+        information_page = None
+        # TODO: don't catch everything
+        try:
+            information_page = InformationPage.objects.get(id=self.page_id)
+            return information_page.title
+        except Exception as e:
+            pass
+
+        guide_page = None
+        # TODO: don't catch everything
+        try:
+            guide_page = GuidePage.objects.get(id=self.page_id)
+            return guide_page.title
+        except Exception as e:
+            pass
+
+        official_document_page = None
+        # TODO: don't catch everything
+        try:
+            official_document_page = OfficialDocumentPage.objects.get(id=self.page_id)
+            return official_document_page.title
+        except Exception as e:
+            pass
 
     def resolve_slug(self, resolve_info, *args, **kwargs):
-        return get_page_from_content_type(self).slug
+        service_page = None
+        # TODO: don't catch everything
+        try:
+            service_page = ServicePage.objects.get(id=self.page_id)
+            return service_page.slug
+        except Exception as e:
+            pass
+
+        information_page = None
+        # TODO: don't catch everything
+        try:
+            information_page = InformationPage.objects.get(id=self.page_id)
+            return information_page.slug
+        except Exception as e:
+            pass
+
+        guide_page = None
+        # TODO: don't catch everything
+        try:
+            guide_page = GuidePage.objects.get(id=self.page_id)
+            return guide_page.slug
+        except Exception as e:
+            pass
+
+        official_document_page = None
+        # TODO: don't catch everything
+        try:
+            official_document_page = OfficialDocumentPage.objects.get(id=self.page_id)
+            return official_document_page.slug
+        except Exception as e:
+            pass
 
     class Meta:
         model = DepartmentPageTopPage
@@ -609,13 +694,100 @@ class DepartmentPageRelatedPageNode(DjangoObjectType):
     page_id = graphene.ID()
 
     def resolve_page_id(self, info):
-        return get_global_id_from_content_type(self)
+        # TODO: don't catch everything
+        try:
+            service_page_global_id = graphene.Node.to_global_id('ServicePageNode', self.page_id)
+            return service_page_global_id
+        except Exception as e:
+            pass
+
+        # TODO: don't catch everything
+        try:
+            information_page_global_id = graphene.Node.to_global_id('InformationPageNode', self.page_id)
+            return information_page_global_id
+        except Exception as e:
+            pass
+
+        # TODO: don't catch everything
+        try:
+            guide_page_global_id = graphene.Node.to_global_id('GuidePageNode', self.page_id)
+            return guide_page_global_id
+        except Exception as e:
+            pass
+
+        # TODO: don't catch everything
+        try:
+            official_document_page_global_id = graphene.Node.to_global_id('OfficialDocumentPageNode', self.page_id)
+            return official_document_page_global_id
+        except Exception as e:
+            pass
+
 
     def resolve_title(self, resolve_info, *args, **kwargs):
-        return get_page_from_content_type(self).title
+        service_page = None
+        # TODO: don't catch everything
+        try:
+            service_page = ServicePage.objects.get(id=self.page_id)
+            return service_page.title
+        except Exception as e:
+            pass
+
+        information_page = None
+        # TODO: don't catch everything
+        try:
+            information_page = InformationPage.objects.get(id=self.page_id)
+            return information_page.title
+        except Exception as e:
+            pass
+
+        guide_page = None
+        # TODO: don't catch everything
+        try:
+            guide_page = GuidePage.objects.get(id=self.page_id)
+            return guide_page.title
+        except Exception as e:
+            pass
+
+        official_document_page = None
+        # TODO: don't catch everything
+        try:
+            official_document_page = OfficialDocumentPage.objects.get(id=self.page_id)
+            return official_document_page.title
+        except Exception as e:
+            pass
 
     def resolve_slug(self, resolve_info, *args, **kwargs):
-        return get_page_from_content_type(self).slug
+        service_page = None
+        # TODO: don't catch everything
+        try:
+            service_page = ServicePage.objects.get(id=self.page_id)
+            return service_page.slug
+        except Exception as e:
+            pass
+
+        information_page = None
+        # TODO: don't catch everything
+        try:
+            information_page = InformationPage.objects.get(id=self.page_id)
+            return information_page.slug
+        except Exception as e:
+            pass
+
+        guide_page = None
+        # TODO: don't catch everything
+        try:
+            guide_page = GuidePage.objects.get(id=self.page_id)
+            return guide_page.slug
+        except Exception as e:
+            pass
+
+        official_document_page = None
+        # TODO: don't catch everything
+        try:
+            official_document_page = OfficialDocumentPage.objects.get(id=self.page_id)
+            return official_document_page.slug
+        except Exception as e:
+            pass
 
     class Meta:
         model = DepartmentPageRelatedPage
@@ -628,13 +800,100 @@ class TopicPageTopPageNode(DjangoObjectType):
     page_id = graphene.ID()
 
     def resolve_page_id(self, info):
-        return get_global_id_from_content_type(self)
+        # TODO: don't catch everything
+        try:
+            service_page_global_id = graphene.Node.to_global_id('ServicePageNode', self.page_id)
+            return service_page_global_id
+        except Exception as e:
+            pass
+
+        # TODO: don't catch everything
+        try:
+            information_page_global_id = graphene.Node.to_global_id('InformationPageNode', self.page_id)
+            return information_page_global_id
+        except Exception as e:
+            pass
+
+        # TODO: don't catch everything
+        try:
+            guide_page_global_id = graphene.Node.to_global_id('GuidePageNode', self.page_id)
+            return guide_page_global_id
+        except Exception as e:
+            pass
+
+        # TODO: don't catch everything
+        try:
+            official_document_page_global_id = graphene.Node.to_global_id('OfficialDocumentPageNode', self.page_id)
+            return official_document_page_global_id
+        except Exception as e:
+            pass
+
 
     def resolve_title(self, resolve_info, *args, **kwargs):
-        return get_page_from_content_type(self).title
+        service_page = None
+        # TODO: don't catch everything
+        try:
+            service_page = ServicePage.objects.get(id=self.page_id)
+            return service_page.title
+        except Exception as e:
+            pass
+
+        information_page = None
+        # TODO: don't catch everything
+        try:
+            information_page = InformationPage.objects.get(id=self.page_id)
+            return information_page.title
+        except Exception as e:
+            pass
+
+        guide_page = None
+        # TODO: don't catch everything
+        try:
+            guide_page = GuidePage.objects.get(id=self.page_id)
+            return guide_page.title
+        except Exception as e:
+            pass
+
+        official_document_page = None
+        # TODO: don't catch everything
+        try:
+            official_document_page = OfficialDocumentPage.objects.get(id=self.page_id)
+            return official_document_page.title
+        except Exception as e:
+            pass
 
     def resolve_slug(self, resolve_info, *args, **kwargs):
-        return get_page_from_content_type(self).slug
+        service_page = None
+        # TODO: don't catch everything
+        try:
+            service_page = ServicePage.objects.get(id=self.page_id)
+            return service_page.slug
+        except Exception as e:
+            pass
+
+        information_page = None
+        # TODO: don't catch everything
+        try:
+            information_page = InformationPage.objects.get(id=self.page_id)
+            return information_page.slug
+        except Exception as e:
+            pass
+
+        guide_page = None
+        # TODO: don't catch everything
+        try:
+            guide_page = GuidePage.objects.get(id=self.page_id)
+            return guide_page.slug
+        except Exception as e:
+            pass
+
+        official_document_page = None
+        # TODO: don't catch everything
+        try:
+            official_document_page = OfficialDocumentPage.objects.get(id=self.page_id)
+            return official_document_page.slug
+        except Exception as e:
+            pass
 
     class Meta:
         model = TopicPageTopPage
@@ -695,13 +954,11 @@ class Query(graphene.ObjectType):
     all_official_document_pages = DjangoFilterConnectionField(
         OfficialDocumentPageNode)
     all_guide_pages = DjangoFilterConnectionField(GuidePageNode)
-    all_form_pages = DjangoFilterConnectionField(FormPageNode)
     all_topic_page_topic_collections = DjangoFilterConnectionField(TopicPageTopicCollectionNode)
     all_service_page_topics = DjangoFilterConnectionField(ServicePageTopicNode)
     all_information_page_topics = DjangoFilterConnectionField(InformationPageTopicNode)
     all_official_document_page_topics = DjangoFilterConnectionField(OfficialDocumentPageTopicNode)
     all_guide_page_topics = DjangoFilterConnectionField(GuidePageTopicNode)
-    all_form_page_topics = DjangoFilterConnectionField(FormPageTopicNode)
 
     def resolve_site_structure(self, resolve_info):
         site_structure = SiteStructure()
@@ -709,6 +966,7 @@ class Query(graphene.ObjectType):
 
     def resolve_page_revision(self, resolve_info, id=None):
         revision = graphene.Node.get_node_from_global_id(resolve_info, id)
+
         return revision
 
 

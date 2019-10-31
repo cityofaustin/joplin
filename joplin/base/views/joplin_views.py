@@ -1,13 +1,12 @@
 from django.shortcuts import get_object_or_404, redirect, render
 from django.http import HttpResponse
 from wagtail.core.models import Page, UserPagePermissionsProxy
-from django.core.exceptions import PermissionDenied
 from wagtail.admin.views import pages
 from wagtail.admin import messages
 from django.utils.translation import ugettext as _
 from django.urls import reverse
 from django.conf import settings
-from base.models import ServicePage, ProcessPage, InformationPage, TopicPage, TopicCollectionPage, DepartmentPage, Theme, OfficialDocumentPage, GuidePage, FormPage
+from base.models import ServicePage, ProcessPage, InformationPage, TopicPage, TopicCollectionPage, DepartmentPage, Theme, OfficialDocumentPage, GuidePage
 from base.models.site_settings import JanisBranchSettings
 import json
 
@@ -78,24 +77,22 @@ def new_page_from_modal(request):
         # Create the page
         if body['type'] == 'service':
             page = ServicePage(**data)
-        elif body['type'] == 'process':
+        if body['type'] == 'process':
             page = ProcessPage(**data)
-        elif body['type'] == 'information':
+        if body['type'] == 'information':
             page = InformationPage(**data)
-        elif body['type'] == 'topic':
+        if body['type'] == 'topic':
             page = TopicPage(**data)
-        elif body['type'] == 'topiccollection':
+        if body['type'] == 'topiccollection':
             if body['theme'] is not None:
                 data['theme'] = Theme.objects.get(id=body['theme'])
             page = TopicCollectionPage(**data)
-        elif body['type'] == 'department':
+        if body['type'] == 'department':
             page = DepartmentPage(**data)
-        elif body['type'] == 'documents':
+        if body['type'] == 'documents':
             page = OfficialDocumentPage(**data)
-        elif body['type'] == 'guide':
+        if body['type'] == 'guide':
             page = GuidePage(**data)
-        elif body['type'] == 'form':
-            page = FormPage(**data)
 
         # Add it as a child of home
         home = Page.objects.get(id=3)

@@ -10,15 +10,7 @@
 
 
 {{ block.super }}
-
-<script>
-// passing the constant from context_processors into a JS variable (boolean)
-    const ISPRODUCTION = '{{ISPRODUCTION}}';
-</script>
 {% render_bundle 'admin' %}
-{% if ISPRODUCTION == False %}
-  {% render_bundle 'theme' %}
-{% endif %}
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet">
 {% include 'session_security/all.html' %}
@@ -42,5 +34,4 @@
         </div>
     </div>
 </div>
-
 {% endblock %}

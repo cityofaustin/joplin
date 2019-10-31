@@ -9,7 +9,6 @@ import guideImage from '../../static/images/guide.png';
 import documentsImage from '../../static/images/documents.png';
 import topicCollectionImage from '../../static/images/topic_collection.png';
 import topicsImage from '../../static/images/topics.png';
-import formPageImage from '../../static/images/info_page.png'; // TODO: get a png for forms
 
 const ChooseTypeStep = ({
   handleTypeSelect,
@@ -124,20 +123,6 @@ const ChooseTypeStep = ({
                 </h3>
                 <img src={documentsImage} alt="Documents" />
                 <p>Summaries and links to official documents</p>
-              </div>
-              <div
-                className="ChooseTypeStep__option"
-                onClick={() =>
-                  handleTypeSelect({
-                    type: 'form',
-                  })
-                }
-              >
-                <h3 className="ChooseTypeStep__option-header">
-                  Form Page
-                </h3>
-                <img src={formPageImage} alt="Form Page" />
-                <p>Container for an embedded Formstack form</p>
               </div>
             </React.Fragment>
           )}
