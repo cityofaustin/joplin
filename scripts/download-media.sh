@@ -1,3 +1,4 @@
+# This function is deprecated
 # The default behavior of Joplin is to point to the remote staging CMS_MEDIA location,
 # which means you no longer need to download media files manually.
 # Previously, that was something we needed to do with this script.
