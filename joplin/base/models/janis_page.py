@@ -49,6 +49,7 @@ class JanisBasePage(Page):
 
     coa_global = models.BooleanField(default=False, verbose_name='Make this a top level page')
 
+
     def janis_url(self):
         """
         This function parses various attributes of related content types to construct the
@@ -56,7 +57,6 @@ class JanisBasePage(Page):
 
         For attributes with multiple relations, it ONLY takes the FIRST one.
         """
-
         try:
             """
              These use ternary operators with some appropriate conditionals
@@ -130,14 +130,23 @@ class JanisBasePage(Page):
                     except AttributeError as e:
                         # this is for pages just under departments
                         theme_slug = self.related_departments.all()[0].related_department.slug or None
-
+                    finally:
+                        paths_list = [
+                            base_url,
+                            theme_slug,
+                            topic_collection_slug,
+                            topic_slug,
+                            page_slug]
+                        janis_url = '/'.join(filter(None, (paths_list)))
+                        return janis_url
             # collect all our path elements
             paths_list = [
                 base_url,
                 theme_slug,
                 topic_collection_slug,
                 topic_slug,
-                page_slug]
+                page_slug
+                ]
             # join them together, filtering out empty ones
 
             janis_url = '/'.join(filter(None, (paths_list)))
@@ -233,9 +242,9 @@ class JanisBasePage(Page):
 
         try:
             if flag_enabled('SHOW_EXTRA_PANELS'):
-                editor_panels += (ObjectList(Page.promote_panels + cls.promote_panels,
+                editor_panels += (ObjectList(cls.promote_panels,
                                              heading='SEO'),
-                                  ObjectList(Page.settings_panels + cls.settings_panels,
+                                  ObjectList(cls.settings_panels,
                                              heading='Settings'))
         except ProgrammingError as e:
             print("some problem, maybe with flags")
