@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "225386b26881398027a78cbc180231aa44c339a467c3a5c0f485705a4339d6e2"
+            "sha256": "92d65e28cd8fbfd7d69c89be5fd294b22ced3de6aa9b9fe84fe46ba1cfe22043"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -293,13 +293,6 @@
                 "sha256:bde2aef6f44302dfb30320115b17d030798de8c4110e28d5cf6cf91a7a31074c"
             ],
             "version": "==0.9.4"
-        },
-        "nested-lookup": {
-            "hashes": [
-                "sha256:9c4c25e4b0327dfd1a039ebf0615896a5017b64f3f2076f53909b272a6c56d2b"
-            ],
-            "index": "pypi",
-            "version": "==0.2.18"
         },
         "phonenumberslite": {
             "hashes": [
