@@ -300,7 +300,7 @@ The migration process currently consists of 3 commands:
 -   Shut down all joplin containers:
     -   `source scripts/docker-helpers.sh; stop_project_containers joplin`
 -   Delete all joplin containers:
-    -   `scripts/docker-helpers.sh; delete_project_containers joplin`
+    -   `source scripts/docker-helpers.sh; delete_project_containers joplin`
 -   Create New App:
     -   ```
         APP_NAME=app_name_goes_here
