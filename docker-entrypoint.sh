@@ -5,16 +5,10 @@ set -o errexit
 # This script sets the command and parameters that will be executed first when a container is started.
 # $DEPLOYMENT_MODE is set in app.Dockerfile at image build time
 
-# Seed prior prod datadump into Joplin from migration_test generated backup
-function load_prod_datadump {
-  echo "Adding prod datadump"
-  python ./joplin/manage.py loaddata ./joplin/db/system-generated/prod.datadump.json
-}
-
-# Seed prior staging datadump into Joplin from migration_test generated backup
-function load_staging_datadump {
-  echo "Adding staging datadump"
-  python ./joplin/manage.py loaddata ./joplin/db/system-generated/staging.datadump.json
+# Seed test data into Joplin from migration_test generated backup
+function load_backup_data {
+  echo "Adding backup data"
+  python ./joplin/manage.py loaddata ./joplin/db/system-generated/seeding.datadump.json
 }
 
 # Add initial configs to handle Publishing and Previewing on PR Apps
@@ -50,23 +44,22 @@ python ./joplin/manage.py migrate --noinput
 
 case "${DEPLOYMENT_MODE}" in
   LOCAL)
-    if [ "$LOAD_NEW_DATADUMP" == "on" ]; then
-      # Option for migration_test.sh to source directly from a new production or staging datadump
-      python ./joplin/manage.py loaddata ./joplin/db/system-generated/tmp.datadump.json
+    if [ "$LOAD_PROD_DATA" == "on" ]; then
+      # Option for migration_test.sh to source directly from production
+      python ./joplin/manage.py loaddata ./joplin/db/system-generated/tmp_production.datadump.json
       sanitize_revision_data
       load_test_admin
-    elif [ "$LOAD_DATA" == "on" ] || [ "$LOAD_PROD_DATA" == "on" ]; then
-      load_prod_datadump
-    elif [ "$LOAD_STAGING_DATA" == "on" ]; then
-      load_staging_datadump
+    elif [ "$LOAD_DATA" == "on" ]; then
+      load_backup_data
     else
       load_test_admin
     fi
     load_janis_branch_settings
   ;;
   REVIEW)
-    load_prod_datadump
+    load_backup_data
     load_janis_branch_settings
+    # Let's try being reckless and doing that static thing here too.
     echo "Collecting static files"
     python ./joplin/manage.py collectstatic --noinput;
   ;;

@@ -1,11 +1,3 @@
 {% extends "wagtailadmin/login.html" %}
-{% load render_bundle from webpack_loader %}
 
-{% block branding_login %}
-{% if ISPRODUCTION == False %}
-  {% render_bundle 'theme' %}
-Welcome to Joplin staging!
-{% else %}
-Welcome to Joplin!
-{% endif %}
-{% endblock %}
+{% block branding_login %}Welcome to Joplin!{% endblock %}

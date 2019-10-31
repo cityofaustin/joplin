@@ -30,9 +30,6 @@ const ChooseTitleStep = ({
       {pageType === 'documents' && (
         <span>Write the name for this list of documents.</span>
       )}
-      {pageType === 'form' && (
-        <span>Write the name for this form.</span>
-      )}
     </h2>
     <label htmlFor="page-title" className="ChooseTitleStep__input-label">
       <span className="ChooseTitleStep__input-label--left">Page Title</span>
