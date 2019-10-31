@@ -1,0 +1,24 @@
+{% extends "wagtailadmin/base.html" %}
+{% load i18n %}
+{% block titletag %}{% trans 'Search' %}{% endblock %}
+{% block extra_js %}
+  {{ block.super }}
+
+  <script>
+      window.headerSearch = {
+          url: "{% url 'wagtailadmin_pages:search' %}",
+          termInput: "#id_q",
+          targetOutput: "#page-results"
+      }
+  </script>
+{% endblock %}
+
+{% block content %}
+  {% trans "Search" as search_str %}
+  {% include "wagtailadmin/pages/search_header.html" with title=search_str search_url="wagtailadmin_pages:search" icon="search" %}
+
+  <div id="page-results">
+      {% include "wagtailadmin/pages/search_results.html" with query_string=query_string %}
+  </div>
+
+{% endblock %}
