@@ -54,7 +54,9 @@ def publish(request, page_id):
 
         if next_url:
             return redirect(next_url)
-        return redirect('wagtailadmin_explore', page.get_parent().id)
+        # return redirect('wagtailadmin_explore', page.get_parent().id)
+        return redirect('pages/search/')
+
 
     return render(request, 'wagtailadmin/pages/confirm_publish.html', {
         'page': page,
