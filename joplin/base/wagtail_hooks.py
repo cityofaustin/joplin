@@ -2,7 +2,7 @@ from django.db import models
 from django import forms
 from wagtail.contrib.settings.models import BaseSetting, register_setting
 from django.utils.html import escape
-from wagtail.core.models import Page
+from wagtail.core.models import Page, PageRevision
 from wagtail.core.rich_text import LinkHandler
 from wagtail.core.rich_text.pages import PageLinkHandler
 from django.conf import settings
@@ -42,6 +42,12 @@ def before_edit_page(request, page):
     assert request.user.is_authenticated
     print(
         f'BeforeEditHook {request.user.email} is in groups {[group.name for group in request.user.groups.all()]}')
+
+
+# @hooks.register('after_edit_page')
+# def after_edit_page(request, page):
+#     import pdb
+#     pdb.set_trace()
 
 
 @hooks.register('construct_main_menu')
