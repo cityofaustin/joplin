@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.utils.translation import ugettext_lazy as _
 from modelcluster.models import ClusterableModel
 from modelcluster.fields import ParentalKey
 
@@ -19,6 +19,7 @@ from base.forms import TopicPageForm
 from .janis_page import JanisBasePage
 from .translated_image import TranslatedImage
 from .widgets import countMe, countMeTextArea
+from generic_chooser.widgets import AdminChooser
 
 
 class TopicPage(JanisBasePage):
@@ -44,12 +45,19 @@ class TopicPage(JanisBasePage):
     ]
 
 
+class PageChooser(AdminChooser):
+    choose_one_text = _('Choose content to feature on this topic')
+    model = JanisBasePage
+    link_to_chosen_text = _('Edit this page')
+    choose_modal_url_name = 'page_chooser:choose'
+
+
 class TopicPageTopPage(Orderable):
     topic = ParentalKey(TopicPage, related_name='top_pages')
-    page = models.ForeignKey('wagtailcore.Page',  verbose_name='Select a page', related_name='+', on_delete=models.CASCADE)
+    page = models.ForeignKey('wagtailcore.Page', verbose_name='Select a page', related_name='+', on_delete=models.CASCADE)
 
     panels = [
-        PageChooserPanel('page', page_type=[InformationPage, ServicePage, GuidePage, OfficialDocumentPage]),
+        FieldPanel('page', widget=PageChooser),
     ]
 
     def __str__(self):

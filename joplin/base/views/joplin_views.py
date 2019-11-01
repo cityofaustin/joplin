@@ -10,12 +10,23 @@ from django.conf import settings
 from base.models import ServicePage, ProcessPage, InformationPage, TopicPage, TopicCollectionPage, DepartmentPage, Theme, OfficialDocumentPage, GuidePage, FormPage
 from base.models.site_settings import JanisBranchSettings
 import json
+from generic_chooser.views import ModelChooserViewSet
 
-# This method is used on the home Pages page.
-# When you want to publish a page directly from the home page, this route is called.
-# The publish button on the edit/ page sends a "action-publish" message directly to wagtail.
-# "action-publish" does not use this endpoint.
+
+class PageChooserViewSet(ModelChooserViewSet):
+    icon = 'user'
+    model = Page
+    page_title = _("Choose a Page")
+    per_page = 10
+
+
 def publish(request, page_id):
+    """
+    This method is used on the home Pages page.
+    When you want to publish a page directly from the home page, this route is called.
+    The publish button on the edit/ page sends a "action-publish" message directly to wagtail.
+    "action-publish" does not use this endpoint.
+    """
     page = get_object_or_404(Page, id=page_id).specific
 
     user_perms = UserPagePermissionsProxy(request.user)
@@ -56,7 +67,6 @@ def publish(request, page_id):
             return redirect(next_url)
         # return redirect('wagtailadmin_explore', page.get_parent().id)
         return redirect('pages/search/')
-
 
     return render(request, 'wagtailadmin/pages/confirm_publish.html', {
         'page': page,

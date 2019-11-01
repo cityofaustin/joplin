@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "92d65e28cd8fbfd7d69c89be5fd294b22ced3de6aa9b9fe84fe46ba1cfe22043"
+            "sha256": "48af43b0eca47b3966e04e07c378c21c0a2d88fdd3527f4befc0b678fb0ea4d6"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -482,6 +482,13 @@
             ],
             "index": "pypi",
             "version": "==2.6.1"
+        },
+        "wagtail-generic-chooser": {
+            "hashes": [
+                "sha256:25ea082c29f361e298e71d4747230eec2cc4c8f21d31b3cf36ea228a397a1d19"
+            ],
+            "index": "pypi",
+            "version": "==0.1"
         },
         "webencodings": {
             "hashes": [

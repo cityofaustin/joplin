@@ -24,6 +24,7 @@ from html.parser import HTMLParser
 
 import wagtail.admin.rich_text.editors.draftail.features as draftail_features
 from wagtail.admin.rich_text.converters.html_to_contentstate import BlockElementHandler
+from base.views.joplin_views import PageChooserViewSet
 
 
 # Following this: https://docs.python.org/3/library/html.parser.html#examples
@@ -295,3 +296,8 @@ class InternalLinkHandler(LinkHandler):
 @hooks.register('register_rich_text_features', order=1)
 def register_link_handler(features):
     features.register_link_type(InternalLinkHandler)
+
+
+@hooks.register('register_admin_viewset')
+def register_page_chooser_viewset():
+    return PageChooserViewSet('page_chooser', url_prefix='page-chooser')
