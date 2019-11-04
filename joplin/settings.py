@@ -390,3 +390,8 @@ if ISLOCAL:
     CMS_API = f"http://localhost:{os.getenv('JOPLIN_APP_HOST_PORT')}/api/graphql"
 else:
     CMS_API = f"https://{os.getenv('APPLICATION_NAME','')}.herokuapp.com/api/graphql"
+
+
+# Sets the login_url redirect for "from django.contrib.auth.decorators import user_passes_test"
+# https://kite.com/python/docs/django.contrib.auth.decorators.user_passes_test
+LOGIN_URL = '/admin/login/'

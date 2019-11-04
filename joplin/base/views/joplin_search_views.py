@@ -5,6 +5,11 @@ from django.core.paginator import Paginator
 from wagtail.core.models import Page
 from wagtail.search.query import MATCH_ALL
 from wagtail.admin.forms.search import SearchForm
+from wagtail.admin.utils import user_has_any_page_permission
+# wagtail.admin.utils.user_passes_test does not redirect to settings.LOGIN_URL
+# So we must use django.contrib.auth.decorators.user_passes_test
+from django.contrib.auth.decorators import user_passes_test
+from django.views.decorators.vary import vary_on_headers
 
 """
  Joplin Note:
@@ -16,10 +21,10 @@ from wagtail.admin.forms.search import SearchForm
  - we 'run' the query as soon as you visit the page (before any search),
    so we can populate it with summary counts and sort stuff
  - excluding certain pages from the pages to query
-
 """
 
-
+@vary_on_headers('X-Requested-With')
+@user_passes_test(user_has_any_page_permission)
 def search(request):
     # excluding Root(1) and Home(3) pages from search
     pages = all_pages = Page.objects.all().exclude(id__in=[1, 3]).prefetch_related('content_type').specific()
