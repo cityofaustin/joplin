@@ -54,14 +54,26 @@ This will automatically load environment variables into your pipenv environment.
     <img src="/README/server_success.png" align="middle" height="70" >
 -   Your Joplin instance will be accessible at http://localhost:8000/admin with the credentials user: `admin@austintexas.io`, pw: `x`
 
-**Run with data**
+**Run with prod data**
 
 ```
 LOAD_DATA="on" ./scripts/serve-local.sh
+LOAD_PROD_DATA="on" ./scripts/serve-local.sh
 ```
 
--   This will add some test content (from `joplin/db/system-generated/seeding.datadump.json`)
--   Images are also not stored in this repo, and can instead be downloaded using `./scripts/download-media.sh`. This will parse a backup file from the db/smuggler directory and place all referenced images into the local media folder.
+-   This will add some seeding content from the last prod datadump (`joplin/db/system-generated/prod.datadump.json`) created by migration-test.sh.
+-   LOAD_DATA and LOAD_PROD_DATA both load from the prod.datadump.json
+-   You have to run the LOAD_x_DATA commands on a clean db instance. You can wipe the DB and load data in the same step by running:
+    -   `DROP_DB=on LOAD_DATA="on" ./scripts/serve-local.sh`
+
+**Run with staging data**
+
+```
+LOAD_STAGING_DATA="on" ./scripts/serve-local.sh
+```
+
+-   This will add some seeding content from the last staging datadump (`joplin/db/system-generated/staging.datadump.json`) created by migration-test.sh.
+
 
 **Drop Existing DB**
 
@@ -102,6 +114,8 @@ HARD_REBUILD="on" ./scripts/serve-local.sh
 
 You might prefer to run the Django app on your host computer to enable better access to debugging tools. This script will still run joplin_assets and joplin_db on docker containers, but will run a django `runserver` command directly on your host computer.
 
+All of the above flags (such as LOAD_DATA=on) will work with the undockered version of Joplin.
+
 ```
 sh scripts/undockered.sh
 ```
@@ -111,6 +125,12 @@ If you run into pipenv errors or are running this for the first time, you can bu
 ```
 REBUILD_PIPENV=on ./undockered.sh
 ```
+
+**Override default behavior of stopping existing Joplin containers**
+```
+NO_STOP=on ./scripts/undockered.sh
+```
+- Makes undockered development go a little faster. You don't need to turn off then turn on the helper DB and Assets containers.
 
 **Run with custom smuggler data**
 

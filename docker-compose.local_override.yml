@@ -2,6 +2,9 @@ version: '3.7'
 # Mount a volume for "app" service and add "assets" service for joplin-local
 services:
   app:
+    environment:
+      LOAD_PROD_DATA: $LOAD_PROD_DATA
+      LOAD_STAGING_DATA: $LOAD_STAGING_DATA
     volumes:
      - ".:/app"
   assets:

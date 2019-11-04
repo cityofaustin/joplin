@@ -43,7 +43,6 @@ fi
 
 if [ "$UNDOCK" == "on" ]; then
   export NO_BUILD="on"
-
 fi
 
 if [ "$HARD_REBUILD" == "on" ]; then
