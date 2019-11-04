@@ -48,9 +48,24 @@
   height: 40px !important;
 }
 
-.coa-nav-search li {
-  margin: 0px !important;
-  padding: 0px !important;
+.nav-search li {
+  margin: 0px;
+  padding: 0px;
+  list-style-type: none;
+}
+
+.icon-search:before {
+  margin-top: 5px !important;
+  color: #777 !important;
+}
+
+.icon-search input {
+  color: #262626 !important;
+  background-color: hsla(0,0%,39%,.15) !important;
+}
+
+.icon-search input::placeholder {
+  color: #aaa !important;
 }
 
 .listing-filter {

@@ -33,7 +33,17 @@
                       {% if content_type == selected_content_type %}
                           <li style="background-color: #E6E6E6">{{ content_type.model_class.get_verbose_name }} ({{ count }})</li>
                       {% else %}
-                          <li><a href="{% url 'wagtailadmin_pages:search' %}?q={{ query_string|urlencode }}&amp;content_type={{ content_type.app_label }}.{{ content_type.model|lower }}">{{ content_type.model_class.get_verbose_name }} ({{ count }})</a></li>
+                          <li>
+                            <!-- <form class="col search-form nav-search" action="?q={{ query_string|urlencode }}&amp;content_type={{ content_type.app_label }}.{{ content_type.model|lower }}" method="get" novalidate>
+                              <button type="submit">
+
+                                {{ content_type.model_class.get_verbose_name }} ({{ count }})
+                              </button>
+                            </form> -->
+                            <a href="{% url 'wagtailadmin_pages:search' %}?q={{ query_string|urlencode }}&amp;content_type={{ content_type.app_label }}.{{ content_type.model|lower }}">
+                              {{ content_type.model_class.get_verbose_name }} ({{ count }})
+                            </a>
+                          </li>
                       {% endif %}
                   {% endfor %}
               </ul>
