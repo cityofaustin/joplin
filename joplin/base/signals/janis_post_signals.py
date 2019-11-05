@@ -32,32 +32,13 @@ def trigger_build(sender, action='saved', instance=None):
         netlify_publish()
 
 # TODO: we can probably feed a list of models to attach the hook to
-
-
+# more ideas here
+# we might want to log but not trigger a build? need some sort of queue
 @receiver(post_save, sender=Document)
-def document_post_save_signal(sender, **kwargs):
-    trigger_build(sender, instance=kwargs['instance'])
-
-
-@receiver(post_delete, sender=Document)
-def document_post_delete_signal(sender, **kwargs):
-    import pdb
-    pdb.set_trace()
-    trigger_build(sender, action='deleted', instance=kwargs['instance'])
-
-
 @receiver(post_save, sender=Contact)
-def contact_post_save_signal(sender, **kwargs):
-    trigger_build(sender, instance=kwargs['instance'])
-
-
 @receiver(post_save, sender=Location)
-def location_post_save_signal(sender, **kwargs):
-    trigger_build(sender, instance=kwargs['instance'])
-
-
 @receiver(post_save, sender=Map)
-def map_post_save_signal(sender, **kwargs):
+def document_post_save_signal(sender, **kwargs):
     trigger_build(sender, instance=kwargs['instance'])
 
 
@@ -69,3 +50,8 @@ def page_published_signal(sender, **kwargs):
 @receiver(page_unpublished)
 def page_unpublished_signal(sender, **kwargs):
     trigger_build(sender, action='unpublished', instance=kwargs['instance'])
+
+# TODO: should we add hooks for the above snippets/models on post delete as well?
+@receiver(post_delete, sender=Document)
+def document_post_delete_signal(sender, **kwargs):
+    trigger_build(sender, action='deleted', instance=kwargs['instance'])
