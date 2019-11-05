@@ -5,8 +5,12 @@ from wagtail.core.signals import page_published, page_unpublished
 from base.models import Contact, Location, Map
 from base.models.site_settings import JanisBranchSettings
 
-import os, logging, requests, json
+import os
+import logging
+import requests
+import json
 logger = logging.getLogger(__name__)
+
 
 def netlify_publish():
     logger.debug("netlify_publish() Starting task")
@@ -26,31 +30,3 @@ def netlify_publish():
         logger.debug("Sent publish request to coa-publisher.")
     else:
         logger.debug("Missing vars. Not publishing")
-
-
-# By creating a signal reciever for each snippet model we have, we can avoid
-# needing to filter out large amounts of unwanted calls in our function logic
-@receiver(post_save, sender=Contact)
-def contact_post_save_signal(sender, **kwargs):
-    logger.debug(f'contact_post_save {sender}')
-    netlify_publish()
-
-@receiver(post_save, sender=Location)
-def location_post_save_signal(sender, **kwargs):
-    logger.debug(f'location_post_save {sender}')
-    netlify_publish()
-
-@receiver(post_save, sender=Map)
-def map_post_save_signal(sender, **kwargs):
-    logger.debug(f'map_post_save {sender}')
-    netlify_publish()
-
-@receiver(page_published)
-def page_published_signal(sender, **kwargs):
-    logger.debug(f'page_published {sender}')
-    netlify_publish()
-
-@receiver(page_unpublished)
-def page_unpublished_signal(sender, **kwargs):
-    logger.debug(f'page_unpublished {sender}')
-    netlify_publish()
