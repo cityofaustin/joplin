@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.dispatch import receiver
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, post_delete
 from wagtail.core.signals import page_published, page_unpublished
 
 import heroku3
@@ -37,6 +37,13 @@ def trigger_build(sender, action='saved', instance=None):
 @receiver(post_save, sender=Document)
 def document_post_save_signal(sender, **kwargs):
     trigger_build(sender, instance=kwargs['instance'])
+
+
+@receiver(post_delete, sender=Document)
+def document_post_delete_signal(sender, **kwargs):
+    import pdb
+    pdb.set_trace()
+    trigger_build(sender, action='deleted', instance=kwargs['instance'])
 
 
 @receiver(post_save, sender=Contact)
