@@ -34,17 +34,27 @@ class ServicePageForm(WagtailAdminPageForm):
         self[field_name].data or as_text (might be useful for streamfields)
         looks like this is working, atm tho it just wont let you publish any empty fields :-D
         """
-
-        # TODO figure out a way to check if its publish vs draft, maybe compare page revisions?
+        def check_for_empties(form_entries):
+            entries = []
+            # alt: self.fields[entry]
+            for entry in form_entries:
+                # TODO really only works for strings atm, super lazy hack to ignore streamfields and prevent render error
+                if not self[entry].data and str(type(self.fields[entry])) == "<class 'django.forms.fields.CharField'>":
+                    self.add_error(entry, "It's empty!")
+                    entries.append(entry)
+                    ValidationError(('Invalid value, empty'), code='invalid')
+            return entries
         cleaned_data = super().clean()
+        # hacky way  to check if its publish vs draft, using the hacky function above
         request = get_http_request()
         is_publishing = bool(request.POST.get('action-publish'))
+
         if is_publishing:
-            field_keys = self.changed_data
-            for field_key in field_keys:
-                if not self[field_key].data:
-                    self.add_error(field_key, "It's empty!")
-                    ValidationError(('Invalid value, empty'), code='invalid')
+            changed_fields = self.changed_data
+            check_changed = check_for_empties(changed_fields)
+            keys = list(self.fields.keys())
+            if not check_changed:
+                check_all = check_for_empties(keys)
         return cleaned_data
 
 
