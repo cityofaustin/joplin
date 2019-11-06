@@ -28,7 +28,7 @@
 }
 
 .tab-nav {
-    z-index: 32;
+    z-index: 35;
 }
 
 .editor__save-button {
@@ -52,6 +52,11 @@ label {
 // This is because the drafttail editor goes to 30 when in focus
 .header.secondary {
     z-index: 34 !important;
+}
+
+.tab-nav a.errors:after {
+  z-index: 40 !important;
+  position: absolute;
 }
 
 .header.coa-header {
