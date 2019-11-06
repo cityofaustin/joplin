@@ -106,7 +106,9 @@
                 <ul role="menu">
                   {# Save Draft should be secondary action if page is live #}
                   {% if page.live %}
-                    {% include "wagtailadmin/pages/edit/save_draft_button.html" %}
+                    <li>
+                        {% include "wagtailadmin/pages/edit/save_draft_button.html" %}
+                    </li>
                   {% else %}
                     {% if page_perms.can_publish %}
                       <li>
