@@ -32,7 +32,7 @@ class ServicePageForm(WagtailAdminPageForm):
 
         cleaned_data = super().clean()
 
-        if self.data['action-publish']:
+        if 'action-publish' in self.data:
             changed_fields = self.changed_data
             check_changed = check_for_empties(changed_fields)
             keys = list(self.fields.keys())
