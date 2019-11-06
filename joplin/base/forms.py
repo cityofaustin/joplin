@@ -2,6 +2,25 @@ from wagtail.admin.forms import WagtailAdminPageForm
 from wagtail.core.models import Page, PageRevision
 from django.core.exceptions import ValidationError
 
+# copying Sergio's magic code
+
+
+def get_http_request():
+    """
+        Probably a bad-practice & non-performant approach,
+        returns a django request object.
+        https://docs.djangoproject.com/en/2.2/ref/request-response/
+    """
+    import inspect
+    for frame_record in inspect.stack():
+        if frame_record[3] == 'get_response':
+            # looking good...
+            return frame_record[0].f_locals['request']
+            break
+    else:
+        # looking bad...
+        return None
+
 
 class ServicePageForm(WagtailAdminPageForm):
     def clean(self):
@@ -15,15 +34,17 @@ class ServicePageForm(WagtailAdminPageForm):
         self[field_name].data or as_text (might be useful for streamfields)
         looks like this is working, atm tho it just wont let you publish any empty fields :-D
         """
+
         # TODO figure out a way to check if its publish vs draft, maybe compare page revisions?
         cleaned_data = super().clean()
-        field_keys = self.changed_data
-        for field_key in field_keys:
-            if not self[field_key].data:
-                self.add_error(field_key, "It's empty!")
-                ValidationError(('Invalid value, empty'), code='invalid')
-        import pdb
-        pdb.set_trace()
+        request = get_http_request()
+        is_publishing = bool(request.POST.get('action-publish'))
+        if is_publishing:
+            field_keys = self.changed_data
+            for field_key in field_keys:
+                if not self[field_key].data:
+                    self.add_error(field_key, "It's empty!")
+                    ValidationError(('Invalid value, empty'), code='invalid')
         return cleaned_data
 
 
