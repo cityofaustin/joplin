@@ -9,6 +9,7 @@
 {% block bodyclass %}page-editor {% if page.live %}page-is-live{% endif %} model-{{ content_type.model }} {% if page.locked %}page-locked{% endif %}{% endblock %}
 
 {% block content %}
+
     {% get_style_guide_url content_type=content_type as style_guide_url %}
     {% page_permissions page as page_perms %}
     <script>

@@ -1,28 +1,13 @@
 from wagtail.admin.forms import WagtailAdminPageForm
 from wagtail.core.models import Page, PageRevision
 from django.core.exceptions import ValidationError
-
-# copying Sergio's magic code
-
-
-def get_http_request():
-    """
-        Probably a bad-practice & non-performant approach,
-        returns a django request object.
-        https://docs.djangoproject.com/en/2.2/ref/request-response/
-    """
-    import inspect
-    for frame_record in inspect.stack():
-        if frame_record[3] == 'get_response':
-            # looking good...
-            return frame_record[0].f_locals['request']
-            break
-    else:
-        # looking bad...
-        return None
+from wagtail.admin import messages
 
 
 class ServicePageForm(WagtailAdminPageForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
     def clean(self):
         """
         ways to limit scope:
@@ -44,12 +29,10 @@ class ServicePageForm(WagtailAdminPageForm):
                     entries.append(entry)
                     ValidationError(('Invalid value, empty'), code='invalid')
             return entries
-        cleaned_data = super().clean()
-        # hacky way  to check if its publish vs draft, using the hacky function above
-        request = get_http_request()
-        is_publishing = bool(request.POST.get('action-publish'))
 
-        if is_publishing:
+        cleaned_data = super().clean()
+
+        if self.data['action-publish']:
             changed_fields = self.changed_data
             check_changed = check_for_empties(changed_fields)
             keys = list(self.fields.keys())
@@ -76,6 +59,12 @@ class DepartmentPageForm(WagtailAdminPageForm):
 class TopicPageForm(WagtailAdminPageForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+    def clean(self):
+        cleaned_data = super(TopicPageForm, self).clean()
+        if not self.instance.top_pages.exists():
+            raise ValidationError(('No top pages selected'), code='invalid')
+        return cleaned_data
 
 
 class TopicCollectionPageForm(WagtailAdminPageForm):

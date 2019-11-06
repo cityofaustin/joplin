@@ -8,5 +8,8 @@ $(function() {
       elem.click();
     });
   var messages = $('.messages');
-  messages.fadeOut(10000);
+  if($(".messages").children().children()[0].className == !"error") {
+      messages.fadeOut(10000);
+  }
+
 });

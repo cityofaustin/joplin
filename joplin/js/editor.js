@@ -357,7 +357,9 @@ $(function() {
   });
 
   var messages = $('.messages');
-  messages.fadeOut(10000);
+  if($(".messages").children().children()[0].className == !"error") {
+      messages.fadeOut(10000);
+  }
 
   // NOT sure the below is tracking anything
   // When we add new fields to the page (orderable/streamfields etc.)

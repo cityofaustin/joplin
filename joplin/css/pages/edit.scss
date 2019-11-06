@@ -153,3 +153,10 @@
 .account-selector-collapsed::-ms-expand {
     display: none;
 }
+
+.messages {
+  position: fixed;
+  top: 0px;
+  left: 130px;
+  width: 60%;
+}
