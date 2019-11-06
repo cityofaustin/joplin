@@ -391,7 +391,7 @@ class GuidePageSection(graphene.ObjectType):
         if django.utils.translation.get_language() == 'en':
             return self.value['section_heading_en']
         elif django.utils.translation.get_language() == 'es':
-            # if there is not a spanish translation available return english
+            # if there is not a spanish translation available, return english
             if self.value['section_heading_es'] == '':
                 return self.value['section_heading_en']
             return self.value['section_heading_es']
