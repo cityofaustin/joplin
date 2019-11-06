@@ -31,6 +31,7 @@ def trigger_build(sender, action='saved', instance=None):
     elif settings.ISREVIEW:
         netlify_publish()
 
+
 # TODO: we can probably feed a list of models to attach the hook to
 # more ideas here
 # we might want to log but not trigger a build? need some sort of queue
@@ -38,7 +39,7 @@ def trigger_build(sender, action='saved', instance=None):
 @receiver(post_save, sender=Contact)
 @receiver(post_save, sender=Location)
 @receiver(post_save, sender=Map)
-def document_post_save_signal(sender, **kwargs):
+def handle_post_save_signal(sender, **kwargs):
     trigger_build(sender, instance=kwargs['instance'])
 
 
