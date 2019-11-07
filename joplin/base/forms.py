@@ -2,22 +2,6 @@ from wagtail.admin.forms import WagtailAdminPageForm
 from wagtail.core.models import Page, PageRevision
 from django.core.exceptions import ValidationError
 from wagtail.admin import messages
-from modelcluster.models import get_all_child_relations, get_all_child_m2m_relations
-
-
-def get_children_values(some_object):
-    """
-    figured this out, may not actually need it tho
-    """
-    relations = []
-    for relation in get_all_child_relations(some_object):
-        # find out the property name used to access this relation
-        relation_name = relation.get_accessor_name()
-
-        # access that property on the current object to retrieve the related objects
-        children = getattr(some_object, relation_name).all()
-        relations.append(children)
-    return relations
 
 
 class JanisPageForm(WagtailAdminPageForm):
@@ -86,11 +70,6 @@ class DepartmentPageForm(JanisPageForm):
 class TopicPageForm(JanisPageForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
-        def clean(self):
-            import pdb
-            pdb.set_trace()
-            cleaned_data = super(TopicPageForm, self).clean()
 
 
 class TopicCollectionPageForm(WagtailAdminPageForm):
