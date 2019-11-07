@@ -1,17 +1,19 @@
+<!--- Remember to connect this PR to a relevant issue on Zenhub! -->
+
 # Description
 
-... Please include a summary of the change and what it fixes.
+<!--- include a summary of the change and what it fixes. -->
 
-Fixes # (issue)
+<!--- Fixes # paste issue link here, but really you should connect it on Zenhub! <3 -->
 
-* [Issue Link]()
-* [Janis Related Pull Request Link]()
+<!--- If there is a relevant Janis PR, link it here -->
+<!--- [Janis Related Pull Request Link]() -->
 
 # Testing Notes
 
-... how can this be tested ?
+<!--- ... how can this be tested ? -->
 
-* [Deployed Link]()
+<!--- deployed links if you have them --> 
 
 # Checklist:
 - [ ] Request reviewers
