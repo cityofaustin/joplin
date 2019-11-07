@@ -28,7 +28,9 @@
         <img class="wagtail-logo wagtail-logo__full" src="{% static 'images/coa_seal_transparent_white.png' %}" alt="Welcome to City of Austin CMS" width="60" />
     </div>
     <div class="messages">
+
         {% if messages %}
+        <button class="button text-replace icon icon-cross coa-close-message" onclick='$(".messages").remove()'>button element</button>
             <ul>
                 {% for message in messages %}
                     <li class="{% message_tags message %}">{{ message|safe }}</li>
