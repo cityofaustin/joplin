@@ -19,22 +19,28 @@ class JanisPageForm(WagtailAdminPageForm):
         self[field_name].data or as_text (might be useful for streamfields)
         looks like this is working, atm tho it just wont let you publish any empty fields :-D
         """
-        def check_for_empties(form_entries):
-            entries = []
-            # alt structure to explore: self.fields[entry]
-            for entry in form_entries:
-                # TODO really only works for strings atm, super lazy hack to ignore streamfields and prevent render error
-                if not self[entry].data and str(type(self.fields[entry])) == "<class 'django.forms.fields.CharField'>":
-                    self.add_error(entry, ValidationError((f'{entry} is empty!'), code='invalid'))
-                    entries.append(entry)
-            return entries
+        def check_for_empties():
+            errors_for_empties = {
+                field_name: try_adding_error_to_field(field_name, field_value)
+                for (field_name, field_value) in self.data.items()
+                if len(field_value) == 0
+            }
+
+        def try_adding_error_to_field(field_name, field_value):
+            # print(field_name, field_value, type(field_value))
+            try:
+                self.add_error(field_name, f'{field_name} is empty!')
+            except ValueError as e:
+                self.add_error(None, f'{field_name} is missing!')
+                # print(e)
+                # if type(field_value) != str:
 
         def check_for_missing_relations():
             relations = self.formsets
-            {
-                relation_name: self.add_error(None, f'No {relation_name} selected')
-                for (relation_name, value) in relations.items()
-                if not value.forms
+            errors_for_missing_relations = {
+                relation_name: try_adding_error_to_field(relation_name, relation_value)
+                for (relation_name, relation_value) in relations.items()
+                if not relation_value.forms
             }
 
         cleaned_data = super().clean()
@@ -42,7 +48,7 @@ class JanisPageForm(WagtailAdminPageForm):
         if 'action-publish' in self.data:
             # TODO: we'll probably want a good way to check a managed subset
             all_keys = list(self.fields.keys())
-            check_all = check_for_empties(all_keys)
+            check_all = check_for_empties()
             missing_relations = check_for_missing_relations()
         return cleaned_data
 
