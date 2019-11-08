@@ -27,16 +27,21 @@ class JanisPageForm(WagtailAdminPageForm):
             }
 
         def try_adding_error_to_field(field_name, field_value):
-            # print(field_name, field_value, type(field_value))
             try:
                 self.add_error(field_name, f'{field_name} is empty!')
             except ValueError as e:
-                self.add_error(None, f'{field_name} is missing!')
-                # print(e)
-                # if type(field_value) != str:
+                print(e)
+                try:
+                    field_value.non_form_errors().append(f'{field_name} not selected!')
+                    self.add_error(None, f'{field_name} is missing!')
+                except AttributeError as e:
+                    print(e)
+                    pass
+                pass
 
         def check_for_missing_relations():
             relations = self.formsets
+            # relation_value.cleaned_data
             errors_for_missing_relations = {
                 relation_name: try_adding_error_to_field(relation_name, relation_value)
                 for (relation_name, relation_value) in relations.items()
@@ -50,6 +55,7 @@ class JanisPageForm(WagtailAdminPageForm):
             all_keys = list(self.fields.keys())
             check_all = check_for_empties()
             missing_relations = check_for_missing_relations()
+
         return cleaned_data
 
 
