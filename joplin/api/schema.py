@@ -274,31 +274,51 @@ class Language(graphene.Enum):
 
 
 class ServicePageNode(DjangoObjectType):
+    pageType = graphene.String()
+
     class Meta:
         model = ServicePage
         filter_fields = ['id', 'slug', 'live', 'coa_global']
         interfaces = [graphene.Node]
 
+    def resolve_pageType(self, info):
+        return "ServicePageNode"
+
 
 class InformationPageNode(DjangoObjectType):
+    pageType = graphene.String()
+
     class Meta:
         model = InformationPage
         filter_fields = ['id', 'slug', 'live', 'coa_global']
         interfaces = [graphene.Node]
 
+    def resolve_pageType(self, info):
+        return "InformationPageNode"
+
 
 class DepartmentPageNode(DjangoObjectType):
+    pageType = graphene.String()
+
     class Meta:
         model = DepartmentPage
         filter_fields = ['id', 'slug', 'live']
         interfaces = [graphene.Node]
 
+    def resolve_pageType(self, info):
+        return "DepartmentPageNode"
+
 
 class FormPageNode(DjangoObjectType):
+    pageType = graphene.String()
+
     class Meta:
         model = FormPage
         filter_fields = ['id', 'slug', 'live', 'coa_global']
         interfaces = [graphene.Node]
+
+    def resolve_pageType(self, info):
+        return "FormPageNode"
 
 
 class OfficialDocumentFilter(FilterSet):
@@ -410,6 +430,7 @@ class GuidePageSection(graphene.ObjectType):
 
 class GuidePageNode(DjangoObjectType):
     sections = graphene.List(GuidePageSection)
+    pageType = graphene.String()
 
     class Meta:
         model = GuidePage
@@ -423,6 +444,9 @@ class GuidePageNode(DjangoObjectType):
             repr_sections.append(GuidePageSection(value=value))
 
         return repr_sections
+
+    def resolve_pageType(self, info):
+        return "GuidePageNode"
 
 
 class PageRevisionNode(DjangoObjectType):
