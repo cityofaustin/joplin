@@ -1,3 +1,7 @@
+# 🤠 ~~Brian~~NICK's Testing Machine 🤠
+
+Hi there! I'm a Joplin environment to trigger builds for all the Janis things @niicck's working on. If you have a login in regular Joplin you should be able to log in here as you would any other PR Joplin instance. Looking forward to working together!
+
 # Joplin - CMS for the City of Austin
 
 Joplin is the Authoring Interface for adding and editing content for alpha.austin.gov.
