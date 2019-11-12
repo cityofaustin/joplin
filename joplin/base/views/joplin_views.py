@@ -15,7 +15,10 @@ import json
 # When you want to publish a page directly from the home page, this route is called.
 # The publish button on the edit/ page sends a "action-publish" message directly to wagtail.
 # "action-publish" does not use this endpoint.
+
+
 def publish(request, page_id):
+
     page = get_object_or_404(Page, id=page_id).specific
 
     user_perms = UserPagePermissionsProxy(request.user)
@@ -55,8 +58,7 @@ def publish(request, page_id):
         if next_url:
             return redirect(next_url)
         # return redirect('wagtailadmin_explore', page.get_parent().id)
-        return redirect('pages/search/')
-
+        return redirect('/admin/pages/search/')
 
     return render(request, 'wagtailadmin/pages/confirm_publish.html', {
         'page': page,
