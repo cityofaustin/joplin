@@ -1,16 +1,7 @@
-<<<<<<< HEAD
-TIMESTAMP: "2019-11-07--11-38-50"
-TIMESTAMP OF LAST SYNC: "2019-10-31--03-46-12"
-=======
 TIMESTAMP: "2019-11-12--13-21-31"
 TIMESTAMP OF LAST SYNC: "2019-11-12--13-21-31"
->>>>>>> master
 LATEST_MIGRATION: "0012_replace_migrations_for_wagtail_independence"
 LATEST_BASE_MIGRATION: "0097_formpage_formpagerelateddepartments_formpagetopic"
 TOTAL_MIGRATIONS: 241
 TOTAL_BASE_MIGRATIONS: 103
-<<<<<<< HEAD
-BRANCH: "idle"
-=======
 BRANCH: "master"
->>>>>>> master
