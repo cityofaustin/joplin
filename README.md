@@ -387,7 +387,7 @@ Microservice that handles publishing versions of Janis based on branches of Jopl
 
 #### Static File Uploads
 
-The master branch (staging app, joplin-staging.herokuapp.com) and production branch (production app, joplin-production.herokuapp.com) upload static files to an S3 bucket (both share the same bucket), but have separate databases.
+The master branch (staging app, joplin-staging.herokuapp.com) and production branch (production app, joplin.herokuapp.com) upload static files to an S3 bucket (both share the same bucket), but have separate databases.
 
 #### Rebuilding Janis on Heroku when new pages are published
 
