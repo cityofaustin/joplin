@@ -81,6 +81,7 @@ INSTALLED_APPS = [
     'phonenumber_field',
     'countable_field',
     'flags',
+    'publish_preflight',
 ]
 
 MIDDLEWARE = [
