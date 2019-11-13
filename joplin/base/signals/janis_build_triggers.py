@@ -26,8 +26,10 @@ def trigger_build(sender, action='saved', instance=None):
     """
     trigger_object = instance
     logger.debug(f'{trigger_object} {action}, triggering build')
+    import pdb
+    pdb.set_trace()
     if settings.ISSTAGING or settings.ISPRODUCTION:
-        create_build_aws(sender, kwargs['instance'], request=get_http_request())
+        create_build_aws(sender, instance, request=get_http_request())
     elif settings.ISREVIEW:
         netlify_publish()
 
