@@ -40,6 +40,7 @@ from .guide_page import GuidePage, GuidePageTopic, GuidePageRelatedDepartments, 
 from .form_page import FormPage, FormPageRelatedDepartments, FormPageTopic
 from .widgets import countMe, countMeTextArea
 from .site_settings import JanisBranchSettings
+from publish_preflight.forms import PublishPreflightForm
 
 WYSIWYG_GENERAL = ['h1', 'h2', 'h3', 'h4', 'bold', 'link', 'ul', 'ol', 'code']
 DEFAULT_MAX_LENGTH = 255
@@ -86,7 +87,7 @@ class ProcessPage(JanisBasePage):
                               blank=True, on_delete=models.SET_NULL, related_name='+')
     # TODO: Add images array field
 
-    base_form_class = custom_forms.ProcessPageForm
+    base_form_class = PublishPreflightForm
 
     content_panels = [
         InlinePanel('topics', label='Topics'),

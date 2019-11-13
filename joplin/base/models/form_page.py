@@ -12,10 +12,12 @@ from .janis_page import JanisBasePage
 from .constants import WYSIWYG_GENERAL
 from .widgets import countMe, countMeTextArea
 from countable_field import widgets
+from publish_preflight.forms import PublishPreflightForm
+
 
 class FormPage(JanisBasePage):
     janis_url_page_type = "form"
-    base_form_class = FormPageForm
+    base_form_class = PublishPreflightForm
 
     description = models.TextField(verbose_name='Form description', blank=True)
     form_url = models.URLField(
@@ -35,6 +37,7 @@ class FormPage(JanisBasePage):
         FieldPanel('form_url'),
     ]
 
+
 class FormPageRelatedDepartments(ClusterableModel):
     page = ParentalKey(FormPage, related_name='related_departments', default=None)
     related_department = models.ForeignKey(
@@ -46,6 +49,7 @@ class FormPageRelatedDepartments(ClusterableModel):
         # Use a SnippetChooserPanel because blog.BlogAuthor is registered as a snippet
         PageChooserPanel("related_department"),
     ]
+
 
 class FormPageTopic(ClusterableModel):
     page = ParentalKey(FormPage, related_name='topics')

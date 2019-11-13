@@ -23,6 +23,7 @@ from .widgets import countMe, countMeTextArea
 from .constants import DEFAULT_MAX_LENGTH, WYSIWYG_GENERAL
 from .widgets import countMe, countMeTextArea, AUTHOR_LIMITS
 from countable_field import widgets
+from publish_preflight.forms import PublishPreflightForm
 
 
 class DepartmentPage(JanisBasePage):
@@ -49,7 +50,7 @@ class DepartmentPage(JanisBasePage):
         blank=True
     )
 
-    base_form_class = DepartmentPageForm
+    base_form_class = PublishPreflightForm
 
     content_panels = [
         FieldPanel('title_en', widget=countMe),
@@ -94,7 +95,6 @@ class DepartmentPageDirector(Orderable):
     ]
 
 
-
 class DepartmentPageContact(ClusterableModel):
     page = ParentalKey(DepartmentPage, related_name='contacts')
     contact = models.ForeignKey(Contact, related_name='+', on_delete=models.CASCADE)
@@ -109,7 +109,7 @@ class DepartmentPageContact(ClusterableModel):
 
 class DepartmentPageTopPage(Orderable):
     department = ParentalKey(DepartmentPage, related_name='top_pages')
-    page = models.ForeignKey('wagtailcore.Page',  verbose_name='Select a page', related_name='+', on_delete=models.CASCADE)
+    page = models.ForeignKey('wagtailcore.Page', verbose_name='Select a page', related_name='+', on_delete=models.CASCADE)
 
     panels = [
         PageChooserPanel('page', page_type=[InformationPage, ServicePage, GuidePage, OfficialDocumentPage]),
@@ -118,9 +118,10 @@ class DepartmentPageTopPage(Orderable):
     def __str__(self):
         return self.page.text
 
+
 class DepartmentPageRelatedPage(Orderable):
     department = ParentalKey(DepartmentPage, related_name='related_pages')
-    page = models.ForeignKey('wagtailcore.Page',  verbose_name='Select a page', related_name='+', on_delete=models.CASCADE)
+    page = models.ForeignKey('wagtailcore.Page', verbose_name='Select a page', related_name='+', on_delete=models.CASCADE)
 
     panels = [
         PageChooserPanel('page', page_type=[InformationPage, ServicePage, GuidePage, OfficialDocumentPage]),

@@ -19,6 +19,7 @@ from base.forms import TopicPageForm
 from .janis_page import JanisBasePage
 from .translated_image import TranslatedImage
 from .widgets import countMe, countMeTextArea
+from publish_preflight.forms import PublishPreflightForm
 
 
 class TopicPage(JanisBasePage):
@@ -28,7 +29,7 @@ class TopicPage(JanisBasePage):
 
     image = models.ForeignKey(TranslatedImage, null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
 
-    base_form_class = TopicPageForm
+    base_form_class = PublishPreflightForm
 
     content_panels = [
         FieldPanel('title_en', widget=countMe),
@@ -46,7 +47,7 @@ class TopicPage(JanisBasePage):
 
 class TopicPageTopPage(Orderable):
     topic = ParentalKey(TopicPage, related_name='top_pages')
-    page = models.ForeignKey('wagtailcore.Page',  verbose_name='Select a page', related_name='+', on_delete=models.CASCADE)
+    page = models.ForeignKey('wagtailcore.Page', verbose_name='Select a page', related_name='+', on_delete=models.CASCADE)
 
     panels = [
         PageChooserPanel('page', page_type=[InformationPage, ServicePage, GuidePage, OfficialDocumentPage]),

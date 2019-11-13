@@ -17,6 +17,7 @@ from .contact import Contact
 from .constants import WYSIWYG_GENERAL, DEFAULT_MAX_LENGTH, SHORT_DESCRIPTION_LENGTH
 from .widgets import countMe, countMeTextArea, AUTHOR_LIMITS
 from countable_field import widgets
+from publish_preflight.forms import PublishPreflightForm
 
 
 WYSIWYG_SERVICE_STEP = ['ul', 'ol', 'link', 'code', 'rich-text-button-link']
@@ -77,7 +78,7 @@ class ServicePage(JanisBasePage):
         blank=True
     )
 
-    base_form_class = ServicePageForm
+    base_form_class = PublishPreflightForm
 
     short_description = models.TextField(
         max_length=SHORT_DESCRIPTION_LENGTH,

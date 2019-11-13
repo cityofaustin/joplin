@@ -20,6 +20,7 @@ from .translated_image import TranslatedImage
 
 from .constants import WYSIWYG_GENERAL
 from .widgets import countMe, countMeTextArea
+from publish_preflight.forms import PublishPreflightForm
 
 
 class GuidePage(JanisBasePage):
@@ -45,7 +46,7 @@ class GuidePage(JanisBasePage):
         blank=True
     )
 
-    base_form_class = GuidePageForm
+    base_form_class = PublishPreflightForm
 
     content_panels = [
         FieldPanel('title_en', widget=countMe),

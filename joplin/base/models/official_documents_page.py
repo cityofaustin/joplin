@@ -15,6 +15,7 @@ from .janis_page import JanisBasePage
 from .constants import DEFAULT_MAX_LENGTH
 from .widgets import countMe, countMeTextArea, AUTHOR_LIMITS
 from countable_field import widgets
+from publish_preflight.forms import PublishPreflightForm
 
 """
 This is a page that displays a list of Official Documents (model: umentPageOfficialDocument).
@@ -26,7 +27,7 @@ Eventually the OfficialDocumentPageOfficialDocument should be replaced by a mode
 
 class OfficialDocumentPage(JanisBasePage):
     janis_url_page_type = "official_document"
-    base_form_class = OfficialDocumentPageForm
+    base_form_class = PublishPreflightForm
 
     description = models.TextField(blank=True)
 

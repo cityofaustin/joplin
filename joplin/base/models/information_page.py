@@ -16,6 +16,7 @@ from .contact import Contact
 from .constants import WYSIWYG_GENERAL
 from .widgets import countMe, countMeTextArea, AUTHOR_LIMITS
 from countable_field import widgets
+from publish_preflight.forms import PublishPreflightForm
 
 
 class InformationPage(JanisBasePage):
@@ -42,7 +43,7 @@ class InformationPage(JanisBasePage):
 
     # TODO: Add images array field
 
-    base_form_class = InformationPageForm
+    base_form_class = PublishPreflightForm
 
     content_panels = [
         FieldPanel('title_en', widget=countMe),

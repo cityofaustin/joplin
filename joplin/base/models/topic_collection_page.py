@@ -8,6 +8,7 @@ from base.forms import TopicCollectionPageForm
 from .janis_page import JanisBasePage
 from .translated_image import TranslatedImage
 from .widgets import countMe, countMeTextArea
+from publish_preflight.forms import PublishPreflightForm
 
 
 class TopicCollectionPage(JanisBasePage):
@@ -24,7 +25,7 @@ class TopicCollectionPage(JanisBasePage):
 
     image = models.ForeignKey(TranslatedImage, null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
 
-    base_form_class = TopicCollectionPageForm
+    base_form_class = PublishPreflightForm
 
     content_panels = [
         FieldPanel('title_en', widget=countMe),
