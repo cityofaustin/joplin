@@ -13,7 +13,7 @@
 
 <script>
 // passing the constant from context_processors into a JS variable (boolean)
-    const ISPRODUCTION = '{{ISPRODUCTION}}';
+const ISPRODUCTION = '{{ISPRODUCTION}}';
 </script>
 {% render_bundle 'admin' %}
 {% if ISPRODUCTION == False %}
@@ -22,6 +22,10 @@
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet">
 {% include 'session_security/all.html' %}
+{% comment %}
+maybe there is a better way/place to pull in this script from the preflight app
+{% endcomment %}
+<script src="{% static "publish_preflight/js/script.js" %}"></script>
 <div class="header coa-header">
     <div>
         <img class="wagtail-logo wagtail-logo__full" src="{% static 'images/coa_seal_transparent_white.png' %}" alt="Welcome to City of Austin CMS" width="60" />
