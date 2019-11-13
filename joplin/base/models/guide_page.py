@@ -10,7 +10,7 @@ from wagtail.snippets.edit_handlers import SnippetChooserPanel
 from wagtail.core.models import Orderable
 from wagtail.images.edit_handlers import ImageChooserPanel
 
-from base.forms import GuidePageForm
+
 
 from .janis_page import JanisBasePage
 from .information_page import InformationPage

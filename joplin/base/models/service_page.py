@@ -9,7 +9,7 @@ from wagtail.admin.edit_handlers import FieldPanel, HelpPanel, InlinePanel, Mult
 from wagtail.snippets.edit_handlers import SnippetChooserPanel
 
 from base.blocks import SnippetChooserBlockWithAPIGoodness, WhatDoIDoWithBlock, CollectionScheduleBlock, RecollectBlock
-from base.forms import ServicePageForm
+
 
 from .janis_page import JanisBasePage
 from .contact import Contact

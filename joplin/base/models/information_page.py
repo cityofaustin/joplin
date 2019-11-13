@@ -8,7 +8,7 @@ from wagtail.core.blocks import RichTextBlock
 from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, MultiFieldPanel, PageChooserPanel, StreamFieldPanel
 from wagtail.snippets.edit_handlers import SnippetChooserPanel
 
-from base.forms import InformationPageForm
+
 
 from .janis_page import JanisBasePage
 from .contact import Contact

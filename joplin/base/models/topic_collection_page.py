@@ -3,7 +3,7 @@ from django.db import models
 from wagtail.admin.edit_handlers import FieldPanel, InlinePanel
 from wagtail.images.edit_handlers import ImageChooserPanel
 
-from base.forms import TopicCollectionPageForm
+
 
 from .janis_page import JanisBasePage
 from .translated_image import TranslatedImage

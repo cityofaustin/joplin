@@ -5,7 +5,7 @@ from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
 from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, MultiFieldPanel, PageChooserPanel
 
-from base.forms import FormPageForm
+
 
 from .janis_page import JanisBasePage
 
