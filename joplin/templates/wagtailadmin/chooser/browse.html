@@ -9,7 +9,7 @@
     {% elif page_type_string == "base.informationpage,base.servicepage" %}
         {% trans "Select a page for the guide" as choose_str %}
     {% elif page_type_string == "base.informationpage,base.servicepage,base.guidepage,base.officialdocumentpage" %}
-        {% trans "Choose content to feature on the department page" as choose_str %}
+        {% trans "Choose content to feature on this page" as choose_str %}
     {% else %}
         {% trans "Choose" as choose_str %}
 {% endif %}
@@ -24,7 +24,6 @@
 <div class="nice-padding">
     {% include 'wagtailadmin/chooser/_link_types.html' with current='internal' %}
     {% if page_types_restricted %}
-
     <p class="help-block help-warning">
         {% blocktrans with type=page_type_names|join:", " count counter=page_type_names|length %}
         Only pages of type "{{ type }}" may be chosen for this field. Search results will exclude pages of other types.
