@@ -282,7 +282,7 @@ class ServicePageNode(DjangoObjectType):
         interfaces = [graphene.Node]
 
     def resolve_page_type(self, info):
-        return "service page"
+        return ServicePage.get_verbose_name().lower()
 
 
 class InformationPageNode(DjangoObjectType):
@@ -294,7 +294,7 @@ class InformationPageNode(DjangoObjectType):
         interfaces = [graphene.Node]
 
     def resolve_page_type(self, info):
-        return "information page"
+        return InformationPage.get_verbose_name().lower()
 
 
 class DepartmentPageNode(DjangoObjectType):
@@ -306,7 +306,7 @@ class DepartmentPageNode(DjangoObjectType):
         interfaces = [graphene.Node]
 
     def resolve_page_type(self, info):
-        return "department page"
+        return DepartmentPage.get_verbose_name().lower()
 
 
 class FormPageNode(DjangoObjectType):
@@ -318,7 +318,7 @@ class FormPageNode(DjangoObjectType):
         interfaces = [graphene.Node]
 
     def resolve_page_type(self, info):
-        return "form page"
+        return FormPage.get_verbose_name().lower()
 
 
 class OfficialDocumentFilter(FilterSet):
@@ -351,7 +351,7 @@ class OfficialDocumentPageNode(DjangoObjectType):
         interfaces = [graphene.Node]
 
     def resolve_page_type(self, info):
-        return "official document page"
+        return OfficialDocumentPage.get_verbose_name().lower()
 
 
 def resolve_guide_page_section_as(model, self):
@@ -450,7 +450,7 @@ class GuidePageNode(DjangoObjectType):
         return repr_sections
 
     def resolve_page_type(self, info):
-        return "guide page"
+        return GuidePage.get_verbose_name().lower()
 
 
 class PageRevisionNode(DjangoObjectType):
