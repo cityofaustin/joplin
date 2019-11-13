@@ -365,23 +365,6 @@ $(function() {
     updateSelectedLanguage(state.currentLang);
   });
 
-  var messages = $('.messages');
-  if (
-    $('.messages')
-      .children()
-      .children()[0].className == !'error'
-  ) {
-    messages.fadeOut(10000);
-  }
-
-  if (
-    $('.messages')
-      .children()
-      .children()[0].className == 'error'
-  ) {
-    messages.remove();
-  }
-
   // NOT sure the below is tracking anything
   // When we add new fields to the page (orderable/streamfields etc.)
   // only show the appropriate fields based on language

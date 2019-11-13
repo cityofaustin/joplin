@@ -21,7 +21,10 @@ const ISPRODUCTION = '{{ISPRODUCTION}}';
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet">
 {% include 'session_security/all.html' %}
-
+{% comment %}
+maybe there is a better way/place to pull in this script from the preflight app
+{% endcomment %}
+<script src="{% static "publish_preflight/js/script.js" %}"></script>
 
 <div class="header coa-header">
     <div>
