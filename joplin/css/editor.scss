@@ -47,6 +47,7 @@ label {
     position: fixed;
     top: 0px;
     width: 75%;
+    background: none;
 }
 
 // This is because the drafttail editor goes to 30 when in focus
@@ -55,8 +56,8 @@ label {
 }
 
 .tab-nav a.errors:after {
-  z-index: 40 !important;
-  position: absolute;
+    z-index: 40 !important;
+    position: absolute;
 }
 
 .header.coa-header {

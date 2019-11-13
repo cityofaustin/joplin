@@ -12,7 +12,7 @@
 
 <script>
 // passing the constant from context_processors into a JS variable (boolean)
-    const ISPRODUCTION = '{{ISPRODUCTION}}';
+const ISPRODUCTION = '{{ISPRODUCTION}}';
 </script>
 {% render_bundle 'admin' %}
 {% if ISPRODUCTION == False %}
@@ -29,14 +29,14 @@
     </div>
     <div class="messages">
 
-        {% if messages %}
+        <!-- {% if messages %}
         <button class="button text-replace icon icon-cross coa-close-message" onclick='$(".messages").remove()'>button element</button>
             <ul>
                 {% for message in messages %}
                     <li class="{% message_tags message %}">{{ message|safe }}</li>
                 {% endfor %}
             </ul>
-        {% endif %}
+        {% endif %} -->
     </div>
     <div class="dropdown user-account">
         <div class="dropdown-toggle">

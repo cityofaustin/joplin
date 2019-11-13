@@ -15,7 +15,8 @@ $(function() {
   richTextPlaceholder();
 
   var language = document.getElementById('language-select-wrapper');
-  var content = document.getElementsByClassName("tab-nav merged")[0].firstElementChild
+  var content = document.getElementsByClassName('tab-nav merged')[0]
+    .firstElementChild;
   content.appendChild(language);
 
   // TODO: This a better way
@@ -160,9 +161,17 @@ $(function() {
     return `${janisPreviewUrlStart}/${currentLang}/${janisPreviewUrlEnd}`;
   }
 
-  function setTabToContent(){
-    $('.tab-nav a').first().tab('show');
-    window.history.replaceState(null, null, $('.tab-nav a').first().attr('href'));
+  function setTabToContent() {
+    $('.tab-nav a')
+      .first()
+      .tab('show');
+    window.history.replaceState(
+      null,
+      null,
+      $('.tab-nav a')
+        .first()
+        .attr('href'),
+    );
   }
   // Changes language and update janisPreviewUrl for our language
   function changeLanguage(currentLang) {
@@ -266,15 +275,15 @@ $(function() {
     let selectedLanguage = document.getElementById('language-select')
       .selectedOptions[0];
     changeLanguage(selectedLanguage.id);
-            updateSelectedLanguage(state.currentLang);
+    updateSelectedLanguage(state.currentLang);
     localStorage.selected_lang = state.currentLang;
   });
 
   // case function for setting the selected language on dropdown
   // maybe there is a less verbose way to do this?
   function updateSelectedLanguage(currentLang) {
-
-    var contentLink = document.getElementsByClassName("tab-nav merged")[0].firstElementChild.firstElementChild
+    var contentLink = document.getElementsByClassName('tab-nav merged')[0]
+      .firstElementChild.firstElementChild;
 
     switch (currentLang) {
       case 'en':
@@ -353,12 +362,24 @@ $(function() {
   // Apply current language to new InlinePanels
   $('.add').click(function() {
     changeLanguage(state.currentLang);
-        updateSelectedLanguage(state.currentLang);
+    updateSelectedLanguage(state.currentLang);
   });
 
   var messages = $('.messages');
-  if($(".messages").children().children()[0].className == !"error") {
-      messages.fadeOut(10000);
+  if (
+    $('.messages')
+      .children()
+      .children()[0].className == !'error'
+  ) {
+    messages.fadeOut(10000);
+  }
+
+  if (
+    $('.messages')
+      .children()
+      .children()[0].className == 'error'
+  ) {
+    messages.remove();
   }
 
   // NOT sure the below is tracking anything
@@ -368,7 +389,7 @@ $(function() {
 
   $('#sections-count').change(function() {
     changeLanguage(state.currentLang);
-        updateSelectedLanguage(state.currentLang);
+    updateSelectedLanguage(state.currentLang);
   });
 
   // Found this here: https://stackoverflow.com/a/31719339
