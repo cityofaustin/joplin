@@ -10,7 +10,7 @@ import boto3
 
 from base.models import Contact, Location, Map
 from wagtail.documents.models import Document
-from base.signals.aws_publish import get_http_request
+from base.signals.aws_publish import get_http_request, create_build_aws
 from base.signals.netlify_publish import netlify_publish
 
 import logging
