@@ -274,31 +274,51 @@ class Language(graphene.Enum):
 
 
 class ServicePageNode(DjangoObjectType):
+    page_type = graphene.String()
+
     class Meta:
         model = ServicePage
         filter_fields = ['id', 'slug', 'live', 'coa_global']
         interfaces = [graphene.Node]
 
+    def resolve_page_type(self, info):
+        return ServicePage.get_verbose_name().lower()
+
 
 class InformationPageNode(DjangoObjectType):
+    page_type = graphene.String()
+
     class Meta:
         model = InformationPage
         filter_fields = ['id', 'slug', 'live', 'coa_global']
         interfaces = [graphene.Node]
 
+    def resolve_page_type(self, info):
+        return InformationPage.get_verbose_name().lower()
+
 
 class DepartmentPageNode(DjangoObjectType):
+    page_type = graphene.String()
+
     class Meta:
         model = DepartmentPage
         filter_fields = ['id', 'slug', 'live']
         interfaces = [graphene.Node]
 
+    def resolve_page_type(self, info):
+        return DepartmentPage.get_verbose_name().lower()
+
 
 class FormPageNode(DjangoObjectType):
+    page_type = graphene.String()
+
     class Meta:
         model = FormPage
         filter_fields = ['id', 'slug', 'live', 'coa_global']
         interfaces = [graphene.Node]
+
+    def resolve_page_type(self, info):
+        return FormPage.get_verbose_name().lower()
 
 
 class OfficialDocumentFilter(FilterSet):
@@ -321,6 +341,7 @@ class OfficialDocumentPageOfficialDocumentNode(DjangoObjectType):
 
 
 class OfficialDocumentPageNode(DjangoObjectType):
+    page_type = graphene.String()
     official_documents = DjangoFilterConnectionField(
         OfficialDocumentPageOfficialDocumentNode, filterset_class=OfficialDocumentFilter)
 
@@ -328,6 +349,9 @@ class OfficialDocumentPageNode(DjangoObjectType):
         model = OfficialDocumentPage
         filter_fields = ['id', 'slug', 'live', 'coa_global']
         interfaces = [graphene.Node]
+
+    def resolve_page_type(self, info):
+        return OfficialDocumentPage.get_verbose_name().lower()
 
 
 def resolve_guide_page_section_as(model, self):
@@ -410,6 +434,7 @@ class GuidePageSection(graphene.ObjectType):
 
 class GuidePageNode(DjangoObjectType):
     sections = graphene.List(GuidePageSection)
+    page_type = graphene.String()
 
     class Meta:
         model = GuidePage
@@ -423,6 +448,9 @@ class GuidePageNode(DjangoObjectType):
             repr_sections.append(GuidePageSection(value=value))
 
         return repr_sections
+
+    def resolve_page_type(self, info):
+        return GuidePage.get_verbose_name().lower()
 
 
 class PageRevisionNode(DjangoObjectType):
@@ -629,6 +657,7 @@ class TopicPageTopPageNode(DjangoObjectType):
     title = graphene.String()
     slug = graphene.String()
     page_id = graphene.ID()
+    page_type = graphene.String()
 
     def resolve_page_id(self, info):
         return get_global_id_from_content_type(self)
@@ -638,6 +667,9 @@ class TopicPageTopPageNode(DjangoObjectType):
 
     def resolve_slug(self, resolve_info, *args, **kwargs):
         return get_page_from_content_type(self).slug
+
+    def resolve_page_type(self, info):
+        return self.page.content_type.name
 
     class Meta:
         model = TopicPageTopPage
