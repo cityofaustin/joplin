@@ -1,45 +1,46 @@
-from wagtail.admin.forms import WagtailAdminPageForm
+from publish_preflight.forms import PublishPreflightForm
 
 
-class ServicePageForm(WagtailAdminPageForm):
+class ServicePageForm(PublishPreflightForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
 
-class ProcessPageForm(WagtailAdminPageForm):
+class ProcessPageForm(PublishPreflightForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
 
-class InformationPageForm(WagtailAdminPageForm):
+class InformationPageForm(PublishPreflightForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
 
-class DepartmentPageForm(WagtailAdminPageForm):
+class DepartmentPageForm(PublishPreflightForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
 
-class TopicPageForm(WagtailAdminPageForm):
+class TopicPageForm(PublishPreflightForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
 
-class TopicCollectionPageForm(WagtailAdminPageForm):
+class TopicCollectionPageForm(PublishPreflightForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
 
-class OfficialDocumentPageForm(WagtailAdminPageForm):
+class OfficialDocumentPageForm(PublishPreflightForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
 
-class GuidePageForm(WagtailAdminPageForm):
+class GuidePageForm(PublishPreflightForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-class FormPageForm(WagtailAdminPageForm):
+
+class FormPageForm(PublishPreflightForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
