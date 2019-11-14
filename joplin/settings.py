@@ -395,3 +395,7 @@ else:
 # Sets the login_url redirect for "from django.contrib.auth.decorators import user_passes_test"
 # https://kite.com/python/docs/django.contrib.auth.decorators.user_passes_test
 LOGIN_URL = '/admin/login/'
+
+# https://docs.djangoproject.com/en/2.2/ref/settings/#data-upload-max-number-fields
+# We submit a lot of fields when saving some of our content types, let's let that happen
+DATA_UPLOAD_MAX_NUMBER_FIELDS = None
