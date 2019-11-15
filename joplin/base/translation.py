@@ -7,7 +7,9 @@ from .models import ThreeOneOne, TopicPage, TopicCollectionPage, Theme, ServiceP
 
 @register(Image)
 class ImageTranslationOptions(TranslationOptions):
-    pass
+    fields = (
+        'title',
+    )
 
 
 @register(TranslatedImage)

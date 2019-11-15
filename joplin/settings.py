@@ -260,7 +260,6 @@ if DEBUG:
 
 WAGTAIL_SITE_NAME = 'joplin'
 WAGTAIL_AUTO_UPDATE_PREVIEW = True
-WAGTAILIMAGES_IMAGE_MODEL = 'base.TranslatedImage'
 
 # Base URL to use when referring to full URLs within the Wagtail admin backend -
 # e.g. in notification emails. Don't include '/admin' or a trailing slash
