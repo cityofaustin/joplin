@@ -1,8 +1,9 @@
 from django.db import models
 from wagtail.admin.edit_handlers import FieldPanel
+from wagtail.images.models import Image
 from wagtail.images.edit_handlers import ImageChooserPanel
 from phonenumber_field.modelfields import PhoneNumberField
-from base.models import JanisBasePage
+from base.models import JanisBasePage, HomePage
 from wagtail.core.models import Page, Orderable
 from modelcluster.fields import ParentalKey
 from wagtail.admin.edit_handlers import (
@@ -21,8 +22,8 @@ class Location(models.Model):
     """
 
     full_address = models.CharField(max_length=255, blank=False)
-    unit_number = models.CharField(max_length=255, blank=True)
-    geography = models.CharField(max_length=255, null=True, blank=True)
+    unit_number = models.IntegerField(max_length=255, blank=True)
+    geography = models.CharField(max_length=255, blank=True)
     """
     optional fields to match mocks, are these really required data to store
     or should they be cosmetic/for the widget?
@@ -31,27 +32,27 @@ class Location(models.Model):
     state
     zip
     """
-    address_is_physical = models.BooleanField(default=True)
     # gonna need location widget that returns streetview or user selected image
+
+
+class PhysicalAddress(Location):
+    """
+    inherits Location (using concrete inheritance) to add a photo for physical location
+    this should also help janis know to render fields differently for this one vs mailing (see mocks)
+    """
     location_photo = models.ForeignKey(
         'wagtailimages.Image',
-        null=True, blank=True,
+        null=True,
+        blank=True,
         on_delete=models.SET_NULL,
         related_name='+'
     )
 
 
-class Contact(models.Model):
-    """
-    simple contact model w phone and email
-    """
-    phone_description = models.CharField(
-        max_length=255, blank=True)
-    phone_number = PhoneNumberField()
-    email = models.EmailField(blank=True)
-
-
 class LocationPageRelatedLocations(Orderable, Location):
+    """
+    a pattern for adding multiple related location, not currently used
+    """
     page = ParentalKey(
         'locations.LocationPage',
         related_name='related_locations',
@@ -59,18 +60,35 @@ class LocationPageRelatedLocations(Orderable, Location):
     )
 
 
-class LocationPage(JanisBasePage):
+class LocationPage(Page):
     """
     all the relevant details for a specifc location (place!?)
     """
+
     primary_name = models.CharField(max_length=255)
     alternate_name = models.CharField(max_length=255, blank=True)
+    physical_address = models.OneToOneField(
+        PhysicalAddress,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )
+    mailing_address = models.OneToOneField(
+        Location,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )
 
-    parent_page_types = ['LocationsIndexPage']
+    parent_page_types = ['base.HomePage', 'LocationsIndexPage']
 
-    content_panels = JanisBasePage.content_panels + [
+    content_panels = [
         FieldPanel('primary_name'),
         FieldPanel('alternate_name'),
+        FieldPanel('physical_address'),
+        FieldPanel('mailing_address'),
         InlinePanel('related_locations', label="Related locations"),
     ]
 
