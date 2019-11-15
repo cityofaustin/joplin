@@ -22,7 +22,7 @@ class Location(models.Model):
     """
 
     full_address = models.CharField(max_length=255, blank=False)
-    unit_number = models.IntegerField(max_length=255, blank=True)
+    unit_number = models.IntegerField(blank=True)
     geography = models.CharField(max_length=255, blank=True)
     """
     optional fields to match mocks, are these really required data to store

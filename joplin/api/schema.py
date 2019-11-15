@@ -30,6 +30,8 @@ from base.models import (
 )
 from .content_type_map import content_type_map
 import traceback
+import locations.models as locations
+
 
 class RichTextFieldType(Scalar):
     """
@@ -184,6 +186,25 @@ class LocationNode(DjangoObjectType):
     class Meta:
         model = Location
         interfaces = [graphene.Node]
+
+
+class LocationPageNode(DjangoObjectType):
+    class Meta:
+        model = locations.LocationPage
+        filter_fields = ['id', 'slug', 'live']
+        fields = '__all__'
+        interfaces = [graphene.Node]
+
+
+class PhysicalLocationType(DjangoObjectType):
+
+    class Meta:
+        model = locations.PhysicalAddress
+
+
+class LocationType(DjangoObjectType):
+    class Meta:
+        model = locations.Location
 
 
 class ContactNode(DjangoObjectType):
@@ -362,6 +383,7 @@ def resolve_guide_page_section_as(model, self):
         pass
     return page
 
+
 class GuidePageSectionPageBlock(graphene.ObjectType):
     # This uses graphene ObjectType resolvers, see:
     # https://docs.graphene-python.org/en/latest/types/objecttypes/#resolvers
@@ -403,6 +425,7 @@ class GuidePageSectionPageBlock(graphene.ObjectType):
 
     def resolve_form_page(self, info):
         return self.__resolve_guide_page_section_as(FormPage)
+
 
 class GuidePageSection(graphene.ObjectType):
     value = GenericScalar()
@@ -492,6 +515,7 @@ class PageRevisionNode(DjangoObjectType):
         filter_fields = ['id']
         interfaces = [graphene.Node]
 
+
 def get_structure_for_content_type(content_type):
     site_structure = []
     content_type_data = content_type_map.get(content_type, None)
@@ -503,14 +527,14 @@ def get_structure_for_content_type(content_type):
         page_global_id = graphene.Node.to_global_id(content_type_data["node"], page.id)
 
         if page.coa_global:
-            site_structure.append({'url' :f'/{page.slug}/', 'type': content_type, 'id': page_global_id})
+            site_structure.append({'url': f'/{page.slug}/', 'type': content_type, 'id': page_global_id})
 
         # For content_type models that have related departments
         if hasattr(page, "related_departments"):
             page_departments = page.related_departments.all()
             for page_department in page_departments:
                 page_department_global_id = graphene.Node.to_global_id('DepartmentNode', page_department.related_department.id)
-                site_structure.append({'url' :f'/{page_department.related_department.slug}/{page.slug}/', 'type': content_type, 'id': page_global_id, 'parent_department': page_department_global_id})
+                site_structure.append({'url': f'/{page_department.related_department.slug}/{page.slug}/', 'type': content_type, 'id': page_global_id, 'parent_department': page_department_global_id})
 
         # For content_type models that have topics
         if hasattr(page, "topics"):
@@ -523,8 +547,9 @@ def get_structure_for_content_type(content_type):
                         continue
 
                     page_topic_tc_global_id = graphene.Node.to_global_id('TopicCollectionNode', tc.topiccollection.id)
-                    site_structure.append({'url' :f'/{tc.topiccollection.theme.slug}/{tc.topiccollection.slug}/{page_topic.topic.slug}/{page.slug}/', 'type': content_type, 'id': page_global_id, 'parent_topic': page_topic_global_id, 'grandparent_topic_collection': page_topic_tc_global_id})
+                    site_structure.append({'url': f'/{tc.topiccollection.theme.slug}/{tc.topiccollection.slug}/{page_topic.topic.slug}/{page.slug}/', 'type': content_type, 'id': page_global_id, 'parent_topic': page_topic_global_id, 'grandparent_topic_collection': page_topic_tc_global_id})
     return site_structure
+
 
 class SiteStructure(graphene.ObjectType):
     value = GenericScalar()
@@ -541,7 +566,7 @@ class SiteStructure(graphene.ObjectType):
                 continue
 
             topic_collection_global_id = graphene.Node.to_global_id('TopicCollectionNode', topic_collection.id)
-            site_structure.append({'url' :f'/{topic_collection.theme.slug}/{topic_collection.slug}/', 'type': 'topic collection', 'id': topic_collection_global_id});
+            site_structure.append({'url': f'/{topic_collection.theme.slug}/{topic_collection.slug}/', 'type': 'topic collection', 'id': topic_collection_global_id})
 
         topics = TopicPage.objects.all()
         for topic in topics:
@@ -552,12 +577,12 @@ class SiteStructure(graphene.ObjectType):
                     continue
 
                 topic_tc_global_id = graphene.Node.to_global_id('TopicCollectionNode', tc.topiccollection.id)
-                site_structure.append({'url' :f'/{tc.topiccollection.theme.slug}/{tc.topiccollection.slug}/{topic.slug}/', 'type': 'topic', 'id': topic_global_id, 'parent_topic_collection': topic_tc_global_id})
+                site_structure.append({'url': f'/{tc.topiccollection.theme.slug}/{tc.topiccollection.slug}/{topic.slug}/', 'type': 'topic', 'id': topic_global_id, 'parent_topic_collection': topic_tc_global_id})
 
         departments = DepartmentPage.objects.all()
         for department in departments:
             department_global_id = graphene.Node.to_global_id('DepartmentNode', department.id)
-            site_structure.append({'url' :f'/{department.slug}/', 'type': 'department', 'id': department_global_id})
+            site_structure.append({'url': f'/{department.slug}/', 'type': 'department', 'id': department_global_id})
 
         site_structure.extend(get_structure_for_content_type('service page'))
         site_structure.extend(get_structure_for_content_type('information page'))
@@ -601,6 +626,8 @@ class DepartmentPageDirectorNode(DjangoObjectType):
 
 # Get the original page object from a page chooser node
 # Works for any content_type defined in content_type_map
+
+
 def get_page_from_content_type(self):
     content_type = self.page.content_type.name
     model = content_type_map[content_type]["model"]
@@ -609,11 +636,14 @@ def get_page_from_content_type(self):
 
 # Get a page global_id from a page chooser node
 # Works for any content_type defined in content_type_map
+
+
 def get_global_id_from_content_type(self):
     content_type = self.page.content_type.name
     node = content_type_map[content_type]["node"]
     global_id = graphene.Node.to_global_id(node, self.page_id)
     return global_id
+
 
 class DepartmentPageTopPageNode(DjangoObjectType):
     title = graphene.String()
@@ -737,6 +767,7 @@ class Query(graphene.ObjectType):
     all_official_document_page_topics = DjangoFilterConnectionField(OfficialDocumentPageTopicNode)
     all_guide_page_topics = DjangoFilterConnectionField(GuidePageTopicNode)
     all_form_page_topics = DjangoFilterConnectionField(FormPageTopicNode)
+    all_location_pages = DjangoFilterConnectionField(LocationPageNode)
 
     def resolve_site_structure(self, resolve_info):
         site_structure = SiteStructure()

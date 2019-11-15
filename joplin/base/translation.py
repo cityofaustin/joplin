@@ -3,6 +3,7 @@ from wagtail.core.models import Page
 from wagtail.images.models import Image
 
 from .models import ThreeOneOne, TopicPage, TopicCollectionPage, Theme, ServicePage, ProcessPage, ProcessPageStep, DepartmentPage, DepartmentPageDirector, InformationPage, OfficialDocumentPage, OfficialDocumentPageOfficialDocument, TranslatedImage, Department, Map, HomePage, GuidePage, FormPage
+from locations.models import LocationPage
 
 
 @register(Image)
@@ -152,3 +153,8 @@ class FormPageTranslationOptions(TranslationOptions):
         'description',
         'form_url',
     )
+
+
+@register(LocationPage)
+class LocationPageOptions(TranslationOptions):
+    pass
