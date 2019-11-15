@@ -94,7 +94,7 @@ def search(request):
         return render(request, "wagtailadmin/pages/search_results.html", {
             'pages': pages,
             'all_pages': all_pages,
-            'query_string': q,
+            'query_string': query,
             'content_types': content_types,
             'selected_content_type': selected_content_type,
             'ordering': ordering,
