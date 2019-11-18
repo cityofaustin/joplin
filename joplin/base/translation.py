@@ -6,13 +6,6 @@ from .models import ThreeOneOne, TopicPage, TopicCollectionPage, Theme, ServiceP
 from locations.models import LocationPage
 
 
-@register(Image)
-class ImageTranslationOptions(TranslationOptions):
-    fields = (
-        'title',
-    )
-
-
 @register(TranslatedImage)
 class TranslatedImageTranslationOptions(TranslationOptions):
     fields = (

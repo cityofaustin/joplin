@@ -13,6 +13,7 @@ from wagtail.admin.edit_handlers import (
     ObjectList,
     TabbedInterface,
 )
+from base.models.translated_image import TranslatedImage
 
 
 class Location(models.Model):
@@ -41,7 +42,7 @@ class PhysicalAddress(Location):
     this should also help janis know to render fields differently for this one vs mailing (see mocks)
     """
     location_photo = models.ForeignKey(
-        'wagtailimages.Image',
+        TranslatedImage,
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
@@ -63,6 +64,7 @@ class LocationPageRelatedLocations(Orderable, Location):
 class LocationPage(Page):
     """
     all the relevant details for a specifc location (place!?)
+    decide if we want to set null or cascade
     """
 
     primary_name = models.CharField(max_length=255)
@@ -71,14 +73,14 @@ class LocationPage(Page):
         PhysicalAddress,
         null=True,
         blank=True,
-        on_delete=models.SET_NULL,
+        on_delete=models.CASCADE,
         related_name='+'
     )
     mailing_address = models.OneToOneField(
         Location,
         null=True,
         blank=True,
-        on_delete=models.SET_NULL,
+        on_delete=models.CASCADE,
         related_name='+'
     )
 
@@ -107,3 +109,9 @@ class LocationsIndexPage(Page):
             self).live().order_by(
             'primary_name')
         return context
+
+
+"""
+maybe try this~! https://gist.github.com/pjho/f0bbcfc745989191cf305a34233388e0
+also fix whatever is up with migrations, might need to add translated image
+"""

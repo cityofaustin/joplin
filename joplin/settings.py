@@ -399,3 +399,4 @@ LOGIN_URL = '/admin/login/'
 # https://docs.djangoproject.com/en/2.2/ref/settings/#data-upload-max-number-fields
 # We submit a lot of fields when saving some of our content types, let's let that happen
 DATA_UPLOAD_MAX_NUMBER_FIELDS = None
+WAGTAILIMAGES_IMAGE_MODEL = 'base.TranslatedImage'
