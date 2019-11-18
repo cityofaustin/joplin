@@ -35,7 +35,7 @@ urlpatterns = [
     url(r'^django-admin/', include('smuggler.urls')),
     url(r'^django-admin/', admin.site.urls),
     path('admin/docs/', include('django.contrib.admindocs.urls')),
-    # uncomment this path to expiriment with the default dashboard,
+    # comment out the below 'admin/' path to experiment with the default dashboard,
     # which can be customized using wagtail hooks
     path('admin/', home),
     path('', login),
