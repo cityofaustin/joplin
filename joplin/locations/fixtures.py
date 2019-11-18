@@ -3,6 +3,7 @@ from pathlib import Path
 from django.core.management import call_command
 from django.conf import settings
 from locations import factories
+from wagtail.core.models import Page
 
 
 def create():
@@ -17,12 +18,13 @@ def create():
     need to be commit to the database for now and revisit this in a more efficient way later
     """
     home_page = HomePage.objects.all()[0]
+    root_page = Page.objects.all()[0]
 
     def create_fixtures():
         """
         creates test data and commits to DB
         """
-        create_index_page = factories.LocationsIndexPageFactory.create(parent=home_page)
+        create_index_page = factories.LocationsIndexPageFactory.create(parent=root_page, title='Location Pages')
         create_locations_pages = factories.LocationPageFactory.create_batch(size=10, parent=create_index_page)
 
     def save_to_file(objects):

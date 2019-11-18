@@ -97,7 +97,6 @@ class LocationsIndexPage(Page):
     """
     A list of LocationPages
     """
-    parent_page_types = ['base.HomePage', 'LocationsIndexPage']
 
     # Overrides the context to list all child
     # items, that are live, by the date that they were published
