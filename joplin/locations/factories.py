@@ -47,3 +47,9 @@ class LocationPageFactory(PageFactory):
 
     class Meta:
         model = models.LocationPage
+
+
+class LocationsIndexPageFactory(PageFactory):
+
+    class Meta:
+        model = models.LocationsIndexPage

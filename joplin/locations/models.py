@@ -71,14 +71,12 @@ class LocationPage(Page):
     alternate_name = models.CharField(max_length=255, blank=True)
     physical_address = models.OneToOneField(
         PhysicalAddress,
-        null=True,
         blank=True,
         on_delete=models.CASCADE,
         related_name='+'
     )
     mailing_address = models.OneToOneField(
         Location,
-        null=True,
         blank=True,
         on_delete=models.CASCADE,
         related_name='+'
@@ -99,6 +97,7 @@ class LocationsIndexPage(Page):
     """
     A list of LocationPages
     """
+    parent_page_types = ['base.HomePage', 'LocationsIndexPage']
 
     # Overrides the context to list all child
     # items, that are live, by the date that they were published
@@ -113,5 +112,4 @@ class LocationsIndexPage(Page):
 
 """
 maybe try this~! https://gist.github.com/pjho/f0bbcfc745989191cf305a34233388e0
-also fix whatever is up with migrations, might need to add translated image
 """
