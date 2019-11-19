@@ -18,35 +18,38 @@ class PageFactory(wagtail_factories.factories.MP_NodeFactory):
         model = Page
 
 
-class LocationFactory(factory.django.DjangoModelFactory):
-    full_address = factory.Faker('address')
-    unit_number = factory.Faker('random_int')
-    geography = factory.Faker('local_latlng')
-
-    class Meta:
-        model = models.Location
-
-
-class PhysicalAddressFactory(factory.django.DjangoModelFactory):
-    full_address = factory.Faker('address')
-    unit_number = factory.Faker('random_int')
-    geography = factory.Faker('local_latlng')
-
-    location_photo = factory.SubFactory(wagtail_factories.ImageFactory)
-
-    class Meta:
-        model = models.PhysicalAddress
-
-
 class LocationPageFactory(PageFactory):
 
     primary_name = factory.Faker('text')
     alternate_name = factory.Faker('text')
-    physical_address = factory.SubFactory(PhysicalAddressFactory)
-    mailing_address = factory.SubFactory(LocationFactory)
+    alternate_name = factory.Faker('text')
+
+    physical_street = factory.Faker('text')
+    physical_city = factory.Faker('text')
+    physical_state = factory.Faker('text')
+    physical_country = factory.Faker('text')
+    physical_zip = factory.Faker('text')
+
+    physical_location_photo = factory.SubFactory(wagtail_factories.ImageFactory)
+
+    mailing_street = factory.Faker('text')
+    mailing_city = factory.Faker('text')
+    mailing_state = factory.Faker('text')
+    mailing_country = factory.Faker('text')
+    mailing_zip = factory.Faker('text')
+
+    nearest_bus_1 = factory.Faker('text')
+    nearest_bus_2 = factory.Faker('text')
+    nearest_bus_3 = factory.Faker('text')
 
     class Meta:
         model = models.LocationPage
+
+
+class LocationPageRelatedServicesFactory(factory.django.DjangoModelFactory):
+
+    class Meta:
+        model = models.LocationPageRelatedServices
 
 
 class LocationsIndexPageFactory(PageFactory):

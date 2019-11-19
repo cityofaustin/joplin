@@ -12,66 +12,18 @@ from wagtail.admin.edit_handlers import (
     MultiFieldPanel,
     ObjectList,
     TabbedInterface,
+    FieldRowPanel,
 )
 from base.models.translated_image import TranslatedImage
+from base.models import Location as BaseLocation
 
 # The abstract model for related links, complete with panels
-
-
-class Location(models.Model):
-    """
-    A base Django model for representing data about an
-    individual location item.
-    """
-
-    full_address = models.CharField(max_length=255, blank=False)
-    unit_number = models.IntegerField(blank=True)
-    geography = models.CharField(max_length=255, blank=True)
-    """
-    optional fields to match mocks, are these really required data to store
-    or should they be cosmetic/for the widget?
-    street
-    city
-    state
-    zip
-    """
-    # gonna need location widget that returns streetview or user selected image
-
-
-class PhysicalAddress(Location):
-    """
-    inherits Location (using concrete inheritance) to add a photo for physical location
-    this should also help janis know to render fields differently for this one vs mailing (see mocks)
-    """
-    location_photo = models.ForeignKey(
-        TranslatedImage,
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
-        related_name='+'
-    )
-
-
-class LocationPageRelatedPhysicalAddress(Orderable, PhysicalAddress):
-    """
-    a pattern for adding multiple related location, not currently used
-    """
-    page = ParentalKey(
-        'locations.LocationPage',
-        related_name='related_physical_address',
-        on_delete=models.CASCADE
-    )
-
-
-class LocationPageRelatedMailingAddress(Orderable, Location):
-    """
-    a pattern for adding multiple related location, not currently used
-    """
-    page = ParentalKey(
-        'locations.LocationPage',
-        related_name='related_mailing_address',
-        on_delete=models.CASCADE
-    )
+from wagtail.core.fields import RichTextField
+from wagtail.search import index
+from wagtail.admin.edit_handlers import FieldPanel, PageChooserPanel
+from wagtail.images.edit_handlers import ImageChooserPanel
+from base.models.widgets import countMe, countMeTextArea, AUTHOR_LIMITS
+from modelcluster.models import ClusterableModel
 
 
 class LocationPage(Page):
@@ -79,32 +31,79 @@ class LocationPage(Page):
     all the relevant details for a specifc location (place!?)
     decide if we want to set null or cascade
     """
-
-    primary_name = models.CharField(max_length=255)
-    title = 'nuttin'
     alternate_name = models.CharField(max_length=255, blank=True)
-    physical_address = models.OneToOneField(
-        LocationPageRelatedPhysicalAddress,
+
+    physical_street = models.TextField()
+    physical_unit = models.TextField()
+    physical_city = models.CharField(max_length=255, default='Austin')
+    physical_state = models.CharField(max_length=2, default='TX')
+    physical_country = models.CharField(max_length=100, default='USA')
+    physical_zip = models.CharField(max_length=50)
+
+    physical_location_photo = models.ForeignKey(
+        TranslatedImage,
+        null=True,
         blank=True,
-        on_delete=models.CASCADE,
+        on_delete=models.SET_NULL,
         related_name='+'
     )
-    mailing_address = models.OneToOneField(
-        LocationPageRelatedMailingAddress,
-        blank=True,
-        on_delete=models.CASCADE,
-        related_name='+'
-    )
+
+    mailing_street = models.TextField()
+    mailing_city = models.CharField(max_length=255, default='Austin')
+    mailing_state = models.CharField(max_length=2, default='TX')
+    mailing_country = models.CharField(max_length=100, default='USA')
+    mailing_zip = models.CharField(max_length=50)
+
+    nearest_bus_1 = models.CharField(max_length=255)
+    nearest_bus_2 = models.CharField(max_length=255)
+    nearest_bus_3 = models.CharField(max_length=255)
 
     parent_page_types = ['base.HomePage', 'LocationsIndexPage']
 
     content_panels = [
-        FieldPanel('primary_name'),
+        FieldPanel('title_en', widget=countMe),
+
+        MultiFieldPanel(children=[
+            FieldPanel('physical_street'),
+            FieldPanel('physical_unit', classname='col2'),
+            FieldPanel('physical_city', classname='col5'),
+            FieldPanel('physical_state', classname='col4'),
+            FieldPanel('physical_zip', classname='col2'),
+            FieldPanel('physical_country', classname='col5'),
+        ], heading='Physical Address'),
+        ImageChooserPanel('physical_location_photo'),
+        MultiFieldPanel(children=[
+            FieldPanel('mailing_street'),
+            FieldPanel('mailing_city', classname='col5'),
+            FieldPanel('mailing_state', classname='col4'),
+            FieldPanel('mailing_zip', classname='col2'),
+            FieldPanel('mailing_country', classname='col5'),
+        ],
+            heading='Mailing Address',
+            classname="collapsible collapsed"
+        ),
         FieldPanel('alternate_name'),
-        FieldPanel('physical_address'),
-        FieldPanel('mailing_address'),
-        InlinePanel('related_physical_address', label="Physical Address", max_num=1),
-        InlinePanel('related_mailing_address', label="Mailing Address", max_num=1),
+        FieldRowPanel(
+            children=[
+                FieldPanel('nearest_bus_1'),
+                FieldPanel('nearest_bus_2'),
+                FieldPanel('nearest_bus_3'),
+            ],
+            heading="Nearest bus"
+        ),
+        InlinePanel('related_services', label='Related Services'),
+    ]
+
+
+class LocationPageRelatedServices(ClusterableModel):
+    page = ParentalKey(LocationPage, related_name='related_services', default=None)
+    related_service = models.ForeignKey(
+        "base.servicePage",
+        on_delete=models.PROTECT,
+    )
+
+    panels = [
+        PageChooserPanel("related_service"),
     ]
 
 

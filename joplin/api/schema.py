@@ -196,17 +196,6 @@ class LocationPageNode(DjangoObjectType):
         interfaces = [graphene.Node]
 
 
-class PhysicalLocationType(DjangoObjectType):
-
-    class Meta:
-        model = locations.PhysicalAddress
-
-
-class LocationType(DjangoObjectType):
-    class Meta:
-        model = locations.Location
-
-
 class ContactNode(DjangoObjectType):
     class Meta:
         model = Contact
