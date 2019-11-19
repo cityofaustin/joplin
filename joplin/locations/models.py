@@ -15,6 +15,8 @@ from wagtail.admin.edit_handlers import (
 )
 from base.models.translated_image import TranslatedImage
 
+# The abstract model for related links, complete with panels
+
 
 class Location(models.Model):
     """
@@ -50,13 +52,24 @@ class PhysicalAddress(Location):
     )
 
 
-class LocationPageRelatedLocations(Orderable, Location):
+class LocationPageRelatedPhysicalAddress(Orderable, PhysicalAddress):
     """
     a pattern for adding multiple related location, not currently used
     """
     page = ParentalKey(
         'locations.LocationPage',
-        related_name='related_locations',
+        related_name='related_physical_address',
+        on_delete=models.CASCADE
+    )
+
+
+class LocationPageRelatedMailingAddress(Orderable, Location):
+    """
+    a pattern for adding multiple related location, not currently used
+    """
+    page = ParentalKey(
+        'locations.LocationPage',
+        related_name='related_mailing_address',
         on_delete=models.CASCADE
     )
 
@@ -68,15 +81,16 @@ class LocationPage(Page):
     """
 
     primary_name = models.CharField(max_length=255)
+    title = 'nuttin'
     alternate_name = models.CharField(max_length=255, blank=True)
     physical_address = models.OneToOneField(
-        PhysicalAddress,
+        LocationPageRelatedPhysicalAddress,
         blank=True,
         on_delete=models.CASCADE,
         related_name='+'
     )
     mailing_address = models.OneToOneField(
-        Location,
+        LocationPageRelatedMailingAddress,
         blank=True,
         on_delete=models.CASCADE,
         related_name='+'
@@ -89,7 +103,8 @@ class LocationPage(Page):
         FieldPanel('alternate_name'),
         FieldPanel('physical_address'),
         FieldPanel('mailing_address'),
-        InlinePanel('related_locations', label="Related locations"),
+        InlinePanel('related_physical_address', label="Physical Address", max_num=1),
+        InlinePanel('related_mailing_address', label="Mailing Address", max_num=1),
     ]
 
 
