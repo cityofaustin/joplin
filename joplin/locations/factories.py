@@ -19,9 +19,6 @@ class PageFactory(wagtail_factories.factories.MP_NodeFactory):
 
 
 class LocationPageFactory(PageFactory):
-
-    primary_name = factory.Faker('text')
-    alternate_name = factory.Faker('text')
     alternate_name = factory.Faker('text')
 
     physical_street = factory.Faker('text')

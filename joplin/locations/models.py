@@ -33,12 +33,12 @@ class LocationPage(Page):
     """
     alternate_name = models.CharField(max_length=255, blank=True)
 
-    physical_street = models.TextField()
-    physical_unit = models.TextField()
-    physical_city = models.CharField(max_length=255, default='Austin')
-    physical_state = models.CharField(max_length=2, default='TX')
-    physical_country = models.CharField(max_length=100, default='USA')
-    physical_zip = models.CharField(max_length=50)
+    physical_street = models.CharField(max_length=255, blank=True)
+    physical_unit = models.CharField(max_length=255, blank=True)
+    physical_city = models.CharField(max_length=255, default='Austin', blank=True)
+    physical_state = models.CharField(max_length=255, default='TX', blank=True)
+    physical_country = models.CharField(max_length=255, default='USA', blank=True)
+    physical_zip = models.CharField(max_length=255, blank=True)
 
     physical_location_photo = models.ForeignKey(
         TranslatedImage,
@@ -48,15 +48,15 @@ class LocationPage(Page):
         related_name='+'
     )
 
-    mailing_street = models.TextField()
-    mailing_city = models.CharField(max_length=255, default='Austin')
-    mailing_state = models.CharField(max_length=2, default='TX')
-    mailing_country = models.CharField(max_length=100, default='USA')
-    mailing_zip = models.CharField(max_length=50)
+    mailing_street = models.CharField(max_length=255, blank=True)
+    mailing_city = models.CharField(max_length=255, default='Austin', blank=True)
+    mailing_state = models.CharField(max_length=255, default='TX', blank=True)
+    mailing_country = models.CharField(max_length=255, default='USA', blank=True)
+    mailing_zip = models.CharField(max_length=255, blank=True)
 
-    nearest_bus_1 = models.CharField(max_length=255)
-    nearest_bus_2 = models.CharField(max_length=255)
-    nearest_bus_3 = models.CharField(max_length=255)
+    nearest_bus_1 = models.CharField(max_length=255, blank=True)
+    nearest_bus_2 = models.CharField(max_length=255, blank=True)
+    nearest_bus_3 = models.CharField(max_length=255, blank=True)
 
     parent_page_types = ['base.HomePage', 'LocationsIndexPage']
 
