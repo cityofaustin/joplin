@@ -57,7 +57,7 @@ INSTALLED_APPS = [
     'wagtail_modeltranslation',
     'wagtail_modeltranslation.makemigrations',
     'wagtail_modeltranslation.migrate',
-
+    'generic_chooser',
     'modelcluster',
     'taggit',
     'rest_framework',
@@ -82,6 +82,7 @@ INSTALLED_APPS = [
     'countable_field',
     'flags',
     'locations',
+
 ]
 
 MIDDLEWARE = [

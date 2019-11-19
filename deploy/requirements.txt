@@ -59,3 +59,4 @@ wagtail==2.6.1
 wagtail-factories==2.0.0
 webencodings==0.5.1
 Willow==1.1
+wagtail-generic-chooser==0.1.1

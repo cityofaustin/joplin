@@ -5,6 +5,9 @@ from .models import (
     LocationPage,
     LocationsIndexPage
 )
+from wagtail.core import hooks
+
+from locations.views import LocationChooserViewSet
 
 
 class LocationAdmin(ModelAdmin):
@@ -33,3 +36,8 @@ class LocationsIndexPageAdmin(ModelAdmin):
 modeladmin_register(LocationAdmin)
 modeladmin_register(LocationPageAdmin)
 modeladmin_register(LocationsIndexPageAdmin)
+
+
+@hooks.register('register_admin_viewset')
+def register_location_chooser_viewset():
+    return LocationChooserViewSet('location_chooser', url_prefix='location-chooser')

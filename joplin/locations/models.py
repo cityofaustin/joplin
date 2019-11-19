@@ -6,6 +6,9 @@ from phonenumber_field.modelfields import PhoneNumberField
 from base.models import JanisBasePage, HomePage
 from wagtail.core.models import Page, Orderable
 from modelcluster.fields import ParentalKey
+from django.contrib.admin.utils import quote
+from django.urls import reverse
+from django.utils.translation import ugettext_lazy as _
 from wagtail.admin.edit_handlers import (
     FieldPanel,
     InlinePanel,
@@ -14,6 +17,7 @@ from wagtail.admin.edit_handlers import (
     TabbedInterface,
 )
 from base.models.translated_image import TranslatedImage
+from generic_chooser.widgets import AdminChooser
 
 
 class Location(models.Model):
@@ -34,6 +38,14 @@ class Location(models.Model):
     zip
     """
     # gonna need location widget that returns streetview or user selected image
+
+    def __str__(self):
+        return self.full_address
+
+
+class LocationChooser(AdminChooser):
+    model = Location
+    choose_modal_url_name = 'location_chooser:choose'
 
 
 class PhysicalAddress(Location):
@@ -87,8 +99,8 @@ class LocationPage(Page):
     content_panels = [
         FieldPanel('primary_name'),
         FieldPanel('alternate_name'),
-        FieldPanel('physical_address'),
-        FieldPanel('mailing_address'),
+        FieldPanel('physical_address', widget=LocationChooser),
+        FieldPanel('mailing_address', widget=LocationChooser),
         InlinePanel('related_locations', label="Related locations"),
     ]
 
