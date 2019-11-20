@@ -579,6 +579,14 @@
   }
 },
 {
+  "model": "sessions.session",
+  "pk": "uk3tke950bs0p03use85x1gxcvly92wh",
+  "fields": {
+    "session_data": "NzlhY2MxNTRkMjAwZTRkOTg0YzFmMjM2NGFjZTEzYTczZGEwMGUzMDp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiJiZTQ3YzJjMjQ0YjRkNTNmMzUzNjAzZjJjN2M0YTc1NjFiNGM0Y2FjIiwiX3Nlc3Npb25fc2VjdXJpdHkiOiIyMDE5LTExLTIwVDA2OjAzOjI4LjY2Njg0NyJ9",
+    "expire_date": "2019-12-04T06:03:28.671Z"
+  }
+},
+{
   "model": "auth.permission",
   "fields": {
     "name": "Can add document",
@@ -3970,8 +3978,8 @@
 {
   "model": "users.user",
   "fields": {
-    "password": "pbkdf2_sha256$150000$h63fDwdtGVNr$KkAGj1errqRZVgm8eS8TdNmWRdxEwMEcNP4LiT/mvO8=",
-    "last_login": "2019-11-20T01:48:58.462Z",
+    "password": "pbkdf2_sha256$150000$9nrFVFX0DGFr$M6naJ4wbHJ/oC8JnGNNgaG0F93FHeS1k6JkjfJ18poE=",
+    "last_login": "2019-11-20T06:03:27.950Z",
     "is_superuser": true,
     "first_name": "Austin",
     "last_name": "Cityof",
