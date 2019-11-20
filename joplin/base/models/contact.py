@@ -16,6 +16,13 @@ from .location import Location
 from .day_and_duration import DayAndDuration
 
 from .constants import DEFAULT_MAX_LENGTH
+from recurrence.fields import RecurrenceField
+
+
+@register_snippet
+class RecurringRules(models.Model):
+    title = models.CharField(max_length=200)
+    recurrences = RecurrenceField()
 
 
 @register_snippet
@@ -24,6 +31,8 @@ class Contact(ClusterableModel):
     email = models.EmailField(blank=True)
     location = models.ForeignKey(
         Location, null=True, blank=True, related_name='+', on_delete=models.SET_NULL)
+    exceptions = models.ForeignKey(
+        RecurringRules, null=True, blank=True, related_name='+', on_delete=models.SET_NULL)
 
     social_media = StreamField(
         [
@@ -41,6 +50,7 @@ class Contact(ClusterableModel):
         FieldPanel('email'),
         InlinePanel('phone_number', label='Phone Numbers'),
         SnippetChooserPanel('location'),
+        SnippetChooserPanel('exceptions'),
         InlinePanel('hours', label='Hours'),
         StreamFieldPanel('social_media'),
     ]

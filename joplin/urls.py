@@ -12,6 +12,9 @@ from base.views import joplin_views
 from base.views import joplin_search_views
 from django.urls import reverse
 import debug_toolbar
+from django.views.i18n import JavaScriptCatalog
+import django.views.i18n
+
 
 def home(request):
     """
@@ -31,6 +34,10 @@ def login(request):
     return redirect(reverse('wagtailadmin_login'), permanent=True)
 
 
+js_info_dict = {
+    'packages': ('recurrence')
+}
+
 urlpatterns = [
     url(r'^django-admin/', include('smuggler.urls')),
     url(r'^django-admin/', admin.site.urls),
@@ -42,13 +49,15 @@ urlpatterns = [
     url(r'admin/pages/(\d+)/publish/$', joplin_views.publish, name='publish'),
     url(r'admin/pages/new_from_modal/$',
         joplin_views.new_page_from_modal, name='new_page_from_modal'),
-    url(r'admin/pages/search/$', joplin_search_views.search, name='search' ),
+    url(r'admin/pages/search/$', joplin_search_views.search, name='search'),
     url(r'^admin/', include(wagtailadmin_urls)),
     url(r'^documents/', include(wagtaildocs_urls)),
     path('__debug__/', include(debug_toolbar.urls)),
     url(r'^api/graphql', csrf_exempt(GraphQLView.as_view())),
     url(r'^api/graphiql', csrf_exempt(GraphQLView.as_view(graphiql=True, pretty=True))),
     url(r'session_security/', include('session_security.urls')),
+    url(r'^jsi18n/$', JavaScriptCatalog.as_view(), js_info_dict),
+    path('jsi18n.js', JavaScriptCatalog.as_view(packages=['recurrence']), name='jsi18n'),
 
 
     # For anything not caught by a more specific rule above, hand over to
@@ -57,6 +66,7 @@ urlpatterns = [
     url(r'', include(wagtail_urls)),
 ]
 
+django.views.i18n.javascript_catalog = None
 
 if settings.DEBUG:
     from django.conf.urls.static import static
