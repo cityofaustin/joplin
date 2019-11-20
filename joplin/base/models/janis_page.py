@@ -164,14 +164,12 @@ class JanisBasePage(Page):
         """
         if revision:
             url_page_type = revision.page.janis_url_page_type
-            global_id = graphene.Node.to_global_id('PageRevisionNode', revision.id)
-            url_end = f"preview/{url_page_type}/{global_id}"
-
         else:
             revision = self.get_latest_revision()
             url_page_type = self.janis_url_page_type
-            url_end = f"preview/{url_page_type}/"
 
+        global_id = graphene.Node.to_global_id('PageRevisionNode', revision.id)
+        url_end = f"preview/{url_page_type}/{global_id}"
         if settings.ISSTAGING or settings.ISPRODUCTION:
             return url_end
         else:

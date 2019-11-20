@@ -54,8 +54,6 @@ def create():
             locations.models.LocationPage.objects.all().delete()
         except Exception as e:
             print(e)
-            import pdb
-            pdb.set_trace()
 
     create_fixtures()
     dump_data()
