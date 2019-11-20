@@ -270,7 +270,6 @@ class JanisBasePage(Page):
 
 class AdminOnlyFieldPanel(FieldPanel):
     def render_as_object(self):
-        print('hello')
         print(self.request.user.has_perm('base.view_extra_panels'))
         if not self.request.user.is_superuser:
             return 'HIDE_ME'
