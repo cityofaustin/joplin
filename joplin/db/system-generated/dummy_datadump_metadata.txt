@@ -1,5 +1,5 @@
-TIMESTAMP: "2019-11-20--01-01-21"
-TIMESTAMP OF LAST SYNC: "2019-11-20--01-01-21"
+TIMESTAMP: "2019-11-20--04-20-00"
+TIMESTAMP OF LAST SYNC: "2019-11-20--04-20-00"
 LATEST_MIGRATION: "0012_replace_migrations_for_wagtail_independence"
 LATEST_BASE_MIGRATION: "0097_formpage_formpagerelateddepartments_formpagetopic"
 TOTAL_MIGRATIONS: 241
