@@ -21,7 +21,7 @@ log 2 "Application Name:  ${APPNAME}"
 # Builds using top-level directory ($CURRENT_DIR/..) as context
 DOCKER_BUILDKIT=1 docker build -f app.Dockerfile -t $DOCKER_TAG_1 -t $DOCKER_TAG_2 -t $DOCKER_TAG_HEROKU --target $DOCKER_TARGET $CURRENT_DIR/../..
 
-if [ "$CIRCLE_BRANCH" == "master" ] || [ "$CIRCLE_BRANCH" == "production" ] || [ "$CIRCLE_BRANCH" == "3396-dummy-data" ]; then
+if [ "$CIRCLE_BRANCH" == "master" ] || [ "$CIRCLE_BRANCH" == "production" ]; then
   # Push master and production images to dockerhub repo for storage
   print_header "Pushing Image to Dockerhub"
   docker push $DOCKER_TAG_1

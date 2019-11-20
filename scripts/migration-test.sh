@@ -55,7 +55,7 @@ elif [ "$LOAD_STAGING_DATA" = "on" ]; then
     jq '(.[] | select(.model == "users.user") | .fields.password) |= "pbkdf2_sha256$150000$GJQ1UoZlgrC4$Ir0Uww/i9f2VKzHznU4B1uaHbdCxRnZ69w12cIvxWP0="' \
     > $TMP_DATADUMP
 elif [ "$DUMMY" = "on" ]; then
-  export DOCKER_TAG_APP="cityofaustin/joplin-app:pr-3396-dummy-data-latest"
+  export DOCKER_TAG_APP="cityofaustin/joplin-app:master-latest"
   export SOURCED_FROM="LAST_DUMMY_DATADUMP"
   export LOAD_DUMMY_DATA="on"
 else
