@@ -7,6 +7,9 @@ from django.conf import settings
 from wagtail.search import index
 from wagtail.utils.decorators import cached_classmethod
 from wagtail.admin.edit_handlers import FieldPanel, ObjectList, TabbedInterface
+from django.contrib.auth.decorators import user_passes_test
+# permission required will be moved in 2.7
+from wagtail.admin.utils import permission_required
 from wagtail.core.models import Page
 from wagtail.core.fields import RichTextField
 from flags.state import flag_enabled
@@ -195,7 +198,7 @@ class JanisBasePage(Page):
     # alias for url base function
     janis_preview_url_start = janis_url_base
 
-    # TODO this function and prevew_url_data are pretty similar, we can probably consolidate them
+    # TODO this function and preview_url_data are pretty similar, we can probably consolidate them
     def janis_preview_url(self, revision=None, lang="en"):
         return f"{self.janis_preview_url_start('preview_janis_branch')}/{lang}/{self.janis_preview_url_end(revision=revision)}"
 
@@ -231,6 +234,7 @@ class JanisBasePage(Page):
 
     @cached_classmethod
     def get_edit_handler(cls):
+
         if hasattr(cls, 'edit_handler'):
             return cls.edit_handler.bind_to(model=cls)
 
@@ -240,8 +244,10 @@ class JanisBasePage(Page):
 
         ]
 
+        # IF USER HAS PERMISSION TO SEE THE PANELS. pass the user in here?
+        # current_request = get_current_request()
         try:
-            if flag_enabled('SHOW_EXTRA_PANELS'):
+            if flag_enabled('SHOW_EXTRA_PANELS'):# and self.request.user.has_perm('base.view_extra_panels'):
                 editor_panels += (ObjectList(cls.promote_panels,
                                              heading='SEO'),
                                   ObjectList(cls.settings_panels,
@@ -256,10 +262,16 @@ class JanisBasePage(Page):
 
     class Meta:
         abstract = True
+        # https://docs.djangoproject.com/en/2.2/topics/auth/customizing/#custom-permissions
+        permissions = [
+          ("view_extra_panels", "Can view extra panels"),
+        ]
 
 
 class AdminOnlyFieldPanel(FieldPanel):
     def render_as_object(self):
+        print('hello')
+        print(self.request.user.has_perm('base.view_extra_panels'))
         if not self.request.user.is_superuser:
             return 'HIDE_ME'
 

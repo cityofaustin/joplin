@@ -43,6 +43,7 @@ urlpatterns = [
     url(r'admin/pages/new_from_modal/$',
         joplin_views.new_page_from_modal, name='new_page_from_modal'),
     url(r'admin/pages/search/$', joplin_search_views.search, name='search' ),
+    # url(r'admin/users/', joplin_search_views.search, name='search'),
     url(r'^admin/', include(wagtailadmin_urls)),
     url(r'^documents/', include(wagtaildocs_urls)),
     path('__debug__/', include(debug_toolbar.urls)),

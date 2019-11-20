@@ -25,6 +25,7 @@
 <div class="header coa-header">
     <div>
         <img class="wagtail-logo wagtail-logo__full" src="{% static 'images/coa_seal_transparent_white.png' %}" alt="Welcome to City of Austin CMS" width="60" />
+        {{ perms.perms }}
     </div>
     <div class="dropdown user-account">
         <div class="dropdown-toggle">
