@@ -22,15 +22,17 @@ from wagtail.core.fields import RichTextField
 from wagtail.search import index
 from wagtail.admin.edit_handlers import FieldPanel, PageChooserPanel
 from wagtail.images.edit_handlers import ImageChooserPanel
+from base.models import JanisBasePage
 from base.models.widgets import countMe, countMeTextArea, AUTHOR_LIMITS
 from modelcluster.models import ClusterableModel
 
 
-class LocationPage(Page):
+class LocationPage(JanisBasePage):
     """
     all the relevant details for a specifc location (place!?)
     decide if we want to set null or cascade
     """
+    janis_url_page_type = 'location'
     alternate_name = models.CharField(max_length=255, blank=True)
 
     physical_street = models.CharField(max_length=255, blank=True)
@@ -54,9 +56,9 @@ class LocationPage(Page):
     mailing_country = models.CharField(max_length=255, default='USA', blank=True)
     mailing_zip = models.CharField(max_length=255, blank=True)
 
-    nearest_bus_1 = models.CharField(max_length=255, blank=True)
-    nearest_bus_2 = models.CharField(max_length=255, blank=True)
-    nearest_bus_3 = models.CharField(max_length=255, blank=True)
+    nearest_bus_1 = models.IntegerField(blank=True)
+    nearest_bus_2 = models.IntegerField(blank=True)
+    nearest_bus_3 = models.IntegerField(blank=True)
 
     parent_page_types = ['base.HomePage', 'LocationsIndexPage']
 

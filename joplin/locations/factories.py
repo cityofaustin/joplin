@@ -21,23 +21,24 @@ class PageFactory(wagtail_factories.factories.MP_NodeFactory):
 class LocationPageFactory(PageFactory):
     alternate_name = factory.Faker('text')
 
-    physical_street = factory.Faker('text')
-    physical_city = factory.Faker('text')
-    physical_state = factory.Faker('text')
-    physical_country = factory.Faker('text')
-    physical_zip = factory.Faker('text')
+    physical_street = factory.Faker('street_address')
+    physical_unit = factory.Faker('secondary_address')
+    physical_city = factory.Faker('city')
+    physical_state = factory.Faker('state_abbr')
+    physical_country = factory.Faker('country_code')
+    physical_zip = factory.Faker('zipcode_in_state')
 
     physical_location_photo = factory.SubFactory(wagtail_factories.ImageFactory)
 
-    mailing_street = factory.Faker('text')
-    mailing_city = factory.Faker('text')
-    mailing_state = factory.Faker('text')
-    mailing_country = factory.Faker('text')
-    mailing_zip = factory.Faker('text')
+    mailing_street = factory.Faker('street_address')
+    mailing_city = factory.Faker('city')
+    mailing_state = factory.Faker('state_abbr')
+    mailing_country = factory.Faker('country_code')
+    mailing_zip = factory.Faker('zipcode_in_state')
 
-    nearest_bus_1 = factory.Faker('text')
-    nearest_bus_2 = factory.Faker('text')
-    nearest_bus_3 = factory.Faker('text')
+    nearest_bus_1 = factory.Faker('random_int', min=0, max=999, step=1)
+    nearest_bus_2 = factory.Faker('random_int', min=0, max=999, step=1)
+    nearest_bus_3 = factory.Faker('random_int', min=0, max=999, step=1)
 
     class Meta:
         model = models.LocationPage
