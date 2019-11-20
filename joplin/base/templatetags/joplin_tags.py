@@ -24,7 +24,8 @@ STYLEGUIDE_PAGES = {
     'topic page': '',
     'topic collection page': '',
     'official document page': '',
-    'guide page': ''
+    'guide page': '',
+    'form page': '',
 }
 
 

@@ -1,0 +1,30 @@
+{% load i18n %}
+
+<div class="header secondary coa-search-header ">
+
+    <div>
+        <h1 class="coa-search-results-h1">
+          Pages
+        </h1>
+    </div>
+
+    <div>
+        <!-- From wagtail/admin/templates/wagtailadmin/shared/menu_search.html -->
+        {% if search_url %}
+            <div class="col search-form nav-search">
+                {% for field in search_form %}
+                    {% include "wagtailadmin/shared/field_as_li.html" with field=field field_classes="field-small iconfield" input_classes="icon-search" %}
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="actions">
+      <!-- <div> -->
+        <!-- Button trigger modal -->
+        <button type="button" class="button" data-toggle="modal" data-target="#createNewContentModal">
+          Create New Content
+        </button>
+      <!-- </div> -->
+    </div>
+</div>

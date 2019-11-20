@@ -242,6 +242,7 @@ if DEBUG_TOOLBAR:
         'debug_toolbar.panels.headers.HeadersPanel',
         'debug_toolbar.panels.request.RequestPanel',
         'debug_toolbar.panels.sql.SQLPanel',
+        'debug_toolbar.panels.templates.TemplatesPanel',
         'debug_toolbar.panels.staticfiles.StaticFilesPanel',
         'debug_toolbar.panels.cache.CachePanel',
         'debug_toolbar.panels.signals.SignalsPanel',
@@ -389,3 +390,12 @@ if ISLOCAL:
     CMS_API = f"http://localhost:{os.getenv('JOPLIN_APP_HOST_PORT')}/api/graphql"
 else:
     CMS_API = f"https://{os.getenv('APPLICATION_NAME','')}.herokuapp.com/api/graphql"
+
+
+# Sets the login_url redirect for "from django.contrib.auth.decorators import user_passes_test"
+# https://kite.com/python/docs/django.contrib.auth.decorators.user_passes_test
+LOGIN_URL = '/admin/login/'
+
+# https://docs.djangoproject.com/en/2.2/ref/settings/#data-upload-max-number-fields
+# We submit a lot of fields when saving some of our content types, let's let that happen
+DATA_UPLOAD_MAX_NUMBER_FIELDS = None
