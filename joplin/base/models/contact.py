@@ -24,6 +24,7 @@ class Contact(ClusterableModel):
     email = models.EmailField(blank=True)
     location = models.ForeignKey(
         Location, null=True, blank=True, related_name='+', on_delete=models.SET_NULL)
+    hours_exceptions = models.TextField(max_length=255, blank=True)
 
     social_media = StreamField(
         [
@@ -42,6 +43,8 @@ class Contact(ClusterableModel):
         InlinePanel('phone_number', label='Phone Numbers'),
         SnippetChooserPanel('location'),
         InlinePanel('hours', label='Hours'),
+        FieldPanel('hours_exceptions'),
+
         StreamFieldPanel('social_media'),
     ]
 

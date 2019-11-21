@@ -260,6 +260,9 @@ class JanisBasePage(Page):
     class Meta:
         abstract = True
 
+# TODO: tech debt here, added an additional rule to hide this for location page
+# we can add or self.instance.content_type.name == "location page" to hide it on a specific kind of page
+
 
 class AdminOnlyFieldPanel(FieldPanel):
     def render_as_object(self):

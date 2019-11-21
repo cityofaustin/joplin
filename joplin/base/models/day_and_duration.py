@@ -6,6 +6,10 @@ from wagtail.admin.edit_handlers import FieldPanel
 
 
 class DayAndDuration(ClusterableModel):
+    """
+    creates a model to choose day of week and hourly ranges
+    you can use this to define operating hours for a service or location
+    """
     MONDAY = 'Monday'
     TUESDAY = 'Tuesday'
     WEDNESDAY = 'Wednesday'
@@ -31,6 +35,7 @@ class DayAndDuration(ClusterableModel):
         FieldPanel('day_of_week'),
         FieldPanel('start_time'),
         FieldPanel('end_time'),
+
     ]
 
     def __str__(self):

@@ -3,6 +3,7 @@ from wagtail.admin.edit_handlers import FieldPanel
 from wagtail.images.models import Image
 from wagtail.images.edit_handlers import ImageChooserPanel
 from phonenumber_field.modelfields import PhoneNumberField
+from phonenumber_field.widgets import PhoneNumberInternationalFallbackWidget
 from base.models import JanisBasePage, HomePage
 from wagtail.core.models import Page, Orderable
 from modelcluster.fields import ParentalKey
@@ -25,6 +26,9 @@ from wagtail.images.edit_handlers import ImageChooserPanel
 from base.models import JanisBasePage
 from base.models.widgets import countMe, countMeTextArea, AUTHOR_LIMITS
 from modelcluster.models import ClusterableModel
+from base.models.constants import DEFAULT_MAX_LENGTH
+from base.models.day_and_duration import DayAndDuration
+from wagtail.snippets.edit_handlers import SnippetChooserPanel
 
 
 class LocationPage(JanisBasePage):
@@ -49,6 +53,12 @@ class LocationPage(JanisBasePage):
         on_delete=models.SET_NULL,
         related_name='+'
     )
+
+    phone_description = models.CharField(
+        max_length=DEFAULT_MAX_LENGTH, blank=True)
+    phone_number = PhoneNumberField(blank=True)
+    email = models.EmailField(blank=True)
+    hours_exceptions = models.TextField(max_length=255, blank=True)
 
     mailing_street = models.CharField(max_length=255, blank=True)
     mailing_city = models.CharField(max_length=255, default='Austin', blank=True)
@@ -87,6 +97,24 @@ class LocationPage(JanisBasePage):
         FieldPanel('alternate_name'),
         FieldRowPanel(
             children=[
+                FieldPanel('phone_number', classname='col6',
+                           widget=PhoneNumberInternationalFallbackWidget),
+                FieldPanel('phone_description', classname='col6'),
+                FieldPanel('email', classname='col6'),
+            ],
+            heading="Location phone"
+        ),
+        MultiFieldPanel(
+            children=[
+                InlinePanel('hours', label='Hours'),
+                FieldPanel('hours_exceptions'),
+            ],
+            heading="Location hours"
+        ),
+
+
+        FieldRowPanel(
+            children=[
                 FieldPanel('nearest_bus_1'),
                 FieldPanel('nearest_bus_2'),
                 FieldPanel('nearest_bus_3'),
@@ -94,6 +122,14 @@ class LocationPage(JanisBasePage):
             heading="Nearest bus"
         ),
         InlinePanel('related_services', label='Related Services'),
+    ]
+
+
+class LocationDayAndDuration(Orderable, DayAndDuration):
+    page = ParentalKey(LocationPage, related_name='hours')
+
+    content_panels = [
+        SnippetChooserPanel('day_and_duration'),
     ]
 
 
