@@ -82,7 +82,7 @@ class LocationPage(JanisBasePage):
             FieldPanel('mailing_country', classname='col5'),
         ],
             heading='Mailing Address',
-            classname="collapsible collapsed"
+            classname="collapsible"
         ),
         FieldPanel('alternate_name'),
         FieldRowPanel(
