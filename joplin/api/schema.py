@@ -185,6 +185,8 @@ class DepartmentContactNode(DjangoObjectType):
 class LocationNode(DjangoObjectType):
     class Meta:
         model = Location
+        filter_fields = ['id']
+        fields = '__all__'
         interfaces = [graphene.Node]
 
 
@@ -770,6 +772,7 @@ class Query(graphene.ObjectType):
     all_official_document_page_topics = DjangoFilterConnectionField(OfficialDocumentPageTopicNode)
     all_guide_page_topics = DjangoFilterConnectionField(GuidePageTopicNode)
     all_form_page_topics = DjangoFilterConnectionField(FormPageTopicNode)
+    all_locations = DjangoFilterConnectionField(LocationNode)
     all_location_pages = DjangoFilterConnectionField(LocationPageNode)
     location_index_pages = DjangoFilterConnectionField(LocationsIndexPageNode)
 
