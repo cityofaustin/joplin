@@ -19,7 +19,7 @@ from .widgets import countMe, countMeTextArea, AUTHOR_LIMITS
 from countable_field import widgets
 
 
-WYSIWYG_SERVICE_STEP = ['ul', 'link', 'code', 'rich-text-button-link']
+WYSIWYG_SERVICE_STEP = ['ol, ''ul', 'link', 'code', 'rich-text-button-link']
 
 
 class ServicePage(JanisBasePage):
