@@ -13,10 +13,34 @@ from wagtail.documents.models import Document
 from base.signals.aws_publish import get_http_request, create_build_aws
 from base.signals.netlify_publish import netlify_publish
 
+import graphene
+
 import logging
 logger = logging.getLogger(__name__)
 
 JANIS_SLUG_URL = settings.JANIS_SLUG_URL
+
+
+# Copying this stuff in there to get data without errors
+# Get a page global_id from a page chooser node
+# Works for any content_type defined in content_type_map
+def get_graphql_id(page):
+    # copypastaing this because importing was being messy
+    content_type_map = {
+        "service page": "ServicePageNode",
+        "information page": "InformationPageNode",
+        "official document page": "OfficialDocumentPageNode",
+        "guide page": "GuidePageNode",
+        "form page": "FormPageNode",
+    }
+
+    if not hasattr(page, 'content_type'):
+        return
+
+    content_type = page.content_type.name
+    node = content_type_map[content_type]
+    global_id = graphene.Node.to_global_id(node, page.id)
+    return global_id
 
 
 def trigger_build(sender, action='saved', instance=None):
@@ -25,7 +49,12 @@ def trigger_build(sender, action='saved', instance=None):
     source = name of snippet or object triggering build
     """
     trigger_object = instance
+    graphql_id = get_graphql_id(trigger_object)
     logger.debug(f'{trigger_object} {action}, triggering build')
+    if graphql_id:
+        print(f'Publishing {trigger_object}')
+        print(f'Page type: {trigger_object.janis_url_page_type}')
+        print(f'GraphQL id: {graphql_id}')
     if settings.ISSTAGING or settings.ISPRODUCTION:
         create_build_aws(sender, instance, request=get_http_request())
     elif settings.ISREVIEW:
