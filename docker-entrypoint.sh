@@ -17,6 +17,12 @@ function load_staging_datadump {
   python ./joplin/manage.py loaddata ./joplin/db/system-generated/staging.datadump.json
 }
 
+# Seed prior dummy datadump into Joplin from migration_test generated backup
+function load_dummy_datadump {
+  echo "Adding dummy datadump"
+  python ./joplin/manage.py loaddata ./joplin/db/system-generated/dummy.datadump.json
+}
+
 # Add initial configs to handle Publishing and Previewing on PR Apps
 function load_janis_branch_settings {
   echo "Adding Janis Branch settings"
@@ -59,6 +65,8 @@ case "${DEPLOYMENT_MODE}" in
       load_prod_datadump
     elif [ "$LOAD_STAGING_DATA" == "on" ]; then
       load_staging_datadump
+    elif [ "$LOAD_DUMMY_DATA" == "on" ]; then
+      load_dummy_datadump
     else
       load_test_admin
     fi

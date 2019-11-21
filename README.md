@@ -70,6 +70,14 @@ LOAD_STAGING_DATA="on" ./scripts/serve-local.sh
 
 -   This will add some seeding content from the last staging datadump (`joplin/db/system-generated/staging.datadump.json`) created by migration-test.sh.
 
+**Run with dummy data**
+
+```
+LOAD_DUMMY_DATA="on" ./scripts/serve-local.sh
+```
+
+-   This will add dummy content from the last dummy datadump (`joplin/db/system-generated/dummy.datadump.json`) created by migration-test.sh.
+
 
 **Drop Existing DB**
 
@@ -210,6 +218,9 @@ Here's what `migration-test.sh` does at a high level:
     - If you pass `JANIS=on ./scripts/migration-test.sh` then it will automatically spin up a Janis image using your own janis:local image. Otherwise, at this step you can manually start a Janis instance using another method.
     - Make sure that Joplin and Janis work as expected and that nothing breaks on Janis.
     - A command line prompt will ask if the migration worked. If you enter "y", then a new datadump fixture will replace the old seeing.datadump.json fixture in joplin/db/system-generated. If you enter "n", then the migration_test containers will shut down and not replace your datadump fixture.
+
+### Updating Dummy Data
+Running `DUMMY=on ./scripts/migration-test.sh` will load in the latest dummy datadump and run migration test in dummy data mode. I (Brian) have been running this and then adding data when it gets to the interactive step. Once I'm happy with the data I have I respond to the `Is it all good?` question with y and get a shiny new `dummy.datadump.json`.
 
 ## CircleCI Deployments
 
