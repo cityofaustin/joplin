@@ -297,6 +297,8 @@ def register_link_handler(features):
     features.register_link_type(InternalLinkHandler)
 
 
+# By default all menu items are shown all the time.
+# This checks for permission and returns True if the item should be shown
 class PermissionMenuItem(MenuItem):
     def is_shown(self, request):
         return request.user.has_perm('base.view_snippets')
