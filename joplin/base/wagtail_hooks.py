@@ -299,5 +299,4 @@ def register_link_handler(features):
 
 class PermissionMenuItem(MenuItem):
     def is_shown(self, request):
-        print('hi there')
-        return request.user.has_perm('base.view_extra_panels')
+        return request.user.has_perm('base.view_snippets')

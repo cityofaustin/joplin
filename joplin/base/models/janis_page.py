@@ -264,14 +264,23 @@ class JanisBasePage(Page):
         abstract = True
         # https://docs.djangoproject.com/en/2.2/topics/auth/customizing/#custom-permissions
         permissions = [
-          ("view_extra_panels", "Can view extra panels"),
+            ("view_extra_panels", "Can view extra panels"),
+            ("view_snippets", "Can view snippets"),
+            ("add_snippets", "Can add snippet"),
+            ("delete_snippets", "Can delete snippet"),
         ]
 
 
 class AdminOnlyFieldPanel(FieldPanel):
     def render_as_object(self):
-        print(self.request.user.has_perm('base.view_extra_panels'))
         if not self.request.user.is_superuser:
-            return 'HIDE_ME'
+            return ''
 
         return super().render_as_object()
+
+class PermissionObjectList(ObjectList):
+    def render(self):
+        if not self.request.user.has_perm('base.view_extra_panels'):
+            return ''
+
+    # heres my problem. i need to be able to also hide the tabs. not just the content of the tab.
