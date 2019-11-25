@@ -11,6 +11,7 @@ from wagtail.documents import urls as wagtaildocs_urls
 from base.views import joplin_views
 from base.views import joplin_search_views
 from users.urls import users as user_urls
+from snippets import urls as snippet_urls
 from django.urls import reverse
 import debug_toolbar
 
@@ -45,6 +46,7 @@ urlpatterns = [
         joplin_views.new_page_from_modal, name='new_page_from_modal'),
     url(r'admin/pages/search/$', joplin_search_views.search, name='search'),
     url(r'admin/users/', include(user_urls)),
+    url(r'admin/snippets/', include(snippet_urls)),
     url(r'^admin/', include(wagtailadmin_urls)),
     url(r'^documents/', include(wagtaildocs_urls)),
     path('__debug__/', include(debug_toolbar.urls)),

@@ -7,9 +7,6 @@ from django.conf import settings
 from wagtail.search import index
 from wagtail.utils.decorators import cached_classmethod
 from wagtail.admin.edit_handlers import FieldPanel, ObjectList, TabbedInterface
-from django.contrib.auth.decorators import user_passes_test
-# permission required will be moved in 2.7
-from wagtail.admin.utils import permission_required
 from wagtail.core.models import Page
 from wagtail.core.fields import RichTextField
 from flags.state import flag_enabled
@@ -248,7 +245,7 @@ class JanisBasePage(Page):
         # current_request = get_current_request()
         try:
             if flag_enabled('SHOW_EXTRA_PANELS'):# and self.request.user.has_perm('base.view_extra_panels'):
-                editor_panels += (ObjectList(cls.promote_panels,
+                editor_panels += (PermissionObjectList(cls.promote_panels,
                                              heading='SEO'),
                                   ObjectList(cls.settings_panels,
                                              heading='Settings'))
@@ -277,6 +274,7 @@ class AdminOnlyFieldPanel(FieldPanel):
             return ''
 
         return super().render_as_object()
+
 
 class PermissionObjectList(ObjectList):
     def render(self):
