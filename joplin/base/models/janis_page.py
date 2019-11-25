@@ -49,6 +49,7 @@ class JanisBasePage(Page):
 
     coa_global = models.BooleanField(default=False, verbose_name='Make this a top level page')
 
+
     def janis_url(self):
         """
         This function parses various attributes of related content types to construct the
@@ -56,7 +57,6 @@ class JanisBasePage(Page):
 
         For attributes with multiple relations, it ONLY takes the FIRST one.
         """
-
         try:
             """
              These use ternary operators with some appropriate conditionals
@@ -77,14 +77,15 @@ class JanisBasePage(Page):
                 'information page',
                 'department page',
                 'guide page',
-                'official document page'
+                'official document page',
+                'form page',
             ]
             has_no_topic_collection = has_no_theme
 
             has_no_topic = [
                 'topic page',
                 'topic collection page',
-                'department page'
+                'department page',
             ]
 
             theme_slug = (
@@ -114,7 +115,7 @@ class JanisBasePage(Page):
             )
 
             # add hardcoded language path to base url
-            base_url = os.environ["JANIS_URL"] + '/en'
+            base_url = f"{self.janis_url_base('publish_janis_branch')}/en"
             # attributes for the url are needed by not discovered yet lets fetch them
             # looking for missing elements, deducing content type from what works and what dosen't
             # this is pretty ugly and ought to be cleaned up
@@ -129,14 +130,23 @@ class JanisBasePage(Page):
                     except AttributeError as e:
                         # this is for pages just under departments
                         theme_slug = self.related_departments.all()[0].related_department.slug or None
-
+                    finally:
+                        paths_list = [
+                            base_url,
+                            theme_slug,
+                            topic_collection_slug,
+                            topic_slug,
+                            page_slug]
+                        janis_url = '/'.join(filter(None, (paths_list)))
+                        return janis_url
             # collect all our path elements
             paths_list = [
                 base_url,
                 theme_slug,
                 topic_collection_slug,
                 topic_slug,
-                page_slug]
+                page_slug
+                ]
             # join them together, filtering out empty ones
 
             janis_url = '/'.join(filter(None, (paths_list)))
@@ -148,20 +158,11 @@ class JanisBasePage(Page):
             return "#"
             pass
 
-    def janis_preview_url(self, revision=None, lang="en"):
-        return f"{self.janis_preview_url_start()}/{lang}/{self.janis_preview_url_end(revision=revision)}"
-
-    # Use hardcoded JANIS_URL for staging and prod
-    # Otherwise use configurable preview_janis_branch setting
-    def janis_preview_url_start(self):
-        if settings.ISSTAGING or settings.ISPRODUCTION:
-            return os.getenv("JANIS_URL")
-        else:
-            return JanisBranchSettings.objects.first().branch_preview_url_base()
-
-    # Optional "revision" parameter to get the janis_preview_url for a specific revision
-    # Otherwise, it will return the janis_preview_url for the latest revision
     def janis_preview_url_end(self, revision=None):
+        """
+            Optional "revision" parameter to get the janis_preview_url for a specific revision
+            Otherwise, it will return the janis_preview_url for the latest revision
+        """
         if revision:
             url_page_type = revision.page.janis_url_page_type
         else:
@@ -176,20 +177,34 @@ class JanisBasePage(Page):
             # Janis will query from its default CMS_API if a param is not provided
             return url_end + f"?CMS_API={settings.CMS_API}"
 
-    # Use hardcoded JANIS_URL for staging and prod
-    # Otherwise use configurable preview_janis_branch setting
-    def janis_url_base(self):
+    def janis_url_base(self, janis_branch):
+        """
+        returns a valid url of the base URL in janis:
+            Use hardcoded JANIS_URL for staging and prod
+            Otherwise, use configurable branch setting
+
+        TODO: this and url_base in site settings could probably
+        be revisited for semantics to be less confusing
+        """
         if settings.ISSTAGING or settings.ISPRODUCTION:
             return os.getenv("JANIS_URL")
         else:
-            return JanisBranchSettings.objects.first().branch_preview_url_base()
+            branch_settings = JanisBranchSettings.objects.first()
+            return branch_settings.url_base(janis_branch)
+
+    # alias for url base function
+    janis_preview_url_start = janis_url_base
+
+    # TODO this function and prevew_url_data are pretty similar, we can probably consolidate them
+    def janis_preview_url(self, revision=None, lang="en"):
+        return f"{self.janis_preview_url_start('preview_janis_branch')}/{lang}/{self.janis_preview_url_end(revision=revision)}"
 
     # data needed to construct preview URLs for any language
     # [janis_preview_url_start]/[lang]/[janis_preview_url_end]
     # ex: http://localhost:3000/es/preview/information/UGFnZVJldmlzaW9uTm9kZToyMjg=
     def preview_url_data(self, revision=None):
         return {
-            "janis_preview_url_start": self.janis_preview_url_start(),
+            "janis_preview_url_start": self.janis_preview_url_start('preview_janis_branch'),
             "janis_preview_url_end": self.janis_preview_url_end(revision=revision),
         }
 
@@ -227,9 +242,9 @@ class JanisBasePage(Page):
 
         try:
             if flag_enabled('SHOW_EXTRA_PANELS'):
-                editor_panels += (ObjectList(Page.promote_panels + cls.promote_panels,
+                editor_panels += (ObjectList(cls.promote_panels,
                                              heading='SEO'),
-                                  ObjectList(Page.settings_panels + cls.settings_panels,
+                                  ObjectList(cls.settings_panels,
                                              heading='Settings'))
         except ProgrammingError as e:
             print("some problem, maybe with flags")

@@ -26,23 +26,21 @@ from .contact import Contact, ContactDayAndDuration, PhoneNumber
 from .day_and_duration import DayAndDuration
 from .location import Location
 from .map import Map
+from .constants import WYSIWYG_GENERAL, DEFAULT_MAX_LENGTH, SHORT_DESCRIPTION_LENGTH
 
 from .janis_page import JanisBasePage
 from .home_page import HomePage
 from .theme import Theme
 from .topic_collection_page import TopicCollectionPage
-from .topic_page import TopicPage, TopicPageTopicCollection
+from .topic_page import TopicPage, TopicPageTopicCollection, TopicPageTopPage
 from .service_page import ServicePage, ServicePageTopic, ServicePageContact, ServicePageRelatedDepartments
 from .information_page import InformationPage, InformationPageRelatedDepartments, InformationPageTopic, InformationPageContact
 from .department_page import DepartmentPage, DepartmentPageDirector, DepartmentPageContact, DepartmentPageTopPage, DepartmentPageRelatedPage
 from .official_documents_page import OfficialDocumentPage, OfficialDocumentPageOfficialDocument, OfficialDocumentPageRelatedDepartments, OfficialDocumentPageTopic
 from .guide_page import GuidePage, GuidePageTopic, GuidePageRelatedDepartments, GuidePageContact
+from .form_page import FormPage, FormPageRelatedDepartments, FormPageTopic
 from .widgets import countMe, countMeTextArea
 from .site_settings import JanisBranchSettings
-
-WYSIWYG_GENERAL = ['h1', 'h2', 'h3', 'h4', 'bold', 'link', 'ul', 'ol', 'code']
-DEFAULT_MAX_LENGTH = 255
-SHORT_DESCRIPTION_LENGTH = 300
 
 # TODO: Remove everything below this comment
 

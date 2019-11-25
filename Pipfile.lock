@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "f74045269fb9d7968ff146a0c5378b6b484a16b7dff1a0b71527fa5a90a4ccd3"
+            "sha256": "92d65e28cd8fbfd7d69c89be5fd294b22ced3de6aa9b9fe84fe46ba1cfe22043"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -66,6 +66,13 @@
                 "sha256:fc323ffcaeaed0e0a02bf4d117757b98aed530d9ed4531e3e15460124c106691"
             ],
             "version": "==3.0.4"
+        },
+        "coa-wagtail-modeltranslation": {
+            "hashes": [
+                "sha256:f6235ca9db040024ec549823ba17e4e68a4a9be8cc51d6d02387686e32efa0b1"
+            ],
+            "index": "pypi",
+            "version": "==0.10.6"
         },
         "dj-database-url": {
             "hashes": [
@@ -136,10 +143,10 @@
         },
         "django-modelcluster": {
             "hashes": [
-                "sha256:a293a1875cb97c1b6e131f53857f0c47e297330c1b5df47737afa54bc10a967d",
-                "sha256:c43d4b17844bf2a3f62a9043675e03bc464abf766afd78a4294818141f8d1b81"
+                "sha256:59672386191d38c69d6f994c3f9aaab3ff93910ec71e78a0bb6aa9abd4d1b90a",
+                "sha256:eea507f2dd8bd283600c1cfa4de6776501a28f199089bb00613c1621505e80cc"
             ],
-            "version": "==5.0"
+            "version": "==4.4"
         },
         "django-modeltranslation": {
             "hashes": [
@@ -181,10 +188,10 @@
         },
         "django-taggit": {
             "hashes": [
-                "sha256:01bf163f66f385de3777378f43338aba93aae8673891d8ba9a20695b2ffb8e10",
-                "sha256:c13dfc1808a3084b64898e591af1d2f49b672d108388654804b170ee0ac5caf0"
+                "sha256:710b4d15ec1996550cc68a0abbc41903ca7d832540e52b1336e6858737e410d8",
+                "sha256:bb8f27684814cd1414b2af75b857b5e26a40912631904038a7ecacd2bfafc3ac"
             ],
-            "version": "==1.1.0"
+            "version": "==0.24.0"
         },
         "django-treebeard": {
             "hashes": [
@@ -230,11 +237,11 @@
         },
         "graphene-django": {
             "hashes": [
-                "sha256:3afd81d47c8b702650e05cc1179fac1cfceae991d241bb164d51f28bed9ec95c",
-                "sha256:760a18068feb5457e2ec00d2447c09b2fbac2a6b8c32cc8be2abce3752107ad3"
+                "sha256:0d1404ab1ba7873a8e848d87d138f615391d100ed0c046482c164429cfb992ef",
+                "sha256:fa9e815f63e3c972773adc96c3f3c81e537dba0edcd0f1be92c799bc0b6ed0a8"
             ],
             "index": "pypi",
-            "version": "==2.2.0"
+            "version": "==2.6.0"
         },
         "graphql-core": {
             "hashes": [
@@ -470,16 +477,11 @@
         },
         "wagtail": {
             "hashes": [
-                "sha256:07f0650fcd2717bdcc0795428e6d2359828233536d282d917a37043a6a52f8c5",
-                "sha256:788014fc54a8737cab4c704a6d433f00fc161548f0704e7203c677f0afd1c458"
+                "sha256:8b66ecf74d40ccc7070944ff2e5a3ae33e42ecf92eb98b92c155410e48f4c974",
+                "sha256:f0793d4de7d9064df04f6086e93992a5c1b07fb97f76996ea1a550bce3d57a16"
             ],
             "index": "pypi",
-            "version": "==2.7rc1"
-        },
-        "wagtail-modeltranslation": {
-            "editable": true,
-            "git": "https://github.com/cityofaustin/wagtail-modeltranslation",
-            "ref": "dd2f05a9dd0e9d3adad557082610e4b898873bde"
+            "version": "==2.6.1"
         },
         "webencodings": {
             "hashes": [
@@ -490,10 +492,10 @@
         },
         "willow": {
             "hashes": [
-                "sha256:4f84c46f65b6a1982e63dbd4d94c6bae705ff21f839164c31e105c3e251bec37",
-                "sha256:8897a6827c0bb7dee2ac908af53f0d358720bd6032ed20bab3175507e34d739a"
+                "sha256:76a8874304356b7d86923405f5ca1df125c3540fb55b32747e7a33ba59bc1744",
+                "sha256:818ee11803c90a0a6d49c94b0453d6266be1ef83ae00de72731c45fae4d3e78c"
             ],
-            "version": "==1.3"
+            "version": "==1.1"
         }
     },
     "develop": {}

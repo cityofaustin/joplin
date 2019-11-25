@@ -39,3 +39,7 @@ class OfficialDocumentPageForm(WagtailAdminPageForm):
 class GuidePageForm(WagtailAdminPageForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+class FormPageForm(WagtailAdminPageForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)

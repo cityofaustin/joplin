@@ -18,6 +18,7 @@ Joplin is the Authoring Interface for adding and editing content for alpha.austi
 -   [Useful Commands](#useful-commands)
 -   [Debugging With Pycharm](#debugging-with-pycharm)
 -   [Design](#design)
+-   [Related Repos](#related-repos)
 -   [Misc](#misc)
 
 ---
@@ -29,9 +30,11 @@ First, install docker (version 18.09 or greater) and clone this repo.
 **Add .env file**
 
 Copy the template and modify for your local environment as you see fit.
+
 ```
 cp template.env .env
 ```
+
 This will automatically load environment variables into your pipenv environment. (If you choose to run Joplin on your host machine without docker). Commands like `pipenv run ./joplin/manage.py migrate` will then know which database to use.
 
 **Run without data**
@@ -47,14 +50,34 @@ This will automatically load environment variables into your pipenv environment.
     <img src="/README/server_success.png" align="middle" height="70" >
 -   Your Joplin instance will be accessible at http://localhost:8000/admin with the credentials user: `admin@austintexas.io`, pw: `x`
 
-**Run with data**
+**Run with prod data**
 
 ```
 LOAD_DATA="on" ./scripts/serve-local.sh
+LOAD_PROD_DATA="on" ./scripts/serve-local.sh
 ```
 
--   This will add some test content (from `joplin/db/system-generated/seeding.datadump.json`)
--   Images are also not stored in this repo, and can instead be downloaded using `./scripts/download-media.sh`. This will parse a backup file from the db/smuggler directory and place all referenced images into the local media folder.
+-   This will add some seeding content from the last prod datadump (`joplin/db/system-generated/prod.datadump.json`) created by migration-test.sh.
+-   LOAD_DATA and LOAD_PROD_DATA both load from the prod.datadump.json
+-   You have to run the LOAD_x_DATA commands on a clean db instance. You can wipe the DB and load data in the same step by running:
+    -   `DROP_DB=on LOAD_DATA="on" ./scripts/serve-local.sh`
+
+**Run with staging data**
+
+```
+LOAD_STAGING_DATA="on" ./scripts/serve-local.sh
+```
+
+-   This will add some seeding content from the last staging datadump (`joplin/db/system-generated/staging.datadump.json`) created by migration-test.sh.
+
+**Run with dummy data**
+
+```
+LOAD_DUMMY_DATA="on" ./scripts/serve-local.sh
+```
+
+-   This will add dummy content from the last dummy datadump (`joplin/db/system-generated/dummy.datadump.json`) created by migration-test.sh.
+
 
 **Drop Existing DB**
 
@@ -95,6 +118,8 @@ HARD_REBUILD="on" ./scripts/serve-local.sh
 
 You might prefer to run the Django app on your host computer to enable better access to debugging tools. This script will still run joplin_assets and joplin_db on docker containers, but will run a django `runserver` command directly on your host computer.
 
+All of the above flags (such as LOAD_DATA=on) will work with the undockered version of Joplin.
+
 ```
 sh scripts/undockered.sh
 ```
@@ -104,6 +129,12 @@ If you run into pipenv errors or are running this for the first time, you can bu
 ```
 REBUILD_PIPENV=on ./undockered.sh
 ```
+
+**Override default behavior of stopping existing Joplin containers**
+```
+NO_STOP=on ./scripts/undockered.sh
+```
+- Makes undockered development go a little faster. You don't need to turn off then turn on the helper DB and Assets containers.
 
 **Run with custom smuggler data**
 
@@ -187,6 +218,9 @@ Here's what `migration-test.sh` does at a high level:
     - If you pass `JANIS=on ./scripts/migration-test.sh` then it will automatically spin up a Janis image using your own janis:local image. Otherwise, at this step you can manually start a Janis instance using another method.
     - Make sure that Joplin and Janis work as expected and that nothing breaks on Janis.
     - A command line prompt will ask if the migration worked. If you enter "y", then a new datadump fixture will replace the old seeing.datadump.json fixture in joplin/db/system-generated. If you enter "n", then the migration_test containers will shut down and not replace your datadump fixture.
+
+### Updating Dummy Data
+Running `DUMMY=on ./scripts/migration-test.sh` will load in the latest dummy datadump and run migration test in dummy data mode. I (Brian) have been running this and then adding data when it gets to the interactive step. Once I'm happy with the data I have I respond to the `Is it all good?` question with y and get a shiny new `dummy.datadump.json`.
 
 ## CircleCI Deployments
 
@@ -277,7 +311,7 @@ The migration process currently consists of 3 commands:
 -   Shut down all joplin containers:
     -   `source scripts/docker-helpers.sh; stop_project_containers joplin`
 -   Delete all joplin containers:
-    -   `scripts/docker-helpers.sh; delete_project_containers joplin`
+    -   `source scripts/docker-helpers.sh; delete_project_containers joplin`
 -   Create New App:
     -   ```
         APP_NAME=app_name_goes_here
@@ -338,11 +372,33 @@ We're using webpack to bundle syles and scripts, and webpack_loader to include t
 
 ---
 
+## Related Repos
+
+There are a couple notable dependencies used by this project:
+
+### Forked projects
+
+There are a couple existing projects that we use for Joplin and needed to fork to add functionality for our purposes. In these cases these forks are hopefully temporary, as we'd like to be able to contribute back to the main projects.
+
+https://github.com/cityofaustin/django-countable-field
+
+Provides support for multiple Django field types. It used used to add a character count widget to designated fields.
+
+https://github.com/cityofaustin/wagtail-modeltranslation
+
+We use wagtail-modeltranslation to handle translated fields, this fork corrects a single line of code to make it compatible with current and future versions of wagtail.
+
+### Publisher
+
+https://github.com/cityofaustin/publisher
+
+Microservice that handles publishing versions of Janis based on branches of Joplin.
+
 ## Misc
 
 #### Static File Uploads
 
-The master branch (staging app, joplin-staging.herokuapp.com) and production branch (production app, joplin-production.herokuapp.com) upload static files to an S3 bucket (both share the same bucket), but have separate databases.
+The master branch (staging app, joplin-staging.herokuapp.com) and production branch (production app, joplin.herokuapp.com) upload static files to an S3 bucket (both share the same bucket), but have separate databases.
 
 #### Rebuilding Janis on Heroku when new pages are published
 
@@ -353,6 +409,7 @@ HEROKU_JANIS_APP_NAME=janis-staging ./scripts/serve-local.sh
 ```
 
 #### Syncing prod data to staging
-1. Create a new seeding data backup sourced from prod, using `migration_test.sh`
+
+1. Create a new seeding data backup sourced from prod, using `LOAD_PROD_DATA=on migration_test.sh`
 2. Drop the staging database (go to heroku and delete the database on staging)
 3. Push code with with new backup to master. This will rebuild the database and then seed it with your latest seeding datadump

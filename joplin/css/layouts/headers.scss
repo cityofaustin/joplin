@@ -32,6 +32,55 @@
     }
 }
 
+.coa-search-results-nav {
+  padding: 0px;
+  border-bottom: 1px solid #e6e6e6;
+}
+
+// COA Search Results
+
+// The built-in Wagtail class is rendered after our custom styling.
+// So, Joplin needs to "cut-in-line" with cascase override `!important` here.
+
+.coa-search-header {
+  position: static !important;
+  width: 100% !important;
+  height: 40px !important;
+}
+
+.nav-search li {
+  margin: 0px;
+  padding: 0px;
+  list-style-type: none;
+}
+
+.icon-search:before {
+  margin-top: 5px !important;
+  color: #777 !important;
+}
+
+.icon-search input {
+  color: #262626 !important;
+  background-color: hsla(0,0%,39%,.15) !important;
+}
+
+.icon-search input::placeholder {
+  color: #aaa !important;
+}
+
+.listing-filter {
+  margin: 0 !important;
+  padding: 20px !important;
+}
+
+.coa-search-results-h1 {
+  font-size: 28px;
+  margin: 0px;
+  padding-right: 20px;
+  font-weight: 400;
+  font-style: normal !important;
+}
+
 // Header Actions section
 
 .header .actions {

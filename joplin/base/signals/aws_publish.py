@@ -15,6 +15,7 @@ logger = logging.getLogger(__name__)
 
 JANIS_SLUG_URL = settings.JANIS_SLUG_URL
 
+
 def create_build_aws(content_type, instance, publish_action='edited', request=None):
     """
         Triggers a build in Amazon Elastic Container Service, it requires:
@@ -165,31 +166,3 @@ def get_http_request():
     else:
         # looking bad...
         return None
-
-
-# By creating a signal reciever for each snippet model we have, we can avoid
-# needing to filter out large amounts of unwanted calls in our function logic
-@receiver(post_save, sender=Contact)
-def contact_post_save_signal(sender, **kwargs):
-    logger.debug(f'contact_post_save {sender}')
-    create_build_aws("Contact", kwargs['instance'], request=get_http_request())
-
-@receiver(post_save, sender=Location)
-def location_post_save_signal(sender, **kwargs):
-    logger.debug(f'location_post_save {sender}')
-    create_build_aws("Location", kwargs['instance'], request=get_http_request())
-
-@receiver(post_save, sender=Map)
-def map_post_save_signal(sender, **kwargs):
-    logger.debug(f'map_post_save {sender}')
-    create_build_aws("Map", kwargs['instance'], request=get_http_request())
-
-@receiver(page_published)
-def page_published_signal(sender, **kwargs):
-    logger.debug(f'page_published {sender}')
-    create_build_aws("Page", kwargs['instance'], publish_action='published', request=get_http_request())
-
-@receiver(page_unpublished)
-def page_unpublished_signal(sender, **kwargs):
-    logger.debug(f'page_unpublished {sender}')
-    create_build_aws("Page", kwargs['instance'], publish_action='unpublished', request=get_http_request())
