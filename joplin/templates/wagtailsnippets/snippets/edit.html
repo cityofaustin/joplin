@@ -1,4 +1,8 @@
 {% extends "wagtailadmin/base.html" %}
+{% comment %}
+    The difference between this template and the wagtail snippet edit template is we hide the delete option if the
+    user does not have delete permissions (line 27)
+{% endcomment %}
 {% load wagtailadmin_tags i18n %}
 {% block titletag %}{% blocktrans with snippet_type_name=model_opts.verbose_name %}Editing {{ snippet_type_name }} - {{ instance }}{% endblocktrans %}{% endblock %}
 {% block content %}

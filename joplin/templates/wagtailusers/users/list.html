@@ -1,4 +1,8 @@
 {% load i18n wagtailusers_tags wagtailadmin_tags %}
+{% comment %}
+    Wagtail's default is for the user name to be a link to edit that user's account. This template override removes
+    the link if the user doesnt have editing abilities, to prevent the Permission Denied response
+{% endcomment %}
 <table class="listing">
     <thead>
         <tr>
