@@ -14,12 +14,13 @@ from wagtail.admin.edit_handlers import (
     ObjectList,
     TabbedInterface,
     FieldRowPanel,
+    StreamFieldPanel,
 )
 from base.models.translated_image import TranslatedImage
 from base.models import Location as BaseLocation
 
 # The abstract model for related links, complete with panels
-from wagtail.core.fields import RichTextField
+from wagtail.core.fields import RichTextField, StreamField
 from wagtail.search import index
 from wagtail.admin.edit_handlers import FieldPanel, PageChooserPanel
 from wagtail.images.edit_handlers import ImageChooserPanel
@@ -29,6 +30,8 @@ from modelcluster.models import ClusterableModel
 from base.models.constants import DEFAULT_MAX_LENGTH
 from base.models.day_and_duration import DayAndDuration
 from wagtail.snippets.edit_handlers import SnippetChooserPanel
+
+from wagtail.core import blocks
 
 
 class LocationPage(JanisBasePage):
@@ -133,15 +136,42 @@ class LocationDayAndDuration(Orderable, DayAndDuration):
     ]
 
 
+class DayChoiceBlock(blocks.ChoiceBlock):
+    choices = [
+        ('monday', 'Monday'),
+        ('tuesday', 'Tuesday'),
+        ('wednesday', 'Wednesday'),
+        ('thursday', 'Thursday'),
+        ('friday', 'Friday'),
+        ('saturday', 'Saturday'),
+        ('sunday', 'Sunday'),
+    ]
+
+
+class OperatingHoursBlock(blocks.StructBlock):
+    day = DayChoiceBlock()
+    start_time = blocks.TimeBlock()
+    end_time = blocks.TimeBlock()
+
+    class Meta:
+        icon = 'user'
+
+
 class LocationPageRelatedServices(ClusterableModel):
     page = ParentalKey(LocationPage, related_name='related_services', default=None)
     related_service = models.ForeignKey(
         "base.servicePage",
         on_delete=models.PROTECT,
     )
+    hours_exceptions = models.TextField(max_length=255, blank=True)
+    hours_list = StreamField([
+        ('hours', blocks.ListBlock(OperatingHoursBlock()))
+    ], blank=True)
 
     panels = [
         PageChooserPanel("related_service"),
+        StreamFieldPanel('hours_list'),
+        FieldPanel('hours_exceptions'),
     ]
 
 
