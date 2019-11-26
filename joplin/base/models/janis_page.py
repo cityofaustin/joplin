@@ -245,7 +245,7 @@ class JanisBasePage(Page):
             if flag_enabled('SHOW_EXTRA_PANELS'):# and self.request.user.has_perm('base.view_extra_panels'):
                 editor_panels += (PermissionObjectList(cls.promote_panels,
                                              heading='SEO'),
-                                  ObjectList(cls.settings_panels,
+                                  PermissionObjectList(cls.settings_panels,
                                              heading='Settings'))
         except ProgrammingError as e:
             print("some problem, maybe with flags")
@@ -275,10 +275,20 @@ class AdminOnlyFieldPanel(FieldPanel):
 
 
 class PermissionObjectList(ObjectList):
+    def __init__(self, children=(), *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.hide_panel = True
+        self.children = children
+
+    def on_form_bound(self):
+        if self.request.user.has_perm('base.view_extra_panels'):
+            self.hide_panel = False
+        return super().on_form_bound()
+
     def render(self):
         # this only hides the content of the tab, not the tab/heading itself
         # we handle that in the template as a temp fix
         if not self.request.user.has_perm('base.view_extra_panels'):
-            return ''
+            return ""
 
         return super().render()
