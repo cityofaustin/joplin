@@ -193,6 +193,7 @@ class HoursByDay(blocks.StructBlock):
 
 
 class LocationPageRelatedServices(ClusterableModel):
+
     page = ParentalKey(LocationPage, related_name='related_services', default=None)
     related_service = models.ForeignKey(
         "base.servicePage",
@@ -200,11 +201,39 @@ class LocationPageRelatedServices(ClusterableModel):
     )
     hours_by_day = StreamField([('hours', HoursByDay())], blank=True)
     exceptions = StreamField([('exceptions', OperatingHoursExceptionsBlock())], blank=True)
-
     panels = [
         PageChooserPanel("related_service"),
         StreamFieldPanel('hours_by_day'),
         StreamFieldPanel('exceptions'),
+
+    ]
+
+
+week_days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+for day in week_days:
+    day_start_field = '%s_start_time' % day.lower()
+    day_end_field = '%s_end_time' % day.lower()
+    day_open_field = '%s_open' % day.lower()
+    models.BooleanField(default=False).contribute_to_class(LocationPageRelatedServices, day_open_field)
+    models.TimeField(null=True, blank=True).contribute_to_class(LocationPageRelatedServices, day_start_field)
+    models.TimeField(null=True, blank=True).contribute_to_class(LocationPageRelatedServices, day_end_field)
+    models.TimeField(null=True, blank=True).contribute_to_class(LocationPageRelatedServices, day_start_field + "_2")
+    models.TimeField(null=True, blank=True).contribute_to_class(LocationPageRelatedServices, day_end_field + "_2")
+    LocationPageRelatedServices.panels = LocationPageRelatedServices.panels + [
+        MultiFieldPanel(children=[
+            FieldRowPanel(
+                children=[
+
+                    FieldPanel(day_open_field),
+                    FieldPanel(day_start_field),
+                    FieldPanel(day_end_field),
+                    FieldPanel(day_start_field + "_2"),
+                    FieldPanel(day_end_field + "_2"),
+                ],
+            ),
+
+        ], heading="HOURS")
+
 
     ]
 
