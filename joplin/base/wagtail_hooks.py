@@ -108,6 +108,9 @@ if settings.ISLOCAL or settings.ISREVIEW:
             js.append(webpack_loader_utils.get_files('janisBranchSettings')[0]['url'])
             return forms.Media(css=css, js=js)
 
+        def is_shown(self, request):
+            return request.user.is_superuser
+
     @hooks.register('register_admin_menu_item')
     def register_options_menu_item():
         return BranchSettingsMenuItem('Options', "/admin/settings/base/janisbranchsettings/2/", classnames="material-icons icon-settings", order=60)

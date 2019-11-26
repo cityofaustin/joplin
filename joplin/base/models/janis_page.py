@@ -231,7 +231,6 @@ class JanisBasePage(Page):
 
     @cached_classmethod
     def get_edit_handler(cls):
-
         if hasattr(cls, 'edit_handler'):
             return cls.edit_handler.bind_to(model=cls)
 
@@ -242,7 +241,7 @@ class JanisBasePage(Page):
         ]
 
         try:
-            if flag_enabled('SHOW_EXTRA_PANELS'):# and self.request.user.has_perm('base.view_extra_panels'):
+            if flag_enabled('SHOW_EXTRA_PANELS'):
                 editor_panels += (PermissionObjectList(cls.promote_panels,
                                              heading='SEO'),
                                   PermissionObjectList(cls.settings_panels,
