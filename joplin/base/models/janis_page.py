@@ -282,12 +282,13 @@ class PermissionObjectList(ObjectList):
 
     def on_form_bound(self):
         if self.request.user.has_perm('base.view_extra_panels'):
+            # tabbed_interface.html checks to see if the panel should be hid
+            # and if so prevents the tab from being added
             self.hide_panel = False
         return super().on_form_bound()
 
     def render(self):
         # this only hides the content of the tab, not the tab/heading itself
-        # we handle that in the template as a temp fix
         if not self.request.user.has_perm('base.view_extra_panels'):
             return ""
 
