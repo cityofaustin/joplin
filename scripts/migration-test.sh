@@ -54,6 +54,10 @@ elif [ "$LOAD_STAGING_DATA" = "on" ]; then
     python ./scripts/remove_logs_from_json_stream.py | \
     jq '(.[] | select(.model == "users.user") | .fields.password) |= "pbkdf2_sha256$150000$GJQ1UoZlgrC4$Ir0Uww/i9f2VKzHznU4B1uaHbdCxRnZ69w12cIvxWP0="' \
     > $TMP_DATADUMP
+elif [ "$DUMMY" = "on" ]; then
+  export DOCKER_TAG_APP="cityofaustin/joplin-app:master-latest"
+  export SOURCED_FROM="LAST_DUMMY_DATADUMP"
+  export LOAD_DUMMY_DATA="on"
 else
   export DOCKER_TAG_APP="cityofaustin/joplin-app:master-latest"
   export SOURCED_FROM="LAST_PROD_DATADUMP"
@@ -109,6 +113,7 @@ export DATABASE_URL="postgres://joplin@${DATABASE_IPADDRESS}:${JOPLIN_DB_CONTAIN
 export LOAD_DATA="off"
 export LOAD_PROD_DATA="off"
 export LOAD_STAGING_DATA="off"
+export LOAD_DUMMY_DATA="off"
 export LOAD_NEW_DATADUMP="off"
 
 # Build Args for use during build process
@@ -158,6 +163,9 @@ function handle_input {
     if [ "$SOURCED_FROM" = "STAGING" ]; then
       DATADUMP_JSON=$CURRENT_DIR/../joplin/db/system-generated/staging.datadump.json
       DATADUMP_METADATA=$CURRENT_DIR/../joplin/db/system-generated/staging_datadump_metadata.txt
+    elif [ "$SOURCED_FROM" = "LAST_DUMMY_DATADUMP" ]; then
+      DATADUMP_JSON=$CURRENT_DIR/../joplin/db/system-generated/dummy.datadump.json
+      DATADUMP_METADATA=$CURRENT_DIR/../joplin/db/system-generated/dummy_datadump_metadata.txt
     else
       DATADUMP_JSON=$CURRENT_DIR/../joplin/db/system-generated/prod.datadump.json
       DATADUMP_METADATA=$CURRENT_DIR/../joplin/db/system-generated/prod_datadump_metadata.txt
