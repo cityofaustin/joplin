@@ -148,13 +148,48 @@ class DayChoiceBlock(blocks.ChoiceBlock):
     ]
 
 
+class AMChoiceBlock(blocks.ChoiceBlock):
+    choices = [
+        ('am', 'A.M.'),
+        ('pm', 'P.M'),
+    ]
+
+
+class RecurrenceChoiceBlock(blocks.ChoiceBlock):
+    choices = [
+        ('1', '1st'),
+        ('2', '2nd'),
+        ('3', '3rd'),
+        ('4', '4th')
+    ]
+
+
+class OperatingHoursExceptionsBlock(blocks.StructBlock):
+    open_or_closed = blocks.ChoiceBlock(choices=[('open', 'Open'), ('closed', 'Closed')])
+    recurrence = RecurrenceChoiceBlock()
+    start_time = blocks.TimeBlock()
+    start_time_AM = AMChoiceBlock()
+    end_time = blocks.TimeBlock()
+    end_time_AM = AMChoiceBlock()
+
+
 class OperatingHoursBlock(blocks.StructBlock):
-    day = DayChoiceBlock()
+    open = blocks.BooleanBlock()
     start_time = blocks.TimeBlock()
     end_time = blocks.TimeBlock()
 
     class Meta:
         icon = 'user'
+
+
+class HoursByDay(blocks.StructBlock):
+    monday = blocks.ListBlock(OperatingHoursBlock())
+    tuesday = blocks.ListBlock(OperatingHoursBlock())
+    wednesday = blocks.ListBlock(OperatingHoursBlock())
+    thursday = blocks.ListBlock(OperatingHoursBlock())
+    friday = blocks.ListBlock(OperatingHoursBlock())
+    saturday = blocks.ListBlock(OperatingHoursBlock())
+    sunday = blocks.ListBlock(OperatingHoursBlock())
 
 
 class LocationPageRelatedServices(ClusterableModel):
@@ -163,15 +198,14 @@ class LocationPageRelatedServices(ClusterableModel):
         "base.servicePage",
         on_delete=models.PROTECT,
     )
-    hours_exceptions = models.TextField(max_length=255, blank=True)
-    hours_list = StreamField([
-        ('hours', blocks.ListBlock(OperatingHoursBlock()))
-    ], blank=True)
+    hours_by_day = StreamField([('hours', HoursByDay())], blank=True)
+    exceptions = StreamField([('exceptions', OperatingHoursExceptionsBlock())], blank=True)
 
     panels = [
         PageChooserPanel("related_service"),
-        StreamFieldPanel('hours_list'),
-        FieldPanel('hours_exceptions'),
+        StreamFieldPanel('hours_by_day'),
+        StreamFieldPanel('exceptions'),
+
     ]
 
 
