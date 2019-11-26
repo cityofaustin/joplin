@@ -61,7 +61,6 @@ class LocationPage(JanisBasePage):
         max_length=DEFAULT_MAX_LENGTH, blank=True)
     phone_number = PhoneNumberField(blank=True)
     email = models.EmailField(blank=True)
-    hours_exceptions = models.TextField(max_length=255, blank=True)
 
     mailing_street = models.CharField(max_length=255, blank=True)
     mailing_city = models.CharField(max_length=255, default='Austin', blank=True)
@@ -107,13 +106,6 @@ class LocationPage(JanisBasePage):
             ],
             heading="Location phone"
         ),
-        MultiFieldPanel(
-            children=[
-                InlinePanel('hours', label='Hours'),
-                FieldPanel('hours_exceptions'),
-            ],
-            heading="Location hours"
-        ),
 
 
         FieldRowPanel(
@@ -128,70 +120,6 @@ class LocationPage(JanisBasePage):
     ]
 
 
-class LocationDayAndDuration(Orderable, DayAndDuration):
-    page = ParentalKey(LocationPage, related_name='hours')
-
-    content_panels = [
-        SnippetChooserPanel('day_and_duration'),
-    ]
-
-
-class DayChoiceBlock(blocks.ChoiceBlock):
-    choices = [
-        ('monday', 'Monday'),
-        ('tuesday', 'Tuesday'),
-        ('wednesday', 'Wednesday'),
-        ('thursday', 'Thursday'),
-        ('friday', 'Friday'),
-        ('saturday', 'Saturday'),
-        ('sunday', 'Sunday'),
-    ]
-
-
-class AMChoiceBlock(blocks.ChoiceBlock):
-    choices = [
-        ('am', 'A.M.'),
-        ('pm', 'P.M'),
-    ]
-
-
-class RecurrenceChoiceBlock(blocks.ChoiceBlock):
-    choices = [
-        ('1', '1st'),
-        ('2', '2nd'),
-        ('3', '3rd'),
-        ('4', '4th')
-    ]
-
-
-class OperatingHoursExceptionsBlock(blocks.StructBlock):
-    open_or_closed = blocks.ChoiceBlock(choices=[('open', 'Open'), ('closed', 'Closed')])
-    recurrence = RecurrenceChoiceBlock()
-    start_time = blocks.TimeBlock()
-    start_time_AM = AMChoiceBlock()
-    end_time = blocks.TimeBlock()
-    end_time_AM = AMChoiceBlock()
-
-
-class OperatingHoursBlock(blocks.StructBlock):
-    open = blocks.BooleanBlock()
-    start_time = blocks.TimeBlock()
-    end_time = blocks.TimeBlock()
-
-    class Meta:
-        icon = 'user'
-
-
-class HoursByDay(blocks.StructBlock):
-    monday = blocks.ListBlock(OperatingHoursBlock())
-    tuesday = blocks.ListBlock(OperatingHoursBlock())
-    wednesday = blocks.ListBlock(OperatingHoursBlock())
-    thursday = blocks.ListBlock(OperatingHoursBlock())
-    friday = blocks.ListBlock(OperatingHoursBlock())
-    saturday = blocks.ListBlock(OperatingHoursBlock())
-    sunday = blocks.ListBlock(OperatingHoursBlock())
-
-
 class LocationPageRelatedServices(ClusterableModel):
 
     page = ParentalKey(LocationPage, related_name='related_services', default=None)
@@ -199,12 +127,8 @@ class LocationPageRelatedServices(ClusterableModel):
         "base.servicePage",
         on_delete=models.PROTECT,
     )
-    hours_by_day = StreamField([('hours', HoursByDay())], blank=True)
-    exceptions = StreamField([('exceptions', OperatingHoursExceptionsBlock())], blank=True)
     panels = [
         PageChooserPanel("related_service"),
-        StreamFieldPanel('hours_by_day'),
-        StreamFieldPanel('exceptions'),
 
     ]
 
@@ -214,33 +138,44 @@ here we want to add these fields to this model, but typing them all out would be
 so a little python and Django's contribute_to_class go a long way
 """
 
-week_days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
-for day in week_days:
-    day_start_field = '%s_start_time' % day.lower()
-    day_end_field = '%s_end_time' % day.lower()
-    day_open_field = '%s_open' % day.lower()
-    models.BooleanField(default=False).contribute_to_class(LocationPageRelatedServices, day_open_field)
-    models.TimeField(null=True, blank=True).contribute_to_class(LocationPageRelatedServices, day_start_field)
-    models.TimeField(null=True, blank=True).contribute_to_class(LocationPageRelatedServices, day_end_field)
-    models.TimeField(null=True, blank=True).contribute_to_class(LocationPageRelatedServices, day_start_field + "_2")
-    models.TimeField(null=True, blank=True).contribute_to_class(LocationPageRelatedServices, day_end_field + "_2")
-    LocationPageRelatedServices.panels = LocationPageRelatedServices.panels + [
-        MultiFieldPanel(children=[
+
+def add_hours_by_day_and_exceptions(model):
+    week_days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+    panels_to_add = []
+    models.TextField(max_length=255, blank=True).contribute_to_class(model, 'hours_exceptions')
+    for day in week_days:
+        day_start_field = '%s_start_time' % day.lower()
+        day_end_field = '%s_end_time' % day.lower()
+        day_open_field = '%s_open' % day.lower()
+        models.BooleanField(default=False).contribute_to_class(model, day_open_field)
+        models.TimeField(null=True, blank=True).contribute_to_class(model, day_start_field)
+        models.TimeField(null=True, blank=True).contribute_to_class(model, day_end_field)
+        models.TimeField(null=True, blank=True).contribute_to_class(model, day_start_field + "_2")
+        models.TimeField(null=True, blank=True).contribute_to_class(model, day_end_field + "_2")
+        panels_to_add += [
+
             FieldRowPanel(
                 children=[
 
-                    FieldPanel(day_open_field),
                     FieldPanel(day_start_field),
                     FieldPanel(day_end_field),
                     FieldPanel(day_start_field + "_2"),
                     FieldPanel(day_end_field + "_2"),
                 ],
+                heading="Hours",
             ),
 
-        ], heading="HOURS")
-
-
+        ]
+    panels_to_add += [
+        FieldPanel('hours_exceptions')
     ]
+    panels_with_wrapper = MultiFieldPanel(children=panels_to_add, classname="collapsible", heading="Location Hours")
+    return panels_with_wrapper
+
+
+LocationPageRelatedServices.panels += [add_hours_by_day_and_exceptions(LocationPageRelatedServices)]
+
+LocationPage.content_panels += [add_hours_by_day_and_exceptions(LocationPage)]
 
 
 class LocationsIndexPage(Page):

@@ -198,12 +198,6 @@ class LocationPageNode(DjangoObjectType):
         interfaces = [graphene.Node]
 
 
-class LocationDayAndDurationNode(DjangoObjectType):
-    class Meta:
-        model = locations.LocationDayAndDuration
-        interfaces = [graphene.Node]
-
-
 class LocationsIndexPageNode(DjangoObjectType):
     class Meta:
         model = locations.LocationsIndexPage
