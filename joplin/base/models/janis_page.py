@@ -267,6 +267,14 @@ class JanisBasePage(Page):
 
 
 class AdminOnlyFieldPanel(FieldPanel):
+    def on_form_bound(self):
+        self.bound_field = self.form[self.field_name]
+        self.help_text = self.bound_field.help_text
+        if not self.request.user.is_superuser:
+            self.heading = ""
+        else:
+            self.heading = self.bound_field.label
+
     def render_as_object(self):
         if not self.request.user.is_superuser:
             return ''
