@@ -241,8 +241,6 @@ class JanisBasePage(Page):
 
         ]
 
-        # IF USER HAS PERMISSION TO SEE THE PANELS. pass the user in here?
-        # current_request = get_current_request()
         try:
             if flag_enabled('SHOW_EXTRA_PANELS'):# and self.request.user.has_perm('base.view_extra_panels'):
                 editor_panels += (PermissionObjectList(cls.promote_panels,
@@ -278,7 +276,9 @@ class AdminOnlyFieldPanel(FieldPanel):
 
 class PermissionObjectList(ObjectList):
     def render(self):
+        # this only hides the content of the tab, not the tab/heading itself
+        # we handle that in the template as a temp fix
         if not self.request.user.has_perm('base.view_extra_panels'):
             return ''
 
-    # heres my problem. i need to be able to also hide the tabs. not just the content of the tab.
+        return super().render()

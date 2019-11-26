@@ -14,6 +14,8 @@ from wagtail.admin.utils import permission_denied
 from wagtail.snippets.models import get_snippet_models
 from wagtail.snippets.permissions import get_permission_name, user_can_edit_snippet_type
 
+# wagtail by default does not pass 'can_delete_snippets' to the edit view
+# we need this variable so we can toggle hiding the delete button
 
 # == Helper functions ==
 def get_snippet_model_from_url_params(app_name, model_name):

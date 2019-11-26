@@ -3,6 +3,8 @@ from django.conf.urls import url
 from wagtail.snippets.views import chooser, snippets
 from base.views import snippets as joplin_snippets
 
+# use our version of the edit view, wagtail defaults for the rest
+
 app_name = 'joplinsnippets'
 urlpatterns = [
     url(r'^$', snippets.index, name='index'),
