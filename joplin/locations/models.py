@@ -209,6 +209,11 @@ class LocationPageRelatedServices(ClusterableModel):
     ]
 
 
+"""
+here we want to add these fields to this model, but typing them all out would be super verbose
+so a little python and Django's contribute_to_class go a long way
+"""
+
 week_days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
 for day in week_days:
     day_start_field = '%s_start_time' % day.lower()
