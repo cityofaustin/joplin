@@ -45,6 +45,20 @@ class LocationPageFactory(PageFactory):
 
 
 class LocationPageRelatedServicesFactory(factory.django.DjangoModelFactory):
+    # find all your fields [f.name for f in MyModel._meta.get_fields()]
+
+    hours_exceptions = factory.Faker('text')
+    # TODO: figure out how to call method/programatically generate these fields
+    # for day in ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]:
+    #     print(day)
+    #     day_start_field = '%s_start_time' % day.lower()
+    #     day_end_field = '%s_end_time' % day.lower()
+    #     day_open_field = '%s_open' % day.lower()
+    #     day_start_field = factory.Faker('time', pattern="%H:%M", end_datetime=None)
+    #     day_end_field = factory.Faker('time', pattern="%H:%M", end_datetime=None)
+
+    # (day_start_field + "_2") = factory.Faker('time', pattern="%H:%M", end_datetime=None)
+    # (day_end_field + "_2") = factory.Faker('time', pattern="%H:%M", end_datetime=None)
 
     class Meta:
         model = models.LocationPageRelatedServices

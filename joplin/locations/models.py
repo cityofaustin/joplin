@@ -40,14 +40,14 @@ class LocationPage(JanisBasePage):
     decide if we want to set null or cascade
     """
     janis_url_page_type = 'location'
-    alternate_name = models.CharField(max_length=255, blank=True)
+    alternate_name = models.CharField(max_length=DEFAULT_MAX_LENGTH, blank=True)
 
-    physical_street = models.CharField(max_length=255, blank=True)
-    physical_unit = models.CharField(max_length=255, blank=True)
-    physical_city = models.CharField(max_length=255, default='Austin', blank=True)
-    physical_state = models.CharField(max_length=255, default='TX', blank=True)
-    physical_country = models.CharField(max_length=255, default='USA', blank=True)
-    physical_zip = models.CharField(max_length=255, blank=True)
+    physical_street = models.CharField(max_length=DEFAULT_MAX_LENGTH, blank=True)
+    physical_unit = models.CharField(max_length=DEFAULT_MAX_LENGTH, blank=True)
+    physical_city = models.CharField(max_length=DEFAULT_MAX_LENGTH, default='Austin', blank=True)
+    physical_state = models.CharField(max_length=DEFAULT_MAX_LENGTH, default='TX', blank=True)
+    physical_country = models.CharField(max_length=DEFAULT_MAX_LENGTH, default='USA', blank=True)
+    physical_zip = models.CharField(max_length=DEFAULT_MAX_LENGTH, blank=True)
 
     physical_location_photo = models.ForeignKey(
         TranslatedImage,
@@ -62,11 +62,11 @@ class LocationPage(JanisBasePage):
     phone_number = PhoneNumberField(blank=True)
     email = models.EmailField(blank=True)
 
-    mailing_street = models.CharField(max_length=255, blank=True)
-    mailing_city = models.CharField(max_length=255, default='Austin', blank=True)
-    mailing_state = models.CharField(max_length=255, default='TX', blank=True)
-    mailing_country = models.CharField(max_length=255, default='USA', blank=True)
-    mailing_zip = models.CharField(max_length=255, blank=True)
+    mailing_street = models.CharField(max_length=DEFAULT_MAX_LENGTH, blank=True)
+    mailing_city = models.CharField(max_length=DEFAULT_MAX_LENGTH, default='Austin', blank=True)
+    mailing_state = models.CharField(max_length=DEFAULT_MAX_LENGTH, default='TX', blank=True)
+    mailing_country = models.CharField(max_length=DEFAULT_MAX_LENGTH, default='USA', blank=True)
+    mailing_zip = models.CharField(max_length=DEFAULT_MAX_LENGTH, blank=True)
 
     nearest_bus_1 = models.IntegerField(blank=True)
     nearest_bus_2 = models.IntegerField(blank=True)
@@ -133,16 +133,14 @@ class LocationPageRelatedServices(ClusterableModel):
     ]
 
 
-"""
-here we want to add these fields to this model, but typing them all out would be super verbose
-so a little python and Django's contribute_to_class go a long way
-"""
-
-
 def add_hours_by_day_and_exceptions(model):
+    """
+    here we want to add these fields to this model, but typing them all out would be super verbose
+    so a little python and Django's contribute_to_class go a long way
+    """
     week_days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
     panels_to_add = []
-    models.TextField(max_length=255, blank=True).contribute_to_class(model, 'hours_exceptions')
+    models.TextField(max_length=DEFAULT_MAX_LENGTH, blank=True).contribute_to_class(model, 'hours_exceptions')
     for day in week_days:
         day_start_field = '%s_start_time' % day.lower()
         day_end_field = '%s_end_time' % day.lower()
@@ -174,7 +172,6 @@ def add_hours_by_day_and_exceptions(model):
 
 
 LocationPageRelatedServices.panels += [add_hours_by_day_and_exceptions(LocationPageRelatedServices)]
-
 LocationPage.content_panels += [add_hours_by_day_and_exceptions(LocationPage)]
 
 
@@ -192,8 +189,3 @@ class LocationsIndexPage(Page):
             self).live().order_by(
             'primary_name')
         return context
-
-
-"""
-maybe try this~! https://gist.github.com/pjho/f0bbcfc745989191cf305a34233388e0
-"""
