@@ -88,7 +88,7 @@ def create_build_aws(content_type, instance, publish_action='edited', request=No
                             },
                             {
                                 'name': 'CMS_MEDIA',
-                                'value': settings.JANIS_CMS_MEDIA  # 'https://joplin-austin-gov.s3.amazonaws.com/media'
+                                'value': settings.JANIS_CMS_MEDIA  # 'https://joplin-austin-gov-static.s3.amazonaws.com/production/media'
                             },
                             {
                                 'name': 'CMS_DOCS',
