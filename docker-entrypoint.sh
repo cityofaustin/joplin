@@ -42,7 +42,7 @@ function sanitize_revision_data {
 
 function set_group_permissions {
   echo "Setting editor and moderator group permissions"
-  python ./joplin/manage.py loaddate ./joplin/db/fixtures/group_permissions_settings.json
+  python ./joplin/manage.py loaddata ./joplin/db/fixtures/group_permissions_settings.json
 }
 
 if [ $DEPLOYMENT_MODE == "LOCAL" ]; then
