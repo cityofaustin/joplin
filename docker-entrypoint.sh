@@ -40,6 +40,11 @@ function sanitize_revision_data {
   psql $DATABASE_URL -f ./scripts/sanitize_revision_data.sql
 }
 
+function set_group_permissions {
+  echo "Setting editor and moderator group permissions"
+  python ./joplin/manage.py loaddate ./joplin/db/fixtures/group_permissions_settings.json
+}
+
 if [ $DEPLOYMENT_MODE == "LOCAL" ]; then
   # We are on a local instance, wait until the deployment is available for connections.
   # Loop sleep every second until a connection is available.
@@ -75,6 +80,7 @@ case "${DEPLOYMENT_MODE}" in
   REVIEW)
     load_prod_datadump
     load_janis_branch_settings
+    set_group_permissions
     echo "Collecting static files"
     python ./joplin/manage.py collectstatic --noinput;
   ;;
