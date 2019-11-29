@@ -3,7 +3,7 @@ from base.models import (
     InformationPage,
     OfficialDocumentPage,
     GuidePage,
-    FormPage,
+    FormContainer,
 )
 
 # Gain access to a content_type's node and model if you have it's name.
@@ -25,8 +25,8 @@ content_type_map = {
         "node": "GuidePageNode",
         "model": GuidePage,
     },
-    "form page": {
-        "node": "FormPageNode",
-        "model": FormPage,
+    "form container": {
+        "node": "FormContainerNode",
+        "model": FormContainer,
     },
 }
