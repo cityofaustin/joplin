@@ -15,7 +15,7 @@ from wagtail.snippets.models import get_snippet_models
 from wagtail.snippets.permissions import get_permission_name, user_can_edit_snippet_type
 
 # wagtail by default does not pass 'can_delete_snippets' to the edit view
-# we need this variable so we can toggle hiding the delete button
+# we need this variable so we can toggle hiding the delete button -chia
 
 # == Helper functions ==
 def get_snippet_model_from_url_params(app_name, model_name):
@@ -23,7 +23,6 @@ def get_snippet_model_from_url_params(app_name, model_name):
     Retrieve a model from an app_label / model_name combo.
     Raise Http404 if the model is not a valid snippet type.
     """
-    print('snippets.py', app_name, model_name)
     try:
         model = apps.get_model(app_name, model_name)
     except LookupError:
@@ -56,7 +55,6 @@ def get_snippet_edit_handler(model):
 
 
 def edit(request, app_label, model_name, pk):
-    print('YESSS THIS WORKED')
     model = get_snippet_model_from_url_params(app_label, model_name)
 
     permission = get_permission_name('change', model)
@@ -97,6 +95,7 @@ def edit(request, app_label, model_name, pk):
     edit_handler = edit_handler.bind_to(form=form)
 
     return render(request, 'wagtailsnippets/snippets/edit.html', {
+        # original version of snippets.py does not include 'can delete snippets'
         'can_delete_snippets': request.user.has_perm(get_permission_name('delete', model)),
         'model_opts': model._meta,
         'instance': instance,

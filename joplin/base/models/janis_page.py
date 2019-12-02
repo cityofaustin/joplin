@@ -267,6 +267,8 @@ class JanisBasePage(Page):
 
 class AdminOnlyFieldPanel(FieldPanel):
     def on_form_bound(self):
+        # Checks to see if user is a superuser. If so, return the label
+        # If not, return an empty string thus effectively hiding the field panel text
         self.bound_field = self.form[self.field_name]
         self.help_text = self.bound_field.help_text
         if not self.request.user.is_superuser:
@@ -275,6 +277,8 @@ class AdminOnlyFieldPanel(FieldPanel):
             self.heading = self.bound_field.label
 
     def render_as_object(self):
+        # Checks to see if user is super user, if so render object
+        # if not, return empty string which overrides the object/checkbox
         if not self.request.user.is_superuser:
             return ''
 
