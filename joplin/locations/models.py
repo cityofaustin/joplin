@@ -40,14 +40,15 @@ class LocationPage(JanisBasePage):
     decide if we want to set null or cascade
     """
     janis_url_page_type = 'location'
-    alternate_name = models.CharField(max_length=DEFAULT_MAX_LENGTH, blank=True)
 
-    physical_street = models.CharField(max_length=DEFAULT_MAX_LENGTH, blank=True)
-    physical_unit = models.CharField(max_length=DEFAULT_MAX_LENGTH, blank=True)
-    physical_city = models.CharField(max_length=DEFAULT_MAX_LENGTH, default='Austin', blank=True)
-    physical_state = models.CharField(max_length=DEFAULT_MAX_LENGTH, default='TX', blank=True)
+    alternate_name = models.CharField(max_length=DEFAULT_MAX_LENGTH, blank=True, verbose_name="Location alternate name", help_text="Use this field if the building has a second name, or is inside a larger facility")
+
+    physical_street = models.CharField(max_length=DEFAULT_MAX_LENGTH, blank=True, verbose_name="Street")
+    physical_unit = models.CharField(max_length=DEFAULT_MAX_LENGTH, blank=True, verbose_name="Floor/Suite #")
+    physical_city = models.CharField(max_length=DEFAULT_MAX_LENGTH, default='Austin', blank=True, verbose_name="City")
+    physical_state = models.CharField(max_length=DEFAULT_MAX_LENGTH, default='TX', blank=True, verbose_name="State")
     physical_country = models.CharField(max_length=DEFAULT_MAX_LENGTH, default='USA', blank=True)
-    physical_zip = models.CharField(max_length=DEFAULT_MAX_LENGTH, blank=True)
+    physical_zip = models.CharField(max_length=DEFAULT_MAX_LENGTH, blank=True, verbose_name="ZIP")
 
     physical_location_photo = models.ForeignKey(
         TranslatedImage,
@@ -58,15 +59,15 @@ class LocationPage(JanisBasePage):
     )
 
     phone_description = models.CharField(
-        max_length=DEFAULT_MAX_LENGTH, blank=True)
-    phone_number = PhoneNumberField(blank=True)
-    email = models.EmailField(blank=True)
+        max_length=DEFAULT_MAX_LENGTH, blank=True, verbose_name="Phone description")
+    phone_number = PhoneNumberField(blank=True, verbose_name="Phone(only if location has a dedicated number)")
+    email = models.EmailField(blank=True, verbose_name="Email address")
 
-    mailing_street = models.CharField(max_length=DEFAULT_MAX_LENGTH, blank=True)
-    mailing_city = models.CharField(max_length=DEFAULT_MAX_LENGTH, default='Austin', blank=True)
-    mailing_state = models.CharField(max_length=DEFAULT_MAX_LENGTH, default='TX', blank=True)
+    mailing_street = models.CharField(max_length=DEFAULT_MAX_LENGTH, blank=True, verbose_name="Street or PO box")
+    mailing_city = models.CharField(max_length=DEFAULT_MAX_LENGTH, default='Austin', blank=True, verbose_name="City")
+    mailing_state = models.CharField(max_length=DEFAULT_MAX_LENGTH, default='TX', blank=True, verbose_name="State")
     mailing_country = models.CharField(max_length=DEFAULT_MAX_LENGTH, default='USA', blank=True)
-    mailing_zip = models.CharField(max_length=DEFAULT_MAX_LENGTH, blank=True)
+    mailing_zip = models.CharField(max_length=DEFAULT_MAX_LENGTH, blank=True, verbose_name="ZIP")
 
     nearest_bus_1 = models.IntegerField(blank=True)
     nearest_bus_2 = models.IntegerField(blank=True)
@@ -83,17 +84,15 @@ class LocationPage(JanisBasePage):
             FieldPanel('physical_city', classname='col5'),
             FieldPanel('physical_state', classname='col4'),
             FieldPanel('physical_zip', classname='col2'),
-            FieldPanel('physical_country', classname='col5'),
-        ], heading='Physical Address'),
+        ], heading='Location physical address'),
         ImageChooserPanel('physical_location_photo'),
         MultiFieldPanel(children=[
             FieldPanel('mailing_street'),
             FieldPanel('mailing_city', classname='col5'),
             FieldPanel('mailing_state', classname='col4'),
             FieldPanel('mailing_zip', classname='col2'),
-            FieldPanel('mailing_country', classname='col5'),
         ],
-            heading='Mailing Address',
+            heading='Location mailing address (if applicable)',
             classname="collapsible"
         ),
         FieldPanel('alternate_name'),
@@ -104,7 +103,7 @@ class LocationPage(JanisBasePage):
                 FieldPanel('phone_description', classname='col6'),
                 FieldPanel('email', classname='col6'),
             ],
-            heading="Location phone"
+            heading="Location contact info"
         ),
 
 
@@ -114,9 +113,8 @@ class LocationPage(JanisBasePage):
                 FieldPanel('nearest_bus_2'),
                 FieldPanel('nearest_bus_3'),
             ],
-            heading="Nearest bus"
+            heading="Location details"
         ),
-        InlinePanel('related_services', label='Related Services'),
     ]
 
 
@@ -172,7 +170,7 @@ def add_hours_by_day_and_exceptions(model):
 
 
 LocationPageRelatedServices.panels += [add_hours_by_day_and_exceptions(LocationPageRelatedServices)]
-LocationPage.content_panels += [add_hours_by_day_and_exceptions(LocationPage)]
+LocationPage.content_panels += [add_hours_by_day_and_exceptions(LocationPage), InlinePanel('related_services', label='Related Services'), ]
 
 
 class LocationsIndexPage(Page):
