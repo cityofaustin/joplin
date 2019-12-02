@@ -55,7 +55,9 @@ class LocationPage(JanisBasePage):
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
-        related_name='+'
+        related_name='+',
+        verbose_name="Choose a banner image",
+        help_text="Use this to show an exterior of the location"
     )
 
     phone_description = models.CharField(
