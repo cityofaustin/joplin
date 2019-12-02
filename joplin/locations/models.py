@@ -77,6 +77,9 @@ class LocationPage(JanisBasePage):
 
     content_panels = [
         FieldPanel('title_en', widget=countMe),
+        FieldPanel('title_es', widget=countMe),
+        FieldPanel('title_ar'),
+        FieldPanel('title_vi'),
 
         MultiFieldPanel(children=[
             FieldPanel('physical_street'),
@@ -171,6 +174,9 @@ def add_hours_by_day_and_exceptions(model):
 
 LocationPageRelatedServices.panels += [add_hours_by_day_and_exceptions(LocationPageRelatedServices)]
 LocationPage.content_panels += [add_hours_by_day_and_exceptions(LocationPage), InlinePanel('related_services', label='Related Services'), ]
+# override title field to change verbose name
+# NOTE: this may break/cause problems if we ever make JanisBasePage NOT absctract
+LocationPage._meta.get_field('title').verbose_name = 'Location name'
 
 
 class LocationsIndexPage(Page):
