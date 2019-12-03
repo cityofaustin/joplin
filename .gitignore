@@ -20,6 +20,3 @@ env.sh
 
 # Temporary datadumps
 joplin/db/system-generated/tmp.datadump.json
-
-# Build Artifacts
-.circleci/build_artifacts/*
