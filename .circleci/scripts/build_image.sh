@@ -6,9 +6,6 @@ log() { log_base "build" "$1" "$2"; }
 
 print_header "Building Joplin Docker Image"
 
-# Log in to dockerhub
-docker login -u $DOCKER_USER -p $DOCKER_PASS
-
 log 1 "Building:"
 log 2 "Image Tags:        ${DOCKER_TAG_1}"
 log 2 "                   ${DOCKER_TAG_2}"
@@ -20,6 +17,9 @@ log 2 "Application Name:  ${APPNAME}"
 # Adds 3 tags
 # Builds using top-level directory ($CURRENT_DIR/..) as context
 DOCKER_BUILDKIT=1 docker build -f app.Dockerfile -t $DOCKER_TAG_1 -t $DOCKER_TAG_2 -t $DOCKER_TAG_HEROKU --target $DOCKER_TARGET $CURRENT_DIR/../..
+
+# Log in to dockerhub
+docker login -u $DOCKER_USER -p $DOCKER_PASS
 
 if [ "$CIRCLE_BRANCH" == "master" ] || [ "$CIRCLE_BRANCH" == "production" ]; then
   # Push master and production images to dockerhub repo for storage
