@@ -4,7 +4,8 @@
 FROM cityofaustin/joplin-base:8a6c8a5 as joplin-common
 
 # Install Python dependencies
-COPY .circleci/build_artifacts/requirements.txt ./requirements.txt
+COPY "$PWD/Pipfile"
+RUN pipenv lock --requirements > ./requirements.txt
 RUN pip install --no-cache-dir --disable-pip-version-check --requirement ./requirements.txt
 
 # Set Working Directory
