@@ -23,6 +23,9 @@ export DOCKER_TAG_APP="joplin-app:local"
 export DOCKER_TAG_ASSETS="joplin-assets:local"
 export DOCKER_TARGET_APP=joplin-local
 
+# Build requirements.txt if it doesn't already exist
+sh $CURRENT_DIR/../.circleci/scripts/build_requirements.sh
+
 # Stop any existing joplin containers that might still be running
 if [ "$NO_STOP" != "on" ]; then
   echo "Stopping any $COMPOSE_PROJECT_NAME containers that might still be running"

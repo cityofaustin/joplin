@@ -214,6 +214,7 @@ if DEBUG_TOOLBAR:
     ]
     INSTALLED_APPS = INSTALLED_APPS + [
         'debug_toolbar',
+        'pympler'
     ]
 
     MIDDLEWARE = MIDDLEWARE + [
@@ -236,6 +237,8 @@ if DEBUG_TOOLBAR:
     INTERNAL_IPS += [ip[:-1] + '1' for ip in ips]
 
     DEBUG_TOOLBAR_PANELS = [
+        'debug_toolbar.panels.profiling.ProfilingPanel',
+        'pympler.panels.MemoryPanel',
         'debug_toolbar.panels.versions.VersionsPanel',
         'debug_toolbar.panels.timer.TimerPanel',
         'debug_toolbar.panels.settings.SettingsPanel',

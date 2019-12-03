@@ -27,6 +27,9 @@ export DEBUG_TOOLBAR=0
 # Build Args for use during build process
 export COMPOSE_PROJECT_NAME=joplin_migration_test
 
+# Build requirements.txt if it doesn't already exist
+sh $CURRENT_DIR/../.circleci/scripts/build_requirements.sh
+
 # If loading prod data, then your db must be built using prod migrations from the prod joplin-app image
 # docker-compose.migration_test_override.yml will replace any production specific settings/variables with local settings
 # Must have herokucli installed and be authenticated to access production joplin
