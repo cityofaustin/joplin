@@ -32,12 +32,12 @@
         [
           "view_extra_panels",
           "base",
-          "formpage"
+          "formcontainer"
         ],
         [
           "view_snippets",
           "base",
-          "formpage"
+          "formcontainer"
         ],
         [
           "view_extra_panels",
