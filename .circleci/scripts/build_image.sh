@@ -17,7 +17,7 @@ log 2 "Branch:            ${CIRCLE_BRANCH}"
 log 2 "Application Name:  ${APPNAME}"
 
 # Build requirements.txt
-sh $CURRENT_DIR/../.circleci/scripts/build_requirements.sh
+sh $CURRENT_DIR/build_requirements.sh
 
 # DOCKER_BUILDKIT=1 allows us to specify a --target within our app.Dockerfile
 # Adds 3 tags
