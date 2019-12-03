@@ -22,7 +22,7 @@ from base.models import Location as BaseLocation
 # The abstract model for related links, complete with panels
 from wagtail.core.fields import RichTextField, StreamField
 from wagtail.search import index
-from wagtail.admin.edit_handlers import FieldPanel, PageChooserPanel
+from wagtail.admin.edit_handlers import FieldPanel, PageChooserPanel, HelpPanel
 from wagtail.images.edit_handlers import ImageChooserPanel
 from base.models import JanisBasePage
 from base.models.widgets import countMe, countMeTextArea, AUTHOR_LIMITS
@@ -90,7 +90,15 @@ class LocationPage(JanisBasePage):
             FieldPanel('physical_state', classname='col4'),
             FieldPanel('physical_zip', classname='col2'),
         ], heading='Location physical address'),
-        ImageChooserPanel('physical_location_photo'),
+        MultiFieldPanel(
+            [
+                HelpPanel(physical_location_photo.help_text, classname="coa-helpPanel"),
+                ImageChooserPanel('physical_location_photo'),
+            ],
+            heading=physical_location_photo.verbose_name,
+            classname='coa-multiField-nopadding'
+        ),
+
         MultiFieldPanel(children=[
             FieldPanel('mailing_street'),
             FieldPanel('mailing_city', classname='col5'),
