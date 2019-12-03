@@ -40,6 +40,6 @@ class GuidePageForm(WagtailAdminPageForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-class FormPageForm(WagtailAdminPageForm):
+class FormContainerForm(WagtailAdminPageForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

@@ -26,7 +26,7 @@ from base.models import (
     Contact, Location, PhoneNumber, ContactDayAndDuration, Department, DepartmentContact,
     OfficialDocumentPage, OfficialDocumentPageRelatedDepartments, OfficialDocumentPageTopic, OfficialDocumentPageOfficialDocument,
     GuidePage, GuidePageTopic, GuidePageRelatedDepartments, GuidePageContact,
-    FormPage, FormPageRelatedDepartments, FormPageTopic,
+    FormContainer, FormContainerRelatedDepartments, FormContainerTopic,
 )
 from .content_type_map import content_type_map
 import traceback
@@ -247,9 +247,9 @@ class GuidePageRelatedDepartmentsNode(DjangoObjectType):
         interfaces = [graphene.Node]
 
 
-class FormPageRelatedDepartmentsNode(DjangoObjectType):
+class FormContainerRelatedDepartmentsNode(DjangoObjectType):
     class Meta:
-        model = FormPageRelatedDepartments
+        model = FormContainerRelatedDepartments
         interfaces = [graphene.Node]
 
 
@@ -309,16 +309,16 @@ class DepartmentPageNode(DjangoObjectType):
         return DepartmentPage.get_verbose_name().lower()
 
 
-class FormPageNode(DjangoObjectType):
+class FormContainerNode(DjangoObjectType):
     page_type = graphene.String()
 
     class Meta:
-        model = FormPage
+        model = FormContainer
         filter_fields = ['id', 'slug', 'live', 'coa_global']
         interfaces = [graphene.Node]
 
     def resolve_page_type(self, info):
-        return FormPage.get_verbose_name().lower()
+        return FormContainer.get_verbose_name().lower()
 
 
 class OfficialDocumentFilter(FilterSet):
@@ -370,7 +370,7 @@ class GuidePageSectionPageBlock(graphene.ObjectType):
     url = graphene.String()
     service_page = graphene.Field(ServicePageNode)
     information_page = graphene.Field(InformationPageNode)
-    form_page = graphene.Field(FormPageNode)
+    form_container = graphene.Field(FormContainerNode)
 
     def __resolve_guide_page_section_as(self, model):
         page = None
@@ -385,7 +385,7 @@ class GuidePageSectionPageBlock(graphene.ObjectType):
         for model in [
             ServicePage,
             InformationPage,
-            FormPage,
+            FormContainer,
         ]:
             page = self.__resolve_guide_page_section_as(model)
             if page:
@@ -401,8 +401,8 @@ class GuidePageSectionPageBlock(graphene.ObjectType):
     def resolve_information_page(self, info):
         return self.__resolve_guide_page_section_as(InformationPage)
 
-    def resolve_form_page(self, info):
-        return self.__resolve_guide_page_section_as(FormPage)
+    def resolve_form_container(self, info):
+        return self.__resolve_guide_page_section_as(FormContainer)
 
 class GuidePageSection(graphene.ObjectType):
     value = GenericScalar()
@@ -461,7 +461,7 @@ class PageRevisionNode(DjangoObjectType):
     as_topic_collection_page = graphene.NonNull(TopicCollectionNode)
     as_official_document_page = graphene.NonNull(OfficialDocumentPageNode)
     as_guide_page = graphene.NonNull(GuidePageNode)
-    as_form_page = graphene.NonNull(FormPageNode)
+    as_form_container = graphene.NonNull(FormContainerNode)
 
     def resolve_as_service_page(self, resolve_info, *args, **kwargs):
         return self.as_page_object()
@@ -484,7 +484,7 @@ class PageRevisionNode(DjangoObjectType):
     def resolve_as_guide_page(self, resolve_info, *args, **kwargs):
         return self.as_page_object()
 
-    def resolve_as_form_page(self, resolve_info, *args, **kwargs):
+    def resolve_as_form_container(self, resolve_info, *args, **kwargs):
         return self.as_page_object()
 
     class Meta:
@@ -563,7 +563,7 @@ class SiteStructure(graphene.ObjectType):
         site_structure.extend(get_structure_for_content_type('information page'))
         site_structure.extend(get_structure_for_content_type('official document page'))
         site_structure.extend(get_structure_for_content_type('guide page'))
-        site_structure.extend(get_structure_for_content_type('form page'))
+        site_structure.extend(get_structure_for_content_type('form container'))
 
         return site_structure
 
@@ -581,9 +581,9 @@ class InformationPageTopicNode(DjangoObjectType):
         filter_fields = ['topic']
 
 
-class FormPageTopicNode(DjangoObjectType):
+class FormContainerTopicNode(DjangoObjectType):
     class Meta:
-        model = FormPageTopic
+        model = FormContainerTopic
         interfaces = [graphene.Node]
         filter_fields = ['topic']
 
@@ -730,13 +730,13 @@ class Query(graphene.ObjectType):
     all_official_document_pages = DjangoFilterConnectionField(
         OfficialDocumentPageNode)
     all_guide_pages = DjangoFilterConnectionField(GuidePageNode)
-    all_form_pages = DjangoFilterConnectionField(FormPageNode)
+    all_form_containers = DjangoFilterConnectionField(FormContainerNode)
     all_topic_page_topic_collections = DjangoFilterConnectionField(TopicPageTopicCollectionNode)
     all_service_page_topics = DjangoFilterConnectionField(ServicePageTopicNode)
     all_information_page_topics = DjangoFilterConnectionField(InformationPageTopicNode)
     all_official_document_page_topics = DjangoFilterConnectionField(OfficialDocumentPageTopicNode)
     all_guide_page_topics = DjangoFilterConnectionField(GuidePageTopicNode)
-    all_form_page_topics = DjangoFilterConnectionField(FormPageTopicNode)
+    all_form_container_topics = DjangoFilterConnectionField(FormContainerTopicNode)
 
     def resolve_site_structure(self, resolve_info):
         site_structure = SiteStructure()
