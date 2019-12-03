@@ -347,7 +347,7 @@ Simply run with the flag DEBUG_TOOLBAR=on, such as `DEBUG_TOOLBAR=on ./scripts/s
 1. Run `sh scripts/undockered.sh` to initialize an undockered Joplin instance. This will run your initial data migration and seeding for you. It will also spin up joplin_db and joplin_assets containers. These are steps that our Pycharm debugging script can't do on its own.
 2. Shut down `^C` your undockered Joplin runserver. The joplin_db and joplin_assets containers should still be running.
 3. Open Pycharm.
-4. Open your 'Undockered Joplin' Run Configuration `Run > Debug 'Undockered Joplin'`. This run configuration should be git committed in your .idea/ folder. It will run a Joplin `runserver` command with the benefit of Pycharm's debugger.
+4. Open your 'Undockered Joplin' Run Configuration `Run > Debug 'Undocked Joplin'`. This run configuration should be git committed in your .idea/ folder. It will run a Joplin `runserver` command with the benefit of Pycharm's debugger.
 
 ### Without Docker or Pycharm
 

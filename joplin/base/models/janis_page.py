@@ -195,7 +195,7 @@ class JanisBasePage(Page):
     # alias for url base function
     janis_preview_url_start = janis_url_base
 
-    # TODO this function and prevew_url_data are pretty similar, we can probably consolidate them
+    # TODO this function and preview_url_data are pretty similar, we can probably consolidate them
     def janis_preview_url(self, revision=None, lang="en"):
         return f"{self.janis_preview_url_start('preview_janis_branch')}/{lang}/{self.janis_preview_url_end(revision=revision)}"
 
@@ -242,9 +242,9 @@ class JanisBasePage(Page):
 
         try:
             if flag_enabled('SHOW_EXTRA_PANELS'):
-                editor_panels += (ObjectList(cls.promote_panels,
+                editor_panels += (PermissionObjectList(cls.promote_panels,
                                              heading='SEO'),
-                                  ObjectList(cls.settings_panels,
+                                  PermissionObjectList(cls.settings_panels,
                                              heading='Settings'))
         except ProgrammingError as e:
             print("some problem, maybe with flags")
@@ -256,11 +256,51 @@ class JanisBasePage(Page):
 
     class Meta:
         abstract = True
+        # https://docs.djangoproject.com/en/2.2/topics/auth/customizing/#custom-permissions
+        permissions = [
+            ("view_extra_panels", "Can view extra panels"),
+            ("view_snippets", "Can view snippets"),
+            ("add_snippets", "Can add snippet"),
+            ("delete_snippets", "Can delete snippet"),
+        ]
 
 
 class AdminOnlyFieldPanel(FieldPanel):
-    def render_as_object(self):
+    def on_form_bound(self):
+        # Checks to see if user is a superuser. If so, return the label
+        # If not, return an empty string thus effectively hiding the field panel text
+        self.bound_field = self.form[self.field_name]
+        self.help_text = self.bound_field.help_text
         if not self.request.user.is_superuser:
-            return 'HIDE_ME'
+            self.heading = ""
+        else:
+            self.heading = self.bound_field.label
+
+    def render_as_object(self):
+        # Checks to see if user is super user, if so render object
+        # if not, return empty string which overrides the object/checkbox
+        if not self.request.user.is_superuser:
+            return ''
 
         return super().render_as_object()
+
+
+class PermissionObjectList(ObjectList):
+    def __init__(self, children=(), *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.hide_panel = True
+        self.children = children
+
+    def on_form_bound(self):
+        if self.request.user.has_perm('base.view_extra_panels'):
+            # tabbed_interface.html checks to see if the panel should be hid
+            # and if so prevents the tab from being added
+            self.hide_panel = False
+        return super().on_form_bound()
+
+    def render(self):
+        # this only hides the content of the tab, not the tab/heading itself
+        if not self.request.user.has_perm('base.view_extra_panels'):
+            return ""
+
+        return super().render()
