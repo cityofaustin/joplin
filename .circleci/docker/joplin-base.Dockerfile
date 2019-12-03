@@ -4,6 +4,7 @@ FROM python:3.7.5-slim-stretch as joplin-base
 
 # jq for sanitizing backup data on hosted container
 RUN apt-get update && apt-get install -y gnupg curl jq
+RUN pip install pipenv
 
 # PostgreSQL 10
 RUN echo 'deb http://apt.postgresql.org/pub/repos/apt/ stretch-pgdg main' >  /etc/apt/sources.list.d/pgdg.list \
