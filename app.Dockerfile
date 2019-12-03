@@ -1,10 +1,12 @@
 ########################################################
 # joplin-common
 
-FROM cityofaustin/joplin-base:f97d770 as joplin-common
+FROM cityofaustin/joplin-base:a205cc0 as joplin-common
 
 # Install Python dependencies
 COPY "$PWD/Pipfile" ./Pipfile
+COPY "$PWD/Pipfile.lock" ./Pipfile.lock
+# Create requirements.txt from Pipfile
 RUN pipenv lock --requirements > ./requirements.txt
 RUN pip install --no-cache-dir --disable-pip-version-check --requirement ./requirements.txt
 
