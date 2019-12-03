@@ -35,9 +35,9 @@ ENTRYPOINT ["./docker-entrypoint.sh"]
 CMD ["gunicorn", "joplin.wsgi:application", "--pythonpath", "/app/joplin", "--reload", "--timeout=190", "--log-level=DEBUG"]
 
 ########################################################
-# joplin-base => joplin-deployed
+# joplin-common => joplin-deployed
 
-FROM joplin-base as joplin-deployed
+FROM joplin-common as joplin-deployed
 
 # Install nodejs dependencies
 RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
@@ -55,21 +55,21 @@ WORKDIR /app
 CMD ["gunicorn", "joplin.wsgi:application", "--pythonpath", "/app/joplin"]
 
 ########################################################
-# joplin-base => joplin-deployed => joplin-review
+# joplin-common => joplin-deployed => joplin-review
 
 FROM joplin-deployed as joplin-review
 
 ENV DEPLOYMENT_MODE "REVIEW"
 
 ########################################################
-# joplin-base => joplin-deployed => joplin-staging
+# joplin-common => joplin-deployed => joplin-staging
 
 FROM joplin-deployed as joplin-staging
 
 ENV DEPLOYMENT_MODE "STAGING"
 
 ########################################################
-# joplin-base => joplin-deployed => joplin-prod
+# joplin-common => joplin-deployed => joplin-prod
 
 FROM joplin-deployed as joplin-prod
 
