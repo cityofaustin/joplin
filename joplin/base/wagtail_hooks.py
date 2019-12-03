@@ -11,6 +11,7 @@ from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from django.utils.html import format_html_join
 from webpack_loader import utils as webpack_loader_utils
+from wagtail.admin.utils import permission_required
 
 from wagtail.admin.menu import MenuItem
 from wagtail.contrib.modeladmin.options import ModelAdmin, ModelAdminGroup, modeladmin_register
@@ -18,7 +19,6 @@ from wagtail.admin.widgets import Button, ButtonWithDropdownFromHook, PageListin
 from wagtail.core import hooks
 
 from base.models import HomePage, Location, Contact
-from wagtail.core.models import PageRevision
 
 from html.parser import HTMLParser
 
@@ -78,17 +78,17 @@ def register_page_list_menu_item():
 
 @hooks.register('register_admin_menu_item')
 def register_map_menu_item():
-    return MenuItem('Maps', "/admin/snippets/base/map/", classnames='material-icons icon-maps', order=20)
+    return PermissionMenuItem('Maps', "/admin/snippets/base/map/", classnames='material-icons icon-maps', order=20)
 
 
 @hooks.register('register_admin_menu_item')
 def register_locations_menu_item():
-    return MenuItem('Locations', "/admin/snippets/base/location/", classnames='material-icons icon-locations', order=30)
+    return PermissionMenuItem('Locations', "/admin/snippets/base/location/", classnames='material-icons icon-locations', order=30)
 
 
 @hooks.register('register_admin_menu_item')
 def register_contacts_menu_item():
-    return MenuItem('Contacts', "/admin/snippets/base/contact/", classnames='material-icons icon-contacts', order=40)
+    return PermissionMenuItem('Contacts', "/admin/snippets/base/contact/", classnames='material-icons icon-contacts', order=40)
 
 
 @hooks.register('register_admin_menu_item')
@@ -107,6 +107,9 @@ if settings.ISLOCAL or settings.ISREVIEW:
             css = super_media._css
             js.append(webpack_loader_utils.get_files('janisBranchSettings')[0]['url'])
             return forms.Media(css=css, js=js)
+
+        def is_shown(self, request):
+            return request.user.is_superuser
 
     @hooks.register('register_admin_menu_item')
     def register_options_menu_item():
@@ -295,3 +298,10 @@ class InternalLinkHandler(LinkHandler):
 @hooks.register('register_rich_text_features', order=1)
 def register_link_handler(features):
     features.register_link_type(InternalLinkHandler)
+
+
+# By default all menu items are shown all the time.
+# This checks for permission and returns True if the item should be shown
+class PermissionMenuItem(MenuItem):
+    def is_shown(self, request):
+        return request.user.has_perm('base.view_snippets')
