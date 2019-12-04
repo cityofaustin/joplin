@@ -19,7 +19,7 @@ RUN curl https://cli-assets.heroku.com/install.sh | sh
 # Install aws-cli
 ARG AWS_CLI_VERSION='1.16.145'
 RUN apk add --update \
-  python \
+  python3 \
   py-pip \
   && pip install awscli==$AWS_CLI_VERSION \
   && apk --purge -v del py-pip
