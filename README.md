@@ -232,7 +232,7 @@ This file contains the stages and commands to execute, and the order of executio
 
 `/circleci/docker`
 
-The contains the docker images used during circleci builds. The `joplin-ci-build` image is for the build job (BUILDKIT=1 docker builds are very particular and need a special image and deployment process as of 05/2019). `joplin-ci-deploy` is used for every other job. `joplin-base` is the foundational image for all joplin builds. It speeds up .circleci deployment time to have it pre-built and stored in dockerhub.
+The contains the docker images used during circleci builds. The `joplin-ci` image is the container that runs our .circleci/config.yml process within circleci. `joplin-base` is the foundational image for all joplin builds. It speeds up .circleci deployment time to have it pre-built and stored in dockerhub (rather than as part of joplin-common within app.Dockerfile).
 
 Builds for these images are done manually as needed and then stored in the cityofaustin dockerhub repo:
 
