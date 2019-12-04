@@ -12,17 +12,16 @@ RUN apk add --no-cache \
   git openssh-client \
   curl gnupg
 
-# Install herokucli (requires nodejs to install)
+# Install herokucli (requires nodejs)
+RUN apk add --update nodejs
 RUN curl https://cli-assets.heroku.com/install.sh | sh
 
 # Install aws-cli
 ARG AWS_CLI_VERSION='1.16.145'
 RUN apk add --update \
   python \
-  python-dev \
   py-pip \
-  build-base \
-  && pip install awscli==$AWSCLI_VERSION \
+  && pip install awscli==$AWS_CLI_VERSION \
   && apk --purge -v del py-pip
 
 # Add psql 10 cli

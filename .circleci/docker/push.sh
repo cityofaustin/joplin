@@ -18,7 +18,7 @@ fi
 echo "Building new version of $1"
 SHA=$(git rev-parse HEAD)
 TAG="cityofaustin/$1:${SHA:0:7}"
-docker build -f $CD/joplin-base.Dockerfile -t $TAG $CD/..
+docker build -f "$CD/$1.Dockerfile" -t $TAG $CD/..
 
 echo "Pushing $TAG"
 docker push $TAG
