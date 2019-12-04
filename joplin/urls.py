@@ -33,7 +33,7 @@ def login(request):
     return redirect(reverse('wagtailadmin_login'), permanent=True)
 
 def reroute(request):
-    return redirect('admin/pages/search/')
+    return redirect('/admin/pages/search/')
 
 urlpatterns = [
     path('admin/pages/3/', reroute),
