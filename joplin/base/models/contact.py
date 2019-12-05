@@ -44,7 +44,6 @@ class Contact(ClusterableModel):
         SnippetChooserPanel('location'),
         InlinePanel('hours', label='Hours'),
         FieldPanel('hours_exceptions'),
-
         StreamFieldPanel('social_media'),
     ]
 

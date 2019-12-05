@@ -32,8 +32,6 @@ class DayAndDuration(ClusterableModel):
     end_time = models.TimeField()
 
     panels = [
-
-
         FieldRowPanel(
             children=[
                 FieldPanel('day_of_week', classname="col5"),
@@ -43,9 +41,6 @@ class DayAndDuration(ClusterableModel):
             ],
             classname="full"
         ),
-
-
-
     ]
 
     def __str__(self):
