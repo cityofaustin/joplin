@@ -171,6 +171,7 @@ class JanisBasePage(Page):
             global_id = graphene.Node.to_global_id('PageRevisionNode', revision.id)
             url_end = f"preview/{url_page_type}/{global_id}"
         except AttributeError:
+            # TODO: make previews work for test fixture pages that may not have revisions/global_ids
             url_end = f"preview/{url_page_type}/"
 
         if settings.ISSTAGING or settings.ISPRODUCTION:
