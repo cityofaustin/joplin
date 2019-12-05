@@ -17,6 +17,12 @@ function load_staging_datadump {
   python ./joplin/manage.py loaddata ./joplin/db/system-generated/staging.datadump.json
 }
 
+# Seed prior dummy datadump into Joplin from migration_test generated backup
+function load_dummy_datadump {
+  echo "Adding dummy datadump"
+  python ./joplin/manage.py loaddata ./joplin/db/system-generated/dummy.datadump.json
+}
+
 # Add initial configs to handle Publishing and Previewing on PR Apps
 function load_janis_branch_settings {
   echo "Adding Janis Branch settings"
@@ -32,6 +38,11 @@ function load_test_admin {
 function sanitize_revision_data {
   echo "Sanitizing Revisions data"
   psql $DATABASE_URL -f ./scripts/sanitize_revision_data.sql
+}
+
+function set_group_permissions {
+  echo "Setting editor and moderator group permissions"
+  python ./joplin/manage.py loaddata ./joplin/db/fixtures/group_permissions_settings.json
 }
 
 if [ $DEPLOYMENT_MODE == "LOCAL" ]; then
@@ -59,6 +70,8 @@ case "${DEPLOYMENT_MODE}" in
       load_prod_datadump
     elif [ "$LOAD_STAGING_DATA" == "on" ]; then
       load_staging_datadump
+    elif [ "$LOAD_DUMMY_DATA" == "on" ]; then
+      load_dummy_datadump
     else
       load_test_admin
     fi
@@ -67,6 +80,7 @@ case "${DEPLOYMENT_MODE}" in
   REVIEW)
     load_prod_datadump
     load_janis_branch_settings
+    set_group_permissions
     echo "Collecting static files"
     python ./joplin/manage.py collectstatic --noinput;
   ;;
