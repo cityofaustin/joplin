@@ -198,6 +198,12 @@ class LocationPageNode(DjangoObjectType):
         interfaces = [graphene.Node]
 
 
+class LocationPageRelatedServices(DjangoObjectType):
+    class Meta:
+        model = locations.LocationPageRelatedServices
+        interfaces = [graphene.Node]
+
+
 class LocationsIndexPageNode(DjangoObjectType):
     class Meta:
         model = locations.LocationsIndexPage
