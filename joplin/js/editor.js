@@ -413,7 +413,7 @@ $(function() {
         },
       },
     }).configure({
-      aroundLatLng: latlng.lat + ',' + latlng.lng, // Paris latitude longitude
+      aroundLatLng: latlng.lat + ',' + latlng.lng,
       aroundRadius: 10 * 4000, // 40km radius
       type: 'address',
     });
