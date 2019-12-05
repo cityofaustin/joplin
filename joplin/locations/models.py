@@ -57,7 +57,7 @@ class LocationPage(JanisBasePage):
         on_delete=models.SET_NULL,
         related_name='+',
         verbose_name="Choose a banner image",
-        help_text="Use this to show an exterior of the location"
+        help_text="Use this to show an exterior of the location."
     )
 
     phone_description = models.CharField(
@@ -108,7 +108,15 @@ class LocationPage(JanisBasePage):
             heading='Location mailing address (if applicable)',
             classname="collapsible"
         ),
-        FieldPanel('alternate_name'),
+        MultiFieldPanel(
+            [
+                HelpPanel(alternate_name.help_text, classname="coa-helpPanel"),
+                FieldPanel('alternate_name'),
+            ],
+            heading=alternate_name.verbose_name,
+            classname='coa-multiField-nopadding'
+        ),
+
         FieldRowPanel(
             children=[
                 FieldPanel('phone_number', classname='col6',
