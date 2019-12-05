@@ -75,7 +75,7 @@ class LocationPage(JanisBasePage):
     nearest_bus_2 = models.IntegerField(blank=True)
     nearest_bus_3 = models.IntegerField(blank=True)
 
-    parent_page_types = ['base.HomePage', 'LocationsIndexPage']
+    parent_page_types = ['base.HomePage']
 
     content_panels = [
         FieldPanel('title_en', widget=countMe),
@@ -195,19 +195,3 @@ LocationPage.content_panels += [add_hours_by_day_and_exceptions(LocationPage), I
 # override title field to change verbose name
 # NOTE: this may break/cause problems if we ever make JanisBasePage NOT absctract
 LocationPage._meta.get_field('title').verbose_name = 'Location name'
-
-
-class LocationsIndexPage(Page):
-    """
-    A list of LocationPages
-    """
-
-    # Overrides the context to list all child
-    # items, that are live, by the date that they were published
-    # http://docs.wagtail.io/en/latest/getting_started/tutorial.html#overriding-context
-    def get_context(self, request):
-        context = super(LocationsIndexPage, self).get_context(request)
-        context['locations'] = LocationPage.objects.descendant_of(
-            self).live().order_by(
-            'primary_name')
-        return context

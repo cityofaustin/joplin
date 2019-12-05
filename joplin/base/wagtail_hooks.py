@@ -58,7 +58,7 @@ def configure_main_menu(request, menu_items):
     menu_items[:] = [item for item in menu_items if item.name not in
                      # here were excluding some default generated menu items per UX
                      [
-                         # 'explorer',
+                         'explorer',
                          'settings',
                          'snippets'
                      ]

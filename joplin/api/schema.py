@@ -204,14 +204,6 @@ class LocationPageRelatedServices(DjangoObjectType):
         interfaces = [graphene.Node]
 
 
-class LocationsIndexPageNode(DjangoObjectType):
-    class Meta:
-        model = locations.LocationsIndexPage
-        filter_fields = ['id', 'slug', 'live']
-        fields = '__all__'
-        interfaces = [graphene.Node]
-
-
 class ContactNode(DjangoObjectType):
     class Meta:
         model = Contact
@@ -774,7 +766,6 @@ class Query(graphene.ObjectType):
     all_form_page_topics = DjangoFilterConnectionField(FormPageTopicNode)
     all_locations = DjangoFilterConnectionField(LocationNode)
     all_location_pages = DjangoFilterConnectionField(LocationPageNode)
-    location_index_pages = DjangoFilterConnectionField(LocationsIndexPageNode)
 
     def resolve_site_structure(self, resolve_info):
         site_structure = SiteStructure()
