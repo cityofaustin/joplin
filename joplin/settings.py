@@ -313,9 +313,9 @@ if(ISPRODUCTION or ISSTAGING or ISREVIEW):
     #
     # AWS Buckets only if not local.
     #
-    APPLICATION_NAME = os.getenv('APPLICATION_NAME')
-    AWS_ACCESS_KEY_ID = os.getenv('AWS_S3_KEYID')
-    AWS_SECRET_ACCESS_KEY = os.getenv('AWS_S3_ACCESSKEY')
+    APPNAME = os.getenv('APPNAME')
+    AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
+    AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
     AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_S3_BUCKET_STATIC')
     AWS_ARCHIVE_BUCKET_NAME = os.getenv('AWS_S3_BUCKET_ARCHIVE')
     AWS_BACKUPS_LOCATION = os.getenv('AWS_S3_BUCKET_ARCHIVE_LOCATION')
@@ -338,7 +338,7 @@ if(ISPRODUCTION or ISSTAGING or ISREVIEW):
         'secret_key': AWS_SECRET_ACCESS_KEY,
         'bucket_name': AWS_ARCHIVE_BUCKET_NAME,
         'host': "s3.amazonaws.com",
-        'location': AWS_BACKUPS_LOCATION + "/" + APPLICATION_NAME
+        'location': AWS_BACKUPS_LOCATION + "/" + APPNAME
     }
 
     # Specifying the location of files
@@ -392,7 +392,7 @@ if ISLOCAL:
     # $JOPLIN_APP_HOST_PORT is set by scripts/serve-local.sh
     CMS_API = f"http://localhost:{os.getenv('JOPLIN_APP_HOST_PORT')}/api/graphql"
 else:
-    CMS_API = f"https://{os.getenv('APPLICATION_NAME','')}.herokuapp.com/api/graphql"
+    CMS_API = f"https://{os.getenv('APPNAME','')}.herokuapp.com/api/graphql"
 
 
 # Sets the login_url redirect for "from django.contrib.auth.decorators import user_passes_test"

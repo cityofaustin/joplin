@@ -283,6 +283,8 @@ Adds environment variables to PR apps. Environment vars for staging and producti
 
 `set_pr_vars.sh` is where environment variables get updated after your app has been created.
 
+`.circleci/vars/branch_overrides.py` is where you can set environment variables for one specific branch.
+
 **5. build_and_release**
 
 `.circleci/scripts/build_image.sh`
@@ -306,6 +308,8 @@ The migration process currently consists of 3 commands:
 
 ## Useful Commands
 
+-   ssh into a container that's deployed on Heroku
+    -   `heroku run bash -a $APPNAME`
 -   Shut down all joplin containers:
     -   `source scripts/docker-helpers.sh; stop_project_containers joplin`
 -   Delete all joplin containers:

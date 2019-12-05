@@ -6,8 +6,7 @@ CD=`dirname $BASH_SOURCE`
 #  Use the exact version of the Docker Image in future scripts.
 #  ex:
 #    sh push.sh joplin-base
-#    sh push.sh joplin-ci-build
-#    sh push.sh joplin-ci-deploy
+#    sh push.sh joplin-ci
 
 FILE="$CD/$1.Dockerfile"
 if [ ! -f $FILE ]; then

@@ -16,11 +16,10 @@ RUN apk add --no-cache \
 RUN apk add --update nodejs
 RUN curl https://cli-assets.heroku.com/install.sh | sh
 
-# Install aws-cli
+# Install python3, aws-cli, requests
 ARG AWS_CLI_VERSION='1.16.145'
-RUN apk add --update \
-  python3 \
-  && pip3 install awscli==$AWS_CLI_VERSION
+RUN apk add --update python3
+RUN pip3 install awscli==$AWS_CLI_VERSION requests
 
 # Add psql 10 cli
 RUN apk add --update postgresql-client
