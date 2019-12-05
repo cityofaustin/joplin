@@ -1,4 +1,4 @@
-import os, requests
+import os, sys, requests
 
 from branch_overrides import branch_overrides
 
@@ -59,6 +59,7 @@ if branch_override:
 # Set your config as your Heroku PR app's environment variables
 headers = {
     "Accept": "application/vnd.heroku+json; version=3",
+    "Authorization": f"Bearer {os.getenv('HEROKU_API_KEY')}"
 }
 response = requests.patch(f'https://api.heroku.com/apps/{os.getenv("APPNAME")}/config-vars', headers=headers, data=config)
 if (response.status_code != 200):
