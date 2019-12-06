@@ -92,6 +92,22 @@ class Command(BaseCommand):
                 print("Adding Janis Branch settings")
                 run_load_data_command('./joplin/db/fixtures/janis_branch_settings.json')
                 DeploymentLog(operation="load_janis_branch_settings",completed=True).save()
+
+            # Set group_permissions if they haven't been loaded already
+            try:
+                info = DeploymentLog.objects.get(operation="set_group_permissions")
+                set_group_permissions_result = info.completed
+                if set_group_permissions_result:
+                    print("Already set group_permissions")
+            except ObjectDoesNotExist:
+                set_group_permissions_result = None
+            if (
+                not set_group_permissions_result and
+                not os.getenv("DEPLOYMENT_MODE") in ("STAGING", "PRODUCTION")
+            ):
+                print("Setting editor and moderator group permissions")
+                run_load_data_command('./joplin/db/fixtures/group_permissions_settings.json')
+                DeploymentLog(operation="set_group_permissions",completed=True).save()
         finally:
             stdout.close()
             stderr.close()
