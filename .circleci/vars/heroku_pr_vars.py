@@ -47,7 +47,7 @@ for v in vars_from_circleci:
 default_branch_vars = {
     "DEBUG": 1,
     "DEBUG_TOOLBAR": False,
-    "LOAD_PROD_DATA": True,
+    "LOAD_DATA": "prod",
 }
 config.update(default_branch_vars)
 
