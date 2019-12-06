@@ -11,5 +11,6 @@
 branch_overrides = {
     "3218-go-fast": {
         "DEBUG_TOOLBAR": True,
+        "DEBUG": 1,
     },
 }

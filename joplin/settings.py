@@ -210,32 +210,22 @@ DEBUG_TOOLBAR = bool(strtobool(os.environ.get('DEBUG_TOOLBAR', str(False))))
 
 
 if DEBUG_TOOLBAR:
-    ALLOWED_HOSTS = ALLOWED_HOSTS + [
-        '127.0.0.1',
-    ]
+    # TODO: only allow toolbar to be visible for admins
+    def show_toolbar(request):
+        return True
+
+    DEBUG_TOOLBAR_CONFIG = {
+        'SHOW_TOOLBAR_CALLBACK': show_toolbar,
+    }
+
     INSTALLED_APPS = INSTALLED_APPS + [
         'debug_toolbar',
         'pympler'
     ]
 
-    MIDDLEWARE = MIDDLEWARE + [
+    MIDDLEWARE = [
         'debug_toolbar.middleware.DebugToolbarMiddleware'
-    ]
-    """
-    for django debug toolbar
-    this is what exposes the toolbar to the docker gateway so it actually shows up
-    i.e.
-    docker inspect joplin_app_1 | grep -e '"Gateway"' or just rely on the fancy thing
-    below
-    """
-
-    INTERNAL_IPS = ['127.0.0.1']
-
-    # adds docker gateway automagically
-
-    import socket
-    hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
-    INTERNAL_IPS += [ip[:-1] + '1' for ip in ips]
+    ] + MIDDLEWARE
 
     DEBUG_TOOLBAR_PANELS = [
         'debug_toolbar.panels.profiling.ProfilingPanel',
