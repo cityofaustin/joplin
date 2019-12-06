@@ -30,7 +30,7 @@ phonenumberslite = "==8.10.16"
 django-debug-toolbar = "==2.0"
 django-countable-field = {editable = true,git = "https://github.com/cityofaustin/django-countable-field"}
 django-flags = "*"
-wagtail-publish-preflight = {editable = true,git = "https://github.com/cityofaustin/wagtail-publish-preflight"}
+wagtail-publish-preflight = {editable = true, path = "/home/eric/repos/wagtail-publish-preflight"}
 wagtail-factories = "*"
 
 [requires]

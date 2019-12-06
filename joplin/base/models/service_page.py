@@ -85,6 +85,13 @@ class ServicePage(JanisBasePage):
         verbose_name='Write a description of this service'
     )
 
+    fields_required_for_publish = (
+        'short_description_en',
+        'steps_en',
+        'additional_content',
+        'related_departments',
+    )
+
     content_panels = [
 
         FieldPanel('title_en', widget=countMe),

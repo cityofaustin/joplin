@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "aa63068a52ac0bfecd444820b8d98728c3792d6ba0155dfce54e3d473380ffd8"
+            "sha256": "77b58b9a3510b2c6495732158d1cabf02b1efc5d364e017d77594e7d038cedd3"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -512,8 +512,7 @@
         },
         "wagtail-publish-preflight": {
             "editable": true,
-            "git": "https://github.com/cityofaustin/wagtail-publish-preflight",
-            "ref": "cafb5ecf082c1321c7c703a6c17063f6ddd34699"
+            "path": "/home/eric/repos/wagtail-publish-preflight"
         },
         "webencodings": {
             "hashes": [
