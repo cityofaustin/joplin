@@ -67,6 +67,7 @@ ENV DEPLOYMENT_MODE "REVIEW"
 FROM joplin-deployed as joplin-staging
 
 ENV DEPLOYMENT_MODE "STAGING"
+RUN rm -rf /app/joplin/db
 
 ########################################################
 # joplin-common => joplin-deployed => joplin-prod
@@ -74,3 +75,4 @@ ENV DEPLOYMENT_MODE "STAGING"
 FROM joplin-deployed as joplin-prod
 
 ENV DEPLOYMENT_MODE "PRODUCTION"
+RUN rm -rf /app/joplin/db
