@@ -96,14 +96,11 @@ const ChooseTypeStep = ({
       <div>
         <h2 className="CreateContentModal__header">Select a content type</h2>
         <div className="CreateContentModal__content_or_topic">
+          {/* whichever type is selected, show as text, otherwise a link to select*/}
           {content ? (
             'Content pages'
           ) : (
-            <a
-              onClick={() =>
-                handleContentOrTopicSelect({ content_or_topic: 'content' })
-              }
-            >
+            <a onClick={() => handleContentOrTopicSelect('content')}>
               Content pages
             </a>
           )}
@@ -111,11 +108,7 @@ const ChooseTypeStep = ({
           {topic ? (
             'Topic or topic collections'
           ) : (
-            <a
-              onClick={() =>
-                handleContentOrTopicSelect({ content_or_topic: 'topic' })
-              }
-            >
+            <a onClick={() => handleContentOrTopicSelect('topic')}>
               Topic or topic collections
             </a>
           )}
@@ -138,11 +131,11 @@ const ChooseTypeStep = ({
             <React.Fragment>
               {topicPages.map((topicPage, index) => (
                 <PageTypeComponent 
-                  type={contentPage.type}
+                  type={topicPage.type}
                   handleTypeSelect={handleTypeSelect}
-                  name={contentPage.name}
-                  image={contentPage.image}
-                  description={contentPage.description}
+                  name={topicPage.name}
+                  image={topicPage.image}
+                  description={topicPage.description}
                 />
               ))}
             </React.Fragment>

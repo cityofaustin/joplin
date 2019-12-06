@@ -13,8 +13,6 @@ import ButtonBar from './ButtonBar.js';
 import './index.scss';
 
 const MAX_TITLE_LENGTH = 58;
-const THEME_TOPIC_TREE = window.themeTopicsTree;
-const DEPARTMENT_LIST = window.departments;
 
 const stepsEnum = {
   CHOOSE_TYPE: 0,
@@ -98,10 +96,8 @@ class CreateContentModal extends Component {
     );
   };
 
-  handleContentOrTopicSelect = (dataObj, e) => {
-    this.setState({
-      content_or_topic: dataObj.content_or_topic,
-    });
+  handleContentOrTopicSelect = (content_or_topic) => {
+    this.setState({ content_or_topic: content_or_topic });
   };
 
   handleTitleInputChange = e => {
@@ -117,6 +113,8 @@ class CreateContentModal extends Component {
   };
 
   createPage = () => {
+    console.log(this.state)
+    // find out what we need to make a location page
     axios
       .post(
         '/admin/pages/new_from_modal/',
@@ -201,13 +199,7 @@ class CreateContentModal extends Component {
                       handleBackButton={this.handleBackButton}
                       handleNextButton={this.handleNextButton}
                       handleCloseButton={this.handleCloseButton}
-                      hidden={
-                        this.state.activeStep === stepsEnum.CHOOSE_TYPE ||
-                        this.state.activeStep ===
-                          stepsEnum.CHOOSE_DEPT_OR_TOPIC ||
-                        this.state.activeStep ===
-                          stepsEnum.CHOOSE_TOPIC_COLLECTION_OR_THEME
-                      }
+                      hidden={this.state.activeStep === stepsEnum.CHOOSE_TYPE}
                       onLastStep={this.onLastStep()}
                     />
                   </div>
