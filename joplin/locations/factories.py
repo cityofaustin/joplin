@@ -62,9 +62,3 @@ class LocationPageRelatedServicesFactory(factory.django.DjangoModelFactory):
 
     class Meta:
         model = models.LocationPageRelatedServices
-
-
-class LocationsIndexPageFactory(PageFactory):
-
-    class Meta:
-        model = models.LocationsIndexPage

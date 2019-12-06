@@ -24,8 +24,8 @@ def create():
         """
         creates test data and commits to DB
         """
-        create_index_page = factories.LocationsIndexPageFactory.create(parent=root_page, title='Location Pages')
-        create_locations_pages = factories.LocationPageFactory.create_batch(size=10, parent=create_index_page)
+        # create_index_page = factories.LocationsIndexPageFactory.create(parent=root_page, title='Location Pages')
+        create_locations_pages = factories.LocationPageFactory.create_batch(size=10, parent=home_page)
 
     def save_to_file(objects):
         import json
