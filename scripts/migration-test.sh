@@ -4,11 +4,11 @@ CURRENT_DIR=`dirname $BASH_SOURCE`
 source $CURRENT_DIR/docker-helpers.sh
 
 function clean_up {
-  if [ ! -z "$TMP_DATADUMP" ]; then
+  if [ -f "$TMP_DATADUMP" ]; then
     echo "#### Deleting intermediate temp datadump"
     rm $TMP_DATADUMP
   fi
-  if [ ! -z "$PLACEHOLDER_DATADUMP" ]; then
+  if [ -f "$PLACEHOLDER_DATADUMP" ]; then
     echo "#### Deleting intermediate temp datadump"
     rm $PLACEHOLDER_DATADUMP
   fi
