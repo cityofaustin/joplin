@@ -10,7 +10,6 @@ import documentsImage from '../../static/images/documents.png';
 import topicCollectionImage from '../../static/images/topic_collection.png';
 import topicsImage from '../../static/images/topics.png';
 import formContainerImage from '../../static/images/info_page.png'; // TODO: get a png for forms
-import locationImage from '../../static/images/location.png';
 
 const ChooseTypeStep = ({
   handleTypeSelect,
@@ -19,67 +18,6 @@ const ChooseTypeStep = ({
 }) => {
   const content = content_or_topic === 'content';
   const topic = content_or_topic === 'topic';
-
-  const contentPages = [
-    {
-      type: 'service',
-      name: 'Service Page',
-      image: servicePageImage,
-      description: 'A step by step guide to a particular city service.'
-    },
-    {
-      type: 'information',
-      name: 'Information Page',
-      image: infoPageImage,
-      description: 'Provides supplementary information and resources to support service delivery.'
-    },
-    {
-      type: 'department',
-      name: 'Department Page',
-      image: departmentPageImage,
-      description: 'Basic information and contact details for a department.'
-    },
-    {
-      type: 'guide',
-      name: 'Guide',
-      image: guideImage,
-      description: 'A collection of pages for a complicated process, organized into sections.'
-    },
-    {
-      type: 'location',
-      name: 'Location',
-      image: locationImage,
-      description: 'Provides service, travel, and contact details for a location.'
-    },
-    {
-      type: 'documents',
-      name: 'Official document list',
-      image: documentsImage,
-      description: 'Summaries and links to official documents'
-    },
-    {
-      type: 'form',
-      name: 'Form container',
-      image: formContainerImage,
-      description: 'Container for an embedded Formstack form'
-    }
-  ];
-
-  const topicPages = [
-    {
-      type: 'topic',
-      name: 'Topics',
-      image: topicsImage,
-      description: 'Topics are landing pages that contain links to all pages on a particular subject'
-    },
-    {
-      type: 'topiccollection',
-      name: 'Topic Collection',
-      image: topicCollectionImage,
-      description: 'Topic collections are landing pages that show similar topics within a larger subject'
-    }
-  ]
-  console.log(content_or_topic);
 
   return (
     <div className="CreateContentModal__step">
@@ -115,41 +53,128 @@ const ChooseTypeStep = ({
         <div className="ChooseTypeStep__options-wrapper">
           {content && (
             <React.Fragment>
-              {contentPages.map((contentPage, index) => (
-                <div
-                className="ChooseTypeStep__option"
-                onClick={() =>
-                  handleTypeSelect({
-                    type: contentPage.type,
-                  })
-                }
-              >
-                <h3 className="ChooseTypeStep__option-header">{contentPage.name}</h3>
-                <img src={contentPage.image} alt={contentPage.name} />
-                <p>{contentPage.description}</p>
-              </div>
-            ))}
-            </React.Fragment>
-          )}
-          {topic && (
-            <React.Fragment>
-              {topicPages.map((topicPage, index) => (
               <div
                 className="ChooseTypeStep__option"
                 onClick={() =>
                   handleTypeSelect({
-                    type: topicPage.type,
+                    type: 'service',
+                  })
+                }
+              >
+                <h3 className="ChooseTypeStep__option-header">Service Page</h3>
+                <img src={servicePageImage} alt="Service Page" />
+                <p>A step by step guide to a particular city service.</p>
+              </div>
+              <div
+                className="ChooseTypeStep__option"
+                onClick={() =>
+                  handleTypeSelect({
+                    type: 'information',
                   })
                 }
               >
                 <h3 className="ChooseTypeStep__option-header">
-                  {topicPage.name}
+                  Information Page
                 </h3>
-                <img src={topicPage.image} alt={topicPage.name} />
+                <img src={infoPageImage} alt="Information Page" />
                 <p>
-                  {topicPage.description}
+                  Provides supplementary information and resources to support
+                  service delivery
                 </p>
-              </div>))}
+              </div>
+              <div
+                className="ChooseTypeStep__option"
+                onClick={() =>
+                  handleTypeSelect({
+                    type: 'department',
+                  })
+                }
+              >
+                <h3 className="ChooseTypeStep__option-header">
+                  Department Page
+                </h3>
+                <img src={departmentPageImage} alt="Department Page" />
+                <p>Basic information and contact details for a department.</p>
+              </div>
+              <div
+                className="ChooseTypeStep__option"
+                onClick={() =>
+                  handleTypeSelect({
+                    type: 'guide',
+                  })
+                }
+              >
+                <h3 className="ChooseTypeStep__option-header">Guide</h3>
+                <img src={guideImage} alt="Guide" />
+                <p>
+                  A collection of pages for a complicated process, organized
+                  into sections
+                </p>
+              </div>
+              <div
+                className="ChooseTypeStep__option"
+                onClick={() =>
+                  handleTypeSelect({
+                    type: 'documents',
+                  })
+                }
+              >
+                <h3 className="ChooseTypeStep__option-header">
+                  Official document list
+                </h3>
+                <img src={documentsImage} alt="Documents" />
+                <p>Summaries and links to official documents</p>
+              </div>
+              <div
+                className="ChooseTypeStep__option"
+                onClick={() =>
+                  handleTypeSelect({
+                    type: 'form',
+                  })
+                }
+              >
+                <h3 className="ChooseTypeStep__option-header">
+                  Form container
+                </h3>
+                <img src={formContainerImage} alt="form container" />
+                <p>Container for an embedded Formstack form</p>
+              </div>
+            </React.Fragment>
+          )}
+          {topic && (
+            <React.Fragment>
+              <div
+                className="ChooseTypeStep__option"
+                onClick={() =>
+                  handleTypeSelect({
+                    type: 'topiccollection',
+                  })
+                }
+              >
+                <h3 className="ChooseTypeStep__option-header">
+                  Topic Collection
+                </h3>
+                <img src={topicCollectionImage} alt="Topic Collection" />
+                <p>
+                  Topic collections are landing pages that show similar topics
+                  within a larger subject
+                </p>
+              </div>
+              <div
+                className="ChooseTypeStep__option"
+                onClick={() =>
+                  handleTypeSelect({
+                    type: 'topic',
+                  })
+                }
+              >
+                <h3 className="ChooseTypeStep__option-header">Topics</h3>
+                <img src={topicsImage} alt="Topics" />
+                <p>
+                  Topics are landing pages that contain links to all pages on a
+                  particular subject
+                </p>
+              </div>
             </React.Fragment>
           )}
         </div>
