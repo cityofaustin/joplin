@@ -763,7 +763,6 @@ class Query(graphene.ObjectType):
     all_information_page_topics = DjangoFilterConnectionField(InformationPageTopicNode)
     all_official_document_page_topics = DjangoFilterConnectionField(OfficialDocumentPageTopicNode)
     all_guide_page_topics = DjangoFilterConnectionField(GuidePageTopicNode)
-    all_form_page_topics = DjangoFilterConnectionField(FormPageTopicNode)
     all_location_pages = DjangoFilterConnectionField(LocationPageNode)
     all_form_container_topics = DjangoFilterConnectionField(FormContainerTopicNode)
 
