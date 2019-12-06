@@ -78,7 +78,6 @@ LOAD_DUMMY_DATA="on" ./scripts/serve-local.sh
 
 -   This will add dummy content from the last dummy datadump (`joplin/db/system-generated/dummy.datadump.json`) created by migration-test.sh.
 
-
 **Drop Existing DB**
 
 ```
@@ -131,10 +130,12 @@ REBUILD_PIPENV=on ./undockered.sh
 ```
 
 **Override default behavior of stopping existing Joplin containers**
+
 ```
 NO_STOP=on ./scripts/undockered.sh
 ```
-- Makes undockered development go a little faster. You don't need to turn off then turn on the helper DB and Assets containers.
+
+-   Makes undockered development go a little faster. You don't need to turn off then turn on the helper DB and Assets containers.
 
 **Run with custom smuggler data**
 
@@ -186,13 +187,32 @@ https://docs.djangoproject.com/en/2.2/topics/migrations/
 ## Updating the Data Model
 
 1. Have a local Joplin instance running (probably populated with data).
-2. Update your data model in `joplin/base/models.py`.
+2. Update your data model wherever you have it written.
 3. Make a new migration with:
     - `docker exec -it joplin_app_1 python joplin/manage.py makemigrations`
 4. Run that migration with:
     - `docker exec -it joplin_app_1 python joplin/manage.py migrate`
 5. Test that your migration works with
     - `./scripts/migration-test.sh`
+
+## Adding new content types
+
+Adding new content types to Joplin is a fairly involved process, and there are many things need to go from a new data model to new content appearing in Janis. We won't cover all that here, but just some basic pointers.
+
+Django is fairly flexible when it comes to how you organize your code. However, a typical and often recommended approach is to break components into individual apps.
+
+You can do this a couple ways, but a simple way using the 'startapp' command, like so:
+
+```
+python manage.py startapp coolnewcontenttype
+```
+
+You can then add that to the list of installed apps in joplin's settings files. More info here:
+https://docs.djangoproject.com/en/2.2/ref/django-admin/#startapp
+Wise words here:
+https://docs.djangoproject.com/en/3.0/intro/reusable-apps/
+
+Once you've got the new content type modeled, you can also expose the model as needed for our GraphQL api by adding the appropriate code to the 'api' application. There are several pre-existing patterns there that can get you started.
 
 **About migration-test script**
 
@@ -220,6 +240,7 @@ Here's what `migration-test.sh` does at a high level:
     - A command line prompt will ask if the migration worked. If you enter "y", then a new datadump fixture will replace the old seeing.datadump.json fixture in joplin/db/system-generated. If you enter "n", then the migration_test containers will shut down and not replace your datadump fixture.
 
 ### Updating Dummy Data
+
 Running `DUMMY=on ./scripts/migration-test.sh` will load in the latest dummy datadump and run migration test in dummy data mode. I (Brian) have been running this and then adding data when it gets to the interactive step. Once I'm happy with the data I have I respond to the `Is it all good?` question with y and get a shiny new `dummy.datadump.json`.
 
 ## CircleCI Deployments
