@@ -50,11 +50,15 @@ This will automatically load environment variables into your pipenv environment.
     <img src="/README/server_success.png" align="middle" height="70" >
 -   Your Joplin instance will be accessible at http://localhost:8000/admin with the credentials user: `admin@austintexas.io`, pw: `x`
 
+Or if you prefer to run without docker (for speed + ability to integrate with debugging tools):
+```
+./scripts/undockered.sh
+```
 **Run with prod data**
 
 ```
-LOAD_DATA="on" ./scripts/serve-local.sh
-LOAD_PROD_DATA="on" ./scripts/serve-local.sh
+LOAD_DATA="prod" ./scripts/serve-local.sh
+LOAD_DATA="prod" ./scripts/undockered.sh
 ```
 
 -   This will add some seeding content from the last prod datadump (`joplin/db/system-generated/prod.datadump.json`) created by migration-test.sh.
@@ -65,7 +69,8 @@ LOAD_PROD_DATA="on" ./scripts/serve-local.sh
 **Run with staging data**
 
 ```
-LOAD_STAGING_DATA="on" ./scripts/serve-local.sh
+LOAD_DATA="staging" ./scripts/serve-local.sh
+LOAD_DATA="staging" ./scripts/undockered.sh
 ```
 
 -   This will add some seeding content from the last staging datadump (`joplin/db/system-generated/staging.datadump.json`) created by migration-test.sh.
@@ -73,7 +78,8 @@ LOAD_STAGING_DATA="on" ./scripts/serve-local.sh
 **Run with dummy data**
 
 ```
-LOAD_DUMMY_DATA="on" ./scripts/serve-local.sh
+LOAD_DATA="dummy" ./scripts/serve-local.sh
+LOAD_DATA="dummy" ./scripts/undockered.sh
 ```
 
 -   This will add dummy content from the last dummy datadump (`joplin/db/system-generated/dummy.datadump.json`) created by migration-test.sh.
@@ -88,10 +94,10 @@ DROP_DB=on ./scripts/serve-local.sh
 **Drop DB, run with fresh data**
 
 ```
-RELOAD_DATA=on ./scripts/serve-local.sh
+RELOAD_DATA=$SOURCE ./scripts/serve-local.sh
 ```
 
--   LOAD_DATA=on + DROP_DB=on
+-   shorthand for LOAD_DATA=$SOURCE + DROP_DB=on
 
 **Run with Janis**
 
@@ -110,7 +116,7 @@ If something goes wrong with your docker builds and you want to start over witho
 HARD_REBUILD="on" ./scripts/serve-local.sh
 ```
 
--   `LOAD_DATA="on"` can also be used with `HARD_REBUILD="on"`
+-   `LOAD_DATA=$SOURCE` can also be used with `HARD_REBUILD="on"`
 -   It takes 90 seconds to do a HARD_REBUILD.
 -   If worse comes to worse, you can always delete your local joplin docker images with `docker rmi`.
 
@@ -121,7 +127,7 @@ You might prefer to run the Django app on your host computer to enable better ac
 All of the above flags (such as LOAD_DATA=on) will work with the undockered version of Joplin.
 
 ```
-sh scripts/undockered.sh
+./scripts/undockered.sh
 ```
 
 If you run into pipenv errors or are running this for the first time, you can build/rebuild a pipenv with:
@@ -136,9 +142,9 @@ NO_STOP=on ./scripts/undockered.sh
 ```
 - Makes undockered development go a little faster. You don't need to turn off then turn on the helper DB and Assets containers.
 
-**Run with custom smuggler data**
+**Run with custom smuggler data (\*Possibly deprecated)**
 
-If you don't want to load the default data used in `LOAD_DATA="on"`, you have to ability to source data from any environment you'd like using a django plugin called [smuggler](https://github.com/semente/django-smuggler).
+If you don't want to load the default data used in `LOAD_DATA=$SOURCE`, you have to ability to source data from any environment you'd like using a django plugin called [smuggler](https://github.com/semente/django-smuggler).
 
 To load in data from smuggler follow these steps:
 
@@ -196,14 +202,24 @@ https://docs.djangoproject.com/en/2.2/topics/migrations/
 
 **About migration-test script**
 
-The migration-test script makes sure that your migration changes will work even when they are applied to a database running the last migration. This is basically a dry run of a merge to the master branch of Joplin. If they do work, then the script will create a new datadump (to be used by `LOAD_DATA="on"`) with the new migrations applied. This will prevent future datadump schema version conflicts (which will happen if your datadump is from a different migration version than the Joplin instance its going into).
+The migration-test script makes sure that your migration changes will work even when they are applied to a database running the last migration. This is basically a dry run of a merge to the master branch of Joplin. If they do work, then the script will create a new datadump (to be used by `LOAD_DATA="prod"`) with the new migrations applied. This will prevent future datadump schema version conflicts (which will happen if your datadump is from a different migration version than the Joplin instance its going into).
 
 Note: This process does not update staging. It updates the data that is seeded into local and PR builds. Staging data is persistent by design and would need to be manually updated.
 
 Options:
 
--   "LOAD_PROD_DATA=on" will source data from production and build migrations from "cityofaustin/joplin-app:production-latest" image
-    -   Default is to source data from current seeding.datadump.json and build migrations from "cityofaustin/joplin-app:master-latest" image
+-   "SOURCE=prod sh scripts/migration-test.sh"
+    - Sources data from production database
+    - Builds migrations from "cityofaustin/joplin-app:production-latest" image
+    - Then applies your local migrations on top of that
+-   "SOURCE=prod USE_PRIOR_DATADUMP=on sh scripts/migration-test.sh"
+    - Sources data from your existing prod.datadump.json
+-   "SOURCE=staging sh scripts/migration-test.sh"
+    - Sources data from staging database
+-   "SOURCE=staging USE_PRIOR_DATADUMP=on sh scripts/migration-test.sh"
+    - Sources data from your existing prod.staging.json
+
+Bonus extra optional Params:
 -   "DOCKER_TAG_DB_BUILD=[x]" will build initial migrations from the docker image of your choice. Potentially could be used if you intend to merge into a branch other than master.
 -   "JANIS=on" will automatically spin up a Janis container for you. Note: you must have a "janis:local" image available locally.
 
@@ -220,7 +236,7 @@ Here's what `migration-test.sh` does at a high level:
     - A command line prompt will ask if the migration worked. If you enter "y", then a new datadump fixture will replace the old seeing.datadump.json fixture in joplin/db/system-generated. If you enter "n", then the migration_test containers will shut down and not replace your datadump fixture.
 
 ### Updating Dummy Data
-Running `DUMMY=on ./scripts/migration-test.sh` will load in the latest dummy datadump and run migration test in dummy data mode. I (Brian) have been running this and then adding data when it gets to the interactive step. Once I'm happy with the data I have I respond to the `Is it all good?` question with y and get a shiny new `dummy.datadump.json`.
+Running `SOURCE=dummy ./scripts/migration-test.sh` will load in the latest dummy datadump and run migration test in dummy data mode. I (Brian) have been running this and then adding data when it gets to the interactive step. Once I'm happy with the data I have I respond to the `Is it all good?` question with y and get a shiny new `dummy.datadump.json`.
 
 ## CircleCI Deployments
 

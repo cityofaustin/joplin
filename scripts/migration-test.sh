@@ -8,12 +8,35 @@ function clean_up {
     echo "#### Deleting intermediate temp datadump"
     rm $TMP_DATADUMP
   fi
+  if [ ! -z "$PLACEHOLDER_DATADUMP" ]; then
+    echo "#### Deleting intermediate temp datadump"
+    rm $PLACEHOLDER_DATADUMP
+  fi
   if [ ! -z "$COMPOSE_PROJECT_NAME" ]; then
     echo "#### Shutting down containers safely"
     stop_project_containers $COMPOSE_PROJECT_NAME
   fi
 }
 trap clean_up EXIT
+
+function get_heroku_datadump {
+  APPNAME=$1
+  # Replace all user passwords with default admin test password
+  # TODO: once prod has scripts/export_heroku_data.sh, run sanitation script on production container itself
+  heroku run -xa $APPNAME python ./joplin/manage.py dumpdata --exclude=wagtailcore.GroupCollectionPermission --indent 2 --natural-foreign --natural-primary -- | \
+    python ./scripts/remove_logs_from_json_stream.py | \
+    jq '(.[] | select(.model == "users.user") | .fields.password) |= "pbkdf2_sha256$150000$GJQ1UoZlgrC4$Ir0Uww/i9f2VKzHznU4B1uaHbdCxRnZ69w12cIvxWP0="' \
+    > $TMP_DATADUMP
+}
+
+function make_placeholder_datadump {
+  echo "Generating placeholder datadump"
+  # Excluding wagtailcore.GroupCollectionPermission because of IntegrityError issues
+  # see: https://docs.djangoproject.com/en/2.2/topics/serialization/#natural-keys for details
+  docker exec -it ${COMPOSE_PROJECT_NAME}_app_1 python joplin/manage.py dumpdata --exclude=wagtailcore.GroupCollectionPermission --indent 2 --natural-foreign --natural-primary | \
+    python ./scripts/remove_logs_from_json_stream.py \
+    > $PLACEHOLDER_DATADUMP
+}
 
 # Env Vars for use in Joplin
 export JOPLIN_DB_HOST_PORT=5434
@@ -26,43 +49,45 @@ export DEBUG_TOOLBAR=0
 
 # Build Args for use during build process
 export COMPOSE_PROJECT_NAME=joplin_migration_test
+export TMP_DATADUMP=$CURRENT_DIR/../joplin/db/system-generated/tmp.datadump.json
+export PLACEHOLDER_DATADUMP=$CURRENT_DIR/../joplin/db/system-generated/placeholder.datadump.json
 
 # If loading prod data, then your db must be built using prod migrations from the prod joplin-app image
 # docker-compose.migration_test_override.yml will replace any production specific settings/variables with local settings
 # Must have herokucli installed and be authenticated to access production joplin
-if [ "$LOAD_PROD_DATA" = "on" ]; then
-  export TMP_DATADUMP=$CURRENT_DIR/../joplin/db/system-generated/tmp.datadump.json
-  export DOCKER_TAG_APP="cityofaustin/joplin-app:production-latest"
-  export SOURCED_FROM="PROD"
-  export LOAD_NEW_DATADUMP="on"
-  echo "Pulling datadump from Production"
-  # Replace all user passwords with default admin test password
-  # TODO: once prod has scripts/export_heroku_data.sh, run sanitation script on production container itself
-  heroku run -xa joplin python ./joplin/manage.py dumpdata --exclude=wagtailcore.GroupCollectionPermission --indent 2 --natural-foreign --natural-primary -- | \
-    python ./scripts/remove_logs_from_json_stream.py | \
-    jq '(.[] | select(.model == "users.user") | .fields.password) |= "pbkdf2_sha256$150000$GJQ1UoZlgrC4$Ir0Uww/i9f2VKzHznU4B1uaHbdCxRnZ69w12cIvxWP0="' \
-    > $TMP_DATADUMP
-elif [ "$LOAD_STAGING_DATA" = "on" ]; then
-  export TMP_DATADUMP=$CURRENT_DIR/../joplin/db/system-generated/tmp.datadump.json
-  export DOCKER_TAG_APP="cityofaustin/joplin-app:master-latest"
-  export SOURCED_FROM="STAGING"
-  export LOAD_NEW_DATADUMP="on"
-  echo "Pulling datadump from Staging"
-  # Replace all user passwords with default admin test password
-  # TODO: once prod has scripts/export_heroku_data.sh, run sanitation script on production container itself
-  heroku run -xa joplin-staging python ./joplin/manage.py dumpdata --exclude=wagtailcore.GroupCollectionPermission --indent 2 --natural-foreign --natural-primary -- | \
-    python ./scripts/remove_logs_from_json_stream.py | \
-    jq '(.[] | select(.model == "users.user") | .fields.password) |= "pbkdf2_sha256$150000$GJQ1UoZlgrC4$Ir0Uww/i9f2VKzHznU4B1uaHbdCxRnZ69w12cIvxWP0="' \
-    > $TMP_DATADUMP
-elif [ "$DUMMY" = "on" ]; then
-  export DOCKER_TAG_APP="cityofaustin/joplin-app:master-latest"
-  export SOURCED_FROM="LAST_DUMMY_DATADUMP"
-  export LOAD_DUMMY_DATA="on"
-else
-  export DOCKER_TAG_APP="cityofaustin/joplin-app:master-latest"
-  export SOURCED_FROM="LAST_PROD_DATADUMP"
-  export LOAD_DATA="on" # Defaults to last prod datadump
-fi
+case "${SOURCE}" in
+  prod)
+    export SOURCED_FROM="PROD"
+    export DOCKER_TAG_APP="cityofaustin/joplin-app:production-latest"
+    if [ "${USE_PRIOR_DATADUMP}" == "on" ]; then
+      export LOAD_DATA="prod"
+    else
+      export LOAD_DATA="new_datadump"
+      echo "Pulling datadump from Production"
+      get_heroku_datadump joplin
+    fi
+  ;;
+  staging)
+    export SOURCED_FROM="STAGING"
+    export DOCKER_TAG_APP="cityofaustin/joplin-app:master-latest"
+    if [ "${USE_PRIOR_DATADUMP}" == "on" ]; then
+      export LOAD_DATA="staging"
+    else
+      export LOAD_DATA="new_datadump"
+      echo "Pulling datadump from Staging"
+      get_heroku_datadump joplin-staging
+    fi
+  ;;
+  dummy)
+    export SOURCED_FROM="LAST_DUMMY_DATADUMP"
+    export DOCKER_TAG_APP="cityofaustin/joplin-app:master-latest"
+    export LOAD_DATA="dummy"
+  ;;
+  *)
+    echo "Error: [${SOURCE}] is not a valid SOURCE"
+    exit 1
+  ;;
+esac
 
 # Optionally plug in your own DOCKER_TAG_DB_BUILD to build a db with data and migrations from a different branch or build
 export DOCKER_TAG_APP=${DOCKER_TAG_DB_BUILD:=$DOCKER_TAG_APP}
@@ -81,11 +106,7 @@ delete_project_containers $COMPOSE_PROJECT_NAME
 echo "#### Pulling ${DOCKER_TAG_APP} from dockerhub"
 docker pull $DOCKER_TAG_APP
 echo "#### Spinning up joplin-app and joplin_db containers to LOAD_DATA from $DOCKER_TAG_APP"
-if [ "$LOAD_NEW_DATADUMP" = "on" ]; then
-  docker-compose -f docker-compose.yml -f docker-compose.migration_test_override.yml -f docker-compose.load_new_datadump_override.yml up -d
-else
-  docker-compose -f docker-compose.yml -f docker-compose.migration_test_override.yml up -d
-fi
+docker-compose -f docker-compose.yml -f docker-compose.migration_test_override.yml up -d
 
 echo "#### Running old migrations from $DOCKER_TAG_APP and loading data"
 docker logs ${COMPOSE_PROJECT_NAME}_app_1 -f
@@ -110,11 +131,7 @@ export DATABASE_IPADDRESS=$(docker inspect --format '{{range .NetworkSettings.Ne
 export DATABASE_URL="postgres://joplin@${DATABASE_IPADDRESS}:${JOPLIN_DB_CONTAINER_PORT}/joplin"
 
 # Data already loaded in step 1. Don't load data again for this step
-export LOAD_DATA="off"
-export LOAD_PROD_DATA="off"
-export LOAD_STAGING_DATA="off"
-export LOAD_DUMMY_DATA="off"
-export LOAD_NEW_DATADUMP="off"
+unset LOAD_DATA
 
 # Build Args for use during build process
 export DOCKER_TAG_APP="joplin-app:local"
@@ -137,6 +154,17 @@ else
   docker-compose -f docker-compose.yml up -d
 fi
 
+# Make placeholder datadump before user testing manipulates data.
+# After user confirms that data is okay, then the placeholder_datadump
+# will be committed as the real datadump.
+# We don't run this step with "dummy", because we do want to manipulate dummy data
+# during testing.
+case "${SOURCE}" in
+  prod|staging)
+    make_placeholder_datadump
+  ;;
+esac
+
 echo "######################"
 echo "Step 3: The Manual One"
 echo "######################"
@@ -158,31 +186,35 @@ function handle_input {
   echo "#### If you enter y, then congratulations, we'll rewrite joplin/db/system-generated/seeding.datadump.json with your latest migration changes."
   read answer
   if [ "$answer" == "y" ]; then
-    echo "#### Glad that worked. We'll create a new migration_datadump for you."
+    echo "#### Glad that worked. We'll save a new migration_datadump for you."
 
-    if [ "$SOURCED_FROM" = "STAGING" ]; then
-      DATADUMP_JSON=$CURRENT_DIR/../joplin/db/system-generated/staging.datadump.json
-      DATADUMP_METADATA=$CURRENT_DIR/../joplin/db/system-generated/staging_datadump_metadata.txt
-    elif [ "$SOURCED_FROM" = "LAST_DUMMY_DATADUMP" ]; then
-      DATADUMP_JSON=$CURRENT_DIR/../joplin/db/system-generated/dummy.datadump.json
-      DATADUMP_METADATA=$CURRENT_DIR/../joplin/db/system-generated/dummy_datadump_metadata.txt
-    else
-      DATADUMP_JSON=$CURRENT_DIR/../joplin/db/system-generated/prod.datadump.json
-      DATADUMP_METADATA=$CURRENT_DIR/../joplin/db/system-generated/prod_datadump_metadata.txt
+    case "${SOURCE}" in
+      prod)
+        DATADUMP_JSON=$CURRENT_DIR/../joplin/db/system-generated/prod.datadump.json
+        DATADUMP_METADATA=$CURRENT_DIR/../joplin/db/system-generated/prod_datadump_metadata.txt
+      ;;
+      staging)
+        DATADUMP_JSON=$CURRENT_DIR/../joplin/db/system-generated/staging.datadump.json
+        DATADUMP_METADATA=$CURRENT_DIR/../joplin/db/system-generated/staging_datadump_metadata.txt
+      ;;
+      dummy)
+        DATADUMP_JSON=$CURRENT_DIR/../joplin/db/system-generated/dummy.datadump.json
+        DATADUMP_METADATA=$CURRENT_DIR/../joplin/db/system-generated/dummy_datadump_metadata.txt
+      ;;
+    esac
+
+    if [ "$SOURCE" == "dummy" ]; then
+      make_placeholder_datadump
     fi
 
-    # Build new migration datadump
-    # Excluding wagtailcore.GroupCollectionPermission because of IntegrityError issues
-    # see: https://docs.djangoproject.com/en/2.2/topics/serialization/#natural-keys for details
-    docker exec -it ${COMPOSE_PROJECT_NAME}_app_1 python joplin/manage.py dumpdata --exclude=wagtailcore.GroupCollectionPermission --indent 2 --natural-foreign --natural-primary | \
-      python ./scripts/remove_logs_from_json_stream.py \
-      > $DATADUMP_JSON
+    # Save placeholder to datadump json
+    mv $PLACEHOLDER_DATADUMP $DATADUMP_JSON
 
     # Handle timestamp logging for metadata file
     CURRENT_TIMESTAMP="\"$(date '+%Y-%m-%d--%H-%M-%S')\""
     function get_last_sync_timestamp {
-      if [ "$SOURCED_FROM" == "LAST_PROD_DATADUMP" ]; then
-        # Use timestamp from the last sync from prod if the data was sourced from the LAST_PROD_DATADUMP
+      if [ "$USE_PRIOR_DATADUMP" == "on" ]; then
+        # Use timestamp from the last sync from prod if the data was sourced from a prior datadump
         echo $(grep -w "TIMESTAMP OF LAST SYNC" $DATADUMP_METADATA | awk -F ': ' '{print $2}')
       else
         # If this current datadump was sourced from prod or staging, then use CURRENT_TIMESTAMP
