@@ -71,9 +71,9 @@ class LocationPage(JanisBasePage):
     mailing_country = models.CharField(max_length=DEFAULT_MAX_LENGTH, default='USA', blank=True)
     mailing_zip = models.CharField(max_length=DEFAULT_MAX_LENGTH, blank=True, verbose_name="ZIP")
 
-    nearest_bus_1 = models.IntegerField(blank=True)
-    nearest_bus_2 = models.IntegerField(blank=True)
-    nearest_bus_3 = models.IntegerField(blank=True)
+    nearest_bus_1 = models.IntegerField(null=True, blank=True)
+    nearest_bus_2 = models.IntegerField(null=True, blank=True)
+    nearest_bus_3 = models.IntegerField(null=True, blank=True)
 
     parent_page_types = ['base.HomePage']
 
