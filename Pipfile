@@ -30,6 +30,7 @@ coa-django-countable_field = "==1.6"
 django-flags = "*"
 pympler = "*"
 psycopg2 = "==2.8.4"
+wagtail-factories = "*"
 
 [requires]
 python_version = "3.7"

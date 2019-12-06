@@ -81,6 +81,7 @@ INSTALLED_APPS = [
     'phonenumber_field',
     'countable_field',
     'flags',
+    'locations',
 ]
 
 MIDDLEWARE = [
@@ -262,7 +263,6 @@ if DEBUG:
 
 WAGTAIL_SITE_NAME = 'joplin'
 WAGTAIL_AUTO_UPDATE_PREVIEW = True
-WAGTAILIMAGES_IMAGE_MODEL = 'base.TranslatedImage'
 
 # Base URL to use when referring to full URLs within the Wagtail admin backend -
 # e.g. in notification emails. Don't include '/admin' or a trailing slash
@@ -402,3 +402,4 @@ LOGIN_URL = '/admin/login/'
 # https://docs.djangoproject.com/en/2.2/ref/settings/#data-upload-max-number-fields
 # We submit a lot of fields when saving some of our content types, let's let that happen
 DATA_UPLOAD_MAX_NUMBER_FIELDS = None
+WAGTAILIMAGES_IMAGE_MODEL = 'base.TranslatedImage'

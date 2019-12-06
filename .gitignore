@@ -17,6 +17,7 @@ media/*/*.jpeg
 joplin/db/smuggler/*
 env.sh
 .env
+yarn.lock
 
 # Temporary datadumps
 joplin/db/system-generated/tmp.datadump.json
