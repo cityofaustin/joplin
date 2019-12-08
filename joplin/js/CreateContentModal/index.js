@@ -113,7 +113,6 @@ class CreateContentModal extends Component {
   };
 
   createPage = () => {
-    console.log(this.state)
     // find out what we need to make a location page
     axios
       .post(
@@ -128,6 +127,7 @@ class CreateContentModal extends Component {
         { headers: { 'X-CSRFToken': Cookies.get('csrftoken') } },
       )
       .then(response => {
+        console.log(response);
         // TODO: see if there's a better way to handle this
         window.onbeforeunload = null;
 
