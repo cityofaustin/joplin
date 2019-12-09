@@ -113,7 +113,6 @@ class CreateContentModal extends Component {
   };
 
   createPage = () => {
-    // find out what we need to make a location page
     axios
       .post(
         '/admin/pages/new_from_modal/',
