@@ -21,7 +21,7 @@ def netlify_publish():
 
     if publish_janis_branch:
         requests.post(
-            url=f"{os.getenv('CI_COA_PUBLISHER_URL')}/publish",
+            url=f"{os.getenv('COA_PUBLISHER_URL')}/publish",
             data=json.dumps({
                 "janis_branch": publish_janis_branch,
                 "CMS_API": settings.CMS_API,
