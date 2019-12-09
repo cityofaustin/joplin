@@ -52,7 +52,7 @@ WORKDIR /app
 
 # Entrypoint must be executed manually since heroku has a 60 second time limit for entrypoint scripts
 # Start the Joplin server
-CMD ["gunicorn", "joplin.wsgi:application", "--pythonpath", "/app/joplin", "--max-requests=100", "--max-requests-jitter=50"]
+CMD ["gunicorn", "joplin.wsgi:application", "--pythonpath", "/app/joplin", "--max-requests=100", "--timeout=90","--max-requests-jitter=50"]
 
 ########################################################
 # joplin-common => joplin-deployed => joplin-review
