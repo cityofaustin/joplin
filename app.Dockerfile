@@ -32,7 +32,7 @@ ENTRYPOINT ["./docker-entrypoint.sh"]
 
 # Start the Joplin server
 # we add an extra timeout and debug level to be generous with our server log
-CMD ["gunicorn", "joplin.wsgi:application", "--pythonpath", "/app/joplin", "--reload", "--timeout=190",  "--log-level=DEBUG", "--max-requests=100", "--max-requests-jitter 50"]
+CMD ["gunicorn", "joplin.wsgi:application", "--pythonpath", "/app/joplin", "--reload", "--timeout=190",  "--log-level=DEBUG", "--max-requests=100", "--max-requests-jitter=50"]
 
 ########################################################
 # joplin-common => joplin-deployed
@@ -52,7 +52,7 @@ WORKDIR /app
 
 # Entrypoint must be executed manually since heroku has a 60 second time limit for entrypoint scripts
 # Start the Joplin server
-CMD ["gunicorn", "joplin.wsgi:application", "--pythonpath", "/app/joplin", "--max-requests=100", "--max-requests-jitter 50"]
+CMD ["gunicorn", "joplin.wsgi:application", "--pythonpath", "/app/joplin", "--max-requests=100", "--max-requests-jitter=50"]
 
 ########################################################
 # joplin-common => joplin-deployed => joplin-review
