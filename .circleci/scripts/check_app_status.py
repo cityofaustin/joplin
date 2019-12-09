@@ -8,9 +8,11 @@ def check_app_status():
         capture_output=True,
         text=True
     )
+    if (output.stdout):
+        print(output.stdout)
     if (output.stderr):
         print(output.stderr)
-        sys.exit(1);
+        sys.exit(1)
     app_info = json.loads(output.stdout)
     app_state = app_info[0]['state']
     if (app_state == 'up'):
