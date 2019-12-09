@@ -32,8 +32,11 @@ def home(request):
 def login(request):
     return redirect(reverse('wagtailadmin_login'), permanent=True)
 
+def reroute(request):
+    return redirect('/admin/pages/search/')
 
 urlpatterns = [
+    path('admin/pages/3/', reroute),
     url(r'^django-admin/', include('smuggler.urls')),
     url(r'^django-admin/', admin.site.urls),
     path('admin/docs/', include('django.contrib.admindocs.urls')),

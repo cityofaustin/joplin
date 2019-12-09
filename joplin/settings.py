@@ -81,6 +81,7 @@ INSTALLED_APPS = [
     'phonenumber_field',
     'countable_field',
     'flags',
+    'locations',
 ]
 
 MIDDLEWARE = [
@@ -209,33 +210,26 @@ DEBUG_TOOLBAR = bool(strtobool(os.environ.get('DEBUG_TOOLBAR', str(False))))
 
 
 if DEBUG_TOOLBAR:
-    ALLOWED_HOSTS = ALLOWED_HOSTS + [
-        '127.0.0.1',
-    ]
+    # TODO: only allow toolbar to be visible for admins
+    def show_toolbar(request):
+        return True
+
+    DEBUG_TOOLBAR_CONFIG = {
+        'SHOW_TOOLBAR_CALLBACK': show_toolbar,
+    }
+
     INSTALLED_APPS = INSTALLED_APPS + [
         'debug_toolbar',
+        'pympler'
     ]
 
-    MIDDLEWARE = MIDDLEWARE + [
+    MIDDLEWARE = [
         'debug_toolbar.middleware.DebugToolbarMiddleware'
-    ]
-    """
-    for django debug toolbar
-    this is what exposes the toolbar to the docker gateway so it actually shows up
-    i.e.
-    docker inspect joplin_app_1 | grep -e '"Gateway"' or just rely on the fancy thing
-    below
-    """
-
-    INTERNAL_IPS = ['127.0.0.1']
-
-    # adds docker gateway automagically
-
-    import socket
-    hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
-    INTERNAL_IPS += [ip[:-1] + '1' for ip in ips]
+    ] + MIDDLEWARE
 
     DEBUG_TOOLBAR_PANELS = [
+        'debug_toolbar.panels.profiling.ProfilingPanel',
+        'pympler.panels.MemoryPanel',
         'debug_toolbar.panels.versions.VersionsPanel',
         'debug_toolbar.panels.timer.TimerPanel',
         'debug_toolbar.panels.settings.SettingsPanel',
@@ -259,7 +253,6 @@ if DEBUG:
 
 WAGTAIL_SITE_NAME = 'joplin'
 WAGTAIL_AUTO_UPDATE_PREVIEW = True
-WAGTAILIMAGES_IMAGE_MODEL = 'base.TranslatedImage'
 
 # Base URL to use when referring to full URLs within the Wagtail admin backend -
 # e.g. in notification emails. Don't include '/admin' or a trailing slash
@@ -310,9 +303,9 @@ if(ISPRODUCTION or ISSTAGING or ISREVIEW):
     #
     # AWS Buckets only if not local.
     #
-    APPLICATION_NAME = os.getenv('APPLICATION_NAME')
-    AWS_ACCESS_KEY_ID = os.getenv('AWS_S3_KEYID')
-    AWS_SECRET_ACCESS_KEY = os.getenv('AWS_S3_ACCESSKEY')
+    APPNAME = os.getenv('APPNAME')
+    AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
+    AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
     AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_S3_BUCKET_STATIC')
     AWS_ARCHIVE_BUCKET_NAME = os.getenv('AWS_S3_BUCKET_ARCHIVE')
     AWS_BACKUPS_LOCATION = os.getenv('AWS_S3_BUCKET_ARCHIVE_LOCATION')
@@ -335,7 +328,7 @@ if(ISPRODUCTION or ISSTAGING or ISREVIEW):
         'secret_key': AWS_SECRET_ACCESS_KEY,
         'bucket_name': AWS_ARCHIVE_BUCKET_NAME,
         'host': "s3.amazonaws.com",
-        'location': AWS_BACKUPS_LOCATION + "/" + APPLICATION_NAME
+        'location': AWS_BACKUPS_LOCATION + "/" + APPNAME
     }
 
     # Specifying the location of files
@@ -389,7 +382,7 @@ if ISLOCAL:
     # $JOPLIN_APP_HOST_PORT is set by scripts/serve-local.sh
     CMS_API = f"http://localhost:{os.getenv('JOPLIN_APP_HOST_PORT')}/api/graphql"
 else:
-    CMS_API = f"https://{os.getenv('APPLICATION_NAME','')}.herokuapp.com/api/graphql"
+    CMS_API = f"https://{os.getenv('APPNAME','')}.herokuapp.com/api/graphql"
 
 
 # Sets the login_url redirect for "from django.contrib.auth.decorators import user_passes_test"
@@ -399,3 +392,4 @@ LOGIN_URL = '/admin/login/'
 # https://docs.djangoproject.com/en/2.2/ref/settings/#data-upload-max-number-fields
 # We submit a lot of fields when saving some of our content types, let's let that happen
 DATA_UPLOAD_MAX_NUMBER_FIELDS = None
+WAGTAILIMAGES_IMAGE_MODEL = 'base.TranslatedImage'

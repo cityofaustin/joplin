@@ -15,7 +15,8 @@ $(function() {
   richTextPlaceholder();
 
   var language = document.getElementById('language-select-wrapper');
-  var content = document.getElementsByClassName("tab-nav merged")[0].firstElementChild
+  var content = document.getElementsByClassName('tab-nav merged')[0]
+    .firstElementChild;
   content.appendChild(language);
 
   // TODO: This a better way
@@ -160,9 +161,17 @@ $(function() {
     return `${janisPreviewUrlStart}/${currentLang}/${janisPreviewUrlEnd}`;
   }
 
-  function setTabToContent(){
-    $('.tab-nav a').first().tab('show');
-    window.history.replaceState(null, null, $('.tab-nav a').first().attr('href'));
+  function setTabToContent() {
+    $('.tab-nav a')
+      .first()
+      .tab('show');
+    window.history.replaceState(
+      null,
+      null,
+      $('.tab-nav a')
+        .first()
+        .attr('href'),
+    );
   }
   // Changes language and update janisPreviewUrl for our language
   function changeLanguage(currentLang) {
@@ -266,15 +275,15 @@ $(function() {
     let selectedLanguage = document.getElementById('language-select')
       .selectedOptions[0];
     changeLanguage(selectedLanguage.id);
-            updateSelectedLanguage(state.currentLang);
+    updateSelectedLanguage(state.currentLang);
     localStorage.selected_lang = state.currentLang;
   });
 
   // case function for setting the selected language on dropdown
   // maybe there is a less verbose way to do this?
   function updateSelectedLanguage(currentLang) {
-
-    var contentLink = document.getElementsByClassName("tab-nav merged")[0].firstElementChild.firstElementChild
+    var contentLink = document.getElementsByClassName('tab-nav merged')[0]
+      .firstElementChild.firstElementChild;
 
     switch (currentLang) {
       case 'en':
@@ -353,7 +362,7 @@ $(function() {
   // Apply current language to new InlinePanels
   $('.add').click(function() {
     changeLanguage(state.currentLang);
-        updateSelectedLanguage(state.currentLang);
+    updateSelectedLanguage(state.currentLang);
   });
 
   var messages = $('.messages');
@@ -366,7 +375,7 @@ $(function() {
 
   $('#sections-count').change(function() {
     changeLanguage(state.currentLang);
-        updateSelectedLanguage(state.currentLang);
+    updateSelectedLanguage(state.currentLang);
   });
 
   // Found this here: https://stackoverflow.com/a/31719339
@@ -387,4 +396,36 @@ $(function() {
   $('#sections-count').each(function(index, element) {
     trackChange(element);
   });
+
+  // autocomplete for places
+  (function() {
+    var latlng = {
+      lat: 30.26,
+      lng: -97.73,
+    };
+    var placesAutocomplete = places({
+      appId: 'plHX3G9C5GRN',
+      apiKey: 'd9275f5f90784eb5ba59ff8ec581d9bb',
+      container: document.querySelector('#id_physical_street'),
+      templates: {
+        value: function(suggestion) {
+          return suggestion.name;
+        },
+      },
+    }).configure({
+      aroundLatLng: latlng.lat + ',' + latlng.lng,
+      aroundRadius: 10 * 4000, // 40km radius
+      type: 'address',
+    });
+    placesAutocomplete.on('change', function resultSelected(e) {
+      document.querySelector('#id_physical_state').value =
+        e.suggestion.administrative || '';
+      document.querySelector('#id_physical_city').value =
+        e.suggestion.city || '';
+      document.querySelector('#id_physical_zip').value =
+        e.suggestion.postcode || '';
+      document.querySelector('#id_physical_country').value =
+        e.suggestion.country || '';
+    });
+  })();
 });

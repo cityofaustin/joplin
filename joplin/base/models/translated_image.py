@@ -2,6 +2,9 @@ from django.db import models
 
 from wagtail.images.models import AbstractImage, Image, AbstractRendition
 
+# one reason why this may be abstract: wagtail-modeltranslation will patch
+# wagtail images directly to add translated fields which seems messy
+
 
 class TranslatedImage(AbstractImage):
     admin_form_fields = Image.admin_form_fields

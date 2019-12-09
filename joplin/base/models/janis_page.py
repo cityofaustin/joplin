@@ -49,7 +49,6 @@ class JanisBasePage(Page):
 
     coa_global = models.BooleanField(default=False, verbose_name='Make this a top level page')
 
-
     def janis_url(self):
         """
         This function parses various attributes of related content types to construct the
@@ -146,7 +145,7 @@ class JanisBasePage(Page):
                 topic_collection_slug,
                 topic_slug,
                 page_slug
-                ]
+            ]
             # join them together, filtering out empty ones
 
             janis_url = '/'.join(filter(None, (paths_list)))
@@ -168,8 +167,13 @@ class JanisBasePage(Page):
         else:
             revision = self.get_latest_revision()
             url_page_type = self.janis_url_page_type
-        global_id = graphene.Node.to_global_id('PageRevisionNode', revision.id)
-        url_end = f"preview/{url_page_type}/{global_id}"
+        try:
+            global_id = graphene.Node.to_global_id('PageRevisionNode', revision.id)
+            url_end = f"preview/{url_page_type}/{global_id}"
+        except AttributeError:
+            # TODO: make previews work for test fixture pages that may not have revisions/global_ids
+            url_end = f"preview/{url_page_type}/"
+
         if settings.ISSTAGING or settings.ISPRODUCTION:
             return url_end
         else:
