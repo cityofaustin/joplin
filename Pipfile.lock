@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "bce0099a70190b567f0530409afbe7825f077162fdbc7cd5f93f095bdd2fab8c"
+            "sha256": "03405f33e5cbf4b587e37a156a1ffbaa0d71d3483d9ab7ab728a93be12bbf2bc"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -268,11 +268,10 @@
         },
         "graphql-relay": {
             "hashes": [
-                "sha256:0e94201af4089e1f81f07d7bd8f84799768e39d70fa1ea16d1df505b46cc6335",
-                "sha256:75aa0758971e252964cb94068a4decd472d2a8295229f02189e3cbca1f10dbb5",
-                "sha256:7fa74661246e826ef939ee92e768f698df167a7617361ab399901eaebf80dce6"
+                "sha256:870b6b5304123a38a0b215a79eace021acce5a466bf40cd39fa18cb8528afabb",
+                "sha256:ac514cb86db9a43014d7e73511d521137ac12cf0101b2eaa5f0a3da2e10d913d"
             ],
-            "version": "==2.0.0"
+            "version": "==2.0.1"
         },
         "gunicorn": {
             "hashes": [
@@ -394,6 +393,14 @@
             ],
             "markers": "python_version >= '2.7'",
             "version": "==2.6.0"
+        },
+        "python-memcached": {
+            "hashes": [
+                "sha256:4dac64916871bd3550263323fc2ce18e1e439080a2d5670c594cf3118d99b594",
+                "sha256:a2e28637be13ee0bf1a8b6843e7490f9456fd3f2a4cb60471733c7b5d5557e4f"
+            ],
+            "index": "pypi",
+            "version": "==1.59"
         },
         "pytz": {
             "hashes": [
