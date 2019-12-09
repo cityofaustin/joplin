@@ -15,6 +15,7 @@ from snippets import urls as snippet_urls
 from django.urls import reverse
 import debug_toolbar
 
+
 def home(request):
     """
             * Search page as our 'HomePage' *
@@ -32,18 +33,20 @@ def home(request):
 def login(request):
     return redirect(reverse('wagtailadmin_login'), permanent=True)
 
+
 def reroute(request):
     return redirect('/admin/pages/search/')
 
+
 urlpatterns = [
-    path('admin/pages/3/', reroute),
+    # path('admin/pages/3/', reroute),
     url(r'^django-admin/', include('smuggler.urls')),
     url(r'^django-admin/', admin.site.urls),
     path('admin/docs/', include('django.contrib.admindocs.urls')),
     # comment out the below 'admin/' path to experiment with the default dashboard,
     # which can be customized using wagtail hooks
-    path('admin/', home),
-    path('', login),
+    # path('admin/', home),
+    # path('', login),
     url(r'admin/pages/(\d+)/publish/$', joplin_views.publish, name='publish'),
     url(r'admin/pages/new_from_modal/$',
         joplin_views.new_page_from_modal, name='new_page_from_modal'),
