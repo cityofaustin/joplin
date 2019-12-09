@@ -106,7 +106,10 @@ def create_build_aws(content_type, instance, publish_action='edited', request=No
         # We log our response for debugging
         logger.debug(f'Response: {response}')
 
-
+# Deprecation Notice:
+# Since we no longer have Janis builds on Heroku, I don't think this function is needed.
+# As a first deprecation step, we will stop requiring HEROKU_JANIS_APP_NAME="janis-staging" as an env variable.
+# When coa-publisher is complete for production, we can safely remove this function.
 def create_build_if_configured():
     if not all([settings.HEROKU_KEY, settings.HEROKU_JANIS_APP_NAME]):
         logger.warning('Not triggering Janis build because the required settings are not configured.')

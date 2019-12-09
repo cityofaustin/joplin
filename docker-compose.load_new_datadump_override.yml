@@ -1,9 +1,0 @@
-version: '3.7'
-services:
-  app:
-    environment:
-      LOAD_NEW_DATADUMP: "on"
-    volumes:
-      # Add new production or staging datadump to container if $LOAD_NEW_DATADUMP == on
-      # tmp.datadump.json is only created during migration_test.sh
-      - "./joplin/db/system-generated/tmp.datadump.json:/app/joplin/db/system-generated/tmp.datadump.json"

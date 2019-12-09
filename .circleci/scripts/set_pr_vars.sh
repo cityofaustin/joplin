@@ -10,18 +10,4 @@ log() { log_base "set_pr_vars" "$1" "$2"; }
 # Suppress stdout with "> /dev/null" to hide display of sensitive variables
 log 1 "Adding environment variables to Heroku App: $APPNAME"
 
-heroku config:set   \
-  APPLICATION_NAME=$APPNAME \
-  AWS_S3_KEYID=$AWS_ACCESS_KEY_ID \
-  AWS_S3_ACCESSKEY=$AWS_SECRET_ACCESS_KEY \
-  AWS_S3_USER=$CI_AWS_S3_USER \
-  AWS_S3_BUCKET_STATIC=$CI_AWS_S3_BUCKET_STATIC \
-  AWS_S3_BUCKET_ARCHIVE=$CI_AWS_S3_BUCKET_ARCHIVE \
-  AWS_S3_BUCKET_ARCHIVE_LOCATION=$CI_AWS_S3_BUCKET_ARCHIVE_LOCATION \
-  CIRCLE_BRANCH=$CIRCLE_BRANCH \
-  DEBUG=1 \
-  HEROKU_JANIS_APP_NAME="janis-staging" \
-  JANIS_URL="https://janis.austintexas.io" \
-  STYLEGUIDE_URL="https://cityofaustin.github.io/digital-services-style-guide" \
-  CI_COA_PUBLISHER_URL="$CI_COA_PUBLISHER_URL" \
-  --app $APPNAME > /dev/null
+python3 $CURRENT_DIR/../vars/heroku_pr_vars.py $APPNAME
