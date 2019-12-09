@@ -37,7 +37,7 @@ const ChooseTitleStep = ({
     </h2>
     <label htmlFor="page-title" className="ChooseTitleStep__input-label">
       <span className="ChooseTitleStep__input-label--left">
-        {pageType === 'location' ? 'Location Title' : 'Page Title'}</span>
+        {pageType === 'location' ? 'Location name' : 'Page Title'}</span>
       <span
         className={classNames('ChooseTitleStep__input-label--right', {
           'ChooseTitleStep__input-label--red':
