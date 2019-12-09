@@ -18,7 +18,7 @@ def check_app_status():
     if (app_state == 'up'):
         print(f"App {APPNAME} is up. Ready to migrate.")
         return
-    elif (app_state == 'starting'):
+    elif (app_state == 'starting') or (app_state == 'restarting'):
         print(f"App {APPNAME} is still starting up. Trying again")
         time.sleep(1)
         check_app_status()
