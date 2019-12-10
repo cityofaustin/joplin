@@ -88,7 +88,7 @@ if [ "$UNDOCK" != "on" ]; then
 else
   # Required vars that are added in docker-compose.yml
   export STYLEGUIDE_URL="https://cityofaustin.github.io/digital-services-style-guide"
-  export DEBUG=0
+  export DEBUG=1
 
   # Django will access DATABASE_URL from HOST, not a container in the same network
   export DATABASE_URL="postgres://joplin@127.0.0.1:${JOPLIN_DB_HOST_PORT}/joplin"
