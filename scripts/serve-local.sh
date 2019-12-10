@@ -30,8 +30,9 @@ if [ "$NO_STOP" != "on" ]; then
 fi
 
 # Aside from the database dropping step, RELOAD_DATA does the same thing as LOAD_DATA
-if [ "$RELOAD_DATA" == "on" ]; then
-  export LOAD_DATA="on"
+if [ ! -z "$RELOAD_DATA" ]; then
+  export LOAD_DATA=$RELOAD_DATA
+  export DROP_DB="on"
 fi
 
 if [ "$DEBUG_TOOLBAR" == "on" ];
@@ -50,7 +51,7 @@ if [ "$HARD_REBUILD" == "on" ]; then
 fi
 
 # Delete old database containers for HARD_REBUILDs or RELOADs
-if [ "$HARD_REBUILD" == "on" ] || [ "$RELOAD_DATA" == "on" ] || [ "$DROP_DB" == "on" ]; then
+if [ "$HARD_REBUILD" == "on" ] || [ "$DROP_DB" == "on" ]; then
   echo "Deleting old joplin_db containes"
   docker ps -aq -f name=joplin_db_1 | while read CONTAINER ; do docker rm -f $CONTAINER ; done
 fi

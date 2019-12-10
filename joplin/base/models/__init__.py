@@ -41,6 +41,7 @@ from .guide_page import GuidePage, GuidePageTopic, GuidePageRelatedDepartments, 
 from .form_container import FormContainer, FormContainerRelatedDepartments, FormContainerTopic
 from .widgets import countMe, countMeTextArea
 from .site_settings import JanisBranchSettings
+from .deployment_log import DeploymentLog
 
 # TODO: Remove everything below this comment
 

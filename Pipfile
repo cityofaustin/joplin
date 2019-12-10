@@ -16,22 +16,26 @@ dj-database-url = "==0.5.0"
 graphene-django = "==2.6.0"
 gunicorn = "==19.8.1"
 heroku3 = "==3.3.0"
-psycopg2-binary = "==2.7.4"
 django-webpack-loader = "==0.6.0"
 boto3 = "==1.9.94"
 django-storages = "==1.6.6"
 django-dbbackup = "==3.2.0"
 django-smuggler = "==0.9.1"
 PyYAML = ">=4.2b1"
-# pygraphviz = "*" # Breaks on OSX/undockerized
 django-session-security = "==2.6.5"
 django-phonenumber-field = "==3.0.1"
 phonenumberslite = "==8.10.16"
 django-debug-toolbar = "==2.0"
-django-countable-field = {editable = true,git = "https://github.com/cityofaustin/django-countable-field"}
+coa-django-countable_field = "==1.6"
 django-flags = "*"
-wagtail-publish-preflight = {editable = true, path = "/home/eric/repos/wagtail-publish-preflight"}
+# if you want to develop locally, use the path below and overwrite with your local files
+# wagtail-publish-preflight = {editable = true, path = "/home/eric/repos/wagtail-publish-preflight"}
+wagtail-publish-preflight = "==0.2"
+pympler = "*"
+psycopg2 = "==2.8.4"
+
 wagtail-factories = "*"
+scout-apm = "*"
 
 [requires]
 python_version = "3.7"
