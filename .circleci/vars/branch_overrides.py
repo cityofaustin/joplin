@@ -13,4 +13,7 @@ branch_overrides = {
         # "DEBUG_TOOLBAR": True,
         # "DEBUG": 1,
     },
+    "3503-concurrency": {
+        "LOAD_DATA": "",
+    },
 }

@@ -13,8 +13,6 @@ RUN echo 'deb http://apt.postgresql.org/pub/repos/apt/ stretch-pgdg main' >  /et
     && curl -s https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \
     && apt-get update && apt-get install -y postgresql-client
 
-# Set Environment Variables
-ENV PYTHONUNBUFFERED=1
-ENV WEB_CONCURRENCY=4
+# Set Port
 ENV PORT ${PORT:-80}
 EXPOSE $PORT
