@@ -45,6 +45,8 @@ for v in vars_from_circleci:
 
 # Set additional environment variables not from os
 default_branch_vars = {
+    "PYTHONUNBUFFERED": 1,
+    "WEB_CONCURRENCY": 2,
     "DEBUG": 1,
     "DEBUG_TOOLBAR": False,
     "LOAD_DATA": "prod",
