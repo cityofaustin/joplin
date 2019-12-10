@@ -1,7 +1,7 @@
 ########################################################
 # joplin-common
 
-FROM cityofaustin/joplin-base:a205cc0 as joplin-common
+FROM cityofaustin/joplin-base:5ac1b08 as joplin-common
 
 # Install Python dependencies
 COPY "$PWD/Pipfile" ./Pipfile
