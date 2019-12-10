@@ -4,6 +4,7 @@ DEPLOYMENT_MODE = os.environ.get('DEPLOYMENT_MODE')
 
 pythonpath = "/app/joplin"
 reload = True
+#  see https://docs.gunicorn.org/en/stable/settings.html#max-requests
 max_requests = 100
 max_requests_jitter = 50
 timeout = 90
