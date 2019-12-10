@@ -31,6 +31,7 @@ django-flags = "*"
 pympler = "*"
 psycopg2 = "==2.8.4"
 wagtail-factories = "*"
+scout-apm = "*"
 
 [requires]
 python_version = "3.7"
