@@ -1,4 +1,6 @@
 import os
+DEPLOYMENT_MODE = os.environ.get('DEPLOYMENT_MODE')
+
 
 pythonpath = "/app/joplin"
 reload = True
