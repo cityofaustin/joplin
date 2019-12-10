@@ -393,3 +393,13 @@ LOGIN_URL = '/admin/login/'
 # We submit a lot of fields when saving some of our content types, let's let that happen
 DATA_UPLOAD_MAX_NUMBER_FIELDS = None
 WAGTAILIMAGES_IMAGE_MODEL = 'base.TranslatedImage'
+
+# Configs required to use SCOUT_APM
+# SCOUT_MONITOR, SCOUT_KEY env vars are automatically provided by Heroku when you provision the addon
+SCOUT_MONITOR = bool(strtobool(os.environ.get('SCOUT_MONITOR', str(False))))
+if SCOUT_MONITOR:
+    INSTALLED_APPS = [
+        "scout_apm.django",
+    ] + INSTALLED_APPS
+
+    SCOUT_NAME = os.environ.get('APPNAME')
