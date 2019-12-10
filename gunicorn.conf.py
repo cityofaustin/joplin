@@ -1,8 +1,4 @@
-import pdb
 import os
-DEPLOYMENT_MODE = os.environ.get('DEPLOYMENT_MODE')
-print("WE ARE IN DEPLOYMENT MODE!!!", DEPLOYMENT_MODE)
-
 
 pythonpath = "/app/joplin"
 reload = True
