@@ -8,6 +8,7 @@ from django.utils.translation import ugettext as _
 from django.urls import reverse
 from django.conf import settings
 from base.models import ServicePage, ProcessPage, InformationPage, TopicPage, TopicCollectionPage, DepartmentPage, Theme, OfficialDocumentPage, GuidePage, FormContainer
+from locations.models import LocationPage
 from base.models.site_settings import JanisBranchSettings
 import json
 
@@ -100,6 +101,8 @@ def new_page_from_modal(request):
             page = GuidePage(**data)
         elif body['type'] == 'form':
             page = FormContainer(**data)
+        elif body['type'] == 'location':
+            page = LocationPage(**data)
 
         # Add it as a child of home
         home = Page.objects.get(id=3)
