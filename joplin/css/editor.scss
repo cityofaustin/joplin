@@ -96,3 +96,36 @@ label {
     color: #555;
     font-size: 12px;
 }
+
+// move the order of draftail toolbar items
+.Draftail-Toolbar {
+    display: flex;
+    flex-direction: row;
+}
+.Draftail-ToolbarGroup:nth-child(1) {
+    order: 2;
+}
+.Draftail-ToolbarGroup:nth-child(2) {
+    order: 1;
+}
+.Draftail-ToolbarGroup:nth-child(2)::before {
+    display: none;
+}
+.Draftail-ToolbarGroup:nth-child(2)::after {
+    content: '';
+    display: inline-block;
+    width: 1px;
+    height: 1rem;
+    vertical-align: middle;
+    margin: 0 0.125rem;
+    background-color: #666;
+}
+.Draftail-ToolbarGroup:nth-child(3) {
+    order: 3;
+}
+.Draftail-ToolbarGroup:nth-child(4) {
+    order: 4;
+}
+.Draftail-ToolbarGroup:nth-child(5) {
+    order: 4;
+}
