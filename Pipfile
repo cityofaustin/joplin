@@ -33,6 +33,7 @@ psycopg2 = "==2.8.4"
 wagtail-factories = "*"
 scout-apm = "*"
 locustio = "==0.13.1"
+django-silk = "*"
 
 [requires]
 python_version = "3.7"

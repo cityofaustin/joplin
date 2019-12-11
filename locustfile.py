@@ -15,8 +15,12 @@ class UserBehavior(TaskSet):
         response = self.client.get('/admin/login/')
         csrftoken = response.cookies['csrftoken']
         self.client.post('/admin/login/',
-                         {"email": "admin@austintexas.io", "password": "x"},
-                         headers={'X-CSRFToken': csrftoken})
+                         {
+                             "email": "admin@austintexas.io",
+                             "password": "x",
+                             'csrfmiddlewaretoken': csrftoken
+                         },
+                         headers={'X-CSRFToken': csrftoken, 'Referer': self.parent.host + '/admin/login/'})
 
     def logout(self):
         self.client.post("/admin/logout", {"email": "admin@austintexas.io", "password": "x"})
@@ -24,6 +28,10 @@ class UserBehavior(TaskSet):
     @task(2)
     def index(self):
         self.client.get("/admin/pages/search/")
+
+    @task(1)
+    def docspage(self):
+        self.client.get("/admin/pages/128/edit/")
 
 
 class WebsiteUser(HttpLocust):
