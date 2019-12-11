@@ -545,6 +545,11 @@ def get_structure_for_content_type(content_type):
 
                     page_topic_tc_global_id = graphene.Node.to_global_id('TopicCollectionNode', tc.topiccollection.id)
                     site_structure.append({'url': f'/{tc.topiccollection.theme.slug}/{tc.topiccollection.slug}/{page_topic.topic.slug}/{page.slug}/', 'type': content_type, 'id': page_global_id, 'parent_topic': page_topic_global_id, 'grandparent_topic_collection': page_topic_tc_global_id})
+
+        # Location pages need urls
+        if content_type == 'location page':
+            site_structure.append({'url': f'/location/{page.slug}/', 'type': content_type, 'id': page_global_id})
+
     return site_structure
 
 
@@ -586,6 +591,7 @@ class SiteStructure(graphene.ObjectType):
         site_structure.extend(get_structure_for_content_type('official document page'))
         site_structure.extend(get_structure_for_content_type('guide page'))
         site_structure.extend(get_structure_for_content_type('form container'))
+        site_structure.extend(get_structure_for_content_type('location page'))
 
         return site_structure
 
