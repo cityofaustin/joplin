@@ -32,6 +32,10 @@ pympler = "*"
 psycopg2 = "==2.8.4"
 wagtail-factories = "*"
 scout-apm = "*"
+locustio = "==0.13.1"
 
 [requires]
 python_version = "3.7"
+
+[pipenv]
+allow_prereleases = true
