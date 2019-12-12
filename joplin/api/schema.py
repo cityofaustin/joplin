@@ -204,6 +204,7 @@ class LocationPageRelatedServices(DjangoObjectType):
         interfaces = [graphene.Node]
 
 
+
 class ContactNode(DjangoObjectType):
     class Meta:
         model = Contact
@@ -293,6 +294,7 @@ class Language(graphene.Enum):
 
 class ServicePageNode(DjangoObjectType):
     page_type = graphene.String()
+    janis_url = graphene.String()
 
     class Meta:
         model = ServicePage
@@ -301,6 +303,9 @@ class ServicePageNode(DjangoObjectType):
 
     def resolve_page_type(self, info):
         return ServicePage.get_verbose_name().lower()
+
+    def resolve_janis_url(self, info):
+        return self.janis_url()
 
 
 class InformationPageNode(DjangoObjectType):
