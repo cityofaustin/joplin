@@ -24,6 +24,12 @@ class FormContainer(JanisBasePage):
         blank=True,
     )
 
+    fields_required_for_publish = (
+        'description_en',
+        'form_url_en',
+    )
+
+
     content_panels = [
         FieldPanel('title_en', widget=countMe),
         FieldPanel('title_es', widget=countMe),

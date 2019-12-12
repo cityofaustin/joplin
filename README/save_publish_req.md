@@ -9,8 +9,8 @@ Behavior when publishing from edit page: if not all the required fields are fill
 #### Service Page
 
 - Required ✅
-    - Description
-    - Steps
+    - Description: 'short_description_en'
+    - Steps : 'steps_en'
 - Not Required ❌
     - Topic
     - Related Departments
@@ -33,7 +33,7 @@ Behavior when publishing from edit page: if not all the required fields are fill
 #### Department Page
 
 - Required ✅
-    - What we do
+    - What we do : 'what_we_do_en'
 - Not Required ❌
     - Image
     - Mission
@@ -45,18 +45,18 @@ Behavior when publishing from edit page: if not all the required fields are fill
     
 #### Official document list
 - Required ✅
-    - Description
-    - Document entries
+    - Description : 'description_en'
+    - Document entries : 'official_documents'
 - Not Required ❌
     - Topic
     - Related departments
 
 #### Guide
 - Required ✅
-    - Description
+    - Description : 'description_en'
     - Document entries
-    - Sections and Pages
-    - Contact
+    - Sections and Pages : 'sections'
+    - Contact : contacts'
 - Not Required ❌
     - Topic
     - Related departments
@@ -64,23 +64,23 @@ Behavior when publishing from edit page: if not all the required fields are fill
     
 #### Form container
 - Required ✅
-    - Description
-    - Formstack URL
+    - Description : 'description_en',
+    - Formstack URL : 'form_url_en',
 - Not Required ❌
     - Topic
     - Related departments
     
 #### Topic
 - Required ✅
-    - Topic collection (Although this could be a weird chicken-egg situation. So maybe ❌)
-    - Top link	✅
+    - Topic collection (Although this could be a weird chicken-egg situation. So maybe ❌) : 'topiccollections'
+    - Top link: 'top_pages',
 - Not Required ❌
     - Description (for now, but will want this later)
     - Image
 
 #### Topic collection
 - Required ✅
-    - Theme
+    - Theme : 'theme'
 - Not Required ❌
     - Description (for now, but will want this later)
     - Image

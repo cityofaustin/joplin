@@ -30,6 +30,11 @@ class TopicPage(JanisBasePage):
 
     base_form_class = TopicPageForm
 
+    fields_required_for_publish = (
+        'top_pages',
+        'topiccollections',
+    )
+
     content_panels = [
         FieldPanel('title_en', widget=countMe),
         FieldPanel('title_es', widget=countMe),

@@ -88,8 +88,6 @@ class ServicePage(JanisBasePage):
     fields_required_for_publish = (
         'short_description_en',
         'steps_en',
-        'additional_content',
-        'related_departments',
     )
 
     content_panels = [

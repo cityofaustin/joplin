@@ -51,6 +51,10 @@ class DepartmentPage(JanisBasePage):
 
     base_form_class = DepartmentPageForm
 
+    fields_required_for_publish = (
+        'what_we_do_en',
+    )
+
     content_panels = [
         FieldPanel('title_en', widget=countMe),
         FieldPanel('title_es', widget=countMe),

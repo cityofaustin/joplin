@@ -47,6 +47,13 @@ class GuidePage(JanisBasePage):
 
     base_form_class = GuidePageForm
 
+    fields_required_for_publish = (
+        'description_en',
+        'contacts',
+        'sections',
+        # Document entries <-- which field is this?
+    )
+
     content_panels = [
         FieldPanel('title_en', widget=countMe),
         FieldPanel('title_es', widget=countMe),

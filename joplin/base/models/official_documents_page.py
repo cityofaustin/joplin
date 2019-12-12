@@ -30,6 +30,11 @@ class OfficialDocumentPage(JanisBasePage):
 
     description = models.TextField(blank=True)
 
+    fields_required_for_publish = (
+        'description_en',
+        'official_documents',
+    )
+
     content_panels = [
         FieldPanel('title_en', widget=countMe),
         FieldPanel('title_es', widget=countMe),

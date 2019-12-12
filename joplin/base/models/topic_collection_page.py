@@ -26,6 +26,10 @@ class TopicCollectionPage(JanisBasePage):
 
     base_form_class = TopicCollectionPageForm
 
+    fields_required_for_publish = (
+        'theme'
+    )
+
     content_panels = [
         FieldPanel('title_en', widget=countMe),
         FieldPanel('title_es', widget=countMe),
