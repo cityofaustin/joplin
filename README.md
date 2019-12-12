@@ -22,7 +22,7 @@ Joplin is the Authoring Interface for adding and editing content for alpha.austi
 -   [Misc](#misc)
 
 ---
-.
+
 ## How to Run Locally
 
 First, install docker (version 18.09 or greater) and clone this repo.

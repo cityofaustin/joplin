@@ -5,6 +5,9 @@ PREV_CD=$(pwd)
 
 function clean_up {
   cd $PREV_CD
+  if [ -f "$CD/zappa_settings.json" ]; then
+    rm $CD/zappa_settings.json
+  fi
 }
 trap clean_up EXIT
 
