@@ -44,6 +44,11 @@ class InformationPage(JanisBasePage):
 
     base_form_class = InformationPageForm
 
+    fields_required_for_publish = (
+        'description_en',
+        'additional_content_en',
+    )
+
     content_panels = [
         FieldPanel('title_en', widget=countMe),
         FieldPanel('title_es', widget=countMe),
