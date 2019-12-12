@@ -51,7 +51,6 @@ class GuidePage(JanisBasePage):
         'description_en',
         'contacts',
         'sections',
-        # Document entries <-- which field is this?
     )
 
     content_panels = [

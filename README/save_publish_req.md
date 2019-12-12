@@ -54,7 +54,6 @@ Behavior when publishing from edit page: if not all the required fields are fill
 #### Guide
 - Required ✅
     - Description : 'description_en'
-    - Document entries
     - Sections and Pages : 'sections'
     - Contact : contacts'
 - Not Required ❌
