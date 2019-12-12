@@ -15,6 +15,7 @@ from snippets import urls as snippet_urls
 from django.urls import reverse
 import debug_toolbar
 
+
 def home(request):
     """
             * Search page as our 'HomePage' *
@@ -32,8 +33,10 @@ def home(request):
 def login(request):
     return redirect(reverse('wagtailadmin_login'), permanent=True)
 
+
 def reroute(request):
     return redirect('/admin/pages/search/')
+
 
 urlpatterns = [
     path('admin/pages/3/', reroute),
