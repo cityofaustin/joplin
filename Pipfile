@@ -4,6 +4,9 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
+github-webhook = "*"
+zappa = "*"
+flask = "*"
 
 [packages]
 wagtail = "==2.6.1"

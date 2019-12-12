@@ -21,3 +21,6 @@ yarn.lock
 
 # Temporary datadumps
 joplin/db/system-generated/tmp.datadump.json
+
+# Zappa build artifacts
+.circleci/cleanup/zappa_settings.json
