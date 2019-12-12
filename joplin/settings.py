@@ -82,11 +82,9 @@ INSTALLED_APPS = [
     'countable_field',
     'flags',
     'locations',
-    'silk',
 ]
 
 MIDDLEWARE = [
-    'silk.middleware.SilkyMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -209,8 +207,20 @@ ALLOWED_HOSTS = [
 ]
 
 DEBUG_TOOLBAR = bool(strtobool(os.environ.get('DEBUG_TOOLBAR', str(False))))
-SILKY_PYTHON_PROFILER = True
-SILKY_META = True
+MONITOR_PERFORMANCE = bool(strtobool(os.environ.get('MONITOR_PERFORMANCE', str(False))))
+
+
+if MONITOR_PERFORMANCE:
+    INSTALLED_APPS = INSTALLED_APPS + [
+        'silk'
+    ]
+    MIDDLEWARE = ['silk.middleware.SilkyMiddleware'] + MIDDLEWARE
+
+    SILKY_PYTHON_PROFILER = True
+    SILKY_META = True
+    SILKY_AUTHENTICATION = True
+    SILKY_AUTHORISATION = True
+
 
 if DEBUG_TOOLBAR:
     # TODO: only allow toolbar to be visible for admins
