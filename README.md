@@ -384,6 +384,12 @@ We've set up Silk for performance monitoring of queries and memory usage. This i
 
 By default, Silk is set to run on every deployed enviornment _besides_ production. If you want to use it locally, include `MONITOR_PERFORMANCE=True` in your .env file.
 
+## Load testing
+
+We set up Locust to use for load testing. You can use it by running `pipenv run locust`. Be careful about where and how and when you do load testing. Be smart, don't crash staging or production (though you shouldn't be able to anyways since they have been load-tested).
+
+The testing behavior is set up locustfile.py and can be expanded to do a wider variety of testing behaviors.
+
 ## Debugging
 
 ### Use the Django Debug Toolbar!
