@@ -16,7 +16,8 @@ Joplin is the Authoring Interface for adding and editing content for alpha.austi
 -   [Updating the Data Model](#updating-the-data-model)
 -   [CircleCI Deployments](#circleci-deployments)
 -   [Useful Commands](#useful-commands)
--   [Debugging With Pycharm](#debugging-with-pycharm)
+-   [Performance Monitoring](#performance-monitoring)
+-   [Debugging](#debugging)
 -   [Design](#design)
 -   [Related Repos](#related-repos)
 -   [Misc](#misc)
@@ -51,9 +52,11 @@ This will automatically load environment variables into your pipenv environment.
 -   Your Joplin instance will be accessible at http://localhost:8000/admin with the credentials user: `admin@austintexas.io`, pw: `x`
 
 Or if you prefer to run without docker (for speed + ability to integrate with debugging tools):
+
 ```
 ./scripts/undockered.sh
 ```
+
 **Run with prod data**
 
 ```
@@ -96,7 +99,7 @@ DROP_DB=on ./scripts/serve-local.sh
 RELOAD_DATA=$SOURCE ./scripts/serve-local.sh
 ```
 
--   shorthand for LOAD_DATA=$SOURCE + DROP_DB=on
+-   shorthand for LOAD_DATA=\$SOURCE + DROP_DB=on
 
 **Run with Janis**
 
@@ -229,17 +232,18 @@ Note: This process does not update staging. It updates the data that is seeded i
 Options:
 
 -   "SOURCE=prod sh scripts/migration-test.sh"
-    - Sources data from production database
-    - Builds migrations from "cityofaustin/joplin-app:production-latest" image
-    - Then applies your local migrations on top of that
+    -   Sources data from production database
+    -   Builds migrations from "cityofaustin/joplin-app:production-latest" image
+    -   Then applies your local migrations on top of that
 -   "SOURCE=prod USE_PRIOR_DATADUMP=on sh scripts/migration-test.sh"
-    - Sources data from your existing prod.datadump.json
+    -   Sources data from your existing prod.datadump.json
 -   "SOURCE=staging sh scripts/migration-test.sh"
-    - Sources data from staging database
+    -   Sources data from staging database
 -   "SOURCE=staging USE_PRIOR_DATADUMP=on sh scripts/migration-test.sh"
-    - Sources data from your existing prod.staging.json
+    -   Sources data from your existing prod.staging.json
 
 Bonus extra optional Params:
+
 -   "DOCKER_TAG_DB_BUILD=[x]" will build initial migrations from the docker image of your choice. Potentially could be used if you intend to merge into a branch other than master.
 -   "JANIS=on" will automatically spin up a Janis container for you. Note: you must have a "janis:local" image available locally.
 
@@ -373,6 +377,18 @@ The migration process currently consists of 3 commands:
         ```
 
 ---
+
+## Performance monitoring
+
+We've set up Silk for performance monitoring of queries and memory usage. This is set up at the `/performance` endpoint. You'll need to login.
+
+By default, Silk is set to run on every deployed enviornment _besides_ production. If you want to use it locally, include `MONITOR_PERFORMANCE=True` in your .env file.
+
+## Load testing
+
+We set up Locust to use for load testing. You can use it by running `pipenv run locust`. Be careful about where and how and when you do load testing. Be smart, don't crash staging or production (though you shouldn't be able to anyways since they have been load-tested).
+
+The testing behavior is set up locustfile.py and can be expanded to do a wider variety of testing behaviors.
 
 ## Debugging
 
