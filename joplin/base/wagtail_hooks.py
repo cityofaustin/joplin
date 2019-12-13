@@ -156,7 +156,7 @@ def joplin_page_listing_buttons(page, page_perms, is_parent=False):
     if page.live and page.url and hasattr(page, 'janis_url'):
         yield PageListingButton(
             _('View live'),
-            page.janis_url(),
+            page.janis_url,
             attrs={'target': "_blank", 'title': _("View live version of '{title}'").format(
                 title=page.get_admin_display_title())},
             priority=30
@@ -286,7 +286,7 @@ class InternalLinkHandler(LinkHandler):
     def expand_db_attributes(cls, attrs):
         try:
             page = cls.get_instance(attrs)
-            return '<a href="%s">' % escape(page.janis_url())
+            return '<a href="%s">' % escape(page.janis_url)
         except Page.DoesNotExist:
             return "<a>"
         except Exception as e:

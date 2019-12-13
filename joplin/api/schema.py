@@ -410,7 +410,7 @@ class GuidePageSectionPageBlock(graphene.ObjectType):
             if page:
                 break
         if page:
-            return page.janis_url()
+            return page.janis_url
         else:
             return '#'
 

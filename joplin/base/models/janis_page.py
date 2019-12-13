@@ -12,6 +12,7 @@ from wagtail.core.fields import RichTextField
 from flags.state import flag_enabled
 
 from base.models.site_settings import JanisBranchSettings
+from django.utils.functional import cached_property
 
 
 class JanisBasePage(Page):
@@ -49,6 +50,7 @@ class JanisBasePage(Page):
 
     coa_global = models.BooleanField(default=False, verbose_name='Make this a top level page')
 
+    @cached_property
     def janis_url(self):
         """
         This function parses various attributes of related content types to construct the
@@ -247,9 +249,9 @@ class JanisBasePage(Page):
         try:
             if flag_enabled('SHOW_EXTRA_PANELS'):
                 editor_panels += (PermissionObjectList(cls.promote_panels,
-                                             heading='SEO'),
+                                                       heading='SEO'),
                                   PermissionObjectList(cls.settings_panels,
-                                             heading='Settings'))
+                                                       heading='Settings'))
         except ProgrammingError as e:
             print("some problem, maybe with flags")
             pass
