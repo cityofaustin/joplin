@@ -4,6 +4,7 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
+locustio = "==0.13.1"
 
 [packages]
 wagtail = "==2.6.1"
@@ -35,6 +36,10 @@ pympler = "*"
 psycopg2 = "==2.8.4"
 wagtail-factories = "*"
 scout-apm = "*"
+django-silk = "*"
 
 [requires]
 python_version = "3.7"
+
+[pipenv]
+allow_prereleases = true
