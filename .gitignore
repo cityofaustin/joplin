@@ -21,3 +21,4 @@ yarn.lock
 
 # Temporary datadumps
 joplin/db/system-generated/tmp.datadump.json
+/tmp/

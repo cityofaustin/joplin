@@ -10,6 +10,8 @@ from wagtail.admin.utils import user_has_any_page_permission
 # So we must use django.contrib.auth.decorators.user_passes_test
 from django.contrib.auth.decorators import user_passes_test
 from django.views.decorators.vary import vary_on_headers
+from silk.profiling.profiler import silk_profile
+
 
 """
  Joplin Note:
@@ -23,8 +25,10 @@ from django.views.decorators.vary import vary_on_headers
  - excluding certain pages from the pages to query
 """
 
+
 @vary_on_headers('X-Requested-With')
 @user_passes_test(user_has_any_page_permission)
+@silk_profile(name='Search')
 def search(request):
     # excluding Root(1) and Home(3) pages from search
     pages = all_pages = Page.objects.all().exclude(id__in=[1, 3]).prefetch_related('content_type').specific()
