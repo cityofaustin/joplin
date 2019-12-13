@@ -82,6 +82,7 @@ INSTALLED_APPS = [
     'countable_field',
     'flags',
     'locations',
+    'silk',
 ]
 
 MIDDLEWARE = [
@@ -211,12 +212,10 @@ MONITOR_PERFORMANCE = bool(strtobool(os.environ.get('MONITOR_PERFORMANCE', str(F
 
 
 if MONITOR_PERFORMANCE:
-    INSTALLED_APPS = INSTALLED_APPS + [
-        'silk'
-    ]
     MIDDLEWARE = ['silk.middleware.SilkyMiddleware'] + MIDDLEWARE
 
     SILKY_PYTHON_PROFILER = True
+    SILKY_PYTHON_PROFILER_BINARY = True
     SILKY_META = True
     SILKY_AUTHENTICATION = True
     SILKY_AUTHORISATION = True
