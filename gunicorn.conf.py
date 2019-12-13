@@ -7,8 +7,8 @@ reload = True
 #  see https://docs.gunicorn.org/en/stable/settings.html#max-requests
 max_requests = 100
 max_requests_jitter = 50
-timeout = 90
+timeout = 300 # 5 minutes, slow is better than randomly breaking
 preload = True
 if DEPLOYMENT_MODE in ("LOCAL", "REVIEW"):
-    timeout = 190
+    # timeout = 190
     loglevel = "DEBUG"
