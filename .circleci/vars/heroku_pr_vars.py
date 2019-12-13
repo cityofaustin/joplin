@@ -1,4 +1,6 @@
-import os, sys, requests
+import os
+import sys
+import requests
 
 from branch_overrides import branch_overrides
 
@@ -28,26 +30,29 @@ config = {}
 
 # Set all variables sourced from circleci
 vars_from_circleci = [
-  "APPNAME", # .circleci/scripts/helpers.sh
-  "AWS_ACCESS_KEY_ID", # CircleCI
-  "AWS_SECRET_ACCESS_KEY", # CircleCI
-  "AWS_S3_USER", # CircleCI
-  "AWS_S3_BUCKET_STATIC", # CircleCI
-  "AWS_S3_BUCKET_ARCHIVE", # CircleCI
-  "AWS_S3_BUCKET_ARCHIVE_LOCATION", # CircleCI
-  "JANIS_URL", # CircleCI
-  "STYLEGUIDE_URL", # CircleCI
-  "CIRCLE_BRANCH", # CircleCI
-  "COA_PUBLISHER_URL", # CircleCI
+    "APPNAME",  # .circleci/scripts/helpers.sh
+    "AWS_ACCESS_KEY_ID",  # CircleCI
+    "AWS_SECRET_ACCESS_KEY",  # CircleCI
+    "AWS_S3_USER",  # CircleCI
+    "AWS_S3_BUCKET_STATIC",  # CircleCI
+    "AWS_S3_BUCKET_ARCHIVE",  # CircleCI
+    "AWS_S3_BUCKET_ARCHIVE_LOCATION",  # CircleCI
+    "JANIS_URL",  # CircleCI
+    "STYLEGUIDE_URL",  # CircleCI
+    "CIRCLE_BRANCH",  # CircleCI
+    "COA_PUBLISHER_URL",  # CircleCI
 ]
 for v in vars_from_circleci:
     config[v] = os.getenv(v, "")
 
 # Set additional environment variables not from os
 default_branch_vars = {
+    "PYTHONUNBUFFERED": 1,
+    "WEB_CONCURRENCY": 2,
     "DEBUG": 1,
     "DEBUG_TOOLBAR": False,
     "LOAD_DATA": "prod",
+    "MONITOR_PERFORMANCE": True,
 }
 config.update(default_branch_vars)
 
@@ -64,6 +69,6 @@ headers = {
 response = requests.patch(f'https://api.heroku.com/apps/{os.getenv("APPNAME")}/config-vars', headers=headers, data=config)
 if (response.status_code != 200):
     print(f"{response.status_code} Error: {response.content.decode('utf-8')}")
-    sys.exit(1);
+    sys.exit(1)
 else:
     print("Environment variables updated successfully.")

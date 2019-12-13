@@ -1,6 +1,12 @@
-import subprocess, re, os, sys, json, time
+import subprocess
+import re
+import os
+import sys
+import json
+import time
 
 APPNAME = sys.argv[1]
+
 
 def check_app_status():
     print(f"Checking state of App {APPNAME}.")
@@ -24,6 +30,7 @@ def check_app_status():
         check_app_status()
     else:
         print(f"Error: App {APPNAME} is in state {app_state}")
-        sys.exit(1);
+        sys.exit(1)
+
 
 check_app_status()

@@ -3,6 +3,27 @@ import classNames from 'classnames';
 
 import './ChooseTitleStep.scss';
 
+const getPageHeading = (pageType) => {
+  switch(pageType) {
+    case 'service':
+      return 'Write an actionable title for your service page, starting with a verb.';
+    case 'information':
+      return 'Write a clear, descriptive title.'
+    case 'department': 
+      return 'Write the full name of the department without abbreviations or acronyms.';
+    case 'guide':
+      return 'Write a name for your guide.';
+    case 'documents':
+      return 'Write the name for this list of documents';
+    case 'form': 
+      return 'Write the name for this form';
+    case 'location':
+      return 'Write the name of this location.';
+    default: 
+      return '';
+  }
+}
+
 const ChooseTitleStep = ({
   pageType,
   title,
@@ -12,30 +33,11 @@ const ChooseTitleStep = ({
 }) => (
   <div className="CreateContentModal__step">
     <h2 className="CreateContentModal__header">
-      {pageType === 'service' && (
-        <span>
-          Write an actionable title for your service page, starting with a verb.
-        </span>
-      )}
-      {pageType === 'information' && (
-        <span>Write a clear, descriptive title.</span>
-      )}
-      {pageType === 'department' && (
-        <span>
-          Write the full name of the department without abbreviations or
-          acronyms.
-        </span>
-      )}
-      {pageType === 'guide' && <span>Write a name for your guide.</span>}
-      {pageType === 'documents' && (
-        <span>Write the name for this list of documents.</span>
-      )}
-      {pageType === 'form' && (
-        <span>Write the name for this form.</span>
-      )}
+      <span>{getPageHeading(pageType)}</span>
     </h2>
     <label htmlFor="page-title" className="ChooseTitleStep__input-label">
-      <span className="ChooseTitleStep__input-label--left">Page Title</span>
+      <span className="ChooseTitleStep__input-label--left">
+        {pageType === 'location' ? 'Location name' : 'Page Title'}</span>
       <span
         className={classNames('ChooseTitleStep__input-label--right', {
           'ChooseTitleStep__input-label--red':
@@ -53,7 +55,7 @@ const ChooseTitleStep = ({
       onChange={handleTitleInputChange}
     />
 
-    {pageType === 'department' && (
+    {pageType === 'department' ? (
       <div>
         <span className="ChooseTitleStep__input-help">
           Example: Public Health
@@ -62,9 +64,8 @@ const ChooseTitleStep = ({
           <li>You don't need to include "Austin" in your department name.</li>
         </ul>
       </div>
-    )}
-
-    {pageType !== 'department' && (
+    )
+    : (
       <div>
         <span className="ChooseTitleStep__input-help">
           {pageType === 'service' &&
@@ -76,9 +77,7 @@ const ChooseTitleStep = ({
 
         <ul className="ChooseTitleStep__bullet-list">
           {pageType === 'guide' && <li>Use the word "guide" in your title.</li>}
-          {pageType === 'information' && (
-            <li>Use primary and secondary keywords.</li>
-          )}
+          {pageType === 'information' && <li>Use primary and secondary keywords.</li>}
           <li>Use simple, accessible language.</li>
           <li>
             Use words you think residents may search to find the {pageType}.

@@ -1,7 +1,7 @@
 ########################################################
 # joplin-common
 
-FROM cityofaustin/joplin-base:a205cc0 as joplin-common
+FROM cityofaustin/joplin-base:5ac1b08 as joplin-common
 
 # Install Python dependencies
 COPY "$PWD/Pipfile" ./Pipfile
@@ -19,6 +19,7 @@ COPY "$PWD/joplin" /app/joplin
 COPY "$PWD/media" /app
 COPY "$PWD/scripts" /app/scripts
 COPY "$PWD/docker-entrypoint.sh" /app/docker-entrypoint.sh
+COPY "$PWD/gunicorn.conf.py" /app/gunicorn.conf.py
 
 ########################################################
 # joplin-common => joplin-local
@@ -32,7 +33,7 @@ ENTRYPOINT ["./docker-entrypoint.sh"]
 
 # Start the Joplin server
 # we add an extra timeout and debug level to be generous with our server log
-CMD ["gunicorn", "joplin.wsgi:application", "--pythonpath", "/app/joplin", "--reload", "--timeout=190", "--log-level=DEBUG"]
+CMD ["gunicorn", "-c", "gunicorn.conf.py", "joplin.wsgi:application"]
 
 ########################################################
 # joplin-common => joplin-deployed
@@ -52,7 +53,7 @@ WORKDIR /app
 
 # Entrypoint must be executed manually since heroku has a 60 second time limit for entrypoint scripts
 # Start the Joplin server
-CMD ["gunicorn", "joplin.wsgi:application", "--pythonpath", "/app/joplin"]
+CMD ["gunicorn", "-c", "gunicorn.conf.py", "joplin.wsgi:application"]
 
 ########################################################
 # joplin-common => joplin-deployed => joplin-review

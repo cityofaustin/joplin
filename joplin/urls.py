@@ -15,6 +15,7 @@ from snippets import urls as snippet_urls
 from django.urls import reverse
 import debug_toolbar
 
+
 def home(request):
     """
             * Search page as our 'HomePage' *
@@ -32,8 +33,10 @@ def home(request):
 def login(request):
     return redirect(reverse('wagtailadmin_login'), permanent=True)
 
+
 def reroute(request):
     return redirect('/admin/pages/search/')
+
 
 urlpatterns = [
     path('admin/pages/3/', reroute),
@@ -56,6 +59,7 @@ urlpatterns = [
     url(r'^api/graphql', csrf_exempt(GraphQLView.as_view())),
     url(r'^api/graphiql', csrf_exempt(GraphQLView.as_view(graphiql=True, pretty=True))),
     url(r'session_security/', include('session_security.urls')),
+    url(r'^performance/', include('silk.urls', namespace='silk')),
 
 
     # For anything not caught by a more specific rule above, hand over to
