@@ -30,7 +30,7 @@ coa-django-countable_field = "==1.6"
 django-flags = "*"
 # if you want to develop locally, use the path below and overwrite with your local files
 # wagtail-publish-preflight = {editable = true, path = "/Users/BerryC/Documents/github/wagtail-publish-preflight"}
-wagtail-publish-preflight = "==0.3"
+wagtail-publish-preflight = "==0.4"
 pympler = "*"
 psycopg2 = "==2.8.4"
 wagtail-factories = "*"
