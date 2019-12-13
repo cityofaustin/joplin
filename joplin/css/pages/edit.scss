@@ -79,6 +79,7 @@
 }
 
 .tab-nav {
+    // this is also giving position fixed to the tab nav in add user
     position: fixed;
     top: $edit-page-tab-bar-top;
     border-top: none;

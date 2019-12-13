@@ -5,7 +5,7 @@ from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
 from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, MultiFieldPanel, PageChooserPanel
 
-from base.forms import FormPageForm
+from base.forms import FormContainerForm
 
 from .janis_page import JanisBasePage
 
@@ -13,9 +13,9 @@ from .constants import WYSIWYG_GENERAL
 from .widgets import countMe, countMeTextArea
 from countable_field import widgets
 
-class FormPage(JanisBasePage):
+class FormContainer(JanisBasePage):
     janis_url_page_type = "form"
-    base_form_class = FormPageForm
+    base_form_class = FormContainerForm
 
     description = models.TextField(verbose_name='Form description', blank=True)
     form_url = models.URLField(
@@ -35,8 +35,8 @@ class FormPage(JanisBasePage):
         FieldPanel('form_url'),
     ]
 
-class FormPageRelatedDepartments(ClusterableModel):
-    page = ParentalKey(FormPage, related_name='related_departments', default=None)
+class FormContainerRelatedDepartments(ClusterableModel):
+    page = ParentalKey(FormContainer, related_name='related_departments', default=None)
     related_department = models.ForeignKey(
         "base.departmentPage",
         on_delete=models.PROTECT,
@@ -47,8 +47,8 @@ class FormPageRelatedDepartments(ClusterableModel):
         PageChooserPanel("related_department"),
     ]
 
-class FormPageTopic(ClusterableModel):
-    page = ParentalKey(FormPage, related_name='topics')
+class FormContainerTopic(ClusterableModel):
+    page = ParentalKey(FormContainer, related_name='topics')
     topic = models.ForeignKey('base.TopicPage', verbose_name='Select a Topic', related_name='+', on_delete=models.CASCADE)
 
     panels = [

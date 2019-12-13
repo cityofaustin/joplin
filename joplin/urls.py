@@ -10,8 +10,11 @@ from wagtail.core import urls as wagtail_urls
 from wagtail.documents import urls as wagtaildocs_urls
 from base.views import joplin_views
 from base.views import joplin_search_views
+from users.urls import users as user_urls
+from snippets import urls as snippet_urls
 from django.urls import reverse
 import debug_toolbar
+
 
 def home(request):
     """
@@ -31,24 +34,32 @@ def login(request):
     return redirect(reverse('wagtailadmin_login'), permanent=True)
 
 
+def reroute(request):
+    return redirect('/admin/pages/search/')
+
+
 urlpatterns = [
+    path('admin/pages/3/', reroute),
     url(r'^django-admin/', include('smuggler.urls')),
     url(r'^django-admin/', admin.site.urls),
     path('admin/docs/', include('django.contrib.admindocs.urls')),
-    # uncomment this path to expiriment with the default dashboard,
+    # comment out the below 'admin/' path to experiment with the default dashboard,
     # which can be customized using wagtail hooks
     path('admin/', home),
     path('', login),
     url(r'admin/pages/(\d+)/publish/$', joplin_views.publish, name='publish'),
     url(r'admin/pages/new_from_modal/$',
         joplin_views.new_page_from_modal, name='new_page_from_modal'),
-    url(r'admin/pages/search/$', joplin_search_views.search, name='search' ),
+    url(r'admin/pages/search/$', joplin_search_views.search, name='search'),
+    url(r'admin/users/', include(user_urls)),
+    url(r'admin/snippets/', include(snippet_urls)),
     url(r'^admin/', include(wagtailadmin_urls)),
     url(r'^documents/', include(wagtaildocs_urls)),
     path('__debug__/', include(debug_toolbar.urls)),
     url(r'^api/graphql', csrf_exempt(GraphQLView.as_view())),
     url(r'^api/graphiql', csrf_exempt(GraphQLView.as_view(graphiql=True, pretty=True))),
     url(r'session_security/', include('session_security.urls')),
+    url(r'^performance/', include('silk.urls', namespace='silk')),
 
 
     # For anything not caught by a more specific rule above, hand over to

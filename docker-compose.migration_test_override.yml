@@ -3,7 +3,6 @@ services:
   app:
     environment:
       DEPLOYMENT_MODE: "LOCAL"
-      LOAD_DUMMY_DATA: "$LOAD_DUMMY_DATA"
     entrypoint: "./docker-entrypoint.sh"
     # Override gunicorn CMD
     command: ["echo", "\"No server needed at this step of the migration test: exiting app\""]
@@ -12,3 +11,5 @@ services:
       - "./docker-entrypoint.sh:/app/docker-entrypoint.sh"
       # Use local scripts in case there were updates that are not in older master image
       - "./scripts:/app/scripts"
+      # Use local db fixtures and datadumps
+      - "./joplin/db:/app/joplin/db"

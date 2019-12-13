@@ -2,8 +2,9 @@ from wagtail_modeltranslation.translation import register, TranslationOptions
 from wagtail.core.models import Page
 from wagtail.images.models import Image
 
-from .models import ThreeOneOne, TopicPage, TopicCollectionPage, Theme, ServicePage, ProcessPage, ProcessPageStep, DepartmentPage, DepartmentPageDirector, InformationPage, OfficialDocumentPage, OfficialDocumentPageOfficialDocument, TranslatedImage, Department, Map, HomePage, GuidePage, FormPage
 
+from .models import ThreeOneOne, TopicPage, TopicCollectionPage, Theme, ServicePage, ProcessPage, ProcessPageStep, DepartmentPage, DepartmentPageDirector, InformationPage, OfficialDocumentPage, OfficialDocumentPageOfficialDocument, TranslatedImage, Department, Map, HomePage, GuidePage, FormContainer
+from locations.models import LocationPage
 
 @register(Image)
 class ImageTranslationOptions(TranslationOptions):
@@ -144,9 +145,14 @@ class GuidePageTranslationOptions(TranslationOptions):
     )
 
 
-@register(FormPage)
-class FormPageTranslationOptions(TranslationOptions):
+@register(FormContainer)
+class FormContainerTranslationOptions(TranslationOptions):
     fields = (
         'description',
         'form_url',
     )
+
+
+@register(LocationPage)
+class LocationPageOptions(TranslationOptions):
+    pass

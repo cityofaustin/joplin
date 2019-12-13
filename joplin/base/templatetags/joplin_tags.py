@@ -11,10 +11,12 @@ import itertools
 
 register = template.Library()
 
+
 @register.simple_tag
 def get_revision_preview_url(*args, **kwargs):
     revision = kwargs['revision']
     return revision.page.janis_preview_url(revision)
+
 
 STYLEGUIDE_PAGES = {
     'service page': '/pick-the-perfect-content-type/service-page',
@@ -25,14 +27,18 @@ STYLEGUIDE_PAGES = {
     'topic collection page': '',
     'official document page': '',
     'guide page': '',
-    'form page': '',
+    'form container': '',
 }
 
 
 @register.simple_tag
 def get_style_guide_url(*args, **kwargs):
     content_type = kwargs['content_type'].name
-    return os.environ['STYLEGUIDE_URL'] + STYLEGUIDE_PAGES[content_type]
+    try:
+        get_style_guide_url = os.environ['STYLEGUIDE_URL'] + STYLEGUIDE_PAGES[content_type]
+    except Exception as e:
+        get_style_guide_url = os.environ['STYLEGUIDE_URL']
+    return get_style_guide_url
 
 
 @register.inclusion_tag('wagtailadmin/themes_topics_tree.html', takes_context=True)
