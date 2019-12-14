@@ -207,27 +207,26 @@ $(function() {
     let labelList = state.languageLabels;
     for (let label in labelList) {
       if (labelList[label].querySelector) {
+        let thisField = labelList[label];
         let languageTag = labelList[label].querySelector('span').innerText;
-        // these seem to be nested twice, from the title to the containing element
-        // TODO: come up with a more elegant and maintable way to check what elements ought to be hidden
-        if (
-          labelList[label].parentElement.parentElement.parentElement.classList
-            .value !== 'struct-block'
-        ) {
-          const translatedElement =
-            labelList[label].parentElement.parentElement;
-          if (languageTag != null && languageTag != currentLang) {
-            translatedElement.classList.add('hidden');
-          } else {
-            translatedElement.classList.remove('hidden');
-          }
+        let element_of_label = labelList[label].htmlFor;
+        if (languageTag != null && languageTag != currentLang) {
+          thisField.parentElement.classList.add('hidden');
         } else {
-          const translatedElement = labelList[label].parentElement;
-          if (languageTag != null && languageTag != currentLang) {
-            translatedElement.classList.add('hidden');
-          } else {
-            translatedElement.classList.remove('hidden');
-          }
+          thisField.parentElement.classList.remove('hidden');
+        }
+
+        if (
+          !thisField.classList.contains('field__label') &&
+          (languageTag != null && languageTag != currentLang)
+        ) {
+          $(thisField.parentElement)
+            .siblings()
+            .addClass('hidden');
+        } else {
+          $(thisField.parentElement)
+            .siblings()
+            .removeClass('hidden');
         }
 
         // console.log(translatedElement);
