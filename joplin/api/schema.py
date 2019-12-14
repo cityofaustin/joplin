@@ -317,7 +317,7 @@ class ServicePageStep(graphene.ObjectType):
         repr_locations = []
         # since we still want to be able to use value, we need to see
         # if it's a string before grabbing locations to avoid errors
-        if not isinstance(self.value, str) and self.value['locations']:
+        if self.step_type == "step_with_locations":
             for location in self.value['locations']:
                 repr_locations.append(ServicePageStepLocationBlock(value=location))
 
