@@ -311,10 +311,13 @@ class ServicePageStepLocationBlock(graphene.ObjectType):
 class ServicePageStep(graphene.ObjectType):
     value = GenericScalar()
     locations = graphene.List(ServicePageStepLocationBlock)
+    step_type = graphene.String()
 
     def resolve_locations(self, info):
         repr_locations = []
-        if self.value['locations']:
+        # since we still want to be able to use value, we need to see
+        # if it's a string before grabbing locations to avoid errors
+        if not isinstance(self.value, str) and self.value['locations']:
             for location in self.value['locations']:
                 repr_locations.append(ServicePageStepLocationBlock(value=location))
 
@@ -341,7 +344,8 @@ class ServicePageNode(DjangoObjectType):
         repr_steps = []
         for step in self.steps.stream_data:
             value = step.get('value')
-            repr_steps.append(ServicePageStep(value=value))
+            step_type = step.get('type')
+            repr_steps.append(ServicePageStep(value=value, step_type=step_type))
 
         return repr_steps
 
