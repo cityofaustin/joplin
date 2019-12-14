@@ -31,6 +31,7 @@ from base.models import (
 from .content_type_map import content_type_map
 import traceback
 import locations.models as locations
+from locations.models import LocationPage
 
 
 class RichTextFieldType(Scalar):
@@ -292,9 +293,38 @@ class Language(graphene.Enum):
     BURMESE = 'my'
 
 
+class ServicePageStepLocationBlock(graphene.ObjectType):
+    # This uses graphene ObjectType resolvers, see:
+    # https://docs.graphene-python.org/en/latest/types/objecttypes/#resolvers
+    value = GenericScalar()
+    location_page = graphene.Field(LocationPageNode)
+
+    def resolve_location_page(self, info):
+        page = None
+        try:
+            page = LocationPage.objects.get(id=self.value)
+        except ObjectDoesNotExist:
+            pass
+        return page
+
+
+class ServicePageStep(graphene.ObjectType):
+    value = GenericScalar()
+    locations = graphene.List(ServicePageStepLocationBlock)
+
+    def resolve_locations(self, info):
+        repr_locations = []
+        if self.value['locations']:
+            for location in self.value['locations']:
+                repr_locations.append(ServicePageStepLocationBlock(value=location))
+
+        return repr_locations
+
+
 class ServicePageNode(DjangoObjectType):
     page_type = graphene.String()
     janis_url = graphene.String()
+    steps = graphene.List(ServicePageStep)
 
     class Meta:
         model = ServicePage
@@ -306,6 +336,14 @@ class ServicePageNode(DjangoObjectType):
 
     def resolve_janis_url(self, info):
         return self.janis_url()
+
+    def resolve_steps(self, info):
+        repr_steps = []
+        for step in self.steps.stream_data:
+            value = step.get('value')
+            repr_steps.append(ServicePageStep(value=value))
+
+        return repr_steps
 
 
 class InformationPageNode(DjangoObjectType):
