@@ -198,6 +198,9 @@ $(function() {
           );
           this.innerHTML = this.innerHTML.replace(']', '</span>');
         });
+        languageLabels.each(function() {
+          this.classList.add('translateable');
+        });
       }
     }
     replaceLanguageLabels();
@@ -210,23 +213,29 @@ $(function() {
         let thisField = labelList[label];
         let languageTag = labelList[label].querySelector('span').innerText;
         let element_of_label = labelList[label].htmlFor;
-        if (languageTag != null && languageTag != currentLang) {
-          thisField.parentElement.classList.add('hidden');
-        } else {
-          thisField.parentElement.classList.remove('hidden');
-        }
+        // if (languageTag != null && languageTag != currentLang) {
+        //   thisField.parentElement.classList.add('hidden');
+        // } else {
+        //   thisField.parentElement.classList.remove('hidden');
+        // }
 
         if (
-          !thisField.classList.contains('field__label') &&
+          thisField.classList.contains('field__label') &&
+          thisField.classList.contains('translateable') &&
           (languageTag != null && languageTag != currentLang)
-        ) {
-          $(thisField.parentElement)
-            .siblings()
-            .addClass('hidden');
-        } else {
-          $(thisField.parentElement)
-            .siblings()
-            .removeClass('hidden');
+        )
+        {
+          thisField.classList.add('hidden')
+          thisField.nextElementSibling.classList.add('hidden')
+        } else if (thisField.classList.contains('field__label') &&
+                  thisField.classList.contains('translateable') &&
+                  (languageTag != null && languageTag === currentLang)) {
+
+        } {
+          thisField.classList.remove('hidden')
+          // debugger;
+          // thisField.nextElementSibling.classList.remove('hidden')
+
         }
 
         // console.log(translatedElement);
