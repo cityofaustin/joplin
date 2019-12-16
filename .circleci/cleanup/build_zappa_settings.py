@@ -9,6 +9,7 @@ zappa_settings = {
     "profile_name": "default",
     "environment_variables": {
       "GITHUB_WEBHOOK_SECRET_TOKEN": os.getenv("GITHUB_WEBHOOK_SECRET_TOKEN"),
+      "HEROKU_KEY": os.getenv("HEROKU_KEY"),
     }
   }
 }
