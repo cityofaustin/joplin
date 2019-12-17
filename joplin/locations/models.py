@@ -155,7 +155,7 @@ class LocationPageRelatedServices(ClusterableModel):
 def add_hours_by_day_and_exceptions(model):
     """
     here we want to add these fields to this model, but typing them all out would be super verbose
-    so a little python and Django's contribute_to_class go a long way blarg
+    so a little python and Django's contribute_to_class go a long way
     """
     week_days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
     panels_to_add = []
