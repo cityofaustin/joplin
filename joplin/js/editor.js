@@ -221,8 +221,7 @@ $(function() {
           } else {
             translatedElement.classList.remove('hidden');
           }
-          //
-          // 
+          // This will check that any of those struct blocks actually had language lables within them to filter and turn them on.
           if (translatedElement.classList.contains("struct-block")) {
             const fieldlabels = translatedElement.querySelectorAll('[for]')
             fieldlabels.forEach( fieldlabel => {
@@ -234,8 +233,6 @@ $(function() {
               }
             })
           }
-          //
-          //
         } else {
           const translatedElement = labelList[label].parentElement;
           if (languageTag != null && languageTag != currentLang) {
