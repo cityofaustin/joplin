@@ -214,7 +214,7 @@ MONITOR_PERFORMANCE = bool(strtobool(os.environ.get('MONITOR_PERFORMANCE', str(F
 if MONITOR_PERFORMANCE:
     MIDDLEWARE = ['silk.middleware.SilkyMiddleware'] + MIDDLEWARE
 
-    SILKY_PYTHON_PROFILER = True
+    SILKY_PYTHON_PROFILER = False
     SILKY_PYTHON_PROFILER_BINARY = False
     SILKY_META = True
     SILKY_AUTHENTICATION = True
