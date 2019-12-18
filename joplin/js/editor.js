@@ -221,7 +221,10 @@ $(function() {
           } else {
             translatedElement.classList.remove('hidden');
           }
-          // This will check that any of those struct blocks actually had language lables within them to filter and turn them on.
+          /*  While the first condition checks for 'struct-blocks' with language tags,
+              it doesn't catch the case where there are 'struct-blocks' with language
+              tages WITHIN the element itself. The following condition checks for those conditions. 
+              - The was neccessary for guide stream fields. */
           if (translatedElement.classList.contains("struct-block")) {
             const fieldlabels = translatedElement.querySelectorAll('[for]')
             fieldlabels.forEach( fieldlabel => {
@@ -229,7 +232,7 @@ $(function() {
               fieldlabel.parentNode.classList.remove('hidden')
               if (attrFor[attrFor.length-1] !== currentLang) {
                 fieldlabel.parentNode.classList.add('hidden')
-                translatedElement.classList.remove('hidden');
+                translatedElement.classList.remove('hidden') // only re-reveal the parent class if we find this case.
               }
             })
           }
