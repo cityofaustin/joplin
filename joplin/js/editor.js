@@ -198,9 +198,6 @@ $(function() {
           );
           this.innerHTML = this.innerHTML.replace(']', '</span>');
         });
-        languageLabels.each(function() {
-          this.classList.add('translateable');
-        });
       }
     }
     replaceLanguageLabels();
@@ -210,32 +207,42 @@ $(function() {
     let labelList = state.languageLabels;
     for (let label in labelList) {
       if (labelList[label].querySelector) {
-        let thisField = labelList[label];
         let languageTag = labelList[label].querySelector('span').innerText;
-        let element_of_label = labelList[label].htmlFor;
-        // if (languageTag != null && languageTag != currentLang) {
-        //   thisField.parentElement.classList.add('hidden');
-        // } else {
-        //   thisField.parentElement.classList.remove('hidden');
-        // }
-
+        // these seem to be nested twice, from the title to the containing element
+        // TODO: come up with a more elegant and maintable way to check what elements ought to be hidden
         if (
-          thisField.classList.contains('field__label') &&
-          thisField.classList.contains('translateable') &&
-          (languageTag != null && languageTag != currentLang)
-        )
-        {
-          thisField.classList.add('hidden')
-          thisField.nextElementSibling.classList.add('hidden')
-        } else if (thisField.classList.contains('field__label') &&
-                  thisField.classList.contains('translateable') &&
-                  (languageTag != null && languageTag === currentLang)) {
+          labelList[label].parentElement.parentElement.parentElement.classList
+            .value !== 'struct-block'
+        ) {
+          const translatedElement = labelList[label].parentElement.parentElement;
 
-        } {
-          thisField.classList.remove('hidden')
-          // debugger;
-          // thisField.nextElementSibling.classList.remove('hidden')
-
+          if (languageTag != null && languageTag != currentLang) {
+            translatedElement.classList.add('hidden');
+          } else {
+            translatedElement.classList.remove('hidden');
+          }
+          /*  While the first condition checks for 'struct-blocks' with language tags,
+              it doesn't catch the case where there are 'struct-blocks' with language
+              tages WITHIN the element itself. The following condition checks for those conditions. 
+              - The was neccessary for guide stream fields. */
+          if (translatedElement.classList.contains("struct-block")) {
+            const fieldlabels = translatedElement.querySelectorAll('[for]')
+            fieldlabels.forEach( fieldlabel => {
+              const attrFor = fieldlabel.getAttribute('for').split("_")
+              fieldlabel.parentNode.classList.remove('hidden')
+              if (attrFor[attrFor.length-1] !== currentLang) {
+                fieldlabel.parentNode.classList.add('hidden')
+                translatedElement.classList.remove('hidden') // only re-reveal the parent class if we find this case.
+              }
+            })
+          }
+        } else {
+          const translatedElement = labelList[label].parentElement;
+          if (languageTag != null && languageTag != currentLang) {
+            translatedElement.classList.add('hidden');
+          } else {
+            translatedElement.classList.remove('hidden');
+          }
         }
 
         // console.log(translatedElement);
