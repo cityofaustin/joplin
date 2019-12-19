@@ -11,7 +11,7 @@ from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from django.utils.html import format_html_join
 from webpack_loader import utils as webpack_loader_utils
-from wagtail.admin.utils import permission_required
+from wagtail.admin.auth import permission_required
 
 from wagtail.admin.menu import MenuItem
 from wagtail.contrib.modeladmin.options import ModelAdmin, ModelAdminGroup, modeladmin_register
