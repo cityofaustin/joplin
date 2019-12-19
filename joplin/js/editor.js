@@ -223,7 +223,7 @@ $(function() {
           }
           /*  While the first condition checks for 'struct-blocks' with language tags,
               it doesn't catch the case where there are 'struct-blocks' with language
-              tages WITHIN the element itself. The following condition checks for those conditions. 
+              tages WITHIN the element itself. The following condition checks for those conditions.
               - The was neccessary for guide stream fields. */
           if (translatedElement.classList.contains("struct-block")) {
             const fieldlabels = translatedElement.querySelectorAll('[for]')
@@ -244,9 +244,6 @@ $(function() {
             translatedElement.classList.remove('hidden');
           }
         }
-
-        // console.log(translatedElement);
-        // toggle visibility of element
       }
     }
 
