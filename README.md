@@ -367,8 +367,8 @@ The migration process currently consists of 3 commands:
     -   Clean up older docker images and containers and rebuild the new application if necessary:
     -   ```
         # Assuming you only have joplin containers running, remove all containers first:
-        docker rm $(docker container ls -aq);
-
+        docker rm $(docker container ls -aq); 
+        
         # Delete orphan (dangling) images only:
         docker rmi $(docker image ls -aq -f "dangling=true");
 
@@ -382,7 +382,7 @@ The migration process currently consists of 3 commands:
 
 We've set up Silk for performance monitoring of queries and memory usage. This is set up at the `/performance` endpoint. You'll need to login.
 
-By default, Silk is set to run on every deployed enviornment _besides_ production. If you want to use it locally, include `MONITOR_PERFORMANCE=True` in your .env file.
+By default, Silk is set to run on every deployed environment _besides_ production. If you want to use it locally, include `MONITOR_PERFORMANCE=True` in your .env file.
 
 ## Load testing
 
