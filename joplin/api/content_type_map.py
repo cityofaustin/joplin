@@ -3,7 +3,11 @@ from base.models import (
     InformationPage,
     OfficialDocumentPage,
     GuidePage,
-    FormContainer,
+    FormContainer
+)
+
+from locations.models import (
+    LocationPage
 )
 
 # Gain access to a content_type's node and model if you have it's name.
@@ -29,4 +33,8 @@ content_type_map = {
         "node": "FormContainerNode",
         "model": FormContainer,
     },
+    "location page": {
+        "node": "LocationPageNode",
+        "model": LocationPage
+    }
 }
