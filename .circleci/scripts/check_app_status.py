@@ -4,23 +4,19 @@ import os
 import sys
 import json
 import time
+import heroku3
+
 
 APPNAME = sys.argv[1]
+
+HEROKU_KEY = os.getenv('HEROKU_KEY')
+heroku = heroku3.from_key(HEROKU_KEY)
 
 
 def check_app_status():
     print(f"Checking state of App {APPNAME}.")
-    output = subprocess.run(re.split("\s+", f"heroku ps -a {APPNAME} --json"),
-        capture_output=True,
-        text=True
-    )
-    if (output.stdout):
-        print(output.stdout)
-    if (output.stderr):
-        print(output.stderr)
-        sys.exit(1)
-    app_info = json.loads(output.stdout)
-    app_state = app_info[0]['state']
+    app = heroku.apps()[APPNAME]
+    app_state = app.dynos()[0].state
     if (app_state == 'up'):
         print(f"App {APPNAME} is up. Ready to migrate.")
         return
