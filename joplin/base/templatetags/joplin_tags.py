@@ -59,6 +59,7 @@ def themes_topics_tree(context):
 
 
 @register.inclusion_tag('wagtailadmin/departments_list.html', takes_context=True)
+# and what is this for?
 def departments_list(context):
     departments = []
 
