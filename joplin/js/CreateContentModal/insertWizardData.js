@@ -13,5 +13,3 @@ export default function (){
       localStorage.removeItem('wagtailCreateModal');
     }
 };
-
-// what is this?
