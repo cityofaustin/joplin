@@ -274,10 +274,9 @@ class AdminOnlyFieldPanel(FieldPanel):
         model_name = self.model.__name__
         self.bound_field = self.form[self.field_name]
         self.help_text = self.bound_field.help_text
-        # Checks to see if user is a superuser. If so, return the label
-        # If not, return an empty string thus effectively hiding the field panel text
+        # If user is superuser and page is Service Page or Information Page
+        # show the field panel text "Make This a Top Level Page"
         if self.request.user.is_superuser:
-            # check the page type. if not the one we can show return "" again
             if model_name is 'ServicePage' or model_name is 'InfoPage':
                 self.heading = self.bound_field.label
             else:
