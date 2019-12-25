@@ -11,7 +11,7 @@ if [[ $CURRENT_CONFIG != *"JANIS_URL"* ]]; then
 fi
 
 if [[ $CURRENT_CONFIG != *"STYLEGUIDE_URL"* ]]; then
-    heroku config:set STYLEGUIDE_URL=https://cityofaustin.github.io/digital-services-style-guide --app "$APP"
+    heroku config:set STYLEGUIDE_URL=https://cityofaustin.gitbook.io/digital-style-guide --app "$APP"
 fi
 
 heroku container:push web --app "$APP"

@@ -87,7 +87,7 @@ if [ "$UNDOCK" != "on" ]; then
   fi
 else
   # Required vars that are added in docker-compose.yml
-  export STYLEGUIDE_URL="https://cityofaustin.github.io/digital-services-style-guide"
+  export STYLEGUIDE_URL="https://cityofaustin.gitbook.io/digital-style-guide"
   export DEBUG=1
 
   # Django will access DATABASE_URL from HOST, not a container in the same network
