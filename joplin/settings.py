@@ -82,7 +82,6 @@ INSTALLED_APPS = [
     'countable_field',
     'flags',
     'locations',
-    'silk',
 ]
 
 MIDDLEWARE = [
@@ -208,18 +207,6 @@ ALLOWED_HOSTS = [
 ]
 
 DEBUG_TOOLBAR = bool(strtobool(os.environ.get('DEBUG_TOOLBAR', str(False))))
-MONITOR_PERFORMANCE = bool(strtobool(os.environ.get('MONITOR_PERFORMANCE', str(False))))
-
-
-if MONITOR_PERFORMANCE:
-    MIDDLEWARE = ['silk.middleware.SilkyMiddleware'] + MIDDLEWARE
-
-    SILKY_PYTHON_PROFILER = True
-    SILKY_PYTHON_PROFILER_BINARY = False
-    SILKY_META = True
-    SILKY_AUTHENTICATION = True
-    SILKY_AUTHORISATION = True
-    SILKY_MAX_RECORDED_REQUESTS = 10**3
 
 
 if DEBUG_TOOLBAR:
