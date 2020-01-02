@@ -204,6 +204,7 @@ class LocationPageRelatedServices(DjangoObjectType):
         interfaces = [graphene.Node]
 
 
+
 class ContactNode(DjangoObjectType):
     class Meta:
         model = Contact
@@ -293,6 +294,7 @@ class Language(graphene.Enum):
 
 class ServicePageNode(DjangoObjectType):
     page_type = graphene.String()
+    janis_url = graphene.String()
 
     class Meta:
         model = ServicePage
@@ -301,6 +303,9 @@ class ServicePageNode(DjangoObjectType):
 
     def resolve_page_type(self, info):
         return ServicePage.get_verbose_name().lower()
+
+    def resolve_janis_url(self, info):
+        return self.janis_url()
 
 
 class InformationPageNode(DjangoObjectType):
@@ -482,6 +487,7 @@ class PageRevisionNode(DjangoObjectType):
     as_official_document_page = graphene.NonNull(OfficialDocumentPageNode)
     as_guide_page = graphene.NonNull(GuidePageNode)
     as_form_container = graphene.NonNull(FormContainerNode)
+    as_location_page = graphene.NonNull(LocationPageNode)
 
     def resolve_as_service_page(self, resolve_info, *args, **kwargs):
         return self.as_page_object()
@@ -505,6 +511,9 @@ class PageRevisionNode(DjangoObjectType):
         return self.as_page_object()
 
     def resolve_as_form_container(self, resolve_info, *args, **kwargs):
+        return self.as_page_object()
+
+    def resolve_as_location_page(self, resolve_info, *args, **kwargs):
         return self.as_page_object()
 
     class Meta:
@@ -545,6 +554,11 @@ def get_structure_for_content_type(content_type):
 
                     page_topic_tc_global_id = graphene.Node.to_global_id('TopicCollectionNode', tc.topiccollection.id)
                     site_structure.append({'url': f'/{tc.topiccollection.theme.slug}/{tc.topiccollection.slug}/{page_topic.topic.slug}/{page.slug}/', 'type': content_type, 'id': page_global_id, 'parent_topic': page_topic_global_id, 'grandparent_topic_collection': page_topic_tc_global_id})
+
+        # Location pages need urls
+        if content_type == 'location page':
+            site_structure.append({'url': f'/location/{page.slug}/', 'type': content_type, 'id': page_global_id})
+
     return site_structure
 
 
@@ -586,6 +600,7 @@ class SiteStructure(graphene.ObjectType):
         site_structure.extend(get_structure_for_content_type('official document page'))
         site_structure.extend(get_structure_for_content_type('guide page'))
         site_structure.extend(get_structure_for_content_type('form container'))
+        site_structure.extend(get_structure_for_content_type('location page'))
 
         return site_structure
 
