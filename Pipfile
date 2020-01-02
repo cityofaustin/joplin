@@ -35,10 +35,6 @@ pympler = "*"
 psycopg2 = "==2.8.4"
 wagtail-factories = "*"
 scout-apm = "*"
-django-silk = "*"
 
 [requires]
 python_version = "3.7"
-
-[pipenv]
-allow_prereleases = true
