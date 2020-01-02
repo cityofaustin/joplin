@@ -277,7 +277,7 @@ class AdminOnlyFieldPanel(FieldPanel):
         # If user is superuser and page is Service Page or Information Page
         # show the field panel text "Make This a Top Level Page"
         if self.request.user.is_superuser:
-            if model_name is 'ServicePage' or model_name is 'InfoPage':
+            if model_name is 'ServicePage' or model_name is 'InformationPage':
                 self.heading = self.bound_field.label
             else:
                 self.heading = ""
@@ -290,7 +290,7 @@ class AdminOnlyFieldPanel(FieldPanel):
         # if not, return empty string which overrides the object/checkbox
         if not self.request.user.is_superuser:
             return ''
-        if model_name is not 'ServicePage' or model_name is not 'InfoPage':
+        if model_name is not 'ServicePage' and model_name is not 'InformationPage':
             return ''
 
         return super().render_as_object()
