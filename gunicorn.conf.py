@@ -10,5 +10,5 @@ max_requests_jitter = 50
 timeout = 190
 preload = True
 if DEPLOYMENT_MODE in ("LOCAL", "REVIEW"):
-    timeout = 190
-    loglevel = "DEBUG"
+    timeout = 100
+    # loglevel = "DEBUG"

@@ -16,4 +16,11 @@ branch_overrides = {
     "3503-concurrency": {
         "LOAD_DATA": "",
     },
+    "3672-timeout": {
+        "LOAD_DATA": "staging",
+        "MONITOR_PERFORMANCE": True,
+        "WEB_CONCURRENCY": 3,
+        "DEBUG": 0,
+        "DELETION_PROTECTION": 1,
+    }
 }
