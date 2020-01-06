@@ -81,6 +81,7 @@ INSTALLED_APPS = [
     'phonenumber_field',
     'countable_field',
     'flags',
+    'silk',
 ]
 
 MIDDLEWARE = [
@@ -204,6 +205,15 @@ ALLOWED_HOSTS = [
     'localhost',
     '.herokuapp.com',
 ]
+
+MIDDLEWARE = ['silk.middleware.SilkyMiddleware'] + MIDDLEWARE
+
+SILKY_PYTHON_PROFILER = True
+SILKY_PYTHON_PROFILER_BINARY = False
+SILKY_META = True
+SILKY_AUTHENTICATION = True
+SILKY_AUTHORISATION = True
+SILKY_MAX_RECORDED_REQUESTS = 10**3
 
 DEBUG_TOOLBAR = bool(strtobool(os.environ.get('DEBUG_TOOLBAR', str(False))))
 

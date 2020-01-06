@@ -21,3 +21,4 @@ django-phonenumber-field==3.0.1
 phonenumberslite==8.10.16
 coa-django-countable_field==1.6
 django-flags==4.2.4
+django-silk==3.0.4
