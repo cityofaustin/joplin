@@ -367,8 +367,8 @@ The migration process currently consists of 3 commands:
     -   Clean up older docker images and containers and rebuild the new application if necessary:
     -   ```
         # Assuming you only have joplin containers running, remove all containers first:
-        docker rm $(docker container ls -aq); 
-        
+        docker rm $(docker container ls -aq);
+
         # Delete orphan (dangling) images only:
         docker rmi $(docker image ls -aq -f "dangling=true");
 
@@ -448,6 +448,12 @@ We use wagtail-modeltranslation to handle translated fields, this fork corrects 
 https://github.com/cityofaustin/publisher
 
 Microservice that handles publishing versions of Janis based on branches of Joplin.
+
+### coa-joplin-clean-up
+
+https://github.com/cityofaustin/coa-joplin-clean-up
+
+A webhook used to delete heroku PR builds after a PR has been closed or merged. If you want your PR branch to stay up even after being merged/closed, you can add the environment variable "DELETION_PROTECTION"=1 to your build.
 
 ## Misc
 
