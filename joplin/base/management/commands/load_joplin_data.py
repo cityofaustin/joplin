@@ -41,7 +41,7 @@ class Command(BaseCommand):
                     print("Adding staging datadump")
                     run_load_data_command('./joplin/db/system-generated/staging.datadump.json')
                     DeploymentLog(operation="load_data",value="staging",completed=True).save()
-                elif (LOAD_DATA == "dummmy"):
+                elif (LOAD_DATA == "dummy"):
                     print("Adding dummy datadump")
                     run_load_data_command('./joplin/db/system-generated/dummy.datadump.json')
                     DeploymentLog(operation="load_data",value="dummmy",completed=True).save()
