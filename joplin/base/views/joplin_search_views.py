@@ -5,8 +5,8 @@ from django.core.paginator import Paginator
 from wagtail.core.models import Page
 from wagtail.search.query import MATCH_ALL
 from wagtail.admin.forms.search import SearchForm
-from wagtail.admin.utils import user_has_any_page_permission
-# wagtail.admin.utils.user_passes_test does not redirect to settings.LOGIN_URL
+from wagtail.admin.auth import user_has_any_page_permission
+# wagtail.admin.auth.user_passes_test does not redirect to settings.LOGIN_URL
 # So we must use django.contrib.auth.decorators.user_passes_test
 from django.contrib.auth.decorators import user_passes_test
 from django.views.decorators.vary import vary_on_headers

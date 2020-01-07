@@ -196,6 +196,8 @@ SMUGGLER_FIXTURE_DIR = os.path.join(BASE_DIR, 'joplin/db/smuggler')
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
 
+WAGTAILDOCS_SERVE_METHOD = 'direct'
+
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
@@ -214,7 +216,7 @@ MONITOR_PERFORMANCE = bool(strtobool(os.environ.get('MONITOR_PERFORMANCE', str(F
 if MONITOR_PERFORMANCE:
     MIDDLEWARE = ['silk.middleware.SilkyMiddleware'] + MIDDLEWARE
 
-    SILKY_PYTHON_PROFILER = True
+    SILKY_PYTHON_PROFILER = False
     SILKY_PYTHON_PROFILER_BINARY = False
     SILKY_META = True
     SILKY_AUTHENTICATION = True
