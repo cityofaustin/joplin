@@ -382,7 +382,7 @@ The migration process currently consists of 3 commands:
 
 We've set up Silk for performance monitoring of queries and memory usage. This is set up at the `/performance` endpoint. You'll need to login.
 
-By default, Silk is set to run on every deployed enviornment _besides_ production. If you want to use it locally, include `MONITOR_PERFORMANCE=True` in your .env file.
+By default, Silk is set to run on every deployed environment _besides_ production. If you want to use it locally, include `MONITOR_PERFORMANCE=True` in your .env file.
 
 ## Load testing
 
@@ -448,6 +448,12 @@ We use wagtail-modeltranslation to handle translated fields, this fork corrects 
 https://github.com/cityofaustin/publisher
 
 Microservice that handles publishing versions of Janis based on branches of Joplin.
+
+### coa-joplin-clean-up
+
+https://github.com/cityofaustin/coa-joplin-clean-up
+
+A webhook used to delete heroku PR builds after a PR has been closed or merged. If you want your PR branch to stay up even after being merged/closed, you can add the environment variable "DELETION_PROTECTION"=1 to your build.
 
 ## Misc
 
