@@ -83,8 +83,7 @@ const ChooseTitleStep = ({
             Use words you think residents may search to find the {pageType}.
           </li>
           <li>
-            You don’t need to worry about including your department’s name in
-            the title.
+            You don’t need to include your department’s name in the title.
           </li>
         </ul>
       </div>
