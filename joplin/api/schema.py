@@ -172,7 +172,7 @@ class TopicNode(DjangoObjectType):
 class DepartmentNode(DjangoObjectType):
     class Meta:
         model = Department
-        filter_fields = ['id', 'name']
+        filter_fields = ['id', 'name', 'live']
         interfaces = [graphene.Node]
 
 
@@ -615,14 +615,14 @@ class InformationPageTopicNode(DjangoObjectType):
     class Meta:
         model = InformationPageTopic
         interfaces = [graphene.Node]
-        filter_fields = ['topic']
+        filter_fields = ['topic', 'live']
 
 
 class FormContainerTopicNode(DjangoObjectType):
     class Meta:
         model = FormContainerTopic
         interfaces = [graphene.Node]
-        filter_fields = ['topic']
+        filter_fields = ['topic', 'live']
 
 
 class DepartmentPageContactNode(DjangoObjectType):
@@ -722,14 +722,14 @@ class OfficialDocumentPageTopicNode(DjangoObjectType):
     class Meta:
         model = OfficialDocumentPageTopic
         interfaces = [graphene.Node]
-        filter_fields = ['topic']
+        filter_fields = ['topic', 'live']
 
 
 class GuidePageTopicNode(DjangoObjectType):
     class Meta:
         model = GuidePageTopic
         interfaces = [graphene.Node]
-        filter_fields = ['topic']
+        filter_fields = ['topic', 'live']
 
 
 def get_page_with_preview_data(page, session):
