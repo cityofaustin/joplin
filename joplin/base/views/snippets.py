@@ -10,7 +10,7 @@ from django.utils.translation import ugettext as _
 
 from wagtail.admin import messages
 from wagtail.admin.edit_handlers import ObjectList, extract_panel_definitions_from_model_class
-from wagtail.admin.utils import permission_denied
+from wagtail.admin.auth import permission_denied
 from wagtail.snippets.models import get_snippet_models
 from wagtail.snippets.permissions import get_permission_name, user_can_edit_snippet_type
 
