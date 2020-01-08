@@ -53,6 +53,7 @@ default_branch_vars = {
     "DEBUG_TOOLBAR": False,
     "LOAD_DATA": "prod",
     "MONITOR_PERFORMANCE": False,
+    "DELETION_PROTECTION": 0,
 }
 config.update(default_branch_vars)
 

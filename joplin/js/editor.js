@@ -214,12 +214,27 @@ $(function() {
           labelList[label].parentElement.parentElement.parentElement.classList
             .value !== 'struct-block'
         ) {
-          const translatedElement =
-            labelList[label].parentElement.parentElement;
+          const translatedElement = labelList[label].parentElement.parentElement;
+
           if (languageTag != null && languageTag != currentLang) {
             translatedElement.classList.add('hidden');
           } else {
             translatedElement.classList.remove('hidden');
+          }
+          /*  While the first condition checks for 'struct-blocks' with language tags,
+              it doesn't catch the case where there are 'struct-blocks' with language
+              tages WITHIN the element itself. The following condition checks for those conditions.
+              - The was neccessary for guide stream fields. */
+          if (translatedElement.classList.contains("struct-block")) {
+            const fieldlabels = translatedElement.querySelectorAll('[for]')
+            fieldlabels.forEach( fieldlabel => {
+              const attrFor = fieldlabel.getAttribute('for').split("_")
+              fieldlabel.parentNode.classList.remove('hidden')
+              if (attrFor[attrFor.length-1] !== currentLang) {
+                fieldlabel.parentNode.classList.add('hidden')
+                translatedElement.classList.remove('hidden') // only re-reveal the parent class if we find this case.
+              }
+            })
           }
         } else {
           const translatedElement = labelList[label].parentElement;
@@ -229,9 +244,6 @@ $(function() {
             translatedElement.classList.remove('hidden');
           }
         }
-
-        // console.log(translatedElement);
-        // toggle visibility of element
       }
     }
 
