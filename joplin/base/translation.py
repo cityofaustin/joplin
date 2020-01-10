@@ -6,6 +6,7 @@ from wagtail.images.models import Image
 from .models import ThreeOneOne, TopicPage, TopicCollectionPage, Theme, ServicePage, ProcessPage, ProcessPageStep, DepartmentPage, DepartmentPageDirector, InformationPage, OfficialDocumentPage, OfficialDocumentPageOfficialDocument, TranslatedImage, Department, Map, HomePage, GuidePage, FormContainer
 from locations.models import LocationPage
 
+
 @register(Image)
 class ImageTranslationOptions(TranslationOptions):
     pass
@@ -155,4 +156,6 @@ class FormContainerTranslationOptions(TranslationOptions):
 
 @register(LocationPage)
 class LocationPageOptions(TranslationOptions):
-    pass
+    fields = (
+        'hours_exceptions',
+    )

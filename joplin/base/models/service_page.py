@@ -4,7 +4,7 @@ from modelcluster.models import ClusterableModel
 from modelcluster.fields import ParentalKey
 
 from wagtail.core.fields import RichTextField, StreamField
-from wagtail.core.blocks import ListBlock, RichTextBlock, StructBlock, TextBlock
+from wagtail.core.blocks import ListBlock, RichTextBlock, StructBlock, TextBlock, PageChooserBlock
 from wagtail.admin.edit_handlers import FieldPanel, HelpPanel, InlinePanel, MultiFieldPanel, PageChooserPanel, StreamFieldPanel
 from wagtail.snippets.edit_handlers import SnippetChooserPanel
 
@@ -12,6 +12,7 @@ from base.blocks import SnippetChooserBlockWithAPIGoodness, WhatDoIDoWithBlock, 
 from base.forms import ServicePageForm
 
 from .janis_page import JanisBasePage
+from locations.models import LocationPage
 from .contact import Contact
 
 from .constants import WYSIWYG_GENERAL, DEFAULT_MAX_LENGTH, SHORT_DESCRIPTION_LENGTH
@@ -53,6 +54,20 @@ class ServicePage(JanisBasePage):
                 ],
                 label="Step With Options"
             )),
+            ('step_with_locations', StructBlock(
+                [
+                    ('locations_description', RichTextBlock(
+                        features=WYSIWYG_SERVICE_STEP,
+                        # richTextPlaceholder.js searches for the class 'coa-option-description' and replaces placeholder text
+                        # The placeholder text is not part of the richtext input, but rather a div mask.
+                        classname='coa-locations-description',
+                    )),
+                    ('locations', ListBlock(PageChooserBlock(label="Location", page_type=[LocationPage]))),
+                ],
+                label="Step with locations"
+            )),
+
+
         ],
         verbose_name='Write out the steps a resident needs to take to use the service',
         # this gets called in the help panel

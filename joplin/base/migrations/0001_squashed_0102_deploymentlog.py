@@ -19,7 +19,6 @@ from wagtail.core.blocks.stream_block import StreamValue
 from django.db import migrations
 
 
-
 # Functions from the following migrations need manual copying.
 # Move them and any dependencies into this file, then update the
 # RunPython operations to refer to the local versions:
@@ -69,6 +68,7 @@ def remove_homepage(apps, schema_editor):
 
     # Delete content type for homepage model
     ContentType.objects.filter(model='homepage', app_label='base').delete()
+
 
 def better_steps(apps, schema_editor):
     '''
@@ -1642,6 +1642,31 @@ class Migration(migrations.Migration):
             field=models.TextField(blank=True, max_length=255),
         ),
         migrations.CreateModel(
+            name='FormContainer',
+            fields=[
+                ('page_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='wagtailcore.Page')),
+                ('created_at', models.DateTimeField(auto_now_add=True)),
+                ('updated_at', models.DateTimeField(auto_now=True)),
+                ('author_notes', wagtail.core.fields.RichTextField(blank=True, verbose_name='Notes for authors (Not visible on the resident facing site)')),
+                ('coa_global', models.BooleanField(default=False, verbose_name='Make this a top level page')),
+                ('description', models.TextField(blank=True, verbose_name='Form description')),
+                ('description_ar', models.TextField(blank=True, null=True, verbose_name='Form description')),
+                ('description_en', models.TextField(blank=True, null=True, verbose_name='Form description')),
+                ('description_es', models.TextField(blank=True, null=True, verbose_name='Form description')),
+                ('description_vi', models.TextField(blank=True, null=True, verbose_name='Form description')),
+                ('form_url', models.URLField(blank=True, help_text='This link can be found under Share > "Link to this form on your website or email:"', verbose_name='Enter the URL of your Formstack form')),
+                ('form_url_ar', models.URLField(blank=True, help_text='This link can be found under Share > "Link to this form on your website or email:"', null=True, verbose_name='Enter the URL of your Formstack form')),
+                ('form_url_en', models.URLField(blank=True, help_text='This link can be found under Share > "Link to this form on your website or email:"', null=True, verbose_name='Enter the URL of your Formstack form')),
+                ('form_url_es', models.URLField(blank=True, help_text='This link can be found under Share > "Link to this form on your website or email:"', null=True, verbose_name='Enter the URL of your Formstack form')),
+                ('form_url_vi', models.URLField(blank=True, help_text='This link can be found under Share > "Link to this form on your website or email:"', null=True, verbose_name='Enter the URL of your Formstack form')),
+            ],
+            options={
+                'abstract': False,
+                'permissions': [('view_extra_panels', 'Can view extra panels'), ('view_snippets', 'Can view snippets'), ('add_snippets', 'Can add snippet'), ('delete_snippets', 'Can delete snippet')],
+            },
+            bases=('wagtailcore.page',),
+        ),
+        migrations.CreateModel(
             name='FormContainerRelatedDepartments',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
@@ -1716,31 +1741,6 @@ class Migration(migrations.Migration):
         migrations.AlterModelOptions(
             name='departmentpage',
             options={'permissions': [('view_extra_panels', 'Can view extra panels'), ('view_snippets', 'Can view snippets'), ('add_snippets', 'Can add snippet'), ('delete_snippets', 'Can delete snippet')]},
-        ),
-        migrations.CreateModel(
-            name='FormContainer',
-            fields=[
-                ('page_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='wagtailcore.Page')),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('author_notes', wagtail.core.fields.RichTextField(blank=True, verbose_name='Notes for authors (Not visible on the resident facing site)')),
-                ('coa_global', models.BooleanField(default=False, verbose_name='Make this a top level page')),
-                ('description', models.TextField(blank=True, verbose_name='Form description')),
-                ('description_ar', models.TextField(blank=True, null=True, verbose_name='Form description')),
-                ('description_en', models.TextField(blank=True, null=True, verbose_name='Form description')),
-                ('description_es', models.TextField(blank=True, null=True, verbose_name='Form description')),
-                ('description_vi', models.TextField(blank=True, null=True, verbose_name='Form description')),
-                ('form_url', models.URLField(blank=True, help_text='This link can be found under Share > "Link to this form on your website or email:"', verbose_name='Enter the URL of your Formstack form')),
-                ('form_url_ar', models.URLField(blank=True, help_text='This link can be found under Share > "Link to this form on your website or email:"', null=True, verbose_name='Enter the URL of your Formstack form')),
-                ('form_url_en', models.URLField(blank=True, help_text='This link can be found under Share > "Link to this form on your website or email:"', null=True, verbose_name='Enter the URL of your Formstack form')),
-                ('form_url_es', models.URLField(blank=True, help_text='This link can be found under Share > "Link to this form on your website or email:"', null=True, verbose_name='Enter the URL of your Formstack form')),
-                ('form_url_vi', models.URLField(blank=True, help_text='This link can be found under Share > "Link to this form on your website or email:"', null=True, verbose_name='Enter the URL of your Formstack form')),
-            ],
-            options={
-                'abstract': False,
-                'permissions': [('view_extra_panels', 'Can view extra panels'), ('view_snippets', 'Can view snippets'), ('add_snippets', 'Can add snippet'), ('delete_snippets', 'Can delete snippet')],
-            },
-            bases=('wagtailcore.page',),
         ),
         migrations.AlterModelOptions(
             name='informationpage',
