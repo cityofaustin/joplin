@@ -11,8 +11,10 @@ from wagtail.core.models import Page
 from wagtail.core.fields import RichTextField
 from flags.state import flag_enabled
 
-from base.models.site_settings import JanisBranchSettings
+from modelcluster.models import ClusterableModel
+from modelcluster.fields import ParentalKey
 
+from base.models.site_settings import JanisBranchSettings
 
 class JanisBasePage(Page):
     """
@@ -260,7 +262,7 @@ class JanisBasePage(Page):
         return edit_handler.bind_to(model=cls)
 
     class Meta:
-        abstract = True
+        # abstract = True
         # https://docs.djangoproject.com/en/2.2/topics/auth/customizing/#custom-permissions
         permissions = [
             ("view_extra_panels", "Can view extra panels"),
@@ -316,3 +318,18 @@ class PermissionObjectList(ObjectList):
             return ""
 
         return super().render()
+
+class JanisUrl(ClusterableModel):
+    url = models.CharField()
+
+    page = ParentalKey(JanisBasePage, related_name='janis_urls', default=None)
+    
+    theme = models.ForeignKey('base.Theme',on_delete=models.PROTECT,null=True, blank=True)
+    topic_collection = models.ForeignKey('base.TopicCollectionPage', on_delete=models.PROTECT,null=True, blank=True)
+    topic = models.ForeignKey('base.TopicPage', on_delete=models.CASCADE, null=True, blank=True)
+    department = models.ForeignKey("base.departmentPage",on_delete=models.PROTECT, null=True, blank=True)
+    
+    language = models.CharField()
+
+    def __str__(self):
+        return self.url
