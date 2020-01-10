@@ -6,7 +6,7 @@ from django.db import models, ProgrammingError
 from django.conf import settings
 from wagtail.search import index
 from wagtail.utils.decorators import cached_classmethod
-from wagtail.admin.edit_handlers import FieldPanel, ObjectList, TabbedInterface
+from wagtail.admin.edit_handlers import FieldPanel, ObjectList, TabbedInterface, InlinePanel
 from wagtail.core.models import Page
 from wagtail.core.fields import RichTextField
 from flags.state import flag_enabled
@@ -44,7 +44,8 @@ class JanisBasePage(Page):
     )
 
     notes_content_panel = [
-        FieldPanel('author_notes')
+        FieldPanel('author_notes'),
+        InlinePanel('janis_urls', label="Janis URLs")
     ]
 
     coa_global = models.BooleanField(default=False, verbose_name='Make this a top level page')

@@ -2,12 +2,13 @@ from django.db import models
 from modelcluster.models import ClusterableModel
 from modelcluster.fields import ParentalKey
 # from wagtail.snippets.models import register_snippet
+from .janis_page import JanisBasePage
 
 # @register_snippet
 class JanisUrl(ClusterableModel):
     url = models.CharField()
 
-    page = ParentalKey(JanisPage, related_name='janis_urls', default=None)
+    page = ParentalKey(JanisBasePage, related_name='janis_urls', default=None)
     
     theme = models.ForeignKey('base.Theme',on_delete=models.PROTECT,null=True, blank=True)
     topic_collection = models.ForeignKey('base.TopicCollectionPage', on_delete=models.CASCADE,null=True, blank=True)
