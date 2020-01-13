@@ -2,6 +2,8 @@ import os
 DEPLOYMENT_MODE = os.environ.get('DEPLOYMENT_MODE')
 
 worker_class = 'gevent'
+# to stay under heroku limit of 20 connections
+worker_connections = 16
 
 pythonpath = "/app/joplin"
 reload = True

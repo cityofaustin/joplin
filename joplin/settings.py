@@ -146,9 +146,8 @@ ISREVIEW = DEPLOYMENT_MODE == "REVIEW"
 #
 default_db_url = f'sqlite:///{os.path.join(PROJECT_DIR, "db.sqlite3")}'
 DATABASES = {
-    'default': dj_database_url.config(default=default_db_url),
+    'default': dj_database_url.config(default=default_db_url, conn_max_age=600),
 }
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
