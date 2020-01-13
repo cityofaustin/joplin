@@ -12,7 +12,7 @@ import json
 logger = logging.getLogger(__name__)
 
 
-def netlify_publish():
+def netlify_publish(page_id=None):
     logger.debug("netlify_publish() Starting task")
     try:
         publish_janis_branch = getattr(JanisBranchSettings.objects.first(), 'publish_janis_branch')
@@ -25,6 +25,7 @@ def netlify_publish():
             data=json.dumps({
                 "janis_branch": publish_janis_branch,
                 "CMS_API": settings.CMS_API,
+                #"page_id": page_id
             }),
         )
         logger.debug("Sent publish request to coa-publisher.")

@@ -20,6 +20,14 @@ JANIS_SLUG_URL = settings.JANIS_SLUG_URL
 
 
 def trigger_build(sender, action='saved', instance=None):
+    print(settings.ISLOCAL)
+    print(sender)
+    print(sender.id)
+    # page_global_id = graphene.Node.to_global_id(content_type_data["node"], page.id)
+    # >>> glob_id = Node.to_global_id('InformationPage', 28)
+    # >>> glob_id
+#SW5mb3JtYXRpb25QYWdlOjI4'
+    # then see about passing it into the create build aws
     """
     triggers different build process depending on environment
     source = name of snippet or object triggering build
