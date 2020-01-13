@@ -1,6 +1,7 @@
 import os
 DEPLOYMENT_MODE = os.environ.get('DEPLOYMENT_MODE')
 
+worker_class = 'gevent'
 
 pythonpath = "/app/joplin"
 reload = True
