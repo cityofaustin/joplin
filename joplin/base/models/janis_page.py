@@ -78,7 +78,6 @@ class JanisBasePage(Page):
                 'guide page',
                 'official document page',
                 'form container',
-                'location page',
             ]
             has_no_topic_collection = has_no_theme
 
@@ -86,7 +85,6 @@ class JanisBasePage(Page):
                 'topic page',
                 'topic collection page',
                 'department page',
-                'location page',
             ]
 
             theme_slug = (
