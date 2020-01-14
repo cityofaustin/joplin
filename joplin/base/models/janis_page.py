@@ -120,6 +120,7 @@ class JanisBasePage(Page):
             if self.content_type.name == 'location page':
                 location_url = base_url + '/location/' + page_slug
                 return location_url
+                
 
             # attributes for the url are needed by not discovered yet lets fetch them
             # looking for missing elements, deducing content type from what works and what dosen't
