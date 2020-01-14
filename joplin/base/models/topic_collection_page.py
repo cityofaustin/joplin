@@ -35,4 +35,5 @@ class TopicCollectionPage(JanisBasePage):
         FieldPanel('theme'),
         ImageChooserPanel('image'),
         InlinePanel('topiccollections', label='Topic Collections this page belongs to'),
+        InlinePanel('janis_urls', label="Janis URLs")
     ]
