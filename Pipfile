@@ -35,6 +35,8 @@ wagtail-factories = "*"
 scout-apm = "*"
 django-silk = "*"
 greenlet = "*"
+psycogreen = "*"
+django-db-geventpool = "*"
 
 [requires]
 python_version = "3.7"

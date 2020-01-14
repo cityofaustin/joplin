@@ -15,3 +15,9 @@ preload = True
 if DEPLOYMENT_MODE in ("LOCAL", "REVIEW"):
     timeout = 190
     loglevel = "DEBUG"
+
+from psycogreen.gevent import patch_psycopg
+
+def post_fork(server, worker):
+    patch_psycopg()
+    worker.log.info("Made Psycopg2 run using gevent (for async stuff)")
