@@ -6,11 +6,12 @@ from wagtail.images.edit_handlers import ImageChooserPanel
 from base.forms import TopicCollectionPageForm
 
 from .janis_page import JanisBasePage
+from .janis_url import JanisUrlPage
 from .translated_image import TranslatedImage
 from .widgets import countMe, countMeTextArea
 
 
-class TopicCollectionPage(JanisBasePage):
+class TopicCollectionPage(JanisBasePage, JanisUrlPage):
     janis_url_page_type = "topiccollection"
 
     description = models.TextField(blank=True)
@@ -35,5 +36,5 @@ class TopicCollectionPage(JanisBasePage):
         FieldPanel('theme'),
         ImageChooserPanel('image'),
         InlinePanel('topiccollections', label='Topic Collections this page belongs to'),
-        InlinePanel('janis_urls', label="Janis URLs")
+        # InlinePanel('janis_urls', label="Janis URLs")
     ]

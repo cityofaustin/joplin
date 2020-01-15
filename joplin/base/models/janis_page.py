@@ -261,7 +261,7 @@ class JanisBasePage(Page):
         return edit_handler.bind_to(model=cls)
 
     class Meta:
-        # abstract = True
+        abstract = True
         # https://docs.djangoproject.com/en/2.2/topics/auth/customizing/#custom-permissions
         permissions = [
             ("view_extra_panels", "Can view extra panels"),
