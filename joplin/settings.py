@@ -146,10 +146,18 @@ ISREVIEW = DEPLOYMENT_MODE == "REVIEW"
 #
 default_db_url = f'sqlite:///{os.path.join(PROJECT_DIR, "db.sqlite3")}'
 DATABASES = {
-    'default': dj_database_url.config(default=default_db_url, conn_max_age=0),
+    'default': dj_database_url.config(default=default_db_url, engine='django_postgrespool2', conn_max_age=0),
 }
-DATABASES['default']['ENGINE'] = 'django_db_geventpool.backends.postgresql_psycopg2'
-DATABASES['default']['OPTIONS'] = {'MAX_CONNS': 10}
+
+DATABASE_POOL_CLASS = 'sqlalchemy.pool.QueuePool'
+
+DATABASE_POOL_ARGS = {
+    'max_overflow': 10,
+    'pool_size': 5,
+    'recycle': 300
+}
+# DATABASES['default']['ENGINE'] = 'django_db_geventpool.backends.postgresql_psycopg2'
+# DATABASES['default']['OPTIONS'] = {'MAX_CONNS': 10}
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
