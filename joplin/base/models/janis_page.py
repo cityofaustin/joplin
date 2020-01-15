@@ -47,6 +47,7 @@ class JanisBasePage(Page):
 
     notes_content_panel = [
         FieldPanel('author_notes'),
+        InlinePanel('janis_urls', label="Janis URLs")
     ]
 
     coa_global = models.BooleanField(default=False, verbose_name='Make this a top level page')
@@ -261,7 +262,7 @@ class JanisBasePage(Page):
         return edit_handler.bind_to(model=cls)
 
     class Meta:
-        abstract = True
+        # abstract = True
         # https://docs.djangoproject.com/en/2.2/topics/auth/customizing/#custom-permissions
         permissions = [
             ("view_extra_panels", "Can view extra panels"),
@@ -318,17 +319,17 @@ class PermissionObjectList(ObjectList):
 
         return super().render()
 
-# class JanisUrl(ClusterableModel):
-#     url = models.CharField(max_length=9001)
+class JanisUrl(ClusterableModel):
+    url = models.CharField(max_length=9001)
 
-#     page = ParentalKey(JanisBasePage, related_name='janis_urls', default=None)
+    page = ParentalKey(JanisBasePage, related_name='janis_urls', default=None)
     
-#     theme = models.ForeignKey('base.Theme',on_delete=models.PROTECT,null=True, blank=True)
-#     topic_collection = models.ForeignKey('base.TopicCollectionPage', on_delete=models.PROTECT,null=True, blank=True)
-#     topic = models.ForeignKey('base.TopicPage', on_delete=models.CASCADE, null=True, blank=True)
-#     department = models.ForeignKey("base.departmentPage",on_delete=models.PROTECT, null=True, blank=True)
+    theme = models.ForeignKey('base.Theme',on_delete=models.PROTECT,null=True, blank=True)
+    topic_collection = models.ForeignKey('base.TopicCollectionPage', on_delete=models.PROTECT,null=True, blank=True)
+    topic = models.ForeignKey('base.TopicPage', on_delete=models.CASCADE, null=True, blank=True)
+    department = models.ForeignKey("base.departmentPage",on_delete=models.PROTECT, null=True, blank=True)
     
-#     language = models.CharField(max_length=2)
+    language = models.CharField(max_length=9)
 
-#     def __str__(self):
-#         return self.url
+    def __str__(self):
+        return self.url
