@@ -3,11 +3,8 @@ from django.dispatch import receiver
 from django.db.models.signals import post_save, post_delete
 from wagtail.core.signals import page_published, page_unpublished
 from graphene import Node
-
-import heroku3
-from heroku3.models.build import Build
-
-import boto3
+from wagtail.core.models import Page
+from wagtail.admin.utils import get_object_usage
 
 from base.models import Contact, Location, Map
 from wagtail.documents.models import Document
@@ -40,6 +37,23 @@ def trigger_build(sender, pages_ids, action='saved', instance=None):
         netlify_publish()
 
 
+def collect_pages(instance):
+    """
+    :param instance: the page or snippet that has been altered
+    :return: an array of global page ids -- note this may need to be a dictionary of page ids and type?
+    """
+    global_ids = []
+    print(instance)
+    wagtail_page = Page.objects.get(id=instance.id)
+    page_set = get_object_usage(wagtail_page)
+    for page in page_set:
+        print(page, page.id, page.content_type)
+        global_ids.append(Node.to_global_id(page.content_type.name, page.id))
+    global_page_id = Node.to_global_id(instance.get_verbose_name(), instance.id)
+    global_ids.append(global_page_id)
+
+    return global_ids
+
 # TODO: we can probably feed a list of models to attach the hook to
 # more ideas here
 # we might want to log but not trigger a build? need some sort of queue
@@ -48,7 +62,10 @@ def trigger_build(sender, pages_ids, action='saved', instance=None):
 @receiver(post_save, sender=Location)
 @receiver(post_save, sender=Map)
 def handle_post_save_signal(sender, **kwargs):
+    print(kwargs['instance'], type(kwargs['instance']))
     usage = kwargs['instance'].get_usage()
+    # oye, locations are pages, right?
+    print(usage)
     pages_ids = []
     for p in usage:
         page_id = Node.to_global_id(p.content_type.name, p.id)
@@ -59,15 +76,14 @@ def handle_post_save_signal(sender, **kwargs):
 
 @receiver(page_published)
 def page_published_signal(sender, **kwargs):
-    # this does not take into account all the pages its connected to
-    page_global_id = Node.to_global_id(kwargs['instance'].get_verbose_name(), kwargs['instance'].id)
-    trigger_build(sender, page_global_id, action='published', instance=kwargs['instance'])
+    pages_global_ids = collect_pages(kwargs['instance'])
+    trigger_build(sender, pages_global_ids, action='published', instance=kwargs['instance'])
 
 
 @receiver(page_unpublished)
 def page_unpublished_signal(sender, **kwargs):
-    page_global_id = Node.to_global_id(kwargs['instance'].get_verbose_name(), kwargs['instance'].id)
-    trigger_build(sender, page_global_id, action='unpublished', instance=kwargs['instance'])
+    pages_global_ids = collect_pages(kwargs['instance'])
+    trigger_build(sender, pages_global_ids, action='unpublished', instance=kwargs['instance'])
 
 # TODO: should we add hooks for the above snippets/models on post delete as well? <--- ?
 @receiver(post_delete, sender=Document)
