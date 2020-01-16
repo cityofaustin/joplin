@@ -1,5 +1,9 @@
 from django.db import models
 
+# Create your models here.
+
+from django.db import models
+
 from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
 
@@ -10,11 +14,11 @@ from wagtail.snippets.edit_handlers import SnippetChooserPanel
 
 from base.forms import InformationPageForm
 
-from .janis_page import JanisBasePage
-from .contact import Contact
+from base.models.janis_page import JanisBasePage
+from base.models.contact import Contact
 
-from .constants import WYSIWYG_GENERAL
-from .widgets import countMe, countMeTextArea, AUTHOR_LIMITS
+from base.models.constants import WYSIWYG_GENERAL
+from base.models.widgets import countMe, countMeTextArea, AUTHOR_LIMITS
 from countable_field import widgets
 
 

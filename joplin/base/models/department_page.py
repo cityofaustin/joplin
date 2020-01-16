@@ -12,7 +12,7 @@ from wagtail.snippets.edit_handlers import SnippetChooserPanel
 from base.forms import DepartmentPageForm
 
 from .janis_page import JanisBasePage
-from .information_page import InformationPage
+from informations.models import InformationPage
 from .service_page import ServicePage
 from .guide_page import GuidePage
 from .official_documents_page import OfficialDocumentPage

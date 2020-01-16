@@ -82,6 +82,7 @@ INSTALLED_APPS = [
     'countable_field',
     'flags',
     'locations',
+    'informations',
     'silk',
 ]
 
