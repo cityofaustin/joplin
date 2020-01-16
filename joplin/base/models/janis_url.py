@@ -23,7 +23,7 @@ class JanisUrl(models.Model):
 
     # Topic collection pages urls are always:
     # /theme_slug/topic_collection_slug/
-    topic_collection_page = models.ForeignKey('base.TopicCollectionPage', on_delete=models.CASCADE,null=True, blank=True)
+    topic_collection_page = models.ForeignKey('base.TopicCollectionPage', on_delete=models.CASCADE, null=True, blank=True)
 
     # Topic page urls are always:
     # /theme_slug/topic_collection_slug/topic_slug/
@@ -51,7 +51,7 @@ class JanisUrl(models.Model):
         return self.url
 
     @classmethod
-    def create(cls, topic_page, topic_collection_page):
-        new_janis_url = cls(topic_page=topic_page, topic_collection_page=topic_collection_page)
+    def create(cls, page_type, theme, topic_collection_page, topic_page):
+        new_janis_url = cls(theme=theme, topic_page=topic_page, topic_collection_page=topic_collection_page)
         # do something with the book
         return new_janis_url

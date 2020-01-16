@@ -19,6 +19,7 @@ from wagtail.admin.widgets import Button, ButtonWithDropdownFromHook, PageListin
 from wagtail.core import hooks
 
 from base.models import HomePage, Location, Contact, JanisUrl
+from base.models.janis_url import TopicPageJanisUrl
 
 from html.parser import HTMLParser
 
@@ -303,9 +304,34 @@ def register_link_handler(features):
 # In here we're going to remake all the urls for this page
 @hooks.register('after_edit_page')
 def after_edit_page(request, page):
+    # Clear out all old urls first
+    # This is going to be full of copypasta
+
+
+
+    # Create the new urls
+    new_urls = []
+
+    # If we're a topic collection page we only have one url
+    # /theme_slug/topic_collection_slug/
+    if page._meta.object_name == 'TopicCollectionPage':
+        new_urls.append(JanisUrl.create(topic_collection_page=page, page_type=page._meta.object_name))
+
+    # If we're a topic page, we have a url for ever topic collection we belong to
+    # /theme_slug/topic_collection_slug/topic_slug/
     if page._meta.object_name == 'TopicPage':
-        page.janis_urls = [ JanisUrl.create(topic_page=page, topic_collection_page=tc) for tc in page.topiccollections.all() ]
+        for topic_page_topic_collection in page.topiccollections.all():
+            new_url = JanisUrl.create(
+                        topic_page=page,
+                        topic_collection_page=topic_page_topic_collection.topiccollection,
+                        theme=topic_page_topic_collection.topiccollection.theme,
+                        page_type=page._meta.object_name)
+            new_url.save()
+            new_urls.append(new_url)
+
+        page.janis_urls = [TopicPageJanisUrl(janis_url=url, page=page) for url in new_urls]
         page.save()
+        return
 
 
 # By default all menu items are shown all the time.
