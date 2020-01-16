@@ -3,11 +3,10 @@ from django.db import models
 from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
 
-from wagtail.core.fields import RichTextField, StreamField
+from wagtail.core.fields import StreamField
 from wagtail.core.blocks import RichTextBlock, StructBlock, PageChooserBlock, TextBlock, ListBlock
-from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, MultiFieldPanel, PageChooserPanel, StreamFieldPanel
+from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, PageChooserPanel, StreamFieldPanel
 from wagtail.snippets.edit_handlers import SnippetChooserPanel
-from wagtail.core.models import Orderable
 from wagtail.images.edit_handlers import ImageChooserPanel
 
 from base.forms import GuidePageForm
@@ -18,7 +17,6 @@ from .service_page import ServicePage
 from .contact import Contact
 from .translated_image import TranslatedImage
 
-from .constants import WYSIWYG_GENERAL
 from .widgets import countMe, countMeTextArea
 
 

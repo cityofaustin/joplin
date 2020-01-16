@@ -1,15 +1,13 @@
 from django.db import models
 
-from wagtail.core.fields import RichTextField
 from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
-from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, MultiFieldPanel, PageChooserPanel
+from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, PageChooserPanel
 
 from base.forms import FormContainerForm
 
 from .janis_page import JanisBasePage
 
-from .constants import WYSIWYG_GENERAL
 from .widgets import countMe, countMeTextArea
 from countable_field import widgets
 
