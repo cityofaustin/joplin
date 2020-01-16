@@ -50,8 +50,9 @@ class TopicPageTopPage(Orderable):
         PageChooserPanel('page', page_type=[InformationPage, ServicePage, GuidePage, OfficialDocumentPage]),
     ]
 
-    def __str__(self):
-        return self.page.text
+    # this errors because it says page has no attribute text, can we fall back on the original method?
+    # def __str__(self):
+    #     return self.page.text
 
 
 class TopicPageTopicCollection(ClusterableModel):

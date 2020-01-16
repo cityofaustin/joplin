@@ -20,7 +20,6 @@ from base.models import (
     ThreeOneOne,
     ServicePage, ServicePageContact, ServicePageTopic, ServicePageRelatedDepartments,
     InformationPage, InformationPageContact, InformationPageTopic, InformationPageRelatedDepartments,
-    ProcessPage, ProcessPageStep, ProcessPageContact, ProcessPageTopic,
     DepartmentPage, DepartmentPageContact, DepartmentPageDirector, DepartmentPageTopPage, DepartmentPageRelatedPage,
     Theme, TopicCollectionPage, TopicPage, TopicPageTopicCollection, TopicPageTopPage,
     Contact, Location, PhoneNumber, ContactDayAndDuration, Department, DepartmentContact,
@@ -799,13 +798,13 @@ def get_page_with_preview_data(page, session):
 class Query(graphene.ObjectType):
     debug = graphene.Field(DjangoDebug, name='__debug')
 
-    department_page = graphene.Node.Field(DepartmentPageNode)
+    department_page = graphene.Node.Field(DepartmentPageNode) # why is this the only one that isnt filterconnectionfield
     all_service_pages = DjangoFilterConnectionField(ServicePageNode)
     page_revision = graphene.Field(PageRevisionNode, id=graphene.ID())
     site_structure = graphene.Field(SiteStructure)
     all_page_revisions = DjangoFilterConnectionField(PageRevisionNode)
     all_information_pages = DjangoFilterConnectionField(InformationPageNode)
-    all_department_pages = DjangoFilterConnectionField(DepartmentPageNode)
+    all_department_pages = DjangoFilterConnectionField(DepartmentPageNode) #and then is here again
     all_themes = DjangoFilterConnectionField(ThemeNode)
     all_topics = DjangoFilterConnectionField(TopicNode)
     all_topic_collections = DjangoFilterConnectionField(TopicCollectionNode)

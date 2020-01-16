@@ -19,12 +19,6 @@ JANIS_SLUG_URL = settings.JANIS_SLUG_URL
 
 def trigger_build(sender, pages_ids, action='saved', instance=None):
     print(pages_ids)
-    # >> > graphene.Node.to_global_id('InformationPage', 28)
-    # 'SW5mb3JtYXRpb25QYWdlOjI4'
-    # >> > graphene.Node.to_global_id('Information page', 28)
-    # 'SW5mb3JtYXRpb24gcGFnZToyOA=='
-    # >> > graphene.Node.to_global_id('information', 28)
-    # 'aW5mb3JtYXRpb246Mjg='
     """
     triggers different build process depending on environment
     source = name of snippet or object triggering build
@@ -64,12 +58,11 @@ def collect_pages(instance):
 def handle_post_save_signal(sender, **kwargs):
     print(kwargs['instance'], type(kwargs['instance']))
     usage = kwargs['instance'].get_usage()
-    # oye, locations are pages, right?
     print(usage)
     pages_ids = []
     for p in usage:
         page_id = Node.to_global_id(p.content_type.name, p.id)
-        pages_ids.append(page_id)
+        pages_ids.append(page_id) # do we need to then check what pages these are in?
 
     trigger_build(sender, pages_ids, instance=kwargs['instance'])
 
@@ -85,8 +78,16 @@ def page_unpublished_signal(sender, **kwargs):
     pages_global_ids = collect_pages(kwargs['instance'])
     trigger_build(sender, pages_global_ids, action='unpublished', instance=kwargs['instance'])
 
-# TODO: should we add hooks for the above snippets/models on post delete as well? <--- ?
 @receiver(post_delete, sender=Document)
-def document_post_delete_signal(sender, **kwargs):
-    page_global_id = Node.to_global_id(kwargs['instance'].get_verbose_name(), kwargs['instance'].id)
-    trigger_build(sender, page_global_id, action='deleted', instance=kwargs['instance'])
+@receiver(post_delete, sender=Contact)
+@receiver(post_delete, sender=Location)
+@receiver(post_delete, sender=Map)
+def handle_post_delete_signal(sender, **kwargs):
+    print(kwargs['instance'], type(kwargs['instance']))
+    usage = kwargs['instance'].get_usage()
+    print(usage)
+    pages_ids = []
+    for p in usage:
+        page_id = Node.to_global_id(p.content_type.name, p.id)
+        pages_ids.append(page_id) # do we need to then check what pages these are in?
+    trigger_build(sender, pages_ids, action='deleted', instance=kwargs['instance'])
