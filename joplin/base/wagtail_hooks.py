@@ -19,7 +19,7 @@ from wagtail.admin.widgets import Button, ButtonWithDropdownFromHook, PageListin
 from wagtail.core import hooks
 
 from base.models import HomePage, Location, Contact, JanisUrl
-from base.models.janis_url import TopicCollectionPageJanisUrl, TopicPageJanisUrl, DepartmentPageJanisUrl
+from base.models.janis_url import TopicCollectionPageJanisUrl, TopicPageJanisUrl, DepartmentPageJanisUrl, LocationPageJanisUrl
 
 from html.parser import HTMLParser
 
@@ -348,10 +348,20 @@ def after_edit_page(request, page):
                 new_urls.append(new_url)
 
         # If we're a department page we only have one url
-        # /department/department_slug/
+        # /department_slug/
         if page_type == 'DepartmentPage':
             new_url = JanisUrl.create(
                         department_page=page,
+                        page_type=page_type,
+                        language=language)
+            new_url.save()
+            new_urls.append(new_url)
+
+        # If we'er a location page we only have one url
+        # /location/location_slug/
+        if page_type == 'LocationPage':
+            new_url = JanisUrl.create(
+                        location_page=page,
                         page_type=page_type,
                         language=language)
             new_url.save()
@@ -370,6 +380,9 @@ def after_edit_page(request, page):
         page.janis_urls = [DepartmentPageJanisUrl(janis_url=url, page=page) for url in new_urls]
         page.save()
 
+    if page_type == 'LocationPage':
+        page.janis_urls = [LocationPageJanisUrl(janis_url=url, page=page) for url in new_urls]
+        page.save()
 
 
 

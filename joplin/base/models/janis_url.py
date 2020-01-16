@@ -6,6 +6,12 @@ from modelcluster.fields import ParentalKey
 from .topic_collection_page import TopicCollectionPage
 from .topic_page import TopicPage
 from .department_page import DepartmentPage
+from locations.models import LocationPage
+
+
+class LocationPageJanisUrl(ClusterableModel):
+    page = ParentalKey(LocationPage, related_name='janis_urls')
+    janis_url = models.ForeignKey('base.JanisUrl', verbose_name='URL', related_name='+', on_delete=models.CASCADE)
 
 
 class DepartmentPageJanisUrl(ClusterableModel):
@@ -34,9 +40,6 @@ class JanisUrl(models.Model):
     topic_collection_page = models.ForeignKey('base.TopicCollectionPage', on_delete=models.CASCADE, null=True, blank=True)
     topic_page = models.ForeignKey('base.TopicPage', on_delete=models.CASCADE, null=True, blank=True)
     department_page = models.ForeignKey("base.departmentPage",on_delete=models.PROTECT, null=True, blank=True)
-
-    # Location page urls are always:
-    # /location/location_slug/
     location_page = models.ForeignKey("locations.LocationPage",on_delete=models.PROTECT, null=True, blank=True)
 
     # The rest of the pages follow these url structures:
@@ -62,7 +65,14 @@ class JanisUrl(models.Model):
         return page.slug_en
 
     @classmethod
-    def create(cls, page_type, language, theme=None, topic_collection_page=None, topic_page=None, department_page=None):
+    def create(cls,
+               page_type,
+               language,
+               theme=None,
+               topic_collection_page=None,
+               topic_page=None,
+               department_page=None,
+               location_page=None):
         # Topic collection pages urls are always:
         # /theme_slug/topic_collection_slug/
         if page_type == 'TopicCollectionPage':
@@ -89,5 +99,12 @@ class JanisUrl(models.Model):
         if page_type == 'DepartmentPage':
             new_janis_url = cls(department_page=department_page,
                                 url=f'/{language}/{JanisUrl.get_translated_slug(language, department_page)}/')
+
+        # Location page urls are always:
+        # /location/location_slug/
+        if page_type == 'LocationPage':
+            new_janis_url = cls(location_page=location_page,
+                                url=f'''/{language}/location/{
+                                    JanisUrl.get_translated_slug(language, location_page)}/''')
 
         return new_janis_url
