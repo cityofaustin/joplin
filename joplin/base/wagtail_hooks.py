@@ -305,17 +305,19 @@ def register_link_handler(features):
 @hooks.register('after_edit_page')
 def after_edit_page(request, page):
     # Clear out all old urls first
-    # This is going to be full of copypasta
-
-
+    for janis_url in page.janis_urls.all():
+        janis_url.janis_url.delete()
 
     # Create the new urls
     new_urls = []
 
+    # Page type matters here
+    page_type = page._meta.object_name
+
     # If we're a topic collection page we only have one url
     # /theme_slug/topic_collection_slug/
-    if page._meta.object_name == 'TopicCollectionPage':
-        new_urls.append(JanisUrl.create(topic_collection_page=page, page_type=page._meta.object_name))
+    if page_type == 'TopicCollectionPage':
+        new_urls.append(JanisUrl.create(topic_collection_page=page, page_type=page_type))
 
     # If we're a topic page, we have a url for ever topic collection we belong to
     # /theme_slug/topic_collection_slug/topic_slug/
@@ -325,13 +327,15 @@ def after_edit_page(request, page):
                         topic_page=page,
                         topic_collection_page=topic_page_topic_collection.topiccollection,
                         theme=topic_page_topic_collection.topiccollection.theme,
-                        page_type=page._meta.object_name)
+                        page_type=page_type)
             new_url.save()
             new_urls.append(new_url)
 
         page.janis_urls = [TopicPageJanisUrl(janis_url=url, page=page) for url in new_urls]
         page.save()
         return
+
+
 
 
 # By default all menu items are shown all the time.

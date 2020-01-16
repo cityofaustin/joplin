@@ -52,6 +52,10 @@ class JanisUrl(models.Model):
 
     @classmethod
     def create(cls, page_type, theme, topic_collection_page, topic_page):
-        new_janis_url = cls(theme=theme, topic_page=topic_page, topic_collection_page=topic_collection_page)
-        # do something with the book
+        if page_type == 'TopicPage':
+            new_janis_url = cls(theme=theme,
+                                topic_collection_page=topic_collection_page,
+                                topic_page=topic_page,
+                                url=f'/{theme.slug}/{topic_collection_page.slug}/{topic_page.slug}/')
+
         return new_janis_url
