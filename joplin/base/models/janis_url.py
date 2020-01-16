@@ -49,6 +49,15 @@ class JanisUrl(models.Model):
     def __str__(self):
         return self.url
 
+    @staticmethod
+    def get_translated_slug(language, page):
+        # todo: flesh this out
+        if language == 'es':
+            if page.slug_es:
+                return page.slug_es
+
+        return page.slug_en
+
     @classmethod
     def create(cls, page_type, language, theme=None, topic_collection_page=None, topic_page=None):
         # Topic collection pages urls are always:
@@ -56,7 +65,9 @@ class JanisUrl(models.Model):
         if page_type == 'TopicCollectionPage':
             new_janis_url = cls(theme=theme,
                                 topic_collection_page=topic_collection_page,
-                                url=f'/{language}/{theme.slug}/{topic_collection_page.slug}/')
+                                url=f'''/{language}/{theme.slug}/{
+                                    JanisUrl.get_translated_slug(language, topic_collection_page)
+                                }/''')
 
         # Topic page urls are always:
         # /theme_slug/topic_collection_slug/topic_slug/
@@ -64,6 +75,10 @@ class JanisUrl(models.Model):
             new_janis_url = cls(theme=theme,
                                 topic_collection_page=topic_collection_page,
                                 topic_page=topic_page,
-                                url=f'/{language}/{theme.slug}/{topic_collection_page.slug}/{topic_page.slug}/')
+                                url=f'''/{language}/{theme.slug}/{
+                                    JanisUrl.get_translated_slug(language, topic_collection_page)
+                                }/{
+                                    JanisUrl.get_translated_slug(language, topic_page)
+                                }/''')
 
         return new_janis_url
