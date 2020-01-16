@@ -19,7 +19,7 @@ from wagtail.admin.widgets import Button, ButtonWithDropdownFromHook, PageListin
 from wagtail.core import hooks
 
 from base.models import HomePage, Location, Contact, JanisUrl
-from base.models.janis_url import TopicCollectionPageJanisUrl, TopicPageJanisUrl
+from base.models.janis_url import TopicCollectionPageJanisUrl, TopicPageJanisUrl, DepartmentPageJanisUrl
 
 from html.parser import HTMLParser
 
@@ -336,7 +336,7 @@ def after_edit_page(request, page):
 
         # If we're a topic page, we have a url for ever topic collection we belong to
         # /theme_slug/topic_collection_slug/topic_slug/
-        if page_type == 'TopicPage':
+        elif page_type == 'TopicPage':
             for topic_page_topic_collection in page.topiccollections.all():
                 new_url = JanisUrl.create(
                             topic_page=page,
@@ -347,6 +347,16 @@ def after_edit_page(request, page):
                 new_url.save()
                 new_urls.append(new_url)
 
+        # If we're a department page we only have one url
+        # /department/department_slug/
+        if page_type == 'DepartmentPage':
+            new_url = JanisUrl.create(
+                        department_page=page,
+                        page_type=page_type,
+                        language=language)
+            new_url.save()
+            new_urls.append(new_url)
+
     # todo: This can definitely be less copypasta'd and more pythonic
     if page_type == 'TopicCollectionPage':
         page.janis_urls = [TopicCollectionPageJanisUrl(janis_url=url, page=page) for url in new_urls]
@@ -354,6 +364,10 @@ def after_edit_page(request, page):
 
     if page_type == 'TopicPage':
         page.janis_urls = [TopicPageJanisUrl(janis_url=url, page=page) for url in new_urls]
+        page.save()
+
+    if page_type == 'DepartmentPage':
+        page.janis_urls = [DepartmentPageJanisUrl(janis_url=url, page=page) for url in new_urls]
         page.save()
 
 

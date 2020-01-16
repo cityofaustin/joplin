@@ -5,6 +5,12 @@ from modelcluster.fields import ParentalKey
 
 from .topic_collection_page import TopicCollectionPage
 from .topic_page import TopicPage
+from .department_page import DepartmentPage
+
+
+class DepartmentPageJanisUrl(ClusterableModel):
+    page = ParentalKey(DepartmentPage, related_name='janis_urls')
+    janis_url = models.ForeignKey('base.JanisUrl', verbose_name='URL', related_name='+', on_delete=models.CASCADE)
 
 
 class TopicCollectionPageJanisUrl(ClusterableModel):
@@ -23,13 +29,10 @@ class JanisUrl(models.Model):
     language = models.CharField(max_length=9)
 
     # Themes don't have dedicated pages
-    theme = models.ForeignKey('base.Theme',on_delete=models.PROTECT,null=True, blank=True)
+    theme = models.ForeignKey('base.Theme', on_delete=models.PROTECT,null=True, blank=True)
 
     topic_collection_page = models.ForeignKey('base.TopicCollectionPage', on_delete=models.CASCADE, null=True, blank=True)
     topic_page = models.ForeignKey('base.TopicPage', on_delete=models.CASCADE, null=True, blank=True)
-
-    # Department page urls are always:
-    # /department_slug/
     department_page = models.ForeignKey("base.departmentPage",on_delete=models.PROTECT, null=True, blank=True)
 
     # Location page urls are always:
@@ -40,11 +43,11 @@ class JanisUrl(models.Model):
     # /theme_slug/topic_collection_slug/topic_slug/page_slug/
     # /department_slug/page_slug/
     # /page_slug/
-    information_page = models.ForeignKey("base.InformationPage",on_delete=models.PROTECT, null=True, blank=True)
-    service_page = models.ForeignKey("base.ServicePage",on_delete=models.PROTECT, null=True, blank=True)
-    guide_page = models.ForeignKey("base.GuidePage",on_delete=models.PROTECT, null=True, blank=True)
-    official_documents_page = models.ForeignKey("base.OfficialDocumentPage",on_delete=models.PROTECT, null=True, blank=True)
-    form_container = models.ForeignKey("base.FormContainer",on_delete=models.PROTECT, null=True, blank=True)
+    information_page = models.ForeignKey("base.InformationPage", on_delete=models.PROTECT, null=True, blank=True)
+    service_page = models.ForeignKey("base.ServicePage", on_delete=models.PROTECT, null=True, blank=True)
+    guide_page = models.ForeignKey("base.GuidePage", on_delete=models.PROTECT, null=True, blank=True)
+    official_documents_page = models.ForeignKey("base.OfficialDocumentPage", on_delete=models.PROTECT, null=True, blank=True)
+    form_container = models.ForeignKey("base.FormContainer", on_delete=models.PROTECT, null=True, blank=True)
 
     def __str__(self):
         return self.url
@@ -59,7 +62,7 @@ class JanisUrl(models.Model):
         return page.slug_en
 
     @classmethod
-    def create(cls, page_type, language, theme=None, topic_collection_page=None, topic_page=None):
+    def create(cls, page_type, language, theme=None, topic_collection_page=None, topic_page=None, department_page=None):
         # Topic collection pages urls are always:
         # /theme_slug/topic_collection_slug/
         if page_type == 'TopicCollectionPage':
@@ -80,5 +83,11 @@ class JanisUrl(models.Model):
                                 }/{
                                     JanisUrl.get_translated_slug(language, topic_page)
                                 }/''')
+
+        # Department page urls are always:
+        # /department_slug/
+        if page_type == 'DepartmentPage':
+            new_janis_url = cls(department_page=department_page,
+                                url=f'/{language}/{JanisUrl.get_translated_slug(language, department_page)}/')
 
         return new_janis_url
