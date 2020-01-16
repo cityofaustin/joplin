@@ -314,32 +314,41 @@ def after_edit_page(request, page):
     # Page type matters here
     page_type = page._meta.object_name
 
-    # If we're a topic collection page we only have one url
-    # /theme_slug/topic_collection_slug/
-    if page_type == 'TopicCollectionPage':
-        new_urls.append(JanisUrl.create(
-                            topic_collection_page=page,
-                            theme=page.theme,
-                            page_type=page_type))
-        page.janis_urls = [TopicCollectionPageJanisUrl(janis_url=url, page=page) for url in new_urls]
-        page.save()
-        return
-
-    # If we're a topic page, we have a url for ever topic collection we belong to
-    # /theme_slug/topic_collection_slug/topic_slug/
-    if page_type == 'TopicPage':
-        for topic_page_topic_collection in page.topiccollections.all():
+    # todo: not have magic language arrays hiding around the codebase
+    languages = ['en', 'es']
+    for language in languages:
+        # If we're a topic collection page we only have one url
+        # /theme_slug/topic_collection_slug/
+        if page_type == 'TopicCollectionPage':
             new_url = JanisUrl.create(
-                        topic_page=page,
-                        topic_collection_page=topic_page_topic_collection.topiccollection,
-                        theme=topic_page_topic_collection.topiccollection.theme,
-                        page_type=page_type)
+                        topic_collection_page=page,
+                        theme=page.theme,
+                        page_type=page_type,
+                        language=language)
             new_url.save()
             new_urls.append(new_url)
 
+        # If we're a topic page, we have a url for ever topic collection we belong to
+        # /theme_slug/topic_collection_slug/topic_slug/
+        if page_type == 'TopicPage':
+            for topic_page_topic_collection in page.topiccollections.all():
+                new_url = JanisUrl.create(
+                            topic_page=page,
+                            topic_collection_page=topic_page_topic_collection.topiccollection,
+                            theme=topic_page_topic_collection.topiccollection.theme,
+                            page_type=page_type,
+                            language=language)
+                new_url.save()
+                new_urls.append(new_url)
+
+    # todo: This can definitely be less copypasta'd and more pythonic
+    if page_type == 'TopicCollectionPage':
+        page.janis_urls = [TopicCollectionPageJanisUrl(janis_url=url, page=page) for url in new_urls]
+        page.save()
+
+    if page_type == 'TopicPage':
         page.janis_urls = [TopicPageJanisUrl(janis_url=url, page=page) for url in new_urls]
         page.save()
-        return
 
 
 

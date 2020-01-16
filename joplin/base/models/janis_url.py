@@ -50,13 +50,13 @@ class JanisUrl(models.Model):
         return self.url
 
     @classmethod
-    def create(cls, page_type, theme, topic_collection_page, topic_page):
+    def create(cls, page_type, language, theme=None, topic_collection_page=None, topic_page=None):
         # Topic collection pages urls are always:
         # /theme_slug/topic_collection_slug/
         if page_type == 'TopicCollectionPage':
             new_janis_url = cls(theme=theme,
                                 topic_collection_page=topic_collection_page,
-                                url=f'/{theme.slug}/{topic_collection_page.slug}/')
+                                url=f'/{language}/{theme.slug}/{topic_collection_page.slug}/')
 
         # Topic page urls are always:
         # /theme_slug/topic_collection_slug/topic_slug/
@@ -64,6 +64,6 @@ class JanisUrl(models.Model):
             new_janis_url = cls(theme=theme,
                                 topic_collection_page=topic_collection_page,
                                 topic_page=topic_page,
-                                url=f'/{theme.slug}/{topic_collection_page.slug}/{topic_page.slug}/')
+                                url=f'/{language}/{theme.slug}/{topic_collection_page.slug}/{topic_page.slug}/')
 
         return new_janis_url
