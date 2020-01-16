@@ -191,7 +191,7 @@ def add_hours_by_day_and_exceptions(model):
 
 
 LocationPageRelatedServices.panels += [add_hours_by_day_and_exceptions(LocationPageRelatedServices)]
-LocationPage.content_panels += [add_hours_by_day_and_exceptions(LocationPage), InlinePanel('related_services', label='Related Services'), ]
+LocationPage.content_panels += [add_hours_by_day_and_exceptions(LocationPage), InlinePanel('related_services', label='Related Services'), InlinePanel('janis_urls', label='Urls'),]
 # override title field to change verbose name
 # NOTE: this may break/cause problems if we ever make JanisBasePage NOT absctract
 # commenting out for now since this is making *every* content type have the field name Location name
