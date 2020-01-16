@@ -305,6 +305,7 @@ def register_link_handler(features):
 @hooks.register('after_edit_page')
 def after_edit_page(request, page):
     # Make sure we're publishing so our Janis urls reflect the live site
+    # taking this from https://github.com/wagtail/wagtail/blob/349fca66f32ecf3df6316b0cffb4e5fd0d24d6c7/wagtail/admin/views/pages.py#L228
     publishing = bool(request.POST.get('action-publish'))
     if not publishing:
         return
