@@ -19,7 +19,7 @@ from wagtail.admin.widgets import Button, ButtonWithDropdownFromHook, PageListin
 from wagtail.core import hooks
 
 from base.models import HomePage, Location, Contact, JanisUrl
-from base.models.janis_url import TopicPageJanisUrl
+from base.models.janis_url import TopicCollectionPageJanisUrl, TopicPageJanisUrl
 
 from html.parser import HTMLParser
 
@@ -317,11 +317,17 @@ def after_edit_page(request, page):
     # If we're a topic collection page we only have one url
     # /theme_slug/topic_collection_slug/
     if page_type == 'TopicCollectionPage':
-        new_urls.append(JanisUrl.create(topic_collection_page=page, page_type=page_type))
+        new_urls.append(JanisUrl.create(
+                            topic_collection_page=page,
+                            theme=page.theme,
+                            page_type=page_type))
+        page.janis_urls = [TopicCollectionPageJanisUrl(janis_url=url, page=page) for url in new_urls]
+        page.save()
+        return
 
     # If we're a topic page, we have a url for ever topic collection we belong to
     # /theme_slug/topic_collection_slug/topic_slug/
-    if page._meta.object_name == 'TopicPage':
+    if page_type == 'TopicPage':
         for topic_page_topic_collection in page.topiccollections.all():
             new_url = JanisUrl.create(
                         topic_page=page,

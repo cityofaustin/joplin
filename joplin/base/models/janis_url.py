@@ -3,15 +3,19 @@ from modelcluster.models import ClusterableModel
 from modelcluster.fields import ParentalKey
 # from wagtail.snippets.models import register_snippet
 
+from .topic_collection_page import TopicCollectionPage
 from .topic_page import TopicPage
+
+
+class TopicCollectionPageJanisUrl(ClusterableModel):
+    page = ParentalKey(TopicCollectionPage, related_name='janis_urls')
+    janis_url = models.ForeignKey('base.JanisUrl', verbose_name='URL', related_name='+', on_delete=models.CASCADE)
+
 
 class TopicPageJanisUrl(ClusterableModel):
     page = ParentalKey(TopicPage, related_name='janis_urls')
     janis_url = models.ForeignKey('base.JanisUrl', verbose_name='URL', related_name='+', on_delete=models.CASCADE)
 
-    # panels = [
-    #     PageChooserPanel('topiccollection'),
-    # ]
 
 # @register_snippet
 class JanisUrl(models.Model):
@@ -21,12 +25,7 @@ class JanisUrl(models.Model):
     # Themes don't have dedicated pages
     theme = models.ForeignKey('base.Theme',on_delete=models.PROTECT,null=True, blank=True)
 
-    # Topic collection pages urls are always:
-    # /theme_slug/topic_collection_slug/
     topic_collection_page = models.ForeignKey('base.TopicCollectionPage', on_delete=models.CASCADE, null=True, blank=True)
-
-    # Topic page urls are always:
-    # /theme_slug/topic_collection_slug/topic_slug/
     topic_page = models.ForeignKey('base.TopicPage', on_delete=models.CASCADE, null=True, blank=True)
 
     # Department page urls are always:
@@ -52,6 +51,15 @@ class JanisUrl(models.Model):
 
     @classmethod
     def create(cls, page_type, theme, topic_collection_page, topic_page):
+        # Topic collection pages urls are always:
+        # /theme_slug/topic_collection_slug/
+        if page_type == 'TopicCollectionPage':
+            new_janis_url = cls(theme=theme,
+                                topic_collection_page=topic_collection_page,
+                                url=f'/{theme.slug}/{topic_collection_page.slug}/')
+
+        # Topic page urls are always:
+        # /theme_slug/topic_collection_slug/topic_slug/
         if page_type == 'TopicPage':
             new_janis_url = cls(theme=theme,
                                 topic_collection_page=topic_collection_page,
