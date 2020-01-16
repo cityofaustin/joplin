@@ -401,6 +401,8 @@ def after_edit_page(request, page):
                 new_url.save()
                 new_urls.append(new_url)
 
+            # Todo: top level
+
 
 
     # todo: This can definitely be less copypasta'd and more pythonic
