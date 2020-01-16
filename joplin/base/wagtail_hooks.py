@@ -304,7 +304,12 @@ def register_link_handler(features):
 # In here we're going to remake all the urls for this page
 @hooks.register('after_edit_page')
 def after_edit_page(request, page):
-    # Clear out all old urls first
+    # Make sure we're publishing so our Janis urls reflect the live site
+    publishing = bool(request.POST.get('action-publish'))
+    if not publishing:
+        return
+
+    # Clear out all old urls
     for janis_url in page.janis_urls.all():
         janis_url.janis_url.delete()
 
