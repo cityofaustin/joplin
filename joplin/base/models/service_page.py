@@ -128,6 +128,7 @@ class ServicePage(JanisBasePage):
             classname='coa-multiField-nopadding'
         ),
         InlinePanel('contacts', label='Contacts'),
+        InlinePanel('janis_urls', label='Urls'),
     ]
 
 

@@ -39,6 +39,7 @@ class OfficialDocumentPage(JanisBasePage):
         InlinePanel('topics', label='Topics'),
         InlinePanel('related_departments', label='Related Departments'),
         InlinePanel('official_documents', label="Documents", heading="Entries will be listed by document date (newest first)."),
+        InlinePanel('janis_urls', label='Urls'),
     ]
 
 

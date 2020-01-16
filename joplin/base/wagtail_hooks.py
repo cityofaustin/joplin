@@ -19,7 +19,7 @@ from wagtail.admin.widgets import Button, ButtonWithDropdownFromHook, PageListin
 from wagtail.core import hooks
 
 from base.models import HomePage, Location, Contact, JanisUrl
-from base.models.janis_url import TopicCollectionPageJanisUrl, TopicPageJanisUrl, DepartmentPageJanisUrl, LocationPageJanisUrl
+from base.models.janis_url import TopicCollectionPageJanisUrl, TopicPageJanisUrl, DepartmentPageJanisUrl, LocationPageJanisUrl, InformationPageJanisUrl, ServicePageJanisUrl, OfficialDocumentPageJanisUrl, GuidePageJanisUrl, FormContainerJanisUrl
 
 from html.parser import HTMLParser
 
@@ -349,7 +349,7 @@ def after_edit_page(request, page):
 
         # If we're a department page we only have one url
         # /department_slug/
-        if page_type == 'DepartmentPage':
+        elif page_type == 'DepartmentPage':
             new_url = JanisUrl.create(
                         department_page=page,
                         page_type=page_type,
@@ -357,15 +357,51 @@ def after_edit_page(request, page):
             new_url.save()
             new_urls.append(new_url)
 
-        # If we'er a location page we only have one url
+        # If we're a location page we only have one url
         # /location/location_slug/
-        if page_type == 'LocationPage':
+        elif page_type == 'LocationPage':
             new_url = JanisUrl.create(
                         location_page=page,
                         page_type=page_type,
                         language=language)
             new_url.save()
             new_urls.append(new_url)
+
+        # If we're any other page type, we need to make all our urls
+        # /theme_slug/topic_collection_slug/topic_slug/page_slug/
+        # /department_slug/page_slug/
+        # /page_slug/
+        else:
+            for page_topic in page.topics.all():
+                for topic_page_topic_collection in page_topic.topiccollections.all():
+                    new_url = JanisUrl.create(
+                                information_page=page if page_type == 'InformationPage' else None,
+                                service_page=page if page_type == 'ServicePage' else None,
+                                guide_page=page if page_type == 'GuidePage' else None,
+                                official_documents_page=page if page_type == 'OfficialDocumentPage' else None,
+                                form_container=page if page_type == 'FormContainer' else None,
+                                topic_page=page_topic.topic,
+                                topic_collection_page=topic_page_topic_collection.topiccollection,
+                                theme=topic_page_topic_collection.topiccollection.theme,
+                                page_type=page_type,
+                                language=language)
+                    new_url.save()
+                    new_urls.append(new_url)
+
+            for page_department in page.related_departments.all():
+                new_url = JanisUrl.create(
+                    information_page=page if page_type == 'InformationPage' else None,
+                    service_page=page if page_type == 'ServicePage' else None,
+                    guide_page=page if page_type == 'GuidePage' else None,
+                    official_documents_page=page if page_type == 'OfficialDocumentPage' else None,
+                    form_container=page if page_type == 'FormContainer' else None,
+                    department_page=page_department.department,
+                    page_type=page_type,
+                    language=language)
+                new_url.save()
+                new_urls.append(new_url)
+
+
 
     # todo: This can definitely be less copypasta'd and more pythonic
     if page_type == 'TopicCollectionPage':
@@ -384,6 +420,25 @@ def after_edit_page(request, page):
         page.janis_urls = [LocationPageJanisUrl(janis_url=url, page=page) for url in new_urls]
         page.save()
 
+    if page_type == 'InformationPage':
+        page.janis_urls = [InformationPageJanisUrl(janis_url=url, page=page) for url in new_urls]
+        page.save()
+
+    if page_type == 'ServicePage':
+        page.janis_urls = [ServicePageJanisUrl(janis_url=url, page=page) for url in new_urls]
+        page.save()
+
+    if page_type == 'GuidePage':
+        page.janis_urls = [GuidePageJanisUrl(janis_url=url, page=page) for url in new_urls]
+        page.save()
+
+    if page_type == 'OfficialDocumentPage':
+        page.janis_urls = [OfficialDocumentPageJanisUrl(janis_url=url, page=page) for url in new_urls]
+        page.save()
+
+    if page_type == 'FormContainer':
+        page.janis_urls = [FormContainerJanisUrl(janis_url=url, page=page) for url in new_urls]
+        page.save()
 
 
 # By default all menu items are shown all the time.

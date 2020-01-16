@@ -58,6 +58,7 @@ class GuidePage(JanisBasePage):
         ImageChooserPanel('image'),
         StreamFieldPanel('sections'),
         InlinePanel('contacts', label='Contacts'),
+        InlinePanel('janis_urls', label='Urls'),
     ]
 
 

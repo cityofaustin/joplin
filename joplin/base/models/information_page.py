@@ -56,6 +56,7 @@ class InformationPage(JanisBasePage):
         # StreamFieldPanel('options'),
         FieldPanel('additional_content'),
         InlinePanel('contacts', label='Contacts'),
+        InlinePanel('janis_urls', label='Urls'),
     ]
 
 

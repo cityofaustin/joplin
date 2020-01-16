@@ -33,6 +33,7 @@ class FormContainer(JanisBasePage):
         InlinePanel('related_departments', label='Related Departments'),
         FieldPanel('description', widget=countMeTextArea),
         FieldPanel('form_url'),
+        InlinePanel('janis_urls', label='Urls'),
     ]
 
 class FormContainerRelatedDepartments(ClusterableModel):
