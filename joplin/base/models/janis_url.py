@@ -163,8 +163,12 @@ class JanisUrl(models.Model):
                                                                      official_documents_page or
                                                                      form_container)
                                     }''')
-            if department_page:
+            elif department_page:
                 new_janis_url = cls(information_page=information_page,
+                                    service_page=service_page,
+                                    guide_page=guide_page,
+                                    official_documents_page=official_documents_page,
+                                    form_container=form_container,
                                     department_page=department_page,
                                     url=f'''/{language}/{
                                         JanisUrl.get_translated_slug(language, department_page)
@@ -176,8 +180,20 @@ class JanisUrl(models.Model):
                                              official_documents_page or
                                              form_container)
                                     }''')
-            # Todo: top level
-            print(information_page)
 
+            else:
+                new_janis_url = cls(information_page=information_page,
+                                    service_page=service_page,
+                                    guide_page=guide_page,
+                                    official_documents_page=official_documents_page,
+                                    form_container=form_container,
+                                    url=f'''/{language}/{
+                                        JanisUrl.get_translated_slug(language,
+                                             information_page or
+                                             service_page or
+                                             guide_page or
+                                             official_documents_page or
+                                             form_container)
+                                    }''')
 
         return new_janis_url

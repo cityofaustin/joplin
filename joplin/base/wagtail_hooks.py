@@ -373,7 +373,7 @@ def after_edit_page(request, page):
         # /page_slug/
         else:
             for page_topic in page.topics.all():
-                for topic_page_topic_collection in page_topic.topiccollections.all():
+                for topic_page_topic_collection in page_topic.topic.topiccollections.all():
                     new_url = JanisUrl.create(
                                 information_page=page if page_type == 'InformationPage' else None,
                                 service_page=page if page_type == 'ServicePage' else None,
@@ -395,13 +395,23 @@ def after_edit_page(request, page):
                     guide_page=page if page_type == 'GuidePage' else None,
                     official_documents_page=page if page_type == 'OfficialDocumentPage' else None,
                     form_container=page if page_type == 'FormContainer' else None,
-                    department_page=page_department.department,
+                    department_page=page_department.related_department,
                     page_type=page_type,
                     language=language)
                 new_url.save()
                 new_urls.append(new_url)
 
-            # Todo: top level
+            if page.coa_global:
+                new_url = JanisUrl.create(
+                    information_page=page if page_type == 'InformationPage' else None,
+                    service_page=page if page_type == 'ServicePage' else None,
+                    guide_page=page if page_type == 'GuidePage' else None,
+                    official_documents_page=page if page_type == 'OfficialDocumentPage' else None,
+                    form_container=page if page_type == 'FormContainer' else None,
+                    page_type=page_type,
+                    language=language)
+                new_url.save()
+                new_urls.append(new_url)
 
 
 
