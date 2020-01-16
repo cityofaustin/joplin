@@ -18,7 +18,7 @@ from wagtail.contrib.modeladmin.options import ModelAdmin, ModelAdminGroup, mode
 from wagtail.admin.widgets import Button, ButtonWithDropdownFromHook, PageListingButton
 from wagtail.core import hooks
 
-from base.models import HomePage, Location, Contact
+from base.models import HomePage, Location, Contact, JanisUrl
 
 from html.parser import HTMLParser
 
@@ -298,6 +298,14 @@ class InternalLinkHandler(LinkHandler):
 @hooks.register('register_rich_text_features', order=1)
 def register_link_handler(features):
     features.register_link_type(InternalLinkHandler)
+
+
+# In here we're going to remake all the urls for this page
+@hooks.register('after_edit_page')
+def after_edit_page(request, page):
+    if page._meta.object_name == 'TopicPage':
+        page.janis_urls = [ JanisUrl.create(topic_page=page, topic_collection_page=tc) for tc in page.topiccollections.all() ]
+        page.save()
 
 
 # By default all menu items are shown all the time.

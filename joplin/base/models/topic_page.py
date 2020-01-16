@@ -41,6 +41,7 @@ class TopicPage(JanisBasePage):
         InlinePanel('top_pages', heading='Links to top pages', label='top link',
                     help_text='Add links to 1-4 top pages or guides (4 maximum allowed).',
                     min_num=None, max_num=4),
+        InlinePanel('janis_urls', label='Urls'),
     ]
 
 

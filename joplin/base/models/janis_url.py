@@ -49,3 +49,9 @@ class JanisUrl(models.Model):
 
     def __str__(self):
         return self.url
+
+    @classmethod
+    def create(cls, topic_page, topic_collection_page):
+        new_janis_url = cls(topic_page=topic_page, topic_collection_page=topic_collection_page)
+        # do something with the book
+        return new_janis_url
