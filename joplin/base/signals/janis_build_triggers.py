@@ -18,11 +18,11 @@ JANIS_SLUG_URL = settings.JANIS_SLUG_URL
 
 
 def trigger_build(sender, pages_ids, action='saved', instance=None):
-    print(pages_ids)
     """
     triggers different build process depending on environment
     source = name of snippet or object triggering build
     """
+    print('global page ids: ', pages_ids)
     trigger_object = instance
     logger.debug(f'{trigger_object} {action}, triggering build')
     if settings.ISSTAGING or settings.ISPRODUCTION:
@@ -32,8 +32,9 @@ def trigger_build(sender, pages_ids, action='saved', instance=None):
 
 
 def collect_pages(instance):
+    # does this work on page deletion? pages arent deleted right, just unpublished?
     """
-    :param instance: the page or snippet that has been altered
+    :param instance: the page that has been altered
     :return: an array of global page ids -- note this may need to be a dictionary of page ids and type?
     """
     global_ids = []
@@ -48,6 +49,19 @@ def collect_pages(instance):
 
     return global_ids
 
+
+def collect_pages_snippet(instance):
+    """
+    :param instance: the snippet that has been altered
+    :return: an array of global page ids
+    """
+    usage = instance.get_usage()
+    pages_ids = []
+    for p in usage:
+        page_id = Node.to_global_id(p.content_type.name, p.id)
+        pages_ids.append(page_id) # do we need to then check what pages these are in?
+    return pages_ids
+
 # TODO: we can probably feed a list of models to attach the hook to
 # more ideas here
 # we might want to log but not trigger a build? need some sort of queue
@@ -56,14 +70,8 @@ def collect_pages(instance):
 @receiver(post_save, sender=Location)
 @receiver(post_save, sender=Map)
 def handle_post_save_signal(sender, **kwargs):
-    usage = kwargs['instance'].get_usage()
-    print(usage)
-    pages_ids = []
-    for p in usage:
-        page_id = Node.to_global_id(p.content_type.name, p.id)
-        pages_ids.append(page_id) # do we need to then check what pages these are in?
-
-    trigger_build(sender, pages_ids, instance=kwargs['instance'])
+    pages_global_ids = collect_pages_snippet(kwargs['instance'])
+    trigger_build(sender, pages_global_ids, instance=kwargs['instance'])
 
 
 @receiver(page_published)
@@ -77,16 +85,11 @@ def page_unpublished_signal(sender, **kwargs):
     pages_global_ids = collect_pages(kwargs['instance'])
     trigger_build(sender, pages_global_ids, action='unpublished', instance=kwargs['instance'])
 
+
 @receiver(post_delete, sender=Document)
 @receiver(post_delete, sender=Contact)
 @receiver(post_delete, sender=Location)
 @receiver(post_delete, sender=Map)
 def handle_post_delete_signal(sender, **kwargs):
-    print(kwargs['instance'], type(kwargs['instance']))
-    usage = kwargs['instance'].get_usage()
-    print(usage)
-    pages_ids = []
-    for p in usage:
-        page_id = Node.to_global_id(p.content_type.name, p.id)
-        pages_ids.append(page_id) # do we need to then check what pages these are in?
-    trigger_build(sender, pages_ids, action='deleted', instance=kwargs['instance'])
+    pages_global_ids = collect_pages_snippet(kwargs['instance'])
+    trigger_build(sender, pages_global_ids, action='deleted', instance=kwargs['instance'])
