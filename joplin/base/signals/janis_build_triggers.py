@@ -56,7 +56,6 @@ def collect_pages(instance):
 @receiver(post_save, sender=Location)
 @receiver(post_save, sender=Map)
 def handle_post_save_signal(sender, **kwargs):
-    print(kwargs['instance'], type(kwargs['instance']))
     usage = kwargs['instance'].get_usage()
     print(usage)
     pages_ids = []
