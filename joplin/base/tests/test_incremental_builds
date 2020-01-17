@@ -1,0 +1,17 @@
+from django.test import TestCase
+
+
+class TestCollectPages(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        print("setup test data: run once to set up non modified test data for all class methods")
+        pass
+
+    def setUp(self):
+        print("setup: run once  for every test method to setup clean data")
+        pass
+
+    # create snippets
+    # create pages
+    # reference each other
+    # test if the correct pages are returned
