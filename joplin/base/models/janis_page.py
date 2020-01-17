@@ -78,6 +78,7 @@ class JanisBasePage(Page):
                 'guide page',
                 'official document page',
                 'form container',
+                'location page'
             ]
             has_no_topic_collection = has_no_theme
 
@@ -85,6 +86,7 @@ class JanisBasePage(Page):
                 'topic page',
                 'topic collection page',
                 'department page',
+                'location page'
             ]
 
             theme_slug = (
@@ -115,6 +117,12 @@ class JanisBasePage(Page):
 
             # add hardcoded language path to base url
             base_url = f"{self.janis_url_base('publish_janis_branch')}/en"
+
+            # Quick location page exception
+            if self.content_type.name == 'location page':
+                location_url = base_url + '/location/' + page_slug
+                return location_url
+
             # attributes for the url are needed by not discovered yet lets fetch them
             # looking for missing elements, deducing content type from what works and what dosen't
             # this is pretty ugly and ought to be cleaned up
