@@ -67,8 +67,8 @@ class LocationPageFactory(PageFactory):
     class Meta:
         model = models.LocationPage
 
-    @factory.post_generation
-    def create_related_services(self, create, extracted, **kwargs):
-        if create:
-            # Create Blog Links
-            LocationPageRelatedServicesFactory.create_batch(5, page=self)
+    # @factory.post_generation
+    # def create_related_services(self, create, extracted, **kwargs):
+    #     if create:
+    #         # Create Blog Links
+    #         LocationPageRelatedServicesFactory.create_batch(2, page=self)

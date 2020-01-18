@@ -191,7 +191,6 @@ class LocationPageRelatedServices(Orderable):
 
     def clean(self):
         if self.hours_same_as_location == False and not any in self.all_hours_fields:
-            print("BIG PROBLEM")
             raise ValidationError({'hours_same_as_location': ('Please either check this or input hours for this service')})
 
 
