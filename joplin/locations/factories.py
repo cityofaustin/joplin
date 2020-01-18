@@ -18,8 +18,10 @@ class PageFactory(wagtail_factories.factories.MP_NodeFactory):
     class Meta:
         model = Page
 
+
 class LocationPageRelatedServicesFactory(factory.django.DjangoModelFactory):
     # find all your fields [f.name for f in MyModel._meta.get_fields()]
+    # page = factory.SubFactory('locations.factories.LocationPageFactory')
     page = factory.Iterator(models.LocationPage.objects.all())
     related_service = factory.Iterator(ServicePage.objects.all())
     hours_exceptions = factory.Faker('text')
@@ -30,6 +32,7 @@ class LocationPageRelatedServicesFactory(factory.django.DjangoModelFactory):
          if field.get_internal_type() == 'TimeField':
              locals()[field.name] = factory.Faker('time', pattern="%H:%M", end_datetime=None)
     del field
+
     class Meta:
         model = models.LocationPageRelatedServices
 
@@ -54,8 +57,11 @@ class LocationPageFactory(PageFactory):
     nearest_bus_1 = factory.Faker('random_int', min=0, max=999, step=1)
     nearest_bus_2 = factory.Faker('random_int', min=0, max=999, step=1)
     nearest_bus_3 = factory.Faker('random_int', min=0, max=999, step=1)
-
-    related_services = factory.SubFactory(LocationPageRelatedServicesFactory)
+    for field in models.LocationPageRelatedServices._meta.fields:
+         if field.get_internal_type() == 'TimeField':
+             locals()[field.name] = factory.Faker('time', pattern="%H:%M", end_datetime=None)
+    del field
+    related_services = factory.RelatedFactoryList(LocationPageRelatedServicesFactory, size=3)
 
     class Meta:
         model = models.LocationPage
