@@ -46,8 +46,6 @@ def add_hours_by_day_and_exceptions(model):
     for day in week_days:
         day_start_field = '%s_start_time' % day.lower()
         day_end_field = '%s_end_time' % day.lower()
-        day_open_field = '%s_open' % day.lower()
-        models.BooleanField(default=False).contribute_to_class(model, day_open_field)
         models.TimeField(null=True, blank=True).contribute_to_class(model, day_start_field)
         models.TimeField(null=True, blank=True).contribute_to_class(model, day_end_field)
         models.TimeField(null=True, blank=True).contribute_to_class(model, day_start_field + "_2")
@@ -177,7 +175,7 @@ class LocationPage(JanisBasePage):
     ]
 
 
-class LocationPageRelatedServices(ClusterableModel):
+class LocationPageRelatedServices(Orderable):
 
     page = ParentalKey(LocationPage, related_name='related_services', default=None)
     related_service = models.ForeignKey(
