@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.exceptions import ValidationError
 from wagtail.admin.edit_handlers import FieldPanel
 from wagtail.images.models import Image
 from wagtail.images.edit_handlers import ImageChooserPanel
@@ -33,6 +34,43 @@ from wagtail.snippets.edit_handlers import SnippetChooserPanel
 
 from wagtail.core import blocks
 
+
+def add_hours_by_day_and_exceptions(model):
+    """
+    here we want to add these fields to this model, but typing them all out would be super verbose
+    so a little python and Django's contribute_to_class go a long way
+    """
+    week_days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+    panels_to_add = []
+    models.TextField(max_length=DEFAULT_MAX_LENGTH, blank=True).contribute_to_class(model, 'hours_exceptions')
+    for day in week_days:
+        day_start_field = '%s_start_time' % day.lower()
+        day_end_field = '%s_end_time' % day.lower()
+        day_open_field = '%s_open' % day.lower()
+        models.BooleanField(default=False).contribute_to_class(model, day_open_field)
+        models.TimeField(null=True, blank=True).contribute_to_class(model, day_start_field)
+        models.TimeField(null=True, blank=True).contribute_to_class(model, day_end_field)
+        models.TimeField(null=True, blank=True).contribute_to_class(model, day_start_field + "_2")
+        models.TimeField(null=True, blank=True).contribute_to_class(model, day_end_field + "_2")
+        panels_to_add += [
+
+            FieldRowPanel(
+                children=[
+
+                    FieldPanel(day_start_field),
+                    FieldPanel(day_end_field),
+                    FieldPanel(day_start_field + "_2"),
+                    FieldPanel(day_end_field + "_2"),
+                ],
+                heading="Hours",
+            ),
+
+        ]
+    panels_to_add += [
+        FieldPanel('hours_exceptions')
+    ]
+    panels_with_wrapper = MultiFieldPanel(children=panels_to_add, classname="collapsible hours-wrapper", heading="Location Hours")
+    return panels_with_wrapper
 
 class LocationPage(JanisBasePage):
     """
@@ -146,49 +184,27 @@ class LocationPageRelatedServices(ClusterableModel):
         "base.servicePage",
         on_delete=models.PROTECT,
     )
+    hours_same_as_location = models.BooleanField(default=False, verbose_name="The hours for this service are the same as the location hours")
+
+    @property
+    def all_hours_fields(self):
+        return [field for field in self._meta.fields if field.get_internal_type() == 'TimeField']
+
+
+    def clean(self):
+        if self.hours_same_as_location == False and not any in self.all_hours_fields:
+            print("BIG PROBLEM")
+            raise ValidationError({'hours_same_as_location': ('Please either check this or input hours for this service')})
+
+
     panels = [
         PageChooserPanel("related_service"),
+        FieldPanel("hours_same_as_location"),
 
     ]
 
 
-def add_hours_by_day_and_exceptions(model):
-    """
-    here we want to add these fields to this model, but typing them all out would be super verbose
-    so a little python and Django's contribute_to_class go a long way
-    """
-    week_days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
-    panels_to_add = []
-    models.TextField(max_length=DEFAULT_MAX_LENGTH, blank=True).contribute_to_class(model, 'hours_exceptions')
-    for day in week_days:
-        day_start_field = '%s_start_time' % day.lower()
-        day_end_field = '%s_end_time' % day.lower()
-        day_open_field = '%s_open' % day.lower()
-        models.BooleanField(default=False).contribute_to_class(model, day_open_field)
-        models.TimeField(null=True, blank=True).contribute_to_class(model, day_start_field)
-        models.TimeField(null=True, blank=True).contribute_to_class(model, day_end_field)
-        models.TimeField(null=True, blank=True).contribute_to_class(model, day_start_field + "_2")
-        models.TimeField(null=True, blank=True).contribute_to_class(model, day_end_field + "_2")
-        panels_to_add += [
-
-            FieldRowPanel(
-                children=[
-
-                    FieldPanel(day_start_field),
-                    FieldPanel(day_end_field),
-                    FieldPanel(day_start_field + "_2"),
-                    FieldPanel(day_end_field + "_2"),
-                ],
-                heading="Hours",
-            ),
-
-        ]
-    panels_to_add += [
-        FieldPanel('hours_exceptions')
-    ]
-    panels_with_wrapper = MultiFieldPanel(children=panels_to_add, classname="collapsible", heading="Location Hours")
-    return panels_with_wrapper
-
+# LocationPageRelatedServices.panels += [add_hours_by_day_and_exceptions(LocationPageRelatedServices)]
 
 LocationPageRelatedServices.panels += [add_hours_by_day_and_exceptions(LocationPageRelatedServices)]
 LocationPage.content_panels += [add_hours_by_day_and_exceptions(LocationPage), InlinePanel('related_services', label='Related Services'), ]
