@@ -25,13 +25,11 @@ class LocationPageRelatedServicesFactory(factory.django.DjangoModelFactory):
     # page = factory.Iterator(models.LocationPage.objects.all())
     related_service = factory.Iterator(ServicePage.objects.all())
     hours_exceptions = factory.Faker('text')
-    """
-    I'm almost proud of myself for how hacky this is, ask me about it sometime
-    """
-    for field in models.LocationPageRelatedServices._meta.fields:
-         if field.get_internal_type() == 'TimeField':
-             locals()[field.name] = factory.Faker('time', pattern="%H:%M", end_datetime=None)
-    del field
+
+    # for field in models.LocationPageRelatedServices._meta.fields:
+    #      if field.get_internal_type() == 'TimeField':
+    #          locals()[field.name] = factory.Faker('time', pattern="%H:%M", end_datetime=None)
+    # del field
 
     class Meta:
         model = models.LocationPageRelatedServices
@@ -57,6 +55,9 @@ class LocationPageFactory(PageFactory):
     nearest_bus_1 = factory.Faker('random_int', min=0, max=999, step=1)
     nearest_bus_2 = factory.Faker('random_int', min=0, max=999, step=1)
     nearest_bus_3 = factory.Faker('random_int', min=0, max=999, step=1)
+    """
+    I'm almost proud of myself for how hacky this is, ask me about it sometime
+    """
     for field in models.LocationPageRelatedServices._meta.fields:
          if field.get_internal_type() == 'TimeField':
              locals()[field.name] = factory.Faker('time', pattern="%H:%M", end_datetime=None)

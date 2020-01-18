@@ -1,17 +1,12 @@
-from django.core.validation import ValidationError
+from django.core.exceptions import ValidationError
 from django.test import TestCase
 from locations.models import LocationPageRelatedServices
-from locations import factories
+from . import factories
 
-class LocationPageRelatedServices(TestCase):
-
-    def test_joe_must_have_a_website(self):
-        p = Person(name='Joe', dob=datetime.date(1990, 1, 1))
-
+class LocationPageTests(TestCase):
+    def test_missing_related_service_hours_raises_error(self):
+        location_page = factories.LocationPageFactory()
         try:
-            p.full_clean()
+            location_page.full_clean()
         except ValidationError as e:
-            self.assertTrue('name' in e.message_dict)
-
-instance = YourModel()
-self.assertRaises(ValidationError, instance.clean)
+            self.assertRaises(ValidationError, instance.clean)
