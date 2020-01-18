@@ -21,8 +21,8 @@ class PageFactory(wagtail_factories.factories.MP_NodeFactory):
 
 class LocationPageRelatedServicesFactory(factory.django.DjangoModelFactory):
     # find all your fields [f.name for f in MyModel._meta.get_fields()]
-    # page = factory.SubFactory('locations.factories.LocationPageFactory')
-    page = factory.Iterator(models.LocationPage.objects.all())
+    page = factory.SubFactory('locations.factories.LocationPageFactory')
+    # page = factory.Iterator(models.LocationPage.objects.all())
     related_service = factory.Iterator(ServicePage.objects.all())
     hours_exceptions = factory.Faker('text')
     """
@@ -61,7 +61,13 @@ class LocationPageFactory(PageFactory):
          if field.get_internal_type() == 'TimeField':
              locals()[field.name] = factory.Faker('time', pattern="%H:%M", end_datetime=None)
     del field
-    related_services = factory.RelatedFactoryList(LocationPageRelatedServicesFactory, size=3)
+    # related_services = factory.RelatedFactoryList(LocationPageRelatedServicesFactory, size=3)
 
     class Meta:
         model = models.LocationPage
+
+    @factory.post_generation
+    def create_related_services(self, create, extracted, **kwargs):
+        if create:
+            # Create Blog Links
+            LocationPageRelatedServicesFactory.create_batch(5, page=self)
