@@ -2,6 +2,7 @@ import factory
 import wagtail_factories
 from django.utils.text import slugify
 from wagtail.core.models import Collection, Page
+from base.models import ServicePage
 from . import models
 
 
@@ -19,20 +20,16 @@ class PageFactory(wagtail_factories.factories.MP_NodeFactory):
 
 class LocationPageRelatedServicesFactory(factory.django.DjangoModelFactory):
     # find all your fields [f.name for f in MyModel._meta.get_fields()]
-    page = factory.RelatedFactory('factories.LocationPageFactory')
+    page = factory.Iterator(models.LocationPage.objects.all())
+    related_service = factory.Iterator(ServicePage.objects.all())
     hours_exceptions = factory.Faker('text')
-    # TODO: figure out how to call method/programatically generate these fields
-    # for day in ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]:
-    #     print(day)
-    #     day_start_field = '%s_start_time' % day.lower()
-    #     day_end_field = '%s_end_time' % day.lower()
-    #     day_open_field = '%s_open' % day.lower()
-    #     day_start_field = factory.Faker('time', pattern="%H:%M", end_datetime=None)
-    #     day_end_field = factory.Faker('time', pattern="%H:%M", end_datetime=None)
-
-    # (day_start_field + "_2") = factory.Faker('time', pattern="%H:%M", end_datetime=None)
-    # (day_end_field + "_2") = factory.Faker('time', pattern="%H:%M", end_datetime=None)
-
+    """
+    I'm almost proud of myself for how hacky this is, ask me about it sometime
+    """
+    for field in models.LocationPageRelatedServices._meta.fields:
+         if field.get_internal_type() == 'TimeField':
+             locals()[field.name] = factory.Faker('time', pattern="%H:%M", end_datetime=None)
+    del field
     class Meta:
         model = models.LocationPageRelatedServices
 
