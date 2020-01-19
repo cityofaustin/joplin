@@ -9,7 +9,6 @@ from base.forms import FormContainerForm
 from .janis_page import JanisBasePage
 
 from .widgets import countMe, countMeTextArea
-from countable_field import widgets
 
 class FormContainer(JanisBasePage):
     janis_url_page_type = "form"

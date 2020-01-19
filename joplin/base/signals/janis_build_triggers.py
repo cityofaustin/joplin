@@ -10,6 +10,7 @@ from base.models import Contact, Location, Map
 from wagtail.documents.models import Document
 from base.signals.aws_publish import get_http_request, create_build_aws
 from base.signals.netlify_publish import netlify_publish
+from flags.state import flag_enabled
 
 import logging
 logger = logging.getLogger(__name__)
@@ -70,19 +71,25 @@ def collect_pages_snippet(instance):
 @receiver(post_save, sender=Location)
 @receiver(post_save, sender=Map)
 def handle_post_save_signal(sender, **kwargs):
-    pages_global_ids = collect_pages_snippet(kwargs['instance'])
+    pages_global_ids = []
+    if flag_enabled('SHOW_EXTRA_PANELS'):
+        pages_global_ids = collect_pages_snippet(kwargs['instance'])
     trigger_build(sender, pages_global_ids, instance=kwargs['instance'])
 
 
 @receiver(page_published)
 def page_published_signal(sender, **kwargs):
-    pages_global_ids = collect_pages(kwargs['instance'])
+    pages_global_ids = []
+    if flag_enabled('SHOW_EXTRA_PANELS'):
+        pages_global_ids = collect_pages(kwargs['instance'])
     trigger_build(sender, pages_global_ids, action='published', instance=kwargs['instance'])
 
 
 @receiver(page_unpublished)
 def page_unpublished_signal(sender, **kwargs):
-    pages_global_ids = collect_pages(kwargs['instance'])
+    pages_global_ids = []
+    if flag_enabled('SHOW_EXTRA_PANELS'):
+        pages_global_ids = collect_pages(kwargs['instance'])
     trigger_build(sender, pages_global_ids, action='unpublished', instance=kwargs['instance'])
 
 
@@ -91,5 +98,7 @@ def page_unpublished_signal(sender, **kwargs):
 @receiver(post_delete, sender=Location)
 @receiver(post_delete, sender=Map)
 def handle_post_delete_signal(sender, **kwargs):
-    pages_global_ids = collect_pages_snippet(kwargs['instance'])
+    pages_global_ids = []
+    if flag_enabled('SHOW_EXTRA_PANELS'):
+        pages_global_ids = collect_pages_snippet(kwargs['instance'])
     trigger_build(sender, pages_global_ids, action='deleted', instance=kwargs['instance'])

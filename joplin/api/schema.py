@@ -15,7 +15,7 @@ from wagtail.core.blocks import *
 from wagtail.documents.models import Document
 from wagtail.core.rich_text import expand_db_html
 from base.models import (
-    JanisBasePage,
+    JanisBasePage, # we dont use janis base page in the scheme
     TranslatedImage,
     ThreeOneOne,
     ServicePage, ServicePageContact, ServicePageTopic, ServicePageRelatedDepartments,
@@ -75,7 +75,7 @@ def expand_dict_values(item):
 def expand_by_type(key, value):
     """
     recursive function to
-    handle the streamfield black items differently depending on type
+    handle the streamfield block items differently depending on type
     and loop through again if its a dict
     """
     if isinstance(value, str):
@@ -134,11 +134,11 @@ class DocumentNode(DjangoObjectType):
     filename = graphene.String()
 
 
-class ThreeOneOneNode(DjangoObjectType):
-    class Meta:
-        model = ThreeOneOne
-        filter_fields = ['title']
-        interfaces = [graphene.Node]
+# class ThreeOneOneNode(DjangoObjectType):
+#     class Meta:
+#         model = ThreeOneOne
+#         filter_fields = ['title']
+#         interfaces = [graphene.Node]
 
 
 class ThemeNode(DjangoObjectType):
@@ -809,7 +809,7 @@ class Query(graphene.ObjectType):
     all_topics = DjangoFilterConnectionField(TopicNode)
     all_topic_collections = DjangoFilterConnectionField(TopicCollectionNode)
     all_departments = DjangoFilterConnectionField(DepartmentNode)
-    all_311 = DjangoFilterConnectionField(ThreeOneOneNode)
+    # all_311 = DjangoFilterConnectionField(ThreeOneOneNode)
     all_official_document_pages = DjangoFilterConnectionField(
         OfficialDocumentPageNode)
     all_guide_pages = DjangoFilterConnectionField(GuidePageNode)

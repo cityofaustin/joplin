@@ -1,9 +1,7 @@
 from django.db import models
-from wagtail.images.models import Image
 from phonenumber_field.modelfields import PhoneNumberField
 from phonenumber_field.widgets import PhoneNumberInternationalFallbackWidget
 from base.models import HomePage
-from wagtail.core.models import Page
 from modelcluster.fields import ParentalKey
 from wagtail.admin.edit_handlers import (
     InlinePanel,
@@ -20,7 +18,6 @@ from base.models import JanisBasePage
 from base.models.widgets import countMe, countMeTextArea, AUTHOR_LIMITS
 from modelcluster.models import ClusterableModel
 from base.models.constants import DEFAULT_MAX_LENGTH
-from base.models.day_and_duration import DayAndDuration
 
 from wagtail.core import blocks
 
