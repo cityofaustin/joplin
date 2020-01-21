@@ -54,7 +54,7 @@ class JanisBasePage(Page):
         This function parses various attributes of related content types to construct the
         expected url structure for janis.
 
-        For attributes with multiple relations, it ONLY takes the FIRST one.
+        For attributes with multiple relations, it ONLY takes the all one.
         """
         try:
             """
@@ -94,9 +94,9 @@ class JanisBasePage(Page):
                 if self.content_type.name not in has_no_theme
                 else None
             )
-            # https://docs.djangoproject.com/en/2.2/ref/models/querysets/#first
+            # https://docs.djangoproject.com/en/2.2/ref/models/querysets/#all
             topic_collection_slug = (
-                self.topiccollections.first().topiccollection.slug
+                self.topiccollections.all().topiccollection.slug
                 if
                 (
                     self.content_type.name not in has_no_topic_collection and
@@ -106,7 +106,7 @@ class JanisBasePage(Page):
                 else None
             )
             topic_slug = (
-                self.topics.first().topic.slug
+                self.topics.all().topic.slug
                 if
                 (
                     self.content_type.name not in has_no_topic and
@@ -128,12 +128,12 @@ class JanisBasePage(Page):
             # this is pretty ugly and ought to be cleaned up
             if theme_slug is None and self.content_type.name != 'department page':
                 try:
-                    theme_slug = self.topics.first().topic.topiccollections.first().topiccollection.theme.slug or None
-                    topic_collection_slug = self.topics.first().topic.topiccollections.first().topiccollection.slug or None
+                    theme_slug = self.topics.all().topic.topiccollections.all().topiccollection.theme.slug or None
+                    topic_collection_slug = self.topics.all().topic.topiccollections.all().topiccollection.slug or None
                 except AttributeError as e:
                     try:
-                        theme_slug = self.topiccollections.first().topiccollection.theme.slug or None
-                        topic_collection_slug = self.topiccollections.first().topiccollection.slug or None
+                        theme_slug = self.topiccollections.all().topiccollection.theme.slug or None
+                        topic_collection_slug = self.topiccollections.all().topiccollection.slug or None
                     except AttributeError as e:
                         # this is for pages just under departments
                         theme_slug = self.related_departments.all()[0].related_department.slug or None
@@ -201,7 +201,7 @@ class JanisBasePage(Page):
         if settings.ISSTAGING or settings.ISPRODUCTION:
             return os.getenv("JANIS_URL")
         else:
-            branch_settings = JanisBranchSettings.objects.first()
+            branch_settings = JanisBranchSettings.objects.all()
             return branch_settings.url_base(janis_branch)
 
     # alias for url base function
@@ -255,9 +255,9 @@ class JanisBasePage(Page):
         try:
             if flag_enabled('SHOW_EXTRA_PANELS'):
                 editor_panels += (PermissionObjectList(cls.promote_panels,
-                                             heading='SEO'),
+                                                       heading='SEO'),
                                   PermissionObjectList(cls.settings_panels,
-                                             heading='Settings'))
+                                                       heading='Settings'))
         except ProgrammingError as e:
             print("some problem, maybe with flags")
             pass

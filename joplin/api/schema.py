@@ -205,7 +205,6 @@ class LocationPageRelatedServices(DjangoObjectType):
         interfaces = [graphene.Node]
 
 
-
 class ContactNode(DjangoObjectType):
     class Meta:
         model = Contact
@@ -327,6 +326,7 @@ class ServicePageStep(graphene.ObjectType):
 class ServicePageNode(DjangoObjectType):
     page_type = graphene.String()
     janis_url = graphene.String()
+    get_parents = graphene.String()
     steps = graphene.List(ServicePageStep)
 
     class Meta:

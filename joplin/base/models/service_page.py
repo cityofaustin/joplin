@@ -75,6 +75,14 @@ class ServicePage(JanisBasePage):
         blank=True
     )
 
+    @property
+    def get_parents(self):
+        parent_topics = self.topics.all()
+        import pdb
+        pdb.set_trace()
+        parent_departments = self.related_departments.all()
+        return parent_topics, parent_departments
+
     dynamic_content = StreamField(
         [
             ('map_block', SnippetChooserBlockWithAPIGoodness('base.Map', icon='site')),
