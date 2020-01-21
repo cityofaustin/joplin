@@ -390,7 +390,7 @@ PHONENUMBER_DB_FORMAT = "RFC3966"
 
 FLAGS = {
     'SHOW_EXTRA_PANELS': [{'condition': 'boolean', 'value': True}],
-    'INCREMENTAL BUILDS': [{'condition': 'boolean', 'value': True}]
+    'INCREMENTAL BUILDS': [{'condition': 'boolean', 'value': False}]
 }
 
 # The CMS_API endpoint of the current Django App for published Janis to use

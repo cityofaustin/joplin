@@ -1,17 +1,37 @@
 from django.test import TestCase
+from django.core.management import call_command
+import os
 
+from base.models import TopicPage
 
 class TestCollectPages(TestCase):
     @classmethod
     def setUpTestData(cls):
-        print("setup test data: run once to set up non modified test data for all class methods")
-        pass
+        # setup test data: run once to set up non modified test data for all class methods"
+        print("loading dummy data...")
+        os.environ['LOAD_DATA'] = 'dummy'
+        call_command('load_joplin_data')
+        print("dummy data loaded")
 
-    def setUp(self):
-        print("setup: run once  for every test method to setup clean data")
-        pass
+    # def setUp(self):
+    #     print("loading dummy data...")
+    #     os.environ['LOAD_DATA'] = "dummy"
+    #     call_command('load_joplin_data')
+    #     print("dummy data loaded")
 
-    # create snippets
-    # create pages
-    # reference each other
-    # test if the correct pages are returned
+    # would it be more useful for me to write my own pages instead of loading the dummy data?
+
+    def test_test(self):
+        self.assertTrue(False)
+
+    def test_page_in_topic_collection(self):
+        changed_page = TopicPage.objects.get(id=53)
+        print(changed_page)
+        self.assertTrue(changed_page.id == '53')
+
+
+
+    # test service pages
+    # test topic pages?
+    # write a test for each page type?
+    #

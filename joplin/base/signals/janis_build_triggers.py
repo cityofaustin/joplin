@@ -72,7 +72,7 @@ def collect_pages_snippet(instance):
 @receiver(post_save, sender=Map)
 def handle_post_save_signal(sender, **kwargs):
     pages_global_ids = []
-    if flag_enabled('SHOW_EXTRA_PANELS'):
+    if flag_enabled('INCREMENTAL BUILDS'):
         pages_global_ids = collect_pages_snippet(kwargs['instance'])
     trigger_build(sender, pages_global_ids, instance=kwargs['instance'])
 
@@ -80,7 +80,7 @@ def handle_post_save_signal(sender, **kwargs):
 @receiver(page_published)
 def page_published_signal(sender, **kwargs):
     pages_global_ids = []
-    if flag_enabled('SHOW_EXTRA_PANELS'):
+    if flag_enabled('INCREMENTAL BUILDS'):
         pages_global_ids = collect_pages(kwargs['instance'])
     trigger_build(sender, pages_global_ids, action='published', instance=kwargs['instance'])
 
@@ -88,7 +88,7 @@ def page_published_signal(sender, **kwargs):
 @receiver(page_unpublished)
 def page_unpublished_signal(sender, **kwargs):
     pages_global_ids = []
-    if flag_enabled('SHOW_EXTRA_PANELS'):
+    if flag_enabled('INCREMENTAL BUILDS'):
         pages_global_ids = collect_pages(kwargs['instance'])
     trigger_build(sender, pages_global_ids, action='unpublished', instance=kwargs['instance'])
 
@@ -99,6 +99,6 @@ def page_unpublished_signal(sender, **kwargs):
 @receiver(post_delete, sender=Map)
 def handle_post_delete_signal(sender, **kwargs):
     pages_global_ids = []
-    if flag_enabled('SHOW_EXTRA_PANELS'):
+    if flag_enabled('INCREMENTAL BUILDS'):
         pages_global_ids = collect_pages_snippet(kwargs['instance'])
     trigger_build(sender, pages_global_ids, action='deleted', instance=kwargs['instance'])

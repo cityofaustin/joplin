@@ -15,7 +15,6 @@ from wagtail.core.blocks import *
 from wagtail.documents.models import Document
 from wagtail.core.rich_text import expand_db_html
 from base.models import (
-    JanisBasePage, # we dont use janis base page in the scheme
     TranslatedImage,
     ThreeOneOne,
     ServicePage, ServicePageContact, ServicePageTopic, ServicePageRelatedDepartments,
@@ -798,18 +797,17 @@ def get_page_with_preview_data(page, session):
 class Query(graphene.ObjectType):
     debug = graphene.Field(DjangoDebug, name='__debug')
 
-    department_page = graphene.Node.Field(DepartmentPageNode) # why is this the only one that isnt filterconnectionfield
+    department_page = graphene.Node.Field(DepartmentPageNode)
     all_service_pages = DjangoFilterConnectionField(ServicePageNode)
     page_revision = graphene.Field(PageRevisionNode, id=graphene.ID())
     site_structure = graphene.Field(SiteStructure)
     all_page_revisions = DjangoFilterConnectionField(PageRevisionNode)
     all_information_pages = DjangoFilterConnectionField(InformationPageNode)
-    all_department_pages = DjangoFilterConnectionField(DepartmentPageNode) #and then is here again
+    all_department_pages = DjangoFilterConnectionField(DepartmentPageNode)
     all_themes = DjangoFilterConnectionField(ThemeNode)
     all_topics = DjangoFilterConnectionField(TopicNode)
     all_topic_collections = DjangoFilterConnectionField(TopicCollectionNode)
     all_departments = DjangoFilterConnectionField(DepartmentNode)
-    # all_311 = DjangoFilterConnectionField(ThreeOneOneNode)
     all_official_document_pages = DjangoFilterConnectionField(
         OfficialDocumentPageNode)
     all_guide_pages = DjangoFilterConnectionField(GuidePageNode)
