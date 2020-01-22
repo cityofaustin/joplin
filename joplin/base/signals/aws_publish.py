@@ -15,8 +15,7 @@ logger = logging.getLogger(__name__)
 
 JANIS_SLUG_URL = settings.JANIS_SLUG_URL
 
-# is this where I would pass along the page id? or is this drastically changing once publisher changes to
-# the different model?
+
 def create_build_aws(content_type, instance, publish_action='edited', request=None):
     """
         Triggers a build in Amazon Elastic Container Service, it requires:

@@ -28,8 +28,7 @@ from base.models import (
 )
 from .content_type_map import content_type_map
 import traceback
-import locations.models as locations
-from locations.models import LocationPage
+from locations.models import LocationPage, LocationPageRelatedServices
 
 
 class RichTextFieldType(Scalar):
@@ -191,7 +190,7 @@ class LocationNode(DjangoObjectType):
 
 class LocationPageNode(DjangoObjectType):
     class Meta:
-        model = locations.LocationPage
+        model = LocationPage
         filter_fields = ['id', 'slug', 'live']
         fields = '__all__'
         interfaces = [graphene.Node]
@@ -199,9 +198,8 @@ class LocationPageNode(DjangoObjectType):
 
 class LocationPageRelatedServices(DjangoObjectType):
     class Meta:
-        model = locations.LocationPageRelatedServices
+        model = LocationPageRelatedServices
         interfaces = [graphene.Node]
-
 
 
 class ContactNode(DjangoObjectType):
@@ -298,6 +296,7 @@ class ServicePageStepLocationBlock(graphene.ObjectType):
     location_page = graphene.Field(LocationPageNode)
 
     def resolve_location_page(self, info):
+        print('resolve location_page', self )
         page = None
         try:
             page = LocationPage.objects.get(id=self.value)
