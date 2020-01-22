@@ -9,7 +9,7 @@ from graphene.types import Scalar
 from graphene.types.json import JSONString
 from graphene.types.generic import GenericScalar
 from wagtail.core.fields import StreamField, RichTextField
-from wagtail.core.models import Page, PageRevision
+from wagtail.core.models import PageRevision
 from django_filters import FilterSet, OrderingFilter
 from wagtail.core.blocks import *
 from wagtail.documents.models import Document

@@ -19,7 +19,6 @@ from base.models.widgets import countMe, countMeTextArea, AUTHOR_LIMITS
 from modelcluster.models import ClusterableModel
 from base.models.constants import DEFAULT_MAX_LENGTH
 
-from wagtail.core import blocks
 
 
 class LocationPage(JanisBasePage):
@@ -183,6 +182,6 @@ LocationPage.content_panels += [add_hours_by_day_and_exceptions(LocationPage), I
 # override title field to change verbose name
 # NOTE: this may break/cause problems if we ever make JanisBasePage NOT abstract
 # commenting out for now since this is making *every* content type have the field name Location name
-# the problem seems to be that title comes from the wagtail Page model, and is not absctract.
+# the problem seems to be that title comes from the wagtail Page model, and is not abstract.
 # we then inherit that non abstract model with janisbasepage which IS abstract, then this page inherits that and is NOT abstract
 # LocationPage._meta.get_field('title').verbose_name = 'Location name'
