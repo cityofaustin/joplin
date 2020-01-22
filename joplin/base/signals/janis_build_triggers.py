@@ -41,6 +41,7 @@ def collect_pages(instance):
     global_ids = []
     wagtail_page = Page.objects.get(id=instance.id)
     page_set = get_object_usage(wagtail_page)
+    # get_object_usage will also return the wagtail_page itself
     for page in page_set:
         global_ids.append(Node.to_global_id(page.content_type.name, page.id))
     global_page_id = Node.to_global_id(instance.get_verbose_name(), instance.id)
@@ -71,8 +72,8 @@ def find_pages_in_guides(changed_id):
     Service Pages and information Pages don't know they are on Guides. So what happens if one is updated?
     Until we know better, this will go through all our guide pages and check if the page that is changed is in
     one of the guide's sections
-    :param changed_id:
-    :return:
+    :param changed_id: id of the page that was published / unpublished
+    :return: id of the Guide Pages that include that page
     """
     pages_id = []
     all_guides = GuidePage.objects.all()
@@ -106,8 +107,10 @@ def handle_post_save_signal(sender, **kwargs):
 @receiver(page_published)
 def page_published_signal(sender, **kwargs):
     pages_global_ids = []
-    #if flag_enabled('INCREMENTAL BUILDS'):
-    if True:
+    if flag_enabled('INCREMENTAL BUILDS'):
+        # for the future, setting up a way to check if the title changed
+        # https://stackoverflow.com/questions/1355150/when-saving-how-can-you-check-if-a-field-has-changed
+        # because if the title didnt change, pages that contain links to the published page don't need to be updated
         pages_global_ids = collect_pages(kwargs['instance'])
     trigger_build(sender, pages_global_ids, action='published', instance=kwargs['instance'])
 
