@@ -1,3 +1,108 @@
 from django.db import models
 
-# Create your models here.
+from modelcluster.fields import ParentalKey
+from modelcluster.models import ClusterableModel
+
+from wagtail.core.fields import RichTextField, StreamField
+from wagtail.core.blocks import RichTextBlock
+from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, MultiFieldPanel, PageChooserPanel, StreamFieldPanel
+from wagtail.snippets.edit_handlers import SnippetChooserPanel
+
+from base.forms import InformationPageForm
+
+from base.models.janis_page import JanisBasePage
+from base.models.contact import Contact
+
+from base.models.constants import WYSIWYG_GENERAL
+from base.models.widgets import countMe, countMeTextArea, AUTHOR_LIMITS
+from countable_field import widgets
+
+
+class InfoInformationPage(JanisBasePage):
+    janis_url_page_type = "information"
+
+    description = models.TextField(blank=True, verbose_name='Write a description of this page')
+    options = StreamField(
+        [
+            ('option', RichTextBlock(
+                features=WYSIWYG_GENERAL,
+                label='Option'
+            ))
+        ],
+        verbose_name='Add option sections as needed.',
+        help_text='Options are needed when the reader needs to make a choice between a few options, such as ways to fill out a form (online, by phone, in person, etc.).',
+        blank=True
+    )
+
+    additional_content = RichTextField(
+        features=WYSIWYG_GENERAL,
+        verbose_name='Write any additional content describing the service',
+        blank=True
+    )
+
+    # TODO: Add images array field
+
+    base_form_class = InformationPageForm
+
+    content_panels = [
+        FieldPanel('title_en', widget=countMe),
+        FieldPanel('title_es', widget=countMe),
+        FieldPanel('title_ar'),
+        FieldPanel('title_vi'),
+        InlinePanel('topics', label='Topics'),
+        InlinePanel('related_departments', label='Related Departments'),
+        FieldPanel('description', widget=countMeTextArea),
+        # hidden for now, see: https://austininnovation.slack.com/archives/C8T4YD23T/p1570659780017500?thread_ts=1570659723.017100&cid=C8T4YD23T
+        # StreamFieldPanel('options'),
+        FieldPanel('additional_content'),
+        InlinePanel('contacts', label='Contacts'),
+    ]
+
+    class Meta:
+        db_table = "informations_informationpage"
+
+
+class InfoInformationPageRelatedDepartments(ClusterableModel):
+    page = ParentalKey(InfoInformationPage, related_name='related_departments', default=None)
+    related_department = models.ForeignKey(
+        "base.departmentPage",
+        on_delete=models.PROTECT,
+    )
+
+    panels = [
+        # Use a SnippetChooserPanel because blog.BlogAuthor is registered as a snippet
+        PageChooserPanel("related_department"),
+    ]
+
+    class Meta:
+        db_table = "informations_informationpagerelateddepartments"
+
+
+class InfoInformationPageContact(ClusterableModel):
+    page = ParentalKey(InfoInformationPage, related_name='contacts')
+    contact = models.ForeignKey(Contact, related_name='+', on_delete=models.CASCADE)
+
+    panels = [
+        SnippetChooserPanel('contact'),
+    ]
+
+    def __str__(self):
+        return self.contact.name
+
+    class Meta:
+        db_table = "informations_informationpagecontact"
+
+
+class InfoInformationPageTopic(ClusterableModel):
+    page = ParentalKey(InfoInformationPage, related_name='topics')
+    topic = models.ForeignKey('base.TopicPage', verbose_name='Select a Topic', related_name='+', on_delete=models.CASCADE)
+
+    panels = [
+        PageChooserPanel('topic'),
+    ]
+
+    def __str__(self):
+        return self.topic.text
+
+    class Meta:
+        db_table = "informations_informationpagetopic"
