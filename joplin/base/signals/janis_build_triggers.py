@@ -6,7 +6,7 @@ from graphene import Node
 from wagtail.core.models import Page
 from wagtail.admin.utils import get_object_usage
 
-from base.models import Contact, Location, Map
+from base.models import Contact, Location, Map, GuidePage
 from wagtail.documents.models import Document
 from base.signals.aws_publish import get_http_request, create_build_aws
 from base.signals.netlify_publish import netlify_publish
@@ -39,14 +39,16 @@ def collect_pages(instance):
     :return: an array of global page ids -- note this may need to be a dictionary of page ids and type?
     """
     global_ids = []
-    print(instance)
     wagtail_page = Page.objects.get(id=instance.id)
     page_set = get_object_usage(wagtail_page)
     for page in page_set:
-        print(page, page.id, page.content_type)
         global_ids.append(Node.to_global_id(page.content_type.name, page.id))
     global_page_id = Node.to_global_id(instance.get_verbose_name(), instance.id)
     global_ids.append(global_page_id)
+
+    if instance.get_verbose_name() is 'Service Page' or 'Information Page':
+        guide_ids = find_pages_in_guides(instance.id)
+        global_ids.extend(guide_ids)
 
     return global_ids
 
@@ -62,6 +64,30 @@ def collect_pages_snippet(instance):
         page_id = Node.to_global_id(p.content_type.name, p.id)
         pages_ids.append(page_id)
     return pages_ids
+
+
+def find_pages_in_guides(changed_id):
+    """
+    Service Pages and information Pages don't know they are on Guides. So what happens if one is updated?
+    Until we know better, this will go through all our guide pages and check if the page that is changed is in
+    one of the guide's sections
+    :param changed_id:
+    :return:
+    """
+    pages_id = []
+    all_guides = GuidePage.objects.all()
+    for g in all_guides:
+        for s in g.sections:
+            # s.value.items() is an ordered dict
+            list_of_values = list(s.value.items())
+            # the pages are the 5th tuple
+            pages = list_of_values[4][1]
+            for p in pages:
+                if changed_id == p.id:
+                    page_id = Node.to_global_id('guide page', g.id)
+                    pages_id.append(page_id)
+
+    return pages_id
 
 # TODO: we can probably feed a list of models to attach the hook to
 # more ideas here
@@ -80,7 +106,8 @@ def handle_post_save_signal(sender, **kwargs):
 @receiver(page_published)
 def page_published_signal(sender, **kwargs):
     pages_global_ids = []
-    if flag_enabled('INCREMENTAL BUILDS'):
+    #if flag_enabled('INCREMENTAL BUILDS'):
+    if True:
         pages_global_ids = collect_pages(kwargs['instance'])
     trigger_build(sender, pages_global_ids, action='published', instance=kwargs['instance'])
 
