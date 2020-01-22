@@ -1,24 +1,16 @@
 from django.db import models
-import os
-import graphene
 
 from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
 
-from wagtail.utils.decorators import cached_classmethod
-from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, MultiFieldPanel, ObjectList, StreamFieldPanel, TabbedInterface, HelpPanel
-from wagtail.core.blocks import TextBlock, RichTextBlock, ListBlock, StreamBlock, StructBlock, URLBlock, PageChooserBlock, CharBlock
-from wagtail.core.fields import StreamField, RichTextField
-from wagtail.core.models import Page, Orderable
+from wagtail.admin.edit_handlers import FieldPanel, InlinePanel
+from wagtail.core.fields import RichTextField
+from wagtail.core.models import Orderable
 from wagtail.snippets.edit_handlers import SnippetChooserPanel
 from wagtail.images.edit_handlers import ImageChooserPanel
-from wagtail.images.models import Image, AbstractImage, AbstractRendition
-from wagtail.images.blocks import ImageChooserBlock
 from wagtail.snippets.models import register_snippet
-from wagtail.search import index
 from wagtail.admin.edit_handlers import PageChooserPanel
 
-from base import blocks as custom_blocks
 from base import forms as custom_forms
 
 from .translated_image import TranslatedImage
@@ -67,7 +59,8 @@ class ThreeOneOne(ClusterableModel):
     def __str__(self):
         return self.title
 
-    
+
+# I tried to remove the ProcessPages, but ended up getting errors with old migrations. - chia 1/22/20
 class ProcessPage(JanisBasePage):
     janis_url_page_type = "processes"
 

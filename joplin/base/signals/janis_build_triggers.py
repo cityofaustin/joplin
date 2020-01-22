@@ -60,7 +60,7 @@ def collect_pages_snippet(instance):
     pages_ids = []
     for p in usage:
         page_id = Node.to_global_id(p.content_type.name, p.id)
-        pages_ids.append(page_id) # do we need to then check what pages these are in?
+        pages_ids.append(page_id)
     return pages_ids
 
 # TODO: we can probably feed a list of models to attach the hook to
