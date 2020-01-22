@@ -58,6 +58,9 @@ class InformationPage(JanisBasePage):
         InlinePanel('contacts', label='Contacts'),
     ]
 
+    class Meta:
+        db_table = "base_informationpage"
+
 
 class InformationPageRelatedDepartments(ClusterableModel):
     page = ParentalKey(InformationPage, related_name='related_departments', default=None)
@@ -71,6 +74,9 @@ class InformationPageRelatedDepartments(ClusterableModel):
         PageChooserPanel("related_department"),
     ]
 
+    class Meta:
+        db_table = "base_informationpagerelateddepartments"
+
 
 class InformationPageContact(ClusterableModel):
     page = ParentalKey(InformationPage, related_name='contacts')
@@ -83,6 +89,9 @@ class InformationPageContact(ClusterableModel):
     def __str__(self):
         return self.contact.name
 
+    class Meta:
+        db_table = "base_informationpagecontact"
+
 
 class InformationPageTopic(ClusterableModel):
     page = ParentalKey(InformationPage, related_name='topics')
@@ -94,3 +103,6 @@ class InformationPageTopic(ClusterableModel):
 
     def __str__(self):
         return self.topic.text
+
+    class Meta:
+        db_table = "base_informationpagetopic"
