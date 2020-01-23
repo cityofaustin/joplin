@@ -18,7 +18,7 @@ from base.models.widgets import countMe, countMeTextArea, AUTHOR_LIMITS
 from countable_field import widgets
 
 
-class InfoInformationPage(JanisBasePage):
+class InformationPage(JanisBasePage):
     janis_url_page_type = "information"
 
     description = models.TextField(blank=True, verbose_name='Write a description of this page')
@@ -62,8 +62,8 @@ class InfoInformationPage(JanisBasePage):
         db_table = "base_informationpage"
 
 
-class InfoInformationPageRelatedDepartments(ClusterableModel):
-    page = ParentalKey(InfoInformationPage, related_name='related_departments', default=None)
+class InformationPageRelatedDepartments(ClusterableModel):
+    page = ParentalKey(InformationPage, related_name='related_departments', default=None)
     related_department = models.ForeignKey(
         "base.departmentPage",
         on_delete=models.PROTECT,
@@ -78,8 +78,8 @@ class InfoInformationPageRelatedDepartments(ClusterableModel):
         db_table = "base_informationpagerelateddepartments"
 
 
-class InfoInformationPageContact(ClusterableModel):
-    page = ParentalKey(InfoInformationPage, related_name='contacts')
+class InformationPageContact(ClusterableModel):
+    page = ParentalKey(InformationPage, related_name='contacts')
     contact = models.ForeignKey(Contact, related_name='+', on_delete=models.CASCADE)
 
     panels = [
@@ -93,8 +93,8 @@ class InfoInformationPageContact(ClusterableModel):
         db_table = "base_informationpagecontact"
 
 
-class InfoInformationPageTopic(ClusterableModel):
-    page = ParentalKey(InfoInformationPage, related_name='topics')
+class InformationPageTopic(ClusterableModel):
+    page = ParentalKey(InformationPage, related_name='topics')
     topic = models.ForeignKey('base.TopicPage', verbose_name='Select a Topic', related_name='+', on_delete=models.CASCADE)
 
     panels = [

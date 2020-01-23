@@ -13,7 +13,7 @@ from wagtail.images.edit_handlers import ImageChooserPanel
 from base.forms import GuidePageForm
 
 from .janis_page import JanisBasePage
-from .information_page import InformationPage
+from informations.models import InformationPage
 from .service_page import ServicePage
 from .contact import Contact
 from .translated_image import TranslatedImage

@@ -9,7 +9,7 @@ from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, PageChooserPane
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.core.models import Orderable
 
-from .information_page import InformationPage
+from informations.models import InformationPage
 from .service_page import ServicePage
 from .guide_page import GuidePage
 from .official_documents_page import OfficialDocumentPage
@@ -46,7 +46,7 @@ class TopicPage(JanisBasePage):
 
 class TopicPageTopPage(Orderable):
     topic = ParentalKey(TopicPage, related_name='top_pages')
-    page = models.ForeignKey('wagtailcore.Page',  verbose_name='Select a page', related_name='+', on_delete=models.CASCADE)
+    page = models.ForeignKey('wagtailcore.Page', verbose_name='Select a page', related_name='+', on_delete=models.CASCADE)
 
     panels = [
         PageChooserPanel('page', page_type=[InformationPage, ServicePage, GuidePage, OfficialDocumentPage]),

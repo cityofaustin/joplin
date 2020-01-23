@@ -11,7 +11,7 @@ class HomePage(Page):
     subpage_types = [
         'base.ServicePage',
         'base.ProcessPage',
-        'base.InformationPage',
+        'informations.InformationPage',
         'base.DepartmentPage',
         'base.TopicPage',
         'locations.LocationPage'
