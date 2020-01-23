@@ -84,8 +84,8 @@ INSTALLED_APPS = [
     'locations',
     'silk',
 
-    # 'ls.joyous',
-    # 'events'
+    'ls.joyous',
+    'events'
 ]
 
 MIDDLEWARE = [
