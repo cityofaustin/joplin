@@ -16,7 +16,6 @@ from wagtail.documents.models import Document
 from wagtail.core.rich_text import expand_db_html
 from base.models import (
     TranslatedImage,
-    ThreeOneOne,
     ServicePage, ServicePageContact, ServicePageTopic, ServicePageRelatedDepartments,
     InformationPage, InformationPageContact, InformationPageTopic, InformationPageRelatedDepartments,
     DepartmentPage, DepartmentPageContact, DepartmentPageDirector, DepartmentPageTopPage, DepartmentPageRelatedPage,
@@ -130,13 +129,6 @@ class DocumentNode(DjangoObjectType):
         interfaces = [graphene.Node]
         exclude_fields = ['tags']
     filename = graphene.String()
-
-
-# class ThreeOneOneNode(DjangoObjectType):
-#     class Meta:
-#         model = ThreeOneOne
-#         filter_fields = ['title']
-#         interfaces = [graphene.Node]
 
 
 class ThemeNode(DjangoObjectType):
