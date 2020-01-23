@@ -214,7 +214,8 @@ $(function() {
           labelList[label].parentElement.parentElement.parentElement.classList
             .value !== 'struct-block'
         ) {
-          const translatedElement = labelList[label].parentElement.parentElement;
+          const translatedElement =
+            labelList[label].parentElement.parentElement;
 
           if (languageTag != null && languageTag != currentLang) {
             translatedElement.classList.add('hidden');
@@ -225,16 +226,20 @@ $(function() {
               it doesn't catch the case where there are 'struct-blocks' with language
               tages WITHIN the element itself. The following condition checks for those conditions.
               - The was neccessary for guide stream fields. */
-          if (translatedElement.classList.contains("struct-block")) {
-            const fieldlabels = translatedElement.querySelectorAll('[for]')
-            fieldlabels.forEach( fieldlabel => {
-              const attrFor = fieldlabel.getAttribute('for').split("_")
-              fieldlabel.parentNode.classList.remove('hidden')
-              if (attrFor[attrFor.length-1] !== currentLang) {
-                fieldlabel.parentNode.classList.add('hidden')
-                translatedElement.classList.remove('hidden') // only re-reveal the parent class if we find this case.
+          if (translatedElement.classList.contains('struct-block')) {
+            const fieldlabels = translatedElement.querySelectorAll('[for]');
+            fieldlabels.forEach(fieldlabel => {
+              const attrFor = fieldlabel.getAttribute('for').split('_');
+              fieldlabel.parentNode.classList.remove('hidden');
+              // Adding a failsafe to make sure we don't remove non translated fields
+              const attrLang = attrFor[attrFor.length - 1];
+              if (['en', 'es', 'vi', 'ar'].includes(attrLang)) {
+                if (attrLang !== currentLang) {
+                  fieldlabel.parentNode.classList.add('hidden');
+                  translatedElement.classList.remove('hidden'); // only re-reveal the parent class if we find this case.
+                }
               }
-            })
+            });
           }
         } else {
           const translatedElement = labelList[label].parentElement;
@@ -390,6 +395,13 @@ $(function() {
     updateSelectedLanguage(state.currentLang);
   });
 
+  // do the same with locations on events
+  $('#location_blocks-count').change(function() {
+    debugger;
+    changeLanguage(state.currentLang);
+    updateSelectedLanguage(state.currentLang);
+  });
+
   // Found this here: https://stackoverflow.com/a/31719339
   MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
 
@@ -406,6 +418,11 @@ $(function() {
 
   // make sure observe all of them
   $('#sections-count').each(function(index, element) {
+    trackChange(element);
+  });
+
+  // make sure observe all of them
+  $('#location_blocks-count').each(function(index, element) {
     trackChange(element);
   });
 

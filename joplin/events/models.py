@@ -45,12 +45,15 @@ class EventPage(JanisBasePage):
     start_time = models.TimeField(blank=True, null=True)
     end_time = models.TimeField(blank=True, null=True)
 
-    location = StreamField(
+    location_blocks = StreamField(
         [
             ('city_location', StructBlock(
                 [
-                    ('location_page', PageChooserBlock(label="Location", page_type=[LocationPage])),
-                    ('additional_details', TextBlock(label='Field for additional details, such as room number')),
+                    ('location_page', PageChooserBlock(label="Location", page_type=[LocationPage], classname='do-not-hide')),
+                    ('additional_details_en', TextBlock(label='Any other necessary location details, such as room number [en]')),
+                    ('additional_details_es', TextBlock(label='Any other necessary location details, such as room number [es]', required=False)),
+                    ('additional_details_ar', TextBlock(label='Any other necessary location details, such as room number [ar]', required=False)),
+                    ('additional_details_vi', TextBlock(label='Any other necessary location details, such as room number [vi]', required=False)),
                 ]
             )),
             ('remote_location', StructBlock(
@@ -61,12 +64,15 @@ class EventPage(JanisBasePage):
                     ('state', TextBlock(label='State')),
                     ('country', TextBlock(label='Country')),
                     ('zip', TextBlock(label='ZIP')),
-                    ('additional_details', TextBlock(label='Field for additional details, such as room number')),
+                    ('additional_details_en', TextBlock(label='Any other necessary location details, such as room number [en]')),
+                    ('additional_details_es', TextBlock(label='Any other necessary location details, such as room number [es]', required=False)),
+                    ('additional_details_ar', TextBlock(label='Any other necessary location details, such as room number [ar]', required=False)),
+                    ('additional_details_vi', TextBlock(label='Any other necessary location details, such as room number [vi]', required=False)),
                 ],
                 # label="Step With Options"
             )),
         ],
-        # verbose_name='Write out the steps a resident needs to take to use the service',
+        verbose_name='Add location of event',
         # this gets called in the help panel
         # help_text='A step may have a basic text step or an options accordion which reveals two or more options',
         blank=True
@@ -86,7 +92,7 @@ class EventPage(JanisBasePage):
             ],
             heading="Event time",
         ),
-        StreamFieldPanel('location')
+        StreamFieldPanel('location_blocks')
 
 
     ]
