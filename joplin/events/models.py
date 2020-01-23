@@ -82,7 +82,12 @@ class EventPage(JanisBasePage):
         blank=True
     )
 
-    event_is_free = models.BooleanField(verbose_name="This event is free", default=False)
+    event_is_free = models.BooleanField(verbose_name="This event is free", default=True)
+
+    registration_url = models.URLField(
+        verbose_name='The URL where the resident may register for the event, if needed',
+        blank=True
+    )
 
     content_panels = [
         FieldPanel('title_en', widget=countMe),
@@ -101,6 +106,7 @@ class EventPage(JanisBasePage):
         StreamFieldPanel('location_blocks'),
         FieldPanel('event_is_free'),
         InlinePanel('fees', label='Fees'),
+        FieldPanel('registration_url'),
     ]
 
     parent_page_types = ['base.HomePage']
@@ -117,7 +123,6 @@ class EventPageFee(ClusterableModel):
                 FieldPanel('fee', classname='col3'),
                 FieldPanel('fee_label', classname='col9'),
             ],
-            heading="Event time",
         ),
     ]
 
