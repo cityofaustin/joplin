@@ -296,7 +296,6 @@ class ServicePageStepLocationBlock(graphene.ObjectType):
     location_page = graphene.Field(LocationPageNode)
 
     def resolve_location_page(self, info):
-        print('resolve location_page', self )
         page = None
         try:
             page = LocationPage.objects.get(id=self.value)

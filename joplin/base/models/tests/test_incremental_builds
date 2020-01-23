@@ -4,7 +4,8 @@ import os
 from graphene import Node
 
 from base.models import (
-    TopicPage, ServicePage, GuidePage, InformationPage, OfficialDocumentPage, DepartmentPages, Map, Contact, Document
+    TopicPage, TopicCollectionPage, ServicePage, GuidePage, InformationPage, OfficialDocumentPage, DepartmentPages,
+    Map, Contact, Document
 )
 
 from base.signals.janis_build_triggers import collect_pages, collect_pages_snippet
@@ -20,9 +21,6 @@ class TestCollectPages(TestCase):
         os.environ['LOAD_DATA'] = 'prod'
         call_command('load_joplin_data')
         print("test data loaded")
-
-    #todo: write a basic test
-    #todo: write test for the topic nonsense
 
     def test_official_document_page(self):
         changed_page = OfficialDocumentPage.get(id=128)
@@ -58,15 +56,28 @@ class TestCollectPages(TestCase):
         permit_guide = GuidePage.objects.get(id=172)
         global_page_id = Node.to_global_id(permit_guide.get_verbose_name(), permit_guide.id)
         self.assertTrue(global_page_id in global_ids)
-        # its not sections...trying to find the pages in the guide by id
 
-    def test_page_in_topic(self):
-        # changed_page =
-        # self.assertTrue(global_page_id in global_ids)
+    def test_page_sibling_topic(self):
+        """
+        currently fails because topics don't know about sibling topics seen in the contextual nav
+        :return:
+        """
+        changed_page = TopicPage.objects.get(id=58)
+        # Compost and Food Waste topic page is listed as related to
+        # Get your Bulk items collected
+        bulk_items = ServicePage.objects.get(id=5)
+        global_ids = collect_pages(changed_page)
+        global_page_id = Node.to_global_id(bulk_items.get_verbose_name(), bulk_items.id)
+        self.assertTrue(global_page_id in global_ids)
 
-    def test_page_in_topic_collection(self):
-        changed_page = TopicPage.objects.get(id=53)
-        self.assertTrue(changed_page.id == 53)
+    def test_topic_collection(self):
+        # Topic Collection page: https://alpha.austin.gov/en/health-safety/health-records-certificates-2/
+        changed_page = TopicCollectionPage.objects.get(id=50)
+        # "health records and certificates" is seen on the Birth and Death Certificates contextual nav
+        birth_cert = TopicPage.objects.get(id=51)
+        global_ids = collect_pages(changed_page)
+        global_page_id = Node.to_global_id(birth_cert.get_verbose_name(), birth_cert.id)
+        self.assertTrue(global_page_id in global_ids)
 
     def test_contact_update(self):
         changed_snippet = Contact.objects.get(id=10)
@@ -99,20 +110,3 @@ class TestCollectPages(TestCase):
         global_page_id = Node.to_global_id(page.get_verbose_name(), page.id)
         self.assertTrue(global_page_id in global_ids)
 
-
-'''
-    >>> changed_page
-    <ServicePage: Get food handler training and food manager certificates>
-   # >> > rel = [f for f in type(changed_page)._meta.get_fields(include_hidden=True) if
-    #             (f.one_to_many or f.one_to_one) and f.auto_created]
-    # >> > rel
-    # [ < ManyToOneRel: base.topicpagetoppage >, < ManyToOneRel: base.departmentpagetoppage >,
-    < ManyToOneRel: base.departmentpagerelatedpage >, < ManyToOneRel: wagtailcore.site >,
-    < ManyToOneRel: wagtailcore.pagerevision >, < ManyToOneRel: wagtailcore.grouppagepermission >,
-    < ManyToOneRel: wagtailcore.pageviewrestriction >, < ManyToOneRel: wagtailforms.formsubmission >,
-    < ManyToOneRel: wagtailredirects.redirect >, < ManyToOneRel: base.servicepagetopic >,
-    < ManyToOneRel: base.servicepagecontact >, < ManyToOneRel: base.servicepagerelateddepartments >,
-    < ManyToOneRel: locations.locationpagerelatedservices >,
-     < django.db.models.fields.related.OneToOneField: page_ptr >]
-----where is the guide page?
-'''

@@ -41,6 +41,7 @@ def collect_pages(instance):
     global_ids = []
     wagtail_page = Page.objects.get(id=instance.id)
     page_set = get_object_usage(wagtail_page)
+    # https://github.com/wagtail/wagtail/blob/master/wagtail/admin/models.py#L15
     # get_object_usage will also return the wagtail_page itself
     for page in page_set:
         global_ids.append(Node.to_global_id(page.content_type.name, page.id))
