@@ -23,7 +23,6 @@ def trigger_build(sender, pages_ids, action='saved', instance=None):
     triggers different build process depending on environment
     source = name of snippet or object triggering build
     """
-    print('global page ids: ', pages_ids)
     trigger_object = instance
     logger.debug(f'{trigger_object} {action}, triggering build')
     if settings.ISSTAGING or settings.ISPRODUCTION:

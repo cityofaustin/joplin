@@ -11,6 +11,7 @@ from wagtail.documents.models import Document
 
 from base.signals.janis_build_triggers import collect_pages, collect_pages_snippet
 
+# to run: pipenv run joplin/manage.py test tests --keepdb
 
 class TestCollectPages(TestCase):
     @classmethod
