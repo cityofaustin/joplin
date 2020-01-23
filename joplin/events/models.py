@@ -20,6 +20,7 @@ from wagtail.admin.edit_handlers import (
 from base.models.translated_image import TranslatedImage
 from base.models import Location as BaseLocation
 from locations.models import LocationPage
+from base.models import Contact
 
 # The abstract model for related links, complete with panels
 from wagtail.core.fields import RichTextField, StreamField
@@ -89,6 +90,10 @@ class EventPage(JanisBasePage):
         blank=True
     )
 
+    contact = models.ForeignKey(Contact, related_name='+', blank=True, null=True, on_delete=models.SET_NULL)
+
+    canceled = models.BooleanField(verbose_name="Cancel this event", default=False)
+
     content_panels = [
         FieldPanel('title_en', widget=countMe),
         FieldPanel('title_es', widget=countMe),
@@ -107,6 +112,9 @@ class EventPage(JanisBasePage):
         FieldPanel('event_is_free'),
         InlinePanel('fees', label='Fees'),
         FieldPanel('registration_url'),
+        InlinePanel('related_departments', label='Related Departments'),
+        SnippetChooserPanel('contact'),
+        FieldPanel('canceled'),
     ]
 
     parent_page_types = ['base.HomePage']
@@ -127,13 +135,13 @@ class EventPageFee(ClusterableModel):
     ]
 
 
-# class EventPageRelatedDepartments(ClusterableModel):
-#     page = ParentalKey(EventPage, related_name='related_departments', default=None)
-#     related_department = models.ForeignKey(
-#         "base.departmentPage",
-#         on_delete=models.PROTECT,
-#     )
+class EventPageRelatedDepartments(ClusterableModel):
+    page = ParentalKey(EventPage, related_name='related_departments', default=None)
+    related_department = models.ForeignKey(
+        "base.departmentPage",
+        on_delete=models.PROTECT,
+    )
 
-#     panels = [
-#         PageChooserPanel("related_department"),
-#     ]
+    panels = [
+        PageChooserPanel("related_department"),
+    ]

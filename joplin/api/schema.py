@@ -32,6 +32,7 @@ from .content_type_map import content_type_map
 import traceback
 import locations.models as locations
 from locations.models import LocationPage
+from events.models import EventPage, EventPageFee, EventPageRelatedDepartments
 
 
 class RichTextFieldType(Scalar):
@@ -204,6 +205,24 @@ class LocationPageRelatedServices(DjangoObjectType):
         model = locations.LocationPageRelatedServices
         interfaces = [graphene.Node]
 
+
+class EventPageNode(DjangoObjectType):
+    class Meta:
+        model = events.EventPage
+        filter_fields = ['id', 'slug', 'live']
+        interfaces = [graphene.Node]
+
+
+class EventPageFeeNode(DjangoObjectType):
+    class Meta:
+        model = events.EventPageFee
+        interfaces = [graphene.Node]
+
+
+class EventPageRelatedDepartmentsNode(DjangoObjectType):
+    class Meta:
+        model = events.EventPageRelatedDepartments
+        interfaces = [graphene.Node]
 
 
 class ContactNode(DjangoObjectType):
