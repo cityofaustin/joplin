@@ -690,6 +690,11 @@ def get_structure_for_content_type(content_type):
     for page in pages:
         page_global_id = graphene.Node.to_global_id(content_type_data["node"], page.id)
 
+        # Only publish event pages at the date based url
+        if content_type == 'event page':
+            site_structure.append({'url': f'/event/{page.date.year}/{page.date.month}/{page.date.day}/{page.slug}/', 'type': content_type, 'id': page_global_id})
+            continue
+
         if page.coa_global:
             site_structure.append({'url': f'/{page.slug}/', 'type': content_type, 'id': page_global_id})
 
@@ -716,10 +721,6 @@ def get_structure_for_content_type(content_type):
         # Location pages need urls
         if content_type == 'location page':
             site_structure.append({'url': f'/location/{page.slug}/', 'type': content_type, 'id': page_global_id})
-
-        # Event pages need urls
-        if content_type == 'event page':
-            site_structure.append({'url': f'/event/{page.date.year}/{page.date.month}/{page.date.day}/{page.slug}/', 'type': content_type, 'id': page_global_id})
 
     return site_structure
 
