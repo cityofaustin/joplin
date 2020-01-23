@@ -35,22 +35,8 @@ from wagtail.core import blocks
 
 
 class EventPage(JanisBasePage):
-    janis_url_page_type = 'event'
-
-    # description = models.TextField(blank=True, verbose_name='Write a description of this page')
-    
-    date = models.DateField(verbose_name="Event date", null=True)
-    start_time = models.TimeField()
-    end_time = models.TimeField()
-
-    content_panels = [
-        FieldPanel('title_en', widget=countMe),
-        FieldPanel('title_es', widget=countMe),
-        FieldPanel('title_ar'),
-        FieldPanel('title_vi'),
-        # FieldPanel('description', widget=countMeTextArea),
-        FieldPanel('start_time', widget=countMeTextArea),
-        FieldPanel('end_time', widget=countMeTextArea)
-    ]
-
-    parent_page_types = ['base.HomePage']
+    """
+    all the relevant details for a specifc location (place!?)
+    decide if we want to set null or cascade
+    """
+    janis_url_page_type = 'location'
