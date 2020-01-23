@@ -1,47 +1,32 @@
 from django.db import models
-from wagtail.admin.edit_handlers import FieldPanel
-from wagtail.images.models import Image
-from wagtail.images.edit_handlers import ImageChooserPanel
-from phonenumber_field.modelfields import PhoneNumberField
-from phonenumber_field.widgets import PhoneNumberInternationalFallbackWidget
-from base.models import JanisBasePage, HomePage
-from wagtail.core.models import Page, Orderable
 from wagtail.core.blocks import StructBlock, PageChooserBlock, TextBlock
 from modelcluster.fields import ParentalKey
 from wagtail.admin.edit_handlers import (
-    FieldPanel,
     InlinePanel,
-    MultiFieldPanel,
-    ObjectList,
-    TabbedInterface,
     FieldRowPanel,
     StreamFieldPanel,
 )
-from base.models.translated_image import TranslatedImage
-from base.models import Location as BaseLocation
+
 from locations.models import LocationPage
 from base.models import Contact
-
-# The abstract model for related links, complete with panels
 from wagtail.core.fields import RichTextField, StreamField
-from wagtail.search import index
-from wagtail.admin.edit_handlers import FieldPanel, PageChooserPanel, HelpPanel
-from wagtail.images.edit_handlers import ImageChooserPanel
+from wagtail.admin.edit_handlers import FieldPanel, PageChooserPanel
 from base.models import JanisBasePage
 from base.models.widgets import countMe, countMeLongTextArea, AUTHOR_LIMITS
 from modelcluster.models import ClusterableModel
-from base.models.constants import DEFAULT_MAX_LENGTH
-from base.models.day_and_duration import DayAndDuration
+from base.models.constants import DEFAULT_MAX_LENGTH, WYSIWYG_GENERAL
 from wagtail.snippets.edit_handlers import SnippetChooserPanel
-
-from wagtail.core import blocks
 
 
 class EventPage(JanisBasePage):
     janis_url_page_type = 'event'
 
-    description = models.TextField(blank=True, verbose_name='Full description of the event')
-    
+    description = RichTextField(
+        features=WYSIWYG_GENERAL,
+        verbose_name='Full description of the event',
+        blank=True
+    )
+
     date = models.DateField(verbose_name="Event date", blank=True, null=True)
     start_time = models.TimeField(blank=True, null=True)
     end_time = models.TimeField(blank=True, null=True)
@@ -99,7 +84,8 @@ class EventPage(JanisBasePage):
         FieldPanel('title_es', widget=countMe),
         FieldPanel('title_ar'),
         FieldPanel('title_vi'),
-        FieldPanel('description', widget=countMeLongTextArea),
+        # FieldPanel('description', widget=countMeLongTextArea),
+        FieldPanel('description'),
         FieldPanel('date'),
         FieldRowPanel(
             children=[
