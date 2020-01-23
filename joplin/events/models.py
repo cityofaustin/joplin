@@ -6,6 +6,7 @@ from phonenumber_field.modelfields import PhoneNumberField
 from phonenumber_field.widgets import PhoneNumberInternationalFallbackWidget
 from base.models import JanisBasePage, HomePage
 from wagtail.core.models import Page, Orderable
+from wagtail.core.blocks import StructBlock, PageChooserBlock, TextBlock
 from modelcluster.fields import ParentalKey
 from wagtail.admin.edit_handlers import (
     FieldPanel,
@@ -18,6 +19,7 @@ from wagtail.admin.edit_handlers import (
 )
 from base.models.translated_image import TranslatedImage
 from base.models import Location as BaseLocation
+from locations.models import LocationPage
 
 # The abstract model for related links, complete with panels
 from wagtail.core.fields import RichTextField, StreamField
@@ -43,6 +45,33 @@ class EventPage(JanisBasePage):
     start_time = models.TimeField(blank=True, null=True)
     end_time = models.TimeField(blank=True, null=True)
 
+    location = StreamField(
+        [
+            ('city_location', StructBlock(
+                [
+                    ('location_page', PageChooserBlock(label="Location", page_type=[LocationPage])),
+                    ('additional_details', TextBlock(label='Field for additional details, such as room number')),
+                ]
+            )),
+            ('remote_location', StructBlock(
+                [
+                    ('street', TextBlock(label='Street')),
+                    ('unit', TextBlock(label='Unit')),
+                    ('city', TextBlock(label='City')),
+                    ('state', TextBlock(label='State')),
+                    ('country', TextBlock(label='Country')),
+                    ('zip', TextBlock(label='ZIP')),
+                    ('additional_details', TextBlock(label='Field for additional details, such as room number')),
+                ],
+                # label="Step With Options"
+            )),
+        ],
+        # verbose_name='Write out the steps a resident needs to take to use the service',
+        # this gets called in the help panel
+        # help_text='A step may have a basic text step or an options accordion which reveals two or more options',
+        blank=True
+    )
+
     content_panels = [
         FieldPanel('title_en', widget=countMe),
         FieldPanel('title_es', widget=countMe),
@@ -57,6 +86,9 @@ class EventPage(JanisBasePage):
             ],
             heading="Event time",
         ),
+        StreamFieldPanel('location')
+
+
     ]
 
     parent_page_types = ['base.HomePage']
