@@ -6,7 +6,7 @@ from modelcluster.fields import ParentalKey
 from wagtail.snippets.models import register_snippet
 from wagtail.core.fields import StreamField
 from wagtail.core.blocks import URLBlock
-from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, StreamFieldPanel, FieldRowPanel
+from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, StreamFieldPanel, FieldRowPanel, PageChooserPanel
 from wagtail.snippets.edit_handlers import SnippetChooserPanel
 from wagtail.core.models import Orderable
 from phonenumber_field.modelfields import PhoneNumberField
@@ -24,6 +24,7 @@ class Contact(ClusterableModel):
     email = models.EmailField(blank=True)
     location = models.ForeignKey(
         Location, null=True, blank=True, related_name='+', on_delete=models.SET_NULL)
+    location_page = models.ForeignKey('locations.LocationPage', verbose_name='Select a Location', related_name='+', on_delete=models.SET_NULL, null=True, blank=True)
     hours_exceptions = models.TextField(max_length=255, blank=True)
 
     social_media = StreamField(
@@ -42,6 +43,7 @@ class Contact(ClusterableModel):
         FieldPanel('email'),
         InlinePanel('phone_number', label='Phone Numbers'),
         SnippetChooserPanel('location'),
+        PageChooserPanel('location_page'),
         InlinePanel('hours', label='Hours'),
         FieldPanel('hours_exceptions'),
         StreamFieldPanel('social_media'),

@@ -80,16 +80,21 @@
 
 .tab-nav {
     // this is also giving position fixed to the tab nav in add user
-    position: fixed;
     top: $edit-page-tab-bar-top;
     border-top: none;
     color: black;
     height: 40px;
 }
 
+#page-edit-form > ul {
+  position: fixed;
+}
+
 .tab-nav a {
     background-color: inherit;
     border-color: #e5e4de;
+    border-top: none;
+    padding-bottom: 1em;
     color: black;
     text-transform: none;
     font-size: 14px;
@@ -97,14 +102,13 @@
 }
 
 .tab-nav a:hover {
-    border-top: 0.3em solid $coa-color-lightest-blue;
     background-color: $coa-color-lightest-blue;
     color: black;
 }
 .tab-nav li.active a {
     background-color: #ffffff;
     border-color: #ffffff;
-    border-bottom: 0.2em solid #fff;
+    border-top: none;
     border-radius: 3px 3px 0px 0px;
     border-radius: 0;
 }
