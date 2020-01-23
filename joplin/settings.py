@@ -83,6 +83,9 @@ INSTALLED_APPS = [
     'flags',
     'locations',
     'silk',
+
+    'ls.joyous',
+    'events'
 ]
 
 MIDDLEWARE = [
