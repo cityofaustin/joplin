@@ -39,9 +39,9 @@ class EventPage(JanisBasePage):
 
     description = models.TextField(blank=True, verbose_name='Write a description of this page')
     
-    date = models.DateField(verbose_name="Event date", null=True)
-    start_time = models.TimeField(null=True)
-    end_time = models.TimeField(null=True)
+    date = models.DateField(verbose_name="Event date", blank=True, null=True)
+    start_time = models.TimeField(blank=True, null=True)
+    end_time = models.TimeField(blank=True, null=True)
 
     content_panels = [
         FieldPanel('title_en', widget=countMe),
@@ -49,8 +49,8 @@ class EventPage(JanisBasePage):
         FieldPanel('title_ar'),
         FieldPanel('title_vi'),
         FieldPanel('description', widget=countMeTextArea),
-        FieldPanel('start_time', widget=countMeTextArea),
-        FieldPanel('end_time', widget=countMeTextArea)
+        FieldPanel('start_time'),
+        FieldPanel('end_time')
     ]
 
     parent_page_types = ['base.HomePage']
