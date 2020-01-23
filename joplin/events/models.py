@@ -31,6 +31,8 @@ class EventPage(JanisBasePage):
     start_time = models.TimeField(blank=True, null=True)
     end_time = models.TimeField(blank=True, null=True)
 
+
+    # Todo, more
     location_blocks = StreamField(
         [
             ('city_location', StructBlock(
