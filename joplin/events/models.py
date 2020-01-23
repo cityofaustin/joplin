@@ -82,6 +82,8 @@ class EventPage(JanisBasePage):
         blank=True
     )
 
+    event_is_free = models.BooleanField(verbose_name="This event is free", default=False)
+
     content_panels = [
         FieldPanel('title_en', widget=countMe),
         FieldPanel('title_es', widget=countMe),
@@ -96,9 +98,37 @@ class EventPage(JanisBasePage):
             ],
             heading="Event time",
         ),
-        StreamFieldPanel('location_blocks')
-
-
+        StreamFieldPanel('location_blocks'),
+        FieldPanel('event_is_free'),
+        InlinePanel('fees', label='Fees'),
     ]
 
     parent_page_types = ['base.HomePage']
+
+
+class EventPageFee(ClusterableModel):
+    page = ParentalKey(EventPage, related_name='fees', default=None)
+    fee = models.DecimalField(max_digits=10, decimal_places=2, blank=True)
+    fee_label = models.CharField(blank=True, verbose_name='Label (kids, adults, seniors, etc.)', max_length=DEFAULT_MAX_LENGTH)
+
+    panels = [
+        FieldRowPanel(
+            children=[
+                FieldPanel('fee', classname='col3'),
+                FieldPanel('fee_label', classname='col9'),
+            ],
+            heading="Event time",
+        ),
+    ]
+
+
+# class EventPageRelatedDepartments(ClusterableModel):
+#     page = ParentalKey(EventPage, related_name='related_departments', default=None)
+#     related_department = models.ForeignKey(
+#         "base.departmentPage",
+#         on_delete=models.PROTECT,
+#     )
+
+#     panels = [
+#         PageChooserPanel("related_department"),
+#     ]
