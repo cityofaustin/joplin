@@ -58,6 +58,10 @@ class EventPage(JanisBasePage):
             )),
             ('remote_location', StructBlock(
                 [
+                    ('name_en', TextBlock(label='Name of venue [en]')),
+                    ('name_es', TextBlock(label='Name of venue [es]', required=False)),
+                    ('name_ar', TextBlock(label='Name of venue [ar]', required=False)),
+                    ('name_vi', TextBlock(label='Name of venue [vi]', required=False)),
                     ('street', TextBlock(label='Street')),
                     ('unit', TextBlock(label='Unit')),
                     ('city', TextBlock(label='City')),
