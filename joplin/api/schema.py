@@ -717,6 +717,10 @@ def get_structure_for_content_type(content_type):
         if content_type == 'location page':
             site_structure.append({'url': f'/location/{page.slug}/', 'type': content_type, 'id': page_global_id})
 
+        # Event pages need urls
+        if content_type == 'event page':
+            site_structure.append({'url': f'/event/{page.date.year}/{page.date.month}/{page.date.day}/{page.slug}/', 'type': content_type, 'id': page_global_id})
+
     return site_structure
 
 
@@ -759,6 +763,7 @@ class SiteStructure(graphene.ObjectType):
         site_structure.extend(get_structure_for_content_type('guide page'))
         site_structure.extend(get_structure_for_content_type('form container'))
         site_structure.extend(get_structure_for_content_type('location page'))
+        site_structure.extend(get_structure_for_content_type('event page'))
 
         return site_structure
 
