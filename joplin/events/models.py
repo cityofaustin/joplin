@@ -31,18 +31,28 @@ from base.models.constants import DEFAULT_MAX_LENGTH
 from base.models.day_and_duration import DayAndDuration
 from wagtail.snippets.edit_handlers import SnippetChooserPanel
 
-from wagtail.core import blocks
+# # from ls.joyous.models import EventBase
+
+# from wagtail.core import blocks
 
 
-# from ls.joyous.models import EventBase
+# class EventPage(JanisBasePage):
+#     janis_url_page_type = 'event'
 
+#     description = models.TextField(blank=True, verbose_name='Write a description of this page')
+    
+#     date = models.DateField(verbose_name="Event date", blank=True, null=True)
+#     start_time = models.TimeField(blank=True, null=True)
+#     end_time = models.TimeField(blank=True, null=True)
 
-class EventPage(JanisBasePage):
-    janis_url_page_type = 'event'
+#     content_panels = [
+#         FieldPanel('title_en', widget=countMe),
+#         FieldPanel('title_es', widget=countMe),
+#         FieldPanel('title_ar'),
+#         FieldPanel('title_vi'),
+#         FieldPanel('description', widget=countMeTextArea),
+#         FieldPanel('start_time'),
+#         FieldPanel('end_time')
+#     ]
 
-    # content_panels = [
-    #     FieldPanel('title_en', widget=countMe),
-    #     FieldPanel('title_es', widget=countMe),
-    #     FieldPanel('title_ar'),
-    #     FieldPanel('title_vi'),
-    # ]
+#     parent_page_types = ['base.HomePage']
