@@ -59,7 +59,7 @@ class InformationPage(JanisBasePage):
     ]
 
     class Meta:
-        db_table = "base_informationpage"
+        db_table = "informations_informationpage"
 
 
 class InformationPageRelatedDepartments(ClusterableModel):
@@ -75,7 +75,7 @@ class InformationPageRelatedDepartments(ClusterableModel):
     ]
 
     class Meta:
-        db_table = "base_informationpagerelateddepartments"
+        db_table = "informations_informationpagerelateddepartments"
 
 
 class InformationPageContact(ClusterableModel):
@@ -90,7 +90,7 @@ class InformationPageContact(ClusterableModel):
         return self.contact.name
 
     class Meta:
-        db_table = "base_informationpagecontact"
+        db_table = "informations_informationpagecontact"
 
 
 class InformationPageTopic(ClusterableModel):
@@ -105,4 +105,4 @@ class InformationPageTopic(ClusterableModel):
         return self.topic.text
 
     class Meta:
-        db_table = "base_informationpagetopic"
+        db_table = "informations_informationpagetopic"
