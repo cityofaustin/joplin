@@ -206,22 +206,115 @@ class LocationPageRelatedServices(DjangoObjectType):
         interfaces = [graphene.Node]
 
 
+class EventPageRemoteLocation(graphene.ObjectType):
+    value = GenericScalar()
+
+    street = graphene.String()
+    unit = graphene.String()
+    city = graphene.String()
+    state = graphene.String()
+    country = graphene.String()
+    zip = graphene.String()
+
+    def resolve_street(self, info):
+        return self.value['street']
+
+    def resolve_unit(self, info):
+        return self.value['unit']
+
+    def resolve_city(self, info):
+        return self.value['city']
+
+    def resolve_state(self, info):
+        return self.value['state']
+
+    def resolve_country(self, info):
+        return self.value['country']
+
+    def resolve_zip(self, info):
+        return self.value['zip']
+
+    name = graphene.String()
+
+    def resolve_name(self, info):
+        # We're doing our own translations in our model here
+        # so let's make sure the API still works as expected
+        if django.utils.translation.get_language() == 'en':
+            return self.value['name_en']
+        elif django.utils.translation.get_language() == 'es':
+            # if there is not a spanish translation available, return english
+            if self.value['name_es'] == '':
+                return self.value['name_en']
+            return self.value['name_es']
+        elif django.utils.translation.get_language() == 'ar':
+            return self.value['name_ar']
+        elif django.utils.translation.get_language() == 'vi':
+            return self.value['name_vi']
+
+
+class EventPageLocation(graphene.ObjectType):
+    value = GenericScalar()
+    location_type = graphene.String()
+    additional_details = graphene.String()
+    city_location = graphene.Field(LocationPageNode)
+    remote_location = graphene.Field(EventPageRemoteLocation)
+
+    def resolve_additional_details(self, info):
+        # We're doing our own translations in our model here
+        # so let's make sure the API still works as expected
+        if django.utils.translation.get_language() == 'en':
+            return self.value['additional_details_en']
+        elif django.utils.translation.get_language() == 'es':
+            # if there is not a spanish translation available, return english
+            if self.value['additional_details_es'] == '':
+                return self.value['additional_details_en']
+            return self.value['additional_details_es']
+        elif django.utils.translation.get_language() == 'ar':
+            return self.value['additional_details_ar']
+        elif django.utils.translation.get_language() == 'vi':
+            return self.value['additional_details_vi']
+
+    def resolve_city_location(self, info):
+        page = None
+        if self.location_type == 'city_location':
+            try:
+                page = LocationPage.objects.get(id=self.value['location_page'])
+            except ObjectDoesNotExist:
+                pass
+            return page
+
+    def resolve_remote_location(self, info):
+        if self.location_type == 'remote_location':
+            return EventPageRemoteLocation(value=self.value)
+
+
 class EventPageNode(DjangoObjectType):
+    locations = graphene.List(EventPageLocation)
+
     class Meta:
-        model = events.EventPage
+        model = EventPage
         filter_fields = ['id', 'slug', 'live']
         interfaces = [graphene.Node]
+
+    def resolve_locations(self, info):
+        repr_locations = []
+        for block in self.location_blocks.stream_data:
+            value = block.get('value')
+            location_type = block.get('type')
+            repr_locations.append(EventPageLocation(value=value, location_type=location_type))
+
+        return repr_locations
 
 
 class EventPageFeeNode(DjangoObjectType):
     class Meta:
-        model = events.EventPageFee
+        model = EventPageFee
         interfaces = [graphene.Node]
 
 
 class EventPageRelatedDepartmentsNode(DjangoObjectType):
     class Meta:
-        model = events.EventPageRelatedDepartments
+        model = EventPageRelatedDepartments
         interfaces = [graphene.Node]
 
 
@@ -312,7 +405,7 @@ class Language(graphene.Enum):
     BURMESE = 'my'
 
 
-class ServicePageStepLocationBlock(graphene.ObjectType):
+class StreamFieldLocationPage(graphene.ObjectType):
     # This uses graphene ObjectType resolvers, see:
     # https://docs.graphene-python.org/en/latest/types/objecttypes/#resolvers
     value = GenericScalar()
@@ -329,7 +422,7 @@ class ServicePageStepLocationBlock(graphene.ObjectType):
 
 class ServicePageStep(graphene.ObjectType):
     value = GenericScalar()
-    locations = graphene.List(ServicePageStepLocationBlock)
+    locations = graphene.List(StreamFieldLocationPage)
     step_type = graphene.String()
 
     def resolve_locations(self, info):
@@ -338,7 +431,7 @@ class ServicePageStep(graphene.ObjectType):
         # if it's a string before grabbing locations to avoid errors
         if self.step_type == "step_with_locations":
             for location in self.value['locations']:
-                repr_locations.append(ServicePageStepLocationBlock(value=location))
+                repr_locations.append(StreamFieldLocationPage(value=location))
 
         return repr_locations
 
@@ -549,6 +642,7 @@ class PageRevisionNode(DjangoObjectType):
     as_guide_page = graphene.NonNull(GuidePageNode)
     as_form_container = graphene.NonNull(FormContainerNode)
     as_location_page = graphene.NonNull(LocationPageNode)
+    as_event_page = graphene.NonNull(EventPageNode)
 
     def resolve_as_service_page(self, resolve_info, *args, **kwargs):
         return self.as_page_object()
@@ -575,6 +669,9 @@ class PageRevisionNode(DjangoObjectType):
         return self.as_page_object()
 
     def resolve_as_location_page(self, resolve_info, *args, **kwargs):
+        return self.as_page_object()
+
+    def resolve_as_event_page(self, resolve_info, *args, **kwargs):
         return self.as_page_object()
 
     class Meta:
@@ -841,6 +938,7 @@ class Query(graphene.ObjectType):
     all_guide_page_topics = DjangoFilterConnectionField(GuidePageTopicNode)
     all_location_pages = DjangoFilterConnectionField(LocationPageNode)
     all_form_container_topics = DjangoFilterConnectionField(FormContainerTopicNode)
+    all_event_pages = DjangoFilterConnectionField(EventPageNode)
 
     def resolve_site_structure(self, resolve_info):
         site_structure = SiteStructure()
