@@ -1,9 +1,12 @@
-import os, subprocess
+import os
+import subprocess
 from io import StringIO
 from django.core.management.base import BaseCommand, CommandError
 from django.core.management import call_command
 from django.core.exceptions import ObjectDoesNotExist
 from base.models import DeploymentLog
+import re
+
 
 class Command(BaseCommand):
     help = "Load initial seeding data into your app"
@@ -32,30 +35,36 @@ class Command(BaseCommand):
             except ObjectDoesNotExist:
                 load_data_result = None
             if not load_data_result:
-                LOAD_DATA=os.getenv("LOAD_DATA")
+                LOAD_DATA = os.getenv("LOAD_DATA")
+                DATABASE_URL = os.getenv("DATABASE_URL")
                 if (LOAD_DATA == "prod"):
                     print("Adding prod datadump")
                     run_load_data_command('./joplin/db/system-generated/prod.datadump.json')
-                    DeploymentLog(operation="load_data",value="prod",completed=True).save()
+                    DeploymentLog(operation="load_data", value="prod", completed=True).save()
                 elif (LOAD_DATA == "staging"):
                     print("Adding staging datadump")
                     run_load_data_command('./joplin/db/system-generated/staging.datadump.json')
-                    DeploymentLog(operation="load_data",value="staging",completed=True).save()
+                    DeploymentLog(operation="load_data", value="staging", completed=True).save()
                 elif (LOAD_DATA == "dummy"):
                     print("Adding dummy datadump")
                     run_load_data_command('./joplin/db/system-generated/dummy.datadump.json')
-                    DeploymentLog(operation="load_data",value="dummy",completed=True).save()
+                    DeploymentLog(operation="load_data", value="dummy", completed=True).save()
                 elif (LOAD_DATA == "new_datadump"):
                     print("Adding new migration test datadump")
                     run_load_data_command('./joplin/db/system-generated/tmp.datadump.json')
                     print("Sanitizing Revisions data")
-                    output = subprocess.run(re.split("\s+", f"psql ${DATABASE_URL} -f ./db/scripts/sanitize_revision_data.sql"),
-                        capture_output=True,
-                        text=True,
-                    )
+                    try:
+                        output = subprocess.run(re.split("\s+", f"psql ${DATABASE_URL} -f ./db/scripts/sanitize_revision_data.sql"),
+                                                capture_output=True,
+                                                text=True,
+                                                )
+                    except Exception as e:
+                        raise
+
                     if output.stdout:
                         print(output.stdout)
-                    if out.stderr:
+                    # this should catch if there are any errors with the above process
+                    if output.stderr:
                         print(output.stderr)
                         raise
                 else:
@@ -75,7 +84,7 @@ class Command(BaseCommand):
             ):
                 print("Adding test admin user for development.")
                 run_load_data_command('./joplin/db/fixtures/local_admin_user.json')
-                DeploymentLog(operation="load_test_admin",completed=True).save()
+                DeploymentLog(operation="load_test_admin", completed=True).save()
 
             # Load janis_branch_settings if they haven't been loaded already
             try:
@@ -91,7 +100,7 @@ class Command(BaseCommand):
             ):
                 print("Adding Janis Branch settings")
                 run_load_data_command('./joplin/db/fixtures/janis_branch_settings.json')
-                DeploymentLog(operation="load_janis_branch_settings",completed=True).save()
+                DeploymentLog(operation="load_janis_branch_settings", completed=True).save()
 
             # Set group_permissions if they haven't been loaded already
             try:
@@ -107,7 +116,7 @@ class Command(BaseCommand):
             ):
                 print("Setting editor and moderator group permissions")
                 run_load_data_command('./joplin/db/fixtures/group_permissions_settings.json')
-                DeploymentLog(operation="set_group_permissions",completed=True).save()
+                DeploymentLog(operation="set_group_permissions", completed=True).save()
         finally:
             stdout.close()
             stderr.close()
