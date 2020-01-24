@@ -70,6 +70,7 @@ def add_hours_by_day_and_exceptions(model):
     panels_with_wrapper = MultiFieldPanel(children=panels_to_add, classname="collapsible hours-wrapper", heading="Location Hours")
     return panels_with_wrapper
 
+
 class LocationPage(JanisBasePage):
     """
     all the relevant details for a specifc location (place!?)
@@ -184,15 +185,14 @@ class LocationPageRelatedServices(Orderable):
     )
     hours_same_as_location = models.BooleanField(default=False, verbose_name="The hours for this service are the same as the location hours")
 
+    # slightly clever property + filter for model clean function
     @property
     def all_hours_fields(self):
         return [field for field in self._meta.fields if field.get_internal_type() == 'TimeField']
 
-
     def clean(self):
-        if self.hours_same_as_location == False and not any in self.all_hours_fields:
+        if self.hours_same_as_location is False and not any((getattr(self, field.name) for field in self.all_hours_fields)):
             raise ValidationError({'hours_same_as_location': ('Please either check this or input hours for this service')})
-
 
     panels = [
         PageChooserPanel("related_service"),
@@ -200,8 +200,6 @@ class LocationPageRelatedServices(Orderable):
 
     ]
 
-
-# LocationPageRelatedServices.panels += [add_hours_by_day_and_exceptions(LocationPageRelatedServices)]
 
 LocationPageRelatedServices.panels += [add_hours_by_day_and_exceptions(LocationPageRelatedServices)]
 LocationPage.content_panels += [add_hours_by_day_and_exceptions(LocationPage), InlinePanel('related_services', label='Related Services'), ]

@@ -7,9 +7,7 @@ from . import models, factories
 from contextlib import contextmanager
 
 
-
 class LocationPageRelatedServiceTests(TestCase):
-
     def setUp(self):
         self.related_service = models.LocationPageRelatedServices()
 
