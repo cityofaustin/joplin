@@ -25,16 +25,17 @@ class PublishPreflightForm(WagtailAdminPageForm):
     Returns a list of unmet criteria. If the form passes successfully, the return value will be an empty list.
     '''
     @staticmethod
-    def check_publish_requirements(publish_requirements, data):
+    def check_publish_requirements(publish_requirements, data, message):
         try:
             unmet_criteria = []
             for requirement in publish_requirements:
                 result = requirement.check_criteria(data)
                 if not result["result"]:
                     unmet_criteria.append(result)
+            print(unmet_criteria)
             return unmet_criteria
         except BaseException as e:
-            raise PublishException("An error occured during publishing") from e
+            raise PublishException("An error occurred during publishing") from e
 
     # Overrides default clean() method
     # This is executed by form.is_valid() in the edit() handler in wagtail/admin/views/pages.py

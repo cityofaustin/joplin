@@ -19,6 +19,8 @@ from .translated_image import TranslatedImage
 
 from .widgets import countMe, countMeTextArea
 
+from publish_preflight.requirements import PublishRequirementField, PublishRequirementRelation
+
 
 class GuidePage(JanisBasePage):
     janis_url_page_type = "guide"
@@ -45,10 +47,10 @@ class GuidePage(JanisBasePage):
 
     base_form_class = GuidePageForm
 
-    fields_required_for_publish = (
-        'description_en',
-        'contacts',
-        'sections',
+    publish_requirements = (
+        PublishRequirementField("description"),
+        # PublishRequirementRelation("contacts"),
+        # PublishRequirementField("sections"),
     )
 
     content_panels = [
