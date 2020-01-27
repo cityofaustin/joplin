@@ -82,7 +82,7 @@ INSTALLED_APPS = [
     'countable_field',
     'flags',
     'locations',
-    'publish_preflight',
+    # 'publish_preflight',
     'silk',
 ]
 
