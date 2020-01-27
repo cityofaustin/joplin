@@ -115,7 +115,6 @@ docker wait ${COMPOSE_PROJECT_NAME}_app_1
 if [[ $(docker inspect ${COMPOSE_PROJECT_NAME}_app_1 --format='{{.State.ExitCode}}') == '1' ]]; then
   exit 1
 fi
-# check if it broke by parsing logs
 echo "#### $DOCKER_TAG_APP migration and data loading completed successfully"
 echo "#### $DOCKER_TAG_APP joplin-app container shutting down"
 
