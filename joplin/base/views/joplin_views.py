@@ -10,16 +10,15 @@ from django.conf import settings
 from base.models import ServicePage, ProcessPage, InformationPage, TopicPage, TopicCollectionPage, DepartmentPage, Theme, OfficialDocumentPage, GuidePage, FormContainer
 from locations.models import LocationPage
 from base.models.site_settings import JanisBranchSettings
+from django.contrib.contenttypes.models import ContentType
 import json
 
 # This method is used on the home Pages page.
 # When you want to publish a page directly from the home page, this route is called.
 # The publish button on the edit/ page sends a "action-publish" message directly to wagtail.
 # "action-publish" does not use this endpoint.
-
-
 def publish(request, page_id):
-
+    # We'll get a weird MetaClass for our page.base_form_class if we don't use page.specific
     page = get_object_or_404(Page, id=page_id).specific
 
     user_perms = UserPagePermissionsProxy(request.user)
@@ -29,7 +28,18 @@ def publish(request, page_id):
     next_url = pages.get_valid_next_url_from_request(request)
 
     if request.method == 'POST':
+        # Check Publish Requirements, redirect to edit page if any requirements are unmet
+        if hasattr(page, "publish_requirements"):
+            publish_requirements = page.publish_requirements
+            unmet_criteria = page.base_form_class.check_publish_requirements(
+                publish_requirements,
+                json.loads(page.to_json())
+            )
+            if unmet_criteria:
+                messages.error(request, _("Page '{0}' has unmet publishing requirements.").format(page.get_admin_display_title()))
+                return redirect(f'/admin/pages/{page.id}/edit/')
 
+        # Publish the latest revision
         page.get_latest_revision().publish()
 
         # TODO: clean up copypasta when coa-publisher phases out previously AWS publish pipeline
