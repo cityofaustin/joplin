@@ -53,13 +53,10 @@ class Command(BaseCommand):
                     print("Adding new migration test datadump")
                     run_load_data_command('./joplin/db/system-generated/tmp.datadump.json')
                     print("Sanitizing Revisions data")
-                    try:
-                        output = subprocess.run(re.split("\s+", f"psql ${DATABASE_URL} -f ./db/scripts/sanitize_revision_data.sql"),
-                                                capture_output=True,
-                                                text=True,
-                                                )
-                    except Exception as e:
-                        raise
+                    output = subprocess.run(re.split("\s+", f"psql ${DATABASE_URL} -f ./db/scripts/sanitize_revision_data.sql"),
+                        capture_output=True,
+                        text=True,
+                    )
 
                     if output.stdout:
                         print(output.stdout)
