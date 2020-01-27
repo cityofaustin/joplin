@@ -5,7 +5,7 @@ from modelcluster.models import ClusterableModel
 
 from base.forms import OfficialDocumentPageForm
 
-from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, MultiFieldPanel, PageChooserPanel
+from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, PageChooserPanel
 from wagtail.core.models import Orderable
 from wagtail.documents.models import Document
 from wagtail.documents.edit_handlers import DocumentChooserPanel

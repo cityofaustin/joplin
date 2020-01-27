@@ -51,7 +51,7 @@
     {% else %}
         {% if query_string %}
             <h2>{% blocktrans %}Sorry, no pages match <em>"{{ query_string }}"</em>{% endblocktrans %}</h2>
-
+            {% include "wagtailadmin/shared/create_content_modal/index.html" %}
             {% search_other %}
         {% else %}
             <p>{% trans 'Enter a search term above' %}</p>

@@ -15,9 +15,8 @@ from .janis_page import JanisBasePage
 from locations.models import LocationPage
 from .contact import Contact
 
-from .constants import WYSIWYG_GENERAL, DEFAULT_MAX_LENGTH, SHORT_DESCRIPTION_LENGTH
-from .widgets import countMe, countMeTextArea, AUTHOR_LIMITS
-from countable_field import widgets
+from .constants import WYSIWYG_GENERAL, SHORT_DESCRIPTION_LENGTH
+from .widgets import countMe, countMeTextArea
 
 
 WYSIWYG_SERVICE_STEP = ['ul', 'link', 'code', 'rich-text-button-link', 'document-link']
