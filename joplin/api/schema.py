@@ -9,18 +9,15 @@ from graphene.types import Scalar
 from graphene.types.json import JSONString
 from graphene.types.generic import GenericScalar
 from wagtail.core.fields import StreamField, RichTextField
-from wagtail.core.models import Page, PageRevision
+from wagtail.core.models import PageRevision
 from django_filters import FilterSet, OrderingFilter
 from wagtail.core.blocks import *
 from wagtail.documents.models import Document
 from wagtail.core.rich_text import expand_db_html
 from base.models import (
-    JanisBasePage,
     TranslatedImage,
-    ThreeOneOne,
     ServicePage, ServicePageContact, ServicePageTopic, ServicePageRelatedDepartments,
     InformationPage, InformationPageContact, InformationPageTopic, InformationPageRelatedDepartments,
-    ProcessPage, ProcessPageStep, ProcessPageContact, ProcessPageTopic,
     DepartmentPage, DepartmentPageContact, DepartmentPageDirector, DepartmentPageTopPage, DepartmentPageRelatedPage,
     Theme, TopicCollectionPage, TopicPage, TopicPageTopicCollection, TopicPageTopPage,
     Contact, Location, PhoneNumber, ContactDayAndDuration, Department, DepartmentContact,
@@ -30,7 +27,7 @@ from base.models import (
 )
 from .content_type_map import content_type_map
 import traceback
-import locations.models as locations
+from locations.models import LocationPage, LocationPageRelatedServices
 
 
 class RichTextFieldType(Scalar):
@@ -75,7 +72,7 @@ def expand_dict_values(item):
 def expand_by_type(key, value):
     """
     recursive function to
-    handle the streamfield black items differently depending on type
+    handle the streamfield block items differently depending on type
     and loop through again if its a dict
     """
     if isinstance(value, str):
@@ -134,13 +131,6 @@ class DocumentNode(DjangoObjectType):
     filename = graphene.String()
 
 
-class ThreeOneOneNode(DjangoObjectType):
-    class Meta:
-        model = ThreeOneOne
-        filter_fields = ['title']
-        interfaces = [graphene.Node]
-
-
 class ThemeNode(DjangoObjectType):
     class Meta:
         model = Theme
@@ -192,7 +182,7 @@ class LocationNode(DjangoObjectType):
 
 class LocationPageNode(DjangoObjectType):
     class Meta:
-        model = locations.LocationPage
+        model = LocationPage
         filter_fields = ['id', 'slug', 'live']
         fields = '__all__'
         interfaces = [graphene.Node]
@@ -200,9 +190,8 @@ class LocationPageNode(DjangoObjectType):
 
 class LocationPageRelatedServices(DjangoObjectType):
     class Meta:
-        model = locations.LocationPageRelatedServices
+        model = LocationPageRelatedServices
         interfaces = [graphene.Node]
-
 
 
 class ContactNode(DjangoObjectType):
@@ -292,9 +281,41 @@ class Language(graphene.Enum):
     BURMESE = 'my'
 
 
+class ServicePageStepLocationBlock(graphene.ObjectType):
+    # This uses graphene ObjectType resolvers, see:
+    # https://docs.graphene-python.org/en/latest/types/objecttypes/#resolvers
+    value = GenericScalar()
+    location_page = graphene.Field(LocationPageNode)
+
+    def resolve_location_page(self, info):
+        page = None
+        try:
+            page = LocationPage.objects.get(id=self.value)
+        except ObjectDoesNotExist:
+            pass
+        return page
+
+
+class ServicePageStep(graphene.ObjectType):
+    value = GenericScalar()
+    locations = graphene.List(ServicePageStepLocationBlock)
+    step_type = graphene.String()
+
+    def resolve_locations(self, info):
+        repr_locations = []
+        # since we still want to be able to use value, we need to see
+        # if it's a string before grabbing locations to avoid errors
+        if self.step_type == "step_with_locations":
+            for location in self.value['locations']:
+                repr_locations.append(ServicePageStepLocationBlock(value=location))
+
+        return repr_locations
+
+
 class ServicePageNode(DjangoObjectType):
     page_type = graphene.String()
     janis_url = graphene.String()
+    steps = graphene.List(ServicePageStep)
 
     class Meta:
         model = ServicePage
@@ -306,6 +327,15 @@ class ServicePageNode(DjangoObjectType):
 
     def resolve_janis_url(self, info):
         return self.janis_url()
+
+    def resolve_steps(self, info):
+        repr_steps = []
+        for step in self.steps.stream_data:
+            value = step.get('value')
+            step_type = step.get('type')
+            repr_steps.append(ServicePageStep(value=value, step_type=step_type))
+
+        return repr_steps
 
 
 class InformationPageNode(DjangoObjectType):
@@ -768,7 +798,6 @@ class Query(graphene.ObjectType):
     all_topics = DjangoFilterConnectionField(TopicNode)
     all_topic_collections = DjangoFilterConnectionField(TopicCollectionNode)
     all_departments = DjangoFilterConnectionField(DepartmentNode)
-    all_311 = DjangoFilterConnectionField(ThreeOneOneNode)
     all_official_document_pages = DjangoFilterConnectionField(
         OfficialDocumentPageNode)
     all_guide_pages = DjangoFilterConnectionField(GuidePageNode)

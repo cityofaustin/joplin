@@ -10,7 +10,7 @@ from django.views.decorators.vary import vary_on_headers
 
 from wagtail.admin import messages
 from wagtail.admin.forms.search import SearchForm
-from wagtail.admin.utils import permission_denied, permission_required
+from wagtail.admin.auth import permission_denied, permission_required
 from wagtail.core import hooks
 from wagtail.core.compat import AUTH_USER_APP_LABEL, AUTH_USER_MODEL_NAME
 from wagtail.users.forms import UserCreationForm, UserEditForm
