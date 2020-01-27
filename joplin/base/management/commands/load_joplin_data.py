@@ -1,12 +1,10 @@
 import os
-import subprocess
 from io import StringIO
 from django.core.management.base import BaseCommand, CommandError
 from django.core.management import call_command
 from django.core.exceptions import ObjectDoesNotExist
 from base.models import DeploymentLog
-import re
-
+from django.db import connection
 
 class Command(BaseCommand):
     help = "Load initial seeding data into your app"
@@ -52,21 +50,16 @@ class Command(BaseCommand):
                 elif (LOAD_DATA == "new_datadump"):
                     print("Adding new migration test datadump")
                     run_load_data_command('./joplin/db/system-generated/tmp.datadump.json')
-                    print("Sanitizing Revisions data")
-                    try:
-                        output = subprocess.run(re.split("\s+", f"psql ${DATABASE_URL} -f ./db/scripts/sanitize_revision_data.sql"),
-                                                capture_output=True,
-                                                text=True,
-                                                )
-                    except Exception as e:
-                        raise
 
-                    if output.stdout:
-                        print(output.stdout)
-                    # this should catch if there are any errors with the above process
-                    if output.stderr:
-                        print(output.stderr)
-                        raise
+                    # Runs code from /db/scripts/sanitize_revision_data.sql
+                    print("Sanitizing Revisions data")
+                    sanitize_revision_path = os.path.join(os.path.dirname(__file__), f'../../../db/scripts/sanitize_revision_data.sql')
+                    sanitize_revision_file = open(sanitize_revision_path, 'r')
+                    sanitize_revision_sql = sanitize_revision_file.read()
+                    sanitize_revision_file.close()
+                    with connection.cursor() as cursor:
+                        cursor.execute(sanitize_revision_sql)
+                        print(cursor.statusmessage)
                 else:
                     print("Not adding any datadumps\n")
 

@@ -111,6 +111,11 @@ docker-compose -f docker-compose.yml -f docker-compose.migration_test_override.y
 echo "#### Running old migrations from $DOCKER_TAG_APP and loading data"
 docker logs ${COMPOSE_PROJECT_NAME}_app_1 -f
 docker wait ${COMPOSE_PROJECT_NAME}_app_1
+# Stop process if our entrypoint.sh errored out on docker-compose
+if [[ $(docker inspect ${COMPOSE_PROJECT_NAME}_app_1 --format='{{.State.ExitCode}}') == '1' ]]; then
+  exit 1
+fi
+# check if it broke by parsing logs
 echo "#### $DOCKER_TAG_APP migration and data loading completed successfully"
 echo "#### $DOCKER_TAG_APP joplin-app container shutting down"
 
