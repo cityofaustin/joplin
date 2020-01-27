@@ -36,7 +36,6 @@ scout-apm = "*"
 django-silk = "*"
 greenlet = "*"
 psycogreen = "*"
-django-db-geventpool = "*"
 django-postgrespool2 = "*"
 
 [requires]
