@@ -150,14 +150,12 @@ DATABASES = {
 }
 
 DATABASE_POOL_CLASS = 'sqlalchemy.pool.QueuePool'
-
+# https://github.com/lcd1232/django-postgrespool2#configuration
 DATABASE_POOL_ARGS = {
     'max_overflow': 10,
     'pool_size': 5,
     'recycle': 300
 }
-# DATABASES['default']['ENGINE'] = 'django_db_geventpool.backends.postgresql_psycopg2'
-# DATABASES['default']['OPTIONS'] = {'MAX_CONNS': 10}
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
