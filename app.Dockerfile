@@ -31,9 +31,7 @@ ENV DEPLOYMENT_MODE "LOCAL"
 # Run Migrations
 ENTRYPOINT ["./docker-entrypoint.sh"]
 
-# Start the Joplin server
-# we add an extra timeout and debug level to be generous with our server log
-CMD ["gunicorn", "-c", "gunicorn.conf.py", "joplin.wsgi:application"]
+CMD ["python", "./joplin/manage.py", "runserver", "0.0.0.0:80"]
 
 ########################################################
 # joplin-common => joplin-deployed
@@ -51,8 +49,9 @@ RUN npm rebuild node-sass
 RUN yarn; yarn build
 WORKDIR /app
 
-# Entrypoint must be executed manually since heroku has a 60 second time limit for entrypoint scripts
 # Start the Joplin server
+# Entrypoint must be executed manually since heroku has a 60 second time limit for entrypoint scripts
+# we add an extra timeout and debug level to be generous with our server log
 CMD ["gunicorn", "-c", "gunicorn.conf.py", "joplin.wsgi:application"]
 
 ########################################################
