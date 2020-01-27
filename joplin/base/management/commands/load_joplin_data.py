@@ -58,6 +58,7 @@ class Command(BaseCommand):
                     sanitize_revision_sql = sanitize_revision_file.read()
                     sanitize_revision_file.close()
                     with connection.cursor() as cursor:
+                        # The cursor will handle error throwing if there are any bugs in your sql code.
                         cursor.execute(sanitize_revision_sql)
                         print(cursor.statusmessage)
                 else:
