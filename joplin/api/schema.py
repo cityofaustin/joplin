@@ -75,7 +75,11 @@ def expand_by_type(key, value):
     handle the streamfield block items differently depending on type
     and loop through again if its a dict
     """
-    if isinstance(value, str):
+
+    if key == 'locations':
+        parsed_item = try_resolve_locations(value)
+        return parsed_item
+    elif isinstance(value, str):
         parsed_item = try_expand_db_html(value)
         return parsed_item
     elif isinstance(value, list):
@@ -83,6 +87,44 @@ def expand_by_type(key, value):
         return parsed_item
     elif isinstance(value, dict):
         try_get_api_representation(value)
+
+
+class LocationPageNode(DjangoObjectType):
+    class Meta:
+        model = LocationPage
+        filter_fields = ['id', 'slug', 'live']
+        fields = '__all__'
+        interfaces = [graphene.Node]
+
+
+class StreamFieldBlock(graphene.ObjectType):
+    # This uses graphene ObjectType resolvers, see:
+    # https://docs.graphene-python.org/en/latest/types/objecttypes/#resolvers
+    value = GenericScalar()
+    location_page = graphene.Field(LocationPageNode)
+    resolved_value = graphene.ObjectType()
+
+    def resolve_resolved_value(self, info):
+        return try_get_api_representation(self)
+
+    def resolve_location_page(self, info):
+        page = None
+        try:
+            page = LocationPage.objects.get(id=self.value)
+        except ObjectDoesNotExist:
+            pass
+        return page
+
+
+def try_resolve_locations(parsed_item):
+    repr_locations = []
+    # since we still want to be able to use value, we need to see
+    # if it's a string before grabbing locations to avoid errors
+    for location in parsed_item:
+        # repr_locations.append(StreamFieldLocationBlock(value=location))
+        x = 3
+
+    return repr_locations
 
 
 def try_get_api_representation(StreamChild):
@@ -102,7 +144,18 @@ def try_get_api_representation(StreamChild):
         return block
 
 
-class StreamFieldType(Scalar):
+class StreamFieldType(graphene.ObjectType):
+    blocks = graphene.List(StreamFieldBlock)
+
+    def resolve_blocks(self, info):
+        repr_blocks = []
+        for block in self:
+            value = block.get('value')
+            block_type = block.get('type')
+            repr_blocks.append(StreamFieldBlock(value=value, type=block_type))
+
+        return repr_blocks
+
     @staticmethod
     def serialize(StreamValue):
         """
@@ -118,9 +171,9 @@ class StreamFieldType(Scalar):
         return expanded_streamfields
 
 
-@convert_django_field.register(StreamField)
-def convert_stream_field(field, registry=None):
-    return StreamFieldType(description=field.help_text, required=not field.null)
+# @convert_django_field.register(StreamField)
+# def convert_stream_field(field, registry=None):
+#     return StreamFieldType()
 
 
 class DocumentNode(DjangoObjectType):
@@ -176,14 +229,6 @@ class LocationNode(DjangoObjectType):
     class Meta:
         model = Location
         filter_fields = ['id']
-        fields = '__all__'
-        interfaces = [graphene.Node]
-
-
-class LocationPageNode(DjangoObjectType):
-    class Meta:
-        model = LocationPage
-        filter_fields = ['id', 'slug', 'live']
         fields = '__all__'
         interfaces = [graphene.Node]
 
@@ -284,6 +329,7 @@ class Language(graphene.Enum):
 class ServicePageNode(DjangoObjectType):
     page_type = graphene.String()
     janis_url = graphene.String()
+    steps = graphene.List(StreamFieldBlock)
 
     class Meta:
         model = ServicePage
@@ -295,6 +341,15 @@ class ServicePageNode(DjangoObjectType):
 
     def resolve_janis_url(self, info):
         return self.janis_url()
+
+    def resolve_steps(self, info):
+        repr_steps = []
+        for step in self.steps.stream_data:
+            value = step.get('value')
+            step_type = step.get('type')
+            repr_steps.append(StreamFieldBlock(value=value, step_type=step_type))
+
+        return repr_steps
 
 
 class InformationPageNode(DjangoObjectType):
