@@ -5,6 +5,7 @@ from wagtail.admin.forms import WagtailAdminPageForm
 class PublishException(BaseException):
     pass
 
+
 class PublishPreflightForm(WagtailAdminPageForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -13,9 +14,10 @@ class PublishPreflightForm(WagtailAdminPageForm):
         try:
             # this is where the error appeared for stream fields maybe the original thing worked anyway? we dont
             # need to make another class for it
+            print(type(message))
             self.add_error(field_name, message)
         except ValueError as e:
-            raise PublishException("An error occured while handling unmet Publishing criteria") from e
+            raise PublishException("An error occurred while handling unmet Publishing criteria") from e
 
     '''
     This method can also be called directly on page.json().

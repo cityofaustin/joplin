@@ -1,4 +1,6 @@
 from django.core.exceptions import ValidationError
+from wagtail.core.blocks.stream_block import StreamBlockValidationError
+from django.forms.utils import ErrorList
 
 
 # Check if field value is not empty
@@ -13,7 +15,8 @@ def is_not_empty(field_value):
 # Check if relation has at least one entry
 # Default criteria for PublishRequirementRelation
 def has_at_least_one(relation_value):
-    return (len(relation_value) > 1)
+    return len(relation_value) > 1
+    return len(relation_value) > 1
 
 
 placeholder_message = "Publish Requirement not met"
@@ -106,7 +109,7 @@ class PublishRequirementStreamField:
     def __init__(self, field_name, criteria=has_at_least_one, message=placeholder_message, langs=["en"]):
         self.field_name = field_name
         self.criteria = criteria
-        self.message = ValidationError(message)
+        self.message = ValidationError(message, params={"field": field_name})
         self.langs = langs
 
     def evaluate(self, field_name, field_value):
