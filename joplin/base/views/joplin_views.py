@@ -13,6 +13,7 @@ from base.models.site_settings import JanisBranchSettings
 from django.contrib.contenttypes.models import ContentType
 import json
 
+
 # This method is used on the home Pages page.
 # When you want to publish a page directly from the home page, this route is called.
 # The publish button on the edit/ page sends a "action-publish" message directly to wagtail.
@@ -27,8 +28,11 @@ def publish(request, page_id):
 
     next_url = pages.get_valid_next_url_from_request(request)
 
+    print(request)
+
     if request.method == 'POST':
         # Check Publish Requirements, redirect to edit page if any requirements are unmet
+        print(page)
         if hasattr(page, "publish_requirements"):
             publish_requirements = page.publish_requirements
             unmet_criteria = page.base_form_class.check_publish_requirements(

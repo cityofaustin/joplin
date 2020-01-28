@@ -19,7 +19,7 @@ from .translated_image import TranslatedImage
 
 from .widgets import countMe, countMeTextArea
 
-from publish_preflight.requirements import PublishRequirementField, PublishRequirementRelation
+from publish_preflight.requirements import PublishRequirementField, PublishRequirementRelation, PublishRequirementStreamField
 
 
 class GuidePage(JanisBasePage):
@@ -49,8 +49,8 @@ class GuidePage(JanisBasePage):
 
     publish_requirements = (
         PublishRequirementField("description"),
-        # PublishRequirementRelation("contacts"),
-        # PublishRequirementField("sections"),
+        #PublishRequirementRelation("contacts"),
+        PublishRequirementStreamField("sections"),
     )
 
     content_panels = [

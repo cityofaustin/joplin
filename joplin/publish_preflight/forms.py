@@ -11,6 +11,8 @@ class PublishPreflightForm(WagtailAdminPageForm):
 
     def add_error_to_edit_page(self, field_name, message):
         try:
+            # this is where the error appeared for stream fields maybe the original thing worked anyway? we dont
+            # need to make another class for it
             self.add_error(field_name, message)
         except ValueError as e:
             raise PublishException("An error occured while handling unmet Publishing criteria") from e
@@ -43,7 +45,7 @@ class PublishPreflightForm(WagtailAdminPageForm):
         cleaned_data = super().clean()
 
         # Check publish requirements, add errors if any are unmet
-        if (self.data['action-publish'] == 'action-publish'):
+        if self.data['action-publish'] == 'action-publish':
             if hasattr(self.instance, "publish_requirements"):
                 consolidated_data = cleaned_data
                 # TODO add formset data to consolidated_data
