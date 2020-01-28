@@ -302,14 +302,14 @@ class ServicePageStep(graphene.ObjectType):
     step_type = graphene.String()
 
     def resolve_locations(self, info):
-        repr_locations = []
-        # since we still want to be able to use value, we need to see
-        # if it's a string before grabbing locations to avoid errors
-        if self.step_type == "step_with_locations":
-            for location in self.value['locations']:
-                repr_locations.append(ServicePageStepLocationBlock(value=location))
-
-        return repr_locations
+        expanded_streamfields = [
+            {
+                'step_type': StreamChild.block_type,
+                'value': try_get_api_representation(StreamChild),
+                'id': StreamChild.id
+            } for StreamChild in self.steps
+        ]
+        return expanded_streamfields
 
 
 class ServicePageNode(DjangoObjectType):
@@ -329,14 +329,13 @@ class ServicePageNode(DjangoObjectType):
         return self.janis_url()
 
     def resolve_steps(self, info):
-        expanded_streamfields = [
-            {
-                'step_type': StreamChild.block_type,
-                'value': try_get_api_representation(StreamChild),
-                'id': StreamChild.id
-            } for StreamChild in self.steps
-        ]
-        return expanded_streamfields
+        repr_steps = []
+        for step in self.steps.stream_data:
+            value = step.get('value')
+            step_type = step.get('type')
+            repr_steps.append(ServicePageStep(value=value, step_type=step_type))
+
+        return repr_steps
 
 
 class InformationPageNode(DjangoObjectType):
