@@ -34,6 +34,7 @@ USE_ANALYTICS = bool(
 
 # Application definition
 
+
 INSTALLED_APPS = [
     'base.apps.BaseConfig',
     'users',
@@ -83,7 +84,11 @@ INSTALLED_APPS = [
     'flags',
     'locations',
     'silk',
+
+    "grapple",
+    "channels",
 ]
+
 
 MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -419,3 +424,10 @@ if SCOUT_MONITOR:
     ] + INSTALLED_APPS
 
     SCOUT_NAME = os.environ.get('APPNAME')
+
+
+# Grapple Config:
+GRAPHENE = {"SCHEMA": "grapple.schema.schema"}
+GRAPPLE_APPS = {
+    "base": ""
+}

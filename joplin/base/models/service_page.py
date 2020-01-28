@@ -18,6 +18,10 @@ from .contact import Contact
 from .constants import WYSIWYG_GENERAL, SHORT_DESCRIPTION_LENGTH
 from .widgets import countMe, countMeTextArea
 
+from grapple.models import (
+    GraphQLStreamfield,
+)
+
 
 WYSIWYG_SERVICE_STEP = ['ul', 'link', 'code', 'rich-text-button-link']
 
@@ -127,6 +131,10 @@ class ServicePage(JanisBasePage):
             classname='coa-multiField-nopadding'
         ),
         InlinePanel('contacts', label='Contacts'),
+    ]
+
+    graphql_fields = [
+        GraphQLStreamfield("steps"),
     ]
 
 
