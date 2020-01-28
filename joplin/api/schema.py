@@ -300,6 +300,14 @@ class ServicePageStep(graphene.ObjectType):
     value = GenericScalar()
     locations = graphene.List(ServicePageStepLocationBlock)
     step_type = graphene.String()
+    generic_value = GenericScalar()
+    locations_description = GenericScalar()
+
+    def resolve_locations_description(self, info):
+        return try_expand_db_html(self.value['locations_description'])
+
+    def resolve_generic_value(self, info):
+        return try_expand_db_html(self.value)
 
     def resolve_locations(self, info):
         repr_locations = []
