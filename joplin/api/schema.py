@@ -9,18 +9,15 @@ from graphene.types import Scalar
 from graphene.types.json import JSONString
 from graphene.types.generic import GenericScalar
 from wagtail.core.fields import StreamField, RichTextField
-from wagtail.core.models import Page, PageRevision
+from wagtail.core.models import PageRevision
 from django_filters import FilterSet, OrderingFilter
 from wagtail.core.blocks import *
 from wagtail.documents.models import Document
 from wagtail.core.rich_text import expand_db_html
 from base.models import (
-    JanisBasePage,
     TranslatedImage,
-    ThreeOneOne,
     ServicePage, ServicePageContact, ServicePageTopic, ServicePageRelatedDepartments,
     InformationPage, InformationPageContact, InformationPageTopic, InformationPageRelatedDepartments,
-    ProcessPage, ProcessPageStep, ProcessPageContact, ProcessPageTopic,
     DepartmentPage, DepartmentPageContact, DepartmentPageDirector, DepartmentPageTopPage, DepartmentPageRelatedPage,
     Theme, TopicCollectionPage, TopicPage, TopicPageTopicCollection, TopicPageTopPage,
     Contact, Location, PhoneNumber, ContactDayAndDuration, Department, DepartmentContact,
@@ -30,8 +27,7 @@ from base.models import (
 )
 from .content_type_map import content_type_map
 import traceback
-import locations.models as locations
-from locations.models import LocationPage
+from locations.models import LocationPage, LocationPageRelatedServices
 from events.models import EventPage, EventPageFee, EventPageRelatedDepartments
 
 
@@ -77,7 +73,7 @@ def expand_dict_values(item):
 def expand_by_type(key, value):
     """
     recursive function to
-    handle the streamfield black items differently depending on type
+    handle the streamfield block items differently depending on type
     and loop through again if its a dict
     """
     if isinstance(value, str):
@@ -136,13 +132,6 @@ class DocumentNode(DjangoObjectType):
     filename = graphene.String()
 
 
-class ThreeOneOneNode(DjangoObjectType):
-    class Meta:
-        model = ThreeOneOne
-        filter_fields = ['title']
-        interfaces = [graphene.Node]
-
-
 class ThemeNode(DjangoObjectType):
     class Meta:
         model = Theme
@@ -194,7 +183,7 @@ class LocationNode(DjangoObjectType):
 
 class LocationPageNode(DjangoObjectType):
     class Meta:
-        model = locations.LocationPage
+        model = LocationPage
         filter_fields = ['id', 'slug', 'live']
         fields = '__all__'
         interfaces = [graphene.Node]
@@ -202,9 +191,8 @@ class LocationPageNode(DjangoObjectType):
 
 class LocationPageRelatedServices(DjangoObjectType):
     class Meta:
-        model = locations.LocationPageRelatedServices
+        model = LocationPageRelatedServices
         interfaces = [graphene.Node]
-
 
 class EventPageRemoteLocation(graphene.ObjectType):
     value = GenericScalar()
@@ -932,7 +920,6 @@ class Query(graphene.ObjectType):
     all_topics = DjangoFilterConnectionField(TopicNode)
     all_topic_collections = DjangoFilterConnectionField(TopicCollectionNode)
     all_departments = DjangoFilterConnectionField(DepartmentNode)
-    all_311 = DjangoFilterConnectionField(ThreeOneOneNode)
     all_official_document_pages = DjangoFilterConnectionField(
         OfficialDocumentPageNode)
     all_guide_pages = DjangoFilterConnectionField(GuidePageNode)
