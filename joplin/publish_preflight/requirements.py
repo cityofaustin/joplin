@@ -25,10 +25,19 @@ def streamfield_has_length(stream_value):
     :param stream_value:
     :return:
     """
-    sv = stream_value
-    print(len(sv))
-    print(stream_value)
     return len(stream_value) > 0
+
+# move into guide page and uncomment the criteria in the definition below
+def streamfield_has_pages(stream_value):
+    #check length of stream value
+    stream_data = stream_value.stream_data
+    # check that we have any data in the streamfield
+    if stream_data:
+        struct_value = stream_data[0][1]
+        values_list = list(struct_value.values())
+        if values_list[0] and values_list[-1]:
+            return True
+    return False
 
 
 placeholder_message = "Publish Requirement not met"
@@ -118,7 +127,8 @@ class PublishRequirementConditional:
 
 
 class PublishRequirementStreamField:
-    def __init__(self, field_name, criteria=streamfield_has_length, message=placeholder_message, langs=["en"]):
+    #    def __init__(self, field_name, criteria=streamfield_has_length, message=placeholder_message, langs=["en"]):
+    def __init__(self, field_name, criteria=streamfield_has_pages, message=placeholder_message, langs=["en"]):
         self.field_name = field_name
         self.criteria = criteria
         # from wagtail.core.blocks.stream_block import StreamBlockValidationError
