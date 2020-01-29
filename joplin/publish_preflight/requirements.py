@@ -1,7 +1,7 @@
 from django.core.exceptions import ValidationError
 
 # Check if field value is not empty
-# Default criteria for PublishRequirementField
+# Default criteria for FieldPublishRequirement
 def is_not_empty(field_value):
     if isinstance(field_value, str):
         return not (not field_value.strip())
@@ -9,15 +9,15 @@ def is_not_empty(field_value):
         return not (not field_value)
 
 # Check if relation has at least one entry
-# Default criteria for PublishRequirementRelation
+# Default criteria for RelationPublishRequirement
 def has_at_least_one(relation_value):
     return (len(relation_value) > 1)
 
 placeholder_message = "Publish Requirement not met"
 
 # A Publish Requirement for a simple field
-class PublishRequirementField():
-    def __init__(self, field_name, criteria=has_at_least_one, message=placeholder_message, langs=["en"]):
+class FieldPublishRequirement():
+    def __init__(self, field_name, criteria=is_not_empty, message=placeholder_message, langs=None):
         self.field_name = field_name
         self.criteria = criteria
         self.message = ValidationError(message)
@@ -34,11 +34,8 @@ class PublishRequirementField():
     def check_criteria(self, data):
         field_name = self.field_name
         # If field is not translated, then get check value of "field_name"
-        if field_name in data:
-            field_value = data.get(field_name)
-            return self.evaluate(field_name, field_value)
         # If field is translated, then check value of each applicable language
-        else:
+        if self.langs:
             for lang in self.langs:
                 translated_field_name = f'{self.field_name}_{lang}'
                 if translated_field_name in data:
@@ -46,9 +43,13 @@ class PublishRequirementField():
                     return self.evaluate(translated_field_name, field_value)
                 else:
                     raise ValidationError(f"Field required for publish '{translated_field_name}' does not exist.")
+        else:
+            field_value = data.get(field_name)
+            return self.evaluate(field_name, field_value)
+
 
 # A Publish Requirement for a related ClusterableModel
-class PublishRequirementRelation():
+class RelationPublishRequirement():
     def __init__(self, field_name, criteria=has_at_least_one, message=placeholder_message):
         self.field_name = field_name
         self.criteria = criteria
@@ -71,7 +72,7 @@ class PublishRequirementRelation():
         else:
             raise ValidationError(f"Field required for publish '{field_name}' does not exist.")
 
-class PublishRequirementConditional():
+class ConditionalPublishRequirement():
     def __init__(self, requirement1, operation, requirement2, message=placeholder_message):
         self.requirement1 = requirement1
         self.operation = operation
@@ -93,15 +94,15 @@ class PublishRequirementConditional():
 
 # sample
 publish_requirements = (
-    PublishRequirementField("description"),
-    PublishRequirementField("additional_content"),
-    PublishRequirementConditional(
-        PublishRequirementRelation("topic"),
+    FieldPublishRequirement("description", langs=["en"]),
+    FieldPublishRequirement("additional_content", langs=["en"]),
+    ConditionalPublishRequirement(
+        RelationPublishRequirement("topic"),
         "or",
-        PublishRequirementConditional(
-            PublishRequirementRelation("related_department"),
+        ConditionalPublishRequirement(
+            RelationPublishRequirement("related_department"),
             "or",
-            PublishRequirementField("coa_global"),
+            FieldPublishRequirement("coa_global"),
         ),
         "You must have at least 1 topic or 1 department or 'Top Level' checked."
     ),

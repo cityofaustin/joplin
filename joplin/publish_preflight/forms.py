@@ -48,7 +48,7 @@ class PublishPreflightForm(WagtailAdminPageForm):
                 # TODO add formset data to consolidated_data
                 # And add streamfield data, wherever that lives
                 publish_requirements = self.instance.publish_requirements
-                unmet_criteria = self.check_publish_requirements(publish_requirements, consolidated_data, self.add_error_to_edit_page)
+                unmet_criteria = self.check_publish_requirements(publish_requirements, consolidated_data)
                 for result in unmet_criteria:
                     self.add_error_to_edit_page(result["field_name"], result["message"])
         return cleaned_data
