@@ -131,7 +131,7 @@ class LocationPageRelatedServices(ClusterableModel):
     page = ParentalKey(LocationPage, related_name='related_services', default=None)
     related_service = models.ForeignKey(
         "base.servicePage",
-        on_delete=models.PROTECT,
+        on_delete=models.CASCADE,
     )
     panels = [
         PageChooserPanel("related_service"),
