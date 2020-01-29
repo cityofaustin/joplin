@@ -10,6 +10,7 @@ from wagtail.admin.edit_handlers import (
 from locations.models import LocationPage
 from base.models import Contact
 from wagtail.core.fields import RichTextField, StreamField
+from wagtail.core.models import Orderable
 from wagtail.admin.edit_handlers import FieldPanel, PageChooserPanel
 from base.models import JanisBasePage
 from base.models.widgets import countMe, countMeLongTextArea, AUTHOR_LIMITS
@@ -102,7 +103,7 @@ class EventPage(JanisBasePage):
     parent_page_types = ['base.HomePage']
 
 
-class EventPageFee(ClusterableModel):
+class EventPageFee(Orderable):
     page = ParentalKey(EventPage, related_name='fees', default=None)
     fee = models.DecimalField(max_digits=10, decimal_places=2, blank=True)
     fee_label = models.CharField(blank=True, verbose_name='Label (kids, adults, seniors, etc.)', max_length=DEFAULT_MAX_LENGTH)
