@@ -12,12 +12,11 @@ class PublishPreflightForm(WagtailAdminPageForm):
 
     def add_error_to_edit_page(self, field_name, message):
         try:
-            # this is where the error appeared for stream fields maybe the original thing worked anyway? we dont
-            # need to make another class for it
             """
                 This method allows adding errors to specific fields from within the Form.clean() method, 
                 or from outside the form altogether; for instance from a view.
             """
+            # if the section wasn't added to the consolidated data, there isnt a place for the message to attach to
             self.add_error(field_name, message)
         except ValueError as e:
             raise PublishException("An error occurred while handling unmet Publishing criteria") from e
@@ -39,7 +38,7 @@ class PublishPreflightForm(WagtailAdminPageForm):
                 result = requirement.check_criteria(data)
                 if not result["result"]:
                     unmet_criteria.append(result)
-            print(unmet_criteria)
+            print('unmet criteria, l42', unmet_criteria)
             return unmet_criteria
         except BaseException as e:
             raise PublishException("An error occurred during publishing") from e
@@ -57,7 +56,6 @@ class PublishPreflightForm(WagtailAdminPageForm):
                 publish_requirements = self.instance.publish_requirements
                 # collect the requirements that arent filled out
                 unmet_criteria = self.check_publish_requirements(publish_requirements, consolidated_data)
-                # what is add error to edit page
                 for result in unmet_criteria:
                     self.add_error_to_edit_page(result["field_name"], result["message"])
         return cleaned_data

@@ -1,6 +1,4 @@
 from django.core.exceptions import ValidationError
-from wagtail.core.blocks.stream_block import StreamBlockValidationError
-from django.forms.utils import ErrorList
 
 
 # Check if field value is not empty
@@ -16,7 +14,21 @@ def is_not_empty(field_value):
 # Default criteria for PublishRequirementRelation
 def has_at_least_one(relation_value):
     return len(relation_value) > 1
-    return len(relation_value) > 1
+
+
+def streamfield_has_length(stream_value):
+    """
+    cant just be if it has length, b/c that allows it to only have a heading and pass
+    so we should check if it has pages attached as well as a heading
+    also for other types of streamfiles its something diffrent. maybe not pages, but steps. its a different criteria
+    perhaps those should be defined in the model. that feels cleanest. and then passed through to the model.
+    :param stream_value:
+    :return:
+    """
+    sv = stream_value
+    print(len(sv))
+    print(stream_value)
+    return len(stream_value) > 0
 
 
 placeholder_message = "Publish Requirement not met"
@@ -106,14 +118,16 @@ class PublishRequirementConditional:
 
 
 class PublishRequirementStreamField:
-    def __init__(self, field_name, criteria=has_at_least_one, message=placeholder_message, langs=["en"]):
+    def __init__(self, field_name, criteria=streamfield_has_length, message=placeholder_message, langs=["en"]):
         self.field_name = field_name
         self.criteria = criteria
+        # from wagtail.core.blocks.stream_block import StreamBlockValidationError
         self.message = ValidationError(message, params={"field": field_name})
         self.langs = langs
 
     def evaluate(self, field_name, field_value):
         result = self.criteria(field_value)
+        print('streamfield result:', result)
         return {
             "result": result,
             "field_name": field_name,
@@ -134,7 +148,14 @@ class PublishRequirementStreamField:
                     field_value = data.get(translated_field_name)
                     return self.evaluate(translated_field_name, field_value)
                 else:
-                    raise ValidationError(f"Field required for publish '{translated_field_name}' does not exist.")
+                    # if the section doesnt have a header and a page attached, the section isn't added to the
+                    # cleaned_data at all
+                    return {
+                        "result": False,
+                        "field_name": field_name,
+                        "message": self.message
+                    }
+                    # raise ValidationError(f"Field required for publish '{translated_field_name}' does not exist.")
 
 
 # sample

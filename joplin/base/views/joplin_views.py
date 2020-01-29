@@ -28,11 +28,8 @@ def publish(request, page_id):
 
     next_url = pages.get_valid_next_url_from_request(request)
 
-    print(request)
-
     if request.method == 'POST':
         # Check Publish Requirements, redirect to edit page if any requirements are unmet
-        print(page)
         if hasattr(page, "publish_requirements"):
             publish_requirements = page.publish_requirements
             unmet_criteria = page.base_form_class.check_publish_requirements(
