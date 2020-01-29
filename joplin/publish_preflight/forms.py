@@ -14,7 +14,10 @@ class PublishPreflightForm(WagtailAdminPageForm):
         try:
             # this is where the error appeared for stream fields maybe the original thing worked anyway? we dont
             # need to make another class for it
-            print(type(message))
+            """
+                This method allows adding errors to specific fields from within the Form.clean() method, 
+                or from outside the form altogether; for instance from a view.
+            """
             self.add_error(field_name, message)
         except ValueError as e:
             raise PublishException("An error occurred while handling unmet Publishing criteria") from e
@@ -29,7 +32,7 @@ class PublishPreflightForm(WagtailAdminPageForm):
     Returns a list of unmet criteria. If the form passes successfully, the return value will be an empty list.
     '''
     @staticmethod
-    def check_publish_requirements(publish_requirements, data, message):
+    def check_publish_requirements(publish_requirements, data):
         try:
             unmet_criteria = []
             for requirement in publish_requirements:
@@ -51,9 +54,10 @@ class PublishPreflightForm(WagtailAdminPageForm):
             if hasattr(self.instance, "publish_requirements"):
                 consolidated_data = cleaned_data
                 # TODO add formset data to consolidated_data
-                # And add streamfield data, wherever that lives
                 publish_requirements = self.instance.publish_requirements
-                unmet_criteria = self.check_publish_requirements(publish_requirements, consolidated_data, self.add_error_to_edit_page)
+                # collect the requirements that arent filled out
+                unmet_criteria = self.check_publish_requirements(publish_requirements, consolidated_data)
+                # what is add error to edit page
                 for result in unmet_criteria:
                     self.add_error_to_edit_page(result["field_name"], result["message"])
         return cleaned_data
