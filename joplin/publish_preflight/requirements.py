@@ -31,8 +31,9 @@ class FieldPublishRequirement():
             "message": self.message
         }
 
-    def check_criteria(self, data):
+    def check_criteria(self, form):
         field_name = self.field_name
+        data = form.cleaned_data
         # If field is not translated, then get check value of "field_name"
         # If field is translated, then check value of each applicable language
         if self.langs:
