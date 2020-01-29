@@ -31,8 +31,6 @@ class EventPage(JanisBasePage):
     start_time = models.TimeField(blank=True, null=True)
     end_time = models.TimeField(blank=True, null=True)
 
-
-    # Todo, more
     location_blocks = StreamField(
         [
             ('city_location', StructBlock(
@@ -61,12 +59,9 @@ class EventPage(JanisBasePage):
                     ('additional_details_ar', TextBlock(label='Any other necessary location details, such as room number [ar]', required=False)),
                     ('additional_details_vi', TextBlock(label='Any other necessary location details, such as room number [vi]', required=False)),
                 ],
-                # label="Step With Options"
             )),
         ],
         verbose_name='Add location of event',
-        # this gets called in the help panel
-        # help_text='A step may have a basic text step or an options accordion which reveals two or more options',
         blank=True
     )
 
@@ -86,7 +81,6 @@ class EventPage(JanisBasePage):
         FieldPanel('title_es', widget=countMe),
         FieldPanel('title_ar'),
         FieldPanel('title_vi'),
-        # FieldPanel('description', widget=countMeLongTextArea),
         FieldPanel('description'),
         FieldPanel('date'),
         FieldRowPanel(
