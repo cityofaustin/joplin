@@ -13,10 +13,10 @@ class PublishPreflightForm(WagtailAdminPageForm):
         if (self.data['action-publish'] == 'action-publish'):
             if hasattr(self.instance, "publish_requirements"):
                 publish_requirements = self.instance.publish_requirements
-                unmet_criteria = []
                 for requirement in publish_requirements:
                     result = requirement.check_criteria(self)
                     if not result["passed"]:
-                        self.add_error(None, result["publish_requirement_error"])
+                        for error in result["publish_requirement_errors"]:
+                            self.add_error(None, error)
 
         return cleaned_data
