@@ -680,7 +680,8 @@ def get_structure_for_content_type(content_type):
 
         # Only publish event pages at the date based url
         if content_type == 'event page':
-            site_structure.append({'url': f'/event/{page.date.year}/{page.date.month}/{page.date.day}/{page.slug}/', 'type': content_type, 'id': page_global_id})
+            if page.date:
+                site_structure.append({'url': f'/event/{page.date.year}/{page.date.month}/{page.date.day}/{page.slug}/', 'type': content_type, 'id': page_global_id})
             continue
 
         if page.coa_global:
