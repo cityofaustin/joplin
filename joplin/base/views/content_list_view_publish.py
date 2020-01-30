@@ -1,3 +1,6 @@
+# DEPRECATED
+# This was the code we used to publish pages from the home Content List View.
+# We no longer do this because it is not compatible with PublishRequirements.
 from django.shortcuts import get_object_or_404, redirect, render
 from django.http import HttpResponse
 from wagtail.core.models import Page, UserPagePermissionsProxy
@@ -76,52 +79,16 @@ def publish(request, page_id):
         'next': next_url,
     })
 
+# This was the url added to urls.py
+url = url(r'admin/pages/(\d+)/publish/$', joplin_views.publish, name='publish')
 
-def new_page_from_modal(request):
-    user_perms = UserPagePermissionsProxy(request.user)
-    if not user_perms.can_edit_pages():
-        raise PermissionDenied
-
-    if request.method == 'POST':
-        # Get the page data
-        body = json.loads(request.body)
-        print(body['type'])
-        data = {}
-        data['title'] = body['title']
-        data['owner'] = request.user
-
-        # Create the page
-        if body['type'] == 'service':
-            page = ServicePage(**data)
-        elif body['type'] == 'process':
-            page = ProcessPage(**data)
-        elif body['type'] == 'information':
-            page = InformationPage(**data)
-        elif body['type'] == 'topic':
-            page = TopicPage(**data)
-        elif body['type'] == 'topiccollection':
-            if body['theme'] is not None:
-                data['theme'] = Theme.objects.get(id=body['theme'])
-            page = TopicCollectionPage(**data)
-        elif body['type'] == 'department':
-            page = DepartmentPage(**data)
-        elif body['type'] == 'documents':
-            page = OfficialDocumentPage(**data)
-        elif body['type'] == 'guide':
-            page = GuidePage(**data)
-        elif body['type'] == 'form':
-            page = FormContainer(**data)
-        elif body['type'] == 'location':
-            page = LocationPage(**data)
-
-        # Add it as a child of home
-        home = Page.objects.get(id=3)
-        home.add_child(instance=page)
-
-        # Save our draft
-        page.save_revision()
-        page.unpublish()  # Not sure why it seems to go live by default
-
-        # Respond with the id of the new page
-        response = HttpResponse(json.dumps({'id': page.id}), content_type="application/json")
-        return response
+# This was the logic added to @hooks.register('register_joplin_page_listing_more_buttons')
+# in order to add a "Publish" option to the Content List View's "more" dropdown
+if page_perms.can_publish() and page.has_unpublished_changes:
+    yield Button(
+        _('Publish'),
+        reverse('publish', args=[page.id]),
+        attrs={'title': _("Publish page '{title}'").format(
+            title=page.get_admin_display_title())},
+        priority=50
+    )
