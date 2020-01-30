@@ -395,7 +395,6 @@ $(function() {
 
   // do the same with locations on events
   $('#location_blocks-count').change(function() {
-    debugger;
     changeLanguage(state.currentLang);
     updateSelectedLanguage(state.currentLang);
   });
