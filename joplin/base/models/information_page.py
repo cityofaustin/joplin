@@ -17,7 +17,7 @@ from .constants import WYSIWYG_GENERAL
 from .widgets import countMe, countMeTextArea, AUTHOR_LIMITS
 from countable_field import widgets
 
-from publish_preflight.requirements import FieldPublishRequirement
+from publish_preflight.requirements import FieldPublishRequirement, RelationPublishRequirement
 
 class InformationPage(JanisBasePage):
     janis_url_page_type = "information"
@@ -46,13 +46,14 @@ class InformationPage(JanisBasePage):
     base_form_class = InformationPageForm
 
     publish_requirements = (
-        FieldPublishRequirement("description", langs=["en"]),
-        FieldPublishRequirement("additional_content", langs=["en"]),
+        FieldPublishRequirement("description", langs=["en"], message="Description before publishing"),
+        FieldPublishRequirement("additional_content", langs=["en"], message="You need to write additional content in order to publish"),
+        RelationPublishRequirement("topics", message="You need at least 1 topic"),
         # ConditionalPublishRequirement(
-        #     RelationPublishRequirement("topic"),
+        #     RelationPublishRequirement("topics"),
         #     "or",
         #     ConditionalPublishRequirement(
-        #         RelationPublishRequirement("related_department"),
+        #         RelationPublishRequirement("related_departments"),
         #         "or",
         #         FieldPublishRequirement("coa_global"),
         #     ),

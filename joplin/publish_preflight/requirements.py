@@ -11,25 +11,41 @@ def is_not_empty(field_value):
 # Check if relation has at least one entry
 # Default criteria for RelationPublishRequirement
 def has_at_least_one(relation_value):
-    return (len(relation_value) > 1)
+    return (len(relation_value) > 0)
 
 placeholder_message = "Publish Requirement not met"
 
-# A Publish Requirement for a simple field
-class FieldPublishRequirement():
-    def __init__(self, field_name, criteria=is_not_empty, message=placeholder_message, langs=None):
-        self.field_name = field_name
-        self.criteria = criteria
-        self.message = ValidationError(message)
-        self.langs = langs
+class PublishRequirementError(ValidationError):
+    def __init__(self, *args, **kwargs):
+        self.publish_error_data = kwargs.pop("publish_error_data", None)
+        super(PublishRequirementError, self).__init__(*args, **kwargs)
 
+class BasePublishRequirement():
     def evaluate(self, field_name, field_value):
         result = self.criteria(field_value)
-        return {
-            "result": result,
-            "field_name": field_name,
-            "message": self.message
-        }
+        if not result:
+            publish_requirement_error = PublishRequirementError(self.message, publish_error_data={
+                "field_name": field_name,
+                "message": self.message,
+                "field_type": self.field_type,
+            })
+            return {
+                "passed": False,
+                "publish_requirement_error": publish_requirement_error,
+            }
+        else:
+            return {
+                "passed": True,
+            }
+
+# A Publish Requirement for a simple field
+class FieldPublishRequirement(BasePublishRequirement):
+    def __init__(self, field_name, criteria=is_not_empty, message=placeholder_message, langs=None):
+        self.field_type = "field"
+        self.field_name = field_name
+        self.criteria = criteria
+        self.message = message
+        self.langs = langs
 
     def check_criteria(self, form):
         field_name = self.field_name
@@ -43,35 +59,27 @@ class FieldPublishRequirement():
                     field_value = data.get(translated_field_name)
                     return self.evaluate(translated_field_name, field_value)
                 else:
-                    raise ValidationError(f"Field required for publish '{translated_field_name}' does not exist.")
+                    raise KeyError(f"Field required for publish '{translated_field_name}' does not exist.")
         else:
             field_value = data.get(field_name)
             return self.evaluate(field_name, field_value)
 
-
 # A Publish Requirement for a related ClusterableModel
-class RelationPublishRequirement():
+class RelationPublishRequirement(BasePublishRequirement):
     def __init__(self, field_name, criteria=has_at_least_one, message=placeholder_message):
+        self.field_type = "relation"
         self.field_name = field_name
         self.criteria = criteria
         self.message = message
 
-    def evaluate(self, field_name, data):
-        result = self.criteria(data)
-        return {
-            "result": result,
-            "field_name": field_name,
-            "message": self.message
-        }
-
     def check_criteria(self, form):
-        formsets = form.formsets
         field_name = self.field_name
+        formsets = form.formsets
         if field_name in formsets:
             data = formsets.get(field_name).cleaned_data
             return self.evaluate(field_name, data)
         else:
-            raise ValidationError(f"Field required for publish '{field_name}' does not exist.")
+            raise KeyError(f"Field required for publish '{field_name}' does not exist.")
 
 class ConditionalPublishRequirement():
     def __init__(self, requirement1, operation, requirement2, message=placeholder_message):
@@ -105,6 +113,6 @@ publish_requirements = (
             "or",
             FieldPublishRequirement("coa_global"),
         ),
-        "You must have at least 1 topic or 1 department or 'Top Level' checked."
+        message="You must have at least 1 topic or 1 department or 'Top Level' checked."
     ),
 )
