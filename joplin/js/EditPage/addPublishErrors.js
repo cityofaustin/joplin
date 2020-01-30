@@ -6,7 +6,8 @@ const addRelationError = (field_name, messageElement) => {
   $(messageElement).insertBefore($(`ul[id='id_${field_name}-FORMS']`).parent().parent())
 }
 
-const addStreamfieldError = () => {
+const addStreamfieldError = (field_name, messageElement) => {
+ $(messageElement).insertBefore($('.stream-field'))
 }
 
 /**

@@ -35,8 +35,7 @@ def streamfield_has_pages(stream_value):
     # check that we have any data in the streamfield
     if stream_data:
         struct_value = stream_data[0][1]
-        values_list = list(struct_value.values())
-        if values_list[0] and values_list[-1]:
+        if struct_value.get('pages') and struct_value.get('section_heading_en'):
             return True
     return False
 
@@ -134,32 +133,22 @@ class ConditionalPublishRequirement:
         )
 
 
-class PublishRequirementStreamField:
+class StreamFieldPublishRequirement(BasePublishRequirement):
     #    def __init__(self, field_name, criteria=streamfield_has_length, message=placeholder_message, langs=["en"]):
-    def __init__(self, field_name, criteria=streamfield_has_pages, message=placeholder_message, langs=["en"]):
+    def __init__(self, field_name, criteria=streamfield_has_pages, message=placeholder_message, langs=None):
+        self.field_type = "streamfield"
         self.field_name = field_name
         self.criteria = criteria
         # from wagtail.core.blocks.stream_block import StreamBlockValidationError
-        self.message = ValidationError(message, params={"field": field_name})
+        # self.message = ValidationError(message, params={"field": field_name})
+        self.message = message
         self.langs = langs
 
-    def evaluate(self, field_name, field_value):
-        result = self.criteria(field_value)
-        print('streamfield result:', result)
-        return {
-            "result": result,
-            "field_name": field_name,
-            "message": self.message
-        }
-
-    def check_criteria(self, data):
+    def check_criteria(self, form):
         field_name = self.field_name
-        # If field is not translated, then get check value of "field_name"
-        if field_name in data:
-            field_value = data.get(field_name)
-            return self.evaluate(field_name, field_value)
+        data = form.cleaned_data
         # If field is translated, then check value of each applicable language
-        else:
+        if self.langs:
             for lang in self.langs:
                 translated_field_name = f'{self.field_name}_{lang}'
                 if translated_field_name in data:
@@ -168,12 +157,16 @@ class PublishRequirementStreamField:
                 else:
                     # if the section doesnt have a header and a page attached, the section isn't added to the
                     # cleaned_data at all
-                    return {
-                        "result": False,
-                        "field_name": field_name,
-                        "message": self.message
-                    }
-                    # raise ValidationError(f"Field required for publish '{translated_field_name}' does not exist.")
+                    # return {
+                    #     "result": False,
+                    #     "field_name": field_name,
+                    #     "message": self.message
+                    # }
+                    raise KeyError(f"Field required for publish '{translated_field_name}' does not exist.")
+        else:
+            # If field is not translated, then get check value of "field_name"
+            field_value = data.get(field_name)
+            return self.evaluate(field_name, field_value)
 
 
 # sample

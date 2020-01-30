@@ -18,7 +18,7 @@ from .contact import Contact
 from .constants import WYSIWYG_GENERAL, SHORT_DESCRIPTION_LENGTH
 from .widgets import countMe, countMeTextArea
 
-from publish_preflight.requirements import PublishRequirementField, PublishRequirementStreamField
+from publish_preflight.requirements import FieldPublishRequirement, StreamFieldPublishRequirement
 
 
 WYSIWYG_SERVICE_STEP = ['ul', 'link', 'code', 'rich-text-button-link']
@@ -102,8 +102,8 @@ class ServicePage(JanisBasePage):
     )
 
     publish_requirements = (
-        PublishRequirementField("short_description"),
-        PublishRequirementStreamField("steps"),
+        FieldPublishRequirement("short_description"),
+        StreamFieldPublishRequirement("steps"),
     )
 
     content_panels = [

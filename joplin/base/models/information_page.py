@@ -17,7 +17,8 @@ from .constants import WYSIWYG_GENERAL
 from .widgets import countMe, countMeTextArea
 from countable_field import widgets
 
-from publish_preflight.requirements import PublishRequirementField
+from publish_preflight.requirements import FieldPublishRequirement
+
 
 class InformationPage(JanisBasePage):
     janis_url_page_type = "information"
@@ -46,8 +47,8 @@ class InformationPage(JanisBasePage):
     base_form_class = InformationPageForm
 
     publish_requirements = (
-        PublishRequirementField("description"),
-        PublishRequirementField("additional_content"),
+        FieldPublishRequirement("description"),
+        FieldPublishRequirement("additional_content"),
     )
 
     content_panels = [
