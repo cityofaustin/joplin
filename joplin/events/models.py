@@ -5,13 +5,14 @@ from wagtail.admin.edit_handlers import (
     InlinePanel,
     FieldRowPanel,
     StreamFieldPanel,
+    MultiFieldPanel,
 )
 
 from locations.models import LocationPage
 from base.models import Contact
 from wagtail.core.fields import RichTextField, StreamField
 from wagtail.core.models import Orderable
-from wagtail.admin.edit_handlers import FieldPanel, PageChooserPanel
+from wagtail.admin.edit_handlers import FieldPanel, PageChooserPanel, HelpPanel
 from base.models import JanisBasePage
 from base.models.widgets import countMe, countMeLongTextArea, AUTHOR_LIMITS
 from modelcluster.models import ClusterableModel
@@ -24,7 +25,8 @@ class EventPage(JanisBasePage):
 
     description = RichTextField(
         features=WYSIWYG_GENERAL,
-        verbose_name='Full description of the event',
+        verbose_name='Long description',
+        help_text='Full description of the event',
         blank=True
     )
 
@@ -53,7 +55,6 @@ class EventPage(JanisBasePage):
                     ('unit', TextBlock(label='Unit', required=False)),
                     ('city', TextBlock(label='City', required=False)),
                     ('state', TextBlock(label='State', required=False)),
-                    ('country', TextBlock(label='Country', required=False)),
                     ('zip', TextBlock(label='ZIP', required=False)),
                     ('additional_details_en', TextBlock(label='Any other necessary location details, such as room number [en]', required=False)),
                     ('additional_details_es', TextBlock(label='Any other necessary location details, such as room number [es]', required=False)),
@@ -69,20 +70,32 @@ class EventPage(JanisBasePage):
     event_is_free = models.BooleanField(verbose_name="This event is free", default=True)
 
     registration_url = models.URLField(
-        verbose_name='The URL where the resident may register for the event, if needed',
+        verbose_name='Registration',
+        help_text='The URL where the resident may register for the event, if needed',
         blank=True
     )
 
     contact = models.ForeignKey(Contact, related_name='+', blank=True, null=True, on_delete=models.SET_NULL)
 
-    canceled = models.BooleanField(verbose_name="Cancel this event", default=False)
+    canceled = models.BooleanField(
+        verbose_name="Cancel this event",
+        help_text="Canceling an event will not unpublish it, but it will display the event as canceled.",
+        default=False
+    )
 
     content_panels = [
         FieldPanel('title_en', widget=countMe),
         FieldPanel('title_es', widget=countMe),
         FieldPanel('title_ar'),
         FieldPanel('title_vi'),
-        FieldPanel('description'),
+        MultiFieldPanel(
+            [
+                HelpPanel(description.help_text, classname="coa-helpPanel"),
+                FieldPanel('description'),
+            ],
+            heading=description.verbose_name,
+            classname='coa-multiField-nopadding'
+        ),
         FieldPanel('date'),
         FieldRowPanel(
             children=[
@@ -94,10 +107,24 @@ class EventPage(JanisBasePage):
         StreamFieldPanel('location_blocks'),
         FieldPanel('event_is_free'),
         InlinePanel('fees', label='Fees'),
-        FieldPanel('registration_url'),
+        MultiFieldPanel(
+            [
+                HelpPanel(registration_url.help_text, classname="coa-helpPanel"),
+                FieldPanel('registration_url'),
+            ],
+            heading=registration_url.verbose_name,
+            classname='coa-multiField-nopadding'
+        ),
         InlinePanel('related_departments', label='Related Departments'),
         SnippetChooserPanel('contact'),
-        FieldPanel('canceled'),
+        MultiFieldPanel(
+            [
+                HelpPanel(canceled.help_text, classname="coa-helpPanel"),
+                FieldPanel('canceled'),
+            ],
+            heading=canceled.verbose_name,
+            classname='coa-multiField-nopadding'
+        ),
     ]
 
     parent_page_types = ['base.HomePage']
