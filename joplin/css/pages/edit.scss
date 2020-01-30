@@ -158,3 +158,15 @@
 .account-selector-collapsed::-ms-expand {
     display: none;
 }
+
+// Fix formatting to allow PublishPreflight errors to be inserted below field titles
+.object>.title-wrapper {
+  padding-left: 0;
+  position: inherit;
+}
+
+// Error message from PublishPreflight
+.coa-publish-error {
+  color: red;
+  font-weight: bold;
+}
