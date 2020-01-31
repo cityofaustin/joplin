@@ -7,7 +7,7 @@ const addRelationError = (field_name, messageElement) => {
 }
 
 const addStreamfieldError = (field_name, messageElement) => {
- $(messageElement).insertBefore($('.stream-field'))
+ $($('.stream-field')).find('.title-wrapper').after(messageElement)
 }
 
 /**

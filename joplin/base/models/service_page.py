@@ -102,8 +102,8 @@ class ServicePage(JanisBasePage):
     )
 
     publish_requirements = (
-        FieldPublishRequirement("short_description"),
-        StreamFieldPublishRequirement("steps"),
+        FieldPublishRequirement("short_description", langs=["en"]),
+        StreamFieldPublishRequirement("steps", langs=["en"]),
     )
 
     content_panels = [

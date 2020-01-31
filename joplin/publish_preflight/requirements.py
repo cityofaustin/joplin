@@ -17,9 +17,8 @@ def has_at_least_one(relation_value):
 
 
 def streamfield_has_length(stream_value):
-    """
-
-    """
+    if not stream_value:
+        return False
     return len(stream_value) > 0
 
 
@@ -126,13 +125,11 @@ class StreamFieldPublishRequirement(BasePublishRequirement):
 
     def check_criteria(self, form):
         field_name = self.field_name
-        print(self.criteria)
         data = form.cleaned_data
         # If field is translated, then check value of each applicable language
         if self.langs:
             for lang in self.langs:
                 translated_field_name = f'{self.field_name}_{lang}'
-                # ran into a problem....description does need a language. but the sections dont. some fields have lang not all
                 if translated_field_name in data:
                     field_value = data.get(translated_field_name)
                     return self.evaluate(translated_field_name, field_value)
