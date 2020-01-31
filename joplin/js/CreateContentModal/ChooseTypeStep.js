@@ -11,6 +11,7 @@ import topicCollectionImage from '../../static/images/topic_collection.png';
 import topicsImage from '../../static/images/topics.png';
 import formContainerImage from '../../static/images/info_page.png'; // TODO: get a png for forms from the xd
 import locationImage from '../../static/images/location.png';
+import eventImage from '../../static/images/event.png';
 
 const PageTypeComponent = ({
   type,
@@ -85,9 +86,10 @@ const ChooseTypeStep = ({
     },
     {
       type: 'event',
-      name: 'Event details',
-      image: formContainerImage,
-      description: 'Details about an event',
+      name: 'Event',
+      image: eventImage,
+      description:
+        'An activity that occurs at a particular time and place and is not a service.',
     },
   ];
 
