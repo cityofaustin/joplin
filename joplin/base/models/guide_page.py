@@ -22,6 +22,19 @@ from .widgets import countMe, countMeTextArea
 from publish_preflight.requirements import FieldPublishRequirement, StreamFieldPublishRequirement
 
 
+# move into guide page and uncomment the criteria in the definition below
+def streamfield_has_pages(stream_value):
+    print(stream_value)
+    if stream_value:
+        stream_data = stream_value.stream_data
+        # check that we have any data in the streamfield
+        if stream_data:
+            struct_value = stream_data[0][1]
+            if struct_value.get('pages') and struct_value.get('section_heading_en'):
+                return True
+    return False
+
+
 class GuidePage(JanisBasePage):
     janis_url_page_type = "guide"
 
@@ -50,7 +63,7 @@ class GuidePage(JanisBasePage):
     publish_requirements = (
         FieldPublishRequirement("description", langs=["en"]),
         #PublishRequirementRelation("contacts"),
-        StreamFieldPublishRequirement("sections"),
+        StreamFieldPublishRequirement("sections", criteria=streamfield_has_pages, langs=["en"]),
     )
 
     content_panels = [
