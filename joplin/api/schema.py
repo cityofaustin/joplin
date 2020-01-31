@@ -393,7 +393,7 @@ class Language(graphene.Enum):
     BURMESE = 'my'
 
 
-class StreamFieldLocationPage(graphene.ObjectType):
+class ServicePageStepLocationBlock(graphene.ObjectType):
     # This uses graphene ObjectType resolvers, see:
     # https://docs.graphene-python.org/en/latest/types/objecttypes/#resolvers
     value = GenericScalar()
@@ -410,7 +410,7 @@ class StreamFieldLocationPage(graphene.ObjectType):
 
 class ServicePageStep(graphene.ObjectType):
     value = GenericScalar()
-    locations = graphene.List(StreamFieldLocationPage)
+    locations = graphene.List(ServicePageStepLocationBlock)
     step_type = graphene.String()
 
     def resolve_locations(self, info):
@@ -419,7 +419,7 @@ class ServicePageStep(graphene.ObjectType):
         # if it's a string before grabbing locations to avoid errors
         if self.step_type == "step_with_locations":
             for location in self.value['locations']:
-                repr_locations.append(StreamFieldLocationPage(value=location))
+                repr_locations.append(ServicePageStepLocationBlock(value=location))
 
         return repr_locations
 
