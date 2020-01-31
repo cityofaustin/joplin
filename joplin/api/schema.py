@@ -194,6 +194,7 @@ class LocationPageRelatedServices(DjangoObjectType):
         model = LocationPageRelatedServices
         interfaces = [graphene.Node]
 
+# Not final name, wating on Content team for decision
 class EventPageRemoteLocation(graphene.ObjectType):
     value = GenericScalar()
 
@@ -201,7 +202,6 @@ class EventPageRemoteLocation(graphene.ObjectType):
     unit = graphene.String()
     city = graphene.String()
     state = graphene.String()
-    country = graphene.String()
     zip = graphene.String()
 
     def resolve_street(self, info):
@@ -216,9 +216,6 @@ class EventPageRemoteLocation(graphene.ObjectType):
     def resolve_state(self, info):
         return self.value['state']
 
-    def resolve_country(self, info):
-        return self.value['country']
-
     def resolve_zip(self, info):
         return self.value['zip']
 
@@ -226,7 +223,13 @@ class EventPageRemoteLocation(graphene.ObjectType):
 
     def resolve_name(self, info):
         # We're doing our own translations in our model here
-        # so let's make sure the API still works as expected
+        # so let's make sure the API returns the appropriate name for:
+        '''
+        remoteLocation {
+            name
+        }
+        '''
+        # based on the Accept-Language header of the request
         if django.utils.translation.get_language() == 'en':
             return self.value['name_en']
         elif django.utils.translation.get_language() == 'es':
@@ -239,7 +242,32 @@ class EventPageRemoteLocation(graphene.ObjectType):
         elif django.utils.translation.get_language() == 'vi':
             return self.value['name_vi']
 
+# In order to support "pick city or not but not both" functionality:
+# While only displaying the relevant fields for the selected type
+# We decided on using streamfields and setting up a max_num in them
+# https://github.com/cityofaustin/techstack/issues/3851
+# 
+# A custom resolver is needed to make streamfields queryable
+# so if we want the API to support queries like:
+"""
 
+eventPage {
+    location {
+        city_location {
+            physicalLocation
+        }
+    }
+}
+"""
+# instead of just getting predetermined fields back from queries like:
+"""
+eventPage {
+    location
+}
+"""
+# we need to use a custom resolver
+# we could also try to make our streamfield type queryable,
+# but that is a rabbit hole I haven't jumped all the way down yet
 class EventPageLocation(graphene.ObjectType):
     value = GenericScalar()
     location_type = graphene.String()
