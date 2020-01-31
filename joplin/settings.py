@@ -41,6 +41,7 @@ INSTALLED_APPS = [
 
     'wagtail.api.v2',
 
+    'wagtail_react_streamfield',
     'wagtail.embeds',
     'wagtail.sites',
     'wagtail.users',
