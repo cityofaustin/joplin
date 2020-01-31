@@ -181,6 +181,7 @@ $(function() {
       const languageLabels = $('ul[class="objects"]').find(
         'label:contains(" [")',
       );
+      const structLabels = $(".c-sf-block").find('label:contains(" [")');
       if (languageLabels.length) {
         if (typeof state.languageLabels === 'undefined') {
           state.languageLabels = languageLabels;
@@ -196,30 +197,37 @@ $(function() {
           );
           this.innerHTML = this.innerHTML.replace(']', '</span>');
         });
+        structLabels.each(function() {
+          this.innerHTML = this.innerHTML.replace(
+            '[',
+            " <span style='color:#ff1493'>",
+          );
+          this.innerHTML = this.innerHTML.replace(']', '</span>');
+        });
       }
     }
     replaceLanguageLabels();
 
     // TODO: refactor into a function, evaluate performance
-    // have better variable namepsace seperation
+    // have better variable namespace separation
     let labelList = state.languageLabels;
     for (let label in labelList) {
       if (labelList[label].querySelector) {
         let languageTag = labelList[label].querySelector('span').innerText;
         // these seem to be nested twice, from the title to the containing element
-        // TODO: come up with a more elegant and maintable way to check what elements ought to be hidden
+        // TODO: come up with a more elegant and maintainable way to check what elements ought to be hidden
         if (
           labelList[label].parentElement.parentElement.parentElement.classList
-            .value !== 'struct-block'
+            .value !== 'rah-static rah-static--height-auto c-sf-block__content'
         ) {
           const translatedElement = labelList[label].parentElement.parentElement;
-
           if (languageTag != null && languageTag != currentLang) {
             translatedElement.classList.add('hidden');
           } else {
             translatedElement.classList.remove('hidden');
           }
-          /*  While the first condition checks for 'struct-blocks' with language tags,
+          /*  check if still valid with new react streamfield
+              While the first condition checks for 'struct-blocks' with language tags,
               it doesn't catch the case where there are 'struct-blocks' with language
               tages WITHIN the element itself. The following condition checks for those conditions.
               - The was neccessary for guide stream fields. */
@@ -289,6 +297,8 @@ $(function() {
     localStorage.selected_lang = state.currentLang;
   });
 
+ // new function to update the language selection when you open a new streamfield?
+
   // case function for setting the selected language on dropdown
   // maybe there is a less verbose way to do this?
   function updateSelectedLanguage(currentLang) {
@@ -344,6 +354,11 @@ $(function() {
 
     localStorage.preview_lang = lang;
   });
+
+  var structbutton = $('.c-sf-add-button');
+  structbutton.click(function() {
+    changeLanguage(state.currentLang)
+  })
 
   // Persist language for sharing even after page refreshes on save
   var shareButton = $('#page-share-preview-button');
