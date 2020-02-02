@@ -136,6 +136,7 @@ ISLOCAL = DEPLOYMENT_MODE == "LOCAL"
 ISPRODUCTION = DEPLOYMENT_MODE == "PRODUCTION"
 ISSTAGING = DEPLOYMENT_MODE == "STAGING"
 ISREVIEW = DEPLOYMENT_MODE == "REVIEW"
+ISTEST = DEPLOYMENT_MODE == "TEST"
 
 
 # Database
@@ -394,7 +395,7 @@ FLAGS = {
 }
 
 # The CMS_API endpoint of the current Django App for published Janis to use
-if ISLOCAL:
+if ISLOCAL or ISTEST:
     # $JOPLIN_APP_HOST_PORT is set by scripts/serve-local.sh
     CMS_API = f"http://localhost:{os.getenv('JOPLIN_APP_HOST_PORT')}/api/graphql"
 else:
