@@ -65,7 +65,7 @@ class GuidePage(JanisBasePage):
     publish_requirements = (
         FieldPublishRequirement("description", langs=["en"]),
         #PublishRequirementRelation("contacts"),
-        StreamFieldPublishRequirement("sections", criteria=streamfield_has_pages),
+        StreamFieldPublishRequirement("sections", criteria=streamfield_has_pages, ),
     )
 
     content_panels = [
