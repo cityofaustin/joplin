@@ -6,8 +6,9 @@ const addRelationError = (field_name, messageElement) => {
   $(messageElement).insertBefore($(`ul[id='id_${field_name}-FORMS']`).parent().parent())
 }
 
-const addStreamfieldError = (field_name, messageElement) => {
- $($('.stream-field')).find('.title-wrapper').after(messageElement)
+const addStreamfieldError = (field_name, messageElement, streamfield_id) => {
+  $(streamfield_id).prepend(messageElement)
+  // ^^^ this is showing up twice for the service page
 }
 
 /**
@@ -25,7 +26,7 @@ const addPublishErrors = () => {
       } else if (data.field_type === "relation") {
         addRelationError(data.field_name, messageElement)
       } else if (data.field_type === "streamfield") {
-        addStreamfieldError(data.field_name, messageElement)
+        addStreamfieldError(data.field_name, messageElement, data.streamfield_id)
       }
     })
   }

@@ -116,15 +116,36 @@ class ConditionalPublishRequirement:
 
 
 class StreamFieldPublishRequirement(BasePublishRequirement):
-    def __init__(self, field_name, criteria=streamfield_has_length, message=placeholder_message, langs=None):
+    def __init__(self, field_name, criteria=streamfield_has_length, message=placeholder_message, langs=None,
+                 streamfield_id=".stream-field"):
         self.field_type = "streamfield"
         self.field_name = field_name
         self.criteria = criteria
         self.message = message
         self.langs = langs
+        self.streamfield_id = streamfield_id
+
+    def evaluate_streamfield(self, field_name, field_value, streamfield_id):
+        result = self.criteria(field_value)
+        if not result:
+            publish_requirement_error = PublishRequirementError(self.message, publish_error_data={
+                "field_name": field_name,
+                "message": self.message,
+                "field_type": self.field_type,
+                "streamfield_id": streamfield_id
+            })
+            return {
+                "passed": False,
+                "publish_requirement_error": publish_requirement_error,
+            }
+        else:
+            return {
+                "passed": True,
+            }
 
     def check_criteria(self, form):
         field_name = self.field_name
+        streamfield_id = self.streamfield_id
         data = form.cleaned_data
         # If field is translated, then check value of each applicable language
         if self.langs:
@@ -132,7 +153,7 @@ class StreamFieldPublishRequirement(BasePublishRequirement):
                 translated_field_name = f'{self.field_name}_{lang}'
                 if translated_field_name in data:
                     field_value = data.get(translated_field_name)
-                    return self.evaluate(translated_field_name, field_value)
+                    return self.evaluate_streamfield(translated_field_name, field_value, streamfield_id)
                 else:
                     # if the section doesnt have a header and a page attached, the section isn't added to the
                     # cleaned_data at all
@@ -140,6 +161,7 @@ class StreamFieldPublishRequirement(BasePublishRequirement):
                         "field_name": field_name,
                         "message": self.message,
                         "field_type": self.field_type,
+                        "streamfield_id": self.streamfield_id,
                     })
                     return {
                         "passed": False,
@@ -149,7 +171,7 @@ class StreamFieldPublishRequirement(BasePublishRequirement):
         else:
             # If field is not translated, then get check value of "field_name"
             field_value = data.get(field_name)
-            return self.evaluate(field_name, field_value)
+            return self.evaluate_streamfield(field_name, field_value, streamfield_id)
 
 
 # sample
