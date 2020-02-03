@@ -7,7 +7,9 @@ const addRelationError = (field_name, messageElement) => {
 }
 
 const addStreamfieldError = (field_name, messageElement, streamfield_id) => {
-  $(streamfield_id).prepend(messageElement)
+  // $(streamfield_id).prepend(messageElement)
+  $(`label[for="id_steps_en"]`).parent().prepend(messageElement)
+  //id_steps_en grandparent
   // ^^^ this is showing up twice for the service page
 }
 
