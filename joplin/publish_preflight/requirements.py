@@ -116,6 +116,7 @@ class ConditionalPublishRequirement:
 
 
 class StreamFieldPublishRequirement(BasePublishRequirement):
+    """Publishing Requirement for Streamfields"""
     def __init__(self, field_name, criteria=streamfield_has_length, message=placeholder_message, langs=None,
                  streamfield_id=".stream-field"):
         self.field_type = "streamfield"
@@ -126,6 +127,13 @@ class StreamFieldPublishRequirement(BasePublishRequirement):
         self.streamfield_id = streamfield_id
 
     def evaluate_streamfield(self, field_name, field_value, streamfield_id):
+        """
+        :param field_name: name of required field
+        :param field_value: value of required field
+        :param streamfield_id: selector passed to PublishRequirementError for publishing the error
+        :return: dictionary with "passed", a boolean of the result of checking the field_value against the criteria.
+        If false, a PublishRequirementError is included
+        """
         result = self.criteria(field_value)
         if not result:
             publish_requirement_error = PublishRequirementError(self.message, publish_error_data={
@@ -144,6 +152,15 @@ class StreamFieldPublishRequirement(BasePublishRequirement):
             }
 
     def check_criteria(self, form):
+        """
+        Goes through form looking for the field_name, appending the appropriate language tag to end of field_name
+        if self.langs. Calls self.evaluate_streamfield if field_name exists, otherwise returns a PublishRequirementError
+
+        If the streamfield is missing elements, the form does not include it in cleaned_data.
+
+        :param form: form being checked
+        :return: result of self.evaluate_streamfield
+        """
         field_name = self.field_name
         streamfield_id = self.streamfield_id
         data = form.cleaned_data

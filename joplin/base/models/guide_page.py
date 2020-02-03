@@ -23,7 +23,10 @@ from publish_preflight.requirements import FieldPublishRequirement, StreamFieldP
 
 
 def streamfield_has_pages(stream_value):
-    print(stream_value)
+    """
+    Confirms the stream_value has data, and the data contains both pages and an english section_heading
+    :return: boolean
+    """
     if stream_value:
         stream_data = stream_value.stream_data
         # check that we have any data in the streamfield
