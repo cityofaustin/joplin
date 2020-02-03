@@ -36,5 +36,10 @@ countConfig = {'data-count': 'characters',
 
 countConfigTextArea = {'data-count': 'characters',
                        'data-max-count': 254, 'data-count-direction': 'down'}
+
+countConfigLongTextArea = {'data-count': 'characters',
+                       'data-max-count': 600, 'data-count-direction': 'down'}
+
 countMe = widgets.CountableTextInputWidget(attrs=countConfig)
 countMeTextArea = widgets.CountableWidget(attrs=countConfigTextArea)
+countMeLongTextArea = widgets.CountableWidget(attrs=countConfigLongTextArea)
