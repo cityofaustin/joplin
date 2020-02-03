@@ -28,6 +28,7 @@ from base.models import (
 from .content_type_map import content_type_map
 import traceback
 from locations.models import LocationPage, LocationPageRelatedServices
+from events.models import EventPage, EventPageFee, EventPageRelatedDepartments
 
 
 class RichTextFieldType(Scalar):
@@ -191,6 +192,145 @@ class LocationPageNode(DjangoObjectType):
 class LocationPageRelatedServices(DjangoObjectType):
     class Meta:
         model = LocationPageRelatedServices
+        interfaces = [graphene.Node]
+
+# Not final name, wating on Content team for decision
+class EventPageRemoteLocation(graphene.ObjectType):
+    value = GenericScalar()
+
+    street = graphene.String()
+    unit = graphene.String()
+    city = graphene.String()
+    state = graphene.String()
+    zip = graphene.String()
+
+    def resolve_street(self, info):
+        return self.value['street']
+
+    def resolve_unit(self, info):
+        return self.value['unit']
+
+    def resolve_city(self, info):
+        return self.value['city']
+
+    def resolve_state(self, info):
+        return self.value['state']
+
+    def resolve_zip(self, info):
+        return self.value['zip']
+
+    name = graphene.String()
+
+    def resolve_name(self, info):
+        # We're doing our own translations in our model here
+        # so let's make sure the API returns the appropriate name for:
+        '''
+        remoteLocation {
+            name
+        }
+        '''
+        # based on the Accept-Language header of the request
+        if django.utils.translation.get_language() == 'en':
+            return self.value['name_en']
+        elif django.utils.translation.get_language() == 'es':
+            # if there is not a spanish translation available, return english
+            if self.value['name_es'] == '':
+                return self.value['name_en']
+            return self.value['name_es']
+        elif django.utils.translation.get_language() == 'ar':
+            return self.value['name_ar']
+        elif django.utils.translation.get_language() == 'vi':
+            return self.value['name_vi']
+
+# In order to support "pick city or not but not both" functionality:
+# While only displaying the relevant fields for the selected type
+# We decided on using streamfields and setting up a max_num in them
+# https://github.com/cityofaustin/techstack/issues/3851
+# 
+# A custom resolver is needed to make streamfields queryable
+# so if we want the API to support queries like:
+"""
+
+eventPage {
+    location {
+        city_location {
+            physicalLocation
+        }
+    }
+}
+"""
+# instead of just getting predetermined fields back from queries like:
+"""
+eventPage {
+    location
+}
+"""
+# we need to use a custom resolver
+# we could also try to make our streamfield type queryable,
+# but that is a rabbit hole I haven't jumped all the way down yet
+class EventPageLocation(graphene.ObjectType):
+    value = GenericScalar()
+    location_type = graphene.String()
+    additional_details = graphene.String()
+    city_location = graphene.Field(LocationPageNode)
+    remote_location = graphene.Field(EventPageRemoteLocation)
+
+    def resolve_additional_details(self, info):
+        # We're doing our own translations in our model here
+        # so let's make sure the API still works as expected
+        if django.utils.translation.get_language() == 'en':
+            return self.value['additional_details_en']
+        elif django.utils.translation.get_language() == 'es':
+            # if there is not a spanish translation available, return english
+            if self.value['additional_details_es'] == '':
+                return self.value['additional_details_en']
+            return self.value['additional_details_es']
+        elif django.utils.translation.get_language() == 'ar':
+            return self.value['additional_details_ar']
+        elif django.utils.translation.get_language() == 'vi':
+            return self.value['additional_details_vi']
+
+    def resolve_city_location(self, info):
+        page = None
+        if self.location_type == 'city_location':
+            try:
+                page = LocationPage.objects.get(id=self.value['location_page'])
+            except ObjectDoesNotExist:
+                pass
+            return page
+
+    def resolve_remote_location(self, info):
+        if self.location_type == 'remote_location':
+            return EventPageRemoteLocation(value=self.value)
+
+
+class EventPageNode(DjangoObjectType):
+    locations = graphene.List(EventPageLocation)
+
+    class Meta:
+        model = EventPage
+        filter_fields = ['id', 'slug', 'live']
+        interfaces = [graphene.Node]
+
+    def resolve_locations(self, info):
+        repr_locations = []
+        for block in self.location_blocks.stream_data:
+            value = block.get('value')
+            location_type = block.get('type')
+            repr_locations.append(EventPageLocation(value=value, location_type=location_type))
+
+        return repr_locations
+
+
+class EventPageFeeNode(DjangoObjectType):
+    class Meta:
+        model = EventPageFee
+        interfaces = [graphene.Node]
+
+
+class EventPageRelatedDepartmentsNode(DjangoObjectType):
+    class Meta:
+        model = EventPageRelatedDepartments
         interfaces = [graphene.Node]
 
 
@@ -518,6 +658,7 @@ class PageRevisionNode(DjangoObjectType):
     as_guide_page = graphene.NonNull(GuidePageNode)
     as_form_container = graphene.NonNull(FormContainerNode)
     as_location_page = graphene.NonNull(LocationPageNode)
+    as_event_page = graphene.NonNull(EventPageNode)
 
     def resolve_as_service_page(self, resolve_info, *args, **kwargs):
         return self.as_page_object()
@@ -546,6 +687,9 @@ class PageRevisionNode(DjangoObjectType):
     def resolve_as_location_page(self, resolve_info, *args, **kwargs):
         return self.as_page_object()
 
+    def resolve_as_event_page(self, resolve_info, *args, **kwargs):
+        return self.as_page_object()
+
     class Meta:
         model = PageRevision
         filter_fields = ['id']
@@ -561,6 +705,12 @@ def get_structure_for_content_type(content_type):
     pages = content_type_data["model"].objects.all()
     for page in pages:
         page_global_id = graphene.Node.to_global_id(content_type_data["node"], page.id)
+
+        # Only publish event pages at the date based url
+        if content_type == 'event page':
+            if page.date:
+                site_structure.append({'url': f'/event/{page.date.year}/{page.date.month}/{page.date.day}/{page.slug}/', 'type': content_type, 'id': page_global_id})
+            continue
 
         if page.coa_global:
             site_structure.append({'url': f'/{page.slug}/', 'type': content_type, 'id': page_global_id})
@@ -631,6 +781,7 @@ class SiteStructure(graphene.ObjectType):
         site_structure.extend(get_structure_for_content_type('guide page'))
         site_structure.extend(get_structure_for_content_type('form container'))
         site_structure.extend(get_structure_for_content_type('location page'))
+        site_structure.extend(get_structure_for_content_type('event page'))
 
         return site_structure
 
@@ -809,6 +960,7 @@ class Query(graphene.ObjectType):
     all_guide_page_topics = DjangoFilterConnectionField(GuidePageTopicNode)
     all_location_pages = DjangoFilterConnectionField(LocationPageNode)
     all_form_container_topics = DjangoFilterConnectionField(FormContainerTopicNode)
+    all_event_pages = DjangoFilterConnectionField(EventPageNode)
 
     def resolve_site_structure(self, resolve_info):
         site_structure = SiteStructure()

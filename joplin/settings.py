@@ -83,6 +83,7 @@ INSTALLED_APPS = [
     'flags',
     'locations',
     'publish_preflight',
+    'events',
     'silk',
 ]
 
