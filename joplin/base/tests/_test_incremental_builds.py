@@ -108,4 +108,3 @@ class TestCollectPages(TestCase):
         # complaint and discipline documents page
         global_page_id = Node.to_global_id(page.get_verbose_name().lower(), page.id)
         self.assertTrue(global_page_id in global_ids)
-

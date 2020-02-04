@@ -3,17 +3,16 @@ from django.test import TestCase
 
 from .utils.make_form import make_form
 from .utils.load_test_data import load_test_data
-
-from base.models import \
-    InformationPage, InformationPageTopic, \
-    TopicPage, TopicCollectionPage, TopicPageTopicCollection,\
+from base.models import (
+    InformationPage, InformationPageTopic,
+    TopicPage, TopicCollectionPage, TopicPageTopicCollection,
     DepartmentPage
+)
 
-# pipenv run joplin/manage.py test publish_preflight.tests.information_page_test
+# pipenv run joplin/manage.py test publish_preflight.tests.test_information_page_publish_preflight
 class PublishPreflightInformationPage(TestCase):
+    # Load fresh data for every test to avoid cross-contamination
     def setUp(self):
-        os.environ['DEPLOYMENT_MODE'] = "TEST"
-
         test_data = load_test_data()
         for key in test_data:
             setattr(self, key, test_data[key])
