@@ -6,11 +6,6 @@ class ServicePageForm(PublishPreflightForm):
         super().__init__(*args, **kwargs)
 
 
-class ProcessPageForm(PublishPreflightForm):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-
 class InformationPageForm(PublishPreflightForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
