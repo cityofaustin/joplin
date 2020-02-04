@@ -19,6 +19,7 @@ from countable_field import widgets
 
 from publish_preflight.requirements import FieldPublishRequirement, RelationPublishRequirement, ConditionalPublishRequirement
 
+
 class InformationPage(JanisBasePage):
     janis_url_page_type = "information"
 

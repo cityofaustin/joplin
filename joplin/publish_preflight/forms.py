@@ -1,5 +1,6 @@
 from wagtail.admin.forms import WagtailAdminPageForm
 
+
 class PublishPreflightForm(WagtailAdminPageForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

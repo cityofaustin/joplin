@@ -19,6 +19,23 @@ from .translated_image import TranslatedImage
 
 from .widgets import countMe, countMeTextArea
 
+from publish_preflight.requirements import FieldPublishRequirement, RelationPublishRequirement, StreamFieldPublishRequirement
+
+
+def streamfield_has_pages(stream_value):
+    """
+    Confirms the stream_value has data, and the data contains both pages and an english section_heading
+    :return: boolean
+    """
+    if stream_value:
+        stream_data = stream_value.stream_data
+        # check that we have any data in the streamfield
+        if stream_data:
+            struct_value = stream_data[0][1]
+            if struct_value.get('pages') and struct_value.get('section_heading_en'):
+                return True
+    return False
+
 
 class GuidePage(JanisBasePage):
     janis_url_page_type = "guide"
@@ -45,10 +62,10 @@ class GuidePage(JanisBasePage):
 
     base_form_class = GuidePageForm
 
-    fields_required_for_publish = (
-        'description_en',
-        'contacts',
-        'sections',
+    publish_requirements = (
+        FieldPublishRequirement("description", message="A description is required", langs=["en"]),
+        RelationPublishRequirement("contacts", message="contacts are neeeeeeeeded"),
+        StreamFieldPublishRequirement("sections", criteria=streamfield_has_pages),
     )
 
     content_panels = [
