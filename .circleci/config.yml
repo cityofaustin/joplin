@@ -98,6 +98,7 @@ workflows:
   version: 2.1
   deploy:
     jobs:
+      - test
       - deploy:
           is_master: true
           is_master_or_production: true
