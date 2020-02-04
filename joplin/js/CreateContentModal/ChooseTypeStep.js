@@ -11,11 +11,18 @@ import topicCollectionImage from '../../static/images/topic_collection.png';
 import topicsImage from '../../static/images/topics.png';
 import formContainerImage from '../../static/images/info_page.png'; // TODO: get a png for forms from the xd
 import locationImage from '../../static/images/location.png';
+import eventImage from '../../static/images/event.png';
 
-const PageTypeComponent = ({type, handleTypeSelect, name, image, description}) => (
+const PageTypeComponent = ({
+  type,
+  handleTypeSelect,
+  name,
+  image,
+  description,
+}) => (
   <div
     className="ChooseTypeStep__option"
-    onClick={() => handleTypeSelect({type})}
+    onClick={() => handleTypeSelect({ type })}
   >
     <h3 className="ChooseTypeStep__option-header">{name}</h3>
     <img src={image} alt={name} />
@@ -36,44 +43,54 @@ const ChooseTypeStep = ({
       type: 'service',
       name: 'Service Page',
       image: servicePageImage,
-      description: 'A step by step guide to a particular city service.'
+      description: 'A step by step guide to a particular city service.',
     },
     {
       type: 'information',
       name: 'Information Page',
       image: infoPageImage,
-      description: 'Provides supplementary information and resources to support service delivery.'
+      description:
+        'Provides supplementary information and resources to support service delivery.',
     },
     {
       type: 'department',
       name: 'Department Page',
       image: departmentPageImage,
-      description: 'Basic information and contact details for a department.'
+      description: 'Basic information and contact details for a department.',
     },
     {
       type: 'guide',
       name: 'Guide',
       image: guideImage,
-      description: 'A collection of pages for a complicated process, organized into sections.'
+      description:
+        'A collection of pages for a complicated process, organized into sections.',
     },
     {
       type: 'location',
       name: 'Location',
       image: locationImage,
-      description: 'Provides service, travel, and contact details for a location.'
+      description:
+        'Provides service, travel, and contact details for a location.',
     },
     {
       type: 'documents',
       name: 'Official document list',
       image: documentsImage,
-      description: 'Summaries and links to official documents'
+      description: 'Summaries and links to official documents',
     },
     {
       type: 'form',
       name: 'Form container',
       image: formContainerImage,
-      description: 'Container for an embedded Formstack form'
-    }
+      description: 'Container for an embedded Formstack form',
+    },
+    {
+      type: 'event',
+      name: 'Event',
+      image: eventImage,
+      description:
+        'An activity that occurs at a particular time and place and is not a service.',
+    },
   ];
 
   const topicPages = [
@@ -81,15 +98,17 @@ const ChooseTypeStep = ({
       type: 'topic',
       name: 'Topics',
       image: topicsImage,
-      description: 'Topics are landing pages that contain links to all pages on a particular subject'
+      description:
+        'Topics are landing pages that contain links to all pages on a particular subject',
     },
     {
       type: 'topiccollection',
       name: 'Topic Collection',
       image: topicCollectionImage,
-      description: 'Topic collections are landing pages that show similar topics within a larger subject'
-    }
-  ]
+      description:
+        'Topic collections are landing pages that show similar topics within a larger subject',
+    },
+  ];
 
   return (
     <div className="CreateContentModal__step">
@@ -117,7 +136,7 @@ const ChooseTypeStep = ({
           {content && (
             <React.Fragment>
               {contentPages.map((contentPage, index) => (
-                <PageTypeComponent 
+                <PageTypeComponent
                   type={contentPage.type}
                   handleTypeSelect={handleTypeSelect}
                   name={contentPage.name}
@@ -130,7 +149,7 @@ const ChooseTypeStep = ({
           {topic && (
             <React.Fragment>
               {topicPages.map((topicPage, index) => (
-                <PageTypeComponent 
+                <PageTypeComponent
                   type={topicPage.type}
                   handleTypeSelect={handleTypeSelect}
                   name={topicPage.name}

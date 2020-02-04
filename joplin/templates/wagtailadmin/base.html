@@ -17,7 +17,6 @@
 const ISPRODUCTION = '{{ISPRODUCTION}}';
 </script>
 {% render_bundle 'admin' %}
-{% render_bundle 'publishPreflight' %}
 {% if ISPRODUCTION == False %}
   {% render_bundle 'theme' %}
 {% endif %}

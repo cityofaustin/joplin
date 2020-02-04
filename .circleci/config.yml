@@ -1,6 +1,38 @@
 version: 2.1
 
 jobs:
+  test:
+    docker:
+      - image: circleci/python:3.7.5-stretch
+      - image: circleci/postgres:10
+        environment:
+          POSTGRES_USER: root
+          POSTGRES_DB: circle_ci_test
+    steps:
+      - checkout
+      - run: sudo chown -R circleci:circleci /usr/local/bin
+      - run: sudo chown -R circleci:circleci /usr/local/lib/python3.7/site-packages
+      - restore_cache:
+          keys:
+            - deps-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
+            # fallback to using the latest cache if no exact match is found
+            - deps-{{ .Branch }}-
+            - deps-
+      - run:
+          name: install dependencies
+          command: |
+            sudo pip install pipenv
+            pipenv install
+      - save_cache:
+          paths:
+            - ".venv"
+            - "/usr/local/bin"
+            - "/usr/local/lib/python3.7/site-packages"
+          key: deps-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
+      - run:
+          name: Run tests
+          command: |
+            pipenv run sh .circleci/scripts/run_tests.sh
   deploy:
     docker:
       - image: cityofaustin/joplin-ci:e228591

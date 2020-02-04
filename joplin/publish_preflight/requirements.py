@@ -9,38 +9,54 @@ def is_not_empty(field_value):
         return not (not field_value)
 
 # Check if relation has at least one entry
+# And that there is at least 1 entry that is not set for deletion.
 # Default criteria for RelationPublishRequirement
 def has_at_least_one(relation_value):
-    return (len(relation_value) > 0)
+    return (
+        (len(relation_value) > 0) and
+        any(not i["DELETE"] for i in relation_value)
+    )
 
-placeholder_message = "Publish Requirement not met"
-
+# A ValidationError with an additional "publish_error_data" attribute
+# The "publish_error_data" attribute is passed to the frontend edit/ page
+# And used to add custom publishing error messages on fields.
 class PublishRequirementError(ValidationError):
     def __init__(self, *args, **kwargs):
         self.publish_error_data = kwargs.pop("publish_error_data", None)
         super(PublishRequirementError, self).__init__(*args, **kwargs)
 
+def publish_error_factory(field_name, field_type, message):
+    return {
+        "passed": False,
+        "publish_requirement_errors": [PublishRequirementError(message, publish_error_data={
+            "field_name": field_name,
+            "message": message,
+            "field_type": field_type,
+        })]
+    }
+
+def publish_success_factory():
+    return {
+        "passed": True,
+    }
+
 class BasePublishRequirement():
+    # Used by FieldPublishRequirement and RelationPublishRequirement
+    # All PublishRequirements return data in the same structure
     def evaluate(self, field_name, field_value):
         result = self.criteria(field_value)
         if not result:
-            publish_requirement_error = PublishRequirementError(self.message, publish_error_data={
-                "field_name": field_name,
-                "message": self.message,
-                "field_type": self.field_type,
-            })
-            return {
-                "passed": False,
-                "publish_requirement_error": publish_requirement_error,
-            }
+            return publish_error_factory(
+                field_name,
+                self.field_type,
+                self.message,
+            )
         else:
-            return {
-                "passed": True,
-            }
+            return publish_success_factory()
 
 # A Publish Requirement for a simple field
 class FieldPublishRequirement(BasePublishRequirement):
-    def __init__(self, field_name, criteria=is_not_empty, message=placeholder_message, langs=None):
+    def __init__(self, field_name, criteria=is_not_empty, message=None, langs=None):
         self.field_type = "field"
         self.field_name = field_name
         self.criteria = criteria
@@ -66,7 +82,7 @@ class FieldPublishRequirement(BasePublishRequirement):
 
 # A Publish Requirement for a related ClusterableModel
 class RelationPublishRequirement(BasePublishRequirement):
-    def __init__(self, field_name, criteria=has_at_least_one, message=placeholder_message):
+    def __init__(self, field_name, criteria=has_at_least_one, message=None):
         self.field_type = "relation"
         self.field_name = field_name
         self.criteria = criteria
@@ -82,9 +98,9 @@ class RelationPublishRequirement(BasePublishRequirement):
             raise KeyError(f"Field required for publish '{field_name}' does not exist.")
 
 class ConditionalPublishRequirement():
-    def __init__(self, requirement1, operation, requirement2, message=placeholder_message):
+    def __init__(self, requirement1, operation, requirement2, message=None):
         self.requirement1 = requirement1
-        self.operation = operation
+        self.operation = self.operation_map[operation]
         self.requirement2 = requirement2
         self.message = message
 
@@ -93,26 +109,25 @@ class ConditionalPublishRequirement():
         "and": lambda a,b: a and b,
     }
 
-    # TODO: finish
-    def check_criteria(self, value):
-        op_func = self.operation_map[self.operation]
-        return op_func(
-            self.requirement1.check_criteria(value),
-            self.requirement2.check_criteria(value),
-        )
-
-# sample
-publish_requirements = (
-    FieldPublishRequirement("description", langs=["en"]),
-    FieldPublishRequirement("additional_content", langs=["en"]),
-    ConditionalPublishRequirement(
-        RelationPublishRequirement("topic"),
-        "or",
-        ConditionalPublishRequirement(
-            RelationPublishRequirement("related_department"),
-            "or",
-            FieldPublishRequirement("coa_global"),
-        ),
-        message="You must have at least 1 topic or 1 department or 'Top Level' checked."
-    ),
-)
+    def check_criteria(self, form):
+        result1 = self.requirement1.check_criteria(form)
+        result2 = self.requirement2.check_criteria(form)
+        if not self.operation(
+            result1["passed"],
+            result2["passed"],
+        ):
+            conditional_result = {
+                "passed": False,
+                "publish_requirement_errors": [],
+            }
+            for result in (result1, result2):
+                if not result["passed"]:
+                    for error in result["publish_requirement_errors"]:
+                        # Use message from ConditionalPublishRequirement
+                        # if nested PublishRequirement did not specify a message
+                        if not error.publish_error_data["message"]:
+                            error.publish_error_data["message"] = self.message
+                        conditional_result["publish_requirement_errors"].append(error)
+            return conditional_result
+        else:
+            return publish_success_factory()
