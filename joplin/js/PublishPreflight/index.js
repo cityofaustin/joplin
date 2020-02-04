@@ -1,5 +1,6 @@
 import './messages.scss';
 
+// Removes multiple error messages that would pop up as a result of publish_preflight
 $(function() {
   let messages = $(".messages");
   if (
