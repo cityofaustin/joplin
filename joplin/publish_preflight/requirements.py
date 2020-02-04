@@ -177,7 +177,7 @@ class StreamFieldPublishRequirement(BasePublishRequirement):
             })
             return {
                 "passed": False,
-                "publish_requirement_error": publish_requirement_error,
+                "publish_requirement_errors": publish_requirement_error,
             }
         else:
             return {
@@ -213,7 +213,7 @@ class StreamFieldPublishRequirement(BasePublishRequirement):
                     })
                     return {
                         "passed": False,
-                        "publish_requirement_error": publish_requirement_error,
+                        "publish_requirement_errors": publish_requirement_error,
                     }
                     # raise KeyError(f"Field required for publish '{translated_field_name}' does not exist.")
         else:
