@@ -5,7 +5,7 @@ from modelcluster.models import ClusterableModel
 
 from wagtail.core.fields import RichTextField, StreamField
 from wagtail.core.blocks import RichTextBlock
-from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, MultiFieldPanel, PageChooserPanel, StreamFieldPanel
+from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, PageChooserPanel, StreamFieldPanel
 from wagtail.snippets.edit_handlers import SnippetChooserPanel
 
 from base.forms import InformationPageForm
@@ -14,7 +14,7 @@ from .janis_page import JanisBasePage
 from .contact import Contact
 
 from .constants import WYSIWYG_GENERAL
-from .widgets import countMe, countMeTextArea, AUTHOR_LIMITS
+from .widgets import countMe, countMeTextArea
 from countable_field import widgets
 
 from publish_preflight.requirements import FieldPublishRequirement, RelationPublishRequirement, ConditionalPublishRequirement

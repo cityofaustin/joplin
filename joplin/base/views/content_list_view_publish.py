@@ -12,6 +12,7 @@ from django.urls import reverse
 from django.conf import settings
 from base.models import ServicePage, ProcessPage, InformationPage, TopicPage, TopicCollectionPage, DepartmentPage, Theme, OfficialDocumentPage, GuidePage, FormContainer
 from locations.models import LocationPage
+from events.models import EventPage
 from base.models.site_settings import JanisBranchSettings
 from django.contrib.contenttypes.models import ContentType
 import json
