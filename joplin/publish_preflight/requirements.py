@@ -150,14 +150,12 @@ class ConditionalPublishRequirement():
 
 class StreamFieldPublishRequirement(BasePublishRequirement):
     """Publishing Requirement for Streamfields"""
-    def __init__(self, field_name, criteria=streamfield_has_length, message="Publish Requirement not met", langs=None,
-                 streamfield_id=".stream-field"):
+    def __init__(self, field_name, criteria=streamfield_has_length, message="Publish Requirement not met", langs=None):
         self.field_type = "streamfield"
         self.field_name = field_name
         self.criteria = criteria
         self.message = message
         self.langs = langs
-        self.streamfield_id = streamfield_id
 
     def evaluate_streamfield(self, field_name, field_value, streamfield_id):
         """
@@ -193,7 +191,6 @@ class StreamFieldPublishRequirement(BasePublishRequirement):
         :return: result of self.evaluate_streamfield
         """
         field_name = self.field_name
-        streamfield_id = self.streamfield_id
         data = form.cleaned_data
         # If field is translated, then check value of each applicable language
         if self.langs:
@@ -201,23 +198,17 @@ class StreamFieldPublishRequirement(BasePublishRequirement):
                 translated_field_name = f'{self.field_name}_{lang}'
                 if translated_field_name in data:
                     field_value = data.get(translated_field_name)
-                    return self.evaluate_streamfield(translated_field_name, field_value, streamfield_id)
+                    return self.evaluate(translated_field_name, field_value)
                 else:
                     # if the section doesnt have a header and a page attached, the section isn't added to the
                     # cleaned_data at all
-                    publish_requirement_error = PublishRequirementError(self.message, publish_error_data={
-                        "field_name": field_name,
-                        "message": self.message,
-                        "field_type": self.field_type,
-                        "streamfield_id": self.streamfield_id,
-                    })
-                    return {
-                        "passed": False,
-                        "publish_requirement_errors": publish_requirement_error,
-                    }
-                    # raise KeyError(f"Field required for publish '{translated_field_name}' does not exist.")
+                    return publish_error_factory(
+                        field_name,
+                        self.field_type,
+                        self.message,
+                    )
         else:
             # If field is not translated, then get check value of "field_name"
             field_value = data.get(field_name)
-            return self.evaluate_streamfield(field_name, field_value, streamfield_id)
+            return self.evaluate(field_name, field_value)
 

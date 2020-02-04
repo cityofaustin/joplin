@@ -6,13 +6,12 @@ const addRelationError = (field_name, messageElement) => {
   $(messageElement).insertBefore($(`ul[id='id_${field_name}-FORMS']`).parent().parent())
 }
 
-const addStreamfieldError = (field_name, messageElement, streamfield_id) => {
-  if (streamfield_id === "id_steps_en") {
-    $(`label[for="id_steps_en"]`).parent().prepend(messageElement)
-  }
-  if (streamfield_id === ".stream-field") {
-    $(".stream-field").prepend(messageElement)
-  }
+const addStreamfieldGuideError = (messageElement) => {
+  $(".stream-field").prepend(messageElement)
+}
+
+const addStreamfieldServiceError = (messageElement) => {
+  $(`label[for="id_steps_en"]`).parent().prepend(messageElement)
 }
 
 /**
@@ -30,7 +29,12 @@ const addPublishErrors = () => {
       } else if (data.field_type === "relation") {
         addRelationError(data.field_name, messageElement)
       } else if (data.field_type === "streamfield") {
-        addStreamfieldError(data.field_name, messageElement, data.streamfield_id)
+        if (data.field_name === 'sections') {
+          addStreamfieldGuideError(messageElement)
+        }
+        if (data.field_name === "steps_en") {
+          addStreamfieldServiceError(messageElement)
+        }
       }
     })
   }

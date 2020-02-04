@@ -63,8 +63,8 @@ class GuidePage(JanisBasePage):
     base_form_class = GuidePageForm
 
     publish_requirements = (
-        FieldPublishRequirement("description", langs=["en"]),
-        RelationPublishRequirement("contacts"),
+        FieldPublishRequirement("description", message="A description is required", langs=["en"]),
+        RelationPublishRequirement("contacts", message="contacts are neeeeeeeeded"),
         StreamFieldPublishRequirement("sections", criteria=streamfield_has_pages),
     )
 
