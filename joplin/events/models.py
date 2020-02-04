@@ -14,7 +14,7 @@ from wagtail.core.fields import RichTextField, StreamField
 from wagtail.core.models import Orderable
 from wagtail.admin.edit_handlers import FieldPanel, PageChooserPanel, HelpPanel
 from base.models import JanisBasePage
-from base.models.widgets import countMe, countMeLongTextArea, AUTHOR_LIMITS
+from base.models.widgets import countMe, AUTHOR_LIMITS
 from modelcluster.models import ClusterableModel
 from base.models.constants import DEFAULT_MAX_LENGTH, WYSIWYG_GENERAL
 from wagtail.snippets.edit_handlers import SnippetChooserPanel
