@@ -25,6 +25,7 @@ def streamfield_has_length(stream_value):
         return False
     return len(stream_value) > 0
 
+placeholder_message = "Publish Requirement not met"
 
 # A ValidationError with an additional "publish_error_data" attribute
 # The "publish_error_data" attribute is passed to the frontend edit/ page
@@ -53,8 +54,8 @@ def publish_success_factory():
 
 
 class BasePublishRequirement:
-    # Used by FieldPublishRequirement and RelationPublishRequirement
-    # All PublishRequirements return data in the same structure
+    # evaluate() is used by FieldPublishRequirement, StreamfieldPublishRequirement, and RelationPublishRequirement
+    # All PublishRequirements must return data in the same structure: either a publish_error_factory instance or a publish_success_factory instance
     def evaluate(self, field_name, field_value):
         result = self.criteria(field_value)
         if not result:
@@ -69,7 +70,7 @@ class BasePublishRequirement:
 
 # A Publish Requirement for a simple field
 class FieldPublishRequirement(BasePublishRequirement):
-    def __init__(self, field_name, criteria=is_not_empty, message=None, langs=None):
+    def __init__(self, field_name, criteria=is_not_empty, message=placeholder_message, langs=None):
         self.field_type = "field"
         self.field_name = field_name
         self.criteria = criteria
@@ -96,7 +97,7 @@ class FieldPublishRequirement(BasePublishRequirement):
 
 # A Publish Requirement for a related ClusterableModel
 class RelationPublishRequirement(BasePublishRequirement):
-    def __init__(self, field_name, criteria=has_at_least_one, message=None):
+    def __init__(self, field_name, criteria=has_at_least_one, message=placeholder_message):
         self.field_type = "relation"
         self.field_name = field_name
         self.criteria = criteria
@@ -112,8 +113,8 @@ class RelationPublishRequirement(BasePublishRequirement):
             raise KeyError(f"Field required for publish '{field_name}' does not exist.")
 
 
-class ConditionalPublishRequirement():
-    def __init__(self, requirement1, operation, requirement2, message=None):
+class ConditionalPublishRequirement(BasePublishRequirement):
+    def __init__(self, requirement1, operation, requirement2, message=placeholder_message):
         self.requirement1 = requirement1
         self.operation = self.operation_map[operation]
         self.requirement2 = requirement2
@@ -150,7 +151,7 @@ class ConditionalPublishRequirement():
 
 class StreamFieldPublishRequirement(BasePublishRequirement):
     """Publishing Requirement for Streamfields"""
-    def __init__(self, field_name, criteria=streamfield_has_length, message="Publish Requirement not met", langs=None):
+    def __init__(self, field_name, criteria=streamfield_has_length, message=placeholder_message, langs=None):
         self.field_type = "streamfield"
         self.field_name = field_name
         self.criteria = criteria
@@ -186,4 +187,3 @@ class StreamFieldPublishRequirement(BasePublishRequirement):
             # If field is not translated, then get check value of "field_name"
             field_value = data.get(field_name)
             return self.evaluate(field_name, field_value)
-

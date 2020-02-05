@@ -15,6 +15,7 @@ from .janis_page import JanisBasePage
 from .constants import DEFAULT_MAX_LENGTH
 from .widgets import countMe, countMeTextArea, AUTHOR_LIMITS
 from countable_field import widgets
+from publish_preflight.requirements import FieldPublishRequirement, RelationPublishRequirement, ConditionalPublishRequirement
 
 """
 This is a page that displays a list of Official Documents (model: umentPageOfficialDocument).
@@ -30,9 +31,15 @@ class OfficialDocumentPage(JanisBasePage):
 
     description = models.TextField(blank=True)
 
-    fields_required_for_publish = (
-        'description_en',
-        'official_documents',
+    publish_requirements = (
+        FieldPublishRequirement("description", langs=["en"], message="You need to write a description before publishing"),
+        RelationPublishRequirement('official_documents'),
+        ConditionalPublishRequirement(
+            RelationPublishRequirement("topics"),
+            "or",
+            RelationPublishRequirement("related_departments"),
+            message="You must have at least 1 topic or 1 department selected.",
+        )
     )
 
     content_panels = [

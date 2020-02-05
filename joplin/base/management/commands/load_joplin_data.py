@@ -7,6 +7,7 @@ from base.models import DeploymentLog
 from django.db import connection
 from django.conf import settings
 
+
 class Command(BaseCommand):
     help = "Load initial seeding data into your app"
 
@@ -24,6 +25,25 @@ class Command(BaseCommand):
                 print(stderr.getvalue())
                 stderr.truncate(0)
                 raise
+
+        # Loads fixture data if it hasn't been loaded already
+        # operation_name: name of the operation for the DeploymentLog
+        # fixture_name: name of the fixture_name that the operation loads
+        # condition: condition required for this operation to be run
+        def load_fixture(operation_name, fixture_name, condition):
+            try:
+                info = DeploymentLog.objects.get(operation=operation_name)
+                result = info.completed
+                if result:
+                    print(f"Skipping previously loaded fixture {fixture_name}")
+            except ObjectDoesNotExist:
+                result = None
+            if (
+                not result and condition
+            ):
+                print(f"Adding fixture {fixture_name}")
+                run_load_data_command(fixture_name)
+                DeploymentLog(operation=operation_name, completed=True).save()
 
         try:
             # Load seeding data if data hasn't been loaded already
@@ -66,53 +86,27 @@ class Command(BaseCommand):
                 else:
                     print("Not adding any datadumps\n")
 
-            # Load test admin user if it hasn't been loaded already
-            try:
-                info = DeploymentLog.objects.get(operation="load_test_admin")
-                load_test_admin_result = info.completed
-                if load_test_admin_result:
-                    print("Already loaded test_admin")
-            except ObjectDoesNotExist:
-                load_test_admin_result = None
-            if (
-                not load_test_admin_result and
+            load_fixture(
+                "load_test_admin",
+                'db/fixtures/local_admin_user.json',
                 (os.getenv("DEPLOYMENT_MODE") == "LOCAL")
-            ):
-                print("Adding test admin user for development.")
-                run_load_data_command('db/fixtures/local_admin_user.json')
-                DeploymentLog(operation="load_test_admin", completed=True).save()
+            )
+            load_fixture(
+                "load_janis_branch_settings",
+                'db/fixtures/janis_branch_settings.json',
+                (not os.getenv("DEPLOYMENT_MODE") in ("STAGING", "PRODUCTION"))
+            )
+            load_fixture(
+                "set_group_permissions",
+                'db/fixtures/group_permissions_settings.json',
+                (not os.getenv("DEPLOYMENT_MODE") in ("STAGING", "PRODUCTION"))
+            )
+            load_fixture(
+                "set_themes",
+                'db/fixtures/themes.json',
+                (os.getenv("DEPLOYMENT_MODE") == "LOCAL")
+            )
 
-            # Load janis_branch_settings if they haven't been loaded already
-            try:
-                info = DeploymentLog.objects.get(operation="load_janis_branch_settings")
-                load_janis_branch_settings_result = info.completed
-                if load_janis_branch_settings_result:
-                    print("Already loaded janis_branch_settings")
-            except ObjectDoesNotExist:
-                load_janis_branch_settings_result = None
-            if (
-                not load_janis_branch_settings_result and
-                not os.getenv("DEPLOYMENT_MODE") in ("STAGING", "PRODUCTION")
-            ):
-                print("Adding Janis Branch settings")
-                run_load_data_command('db/fixtures/janis_branch_settings.json')
-                DeploymentLog(operation="load_janis_branch_settings", completed=True).save()
-
-            # Set group_permissions if they haven't been loaded already
-            try:
-                info = DeploymentLog.objects.get(operation="set_group_permissions")
-                set_group_permissions_result = info.completed
-                if set_group_permissions_result:
-                    print("Already set group_permissions")
-            except ObjectDoesNotExist:
-                set_group_permissions_result = None
-            if (
-                not set_group_permissions_result and
-                not os.getenv("DEPLOYMENT_MODE") in ("STAGING", "PRODUCTION")
-            ):
-                print("Setting editor and moderator group permissions")
-                run_load_data_command('db/fixtures/group_permissions_settings.json')
-                DeploymentLog(operation="set_group_permissions", completed=True).save()
         finally:
             stdout.close()
             stderr.close()

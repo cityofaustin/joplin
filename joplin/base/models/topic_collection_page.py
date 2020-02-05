@@ -8,6 +8,7 @@ from base.forms import TopicCollectionPageForm
 from .janis_page import JanisBasePage
 from .translated_image import TranslatedImage
 from .widgets import countMe, countMeTextArea
+from publish_preflight.requirements import FieldPublishRequirement
 
 
 class TopicCollectionPage(JanisBasePage):
@@ -26,8 +27,8 @@ class TopicCollectionPage(JanisBasePage):
 
     base_form_class = TopicCollectionPageForm
 
-    fields_required_for_publish = (
-        'theme'
+    publish_requirements = (
+        FieldPublishRequirement('theme'),
     )
 
     content_panels = [

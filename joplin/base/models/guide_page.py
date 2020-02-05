@@ -19,7 +19,7 @@ from .translated_image import TranslatedImage
 
 from .widgets import countMe, countMeTextArea
 
-from publish_preflight.requirements import FieldPublishRequirement, RelationPublishRequirement, StreamFieldPublishRequirement
+from publish_preflight.requirements import FieldPublishRequirement, RelationPublishRequirement, StreamFieldPublishRequirement, ConditionalPublishRequirement
 
 
 def streamfield_has_pages(stream_value):
@@ -63,9 +63,15 @@ class GuidePage(JanisBasePage):
     base_form_class = GuidePageForm
 
     publish_requirements = (
-        FieldPublishRequirement("description", message="A description is required", langs=["en"]),
-        RelationPublishRequirement("contacts", message="contacts are neeeeeeeeded"),
+        FieldPublishRequirement("description", message="A description is required for publishing", langs=["en"]),
+        RelationPublishRequirement("contacts", message="A contact is required for publishing."),
         StreamFieldPublishRequirement("sections", criteria=streamfield_has_pages),
+        ConditionalPublishRequirement(
+            RelationPublishRequirement("topics"),
+            "or",
+            RelationPublishRequirement("related_departments"),
+            message="You must have at least 1 topic or 1 department selected.",
+        ),
     )
 
     content_panels = [

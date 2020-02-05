@@ -9,6 +9,7 @@ from base.forms import FormContainerForm
 from .janis_page import JanisBasePage
 
 from .widgets import countMe, countMeTextArea
+from publish_preflight.requirements import FieldPublishRequirement, RelationPublishRequirement, ConditionalPublishRequirement
 
 class FormContainer(JanisBasePage):
     janis_url_page_type = "form"
@@ -21,11 +22,16 @@ class FormContainer(JanisBasePage):
         blank=True,
     )
 
-    fields_required_for_publish = (
-        'description_en',
-        'form_url_en',
+    publish_requirements = (
+        FieldPublishRequirement("description", langs=["en"]),
+        FieldPublishRequirement("form_url", langs=["en"]),
+        ConditionalPublishRequirement(
+            RelationPublishRequirement("topics"),
+            "or",
+            RelationPublishRequirement("related_departments"),
+            message="You must have at least 1 topic or 1 department selected.",
+        ),
     )
-
 
     content_panels = [
         FieldPanel('title_en', widget=countMe),

@@ -17,6 +17,7 @@ from base.forms import TopicPageForm
 from .janis_page import JanisBasePage
 from .translated_image import TranslatedImage
 from .widgets import countMe, countMeTextArea
+from publish_preflight.requirements import RelationPublishRequirement
 
 
 class TopicPage(JanisBasePage):
@@ -28,9 +29,9 @@ class TopicPage(JanisBasePage):
 
     base_form_class = TopicPageForm
 
-    fields_required_for_publish = (
-        'top_pages',
-        'topiccollections',
+    publish_requirements = (
+        RelationPublishRequirement('top_pages'),
+        RelationPublishRequirement('topiccollections'),
     )
 
     content_panels = [
