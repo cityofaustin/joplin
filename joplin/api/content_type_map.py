@@ -10,6 +10,8 @@ from locations.models import (
     LocationPage
 )
 
+from events.models import EventPage
+
 # Gain access to a content_type's node and model if you have it's name.
 # Helps reduce copypasta in api.schema.py
 content_type_map = {
@@ -36,5 +38,9 @@ content_type_map = {
     "location page": {
         "node": "LocationPageNode",
         "model": LocationPage
+    },
+    "event page": {
+        "node": "EventPageNode",
+        "model": EventPage
     }
 }

@@ -78,7 +78,8 @@ class JanisBasePage(Page):
                 'guide page',
                 'official document page',
                 'form container',
-                'location page'
+                'location page',
+                'event page'
             ]
             has_no_topic_collection = has_no_theme
 
@@ -86,7 +87,8 @@ class JanisBasePage(Page):
                 'topic page',
                 'topic collection page',
                 'department page',
-                'location page'
+                'location page',
+                'event page'
             ]
 
             theme_slug = (
@@ -122,6 +124,11 @@ class JanisBasePage(Page):
             if self.content_type.name == 'location page':
                 location_url = base_url + '/location/' + page_slug
                 return location_url
+
+            # Quick event page exception
+            if self.content_type.name == 'event page':
+                event_url = base_url + f'/event/{self.date.year}/{self.date.month}/{self.date.day}/{page_slug}/'
+                return event_url
 
             # attributes for the url are needed by not discovered yet lets fetch them
             # looking for missing elements, deducing content type from what works and what dosen't
@@ -255,11 +262,12 @@ class JanisBasePage(Page):
         try:
             if flag_enabled('SHOW_EXTRA_PANELS'):
                 editor_panels += (PermissionObjectList(cls.promote_panels,
-                                             heading='SEO'),
+                                                       heading='SEO'),
                                   PermissionObjectList(cls.settings_panels,
-                                             heading='Settings'))
+                                                       heading='Settings'))
         except ProgrammingError as e:
             print("some problem, maybe with flags")
+            print(traceback.format_exc())
             pass
 
         edit_handler = TabbedInterface(editor_panels)

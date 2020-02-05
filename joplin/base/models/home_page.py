@@ -14,7 +14,8 @@ class HomePage(Page):
         'base.InformationPage',
         'base.DepartmentPage',
         'base.TopicPage',
-        'locations.LocationPage'
+        'locations.LocationPage',
+        'events.EventPage'
     ]
 
     image = models.ForeignKey(TranslatedImage, null=True, on_delete=models.SET_NULL, related_name='+')

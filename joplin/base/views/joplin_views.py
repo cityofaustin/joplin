@@ -9,6 +9,7 @@ from django.urls import reverse
 from django.conf import settings
 from base.models import ServicePage, ProcessPage, InformationPage, TopicPage, TopicCollectionPage, DepartmentPage, Theme, OfficialDocumentPage, GuidePage, FormContainer
 from locations.models import LocationPage
+from events.models import EventPage
 from base.models.site_settings import JanisBranchSettings
 import json
 
@@ -103,6 +104,8 @@ def new_page_from_modal(request):
             page = FormContainer(**data)
         elif body['type'] == 'location':
             page = LocationPage(**data)
+        elif body['type'] == 'event':
+            page = EventPage(**data)
 
         # Add it as a child of home
         home = Page.objects.get(id=3)
