@@ -176,9 +176,7 @@ class LocationPageRelatedServices(Orderable):
 
     def clean(self):
         if self.hours_same_as_location is False and not any((getattr(self, field.name) for field in self.all_hours_fields)):
-            print('gonna raise an error someday soon when we uncomment the next line')
-            pass
-            # raise ValidationError({'hours_same_as_location': ('Please either check this or input hours for this service')})
+            raise ValidationError({'hours_same_as_location': ('Please either check this or input hours for this service')})
 
     panels = [
         PageChooserPanel("related_service"),
