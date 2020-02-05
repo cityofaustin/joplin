@@ -17,5 +17,15 @@ Joplin edited from Original file: https://github.com/wagtail/wagtail/blob/master
         {% if show_help_text|default_if_none:True and field.help_text %}
             <p class="help">{{ field.help_text }}</p>
         {% endif %}
+        {% comment %} uncomment this stuff to add errors back to fields,
+        but it will show on search page
+        {% if field|has_unrendered_errors %}
+    <p class="error-message">
+        {% for error in field.errors %}
+            <span>{{ error|escape }}</span>
+        {% endfor %}
+    </p>
+{% endif %}
+{% endcomment %}
     </div>
 </div>

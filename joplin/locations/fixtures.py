@@ -56,5 +56,6 @@ def create():
             print(e)
 
     create_fixtures()
+    save_to_file()
     dump_data()
     # cleanup()
