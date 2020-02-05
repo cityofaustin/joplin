@@ -102,6 +102,12 @@ def try_get_api_representation(StreamChild):
         print(traceback.format_exc())
 
 
+def handle_types(block_type, StreamChild):
+    if block_type == 'step_with_locations':
+        import pdb
+        pdb.set_trace()
+
+
 class StreamFieldType(Scalar):
     @staticmethod
     def serialize(StreamValue):
@@ -110,7 +116,7 @@ class StreamFieldType(Scalar):
         """
         expanded_streamfields = [
             {
-                'type': StreamChild.block_type,
+                'type': handle_types(StreamChild.block_type, StreamChild),
                 'value': try_get_api_representation(StreamChild),
                 'id': StreamChild.id
             } for StreamChild in StreamValue
