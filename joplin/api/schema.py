@@ -90,22 +90,24 @@ def try_get_api_representation(StreamChild):
     try:
         block = StreamChild.block.get_api_representation(StreamChild.value)
         # if the block is just a string (no dict at all), just return it expanded
+
         if isinstance(block, str):
             parsed_block = try_expand_db_html(block)
             return parsed_block
         elif isinstance(StreamChild, dict):
             parsed_block = {key: expand_by_type(key, value) for (key, value) in StreamChild.items()}
             return parsed_block
+        elif StreamChild.block_type == "step_with_locations":
+            location_pages = StreamChild.value['locations']
+            location_pages = [vars(LocationPageNode(location_page)) for location_page in location_pages]
+            StreamChild.value['locations'] = location_pages
+            import pdb
+            pdb.set_trace()
+
         return block
     except Exception as e:
         print('try_get_api_representation!', e)
         print(traceback.format_exc())
-
-
-def handle_types(block_type, StreamChild):
-    if block_type == 'step_with_locations':
-        import pdb
-        pdb.set_trace()
 
 
 class StreamFieldType(Scalar):
@@ -116,7 +118,7 @@ class StreamFieldType(Scalar):
         """
         expanded_streamfields = [
             {
-                'type': handle_types(StreamChild.block_type, StreamChild),
+                'type': StreamChild.block_type,
                 'value': try_get_api_representation(StreamChild),
                 'id': StreamChild.id
             } for StreamChild in StreamValue
