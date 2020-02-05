@@ -19,7 +19,7 @@ from .constants import WYSIWYG_GENERAL, SHORT_DESCRIPTION_LENGTH
 from .widgets import countMe, countMeTextArea
 
 
-WYSIWYG_SERVICE_STEP = ['ul', 'link', 'code', 'rich-text-button-link']
+WYSIWYG_SERVICE_STEP = ['ul', 'link', 'code', 'rich-text-button-link', 'document-link']
 
 
 class ServicePage(JanisBasePage):
