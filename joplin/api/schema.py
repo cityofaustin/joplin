@@ -86,20 +86,27 @@ def expand_by_type(key, value):
 
 
 def try_get_api_representation(StreamChild):
-    try:
-        block = StreamChild.block.get_api_representation(StreamChild.value)
-        # if the block is just a string (no dict at all), just return it expanded
-        if isinstance(block, str):
-            parsed_block = try_expand_db_html(block)
-            return parsed_block
-        else:
-            parsed_block = {key: expand_by_type(key, value) for (key, value) in block.items()}
+    if hasattr(StreamChild, 'value'):
+        try:
+            serialized_block = StreamChild.block.get_api_representation(StreamChild.value) or StreamChild.block
+            # if the block is just a string (no dict at all), just return it expanded
+            if isinstance(serialized_block, str):
+                parsed_block = try_expand_db_html(block)
+                return parsed_block
+            else:
+                parsed_block = {key: expand_by_type(key, value) for (key, value) in serialized_block.items()}
 
+            return parsed_block
+        except Exception as e:
+            # import pdb
+            # pdb.set_trace()
+            print('Streamfield API Exception!', e)
+            print(traceback.format_exc())
+            # return serialized_block
+            pass
+    elif isinstance(StreamChild, dict):
+        parsed_block = {key: expand_by_type(key, value) for (key, value) in StreamChild.items()}
         return parsed_block
-    except Exception as e:
-        print('Streamfield API Exception!', e)
-        print(traceback.format_exc())
-        return block
 
 
 class StreamFieldType(Scalar):
