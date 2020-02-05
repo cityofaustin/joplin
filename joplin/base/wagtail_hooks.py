@@ -24,6 +24,7 @@ from html.parser import HTMLParser
 
 import wagtail.admin.rich_text.editors.draftail.features as draftail_features
 from wagtail.admin.rich_text.converters.html_to_contentstate import BlockElementHandler
+import traceback
 
 
 # Following this: https://docs.python.org/3/library/html.parser.html#examples
@@ -290,7 +291,7 @@ class InternalLinkHandler(LinkHandler):
         except Page.DoesNotExist:
             return "<a>"
         except Exception as e:
-            print("!janis url hook error!:", self.title, e)
+            print("!janis url hook error!:", cls.title, e)
             print(traceback.format_exc())
             pass
 

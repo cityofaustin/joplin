@@ -91,7 +91,7 @@ def try_get_api_representation(StreamChild):
             serialized_block = StreamChild.block.get_api_representation(StreamChild.value) or StreamChild.block
             # if the block is just a string (no dict at all), just return it expanded
             if isinstance(serialized_block, str):
-                parsed_block = try_expand_db_html(block)
+                parsed_block = try_expand_db_html(serialized_block)
                 return parsed_block
             else:
                 parsed_block = {key: expand_by_type(key, value) for (key, value) in serialized_block.items()}
