@@ -58,7 +58,7 @@ def try_expand_db_html(parsed_item):
     try:
         return expand_db_html(parsed_item)
     except Exception as e:
-        print('Streamfield API Exception!', e)
+        print('try_expand_db_html!', e)
         print(traceback.format_exc())
         return parsed_item
 
@@ -93,14 +93,13 @@ def try_get_api_representation(StreamChild):
         if isinstance(block, str):
             parsed_block = try_expand_db_html(block)
             return parsed_block
-        else:
-            parsed_block = {key: expand_by_type(key, value) for (key, value) in block.items()}
-
-        return parsed_block
-    except Exception as e:
-        print('Streamfield API Exception!', e)
-        print(traceback.format_exc())
+        elif isinstance(StreamChild, dict):
+            parsed_block = {key: expand_by_type(key, value) for (key, value) in StreamChild.items()}
+            return parsed_block
         return block
+    except Exception as e:
+        print('try_get_api_representation!', e)
+        print(traceback.format_exc())
 
 
 class StreamFieldType(Scalar):
@@ -192,6 +191,7 @@ class LocationPageNode(DjangoObjectType):
 class LocationPageRelatedServices(DjangoObjectType):
     class Meta:
         model = LocationPageRelatedServices
+        fields = '__all__'
         interfaces = [graphene.Node]
 
 # Not final name, wating on Content team for decision
