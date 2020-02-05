@@ -23,7 +23,7 @@ jobs:
             - deps-{{ .Branch }}-
             - deps-
       - run:
-          name: install dependencies
+          name: Install dependencies
           command: |
             sudo pip install pipenv
             pipenv install
