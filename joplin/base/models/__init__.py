@@ -77,8 +77,6 @@ class ProcessPage(JanisBasePage):
                               blank=True, on_delete=models.SET_NULL, related_name='+')
     # TODO: Add images array field
 
-    base_form_class = custom_forms.ProcessPageForm
-
     content_panels = [
         InlinePanel('topics', label='Topics'),
         FieldPanel('department'),

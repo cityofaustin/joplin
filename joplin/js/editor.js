@@ -4,6 +4,7 @@ import '../css/preview.scss';
 import menuActiveState from './EditPage/menuActiveState';
 import toggleActivePanel from './SidebarPreview/toggleActivePanel';
 import richTextPlaceholder from './EditPage/richTextPlaceholder';
+import addPublishErrors from './EditPage/addPublishErrors';
 
 import _ from 'lodash';
 
@@ -11,6 +12,7 @@ $(function() {
   menuActiveState();
   toggleActivePanel();
   richTextPlaceholder();
+  addPublishErrors();
 
   var language = document.getElementById('language-select-wrapper');
   var content = document.getElementsByClassName('tab-nav merged')[0]
@@ -35,9 +37,10 @@ $(function() {
     'id_process_steps-quote': '#step-quote',
   };
 
-  // Get all labels and add styleguide links
+  // Get data from page and json_script templatetags
   const labels = document.querySelectorAll('label');
-  const styleGuideUrl = djangoData.styleGuideUrl;
+  const styleGuideUrl = JSON.parse(document.getElementById('style-guide-url').textContent);
+  const previewUrlData = JSON.parse(document.getElementById('preview-url-data').textContent);
 
   // initialize state
   const state = {
@@ -153,7 +156,6 @@ $(function() {
   }
 
   function getPreviewUrl(currentLang) {
-    const previewUrlData = djangoData.previewUrlData;
     const janisPreviewUrlStart = previewUrlData.janis_preview_url_start;
     const janisPreviewUrlEnd = previewUrlData.janis_preview_url_end;
     return `${janisPreviewUrlStart}/${currentLang}/${janisPreviewUrlEnd}`;
