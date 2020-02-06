@@ -90,17 +90,17 @@ def try_get_api_representation(StreamChild):
     try:
         block = StreamChild.block.get_api_representation(StreamChild.value)
         # if the block is just a string (no dict at all), just return it expanded
+
         if isinstance(block, str):
             parsed_block = try_expand_db_html(block)
             return parsed_block
-        else:
-            parsed_block = {key: expand_by_type(key, value) for (key, value) in block.items()}
-
-        return parsed_block
-    except Exception as e:
-        print('Streamfield API Exception!', e)
-        print(traceback.format_exc())
+        elif isinstance(StreamChild, dict):
+            parsed_block = {key: expand_by_type(key, value) for (key, value) in StreamChild.items()}
+            return parsed_block
         return block
+    except Exception as e:
+        print('try_get_api_representation!', e)
+        print(traceback.format_exc())
 
 
 class StreamFieldType(Scalar):
@@ -195,6 +195,8 @@ class LocationPageRelatedServices(DjangoObjectType):
         interfaces = [graphene.Node]
 
 # Not final name, wating on Content team for decision
+
+
 class EventPageRemoteLocation(graphene.ObjectType):
     value = GenericScalar()
 
@@ -242,11 +244,12 @@ class EventPageRemoteLocation(graphene.ObjectType):
         elif django.utils.translation.get_language() == 'vi':
             return self.value['name_vi']
 
+
 # In order to support "pick city or not but not both" functionality:
 # While only displaying the relevant fields for the selected type
 # We decided on using streamfields and setting up a max_num in them
 # https://github.com/cityofaustin/techstack/issues/3851
-# 
+#
 # A custom resolver is needed to make streamfields queryable
 # so if we want the API to support queries like:
 """
@@ -268,6 +271,8 @@ eventPage {
 # we need to use a custom resolver
 # we could also try to make our streamfield type queryable,
 # but that is a rabbit hole I haven't jumped all the way down yet
+
+
 class EventPageLocation(graphene.ObjectType):
     value = GenericScalar()
     location_type = graphene.String()
