@@ -91,7 +91,7 @@ class PublishPreflightInformationPage(TestCase):
             "topics-INITIAL_FORMS": "0",
             "topics-MIN_NUM_FORMS": "0",
             "topics-MAX_NUM_FORMS": "1000",
-            "topics-0-topic": "5",
+            "topics-0-topic": self.topic.pk,
             "topics-0-id": "",
             "topics-0-DELETE": "",
             "related_departments-TOTAL_FORMS": "0",
@@ -143,7 +143,6 @@ class PublishPreflightInformationPage(TestCase):
 
         fake_request = {
             'action-publish': 'action-publish',
-            'csrfmiddlewaretoken': '0PUP9eNUxte4lK95EPdY8mhPs1eqeMMjTQnWGXC755kSkEPK9fFHsZgm7dbwHKCB',
             'next': '',
             'select': 'English',
             'title_en': 'Adopt a baby tarantula',
@@ -154,7 +153,7 @@ class PublishPreflightInformationPage(TestCase):
             'topics-INITIAL_FORMS': '1',
             'topics-MIN_NUM_FORMS': '0',
             'topics-MAX_NUM_FORMS': '1000',
-            'topics-0-topic': '5',
+            'topics-0-topic': self.topic.pk,
             'topics-0-id': '1',
             'topics-0-DELETE': '1',
             'related_departments-TOTAL_FORMS': '0',
