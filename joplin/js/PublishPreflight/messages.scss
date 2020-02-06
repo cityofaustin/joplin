@@ -1,0 +1,12 @@
+.messages {
+  position: fixed;
+  top: 0px;
+  left: 130px;
+  width: 60%;
+}
+
+.close-message {
+  right: 1px;
+  z-index: 37 !important;
+  position: absolute;
+}

@@ -22,6 +22,7 @@ from .contact import Contact
 from .constants import DEFAULT_MAX_LENGTH, WYSIWYG_GENERAL
 from .widgets import countMe, AUTHOR_LIMITS
 from countable_field import widgets
+from publish_preflight.requirements import FieldPublishRequirement
 
 
 class DepartmentPage(JanisBasePage):
@@ -49,6 +50,10 @@ class DepartmentPage(JanisBasePage):
     )
 
     base_form_class = DepartmentPageForm
+
+    publish_requirements = (
+        FieldPublishRequirement("what_we_do", langs=["en"]),
+    )
 
     content_panels = [
         FieldPanel('title_en', widget=countMe),

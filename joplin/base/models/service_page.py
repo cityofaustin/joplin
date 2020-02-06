@@ -18,6 +18,8 @@ from .contact import Contact
 from .constants import WYSIWYG_GENERAL, SHORT_DESCRIPTION_LENGTH
 from .widgets import countMe, countMeTextArea
 
+from publish_preflight.requirements import FieldPublishRequirement, StreamFieldPublishRequirement, ConditionalPublishRequirement, RelationPublishRequirement
+
 
 WYSIWYG_SERVICE_STEP = ['ul', 'link', 'code', 'rich-text-button-link']
 
@@ -99,8 +101,22 @@ class ServicePage(JanisBasePage):
         verbose_name='Write a description of this service'
     )
 
-    content_panels = [
+    publish_requirements = (
+        FieldPublishRequirement("short_description", message="A description is required", langs=["en"]),
+        StreamFieldPublishRequirement("steps", langs=["en"]),
+        ConditionalPublishRequirement(
+            RelationPublishRequirement("topics"),
+            "or",
+            ConditionalPublishRequirement(
+                RelationPublishRequirement("related_departments"),
+                "or",
+                FieldPublishRequirement("coa_global"),
+            ),
+            message="You must have at least 1 topic or 1 department or 'Top Level' checked."
+        ),
+    )
 
+    content_panels = [
         FieldPanel('title_en', widget=countMe),
         FieldPanel('title_es', widget=countMe),
         FieldPanel('title_ar'),

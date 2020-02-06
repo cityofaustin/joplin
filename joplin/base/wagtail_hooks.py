@@ -218,14 +218,6 @@ def joplin_page_listing_more_buttons(page, page_perms, is_parent=False):
                 title=page.get_admin_display_title())},
             priority=40
         )
-    if page_perms.can_publish() and page.has_unpublished_changes:
-        yield Button(
-            _('Publish'),
-            reverse('publish', args=[page.id]),
-            attrs={'title': _("Publish page '{title}'").format(
-                title=page.get_admin_display_title())},
-            priority=50
-        )
     if not page.is_root():
         yield Button(
             _('Revisions'),
