@@ -87,22 +87,6 @@ def expand_by_type(key, value):
         try_get_api_representation(value)
 
 
-"""
-      locations {
-        locationPage {
-          id
-          slug
-          title
-          physicalStreet
-          physicalUnit
-          physicalCity
-          physicalState
-          physicalZip
-        }
-      }
-"""
-
-
 def try_get_api_representation(StreamChild):
     try:
         block = StreamChild.block.get_api_representation(StreamChild.value)
@@ -117,23 +101,24 @@ def try_get_api_representation(StreamChild):
         elif StreamChild.block_type == "step_with_locations":
             block = StreamChild.block.get_api_representation(StreamChild.value)
             location_pages = StreamChild.value['locations']
-            for location_page in location_pages:
-                lp = LocationPageNode(location_pages[location_page])
-                {
-                    "id": to_global_id(lp._meta.name, location_pages[location_page].id),
-                    "slug": location_pages[location_page].slug,
-                    "title": location_pages[location_page].title,
-                    "physicalStreet": location_pages[location_page].physical_street,
-                    "physicalUnit": location_pages[location_page].physical_unit,
-                    "physicalCity": location_pages[location_page].physical_city,
-                    "physicalState": location_pages[location_page].physical_state,
-                    "physicalZip": location_pages[location_page].physical_zip,
-                }
-            # location_pages = [vars(LocationPageNode(location_page)) for location_page in location_pages]
-            # StreamChild.value['locations'] = location_pages
-            import pdb
-            pdb.set_trace()
 
+            for index, location_page in enumerate(location_pages):
+                # cast as node so we can get the global id
+                lp = LocationPageNode(location_page)
+                parsed_location = {
+                    "locationPage": {
+                        "id": to_global_id(lp._meta.name, location_page.id),
+                        "slug": location_page.slug,
+                        "title": location_page.title,
+                        "physicalStreet": location_page.physical_street,
+                        "physicalUnit": location_page.physical_unit,
+                        "physicalCity": location_page.physical_city,
+                        "physicalState": location_page.physical_state,
+                        "physicalZip": location_page.physical_zip,
+                    }
+                }
+                # replace the pk entry in the StreamChild output with the parsed info above
+                block['locations'][index] = parsed_location
         return block
     except Exception as e:
         print('try_get_api_representation!', e)
