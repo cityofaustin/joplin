@@ -48,19 +48,6 @@ $(function() {
   for (const label of labels) {
     let id = label.getAttribute('for');
 
-    // // Since we're getting these ids let's set the title text appropriately
-    // if(id == "id_title") {
-    //   // Super hack here, use the preview url to figure out what kind of page we're editing
-    //   const previewRegex = /preview\/\w+\//g;
-    //   const previewUrl = document.getElementById('preview_url').value;
-    //   const previewTypeString = previewUrl.match(previewRegex)[0];
-    //   if(previewTypeString == "preview/department/") {
-    //     label.innerText = "Department Name"
-    //   } else {
-    //     label.innerText = "Write an actionable title"
-    //   }
-    // }
-
     // HACK: If we're dealing with subheadings in steps we need to remove the index
     if (id && id.includes('id_process_steps')) {
       const idTokens = id.split('-');
@@ -91,6 +78,8 @@ $(function() {
       $(label).append(link);
     }
   }
+
+  // todo also find out who wrote this and when
   // TODO: what is this for??
   $('.js-proxy-click').click(function() {
     let $this = $(this);
@@ -171,36 +160,34 @@ $(function() {
         .attr('href'),
     );
   }
+
   // Changes language and update janisPreviewUrl for our language
+  // hides the translation fields by selecting the fields and adding the hidden tag
   function changeLanguage(currentLang) {
     state.currentLang = currentLang;
     setTabToContent();
 
-    // replace brackets with hidden span tags
+    // replace brackets with hidden span tags and store lang tags in state
     function replaceLanguageLabels() {
-      const languageLabels = $('ul[class="objects"]').find(
-        'label:contains(" [")',
-      );
-      const structLabels = $(".c-sf-block").find('label:contains(" [")');
+      const languageLabels = $('ul[class="objects"]').find('label:contains(" [")');
+      const structlabels = $('label.field__label')
+      console.log(structlabels)
       if (languageLabels.length) {
+        // if state is undefined, set the language labels in state
         if (typeof state.languageLabels === 'undefined') {
           state.languageLabels = languageLabels;
+          state.structlabels = structlabels
         } else {
           for (let label in languageLabels) {
             state.languageLabels.push(languageLabels[label]);
           }
         }
+        console.log('instate ', state.languageLabels.length)
+        // replace brackets with hidden span tags
         languageLabels.each(function() {
           this.innerHTML = this.innerHTML.replace(
             '[',
-            " <span style='display:none;'>",
-          );
-          this.innerHTML = this.innerHTML.replace(']', '</span>');
-        });
-        structLabels.each(function() {
-          this.innerHTML = this.innerHTML.replace(
-            '[',
-            " <span style='color:#ff1493'>",
+            " <span class='translation' style='background-color:red'>",
           );
           this.innerHTML = this.innerHTML.replace(']', '</span>');
         });
@@ -211,11 +198,25 @@ $(function() {
     // TODO: refactor into a function, evaluate performance
     // have better variable namespace separation
     let labelList = state.languageLabels;
+    let structlabels = state.structlabels;
+    console.log(labelList.length, '  label list length')
+    let total = 0;
+    for (let struct in structlabels) {
+      console.log(struct)
+      structlabels[struct].style.border = "2px solid purple"
+    }
     for (let label in labelList) {
+      total++; // for some reason its only doing 8 of these, quits after the structblock
       if (labelList[label].querySelector) {
+        // language tag is either 'en', 'es', 'vi' or 'ar'
         let languageTag = labelList[label].querySelector('span').innerText;
+        console.log(languageTag, labelList[label])
         // these seem to be nested twice, from the title to the containing element
         // TODO: come up with a more elegant and maintainable way to check what elements ought to be hidden
+        labelList[label].style.border = "1px solid #FF1493"
+        labelList[label].parentElement.style.border = "3px solid green"
+        // labelList[label].parentElement.parentElement.style.border = "1px solid #FF1493"
+        // labelList[label].parentElement.parentElement.parentElement.style.border = "2px solid #1492FF"
         if (
           labelList[label].parentElement.parentElement.parentElement.classList
             .value !== 'rah-static rah-static--height-auto c-sf-block__content'
@@ -231,34 +232,40 @@ $(function() {
               it doesn't catch the case where there are 'struct-blocks' with language
               tages WITHIN the element itself. The following condition checks for those conditions.
               - The was neccessary for guide stream fields. */
-          if (translatedElement.classList.contains('struct-block')) {
-            const fieldlabels = translatedElement.querySelectorAll('[for]');
-            fieldlabels.forEach(fieldlabel => {
-              const attrFor = fieldlabel.getAttribute('for').split('_');
-              fieldlabel.parentNode.classList.remove('hidden');
-              // Adding a failsafe to make sure we don't remove non translated fields
-              const attrLang = attrFor[attrFor.length - 1];
-              if (['en', 'es', 'vi', 'ar'].includes(attrLang)) {
-                if (attrLang !== currentLang) {
-                  fieldlabel.parentNode.classList.add('hidden');
-                  translatedElement.classList.remove('hidden'); // only re-reveal the parent class if we find this case.
-                }
-              }
-            });
-          }
+//          if (translatedElement.classList.contains('struct-block')) {
+//            const fieldlabels = translatedElement.querySelectorAll('[for]');
+//            fieldlabels.forEach(fieldlabel => {
+//              const attrFor = fieldlabel.getAttribute('for').split('_');
+//              fieldlabel.parentNode.classList.remove('hidden');
+//              // Adding a failsafe to make sure we don't remove non translated fields
+//              const attrLang = attrFor[attrFor.length - 1];
+//              if (['en', 'es', 'vi', 'ar'].includes(attrLang)) {
+//                if (attrLang !== currentLang) {
+//                  fieldlabel.parentNode.classList.add('hidden');
+//                  translatedElement.classList.remove('hidden'); // only re-reveal the parent class if we find this case.
+//                }
+//              }
+//            });
+//          }
         } else {
           const translatedElement = labelList[label].parentElement;
+          console.log('ELSE:', translatedElement)
+          console.log(translatedElement.classList)
+          labelList[label].style.border("4px solid blue")
           if (languageTag != null && languageTag != currentLang) {
             translatedElement.classList.add('hidden');
           } else {
             translatedElement.classList.remove('hidden');
           }
         }
+      } else {
+        console.log(labelList[label], ' has no query selector')
       }
+      console.log(total)
     }
 
     // ----
-    // Switch the language for janisPreviewUrl
+    // Switch the language for janisPreviewUrl in state
     // ----
     const janisPreviewUrl = getPreviewUrl(currentLang);
     state.janisPreviewUrl = janisPreviewUrl;
@@ -281,6 +288,8 @@ $(function() {
     }
   }
 
+  // if we previously had a language stored in local storage, load the view for that language
+  // otherwise, we default to english
   if (localStorage.selected_lang) {
     state.currentLang = localStorage.selected_lang;
     updateSelectedLanguage(state.currentLang);
@@ -301,7 +310,6 @@ $(function() {
     localStorage.selected_lang = state.currentLang;
   });
 
- // new function to update the language selection when you open a new streamfield?
 
   // case function for setting the selected language on dropdown
   // maybe there is a less verbose way to do this?
@@ -362,6 +370,7 @@ $(function() {
   var structbutton = $('.c-sf-add-button');
   structbutton.click(function() {
     changeLanguage(state.currentLang)
+     updateSelectedLanguage(state.currentLang);
   })
 
   // Persist language for sharing even after page refreshes on save
@@ -388,6 +397,7 @@ $(function() {
       localStorage.sharingpreview = false;
     }
   });
+
   // Apply current language to new InlinePanels
   $('.add').click(function() {
     changeLanguage(state.currentLang);
@@ -403,12 +413,14 @@ $(function() {
   // we can do this by observing changes to our sections count
 
   $('#sections-count').change(function() {
+    console.log('sections-count!!')
     changeLanguage(state.currentLang);
     updateSelectedLanguage(state.currentLang);
   });
 
   // do the same with locations on events
   $('#location_blocks-count').change(function() {
+    console.log('locations count')
     changeLanguage(state.currentLang);
     updateSelectedLanguage(state.currentLang);
   });
@@ -429,11 +441,13 @@ $(function() {
 
   // make sure observe all of them
   $('#sections-count').each(function(index, element) {
+    console.log('sections count')
     trackChange(element);
   });
 
   // make sure observe all of them
   $('#location_blocks-count').each(function(index, element) {
+    console.log('location blocks')
     trackChange(element);
   });
 
