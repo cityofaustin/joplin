@@ -201,27 +201,27 @@ $(function() {
     let structlabels = state.structlabels;
     console.log(labelList.length, '  label list length')
     let total = 0;
-    for (let struct in structlabels) {
-      console.log(struct)
-      structlabels[struct].style.border = "2px solid purple"
-    }
-    for (let label in labelList) {
+//    for (let struct in structlabels) {
+//      structlabels[struct].style.border = "2px solid purple"
+//    }
+    for (let label of labelList) {
+      console.log('label counter ',  label)
       total++; // for some reason its only doing 8 of these, quits after the structblock
-      if (labelList[label].querySelector) {
+      if (label.querySelector) {
         // language tag is either 'en', 'es', 'vi' or 'ar'
-        let languageTag = labelList[label].querySelector('span').innerText;
-        console.log(languageTag, labelList[label])
+        let languageTag = label.querySelector('span').innerText;
+        console.log(languageTag, label)
         // these seem to be nested twice, from the title to the containing element
         // TODO: come up with a more elegant and maintainable way to check what elements ought to be hidden
-        labelList[label].style.border = "1px solid #FF1493"
-        labelList[label].parentElement.style.border = "3px solid green"
+        label.style.border = "1px solid #FF1493"
+        label.parentElement.style.border = "3px solid green"
         // labelList[label].parentElement.parentElement.style.border = "1px solid #FF1493"
         // labelList[label].parentElement.parentElement.parentElement.style.border = "2px solid #1492FF"
         if (
-          labelList[label].parentElement.parentElement.parentElement.classList
+          label.parentElement.parentElement.parentElement.classList
             .value !== 'rah-static rah-static--height-auto c-sf-block__content'
         ) {
-          const translatedElement = labelList[label].parentElement.parentElement;
+          const translatedElement = label.parentElement.parentElement;
           if (languageTag != null && languageTag != currentLang) {
             translatedElement.classList.add('hidden');
           } else {
@@ -248,10 +248,10 @@ $(function() {
 //            });
 //          }
         } else {
-          const translatedElement = labelList[label].parentElement;
+          const translatedElement = label.parentElement;
           console.log('ELSE:', translatedElement)
-          console.log(translatedElement.classList)
-          labelList[label].style.border("4px solid blue")
+          console.log(label)
+          // label.style.border("4px solid blue")
           if (languageTag != null && languageTag != currentLang) {
             translatedElement.classList.add('hidden');
           } else {
@@ -259,9 +259,8 @@ $(function() {
           }
         }
       } else {
-        console.log(labelList[label], ' has no query selector')
+        console.log(label, ' has no query selector')
       }
-      console.log(total)
     }
 
     // ----
