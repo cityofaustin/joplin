@@ -79,33 +79,33 @@ $(function() {
     }
   }
 
-  // todo also find out who wrote this and when
-  // TODO: what is this for??
-  $('.js-proxy-click').click(function() {
-    let $this = $(this);
-    $this.text($this.data('clicked-text'));
-
-    let $button;
-
-    let proxyByName = $this.data('proxyByName');
-    if (proxyByName) {
-      $button = $(`[name="${proxyByName}"]`);
-    }
-
-    let proxyByClass = $this.data('proxyByClass');
-    if (proxyByClass) {
-      $button = $(`.${proxyByClass}`);
-    }
-
-    if (!$button) {
-      console.error(`Data attributes: ${$this.data()}`);
-      throw new Error(
-        'Unable to find a button. Did you specify data-proxy-by-name or data-proxy-by-class?',
-      );
-    }
-
-    $button.click();
-  });
+//  // TODO: what is this for??
+// code from june 2018. (Because the current button placement doesn't allow me to put them inside the form to submit, I hooked up the new Publish & Save Draft buttons to just click the old buttons from hidden bottom bar. I also hooked up the Preview button to do what the old preview button does, but we'll want to change that to hook into the new preview flow once we've got that nailed down.)
+//  $('.js-proxy-click').click(function() {
+//    let $this = $(this);
+//    $this.text($this.data('clicked-text'));
+//
+//    let $button;
+//
+//    let proxyByName = $this.data('proxyByName');
+//    if (proxyByName) {
+//      $button = $(`[name="${proxyByName}"]`);
+//    }
+//
+//    let proxyByClass = $this.data('proxyByClass');
+//    if (proxyByClass) {
+//      $button = $(`.${proxyByClass}`);
+//    }
+//
+//    if (!$button) {
+//      console.error(`Data attributes: ${$this.data()}`);
+//      throw new Error(
+//        'Unable to find a button. Did you specify data-proxy-by-name or data-proxy-by-class?',
+//      );
+//    }
+//
+//    $button.click();
+//  });
 
   // TODO; verify this code is still used, move to into a utilities section
   function fallbackCopyTextToClipboard(text) {
@@ -170,24 +170,25 @@ $(function() {
     // replace brackets with hidden span tags and store lang tags in state
     function replaceLanguageLabels() {
       const languageLabels = $('ul[class="objects"]').find('label:contains(" [")');
+      console.log(languageLabels)
       const structlabels = $('label.field__label')
-      console.log(structlabels)
       if (languageLabels.length) {
         // if state is undefined, set the language labels in state
         if (typeof state.languageLabels === 'undefined') {
           state.languageLabels = languageLabels;
           state.structlabels = structlabels
         } else {
+          console.log('its not undefined ', languageLabels.length)
           for (let label in languageLabels) {
+            console.log(label, 'in lanaugage lables')
             state.languageLabels.push(languageLabels[label]);
           }
         }
-        console.log('instate ', state.languageLabels.length)
         // replace brackets with hidden span tags
         languageLabels.each(function() {
           this.innerHTML = this.innerHTML.replace(
             '[',
-            " <span class='translation' style='background-color:red'>",
+            " <span style='display:none;'>",
           );
           this.innerHTML = this.innerHTML.replace(']', '</span>');
         });
@@ -201,16 +202,11 @@ $(function() {
     let structlabels = state.structlabels;
     console.log(labelList.length, '  label list length')
     let total = 0;
-//    for (let struct in structlabels) {
-//      structlabels[struct].style.border = "2px solid purple"
-//    }
     for (let label of labelList) {
-      console.log('label counter ',  label)
       total++; // for some reason its only doing 8 of these, quits after the structblock
       if (label.querySelector) {
         // language tag is either 'en', 'es', 'vi' or 'ar'
         let languageTag = label.querySelector('span').innerText;
-        console.log(languageTag, label)
         // these seem to be nested twice, from the title to the containing element
         // TODO: come up with a more elegant and maintainable way to check what elements ought to be hidden
         label.style.border = "1px solid #FF1493"
@@ -249,8 +245,7 @@ $(function() {
 //          }
         } else {
           const translatedElement = label.parentElement;
-          console.log('ELSE:', translatedElement)
-          console.log(label)
+          console.log('ELSE: in rah', label)
           // label.style.border("4px solid blue")
           if (languageTag != null && languageTag != currentLang) {
             translatedElement.classList.add('hidden');
@@ -368,8 +363,10 @@ $(function() {
 
   var structbutton = $('.c-sf-add-button');
   structbutton.click(function() {
-    changeLanguage(state.currentLang)
-     updateSelectedLanguage(state.currentLang);
+      console.log('bboooo')
+      // todo: I need to write a different thing to handle the translation of the structblocks
+    // hangeLanguage(state.currentLang)
+    // updateSelectedLanguage(state.currentLang);
   })
 
   // Persist language for sharing even after page refreshes on save
