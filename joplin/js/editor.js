@@ -170,13 +170,10 @@ $(function() {
     // replace brackets with hidden span tags and store lang tags in state
     function replaceLanguageLabels() {
       const languageLabels = $('ul[class="objects"]').find('label:contains(" [")');
-      console.log(languageLabels)
-      const structlabels = $('label.field__label')
       if (languageLabels.length) {
         // if state is undefined, set the language labels in state
         if (typeof state.languageLabels === 'undefined') {
           state.languageLabels = languageLabels;
-          state.structlabels = structlabels
         } else {
           console.log('its not undefined ', languageLabels.length)
           for (let label in languageLabels) {
@@ -197,13 +194,9 @@ $(function() {
     replaceLanguageLabels();
 
     // TODO: refactor into a function, evaluate performance
-    // have better variable namespace separation
     let labelList = state.languageLabels;
-    let structlabels = state.structlabels;
     console.log(labelList.length, '  label list length')
-    let total = 0;
     for (let label of labelList) {
-      total++; // for some reason its only doing 8 of these, quits after the structblock
       if (label.querySelector) {
         // language tag is either 'en', 'es', 'vi' or 'ar'
         let languageTag = label.querySelector('span').innerText;
@@ -211,8 +204,6 @@ $(function() {
         // TODO: come up with a more elegant and maintainable way to check what elements ought to be hidden
         label.style.border = "1px solid #FF1493"
         label.parentElement.style.border = "3px solid green"
-        // labelList[label].parentElement.parentElement.style.border = "1px solid #FF1493"
-        // labelList[label].parentElement.parentElement.parentElement.style.border = "2px solid #1492FF"
         if (
           label.parentElement.parentElement.parentElement.classList
             .value !== 'rah-static rah-static--height-auto c-sf-block__content'
@@ -245,8 +236,6 @@ $(function() {
 //          }
         } else {
           const translatedElement = label.parentElement;
-          console.log('ELSE: in rah', label)
-          // label.style.border("4px solid blue")
           if (languageTag != null && languageTag != currentLang) {
             translatedElement.classList.add('hidden');
           } else {
@@ -361,12 +350,19 @@ $(function() {
     localStorage.preview_lang = lang;
   });
 
-  var structbutton = $('.c-sf-add-button');
+  var structbutton = $('.c-sf-add-button'); // this only finds the first one, doesnt it?
   structbutton.click(function() {
-      console.log('bboooo')
-      // todo: I need to write a different thing to handle the translation of the structblocks
-    // hangeLanguage(state.currentLang)
-    // updateSelectedLanguage(state.currentLang);
+      setTimeout(() => {
+        const structlabels = $('label.field__label')
+        for (const label of structlabels) {
+          console.log(label.innerHTML)
+          label.innerHTML = label.innerHTML.replace(
+            '[',
+            " <span style='display:none;'>");
+          label.innerHTML = label.innerHTML.replace(']', '</span>');
+        }
+        console.log(structlabels.length)
+      }, 100)
   })
 
   // Persist language for sharing even after page refreshes on save
