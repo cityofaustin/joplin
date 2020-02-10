@@ -31,7 +31,6 @@ $(function() {
     id_title: '#title',
     id_image: '#TODO', // todo: replace with link to styleguide image anchor
     id_steps: '#steps',
-    id_apps: '#apps',
     id_additional_content: '#additional',
     id_contacts: '#contacts',
     id_description: '#description',
@@ -130,9 +129,7 @@ $(function() {
         if (typeof state.languageLabels === 'undefined') {
           state.languageLabels = languageLabels;
         } else {
-          console.log('its not undefined ', languageLabels.length)
           for (let label in languageLabels) {
-            console.log(label, 'in lanaugage lables')
             state.languageLabels.push(languageLabels[label]);
           }
         }
@@ -150,11 +147,9 @@ $(function() {
 
     // TODO: refactor into a function, evaluate performance
     let labelList = state.languageLabels;
-    console.log(labelList.length, '  label list length')
     for (let label of labelList) {
       if (label.querySelector) {
         let languageTag = label.querySelector('span').innerText;
-        // these seem to be nested twice, from the title to the containing element
         // TODO: come up with a more elegant and maintainable way to check what elements ought to be hidden
         if (
           label.parentElement.parentElement.parentElement.classList
@@ -188,7 +183,6 @@ $(function() {
 //          }
         } else {
           const translatedElement = label.parentElement;
-          console.log('ELSE ', translatedElement)
           if (languageTag != null && languageTag != currentLang) {
             translatedElement.classList.add('hidden');
           } else {
@@ -249,20 +243,6 @@ $(function() {
     var contentLink = document.getElementsByClassName('tab-nav merged')[0]
       .firstElementChild.firstElementChild;
     contentLink.innerText = document.getElementById('language-select').value;
-//    switch (currentLang) {
-//      case 'en':
-//        document.getElementById('language-select').value = 'English';
-//        break;
-//      case 'es':
-//        document.getElementById('language-select').value = 'Spanish';
-//        break;
-//      case 'vi':
-//        document.getElementById('language-select').value = 'Vietnamese';
-//        break;
-//      case 'ar':
-//        document.getElementById('language-select').value = 'Arabic';
-//        break;
-//    }
   }
 
   // Persist language for preview even after page refreshes on save
@@ -288,31 +268,32 @@ $(function() {
   });
 
   var structbutton = $('.c-sf-add-button');
-  // it doesnt find additional structbuttons that are being added. thats what.
   structbutton.click(function() {
-      console.log('click')
+      console.log(structbutton.length)
       setTimeout(() => {
         let currentLang = state.currentLang
         const structlabels = $('label.field__label')
         for (const label of structlabels) {
+          // replace the languages with a span to hide the text
           label.innerHTML = label.innerHTML.replace(
             '[',
             " <span style='display:none;'>");
           label.innerHTML = label.innerHTML.replace(']', '</span>');
-          let languageTag = label.querySelector('span').innerText;
+          // now hide the whole field if its not the current language
           const translatedElement = label.parentElement;
-          label.parentElement.style.border = "3px solid green"
+          let languageTag = null
+          // not all labels have translation/spans
+          if (label.querySelector('span')) {
+             languageTag = label.querySelector('span').innerText;
+          }
           if (languageTag != null && languageTag != currentLang) {
             translatedElement.classList.add('hidden');
           } else {
             translatedElement.classList.remove('hidden');
           }
         }
-        // todo: update when change language happens
-        console.log(structlabels.length)
-        console.log($('.c-sf-add-button'), $('.c-sf-add-button').length)
+        console.log($('.c-sf-add-button').length)
       }, 0)
-      console.log($('.c-sf-add-button'), $('.c-sf-add-button').length)
   })
 
   // Persist language for sharing even after page refreshes on save
@@ -342,8 +323,8 @@ $(function() {
 
   // Apply current language to new InlinePanels
   $('.add').click(function() {
+    console.log('new inline panel')
     changeLanguage(state.currentLang);
-    updateSelectedLanguageDropdown(state.currentLang);
   });
 
   var messages = $('.messages');
