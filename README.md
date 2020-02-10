@@ -13,6 +13,7 @@ Joplin is the Authoring Interface for adding and editing content for alpha.austi
 ## Index
 
 -   [How to Run Locally](#how-to-run-locally)
+-   [Testing](#testing)
 -   [Updating the Data Model](#updating-the-data-model)
 -   [CircleCI Deployments](#circleci-deployments)
 -   [Useful Commands](#useful-commands)
@@ -190,6 +191,12 @@ This will run `makemigrations` with the --merge flag, and should do a good job h
 
 See more:
 https://docs.djangoproject.com/en/2.2/topics/migrations/
+
+---
+
+## Testing
+
+Testing documentation can be found [here](./README/testing.md).
 
 ---
 
@@ -471,6 +478,4 @@ HEROKU_JANIS_APP_NAME=janis-staging ./scripts/serve-local.sh
 
 #### Syncing prod data to staging
 
-1. Create a new seeding data backup sourced from prod, using `LOAD_PROD_DATA=on migration_test.sh`
-2. Drop the staging database (go to heroku and delete the database on staging)
-3. Push code with with new backup to master. This will rebuild the database and then seed it with your latest seeding datadump
+1. ```heroku pg:copy joplin::DATABASE_URL DATABASE_URL -a joplin-staging```

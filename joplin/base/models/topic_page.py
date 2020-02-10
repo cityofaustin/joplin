@@ -17,6 +17,7 @@ from base.forms import TopicPageForm
 from .janis_page import JanisBasePage
 from .translated_image import TranslatedImage
 from .widgets import countMe, countMeTextArea
+from publish_preflight.requirements import RelationPublishRequirement
 
 
 class TopicPage(JanisBasePage):
@@ -27,6 +28,11 @@ class TopicPage(JanisBasePage):
     image = models.ForeignKey(TranslatedImage, null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
 
     base_form_class = TopicPageForm
+
+    publish_requirements = (
+        RelationPublishRequirement('top_pages'),
+        RelationPublishRequirement('topiccollections'),
+    )
 
     content_panels = [
         FieldPanel('title_en', widget=countMe),

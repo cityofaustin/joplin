@@ -8,7 +8,7 @@ from graphene_django.views import GraphQLView
 from wagtail.admin import urls as wagtailadmin_urls
 from wagtail.core import urls as wagtail_urls
 from wagtail.documents import urls as wagtaildocs_urls
-from base.views import joplin_views
+from base.views import new_page_from_modal
 from base.views import joplin_search_views
 from users.urls import users as user_urls
 from snippets import urls as snippet_urls
@@ -47,9 +47,8 @@ urlpatterns = [
     # which can be customized using wagtail hooks
     path('admin/', home),
     path('', login),
-    url(r'admin/pages/(\d+)/publish/$', joplin_views.publish, name='publish'),
     url(r'admin/pages/new_from_modal/$',
-        joplin_views.new_page_from_modal, name='new_page_from_modal'),
+        new_page_from_modal.new_page_from_modal, name='new_page_from_modal'),
     url(r'admin/pages/search/$', joplin_search_views.search, name='search'),
     url(r'admin/users/', include(user_urls)),
     url(r'admin/snippets/', include(snippet_urls)),
