@@ -17,54 +17,37 @@ $(function() {
     .firstElementChild;
   content.appendChild(language);
 
-  // TODO: This a better way
-  const anchors = {
-    id_title: '#title',
-    id_image: '#TODO',
-    id_steps: '#steps',
-    id_apps: '#apps',
-    id_additional_content: '#additional',
-    id_contacts: '#contacts',
-    id_description: '#description',
-    'id_process_steps-title': '#step-title',
-    'id_process_steps-short_title': '#step-short-title',
-    'id_process_steps-link_title': '#step-link-title',
-    'id_process_steps-description': '#step-description',
-    'id_process_steps-overview_steps': '#step-steps',
-    'id_process_steps-detailed_content': '#step-details',
-    'id_process_steps-quote': '#step-quote',
-  };
-
-  // Get all labels and add styleguide links
-  const labels = document.querySelectorAll('label');
-  const styleGuideUrl = djangoData.styleGuideUrl;
-
   // initialize state
   const state = {
     currentLang: 'en',
     janisPreviewUrl: getPreviewUrl('en'),
   };
 
+  // Get all labels and add styleguide links
+  const labels = document.querySelectorAll('label');
+  const styleGuideUrl = djangoData.styleGuideUrl;
+
+  const anchors = {
+    id_title: '#title',
+    id_image: '#TODO', // todo: replace with link to styleguide image anchor
+    id_steps: '#steps',
+    id_apps: '#apps',
+    id_additional_content: '#additional',
+    id_contacts: '#contacts',
+    id_description: '#description',
+  };
+
   for (const label of labels) {
     let id = label.getAttribute('for');
 
-    // HACK: If we're dealing with subheadings in steps we need to remove the index
-    if (id && id.includes('id_process_steps')) {
-      const idTokens = id.split('-');
-      id = `${idTokens[0]}-${idTokens[2]}`;
-    }
-
     if (!id) {
-      // HACK: Only some fields actually have for attributes
+      // Only some fields actually have for attributes
       switch (label.innerText) {
         case 'ADD ANY MAPS OR APPS THAT WILL HELP THE RESIDENT USE THE SERVICE ':
           id = 'id_apps';
           break;
         case 'CONTACTS':
           id = 'id_contacts';
-          break;
-        case 'PROCESS STEPS':
-          id = 'id_steps';
           break;
       }
     }
@@ -78,34 +61,6 @@ $(function() {
       $(label).append(link);
     }
   }
-
-//  // TODO: what is this for??
-// code from june 2018. (Because the current button placement doesn't allow me to put them inside the form to submit, I hooked up the new Publish & Save Draft buttons to just click the old buttons from hidden bottom bar. I also hooked up the Preview button to do what the old preview button does, but we'll want to change that to hook into the new preview flow once we've got that nailed down.)
-//  $('.js-proxy-click').click(function() {
-//    let $this = $(this);
-//    $this.text($this.data('clicked-text'));
-//
-//    let $button;
-//
-//    let proxyByName = $this.data('proxyByName');
-//    if (proxyByName) {
-//      $button = $(`[name="${proxyByName}"]`);
-//    }
-//
-//    let proxyByClass = $this.data('proxyByClass');
-//    if (proxyByClass) {
-//      $button = $(`.${proxyByClass}`);
-//    }
-//
-//    if (!$button) {
-//      console.error(`Data attributes: ${$this.data()}`);
-//      throw new Error(
-//        'Unable to find a button. Did you specify data-proxy-by-name or data-proxy-by-class?',
-//      );
-//    }
-//
-//    $button.click();
-//  });
 
   // TODO; verify this code is still used, move to into a utilities section
   function fallbackCopyTextToClipboard(text) {
@@ -198,12 +153,9 @@ $(function() {
     console.log(labelList.length, '  label list length')
     for (let label of labelList) {
       if (label.querySelector) {
-        // language tag is either 'en', 'es', 'vi' or 'ar'
         let languageTag = label.querySelector('span').innerText;
         // these seem to be nested twice, from the title to the containing element
         // TODO: come up with a more elegant and maintainable way to check what elements ought to be hidden
-        label.style.border = "1px solid #FF1493"
-        label.parentElement.style.border = "3px solid green"
         if (
           label.parentElement.parentElement.parentElement.classList
             .value !== 'rah-static rah-static--height-auto c-sf-block__content'
@@ -217,8 +169,8 @@ $(function() {
           /*  check if still valid with new react streamfield
               While the first condition checks for 'struct-blocks' with language tags,
               it doesn't catch the case where there are 'struct-blocks' with language
-              tages WITHIN the element itself. The following condition checks for those conditions.
-              - The was neccessary for guide stream fields. */
+              tags WITHIN the element itself. The following condition checks for those conditions.
+              - The was necessary for guide stream fields. */
 //          if (translatedElement.classList.contains('struct-block')) {
 //            const fieldlabels = translatedElement.querySelectorAll('[for]');
 //            fieldlabels.forEach(fieldlabel => {
@@ -236,14 +188,13 @@ $(function() {
 //          }
         } else {
           const translatedElement = label.parentElement;
+          console.log('ELSE ', translatedElement)
           if (languageTag != null && languageTag != currentLang) {
             translatedElement.classList.add('hidden');
           } else {
             translatedElement.classList.remove('hidden');
           }
         }
-      } else {
-        console.log(label, ' has no query selector')
       }
     }
 
@@ -275,12 +226,12 @@ $(function() {
   // otherwise, we default to english
   if (localStorage.selected_lang) {
     state.currentLang = localStorage.selected_lang;
-    updateSelectedLanguage(state.currentLang);
+    updateSelectedLanguageDropdown(state.currentLang);
     changeLanguage(state.currentLang);
     localStorage.removeItem('selected_lang');
   } else {
     state.currentLang = 'en';
-    updateSelectedLanguage(state.currentLang);
+    updateSelectedLanguageDropdown(state.currentLang);
     changeLanguage(state.currentLang);
   }
 
@@ -289,50 +240,36 @@ $(function() {
     let selectedLanguage = document.getElementById('language-select')
       .selectedOptions[0];
     changeLanguage(selectedLanguage.id);
-    updateSelectedLanguage(state.currentLang);
+    updateSelectedLanguageDropdown(state.currentLang);
     localStorage.selected_lang = state.currentLang;
   });
 
 
-  // case function for setting the selected language on dropdown
-  // maybe there is a less verbose way to do this?
-  function updateSelectedLanguage(currentLang) {
+  function updateSelectedLanguageDropdown(currentLang) {
     var contentLink = document.getElementsByClassName('tab-nav merged')[0]
       .firstElementChild.firstElementChild;
-
-    switch (currentLang) {
-      case 'en':
-        document.getElementById('language-select').value = 'English';
-        contentLink.innerText = document.getElementById(
-          'language-select',
-        ).value;
-        break;
-      case 'es':
-        document.getElementById('language-select').value = 'Spanish';
-        contentLink.innerText = document.getElementById(
-          'language-select',
-        ).value;
-        break;
-      case 'vi':
-        document.getElementById('language-select').value = 'Vietnamese';
-        contentLink.innerText = document.getElementById(
-          'language-select',
-        ).value;
-        break;
-      case 'ar':
-        document.getElementById('language-select').value = 'Arabic';
-        contentLink.innerText = document.getElementById(
-          'language-select',
-        ).value;
-        break;
-    }
+    contentLink.innerText = document.getElementById('language-select').value;
+//    switch (currentLang) {
+//      case 'en':
+//        document.getElementById('language-select').value = 'English';
+//        break;
+//      case 'es':
+//        document.getElementById('language-select').value = 'Spanish';
+//        break;
+//      case 'vi':
+//        document.getElementById('language-select').value = 'Vietnamese';
+//        break;
+//      case 'ar':
+//        document.getElementById('language-select').value = 'Arabic';
+//        break;
+//    }
   }
 
   // Persist language for preview even after page refreshes on save
   var previewbutton = $('#page-preview-button');
   if (localStorage.preview_lang) {
     changeLanguage(localStorage.preview_lang);
-    updateSelectedLanguage(localStorage.preview_lang);
+    updateSelectedLanguageDropdown(localStorage.preview_lang);
     window.open(state.janisPreviewUrl, '_blank');
     localStorage.removeItem('preview_lang');
   }
@@ -350,22 +287,20 @@ $(function() {
     localStorage.preview_lang = lang;
   });
 
-  var structbutton = $('.c-sf-add-button'); // this only finds the first one, doesnt it?
+  var structbutton = $('.c-sf-add-button');
+  // it doesnt find additional structbuttons that are being added. thats what.
   structbutton.click(function() {
+      console.log('click')
       setTimeout(() => {
         let currentLang = state.currentLang
         const structlabels = $('label.field__label')
         for (const label of structlabels) {
-          console.log(label.innerHTML)
           label.innerHTML = label.innerHTML.replace(
             '[',
             " <span style='display:none;'>");
           label.innerHTML = label.innerHTML.replace(']', '</span>');
           let languageTag = label.querySelector('span').innerText;
-          console.log(label.innerHTML)
-          console.log('lang ', languageTag, currentLang)
           const translatedElement = label.parentElement;
-          label.style.border = "1px solid #FF1493"
           label.parentElement.style.border = "3px solid green"
           if (languageTag != null && languageTag != currentLang) {
             translatedElement.classList.add('hidden');
@@ -374,9 +309,10 @@ $(function() {
           }
         }
         // todo: update when change language happens
-        // todo: make work for all buttons
         console.log(structlabels.length)
-      }, 100)
+        console.log($('.c-sf-add-button'), $('.c-sf-add-button').length)
+      }, 0)
+      console.log($('.c-sf-add-button'), $('.c-sf-add-button').length)
   })
 
   // Persist language for sharing even after page refreshes on save
@@ -397,7 +333,7 @@ $(function() {
     if (lang) {
       changeLanguage(lang);
       copyTextToClipboard(state.janisPreviewUrl);
-      updateSelectedLanguage(lang);
+      updateSelectedLanguageDropdown(lang);
       urlcopied.removeClass('hidden');
       urlcopied.fadeOut(10000);
       localStorage.sharingpreview = false;
@@ -407,28 +343,25 @@ $(function() {
   // Apply current language to new InlinePanels
   $('.add').click(function() {
     changeLanguage(state.currentLang);
-    updateSelectedLanguage(state.currentLang);
+    updateSelectedLanguageDropdown(state.currentLang);
   });
 
   var messages = $('.messages');
   messages.fadeOut(10000);
 
-  // NOT sure the below is tracking anything
   // When we add new fields to the page (orderable/streamfields etc.)
   // only show the appropriate fields based on language
   // we can do this by observing changes to our sections count
 
   $('#sections-count').change(function() {
-    console.log('sections-count!!')
     changeLanguage(state.currentLang);
-    updateSelectedLanguage(state.currentLang);
+    updateSelectedLanguageDropdown(state.currentLang);
   });
 
   // do the same with locations on events
   $('#location_blocks-count').change(function() {
-    console.log('locations count')
     changeLanguage(state.currentLang);
-    updateSelectedLanguage(state.currentLang);
+    updateSelectedLanguageDropdown(state.currentLang);
   });
 
   // Found this here: https://stackoverflow.com/a/31719339
@@ -447,13 +380,11 @@ $(function() {
 
   // make sure observe all of them
   $('#sections-count').each(function(index, element) {
-    console.log('sections count')
     trackChange(element);
   });
 
   // make sure observe all of them
   $('#location_blocks-count').each(function(index, element) {
-    console.log('location blocks')
     trackChange(element);
   });
 
