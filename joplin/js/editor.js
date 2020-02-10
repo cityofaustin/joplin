@@ -353,6 +353,7 @@ $(function() {
   var structbutton = $('.c-sf-add-button'); // this only finds the first one, doesnt it?
   structbutton.click(function() {
       setTimeout(() => {
+        let currentLang = state.currentLang
         const structlabels = $('label.field__label')
         for (const label of structlabels) {
           console.log(label.innerHTML)
@@ -360,7 +361,20 @@ $(function() {
             '[',
             " <span style='display:none;'>");
           label.innerHTML = label.innerHTML.replace(']', '</span>');
+          let languageTag = label.querySelector('span').innerText;
+          console.log(label.innerHTML)
+          console.log('lang ', languageTag, currentLang)
+          const translatedElement = label.parentElement;
+          label.style.border = "1px solid #FF1493"
+          label.parentElement.style.border = "3px solid green"
+          if (languageTag != null && languageTag != currentLang) {
+            translatedElement.classList.add('hidden');
+          } else {
+            translatedElement.classList.remove('hidden');
+          }
         }
+        // todo: update when change language happens
+        // todo: make work for all buttons
         console.log(structlabels.length)
       }, 100)
   })
