@@ -68,7 +68,14 @@ def expand_dict_values(item):
     """
     dict comprehension that expands db html on each item in a dict
     """
-    return {key: try_expand_db_html(value) for (key, value) in item.items()}
+    if isinstance(item, int):
+        return item
+    try:
+        dict_values = {key: try_expand_db_html(value) for (key, value) in item.items() if item is not isinstance(item, int)}
+        return dict_values
+    except Exception as e:
+        import pdb
+        pdb.set_trace()
 
 
 def expand_by_type(key, value):
@@ -88,38 +95,44 @@ def expand_by_type(key, value):
 
 
 def try_get_api_representation(StreamChild):
-    try:
+    if StreamChild.block_type == "map_block":
+        # this has its own representation defition in blocks.py
         block = StreamChild.block.get_api_representation(StreamChild.value)
-        # if the block is just a string (no dict at all), just return it expanded
-
-        if isinstance(block, str):
-            parsed_block = try_expand_db_html(block)
-            return parsed_block
-        elif isinstance(StreamChild, dict):
-            parsed_block = {key: expand_by_type(key, value) for (key, value) in StreamChild.items()}
-            return parsed_block
-        elif StreamChild.block_type == "step_with_locations":
-            block = StreamChild.block.get_api_representation(StreamChild.value)
-            location_pages = StreamChild.value['locations']
-
-            for index, location_page in enumerate(location_pages):
-                # cast as node so we can get the global id
-                lp = LocationPageNode(location_page)
-                parsed_location = {
-                    "locationPage": {
-                        "id": to_global_id(lp._meta.name, location_page.id),
-                        "slug": location_page.slug,
-                        "title": location_page.title,
-                        "physicalStreet": location_page.physical_street,
-                        "physicalUnit": location_page.physical_unit,
-                        "physicalCity": location_page.physical_city,
-                        "physicalState": location_page.physical_state,
-                        "physicalZip": location_page.physical_zip,
-                    }
-                }
-                # replace the pk entry in the StreamChild output with the parsed info above
-                block['locations'][index] = parsed_location
         return block
+
+    try:
+        if not isinstance(StreamChild, dict):
+            block = StreamChild.block.get_api_representation(StreamChild.value) or None
+        # if the block is just a string (no dict at all), just return it expanded
+            if isinstance(block, str):
+                parsed_block = try_expand_db_html(block)
+                return parsed_block
+            elif StreamChild.block_type == "step_with_locations":
+                block = StreamChild.block.get_api_representation(StreamChild.value)
+                location_pages = StreamChild.value['locations']
+
+                for index, location_page in enumerate(location_pages):
+                    # cast as node so we can get the global id
+                    lp = LocationPageNode(location_page)
+                    parsed_location = {
+                        "locationPage": {
+                            "id": to_global_id(lp._meta.name, location_page.id),
+                            "slug": location_page.slug,
+                            "title": location_page.title,
+                            "physicalStreet": location_page.physical_street,
+                            "physicalUnit": location_page.physical_unit,
+                            "physicalCity": location_page.physical_city,
+                            "physicalState": location_page.physical_state,
+                            "physicalZip": location_page.physical_zip,
+                        }
+                    }
+                    # replace the pk entry in the StreamChild output with the parsed info above
+                    block['locations'][index] = parsed_location
+                    block['locations_description'] = expand_db_html(block['locations_description'])
+                    return block
+            elif isinstance(block, dict):
+                parsed_block = {key: expand_by_type(key, value) for (key, value) in block.items()}
+                return parsed_block
     except Exception as e:
         print('try_get_api_representation!', e)
         print(traceback.format_exc())
