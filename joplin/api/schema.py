@@ -217,10 +217,11 @@ class LocationPageRelatedServices(DjangoObjectType):
         fields = '__all__'
         interfaces = [graphene.Node]
 
-# Not final name, wating on Content team for decision
-
 
 class EventPageRemoteLocation(graphene.ObjectType):
+    """
+    Remote Location = non city owned location
+    """
     value = GenericScalar()
 
     street = graphene.String()
