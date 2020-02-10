@@ -129,7 +129,7 @@ def try_get_api_representation(StreamChild):
                     # replace the pk entry in the StreamChild output with the parsed info above
                     block['locations'][index] = parsed_location
                     block['locations_description'] = expand_db_html(block['locations_description'])
-                    return block
+                return block
             elif isinstance(block, dict):
                 parsed_block = {key: expand_by_type(key, value) for (key, value) in block.items()}
                 return parsed_block
