@@ -135,6 +135,7 @@ $(function() {
       } else {
         translatedElement.classList.remove('hidden');
       }
+    }
   }
 
   // Changes language and update janisPreviewUrl for our language
@@ -257,6 +258,7 @@ $(function() {
       .selectedOptions[0];
     changeLanguage(selectedLanguage.id);
     updateSelectedLanguageDropdown(state.currentLang);
+    translateStructBlocks(state.currentLang);
     localStorage.selected_lang = state.currentLang;
   });
 
@@ -264,6 +266,20 @@ $(function() {
   function updateSelectedLanguageDropdown(currentLang) {
     var contentLink = document.getElementsByClassName('tab-nav merged')[0]
       .firstElementChild.firstElementChild;
+    switch (currentLang) {
+      case 'en':
+        document.getElementById('language-select').value = 'English';
+        break;
+      case 'es':
+        document.getElementById('language-select').value = 'Spanish';
+        break;
+      case 'vi':
+        document.getElementById('language-select').value = 'Vietnamese';
+        break;
+      case 'ar':
+        document.getElementById('language-select').value = 'Arabic';
+        break;
+    }
     contentLink.innerText = document.getElementById('language-select').value;
   }
 
@@ -297,26 +313,7 @@ $(function() {
       // hence a settimeout.
       setTimeout(() => {
         let currentLang = state.currentLang
-        const structlabels = $('label.field__label')
-        for (const label of structlabels) {
-          // replace the languages with a span to hide the text
-          label.innerHTML = label.innerHTML.replace(
-            '[',
-            " <span style='display:none;'>");
-          label.innerHTML = label.innerHTML.replace(']', '</span>');
-          // hide the whole field if its not the current language
-          const translatedElement = label.parentElement;
-          let languageTag = null
-          // not all labels have translation/spans
-          if (label.querySelector('span')) {
-             languageTag = label.querySelector('span').innerText;
-          }
-          if (languageTag != null && languageTag != currentLang) {
-            translatedElement.classList.add('hidden');
-          } else {
-            translatedElement.classList.remove('hidden');
-          }
-        }
+        translateStructBlocks(currentLang)
         console.log($('.c-sf-add-button').length)
       }, 0)
   })
@@ -373,7 +370,6 @@ $(function() {
   MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
 
   var trackChange = function(element) {
-    console.log('traack')
     var observer = new MutationObserver(function(mutations, observer) {
       if (mutations[0].attributeName == 'value') {
         $(element).trigger('change');
