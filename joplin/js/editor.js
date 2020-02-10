@@ -19,16 +19,16 @@ $(function() {
     .firstElementChild;
   content.appendChild(language);
 
+  // Get data from page and json_script templatetags
+  const labels = document.querySelectorAll('label');
+  const styleGuideUrl = JSON.parse(document.getElementById('style-guide-url').textContent);
+  const previewUrlData = JSON.parse(document.getElementById('preview-url-data').textContent);
+
   // initialize state
   const state = {
     currentLang: 'en',
     janisPreviewUrl: getPreviewUrl('en'),
   };
-
-  // Get data from page and json_script templatetags
-  const labels = document.querySelectorAll('label');
-  const styleGuideUrl = JSON.parse(document.getElementById('style-guide-url').textContent);
-  const previewUrlData = JSON.parse(document.getElementById('preview-url-data').textContent);
 
   const anchors = {
     id_title: '#title',
@@ -115,6 +115,26 @@ $(function() {
         .first()
         .attr('href'),
     );
+  }
+
+  function translateStructBlocks(currentLang) {
+    const structlabels = $('label.field__label')
+    for (const label of structlabels) {
+      // replace the languages with a span to hide the text
+      label.innerHTML = label.innerHTML.replace('[', " <span style='display:none;'>");
+      label.innerHTML = label.innerHTML.replace(']', '</span>');
+      // hide the whole field if its not the current language
+      const translatedElement = label.parentElement;
+      let languageTag = null
+      // not all labels have translation/spans
+      if (label.querySelector('span')) {
+        languageTag = label.querySelector('span').innerText;
+      }
+      if (languageTag != null && languageTag != currentLang) {
+        translatedElement.classList.add('hidden');
+      } else {
+        translatedElement.classList.remove('hidden');
+      }
   }
 
   // Changes language and update janisPreviewUrl for our language
@@ -272,6 +292,9 @@ $(function() {
   var structbutton = $('.c-sf-add-button');
   structbutton.click(function() {
       console.log(structbutton.length)
+      // when the button is clicked, a new streamfield is added. we need a slight delay between
+      // clicking the button and getting the list of labels to allow the labels to be added to the DOM
+      // hence a settimeout.
       setTimeout(() => {
         let currentLang = state.currentLang
         const structlabels = $('label.field__label')
@@ -281,7 +304,7 @@ $(function() {
             '[',
             " <span style='display:none;'>");
           label.innerHTML = label.innerHTML.replace(']', '</span>');
-          // now hide the whole field if its not the current language
+          // hide the whole field if its not the current language
           const translatedElement = label.parentElement;
           let languageTag = null
           // not all labels have translation/spans
@@ -325,7 +348,6 @@ $(function() {
 
   // Apply current language to new InlinePanels
   $('.add').click(function() {
-    console.log('new inline panel')
     changeLanguage(state.currentLang);
   });
 
@@ -351,6 +373,7 @@ $(function() {
   MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
 
   var trackChange = function(element) {
+    console.log('traack')
     var observer = new MutationObserver(function(mutations, observer) {
       if (mutations[0].attributeName == 'value') {
         $(element).trigger('change');
