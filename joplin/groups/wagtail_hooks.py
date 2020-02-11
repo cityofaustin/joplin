@@ -1,4 +1,17 @@
 from wagtail.contrib.modeladmin.options import (
-    ModelAdmin, ModelAdminGroup, modeladmin_register)
+    ModelAdmin, modeladmin_register)
+from .models import Department
 
-# events hooks here
+
+class DepartmentAdmin(ModelAdmin):
+    model = Department
+    menu_icon = 'pilcrow'  # change as required
+    menu_order = 200  # will put in 3rd place (000 being 1st, 100 2nd)
+    add_to_settings_menu = False  # or True to add your model to the Settings sub-menu
+    exclude_from_explorer = False # or True to exclude pages of this type from Wagtail's explorer view
+    list_display = ('name',)
+    list_filter = ('name',)
+    search_fields = ('name',)
+
+
+modeladmin_register(DepartmentAdmin)

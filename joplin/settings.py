@@ -274,6 +274,8 @@ if DEBUG:
 WAGTAIL_SITE_NAME = 'joplin'
 WAGTAIL_AUTO_UPDATE_PREVIEW = True
 
+# WAGTAIL_USER_EDIT_FORM = 'users.forms.JoplinUserEditForm'
+
 # Base URL to use when referring to full URLs within the Wagtail admin backend -
 # e.g. in notification emails. Don't include '/admin' or a trailing slash
 BASE_URL = 'https://austintexas.io'
