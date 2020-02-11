@@ -7,10 +7,8 @@ def create_departments_from_pages(apps, schema_editor):
     DepartmentPage = apps.get_model('base', 'DepartmentPage')
     Department = apps.get_model('groups', 'Department')
 
-    Department.objects.bulk_create(
-        Department(name=department_page.title, department_page=department_page)
-        for department_page in DepartmentPage.objects.all()
-    )
+    for department_page in DepartmentPage.objects.all():
+        Department.objects.create(name=department_page.title, department_page=department_page)
 
 
 class Migration(migrations.Migration):
