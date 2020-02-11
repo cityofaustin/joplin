@@ -29,6 +29,7 @@ from .content_type_map import content_type_map
 import traceback
 from locations.models import LocationPage, LocationPageRelatedServices
 from events.models import EventPage, EventPageFee, EventPageRelatedDepartments
+from graphql_relay import to_global_id
 
 
 class RichTextFieldType(Scalar):
@@ -58,7 +59,7 @@ def try_expand_db_html(parsed_item):
     try:
         return expand_db_html(parsed_item)
     except Exception as e:
-        print('Streamfield API Exception!', e)
+        print('try_expand_db_html!', e)
         print(traceback.format_exc())
         return parsed_item
 
@@ -67,7 +68,14 @@ def expand_dict_values(item):
     """
     dict comprehension that expands db html on each item in a dict
     """
-    return {key: try_expand_db_html(value) for (key, value) in item.items()}
+    if isinstance(item, int):
+        return item
+    try:
+        dict_values = {key: try_expand_db_html(value) for (key, value) in item.items() if item is not isinstance(item, int)}
+        return dict_values
+    except Exception as e:
+        print('dict_comprehension error!', e)
+        print(traceback.format_exc())
 
 
 def expand_by_type(key, value):
@@ -87,17 +95,44 @@ def expand_by_type(key, value):
 
 
 def try_get_api_representation(StreamChild):
-    try:
+    if StreamChild.block_type == "map_block":
+        # this has its own representation defition in blocks.py
         block = StreamChild.block.get_api_representation(StreamChild.value)
-        # if the block is just a string (no dict at all), just return it expanded
-
-        if isinstance(block, str):
-            parsed_block = try_expand_db_html(block)
-            return parsed_block
-        elif isinstance(StreamChild, dict):
-            parsed_block = {key: expand_by_type(key, value) for (key, value) in StreamChild.items()}
-            return parsed_block
         return block
+
+    try:
+        if not isinstance(StreamChild, dict):
+            block = StreamChild.block.get_api_representation(StreamChild.value) or None
+        # if the block is just a string (no dict at all), just return it expanded
+            if isinstance(block, str):
+                parsed_block = try_expand_db_html(block)
+                return parsed_block
+            elif StreamChild.block_type == "step_with_locations":
+                block = StreamChild.block.get_api_representation(StreamChild.value)
+                location_pages = StreamChild.value['locations']
+
+                for index, location_page in enumerate(location_pages):
+                    # cast as node so we can get the global id
+                    lp = LocationPageNode(location_page)
+                    parsed_location = {
+                        "locationPage": {
+                            "id": to_global_id(lp._meta.name, location_page.id),
+                            "slug": location_page.slug,
+                            "title": location_page.title,
+                            "physicalStreet": location_page.physical_street,
+                            "physicalUnit": location_page.physical_unit,
+                            "physicalCity": location_page.physical_city,
+                            "physicalState": location_page.physical_state,
+                            "physicalZip": location_page.physical_zip,
+                        }
+                    }
+                    # replace the pk entry in the StreamChild output with the parsed info above
+                    block['locations'][index] = parsed_location
+                    block['locations_description'] = expand_db_html(block['locations_description'])
+                return block
+            elif isinstance(block, dict):
+                parsed_block = {key: expand_by_type(key, value) for (key, value) in block.items()}
+                return parsed_block
     except Exception as e:
         print('try_get_api_representation!', e)
         print(traceback.format_exc())
@@ -192,12 +227,14 @@ class LocationPageNode(DjangoObjectType):
 class LocationPageRelatedServices(DjangoObjectType):
     class Meta:
         model = LocationPageRelatedServices
+        fields = '__all__'
         interfaces = [graphene.Node]
-
-# Not final name, wating on Content team for decision
 
 
 class EventPageRemoteLocation(graphene.ObjectType):
+    """
+    Remote Location = non city owned location
+    """
     value = GenericScalar()
 
     street = graphene.String()
@@ -426,41 +463,9 @@ class Language(graphene.Enum):
     BURMESE = 'my'
 
 
-class ServicePageStepLocationBlock(graphene.ObjectType):
-    # This uses graphene ObjectType resolvers, see:
-    # https://docs.graphene-python.org/en/latest/types/objecttypes/#resolvers
-    value = GenericScalar()
-    location_page = graphene.Field(LocationPageNode)
-
-    def resolve_location_page(self, info):
-        page = None
-        try:
-            page = LocationPage.objects.get(id=self.value)
-        except ObjectDoesNotExist:
-            pass
-        return page
-
-
-class ServicePageStep(graphene.ObjectType):
-    value = GenericScalar()
-    locations = graphene.List(ServicePageStepLocationBlock)
-    step_type = graphene.String()
-
-    def resolve_locations(self, info):
-        repr_locations = []
-        # since we still want to be able to use value, we need to see
-        # if it's a string before grabbing locations to avoid errors
-        if self.step_type == "step_with_locations":
-            for location in self.value['locations']:
-                repr_locations.append(ServicePageStepLocationBlock(value=location))
-
-        return repr_locations
-
-
 class ServicePageNode(DjangoObjectType):
     page_type = graphene.String()
     janis_url = graphene.String()
-    steps = graphene.List(ServicePageStep)
 
     class Meta:
         model = ServicePage
@@ -472,15 +477,6 @@ class ServicePageNode(DjangoObjectType):
 
     def resolve_janis_url(self, info):
         return self.janis_url()
-
-    def resolve_steps(self, info):
-        repr_steps = []
-        for step in self.steps.stream_data:
-            value = step.get('value')
-            step_type = step.get('type')
-            repr_steps.append(ServicePageStep(value=value, step_type=step_type))
-
-        return repr_steps
 
 
 class InformationPageNode(DjangoObjectType):

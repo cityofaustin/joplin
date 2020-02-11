@@ -3,6 +3,11 @@ from wagtail.snippets.blocks import SnippetChooserBlock
 
 
 class SnippetChooserBlockWithAPIGoodness(SnippetChooserBlock):
+    """
+    if we want to avoid complicated parsing in our api, we could follow this pattern
+    to set up models specific for each kind of block
+    """
+
     def get_api_representation(self, model_instance, context=None):
         return model_instance.serializable_data()
 
