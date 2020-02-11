@@ -22,7 +22,7 @@ def create_group_page_permissions(apps, schema_editor):
         for page in page_model.objects.all():
             if page.related_departments:
                 for page_related_department in page.related_departments.all():
-                    GroupPagePermission.objects.create(
+                    GroupPagePermission.objects.get_or_create(
                         group=page_related_department.related_department.department,
                         page=page,
                         permission_type='edit'
