@@ -74,8 +74,8 @@ def expand_dict_values(item):
         dict_values = {key: try_expand_db_html(value) for (key, value) in item.items() if item is not isinstance(item, int)}
         return dict_values
     except Exception as e:
-        import pdb
-        pdb.set_trace()
+        print('dict_comprehension error!', e)
+        print(traceback.format_exc())
 
 
 def expand_by_type(key, value):
