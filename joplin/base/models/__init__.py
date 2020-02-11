@@ -137,35 +137,3 @@ class ProcessPageTopic(ClusterableModel):
 
     def __str__(self):
         return self.topic.text
-
-
-@register_snippet
-class Department(ClusterableModel):
-    slug = models.SlugField()
-    name = models.CharField(max_length=DEFAULT_MAX_LENGTH)
-    mission = models.TextField()
-    image = models.ForeignKey(
-        TranslatedImage, null=True, on_delete=models.SET_NULL, related_name='+')
-
-    panels = [
-        FieldPanel('name'),
-        FieldPanel('mission'),
-        InlinePanel('contacts', label='Contacts'),
-        ImageChooserPanel('image'),
-    ]
-
-    def __str__(self):
-        return self.name
-
-
-class DepartmentContact(ClusterableModel):
-    department = ParentalKey(Department, related_name='contacts')
-    contact = models.ForeignKey(
-        Contact, related_name='+', on_delete=models.CASCADE)
-
-    panels = [
-        SnippetChooserPanel('contact'),
-    ]
-
-    def __str__(self):
-        return self.department.name

@@ -81,10 +81,12 @@ INSTALLED_APPS = [
     'phonenumber_field',
     'countable_field',
     'flags',
-    'locations',
-    'publish_preflight',
-    'events',
     'silk',
+
+    'groups',
+    'publish_preflight',
+    'locations',
+    'events',
 ]
 
 MIDDLEWARE = [

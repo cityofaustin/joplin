@@ -20,10 +20,9 @@ from base.models import (
     InformationPage, InformationPageContact, InformationPageTopic, InformationPageRelatedDepartments,
     DepartmentPage, DepartmentPageContact, DepartmentPageDirector, DepartmentPageTopPage, DepartmentPageRelatedPage,
     Theme, TopicCollectionPage, TopicPage, TopicPageTopicCollection, TopicPageTopPage,
-    Contact, Location, PhoneNumber, ContactDayAndDuration, Department, DepartmentContact,
-    OfficialDocumentPage, OfficialDocumentPageRelatedDepartments, OfficialDocumentPageTopic, OfficialDocumentPageOfficialDocument,
-    GuidePage, GuidePageTopic, GuidePageRelatedDepartments, GuidePageContact,
-    FormContainer, FormContainerRelatedDepartments, FormContainerTopic,
+    Contact, Location, PhoneNumber, ContactDayAndDuration, OfficialDocumentPage, OfficialDocumentPageRelatedDepartments,
+    OfficialDocumentPageTopic, OfficialDocumentPageOfficialDocument, GuidePage, GuidePageTopic,
+    GuidePageRelatedDepartments, GuidePageContact, FormContainer, FormContainerRelatedDepartments, FormContainerTopic,
 )
 from .content_type_map import content_type_map
 import traceback
@@ -157,19 +156,6 @@ class TopicNode(DjangoObjectType):
     class Meta:
         model = TopicPage
         filter_fields = ['id', 'slug', 'live']
-        interfaces = [graphene.Node]
-
-
-class DepartmentNode(DjangoObjectType):
-    class Meta:
-        model = Department
-        filter_fields = ['id', 'name']
-        interfaces = [graphene.Node]
-
-
-class DepartmentContactNode(DjangoObjectType):
-    class Meta:
-        model = DepartmentContact
         interfaces = [graphene.Node]
 
 
@@ -715,12 +701,16 @@ def get_structure_for_content_type(content_type):
         if page.coa_global:
             site_structure.append({'url': f'/{page.slug}/', 'type': content_type, 'id': page_global_id})
 
-        # For content_type models that have related departments
-        if hasattr(page, "related_departments"):
-            page_departments = page.related_departments.all()
-            for page_department in page_departments:
-                page_department_global_id = graphene.Node.to_global_id('DepartmentNode', page_department.related_department.id)
-                site_structure.append({'url': f'/{page_department.related_department.slug}/{page.slug}/', 'type': content_type, 'id': page_global_id, 'parent_department': page_department_global_id})
+        # todo: manage this with the groups instead
+        # sidenote, surprised this works considering our global id is looking for the departmentnode when this
+        # is really something that should be a departmentpagenode... whoops
+        #
+        # # For content_type models that have related departments
+        # if hasattr(page, "related_departments"):
+        #     page_departments = page.related_departments.all()
+        #     for page_department in page_departments:
+        #         page_department_global_id = graphene.Node.to_global_id('DepartmentNode', page_department.related_department.id)
+        #         site_structure.append({'url': f'/{page_department.related_department.slug}/{page.slug}/', 'type': content_type, 'id': page_global_id, 'parent_department': page_department_global_id})
 
         # For content_type models that have topics
         if hasattr(page, "topics"):
@@ -948,7 +938,6 @@ class Query(graphene.ObjectType):
     all_themes = DjangoFilterConnectionField(ThemeNode)
     all_topics = DjangoFilterConnectionField(TopicNode)
     all_topic_collections = DjangoFilterConnectionField(TopicCollectionNode)
-    all_departments = DjangoFilterConnectionField(DepartmentNode)
     all_official_document_pages = DjangoFilterConnectionField(
         OfficialDocumentPageNode)
     all_guide_pages = DjangoFilterConnectionField(GuidePageNode)
