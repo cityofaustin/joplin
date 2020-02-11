@@ -143,7 +143,7 @@ class JanisBasePage(Page):
                         topic_collection_slug = self.topiccollections.first().topiccollection.slug or None
                     except AttributeError as e:
                         # this is for pages just under departments
-                        theme_slug = self.related_departments.all()[0].related_department.slug or None
+                        theme_slug = self.group_permissions.all()[0].group.department.department_page.slug or None
                     finally:
                         paths_list = [
                             base_url,
