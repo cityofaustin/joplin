@@ -22,11 +22,16 @@ def create_group_page_permissions(apps, schema_editor):
         for page in page_model.objects.all():
             if page.related_departments:
                 for page_related_department in page.related_departments.all():
-                    GroupPagePermission.objects.create(
-                        group=page_related_department.related_department.department,
-                        page=page,
-                        permission_type='edit'
-                    )
+                    try:
+                        GroupPagePermission.objects.create(
+                            group=page_related_department.related_department['department'],
+                            page=page,
+                            permission_type='edit'
+                        )
+                    except AttributeError:
+                        print(page)
+                        print(page_related_department)
+                        raise
 
 
 class Migration(migrations.Migration):
