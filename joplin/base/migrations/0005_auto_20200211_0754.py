@@ -33,7 +33,8 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('base', '0004_auto_20200211_0648'),
-        ('groups', '0002_auto_20200211_0656')
+        ('groups', '0002_auto_20200211_0656'),
+        ('events', '0003_auto_20200130_0349'),
     ]
 
     operations = [
