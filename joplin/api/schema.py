@@ -123,6 +123,18 @@ def convert_stream_field(field, registry=None):
     return StreamFieldType(description=field.help_text, required=not field.null)
 
 
+class DepartmentPageNode(DjangoObjectType):
+    page_type = graphene.String()
+
+    class Meta:
+        model = DepartmentPage
+        filter_fields = ['id', 'slug', 'live']
+        interfaces = [graphene.Node]
+
+    def resolve_page_type(self, info):
+        return DepartmentPage.get_verbose_name().lower()
+
+
 class DocumentNode(DjangoObjectType):
     class Meta:
         model = Document
@@ -442,6 +454,7 @@ class ServicePageNode(DjangoObjectType):
     page_type = graphene.String()
     janis_url = graphene.String()
     steps = graphene.List(ServicePageStep)
+    departments = graphene.List(DepartmentPageNode)
 
     class Meta:
         model = ServicePage
@@ -453,6 +466,9 @@ class ServicePageNode(DjangoObjectType):
 
     def resolve_janis_url(self, info):
         return self.janis_url()
+
+    def resolve_departments(self, info):
+        return self.departments()
 
     def resolve_steps(self, info):
         repr_steps = []
@@ -474,18 +490,6 @@ class InformationPageNode(DjangoObjectType):
 
     def resolve_page_type(self, info):
         return InformationPage.get_verbose_name().lower()
-
-
-class DepartmentPageNode(DjangoObjectType):
-    page_type = graphene.String()
-
-    class Meta:
-        model = DepartmentPage
-        filter_fields = ['id', 'slug', 'live']
-        interfaces = [graphene.Node]
-
-    def resolve_page_type(self, info):
-        return DepartmentPage.get_verbose_name().lower()
 
 
 class FormContainerNode(DjangoObjectType):

@@ -248,6 +248,13 @@ class JanisBasePage(Page):
             else:
                 return ("Live")
 
+    def departments(self):
+        department_pages = []
+        for group_permission in self.group_permissions.all():
+            if(group_permission and group_permission.group and group_permission.group.department and group_permission.group.department.department_page):
+                department_pages.append(group_permission.group.department.department_page)
+        return department_pages
+
     @cached_classmethod
     def get_edit_handler(cls):
         if hasattr(cls, 'edit_handler'):
