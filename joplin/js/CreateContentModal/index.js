@@ -19,6 +19,7 @@ const stepsEnum = {
   CHOOSE_TITLE: 1,
 };
 
+//TODO: extend this to support selecting a department
 class CreateContentModal extends Component {
   constructor(props) {
     super(props);
