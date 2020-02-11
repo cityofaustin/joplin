@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404, redirect, render
 from django.http import HttpResponse
-from wagtail.core.models import Page, UserPagePermissionsProxy
+from wagtail.core.models import Page, UserPagePermissionsProxy, GroupPagePermission
 from django.core.exceptions import PermissionDenied
 from wagtail.admin.views import pages
 from wagtail.admin import messages
@@ -60,6 +60,18 @@ def new_page_from_modal(request):
         # Save our draft
         page.save_revision()
         page.unpublish()  # Not sure why it seems to go live by default
+
+        # Create a group permission object that allows each of the user's departments to edit this page
+        for user_group in request.user.groups.all():
+            # If we did this with non department groups it might cause issues
+            if user_group and user_group.department:
+                GroupPagePermission.objects.create(
+                    group=user_group,
+                    page=page,
+                    permission_type='edit'
+                )
+
+
 
         # Respond with the id of the new page
         response = HttpResponse(json.dumps({'id': page.id}), content_type="application/json")

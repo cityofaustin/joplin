@@ -248,10 +248,15 @@ class JanisBasePage(Page):
             else:
                 return ("Live")
 
+    # For now this simply goes through our group page permissions and looks for any related
+    # departments, but it should be fleshed out with actual logic as to how we want this to work
     def departments(self):
         department_pages = []
         for group_permission in self.group_permissions.all():
-            if(group_permission and group_permission.group and group_permission.group.department and group_permission.group.department.department_page):
+            if(group_permission and
+               group_permission.group and
+               group_permission.group.department and
+               group_permission.group.department.department_page):
                 department_pages.append(group_permission.group.department.department_page)
         return department_pages
 
