@@ -115,7 +115,6 @@ class EventPage(JanisBasePage):
             heading=registration_url.verbose_name,
             classname='coa-multiField-nopadding'
         ),
-        InlinePanel('related_departments', label='Related Departments'),
         SnippetChooserPanel('contact'),
         MultiFieldPanel(
             [
@@ -142,16 +141,4 @@ class EventPageFee(Orderable):
                 FieldPanel('fee_label', classname='col9'),
             ],
         ),
-    ]
-
-
-class EventPageRelatedDepartments(ClusterableModel):
-    page = ParentalKey(EventPage, related_name='related_departments', default=None)
-    related_department = models.ForeignKey(
-        "base.departmentPage",
-        on_delete=models.PROTECT,
-    )
-
-    panels = [
-        PageChooserPanel("related_department"),
     ]

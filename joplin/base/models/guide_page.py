@@ -81,7 +81,6 @@ class GuidePage(JanisBasePage):
         FieldPanel('title_vi'),
         FieldPanel('description', widget=countMeTextArea),
         InlinePanel('topics', label='Topics'),
-        InlinePanel('related_departments', label='Related Departments'),
         ImageChooserPanel('image'),
         StreamFieldPanel('sections'),
         InlinePanel('contacts', label='Contacts'),
@@ -98,18 +97,6 @@ class GuidePageTopic(ClusterableModel):
 
     def __str__(self):
         return self.topic.text
-
-
-class GuidePageRelatedDepartments(ClusterableModel):
-    page = ParentalKey(GuidePage, related_name='related_departments', default=None)
-    related_department = models.ForeignKey(
-        "base.departmentPage",
-        on_delete=models.PROTECT,
-    )
-
-    panels = [
-        PageChooserPanel("related_department"),
-    ]
 
 
 class GuidePageContact(ClusterableModel):

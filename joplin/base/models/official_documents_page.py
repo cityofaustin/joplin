@@ -49,7 +49,6 @@ class OfficialDocumentPage(JanisBasePage):
         FieldPanel('title_vi'),
         FieldPanel('description', widget=countMeTextArea),
         InlinePanel('topics', label='Topics'),
-        InlinePanel('related_departments', label='Related Departments'),
         InlinePanel('official_documents', label="Documents", heading="Entries will be listed by document date (newest first)."),
     ]
 
@@ -84,18 +83,6 @@ class OfficialDocumentPageOfficialDocument(Orderable):
 
     class Meta:
         indexes = [models.Index(fields=['-date'])]
-
-
-class OfficialDocumentPageRelatedDepartments(ClusterableModel):
-    page = ParentalKey(OfficialDocumentPage, related_name='related_departments', default=None)
-    related_department = models.ForeignKey(
-        "base.departmentPage",
-        on_delete=models.PROTECT,
-    )
-
-    panels = [
-        PageChooserPanel("related_department"),
-    ]
 
 
 class OfficialDocumentPageTopic(ClusterableModel):

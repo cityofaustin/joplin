@@ -39,21 +39,8 @@ class FormContainer(JanisBasePage):
         FieldPanel('title_ar'),
         FieldPanel('title_vi'),
         InlinePanel('topics', label='Topics'),
-        InlinePanel('related_departments', label='Related Departments'),
         FieldPanel('description', widget=countMeTextArea),
         FieldPanel('form_url'),
-    ]
-
-class FormContainerRelatedDepartments(ClusterableModel):
-    page = ParentalKey(FormContainer, related_name='related_departments', default=None)
-    related_department = models.ForeignKey(
-        "base.departmentPage",
-        on_delete=models.PROTECT,
-    )
-
-    panels = [
-        # Use a SnippetChooserPanel because blog.BlogAuthor is registered as a snippet
-        PageChooserPanel("related_department"),
     ]
 
 class FormContainerTopic(ClusterableModel):
