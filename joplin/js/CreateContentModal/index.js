@@ -150,7 +150,6 @@ class CreateContentModal extends Component {
   };
 
   render() {
-    debugger;
     return (
       <div
         className="modal fade"

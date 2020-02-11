@@ -64,7 +64,7 @@ def new_page_from_modal(request):
         # Create a group permission object that allows each of the user's departments to edit this page
         for user_group in request.user.groups.all():
             # If we did this with non department groups it might cause issues
-            if user_group and user_group.department:
+            if user_group and hasattr(user_group, 'department'):
                 GroupPagePermission.objects.create(
                     group=user_group,
                     page=page,
