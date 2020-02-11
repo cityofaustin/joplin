@@ -22,7 +22,3 @@ class Department(ClusterableModel, Group):
 
     def __str__(self):
         return self.name
-
-
-
-

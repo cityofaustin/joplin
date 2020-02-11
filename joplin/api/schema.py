@@ -135,6 +135,14 @@ class DepartmentPageNode(DjangoObjectType):
         return DepartmentPage.get_verbose_name().lower()
 
 
+class DepartmentResolver(graphene.Interface):
+    departments = graphene.List(DepartmentPageNode)
+
+    @classmethod
+    def resolve_departments(cls, instance, info):
+        return instance.departments()
+
+
 class DocumentNode(DjangoObjectType):
     class Meta:
         model = Document
@@ -184,7 +192,7 @@ class LocationPageNode(DjangoObjectType):
         model = LocationPage
         filter_fields = ['id', 'slug', 'live']
         fields = '__all__'
-        interfaces = [graphene.Node]
+        interfaces = [graphene.Node, DepartmentResolver]
 
 
 class LocationPageRelatedServices(DjangoObjectType):
@@ -308,7 +316,7 @@ class EventPageNode(DjangoObjectType):
     class Meta:
         model = EventPage
         filter_fields = ['id', 'slug', 'live']
-        interfaces = [graphene.Node]
+        interfaces = [graphene.Node, DepartmentResolver]
 
     def resolve_locations(self, info):
         repr_locations = []
@@ -454,21 +462,17 @@ class ServicePageNode(DjangoObjectType):
     page_type = graphene.String()
     janis_url = graphene.String()
     steps = graphene.List(ServicePageStep)
-    departments = graphene.List(DepartmentPageNode)
 
     class Meta:
         model = ServicePage
         filter_fields = ['id', 'slug', 'live', 'coa_global']
-        interfaces = [graphene.Node]
+        interfaces = [graphene.Node, DepartmentResolver]
 
     def resolve_page_type(self, info):
         return ServicePage.get_verbose_name().lower()
 
     def resolve_janis_url(self, info):
         return self.janis_url()
-
-    def resolve_departments(self, info):
-        return self.departments()
 
     def resolve_steps(self, info):
         repr_steps = []
@@ -486,7 +490,7 @@ class InformationPageNode(DjangoObjectType):
     class Meta:
         model = InformationPage
         filter_fields = ['id', 'slug', 'live', 'coa_global']
-        interfaces = [graphene.Node]
+        interfaces = [graphene.Node, DepartmentResolver]
 
     def resolve_page_type(self, info):
         return InformationPage.get_verbose_name().lower()
@@ -498,7 +502,7 @@ class FormContainerNode(DjangoObjectType):
     class Meta:
         model = FormContainer
         filter_fields = ['id', 'slug', 'live', 'coa_global']
-        interfaces = [graphene.Node]
+        interfaces = [graphene.Node, DepartmentResolver]
 
     def resolve_page_type(self, info):
         return FormContainer.get_verbose_name().lower()
@@ -531,7 +535,7 @@ class OfficialDocumentPageNode(DjangoObjectType):
     class Meta:
         model = OfficialDocumentPage
         filter_fields = ['id', 'slug', 'live', 'coa_global']
-        interfaces = [graphene.Node]
+        interfaces = [graphene.Node, DepartmentResolver]
 
     def resolve_page_type(self, info):
         return OfficialDocumentPage.get_verbose_name().lower()
@@ -624,7 +628,7 @@ class GuidePageNode(DjangoObjectType):
     class Meta:
         model = GuidePage
         filter_fields = ['id', 'slug', 'live', 'coa_global']
-        interfaces = [graphene.Node]
+        interfaces = [graphene.Node, DepartmentResolver]
 
     def resolve_sections(self, info):
         repr_sections = []
