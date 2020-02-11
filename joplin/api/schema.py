@@ -15,19 +15,17 @@ from wagtail.core.blocks import *
 from wagtail.documents.models import Document
 from wagtail.core.rich_text import expand_db_html
 from base.models import (
-    TranslatedImage,
-    ServicePage, ServicePageContact, ServicePageTopic, ServicePageRelatedDepartments,
-    InformationPage, InformationPageContact, InformationPageTopic, InformationPageRelatedDepartments,
-    DepartmentPage, DepartmentPageContact, DepartmentPageDirector, DepartmentPageTopPage, DepartmentPageRelatedPage,
-    Theme, TopicCollectionPage, TopicPage, TopicPageTopicCollection, TopicPageTopPage,
-    Contact, Location, PhoneNumber, ContactDayAndDuration, OfficialDocumentPage, OfficialDocumentPageRelatedDepartments,
-    OfficialDocumentPageTopic, OfficialDocumentPageOfficialDocument, GuidePage, GuidePageTopic,
-    GuidePageRelatedDepartments, GuidePageContact, FormContainer, FormContainerRelatedDepartments, FormContainerTopic,
+    TranslatedImage, ServicePage, ServicePageContact, ServicePageTopic, InformationPage, InformationPageContact,
+    InformationPageTopic, DepartmentPage, DepartmentPageContact, DepartmentPageDirector, DepartmentPageTopPage,
+    DepartmentPageRelatedPage, Theme, TopicCollectionPage, TopicPage, TopicPageTopicCollection, TopicPageTopPage,
+    Contact, Location, PhoneNumber, ContactDayAndDuration, OfficialDocumentPage, OfficialDocumentPageTopic,
+    OfficialDocumentPageOfficialDocument, GuidePage, GuidePageTopic, GuidePageContact,
+    FormContainer, FormContainerTopic,
 )
 from .content_type_map import content_type_map
 import traceback
 from locations.models import LocationPage, LocationPageRelatedServices
-from events.models import EventPage, EventPageFee, EventPageRelatedDepartments
+from events.models import EventPage, EventPageFee
 
 
 class RichTextFieldType(Scalar):
@@ -339,10 +337,7 @@ class EventPageFeeNode(DjangoObjectType):
         interfaces = [graphene.Node]
 
 
-class EventPageRelatedDepartmentsNode(DjangoObjectType):
-    class Meta:
-        model = EventPageRelatedDepartments
-        interfaces = [graphene.Node]
+
 
 
 class ContactNode(DjangoObjectType):
@@ -380,36 +375,6 @@ class ServicePageTopicNode(DjangoObjectType):
         model = ServicePageTopic
         interfaces = [graphene.Node]
         filter_fields = ['topic']
-
-
-class ServicePageRelatedDepartmentsNode(DjangoObjectType):
-    class Meta:
-        model = ServicePageRelatedDepartments
-        interfaces = [graphene.Node]
-
-
-class InformationPageRelatedDepartmentsNode(DjangoObjectType):
-    class Meta:
-        model = InformationPageRelatedDepartments
-        interfaces = [graphene.Node]
-
-
-class OfficialDocumentPageRelatedDepartmentsNode(DjangoObjectType):
-    class Meta:
-        model = OfficialDocumentPageRelatedDepartments
-        interfaces = [graphene.Node]
-
-
-class GuidePageRelatedDepartmentsNode(DjangoObjectType):
-    class Meta:
-        model = GuidePageRelatedDepartments
-        interfaces = [graphene.Node]
-
-
-class FormContainerRelatedDepartmentsNode(DjangoObjectType):
-    class Meta:
-        model = FormContainerRelatedDepartments
-        interfaces = [graphene.Node]
 
 
 class TranslatedImageNode(DjangoObjectType):

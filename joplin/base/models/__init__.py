@@ -25,12 +25,12 @@ from .home_page import HomePage
 from .theme import Theme
 from .topic_collection_page import TopicCollectionPage
 from .topic_page import TopicPage, TopicPageTopicCollection, TopicPageTopPage
-from .service_page import ServicePage, ServicePageTopic, ServicePageContact, ServicePageRelatedDepartments
-from .information_page import InformationPage, InformationPageRelatedDepartments, InformationPageTopic, InformationPageContact
+from .service_page import ServicePage, ServicePageTopic, ServicePageContact
+from .information_page import InformationPage, InformationPageTopic, InformationPageContact
 from .department_page import DepartmentPage, DepartmentPageDirector, DepartmentPageContact, DepartmentPageTopPage, DepartmentPageRelatedPage
-from .official_documents_page import OfficialDocumentPage, OfficialDocumentPageOfficialDocument, OfficialDocumentPageRelatedDepartments, OfficialDocumentPageTopic
-from .guide_page import GuidePage, GuidePageTopic, GuidePageRelatedDepartments, GuidePageContact
-from .form_container import FormContainer, FormContainerRelatedDepartments, FormContainerTopic
+from .official_documents_page import OfficialDocumentPage, OfficialDocumentPageOfficialDocument, OfficialDocumentPageTopic
+from .guide_page import GuidePage, GuidePageTopic, GuidePageContact
+from .form_container import FormContainer, FormContainerTopic
 from .widgets import countMe, countMeTextArea
 from .site_settings import JanisBranchSettings
 from .deployment_log import DeploymentLog
