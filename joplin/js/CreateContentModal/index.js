@@ -97,7 +97,7 @@ class CreateContentModal extends Component {
     );
   };
 
-  handleContentOrTopicSelect = (content_or_topic) => {
+  handleContentOrTopicSelect = content_or_topic => {
     this.setState({ content_or_topic: content_or_topic });
   };
 
@@ -150,6 +150,7 @@ class CreateContentModal extends Component {
   };
 
   render() {
+    debugger;
     return (
       <div
         className="modal fade"

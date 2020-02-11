@@ -25,12 +25,6 @@ class FormContainer(JanisBasePage):
     publish_requirements = (
         FieldPublishRequirement("description", langs=["en"]),
         FieldPublishRequirement("form_url", langs=["en"]),
-        ConditionalPublishRequirement(
-            RelationPublishRequirement("topics"),
-            "or",
-            RelationPublishRequirement("related_departments"),
-            message="You must have at least 1 topic or 1 department selected.",
-        ),
     )
 
     content_panels = [
