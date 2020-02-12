@@ -305,18 +305,18 @@ $(function() {
     localStorage.preview_lang = lang;
   });
 
-  var structbutton = $('.c-sf-add-button');
-  structbutton.click(function() {
-      console.log(structbutton.length)
-      // when the button is clicked, a new streamfield is added. we need a slight delay between
-      // clicking the button and getting the list of labels to allow the labels to be added to the DOM
-      // hence a settimeout.
-      setTimeout(() => {
-        let currentLang = state.currentLang
-        translateStructBlocks(currentLang)
-        console.log($('.c-sf-add-button').length)
-      }, 0)
-  })
+//  var structbutton = $('.c-sf-add-button');
+//  structbutton.click(function() {
+//      console.log(structbutton.length)
+//      // when the button is clicked, a new streamfield is added. we need a slight delay between
+//      // clicking the button and getting the list of labels to allow the labels to be added to the DOM
+//      // hence a settimeout.
+//      setTimeout(() => {
+//        let currentLang = state.currentLang
+//        translateStructBlocks(currentLang)
+//        console.log($('.c-sf-add-button').length)
+//      }, 0)
+//  })
 
   // Persist language for sharing even after page refreshes on save
   var shareButton = $('#page-share-preview-button');
@@ -350,6 +350,22 @@ $(function() {
 
   var messages = $('.messages');
   messages.fadeOut(10000);
+
+  const pageEditForm = document.getElementById('page-edit-form')
+  const checkStreamFieldLanguages = new MutationObserver(function(mutations) {
+    for (let mutation of mutations) {
+      if (mutation.type === 'childList') {
+        if (mutation.target.classList.contains("c-sf-container")) {
+          console.log("mutation.target:", mutation.target)
+          translateStructBlocks(state.currentLang)
+        }
+      }
+    }
+  })
+  checkStreamFieldLanguages.observe(pageEditForm, {
+    childList: true,
+    subtree: true
+  })
 
   // When we add new fields to the page (orderable/streamfields etc.)
   // only show the appropriate fields based on language
