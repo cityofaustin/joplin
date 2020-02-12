@@ -43,7 +43,7 @@ class GuidePage(JanisBasePage):
     description = models.TextField(blank=True, verbose_name='Write a description of the guide')
     image = models.ForeignKey(TranslatedImage, null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
 
-    sections = StreamField(StreamBlock(
+    sections = StreamField(
         [
             ('section', StructBlock(
                 [
@@ -55,7 +55,7 @@ class GuidePage(JanisBasePage):
                 ],
                 label="Section",
             )),
-        ], max_num=3),
+        ],
         verbose_name='Add a section header and pages to each section',
         blank=True
     )

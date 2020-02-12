@@ -356,7 +356,6 @@ $(function() {
     for (let mutation of mutations) {
       if (mutation.type === 'childList') {
         if (mutation.target.classList.contains("c-sf-container")) {
-          console.log("mutation.target:", mutation.target)
           translateStructBlocks(state.currentLang)
         }
       }
