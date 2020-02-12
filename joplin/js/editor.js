@@ -305,19 +305,6 @@ $(function() {
     localStorage.preview_lang = lang;
   });
 
-//  var structbutton = $('.c-sf-add-button');
-//  structbutton.click(function() {
-//      console.log(structbutton.length)
-//      // when the button is clicked, a new streamfield is added. we need a slight delay between
-//      // clicking the button and getting the list of labels to allow the labels to be added to the DOM
-//      // hence a settimeout.
-//      setTimeout(() => {
-//        let currentLang = state.currentLang
-//        translateStructBlocks(currentLang)
-//        console.log($('.c-sf-add-button').length)
-//      }, 0)
-//  })
-
   // Persist language for sharing even after page refreshes on save
   var shareButton = $('#page-share-preview-button');
   var urlcopied = $('#page-share-url-copied');

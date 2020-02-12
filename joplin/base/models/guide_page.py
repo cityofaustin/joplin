@@ -4,7 +4,7 @@ from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
 
 from wagtail.core.fields import StreamField
-from wagtail.core.blocks import StreamBlock, StructBlock, PageChooserBlock, TextBlock, ListBlock
+from wagtail.core.blocks import StructBlock, PageChooserBlock, TextBlock, ListBlock
 from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, PageChooserPanel, StreamFieldPanel
 from wagtail.snippets.edit_handlers import SnippetChooserPanel
 from wagtail.images.edit_handlers import ImageChooserPanel
@@ -53,7 +53,7 @@ class GuidePage(JanisBasePage):
                     ('section_heading_vi', TextBlock(label='Heading [vi]', required=False)),
                     ('pages', ListBlock(PageChooserBlock(label="Page", page_type=[InformationPage, ServicePage]), help_text='Select existing pages in the order you want them to display within each heading. Pages should be added only once to any single guide.')),
                 ],
-                label="Section",
+                label="Section"
             )),
         ],
         verbose_name='Add a section header and pages to each section',
