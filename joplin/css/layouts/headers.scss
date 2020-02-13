@@ -1,16 +1,36 @@
 // COA Global Header
 
+.coa-seal {
+  width: 50px;
+  padding: 20px;
+}
+
+.coa-user { // 👀👇Look, there's more below from og styles for this
+  color: $coa-text-color;
+  background-color: $coa-background-color-secondary;
+  font-size: $coa-fontSize-md !important; // figure-out why...?
+  margin-top: 8px;
+  padding-left: 20px !important;
+  padding-right: 20px;
+  line-height: 50px;
+  height: 50px;
+}
+
+// 🔥 NOTES...
+// ---- sperate as header and... whatever else is used in here....
+// ... it's confused with nav header👆 and individual headers👇
+
 .coa-header {
     display: flex;
     padding: 0.75rem;
-    background: $coa-color-darkest-gray;
+    // background: $coa-color-darkest-gray;
     position: fixed;
     z-index: 4;
     width: 100%;
 }
 
 .coa-user {
-    color: $coa-color-lightest-blue;
+    // color: $coa-color-lightest-blue;
     padding-left: 10px;
     font-size: 14px;
 }
