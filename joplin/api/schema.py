@@ -389,17 +389,6 @@ class EventPageRelatedDepartmentsNode(DjangoObjectType):
         interfaces = [graphene.Node]
 
 
-class EventListPageNode(DjangoObjectType):
-    allEvents = DjangoFilterConnectionField(
-        EventPageNode, filterset_class=EventFilter)
-
-    class Meta:
-        model = EventPage
-        filter_fields = ['id', 'slug', 'live', 'date']
-        interfaces = [graphene.Node]
-
-
-
 class ContactNode(DjangoObjectType):
     class Meta:
         model = Contact
@@ -986,7 +975,7 @@ class Query(graphene.ObjectType):
     all_location_pages = DjangoFilterConnectionField(LocationPageNode)
     all_form_container_topics = DjangoFilterConnectionField(FormContainerTopicNode)
     all_event_pages = DjangoFilterConnectionField(EventPageNode)
-    all_event_list = DjangoFilterConnectionField(EventListPageNode)
+    all_ordered_events = DjangoFilterConnectionField(EventPageNode, filterset_class=EventFilter)
 
     def resolve_site_structure(self, resolve_info):
         site_structure = SiteStructure()
