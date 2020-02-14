@@ -173,7 +173,11 @@ $(function() {
     for (let label of labelList) {
       if (label.querySelector) {
         let languageTag = label.querySelector('span').innerText;
-        // TODO: come up with a more elegant and maintainable way to check what elements ought to be hidden
+        // 'rah-static rah-static--height-auto c-sf-block__content' is the classList associated with
+        // react-streamfields. If the element is not in the streamfield div, then we need to access
+        // its grandparent and hide that. If it is in the streamfield div, we hide its parent.
+        // if the classlist changes, or other fields are nested in different ways, there is the
+        // potential for regressions
         if (
           label.parentElement.parentElement.parentElement.classList
             .value !== 'rah-static rah-static--height-auto c-sf-block__content'
@@ -184,11 +188,12 @@ $(function() {
           } else {
             translatedElement.classList.remove('hidden');
           }
-          /*  check if still valid with new react streamfield
+          /*
               While the first condition checks for 'struct-blocks' with language tags,
               it doesn't catch the case where there are 'struct-blocks' with language
               tags WITHIN the element itself. The following condition checks for those conditions.
-              - The was necessary for guide stream fields. */
+              - This is not currently being used for streamfields, but could be used again
+               if we decide to hide different fields */
 //          if (translatedElement.classList.contains('struct-block')) {
 //            const fieldlabels = translatedElement.querySelectorAll('[for]');
 //            fieldlabels.forEach(fieldlabel => {
