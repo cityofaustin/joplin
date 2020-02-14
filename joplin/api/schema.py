@@ -976,8 +976,7 @@ class Query(graphene.ObjectType):
     all_guide_page_topics = DjangoFilterConnectionField(GuidePageTopicNode)
     all_location_pages = DjangoFilterConnectionField(LocationPageNode)
     all_form_container_topics = DjangoFilterConnectionField(FormContainerTopicNode)
-    all_event_pages = DjangoFilterConnectionField(EventPageNode)
-    all_ordered_events = DjangoFilterConnectionField(EventPageNode, filterset_class=EventFilter)
+    all_event_pages = DjangoFilterConnectionField(EventPageNode, filterset_class=EventFilter)
 
     def resolve_site_structure(self, resolve_info):
         site_structure = SiteStructure()
