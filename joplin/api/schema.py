@@ -96,7 +96,7 @@ def expand_by_type(key, value):
 
 def try_get_api_representation(StreamChild):
     if StreamChild.block_type == "map_block":
-        # this has its own representation defition in blocks.py
+        # this has its own representation definition in blocks.py
         block = StreamChild.block.get_api_representation(StreamChild.value)
         return block
 
@@ -231,6 +231,19 @@ class LocationPageRelatedServices(DjangoObjectType):
         interfaces = [graphene.Node]
 
 
+class EventFilter(FilterSet):
+    order_by = OrderingFilter(
+        fields=(
+            ('date'),
+        )
+    )
+    # https://django-filter.readthedocs.io/en/master/guide/usage.html#the-filter
+
+    class Meta:
+        model = EventPage
+        fields = ['date']
+
+
 class EventPageRemoteLocation(graphene.ObjectType):
     """
     Remote Location = non city owned location
@@ -351,7 +364,7 @@ class EventPageNode(DjangoObjectType):
 
     class Meta:
         model = EventPage
-        filter_fields = ['id', 'slug', 'live']
+        filter_fields = ['id', 'slug', 'live', 'date']
         interfaces = [graphene.Node]
 
     def resolve_locations(self, info):
@@ -374,6 +387,17 @@ class EventPageRelatedDepartmentsNode(DjangoObjectType):
     class Meta:
         model = EventPageRelatedDepartments
         interfaces = [graphene.Node]
+
+
+class EventListPageNode(DjangoObjectType):
+    allEvents = DjangoFilterConnectionField(
+        EventPageNode, filterset_class=EventFilter)
+
+    class Meta:
+        model = EventPage
+        filter_fields = ['id', 'slug', 'live', 'date']
+        interfaces = [graphene.Node]
+
 
 
 class ContactNode(DjangoObjectType):
@@ -962,6 +986,7 @@ class Query(graphene.ObjectType):
     all_location_pages = DjangoFilterConnectionField(LocationPageNode)
     all_form_container_topics = DjangoFilterConnectionField(FormContainerTopicNode)
     all_event_pages = DjangoFilterConnectionField(EventPageNode)
+    all_event_list = DjangoFilterConnectionField(EventListPageNode)
 
     def resolve_site_structure(self, resolve_info):
         site_structure = SiteStructure()
