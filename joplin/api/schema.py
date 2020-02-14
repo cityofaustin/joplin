@@ -10,7 +10,7 @@ from graphene.types.json import JSONString
 from graphene.types.generic import GenericScalar
 from wagtail.core.fields import StreamField, RichTextField
 from wagtail.core.models import PageRevision
-from django_filters import FilterSet, OrderingFilter, DateFromToRangeFilter
+from django_filters import FilterSet, OrderingFilter
 from wagtail.core.blocks import *
 from wagtail.documents.models import Document
 from wagtail.core.rich_text import expand_db_html
@@ -238,11 +238,12 @@ class EventFilter(FilterSet):
         )
     )
 
-    # https://django-filter.readthedocs.io/en/master/guide/usage.html#the-filter
-
     class Meta:
         model = EventPage
-        fields = ['date']
+        fields = {
+            'date': ['exact', 'lte', 'gte'],
+            'live': ['exact']
+        }
 
 
 class EventPageRemoteLocation(graphene.ObjectType):
@@ -365,13 +366,7 @@ class EventPageNode(DjangoObjectType):
 
     class Meta:
         model = EventPage
-        filter_fields = {
-            "id": ["exact"],
-            "slug": ["exact"],
-            "live": ["exact"],
-            "date": ["exact", "gt", "lt"],
-         # ['id', 'slug', 'live', 'date'
-        }
+        filter_fields =  ['id', 'slug', 'live', 'date']
         interfaces = [graphene.Node]
 
     def resolve_locations(self, info):
