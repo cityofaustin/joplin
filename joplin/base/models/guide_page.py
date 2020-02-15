@@ -24,7 +24,8 @@ from publish_preflight.requirements import FieldPublishRequirement, RelationPubl
 
 def streamfield_has_pages(stream_value):
     """
-    Confirms the stream_value has data, and the data contains both pages and an english section_heading
+    Confirms the stream_value has data, and
+    the data contains both pages and an english section_heading
     :return: boolean
     """
     if stream_value:
@@ -38,6 +39,11 @@ def streamfield_has_pages(stream_value):
 
 
 class GuidePage(JanisBasePage):
+    """
+    A guide page aggregates several pages together into a user-friendly view
+    Since the number of related in a section page could be arbitrary, it's
+    implemented using Streamfields
+    """
     janis_url_page_type = "guide"
 
     description = models.TextField(blank=True, verbose_name='Write a description of the guide')
