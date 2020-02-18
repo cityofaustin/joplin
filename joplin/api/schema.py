@@ -242,7 +242,8 @@ class EventFilter(FilterSet):
         model = EventPage
         fields = {
             'date': ['exact', 'lte', 'gte'],
-            'live': ['exact']
+            'live': ['exact'],
+            'id': ['exact'],
         }
 
 
