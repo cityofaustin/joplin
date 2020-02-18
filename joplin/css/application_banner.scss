@@ -1,0 +1,14 @@
+.coa-header { // Change me to coa-application_banner
+  display: flex;
+  padding: 0.75rem;
+  // background: $coa-color-darkest-gray;
+  position: fixed;
+  z-index: 4;
+  width: 100%;
+  border-bottom: solid $coa-border-color 2px;
+}
+
+.coa-seal {
+  width: 50px;
+  padding: 20px;
+}
