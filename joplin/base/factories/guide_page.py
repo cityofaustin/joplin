@@ -1,4 +1,5 @@
 import factory
+import factory.fuzzy
 import wagtail_factories
 from django.utils.text import slugify
 from wagtail.core.models import Collection, Page
@@ -8,8 +9,19 @@ from .base_factories import PageFactory
 
 
 class PageChooserBlockFactory(wagtail_factories.blocks.BlockFactory):
+    page = factory.fuzzy.FuzzyChoice([page for page in Page.objects.type(
+        tuple([ServicePage, InformationPage]))])
+
     class Meta:
         model = blocks.PageChooserBlock
+
+    @classmethod
+    def _build(cls, model_class, page):
+        return page
+
+    @classmethod
+    def _create(cls, model_class, page):
+        return page
 
 
 class GuidePageTopicFactory(factory.django.DjangoModelFactory):
@@ -48,7 +60,7 @@ class GuidePageFactory(PageFactory):
     description = factory.Faker('text')
     image = factory.SubFactory(wagtail_factories.ImageFactory)
     sections = wagtail_factories.StreamFieldFactory(
-        {'section': factory.Faker('text')}
+        {'section': wagtail_factories.StructBlockFactory}
     )
 
     class Meta:
