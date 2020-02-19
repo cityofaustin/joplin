@@ -10,7 +10,7 @@ from wagtail.admin.edit_handlers import (
 
 from locations.models import LocationPage
 from base.models import Contact
-from wagtail.core.fields import RichTextField, StreamField
+from wagtail.core.fields import RichTextField, StreamField, StreamBlock
 from wagtail.core.models import Orderable
 from wagtail.admin.edit_handlers import FieldPanel, PageChooserPanel, HelpPanel
 from base.models import JanisBasePage
@@ -34,7 +34,7 @@ class EventPage(JanisBasePage):
     start_time = models.TimeField(blank=True, null=True)
     end_time = models.TimeField(blank=True, null=True)
 
-    location_blocks = StreamField(
+    location_blocks = StreamBlock(
         [
             ('city_location', StructBlock(
                 [
@@ -64,7 +64,8 @@ class EventPage(JanisBasePage):
             )),
         ],
         verbose_name='Add location of event',
-        blank=True
+        blank=True,
+        max_num=1
     )
 
     event_is_free = models.BooleanField(verbose_name="This event is free", default=True)
