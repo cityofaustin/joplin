@@ -61,7 +61,8 @@ def configure_main_menu(request, menu_items):
                      [
                          'explorer',
                          'settings',
-                         'snippets'
+                         'snippets',
+                         'reports'
                      ]
                      ]
 
