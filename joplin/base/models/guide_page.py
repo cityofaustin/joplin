@@ -41,7 +41,7 @@ def streamfield_has_pages(stream_value):
 class GuidePage(JanisBasePage):
     """
     A guide page aggregates several pages together into a user-friendly view
-    Since the number of related in a section page could be arbitrary, it's
+    Since the number of related pages in a section could be arbitrary, it's
     implemented using Streamfields
     """
     janis_url_page_type = "guide"
@@ -57,7 +57,12 @@ class GuidePage(JanisBasePage):
                     ('section_heading_es', TextBlock(label='Heading [es]', required=False)),
                     ('section_heading_ar', TextBlock(label='Heading [ar]', required=False)),
                     ('section_heading_vi', TextBlock(label='Heading [vi]', required=False)),
-                    ('pages', ListBlock(PageChooserBlock(label="Page", page_type=[InformationPage, ServicePage]), help_text='Select existing pages in the order you want them to display within each heading. Pages should be added only once to any single guide.')),
+                    ('pages', ListBlock(
+                        PageChooserBlock(label="Page", page_type=[InformationPage, ServicePage]),
+                        help_text='Select existing pages in the order you want them \
+                        to display within each heading.\
+                        Pages should be added only once to any single guide.')
+                     ),
                 ],
                 label="Section"
             )),

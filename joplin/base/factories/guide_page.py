@@ -59,7 +59,7 @@ class GuidePageContactFactory(factory.django.DjangoModelFactory):
 class GuidePageFactory(PageFactory):
     description = factory.Faker('text')
     image = factory.SubFactory(wagtail_factories.ImageFactory)
-    # sections = wagtail_factories.StreamFieldFactory(wagtail_factories.StructBlockFactory)
+    # sections = wagtail_factories.StreamFieldFactory()
 
     class Meta:
         model = GuidePage
