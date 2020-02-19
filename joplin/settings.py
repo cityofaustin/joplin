@@ -216,6 +216,7 @@ ALLOWED_HOSTS = [
 DEBUG_TOOLBAR = bool(strtobool(os.environ.get('DEBUG_TOOLBAR', str(False))))
 MONITOR_PERFORMANCE = bool(strtobool(os.environ.get('MONITOR_PERFORMANCE', str(False))))
 
+WAGTAILEMBEDS_RESPONSIVE_HTML = True
 
 if MONITOR_PERFORMANCE:
     MIDDLEWARE = ['silk.middleware.SilkyMiddleware'] + MIDDLEWARE
