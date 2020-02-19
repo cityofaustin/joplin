@@ -237,6 +237,9 @@ class EventFilter(FilterSet):
             ('date'),
         )
     )
+    # For reference:
+    # https://django-filter.readthedocs.io/en/master/ref/filterset.html#declaring-filterable-fields
+    # https://docs.djangoproject.com/en/3.0/ref/models/querysets/#lte
 
     class Meta:
         model = EventPage
