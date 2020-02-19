@@ -3,7 +3,6 @@ import wagtail_factories
 from django.utils.text import slugify
 from wagtail.core.models import Collection, Page
 from wagtail.core.blocks import RichTextBlock, TextBlock
-
 from base.models import *
 
 
