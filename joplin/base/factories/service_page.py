@@ -3,7 +3,7 @@ import wagtail_factories
 from django.utils.text import slugify
 from wagtail.core.models import Collection, Page
 from base.models import *
-from .base_factories import PageFactory
+from .shared_factories import PageFactory
 
 
 class ServicePageTopicFactory(factory.django.DjangoModelFactory):

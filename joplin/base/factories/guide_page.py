@@ -5,10 +5,16 @@ from django.utils.text import slugify
 from wagtail.core.models import Collection, Page
 from base.models import *
 from wagtail.core import blocks
-from .base_factories import PageFactory
+from .shared_factories import PageFactory, TextBlockFactory
+
+"""
+almost working
+might need to split page up into its own factory (pass page factory? choosing a page)
+or do more stuff in the build/create section to choose a random qualifying page
+"""
 
 
-class PageChooserBlockFactory(wagtail_factories.blocks.BlockFactory):
+class SectionPageChooserBlockFactory(wagtail_factories.blocks.BlockFactory):
     page = factory.fuzzy.FuzzyChoice([page for page in Page.objects.type(
         tuple([ServicePage, InformationPage]))])
 
@@ -50,18 +56,10 @@ class GuidePageContactFactory(factory.django.DjangoModelFactory):
         model = GuidePageContact
 
 
-class SectionFactory(wagtail_factories.StructBlockFactory):
-    section_heading_en = factory.Faker('text')
-    # TODO: making the streamfield factory work is gonna be a thing
-    pages = wagtail_factories.ListBlockFactory(PageChooserBlockFactory)
-
-
 class GuidePageFactory(PageFactory):
     description = factory.Faker('text')
     image = factory.SubFactory(wagtail_factories.ImageFactory)
-    sections = wagtail_factories.StreamFieldFactory(
-        {'section': wagtail_factories.StructBlockFactory}
-    )
+    # sections = wagtail_factories.StreamFieldFactory(wagtail_factories.StructBlockFactory)
 
     class Meta:
         model = GuidePage
