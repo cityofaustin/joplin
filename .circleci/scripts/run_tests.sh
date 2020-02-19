@@ -24,4 +24,4 @@ if [ $skipped_test_count -gt 0 ]; then
   echo ""
 fi
 
-python manage.py test --pattern="test_*.py"
+python pytest

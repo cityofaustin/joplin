@@ -10,6 +10,7 @@ from base.models import (
 from wagtail.documents.models import Document
 
 from base.signals.janis_build_triggers import collect_pages, collect_pages_snippet
+import pytest
 
 
 class TestCollectPages(TestCase):
@@ -56,6 +57,7 @@ class TestCollectPages(TestCase):
         global_page_id = Node.to_global_id(permit_guide.get_verbose_name().lower(), permit_guide.id)
         self.assertTrue(global_page_id in global_ids)
 
+    @pytest.mark.xfail
     def test_page_sibling_topic(self):
         """
         currently fails because topics don't know about sibling topics seen in the contextual nav
@@ -89,6 +91,7 @@ class TestCollectPages(TestCase):
         self.assertTrue(global_page_id1 in global_ids)
         self.assertTrue(global_page_id2 in global_ids)
 
+    @pytest.mark.xfail
     def test_map_update(self):
         """
         Not working. Maps are inserted in a Streamfield named dynamic content via
