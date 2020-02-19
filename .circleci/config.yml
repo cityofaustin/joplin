@@ -35,9 +35,6 @@ jobs:
             - "/usr/local/lib/python3.7/site-packages"
           key: deps-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
       - run:
-          name: Run migrations for test
-          command: pipenv run python joplin/manage.py migrate --noinput
-      - run:
           name: Run tests
           command: pipenv run pytest
   deploy:
