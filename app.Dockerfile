@@ -40,7 +40,7 @@ FROM joplin-common as joplin-deployed
 
 # Install nodejs dependencies
 RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
-RUN apt-get update; apt-get -y install nodejs
+RUN apt-get update; apt-get -y install nodejs, git
 RUN npm install --global yarn
 
 # Build nodejs dependencies for deployed builds
