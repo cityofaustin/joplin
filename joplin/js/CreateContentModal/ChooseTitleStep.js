@@ -43,6 +43,9 @@ const ChooseTitleStep = ({
   handleTitleInputChange,
   characterCount,
   maxCharacterCount,
+  departmentList,
+  selectedDepartment,
+  handleDepartmentSelect
 }) => (
   <div className="CreateContentModal__step">
     <h2 className="CreateContentModal__header">
@@ -68,6 +71,14 @@ const ChooseTitleStep = ({
       autoFocus
       onChange={handleTitleInputChange}
     />
+    {!!departmentList && !!departmentList.length &&
+    <label htmlFor="page-title" className="ChooseTitleStep__input-label">
+      Pick a department
+      <select value={selectedDepartment} onChange={handleDepartmentSelect}>
+        <option value=''></option>
+        {departmentList.map(dept => <option value={dept.id}>{dept.title}</option>)}
+      </select>
+    </label>}
 
     {pageType === 'department' ? (
       <div>

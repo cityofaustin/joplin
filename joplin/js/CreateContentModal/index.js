@@ -13,6 +13,7 @@ import ButtonBar from './ButtonBar.js';
 import './index.scss';
 
 const MAX_TITLE_LENGTH = 58;
+const DEPARTMENT_LIST = window.departments;
 
 const stepsEnum = {
   CHOOSE_TYPE: 0,
@@ -28,7 +29,7 @@ class CreateContentModal extends Component {
       title: '', // React warning said: `value` prop on `input` should not be null. Consider using an empty string...
       topic: null,
       theme: null,
-      department: null,
+      department: '',
       activeStep: 0,
       titleCharacterCount: 0,
       creatingContent: false,
@@ -109,6 +110,10 @@ class CreateContentModal extends Component {
     });
   };
 
+  handleDepartmentSelect = e => {
+    this.setState({ department: e.target.value });
+  };
+
   redirectToEditPage = id => {
     window.location.href = `/admin/pages/${id}/edit/`;
   };
@@ -187,6 +192,9 @@ class CreateContentModal extends Component {
                         handleTitleInputChange={this.handleTitleInputChange}
                         characterCount={this.state.titleCharacterCount}
                         maxCharacterCount={MAX_TITLE_LENGTH}
+                        departmentList={DEPARTMENT_LIST}
+                        selectedDepartment={this.state.department}
+                        handleDepartmentSelect={this.handleDepartmentSelect}
                       />
                     )}
                     {this.state.missingTitle && (
