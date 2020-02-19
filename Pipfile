@@ -7,7 +7,7 @@ verify_ssl = true
 locustio = "==0.13.1"
 
 [packages]
-wagtail = "==2.7"
+wagtail = "==2.8"
 django-cors-headers = "==2.2.0"
 django-extensions = "==2.1.9"
 django-filter = "==2.1.0"
@@ -34,6 +34,7 @@ psycopg2 = "==2.8.4"
 wagtail-factories = "*"
 scout-apm = "*"
 django-silk = "*"
+wagtail-react-streamfield = "*"
 
 [requires]
 python_version = "3.7"
