@@ -71,7 +71,9 @@ const ChooseTitleStep = ({
       autoFocus
       onChange={handleTitleInputChange}
     />
-    {!!departmentList && !!departmentList.length &&
+    { // We don't get sent a list of departments unless the user is an admin
+      // so if we have one, we should show the dropdown
+      !!departmentList && !!departmentList.length &&
     <label htmlFor="page-department" className="ChooseTitleStep__input-label">
       Pick a department
       <select id="page-department" value={selectedDepartment} onChange={handleDepartmentSelect}>

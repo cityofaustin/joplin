@@ -63,7 +63,7 @@ def new_page_from_modal(request):
         page.unpublish()  # Not sure why it seems to go live by default
 
         if request.user.is_superuser:
-            # If we're an admin, add the selected department from
+            # If the user's an admin, add the selected department from
             # the create content modal
             department_id = body['department']
             department_group = Department.objects.get(pk=department_id)
@@ -73,7 +73,7 @@ def new_page_from_modal(request):
                 permission_type='edit'
             )
         else:
-            # If we're not an admin, then we want to create a
+            # If the user's not an admin, then we want to create a
             # group permission object for each of the user's assigned departments
             for user_group in request.user.groups.all():
                 # If we did this with non department groups it might cause issues
