@@ -17,7 +17,7 @@ from .constants import WYSIWYG_GENERAL
 from .widgets import countMe, countMeTextArea
 from countable_field import widgets
 
-from publish_preflight.requirements import FieldPublishRequirement, RelationPublishRequirement, ConditionalPublishRequirement
+from publish_preflight.requirements import FieldPublishRequirement, RelationPublishRequirement, ConditionalPublishRequirement, DepartmentPublishRequirement
 
 
 class InformationPage(JanisBasePage):
@@ -49,16 +49,16 @@ class InformationPage(JanisBasePage):
     publish_requirements = (
         FieldPublishRequirement("description", langs=["en"], message="You need to write a description before publishing"),
         FieldPublishRequirement("additional_content", langs=["en"], message="You need to write additional content in order to publish"),
-        # ConditionalPublishRequirement(
-        #     RelationPublishRequirement("topics"),
-        #     "or",
-        #     ConditionalPublishRequirement(
-        #         RelationPublishRequirement("related_departments"),
-        #         "or",
-        #         FieldPublishRequirement("coa_global"),
-        #     ),
-        #     message="You must have at least 1 topic or 1 department or 'Top Level' checked."
-        # ),
+        ConditionalPublishRequirement(
+            RelationPublishRequirement("topics"),
+            "or",
+            ConditionalPublishRequirement(
+                DepartmentPublishRequirement(),
+                "or",
+                FieldPublishRequirement("coa_global"),
+            ),
+            message="You must have at least 1 topic or 1 department or 'Top Level' checked."
+        ),
     )
 
     content_panels = [
