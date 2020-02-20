@@ -1,7 +1,7 @@
 ########################################################
 # joplin-common
 
-FROM cityofaustin/joplin-base:5ac1b08 as joplin-common
+FROM cityofaustin/joplin-base:a148b09 as joplin-common
 
 # Install Python dependencies
 COPY "$PWD/Pipfile" ./Pipfile
@@ -40,7 +40,7 @@ FROM joplin-common as joplin-deployed
 
 # Install nodejs dependencies
 RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
-RUN apt-get update; apt-get -y install nodejs, git
+RUN apt-get update; apt-get -y install nodejs
 RUN npm install --global yarn
 
 # Build nodejs dependencies for deployed builds
