@@ -246,9 +246,9 @@ $(function() {
 
   function updateFeeVisibility(visible) {
     if(visible) {
-      $('.coa-eventFees').first().show()
+      $('.coa-eventFees').first().show('slow')
     } else {
-      $('.coa-eventFees').first().hide()
+      $('.coa-eventFees').first().hide('slow')
     }
   }
   updateFeeVisibility(!($('#id_event_is_free').first().prop('checked')))
