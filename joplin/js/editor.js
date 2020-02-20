@@ -244,6 +244,15 @@ $(function() {
     }
   }
 
+  function updateFeeVisibility(visible) {
+    if(visible) {
+      $('.coa-eventFees').first().show()
+    } else {
+      $('.coa-eventFees').first().hide()
+    }
+  }
+  updateFeeVisibility(!($('#id_event_is_free').first().prop('checked')))
+
   // if we previously had a language stored in local storage, load the view for that language
   // otherwise, we default to english
   if (localStorage.selected_lang) {
@@ -372,6 +381,11 @@ $(function() {
     changeLanguage(state.currentLang);
     updateSelectedLanguageDropdown(state.currentLang);
   });
+
+  // When we change the value of the event is free checkbox
+  $('#id_event_is_free').change(function() {
+    updateFeeVisibility(!($('#id_event_is_free').first().prop('checked')))
+  })
 
   // Found this here: https://stackoverflow.com/a/31719339
   MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
