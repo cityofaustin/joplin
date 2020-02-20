@@ -105,8 +105,14 @@ class EventPage(JanisBasePage):
             heading="Event time",
         ),
         StreamFieldPanel('location_blocks'),
-        FieldPanel('event_is_free'),
-        InlinePanel('fees', label='Fees'),
+        FieldPanel('event_is_free', classname=(
+            'wagtailuiplus__checkbox-handler ',
+            'wagtailuiplus__checkbox-handler--event_is_free'),
+        ),
+        InlinePanel('fees', label='Fees', classname=(
+            'wagtailuiplus__checkbox-handler-target--event_is_free '
+            'wagtailuiplus__checkbox-handler-hidden-if--checked'),
+        ),
         MultiFieldPanel(
             [
                 HelpPanel(registration_url.help_text, classname="coa-helpPanel"),
@@ -141,6 +147,10 @@ class EventPageFee(Orderable):
                 FieldPanel('fee', classname='col3'),
                 FieldPanel('fee_label', classname='col9'),
             ],
+            # classname=(
+            #     'wagtailuiplus__checkbox-handler ',
+            #     'wagtailuiplus__checkbox-handler--event_is_free'
+            # ),
         ),
     ]
 

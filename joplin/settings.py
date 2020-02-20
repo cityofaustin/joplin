@@ -86,6 +86,7 @@ INSTALLED_APPS = [
     'publish_preflight',
     'events',
     'silk',
+    'wagtailuiplus',
 ]
 
 MIDDLEWARE = [
