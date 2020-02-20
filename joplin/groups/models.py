@@ -8,6 +8,8 @@ class Department(ClusterableModel, Group):
     department_page = models.OneToOneField(
         "base.departmentPage",
         on_delete=models.CASCADE,
+        null=True,
+        blank=True
     )
 
     panels = [

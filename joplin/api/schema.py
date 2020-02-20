@@ -681,9 +681,9 @@ def get_structure_for_content_type(content_type):
             # Department groups have this
             if hasattr(group_page_permission.group, "department"):
                 department_page = group_page_permission.group.department.department_page
-
-                department_global_id = graphene.Node.to_global_id('DepartmentNode', department_page.id)
-                site_structure.append({'url': f'/{department_page.slug}/{page.slug}/', 'type': content_type, 'id': page_global_id, 'parent_department': department_global_id})
+                if department_page:
+                    department_global_id = graphene.Node.to_global_id('DepartmentNode', department_page.id)
+                    site_structure.append({'url': f'/{department_page.slug}/{page.slug}/', 'type': content_type, 'id': page_global_id, 'parent_department': department_global_id})
 
         # For content_type models that have topics
         if hasattr(page, "topics"):
