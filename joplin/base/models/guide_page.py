@@ -66,6 +66,12 @@ class GuidePage(JanisBasePage):
         FieldPublishRequirement("description", message="A description is required for publishing", langs=["en"]),
         RelationPublishRequirement("contacts", message="A contact is required for publishing."),
         StreamFieldPublishRequirement("sections", criteria=streamfield_has_pages),
+        # ConditionalPublishRequirement(
+        #     RelationPublishRequirement("topics"),
+        #     "or",
+        #     RelationPublishRequirement("related_departments"),
+        #     message="You must have at least 1 topic or 1 department selected.",
+        # ),
     )
 
     content_panels = [

@@ -104,6 +104,16 @@ class ServicePage(JanisBasePage):
     publish_requirements = (
         FieldPublishRequirement("short_description", message="A description is required", langs=["en"]),
         StreamFieldPublishRequirement("steps", langs=["en"]),
+        # ConditionalPublishRequirement(
+        #     RelationPublishRequirement("topics"),
+        #     "or",
+        #     ConditionalPublishRequirement(
+        #         RelationPublishRequirement("related_departments"),
+        #         "or",
+        #         FieldPublishRequirement("coa_global"),
+        #     ),
+        #     message="You must have at least 1 topic or 1 department or 'Top Level' checked."
+        # ),
     )
 
     content_panels = [

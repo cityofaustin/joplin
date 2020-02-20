@@ -72,9 +72,9 @@ const ChooseTitleStep = ({
       onChange={handleTitleInputChange}
     />
     {!!departmentList && !!departmentList.length &&
-    <label htmlFor="page-title" className="ChooseTitleStep__input-label">
+    <label htmlFor="page-department" className="ChooseTitleStep__input-label">
       Pick a department
-      <select value={selectedDepartment} onChange={handleDepartmentSelect}>
+      <select id="page-department" value={selectedDepartment} onChange={handleDepartmentSelect}>
         <option value=''></option>
         {departmentList.map(dept => <option value={dept.id}>{dept.title}</option>)}
       </select>
