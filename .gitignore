@@ -18,6 +18,7 @@ joplin/db/smuggler/*
 env.sh
 .env
 yarn.lock
+.pytest_cache/
 
 # Temporary datadumps
 joplin/db/system-generated/tmp.datadump.json

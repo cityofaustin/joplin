@@ -35,6 +35,8 @@ wagtail-factories = "*"
 scout-apm = "*"
 django-silk = "*"
 wagtail-react-streamfield = "*"
+pytest-django = "*"
+pytest-pythonpath = "*"
 
 [requires]
 python_version = "3.7"

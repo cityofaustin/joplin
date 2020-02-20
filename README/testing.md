@@ -1,14 +1,13 @@
 # Testing
 
-We now have automated tests! They get run on every circleci build during the "test" job. You can replicate this process locally by running:
+We now have automated tests! They get run on every circleci build during the "test" job. To replicate this process locally:
 
-`pipenv run bash .circleci/scripts/run_tests.sh`
+1. Start a database (`sh scripts/undockered` and quit after postgres starts; dedicated script for database starting is a TODO)
+2. run `pipenv run pytest`
 
 ## Which tests get run?
 
-Any file that matches the pattern `test_*.py` will be run.
-
-If there are any test files that you want to skip (i.e. they are broken and you have a good reason to not fix them immediately) then rename that file with an underscore prefix `_test_*.py`. The `.circleci/scripts/run_tests.sh` script will remind you to fix those tests later.
+Any file that matches the pattern specified in `pytest.ini`.
 
 ## How do I make test data?
 
