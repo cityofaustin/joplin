@@ -73,8 +73,8 @@ class PublishPreflightInformationPage(TestCase):
         }
         form = make_form(self.info_page, fake_request)
         is_valid = form.is_valid()
-        # self.assertFalse(is_valid)
-        # self.assertEqual(form._errors["__all__"].data.__len__(), 5)
+        self.assertFalse(is_valid)
+        self.assertEqual(form._errors["__all__"].data.__len__(), 5)
 
     # Test that form is valid if:
     # additional content, description, and a topic is selected
@@ -190,5 +190,5 @@ class PublishPreflightInformationPage(TestCase):
         }
         form = make_form(self.info_page, fake_request)
         is_valid = form.is_valid()
-        # self.assertFalse(is_valid)
-        # self.assertEqual(form._errors["__all__"].data.__len__(), 3)
+        self.assertFalse(is_valid)
+        self.assertEqual(form._errors["__all__"].data.__len__(), 3)
