@@ -26,6 +26,12 @@ from publish_preflight.requirements import FieldPublishRequirement
 
 
 class DepartmentPage(JanisBasePage):
+    """
+    A base that contains information about a department for public consumption
+    Note: there also may be other department models used for internally managing
+    content, user permissions, etc
+    """
+
     janis_url_page_type = "department"
 
     def __str__(self):
@@ -98,7 +104,6 @@ class DepartmentPageDirector(Orderable):
     ]
 
 
-
 class DepartmentPageContact(ClusterableModel):
     page = ParentalKey(DepartmentPage, related_name='contacts')
     contact = models.ForeignKey(Contact, related_name='+', on_delete=models.CASCADE)
@@ -113,7 +118,7 @@ class DepartmentPageContact(ClusterableModel):
 
 class DepartmentPageTopPage(Orderable):
     department = ParentalKey(DepartmentPage, related_name='top_pages')
-    page = models.ForeignKey('wagtailcore.Page',  verbose_name='Select a page', related_name='+', on_delete=models.CASCADE)
+    page = models.ForeignKey('wagtailcore.Page', verbose_name='Select a page', related_name='+', on_delete=models.CASCADE)
 
     panels = [
         PageChooserPanel('page', page_type=[InformationPage, ServicePage, GuidePage, OfficialDocumentPage]),
@@ -122,9 +127,10 @@ class DepartmentPageTopPage(Orderable):
     def __str__(self):
         return self.page.text
 
+
 class DepartmentPageRelatedPage(Orderable):
     department = ParentalKey(DepartmentPage, related_name='related_pages')
-    page = models.ForeignKey('wagtailcore.Page',  verbose_name='Select a page', related_name='+', on_delete=models.CASCADE)
+    page = models.ForeignKey('wagtailcore.Page', verbose_name='Select a page', related_name='+', on_delete=models.CASCADE)
 
     panels = [
         PageChooserPanel('page', page_type=[InformationPage, ServicePage, GuidePage, OfficialDocumentPage]),
