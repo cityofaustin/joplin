@@ -168,6 +168,7 @@
 // Fix formatting to allow PublishPreflight errors to be inserted below field titles
 .object>.title-wrapper {
   padding-left: 0;
+  // here it is, can I remove it?
   position: inherit;
 }
 
