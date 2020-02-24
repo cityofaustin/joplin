@@ -247,6 +247,7 @@ class EventFilter(FilterSet):
             'date': ['exact', 'lte', 'gte'],
             'live': ['exact'],
             'id': ['exact'],
+            'canceled': ['exact'],
         }
 
 
