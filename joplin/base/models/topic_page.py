@@ -3,9 +3,7 @@ from django.db import models
 from modelcluster.models import ClusterableModel
 from modelcluster.fields import ParentalKey
 
-from wagtail.core.fields import StreamField
-from wagtail.core.blocks import CharBlock, StructBlock, URLBlock
-from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, PageChooserPanel, StreamFieldPanel
+from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, PageChooserPanel
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.core.models import Orderable
 
@@ -19,6 +17,7 @@ from base.forms import TopicPageForm
 from .janis_page import JanisBasePage
 from .translated_image import TranslatedImage
 from .widgets import countMe, countMeTextArea
+from publish_preflight.requirements import RelationPublishRequirement
 
 
 class TopicPage(JanisBasePage):
@@ -29,6 +28,11 @@ class TopicPage(JanisBasePage):
     image = models.ForeignKey(TranslatedImage, null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
 
     base_form_class = TopicPageForm
+
+    publish_requirements = (
+        RelationPublishRequirement('top_pages'),
+        RelationPublishRequirement('topiccollections'),
+    )
 
     content_panels = [
         FieldPanel('title_en', widget=countMe),
@@ -53,7 +57,7 @@ class TopicPageTopPage(Orderable):
     ]
 
     def __str__(self):
-        return self.page.text
+        return self.page.title
 
 
 class TopicPageTopicCollection(ClusterableModel):

@@ -1,6 +1,7 @@
 -- wagtailcore_pagerevision.content_json.content_type uses foreign keys from production data.
 -- Foreign key ids inside of nested content_json field are not automatically updated during datadump.
 -- So the content_type value must be updated to match the correct content_type ids used locally.
+-- I do not know why django_content_type primary keys are not the same across all environments, but they are.
 update wagtailcore_pagerevision
   set content_json = sq00.updated_content_json
 from (

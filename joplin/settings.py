@@ -41,6 +41,7 @@ INSTALLED_APPS = [
 
     'wagtail.api.v2',
 
+    'wagtail_react_streamfield',
     'wagtail.embeds',
     'wagtail.sites',
     'wagtail.users',
@@ -82,6 +83,8 @@ INSTALLED_APPS = [
     'countable_field',
     'flags',
     'locations',
+    'publish_preflight',
+    'events',
     'silk',
 ]
 
@@ -135,6 +138,7 @@ ISLOCAL = DEPLOYMENT_MODE == "LOCAL"
 ISPRODUCTION = DEPLOYMENT_MODE == "PRODUCTION"
 ISSTAGING = DEPLOYMENT_MODE == "STAGING"
 ISREVIEW = DEPLOYMENT_MODE == "REVIEW"
+ISTEST = DEPLOYMENT_MODE == "TEST"
 
 
 # Database
@@ -219,6 +223,7 @@ ALLOWED_HOSTS = [
 DEBUG_TOOLBAR = bool(strtobool(os.environ.get('DEBUG_TOOLBAR', str(False))))
 MONITOR_PERFORMANCE = bool(strtobool(os.environ.get('MONITOR_PERFORMANCE', str(False))))
 
+WAGTAILEMBEDS_RESPONSIVE_HTML = True
 
 if MONITOR_PERFORMANCE:
     MIDDLEWARE = ['silk.middleware.SilkyMiddleware'] + MIDDLEWARE
@@ -396,11 +401,12 @@ PHONENUMBER_DEFAULT_REGION = 'US'
 PHONENUMBER_DB_FORMAT = "RFC3966"
 
 FLAGS = {
-    'SHOW_EXTRA_PANELS': [{'condition': 'boolean', 'value': True}]
+    'SHOW_EXTRA_PANELS': [{'condition': 'boolean', 'value': True}],
+    'INCREMENTAL BUILDS': [{'condition': 'boolean', 'value': False}]
 }
 
 # The CMS_API endpoint of the current Django App for published Janis to use
-if ISLOCAL:
+if ISLOCAL or ISTEST:
     # $JOPLIN_APP_HOST_PORT is set by scripts/serve-local.sh
     CMS_API = f"http://localhost:{os.getenv('JOPLIN_APP_HOST_PORT')}/api/graphql"
 else:

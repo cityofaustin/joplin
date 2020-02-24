@@ -1,6 +1,42 @@
 version: 2.1
 
 jobs:
+  test:
+    docker:
+      - image: circleci/python:3.7.5-stretch
+        environment:
+          PIPENV_VENV_IN_PROJECT: true
+          DATABASE_URL: postgresql://root@localhost/circle_test?sslmode=disable
+          DEPLOYMENT_MODE: TEST
+      - image: circleci/postgres:10
+        environment:
+          POSTGRES_USER: root
+          POSTGRES_DB: circle_test
+          POSTGRES_PASSWORD: root_user_password
+    steps:
+      - checkout
+      - run: sudo chown -R circleci:circleci /usr/local/bin
+      - run: sudo chown -R circleci:circleci /usr/local/lib/python3.7/site-packages
+      - restore_cache:
+          keys:
+            - deps-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
+            # fallback to using the latest cache if no exact match is found
+            - deps-{{ .Branch }}-
+            - deps-
+      - run:
+          name: Install dependencies
+          command: |
+            sudo pip install pipenv
+            pipenv install
+      - save_cache:
+          paths:
+            - ".venv"
+            - "/usr/local/bin"
+            - "/usr/local/lib/python3.7/site-packages"
+          key: deps-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
+      - run:
+          name: Run tests
+          command: pipenv run pytest
   deploy:
     docker:
       - image: cityofaustin/joplin-ci:e228591
@@ -61,7 +97,10 @@ workflows:
   version: 2.1
   deploy:
     jobs:
+      - test
       - deploy:
+          requires:
+            - test
           is_master: true
           is_master_or_production: true
           filters:
@@ -69,6 +108,8 @@ workflows:
               only:
                 - master
       - deploy:
+          requires:
+            - test
           is_production: true
           is_master_or_production: true
           filters:
@@ -76,6 +117,8 @@ workflows:
               only:
                 - production
       - deploy:
+          requires:
+            - test
           filters:
             branches:
               ignore:

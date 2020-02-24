@@ -1,3 +1,4 @@
+from psycogreen.gevent import patch_psycopg
 import os
 DEPLOYMENT_MODE = os.environ.get('DEPLOYMENT_MODE')
 
@@ -17,7 +18,6 @@ if DEPLOYMENT_MODE in ("LOCAL", "REVIEW"):
     timeout = 190
     loglevel = "DEBUG"
 
-from psycogreen.gevent import patch_psycopg
 
 def post_fork(server, worker):
     patch_psycopg()

@@ -5,7 +5,7 @@ from modelcluster.models import ClusterableModel
 
 from wagtail.core.fields import RichTextField, StreamField
 from wagtail.core.blocks import RichTextBlock
-from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, MultiFieldPanel, PageChooserPanel, StreamFieldPanel
+from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, PageChooserPanel, StreamFieldPanel
 from wagtail.snippets.edit_handlers import SnippetChooserPanel
 
 from base.forms import InformationPageForm
@@ -14,8 +14,10 @@ from .janis_page import JanisBasePage
 from .contact import Contact
 
 from .constants import WYSIWYG_GENERAL
-from .widgets import countMe, countMeTextArea, AUTHOR_LIMITS
+from .widgets import countMe, countMeTextArea
 from countable_field import widgets
+
+from publish_preflight.requirements import FieldPublishRequirement, RelationPublishRequirement, ConditionalPublishRequirement
 
 
 class InformationPage(JanisBasePage):
@@ -43,6 +45,21 @@ class InformationPage(JanisBasePage):
     # TODO: Add images array field
 
     base_form_class = InformationPageForm
+
+    publish_requirements = (
+        FieldPublishRequirement("description", langs=["en"], message="You need to write a description before publishing"),
+        FieldPublishRequirement("additional_content", langs=["en"], message="You need to write additional content in order to publish"),
+        ConditionalPublishRequirement(
+            RelationPublishRequirement("topics"),
+            "or",
+            ConditionalPublishRequirement(
+                RelationPublishRequirement("related_departments"),
+                "or",
+                FieldPublishRequirement("coa_global"),
+            ),
+            message="You must have at least 1 topic or 1 department or 'Top Level' checked."
+        ),
+    )
 
     content_panels = [
         FieldPanel('title_en', widget=countMe),

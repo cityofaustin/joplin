@@ -158,3 +158,27 @@
 .account-selector-collapsed::-ms-expand {
     display: none;
 }
+
+// Error message from PublishPreflight
+.coa-publish-error {
+  color: red;
+  font-weight: bold;
+}
+
+// Fix formatting to allow PublishPreflight errors to be inserted below field titles
+.object>.title-wrapper {
+  padding-left: 0;
+  position: inherit;
+}
+
+// Clean up weird whitespace on Relation InlinePanels that results from .title-wrapper no longer being position:absolute
+.object .multiple {
+  padding: 0;
+}
+.object fieldset {
+  padding-top: 0;
+}
+// This is a start, the helper text needs more formatting help
+.object .object-help {
+  top: 0px;
+}

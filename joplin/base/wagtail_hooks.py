@@ -12,6 +12,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.utils.html import format_html_join
 from webpack_loader import utils as webpack_loader_utils
 from wagtail.admin.auth import permission_required
+import traceback
 
 from wagtail.admin.menu import MenuItem
 from wagtail.contrib.modeladmin.options import ModelAdmin, ModelAdminGroup, modeladmin_register
@@ -60,7 +61,8 @@ def configure_main_menu(request, menu_items):
                      [
                          'explorer',
                          'settings',
-                         'snippets'
+                         'snippets',
+                         'reports'
                      ]
                      ]
 
@@ -163,7 +165,14 @@ def joplin_page_listing_buttons(page, page_perms, is_parent=False):
         )
 
     # make the author notes icon appear if latest revision has notes
-    latest_revision_as_page = page.get_latest_revision_as_page()
+    # TODO this is suddenly causing a permissions error which is breaking on some pages
+    try:
+        latest_revision_as_page = page.get_latest_revision_as_page()
+    except Exception as e:
+        latest_revision_as_page = None
+        print(e)
+        print(traceback.format_exc())
+
     if hasattr(latest_revision_as_page, 'author_notes') and latest_revision_as_page.author_notes:
         yield Button(
             _('📝'),
@@ -209,14 +218,6 @@ def joplin_page_listing_more_buttons(page, page_perms, is_parent=False):
             attrs={'title': _("Unpublish page '{title}'").format(
                 title=page.get_admin_display_title())},
             priority=40
-        )
-    if page_perms.can_publish() and page.has_unpublished_changes:
-        yield Button(
-            _('Publish'),
-            reverse('publish', args=[page.id]),
-            attrs={'title': _("Publish page '{title}'").format(
-                title=page.get_admin_display_title())},
-            priority=50
         )
     if not page.is_root():
         yield Button(
@@ -290,7 +291,7 @@ class InternalLinkHandler(LinkHandler):
         except Page.DoesNotExist:
             return "<a>"
         except Exception as e:
-            print("!janis url hook error!:", self.title, e)
+            print("!janis url hook error!:", cls.title, e)
             print(traceback.format_exc())
             pass
 
