@@ -88,13 +88,10 @@ class EventPage(JanisBasePage):
     base_form_class = EventPageForm
 
     publish_requirements = (
-        # address / location
-        # description
-        # event date / just start time is required
         FieldPublishRequirement("description", message="A description is required for publishing", langs=["en"]),
         FieldPublishRequirement("date", message="A date is required for publishing"),
         FieldPublishRequirement("start_time", message="Start time is required for publishing"),
-        StreamFieldPublishRequirement("location_blocks") #, criteria=streamfield_has_pages),
+        StreamFieldPublishRequirement("location_blocks"),
     )
 
     content_panels = [

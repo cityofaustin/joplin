@@ -6,7 +6,7 @@ const addRelationError = (field_name, messageElement) => {
   $(messageElement).insertBefore($(`ul[id='id_${field_name}-FORMS']`).parent().parent())
 }
 
-const addStreamfieldGuideError = (messageElement) => {
+const addStreamfieldError = (messageElement) => {
   $(".stream-field").prepend(messageElement)
 }
 
@@ -29,11 +29,10 @@ const addPublishErrors = () => {
       } else if (data.field_type === "relation") {
         addRelationError(data.field_name, messageElement)
       } else if (data.field_type === "streamfield") {
-        if (data.field_name === 'sections') {
-          addStreamfieldGuideError(messageElement)
-        }
         if (data.field_name === "steps_en") {
           addStreamfieldServiceError(messageElement)
+        } else { // works for "location_blocks" and "sections"
+          addStreamfieldError(messageElement)
         }
       }
     })
