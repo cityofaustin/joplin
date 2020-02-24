@@ -1,5 +1,5 @@
 ### Requirements
-As of December 12, 2019
+Last updated February 24, 2020
 
 The only field required for save across all content types is Title
 For publishing, only require English
@@ -85,3 +85,31 @@ Behavior when publishing from edit page: if not all the required fields are fill
     - Image
     - Topic collection (topic collections can belong to parent topic collections)
 
+#### Events
+
+- Required ✅
+    - Location physical address
+    - Description
+    - Event date *note: only start time should be required; end time is not required
+    - Location of event
+
+- Not Required ❌
+    - The event is free
+    - Fees
+    - Registration
+    - Related departments
+    - Contact
+    - Cancel
+
+#### Location Pages
+
+- Required ✅
+    - Location physical address
+- Not Required ❌
+    - Banner image
+    - Mailing address
+    - Alternate name
+    - Location contact info
+    - Location details
+    - Location hours
+    - Related services
