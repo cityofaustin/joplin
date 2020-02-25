@@ -41,8 +41,6 @@ pytest-pythonpath = "*"
 pytest-factoryboy = "*"
 coverage = "*"
 django-coverage-plugin = "*"
-pytest-cov = "*"
-pytest-xdist = "*"
 
 [requires]
 python_version = "3.7"
