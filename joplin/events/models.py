@@ -106,7 +106,7 @@ class EventPage(JanisBasePage):
         ),
         StreamFieldPanel('location_blocks'),
         FieldPanel('event_is_free'),
-        InlinePanel('fees', label='Fees'),
+        InlinePanel('fees', label='Fees', classname='coa-eventFees'),
         MultiFieldPanel(
             [
                 HelpPanel(registration_url.help_text, classname="coa-helpPanel"),
