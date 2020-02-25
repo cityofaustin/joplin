@@ -17,6 +17,8 @@ from base.models.translated_image import TranslatedImage
 from base.models import JanisBasePage
 from base.models.widgets import countMe
 from base.models.constants import DEFAULT_MAX_LENGTH
+from base.forms import LocationPageForm
+from publish_preflight.requirements import FieldPublishRequirement
 
 
 def add_hours_by_day_and_exceptions(model):
@@ -57,7 +59,7 @@ def add_hours_by_day_and_exceptions(model):
 
 class LocationPage(JanisBasePage):
     """
-    all the relevant details for a specifc location (place!?)
+    all the relevant details for a specific location (place!?)
     decide if we want to set null or cascade
     """
     janis_url_page_type = 'location'
@@ -97,6 +99,12 @@ class LocationPage(JanisBasePage):
     nearest_bus_3 = models.IntegerField(null=True, blank=True)
 
     parent_page_types = ['base.HomePage']
+
+    base_form_class = LocationPageForm
+
+    publish_requirements = (
+        FieldPublishRequirement("physical_street", message="A street is required for publishing"),
+    )
 
     content_panels = [
         FieldPanel('title_en', widget=countMe),
