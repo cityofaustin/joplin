@@ -104,6 +104,7 @@ class LocationPage(JanisBasePage):
 
     publish_requirements = (
         FieldPublishRequirement("physical_street", message="A street is required for publishing"),
+        FieldPublishRequirement("physical_zip", message="Zip Code required for publishing")
     )
 
     content_panels = [
