@@ -39,6 +39,8 @@ wagtail-react-streamfield = "*"
 pytest-django = "*"
 pytest-pythonpath = "*"
 pytest-factoryboy = "*"
+coverage = "*"
+django-coverage-plugin = "*"
 
 [requires]
 python_version = "3.7"
