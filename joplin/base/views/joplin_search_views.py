@@ -28,6 +28,18 @@ from django.views.decorators.vary import vary_on_headers
 def search(request):
     # excluding Root(1) and Home(3) pages from search
     pages = all_pages = Page.objects.all().exclude(id__in=[1, 3]).prefetch_related('content_type').specific()
+    # blarg = request.user.groups.all()
+    user_departments = [user_group for user_group in request.user.groups.all() if hasattr(user_group, 'department')]
+
+    # TODO: use cleaner filtering
+    filtered_pages = []
+    for page in pages:
+        blarg = page.group_permissions.all()
+        for bl in blarg:
+            if bl.group in user_departments:
+                filtered_pages.append(page)
+    pages = all_pages = filtered_pages
+
     q = MATCH_ALL
     content_types = []
     pagination_query_params = QueryDict({}, mutable=True)
