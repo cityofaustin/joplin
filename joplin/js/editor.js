@@ -19,24 +19,6 @@ $(function() {
     .firstElementChild;
   content.appendChild(language);
 
-  // TODO: This a better way
-  const anchors = {
-    id_title: '#title',
-    id_image: '#TODO',
-    id_steps: '#steps',
-    id_apps: '#apps',
-    id_additional_content: '#additional',
-    id_contacts: '#contacts',
-    id_description: '#description',
-    'id_process_steps-title': '#step-title',
-    'id_process_steps-short_title': '#step-short-title',
-    'id_process_steps-link_title': '#step-link-title',
-    'id_process_steps-description': '#step-description',
-    'id_process_steps-overview_steps': '#step-steps',
-    'id_process_steps-detailed_content': '#step-details',
-    'id_process_steps-quote': '#step-quote',
-  };
-
   // Get data from page and json_script templatetags
   const labels = document.querySelectorAll('label');
   const styleGuideUrl = JSON.parse(document.getElementById('style-guide-url').textContent);
@@ -48,39 +30,26 @@ $(function() {
     janisPreviewUrl: getPreviewUrl('en'),
   };
 
+  const anchors = {
+    id_title: '#title',
+    id_image: '#TODO', // todo: replace with link to styleguide image anchor
+    id_steps: '#steps',
+    id_additional_content: '#additional',
+    id_contacts: '#contacts',
+    id_description: '#description',
+  };
+
   for (const label of labels) {
     let id = label.getAttribute('for');
 
-    // // Since we're getting these ids let's set the title text appropriately
-    // if(id == "id_title") {
-    //   // Super hack here, use the preview url to figure out what kind of page we're editing
-    //   const previewRegex = /preview\/\w+\//g;
-    //   const previewUrl = document.getElementById('preview_url').value;
-    //   const previewTypeString = previewUrl.match(previewRegex)[0];
-    //   if(previewTypeString == "preview/department/") {
-    //     label.innerText = "Department Name"
-    //   } else {
-    //     label.innerText = "Write an actionable title"
-    //   }
-    // }
-
-    // HACK: If we're dealing with subheadings in steps we need to remove the index
-    if (id && id.includes('id_process_steps')) {
-      const idTokens = id.split('-');
-      id = `${idTokens[0]}-${idTokens[2]}`;
-    }
-
     if (!id) {
-      // HACK: Only some fields actually have for attributes
+      // Only some fields actually have for attributes
       switch (label.innerText) {
         case 'ADD ANY MAPS OR APPS THAT WILL HELP THE RESIDENT USE THE SERVICE ':
           id = 'id_apps';
           break;
         case 'CONTACTS':
           id = 'id_contacts';
-          break;
-        case 'PROCESS STEPS':
-          id = 'id_steps';
           break;
       }
     }
@@ -94,32 +63,6 @@ $(function() {
       $(label).append(link);
     }
   }
-  // TODO: what is this for??
-  $('.js-proxy-click').click(function() {
-    let $this = $(this);
-    $this.text($this.data('clicked-text'));
-
-    let $button;
-
-    let proxyByName = $this.data('proxyByName');
-    if (proxyByName) {
-      $button = $(`[name="${proxyByName}"]`);
-    }
-
-    let proxyByClass = $this.data('proxyByClass');
-    if (proxyByClass) {
-      $button = $(`.${proxyByClass}`);
-    }
-
-    if (!$button) {
-      console.error(`Data attributes: ${$this.data()}`);
-      throw new Error(
-        'Unable to find a button. Did you specify data-proxy-by-name or data-proxy-by-class?',
-      );
-    }
-
-    $button.click();
-  });
 
   // TODO; verify this code is still used, move to into a utilities section
   function fallbackCopyTextToClipboard(text) {
@@ -173,17 +116,39 @@ $(function() {
         .attr('href'),
     );
   }
+
+  function translateStructBlocks(currentLang) {
+    const structlabels = $('label.field__label')
+    for (const label of structlabels) {
+      // replace the languages with a span to hide the text
+      label.innerHTML = label.innerHTML.replace('[', " <span style='display:none;'>");
+      label.innerHTML = label.innerHTML.replace(']', '</span>');
+      // hide the whole field if its not the current language
+      const translatedElement = label.parentElement;
+      let languageTag = null
+      // not all labels have translation/spans
+      if (label.querySelector('span')) {
+        languageTag = label.querySelector('span').innerText;
+      }
+      if (languageTag != null && languageTag != currentLang) {
+        translatedElement.classList.add('hidden');
+      } else {
+        translatedElement.classList.remove('hidden');
+      }
+    }
+  }
+
   // Changes language and update janisPreviewUrl for our language
+  // hides the translation fields by selecting the fields and adding the hidden tag
   function changeLanguage(currentLang) {
     state.currentLang = currentLang;
     setTabToContent();
 
-    // replace brackets with hidden span tags
+    // replace brackets with hidden span tags and store lang tags in state
     function replaceLanguageLabels() {
-      const languageLabels = $('ul[class="objects"]').find(
-        'label:contains(" [")',
-      );
+      const languageLabels = $('ul[class="objects"]').find('label:contains(" [")');
       if (languageLabels.length) {
+        // if state is undefined, set the language labels in state
         if (typeof state.languageLabels === 'undefined') {
           state.languageLabels = languageLabels;
         } else {
@@ -191,6 +156,7 @@ $(function() {
             state.languageLabels.push(languageLabels[label]);
           }
         }
+        // replace brackets with hidden span tags
         languageLabels.each(function() {
           this.innerHTML = this.innerHTML.replace(
             '[',
@@ -203,46 +169,48 @@ $(function() {
     replaceLanguageLabels();
 
     // TODO: refactor into a function, evaluate performance
-    // have better variable namepsace seperation
     let labelList = state.languageLabels;
-    for (let label in labelList) {
-      if (labelList[label].querySelector) {
-        let languageTag = labelList[label].querySelector('span').innerText;
-        // these seem to be nested twice, from the title to the containing element
-        // TODO: come up with a more elegant and maintable way to check what elements ought to be hidden
+    for (let label of labelList) {
+      if (label.querySelector) {
+        let languageTag = label.querySelector('span').innerText;
+        // 'rah-static rah-static--height-auto c-sf-block__content' is the classList associated with
+        // react-streamfields. If the element is not in the streamfield div, then we need to access
+        // its grandparent and hide that. If it is in the streamfield div, we hide its parent.
+        // if the classlist changes, or other fields are nested in different ways, there is the
+        // potential for regressions
         if (
-          labelList[label].parentElement.parentElement.parentElement.classList
-            .value !== 'struct-block'
+          label.parentElement.parentElement.parentElement.classList
+            .value !== 'rah-static rah-static--height-auto c-sf-block__content'
         ) {
-          const translatedElement =
-            labelList[label].parentElement.parentElement;
-
+          const translatedElement = label.parentElement.parentElement;
           if (languageTag != null && languageTag != currentLang) {
             translatedElement.classList.add('hidden');
           } else {
             translatedElement.classList.remove('hidden');
           }
-          /*  While the first condition checks for 'struct-blocks' with language tags,
+          /*
+              While the first condition checks for 'struct-blocks' with language tags,
               it doesn't catch the case where there are 'struct-blocks' with language
-              tages WITHIN the element itself. The following condition checks for those conditions.
-              - The was neccessary for guide stream fields. */
-          if (translatedElement.classList.contains('struct-block')) {
-            const fieldlabels = translatedElement.querySelectorAll('[for]');
-            fieldlabels.forEach(fieldlabel => {
-              const attrFor = fieldlabel.getAttribute('for').split('_');
-              fieldlabel.parentNode.classList.remove('hidden');
-              // Adding a failsafe to make sure we don't remove non translated fields
-              const attrLang = attrFor[attrFor.length - 1];
-              if (['en', 'es', 'vi', 'ar'].includes(attrLang)) {
-                if (attrLang !== currentLang) {
-                  fieldlabel.parentNode.classList.add('hidden');
-                  translatedElement.classList.remove('hidden'); // only re-reveal the parent class if we find this case.
-                }
-              }
-            });
-          }
+              tags WITHIN the element itself. The following condition checks for those conditions.
+              - This is not currently being used for streamfields, but could be used again
+               if we decide to hide different fields */
+//          if (translatedElement.classList.contains('struct-block')) {
+//            const fieldlabels = translatedElement.querySelectorAll('[for]');
+//            fieldlabels.forEach(fieldlabel => {
+//              const attrFor = fieldlabel.getAttribute('for').split('_');
+//              fieldlabel.parentNode.classList.remove('hidden');
+//              // Adding a failsafe to make sure we don't remove non translated fields
+//              const attrLang = attrFor[attrFor.length - 1];
+//              if (['en', 'es', 'vi', 'ar'].includes(attrLang)) {
+//                if (attrLang !== currentLang) {
+//                  fieldlabel.parentNode.classList.add('hidden');
+//                  translatedElement.classList.remove('hidden'); // only re-reveal the parent class if we find this case.
+//                }
+//              }
+//            });
+//          }
         } else {
-          const translatedElement = labelList[label].parentElement;
+          const translatedElement = label.parentElement;
           if (languageTag != null && languageTag != currentLang) {
             translatedElement.classList.add('hidden');
           } else {
@@ -253,7 +221,7 @@ $(function() {
     }
 
     // ----
-    // Switch the language for janisPreviewUrl
+    // Switch the language for janisPreviewUrl in state
     // ----
     const janisPreviewUrl = getPreviewUrl(currentLang);
     state.janisPreviewUrl = janisPreviewUrl;
@@ -276,14 +244,25 @@ $(function() {
     }
   }
 
+  function updateFeeVisibility(visible) {
+    if(visible) {
+      $('.coa-eventFees').first().show('slow')
+    } else {
+      $('.coa-eventFees').first().hide('slow')
+    }
+  }
+  updateFeeVisibility(!($('#id_event_is_free').first().prop('checked')))
+
+  // if we previously had a language stored in local storage, load the view for that language
+  // otherwise, we default to english
   if (localStorage.selected_lang) {
     state.currentLang = localStorage.selected_lang;
-    updateSelectedLanguage(state.currentLang);
+    updateSelectedLanguageDropdown(state.currentLang);
     changeLanguage(state.currentLang);
     localStorage.removeItem('selected_lang');
   } else {
     state.currentLang = 'en';
-    updateSelectedLanguage(state.currentLang);
+    updateSelectedLanguageDropdown(state.currentLang);
     changeLanguage(state.currentLang);
   }
 
@@ -292,49 +271,37 @@ $(function() {
     let selectedLanguage = document.getElementById('language-select')
       .selectedOptions[0];
     changeLanguage(selectedLanguage.id);
-    updateSelectedLanguage(state.currentLang);
+    updateSelectedLanguageDropdown(state.currentLang);
+    translateStructBlocks(state.currentLang);
     localStorage.selected_lang = state.currentLang;
   });
 
-  // case function for setting the selected language on dropdown
-  // maybe there is a less verbose way to do this?
-  function updateSelectedLanguage(currentLang) {
+
+  function updateSelectedLanguageDropdown(currentLang) {
     var contentLink = document.getElementsByClassName('tab-nav merged')[0]
       .firstElementChild.firstElementChild;
-
     switch (currentLang) {
       case 'en':
         document.getElementById('language-select').value = 'English';
-        contentLink.innerText = document.getElementById(
-          'language-select',
-        ).value;
         break;
       case 'es':
         document.getElementById('language-select').value = 'Spanish';
-        contentLink.innerText = document.getElementById(
-          'language-select',
-        ).value;
         break;
       case 'vi':
         document.getElementById('language-select').value = 'Vietnamese';
-        contentLink.innerText = document.getElementById(
-          'language-select',
-        ).value;
         break;
       case 'ar':
         document.getElementById('language-select').value = 'Arabic';
-        contentLink.innerText = document.getElementById(
-          'language-select',
-        ).value;
         break;
     }
+    contentLink.innerText = document.getElementById('language-select').value;
   }
 
   // Persist language for preview even after page refreshes on save
   var previewbutton = $('#page-preview-button');
   if (localStorage.preview_lang) {
     changeLanguage(localStorage.preview_lang);
-    updateSelectedLanguage(localStorage.preview_lang);
+    updateSelectedLanguageDropdown(localStorage.preview_lang);
     window.open(state.janisPreviewUrl, '_blank');
     localStorage.removeItem('preview_lang');
   }
@@ -370,36 +337,55 @@ $(function() {
     if (lang) {
       changeLanguage(lang);
       copyTextToClipboard(state.janisPreviewUrl);
-      updateSelectedLanguage(lang);
+      updateSelectedLanguageDropdown(lang);
       urlcopied.removeClass('hidden');
       urlcopied.fadeOut(10000);
       localStorage.sharingpreview = false;
     }
   });
+
   // Apply current language to new InlinePanels
   $('.add').click(function() {
     changeLanguage(state.currentLang);
-    updateSelectedLanguage(state.currentLang);
   });
 
   var messages = $('.messages');
   messages.fadeOut(10000);
 
-  // NOT sure the below is tracking anything
+  const pageEditForm = document.getElementById('page-edit-form')
+  const checkStreamFieldLanguages = new MutationObserver(function(mutations) {
+    for (let mutation of mutations) {
+      if (mutation.type === 'childList') {
+        if (mutation.target.classList.contains("c-sf-container")) {
+          translateStructBlocks(state.currentLang)
+        }
+      }
+    }
+  })
+  checkStreamFieldLanguages.observe(pageEditForm, {
+    childList: true,
+    subtree: true
+  })
+
   // When we add new fields to the page (orderable/streamfields etc.)
   // only show the appropriate fields based on language
   // we can do this by observing changes to our sections count
 
   $('#sections-count').change(function() {
     changeLanguage(state.currentLang);
-    updateSelectedLanguage(state.currentLang);
+    updateSelectedLanguageDropdown(state.currentLang);
   });
 
   // do the same with locations on events
   $('#location_blocks-count').change(function() {
     changeLanguage(state.currentLang);
-    updateSelectedLanguage(state.currentLang);
+    updateSelectedLanguageDropdown(state.currentLang);
   });
+
+  // When we change the value of the event is free checkbox
+  $('#id_event_is_free').change(function() {
+    updateFeeVisibility(!($('#id_event_is_free').first().prop('checked')))
+  })
 
   // Found this here: https://stackoverflow.com/a/31719339
   MutationObserver = window.MutationObserver || window.WebKitMutationObserver;

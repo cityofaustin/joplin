@@ -21,7 +21,7 @@ from .widgets import countMe, countMeTextArea
 from publish_preflight.requirements import FieldPublishRequirement, StreamFieldPublishRequirement, ConditionalPublishRequirement, RelationPublishRequirement
 
 
-WYSIWYG_SERVICE_STEP = ['ul', 'link', 'code', 'rich-text-button-link']
+WYSIWYG_SERVICE_STEP = ['ul', 'link', 'code', 'rich-text-button-link', 'document-link']
 
 
 class ServicePage(JanisBasePage):
