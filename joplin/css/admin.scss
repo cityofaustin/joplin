@@ -143,3 +143,9 @@
 .translation-field-copy-wrapper {
     display: none;
 }
+
+.object > .title-wrapper label {
+  /* This fixes padding issues where the title
+     is hiding behind the arrow on snippets/snippetlike content types  */
+    padding-left: 55px;
+}
