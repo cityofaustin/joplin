@@ -155,6 +155,7 @@ DATABASES = {
 
 DATABASE_POOL_CLASS = 'sqlalchemy.pool.QueuePool'
 # https://github.com/lcd1232/django-postgrespool2#configuration
+# we have setting that vary by env becuase heroku dynos have different limits
 if ISSTAGING or ISPRODUCTION:
     DATABASE_POOL_ARGS = {
         'max_overflow': 10,
