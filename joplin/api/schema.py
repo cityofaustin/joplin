@@ -245,7 +245,6 @@ class EventFilter(FilterSet):
         model = EventPage
         fields = {
             'date': ['exact', 'lte', 'gte'],
-            'date': ['exact', 'lte', 'gte'],
             'live': ['exact'],
             'id': ['exact'],
             'canceled': ['exact'],
@@ -730,7 +729,7 @@ def get_structure_for_content_type(content_type):
 
         # Only publish event pages at the date based url
         if content_type == 'event page':
-            if page.date and page.live:
+            if page.date:
                 site_structure.append({'url': f'/event/{page.date.year}/{page.date.month}/{page.date.day}/{page.slug}/', 'type': content_type, 'id': page_global_id})
             continue
 
