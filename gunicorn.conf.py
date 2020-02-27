@@ -5,7 +5,7 @@ DEPLOYMENT_MODE = os.environ.get('DEPLOYMENT_MODE')
 
 worker_class = 'gevent'
 
-keepalive = 20
+
 preload = True
 pythonpath = "/app/joplin"
 
@@ -25,7 +25,5 @@ if DEPLOYMENT_MODE in ("LOCAL", "REVIEW"):
 
 
 def post_fork(server, worker):
-    from gevent import monkey
-    monkey.patch_all()
     patch_psycopg()
     worker.log.info("Made Psycopg2 run using gevent (for async stuff)")
