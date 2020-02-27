@@ -155,11 +155,27 @@ DATABASES = {
 
 DATABASE_POOL_CLASS = 'sqlalchemy.pool.QueuePool'
 # https://github.com/lcd1232/django-postgrespool2#configuration
-DATABASE_POOL_ARGS = {
-    'max_overflow': 10,
+
+# smaller pool to avoid going over connection limit
+# related to gunicorn worker settings
+safe_pool = {
+    'max_overflow': 8,
     'pool_size': 5,
-    'recycle': 300
+    'recycle': 200
 }
+
+# we can have more connections on the heroku standard db, so lets open the pool
+#
+bigger_pool = {
+    'max_overflow': 10,
+    'pool_size': 8,
+    'recycle': 500
+}
+
+if ISSTAGING or ISPRODUCTION:
+    DATABASE_POOL_ARGS = bigger_pool
+else:
+    DATABASE_POOL_ARGS = safe_pool
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
