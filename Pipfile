@@ -40,6 +40,7 @@ django-postgrespool2 = "*"
 wagtail-react-streamfield = "*"
 pytest-django = "*"
 pytest-pythonpath = "*"
+django-db-geventpool = "*"
 
 [requires]
 python_version = "3.7"
