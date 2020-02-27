@@ -164,7 +164,7 @@ if ISSTAGING or ISPRODUCTION:
     }
 else:
     DATABASE_POOL_ARGS = {
-        'max_overflow': 8,
+        'max_overflow': 6,
         'pool_size': 3,
         'timeout': 150
     }
