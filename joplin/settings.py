@@ -150,7 +150,7 @@ ISTEST = DEPLOYMENT_MODE == "TEST"
 #
 default_db_url = f'sqlite:///{os.path.join(PROJECT_DIR, "db.sqlite3")}'
 DATABASES = {
-    'default': dj_database_url.config(default=default_db_url, engine='django_postgrespool2', conn_max_age=200),
+    'default': dj_database_url.config(default=default_db_url, engine='django_postgrespool2', conn_max_age=500),
 }
 
 DATABASE_POOL_CLASS = 'sqlalchemy.pool.QueuePool'
@@ -164,9 +164,8 @@ if ISSTAGING or ISPRODUCTION:
     }
 else:
     DATABASE_POOL_ARGS = {
-        'max_overflow': 5,
+        'max_overflow': 8,
         'pool_size': 3,
-        'recycle': 200,
         'timeout': 150
     }
 
