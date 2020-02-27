@@ -3,7 +3,9 @@ import os
 import multiprocessing
 DEPLOYMENT_MODE = os.environ.get('DEPLOYMENT_MODE')
 
-worker_class = 'gevent'
+worker_class = 'gthread'
+
+threads = 4
 
 
 preload = True
@@ -19,13 +21,11 @@ if DEPLOYMENT_MODE in ("LOCAL", "REVIEW"):
     timeout = 500
     loglevel = "DEBUG"
     # to stay under heroku limit of 20 connections
-    worker_connections = 150
+    worker_connections = 100
     reload = True
     workers = 2
 
 
 def post_fork(server, worker):
-    from gevent import monkey
-    monkey.patch_all()
     patch_psycopg()
     worker.log.info("Made Psycopg2 run using gevent (for async stuff)")
