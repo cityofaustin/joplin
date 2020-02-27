@@ -164,8 +164,8 @@ if ISSTAGING or ISPRODUCTION:
     }
 else:
     DATABASE_POOL_ARGS = {
-        'max_overflow': 500,
-        'pool_size': 300,
+        'max_overflow': 5,
+        'pool_size': 3,
         'recycle': 200
     }
 
