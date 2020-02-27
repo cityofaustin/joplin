@@ -31,7 +31,7 @@ coa-django-countable_field = "==1.6"
 django-flags = "*"
 pympler = "*"
 psycopg2 = "==2.8.4"
-wagtail-factories = {editable = true,ref = "dev",git = "https://github.com/nhsuk/wagtail-factories.git"}
+wagtail-factories = "==2.0.0"
 scout-apm = "*"
 django-silk = "*"
 l18n = "*"
