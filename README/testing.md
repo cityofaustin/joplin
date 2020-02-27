@@ -17,6 +17,26 @@ In the case of publish_preflight tests, we needed to create mock forms to valida
 
 You can experiment with the test data used in publish_preflight by running `pipenv run python joplin/manage.py load_test_data_publish_preflight` on an empty database (`DROP_DB=on scripts/undockered.py` for now, better empty database creation script to follow). This lets you interact directly with the same pages used to `setUp` the test data for `publish_preflight/tests/test_information_page_publish_preflight.py`. You can create your own new test `fake_request`s to test new criteria.
 
+## Coverage
+
+Running pytest now also generates coverage reports. You can see this in a console, and also generate a browseable html coverage report.
+
+`pipenv run pytest`
+
+ After that is done:
+
+ `pipenv run pytest coverage html`
+
+ Browse to 'htmlcov' folder and open index.html. Ta-da!
+
+ This coverage report currently dosen't cover templates, and therefore it dosen't cover customizations we've made to the admin (FWIW our test coverage apparently drops down to around 9% if we include Django templates generally, so we'd probably need to narrow our focus to get something useful).
+
+ It also dosen't cover(to my knowledge), test coverage of Javascript code we've written to customize interactions, so keep that in mind.
+
+ Coverage percentage isn't an end-all be-all measure of testability (we could, for instance, write bad tests that still cover the code), and we don't need to shoot for 100% coverage, but it is a helpful objetive indicator of where to start writing tests. It also plainly shows the values of using existing Django functionality or other libraries that have their own tests already.
+
+ We can also mark some files or lines of code as safe to exclude from coverage. 
+
 ## How do I debug tests?
 
 There is a pycharm runConfiguration included to help you debug tests called [Run_tests](./.idea/runConfigurations/Run_tests.xml).
