@@ -412,34 +412,35 @@ $(function() {
   });
 
   // autocomplete for places
-  (function() {
-    var latlng = {
-      lat: 30.26,
-      lng: -97.73,
-    };
-    var placesAutocomplete = places({
-      appId: 'plHX3G9C5GRN',
-      apiKey: 'd9275f5f90784eb5ba59ff8ec581d9bb',
-      container: document.querySelector('#id_physical_street'),
-      templates: {
-        value: function(suggestion) {
-          return suggestion.name;
-        },
-      },
-    }).configure({
-      aroundLatLng: latlng.lat + ',' + latlng.lng,
-      aroundRadius: 10 * 4000, // 40km radius
-      type: 'address',
-    });
-    placesAutocomplete.on('change', function resultSelected(e) {
-      document.querySelector('#id_physical_state').value =
-        e.suggestion.administrative || '';
-      document.querySelector('#id_physical_city').value =
-        e.suggestion.city || '';
-      document.querySelector('#id_physical_zip').value =
-        e.suggestion.postcode || '';
-      document.querySelector('#id_physical_country').value =
-        e.suggestion.country || '';
-    });
-  })();
+  // commented out because currently Algolia places only returns "street level" accuracy meaning the zipcodes apply to
+  // every zip code the street goes through
+//  (function() {
+//    var latlng = {
+//      lat: 30.26,
+//      lng: -97.73,
+//    };
+//    var placesAutocomplete = places({
+//      appId: 'plHX3G9C5GRN',
+//      apiKey: 'd9275f5f90784eb5ba59ff8ec581d9bb',
+//      container: document.querySelector('#id_physical_street'),
+//      templates: {
+//        value: function(suggestion) {
+//          return suggestion.name;
+//        },
+//      },
+//    }).configure({
+//      aroundLatLng: latlng.lat + ',' + latlng.lng,
+//      aroundRadius: 10 * 4000, // 40km radius
+//      type: 'address',
+//    });
+//    placesAutocomplete.on('change', function resultSelected(e) {
+//      console.log(e.suggestion)
+//      document.querySelector('#id_physical_state').value =
+//        e.suggestion.administrative || '';
+//      document.querySelector('#id_physical_city').value =
+//        e.suggestion.city || '';
+//      document.querySelector('#id_physical_zip').value =
+//        e.suggestion.postcode || '';
+//    });
+//  })();
 });

@@ -23,7 +23,7 @@ from branch_overrides import branch_overrides
         Whatever you set in that object will not contaminate the environment vars of any other branch.
         You're allowed to override any environment var (even ones in vars_from_circleci),
         though you probably don't want to.
-        branch_overrides are not requried for every branch.
+        branch_overrides are not required for every branch.
 '''
 # Dictionary of all environment variables to be set within your Heroku PR App
 config = {}
@@ -41,6 +41,9 @@ vars_from_circleci = [
     "STYLEGUIDE_URL",  # CircleCI
     "CIRCLE_BRANCH",  # CircleCI
     "COA_PUBLISHER_URL",  # CircleCI
+    "DJANGO_SECRET_KEY", # CircleCI
+    "ALGOLIA_APP_ID", # CircleCI
+    "ALGOLIA_API_KEY", # CircleCI
 ]
 for v in vars_from_circleci:
     config[v] = os.getenv(v, "")
@@ -68,7 +71,7 @@ headers = {
     "Authorization": f"Bearer {os.getenv('HEROKU_API_KEY')}"
 }
 response = requests.patch(f'https://api.heroku.com/apps/{os.getenv("APPNAME")}/config-vars', headers=headers, data=config)
-if (response.status_code != 200):
+if response.status_code != 200:
     print(f"{response.status_code} Error: {response.content.decode('utf-8')}")
     sys.exit(1)
 else:
