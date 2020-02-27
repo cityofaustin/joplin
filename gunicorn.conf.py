@@ -18,7 +18,7 @@ timeout = 190
 
 if DEPLOYMENT_MODE in ("STAGING", "PRODUCTION"):
     timeout = 190
-    worker_connections = 10
+    worker_connections = 4
     workers = 4
 
 

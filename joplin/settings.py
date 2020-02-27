@@ -174,7 +174,7 @@ bigger_pool = {
 }
 
 if ISSTAGING or ISPRODUCTION:
-    DATABASE_POOL_ARGS = bigger_pool
+    DATABASE_POOL_ARGS = safe_pool
 else:
     DATABASE_POOL_ARGS = safe_pool
 
