@@ -1,4 +1,4 @@
-import '../css/admin.scss';
+// import '../css/admin.scss';
 
 $(function() {
   // HACK: I can't find a way to configure this to be closed via python

@@ -1,0 +1,27 @@
+
+.header.coa-header {
+  background-color: $coa-background-color;
+}
+.coa-header {
+    // display: flex;
+    // padding: 0.75rem;
+    // background: $coa-color-darkest-gray;
+    background-color: $coa-background-color;
+    position: fixed;
+    // z-index: 27;
+    width: 100%;
+}
+.coa-seal {
+  display: block;
+  padding: 32px;
+}
+.easter-egg {
+  position: absolute;
+  top: 54px;
+  left: 57px;
+  min-width: 10px;
+  min-height: 10px;
+}
+.easter-egg:hover {
+  cursor: pointer;
+}
