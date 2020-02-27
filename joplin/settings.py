@@ -155,7 +155,7 @@ DATABASES = {
         engine='django_db_geventpool.backends.postgresql_psycopg2',
         conn_max_age=0),
 }
-DATABASES['default']['OPTIONS'] = {'MAX_CONNS': 2}
+DATABASES['default']['OPTIONS'] = {'MAX_CONNS': 3}
 
 # DATABASES = {
 #     'default': {
