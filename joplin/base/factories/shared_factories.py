@@ -5,6 +5,8 @@ from wagtail.core.models import Collection, Page
 from wagtail.core.blocks import RichTextBlock, TextBlock
 from base.models import *
 
+# put factories here that can be used in more than one part of the code-base
+
 
 class PageFactory(wagtail_factories.factories.MP_NodeFactory):
     """
