@@ -21,7 +21,7 @@ if DEPLOYMENT_MODE in ("LOCAL", "REVIEW"):
     timeout = 500
     loglevel = "DEBUG"
     # to stay under heroku limit of 20 connections
-    worker_connections = 100
+    worker_connections = 500
     reload = True
     workers = 2
 
