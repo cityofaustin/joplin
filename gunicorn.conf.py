@@ -25,5 +25,7 @@ if DEPLOYMENT_MODE in ("LOCAL", "REVIEW"):
 
 
 def post_fork(server, worker):
+    from gevent import monkey
+    monkey.patch_all()
     patch_psycopg()
     worker.log.info("Made Psycopg2 run using gevent (for async stuff)")

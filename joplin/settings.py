@@ -150,7 +150,7 @@ ISTEST = DEPLOYMENT_MODE == "TEST"
 #
 default_db_url = f'sqlite:///{os.path.join(PROJECT_DIR, "db.sqlite3")}'
 DATABASES = {
-    'default': dj_database_url.config(default=default_db_url, engine='django_postgrespool2', conn_max_age=500),
+    'default': dj_database_url.config(default=default_db_url, engine='django_postgrespool2', conn_max_age=0),
 }
 
 DATABASE_POOL_CLASS = 'sqlalchemy.pool.QueuePool'
