@@ -166,7 +166,8 @@ else:
     DATABASE_POOL_ARGS = {
         'max_overflow': 5,
         'pool_size': 3,
-        'recycle': 200
+        'recycle': 200,
+        'pool_timeout': 150
     }
 
 # Internationalization
