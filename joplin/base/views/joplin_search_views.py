@@ -37,6 +37,12 @@ def search(request):
         if request.GET['ordering'] in ['content_type', '-content_type', 'owner', '-owner', 'title', '-title', 'latest_revision_created_at', '-latest_revision_created_at', 'live', '-live']:
             ordering = request.GET['ordering']
             pages = pages.order_by(ordering)
+    else:
+        # If we don't have an order, do reverse chronological by latest revision
+        # https://github.com/cityofaustin/techstack/issues/3974
+        ordering = '-latest_revision_created_at'
+        pages = pages.order_by(ordering)
+
 
     if 'content_type' in request.GET:
         pagination_query_params['content_type'] = request.GET['content_type']

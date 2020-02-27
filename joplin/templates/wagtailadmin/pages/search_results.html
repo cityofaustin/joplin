@@ -44,7 +44,7 @@
           This is where Joplin search results are modified for the UI for search results
           on our search results page.
         -->
-        {% include "wagtailadmin/pages/listing/_list_explore.html" with show_parent=0 sortable=1 sortable_by_type=0 full_width=1 ordering=request.GET.ordering show_ordering_column=1 orderable=1 %}
+        {% include "wagtailadmin/pages/listing/_list_explore.html" with show_parent=0 sortable=1 sortable_by_type=0 full_width=1 ordering=ordering show_ordering_column=1 orderable=1 %}
 
         {% url 'wagtailadmin_pages:search' as pagination_base_url %}
         {% paginate pages base_url=pagination_base_url %}
