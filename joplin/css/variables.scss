@@ -1,3 +1,26 @@
+// Joplin UI 2020~
+
+// Types
+$coa-fontFamily: 'IBM Plex Sans', sans-serif;
+$coa-fontSize-md: 1rem;
+$coa-fontSize-sm-icon: 1.25rem;
+
+// Colors
+$coa-blue: #0050D8;
+$coa-text-color: #2D2E2F; // coa-font-dark
+$coa-border-color: #DCDEE0; // just make "coa-light-gray"
+$coa-background-color: #FFFFFF; // just make "coa-white"
+$coa-background-color-secondary: #F6F6F6; // just make "coa-off-white"
+
+// Sizes
+$coa-active-left-boarder-width: 7px;
+
+// Left sidebar nav
+$nav-wrapper-width: 180px;
+
+
+// - - - - - - - - - - - - - - - - - old - - - - - - - - - - - - - - - - - - -
+
 // COLORS
 $coa-color-dark-blue: #023654;
 $coa-color-light-blue: #3282AF;
@@ -18,12 +41,10 @@ $coa-color-white: #FFFFFF;
 $coa-color-primary: #244a63;
 $coa-color-primary-active: #183243;
 
-
-
 // LAYOUT
 
-$nav-wrapper-width: 140px;
-$header-height: 89px;
+// $nav-wrapper-width: 140px; // 🌙 Changed with Joplin UI 2020~
+$header-height: 114px; // OG: 89
 $secondary-header-height: 112px;
 
 $edit-page-tab-bar-top: 200px;

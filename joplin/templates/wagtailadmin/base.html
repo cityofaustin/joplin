@@ -20,12 +20,12 @@ const ISPRODUCTION = '{{ISPRODUCTION}}';
 {% if ISPRODUCTION == False %}
   {% render_bundle 'theme' %}
 {% endif %}
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
-      rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans&display=swap" rel="stylesheet">
 {% include 'session_security/all.html' %}
 <div class="header coa-header">
     <div>
-        <img class="wagtail-logo wagtail-logo__full" src="{% static 'images/coa_seal_transparent_white.png' %}" alt="Welcome to City of Austin CMS" width="60" />
+        <img class="coa-seal" src="{% static 'images/coa_seal_transparent_full_color.png' %}" alt="Welcome to City of Austin CMS" width="60" />
     </div>
     <div class="dropdown user-account">
         <div class="dropdown-toggle">

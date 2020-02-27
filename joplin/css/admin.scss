@@ -1,4 +1,6 @@
 @import './variables';
+@import './application_banner.scss';
+// -----
 @import './utilities/border-box-reset';
 @import './layouts/headers';
 @import './layouts/left_sidebar_nav';
@@ -92,7 +94,7 @@
 }
 
 .header.coa-header > .dropdown > .dropdown-toggle {
-    background-color: $coa-color-darkest-gray;
+    // background-color: $coa-color-darkest-gray;
     border-left: none;
     color: #fff;
     text-transform: none;

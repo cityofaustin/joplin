@@ -1,20 +1,55 @@
 @import './variables';
 
+body {
+  font-family: $coa-fontFamily;
+}
+
+// - - - - - - - - - - - - Find a better home  - - - - - - - - - - - - - - - - -
+
+.avatar.circle {
+  width: 40px;
+  height: 40px;
+  margin-top: 10px;
+  border: solid 3px $coa-blue;
+}
+.avatar.circle > img {
+  padding: 5px;
+  padding-top: 2px;
+  width: 32px;
+}
+
+.dropdown-toggle {
+  background-color: $coa-background-color !important; // * wagtail forced (See: Notes)
+}
+
+/* * * * * Notes * * * * *
+
+* wagtail forced
+  - This css attribute is being built in the wagtail pre-process.
+  - It won't work without "!important"
+
+*/
+
+
+// - - - - - - - - - - - - - - - - - old - - - - - - - - - - - - - - - - - - -
+
+
 .header.coa-header {
-  background-color: $coa-color-primary;
+  background-color: $coa-background-color;
 }
 
 .menu-active.menu-active {
   background-color: $coa-color-primary-active;
 }
-.inner {
-  background-color: $coa-color-primary !important;
-}
+// .inner {
+//   background-color: $coa-color-primary !important;
+// }
 
-.dropdown-toggle {
-  background-color: $coa-color-primary !important;
-}
+// .dropdown-toggle {
+//   background-color: $coa-color-primary !important;
+// }
 
-#wagtail > div.wrapper, #wagtail > div.wrapper > main {
-  background-color: $coa-color-primary;
-}
+// 🔥Staging vs Prod ???? how to handle.
+// #wagtail > div.wrapper, #wagtail > div.wrapper > main {
+//   background-color: $coa-color-primary;
+// }
