@@ -160,12 +160,13 @@ DATABASE_POOL_CLASS = 'sqlalchemy.pool.QueuePool'
 # related to gunicorn worker settings
 safe_pool = {
     'max_overflow': 8,
-    'pool_size': 5,
+    'pool_size': 4,
     'recycle': 200
 }
 
 # we can have more connections on the heroku standard db, so lets open the pool
-#
+# the formula is some combo of workers + worker_connections * pool_size + max_overflow
+# this could be bigger but I also upped worker_connections in gunicorn.conf
 bigger_pool = {
     'max_overflow': 10,
     'pool_size': 8,
