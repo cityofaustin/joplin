@@ -19,7 +19,7 @@ timeout = 190
 if DEPLOYMENT_MODE in ("STAGING", "PRODUCTION"):
     timeout = 190
     worker_connections = 10
-    workers = multiprocessing.cpu_count() * 2
+    workers = 4
 
 
 if DEPLOYMENT_MODE in ("LOCAL", "REVIEW"):
