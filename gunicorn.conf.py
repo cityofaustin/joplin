@@ -5,7 +5,7 @@ DEPLOYMENT_MODE = os.environ.get('DEPLOYMENT_MODE')
 
 worker_class = 'gevent'
 
-keepalive = 20
+keepalive = 40
 preload = True
 pythonpath = "/app/joplin"
 
@@ -19,7 +19,7 @@ if DEPLOYMENT_MODE in ("LOCAL", "REVIEW"):
     timeout = 500
     loglevel = "DEBUG"
     # to stay under heroku limit of 20 connections
-    worker_connections = 100
+    worker_connections = 10
     reload = True
     workers = 2
 
