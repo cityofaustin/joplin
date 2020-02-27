@@ -3,7 +3,7 @@ import os
 import multiprocessing
 DEPLOYMENT_MODE = os.environ.get('DEPLOYMENT_MODE')
 
-worker_class = 'gthread'
+worker_class = 'gevent'
 
 threads = 4
 
