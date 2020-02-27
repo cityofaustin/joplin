@@ -1,27 +1,49 @@
-
-.header.coa-header {
-  background-color: $coa-background-color;
-}
-.coa-header {
-    // display: flex;
-    // padding: 0.75rem;
-    // background: $coa-color-darkest-gray;
-    background-color: $coa-background-color;
-    position: fixed;
-    // z-index: 27;
-    width: 100%;
+.coa-header { // change name coa-application-banner(NOTE: this will effect old styles)
+  background-color: $coa-background-color !important;
+  position: fixed;
+  z-index: 1;
+  width: 100%;
 }
 .coa-seal {
   display: block;
   padding: 32px;
+  width: 50px;
+  height: 50px;
 }
-.easter-egg {
+.coa-easter-egg {
   position: absolute;
-  top: 54px;
-  left: 57px;
+  top: 49px;
+  left: 52px;
   min-width: 10px;
   min-height: 10px;
 }
-.easter-egg:hover {
-  cursor: pointer;
+
+// User / Account DROPDOWN
+.dropdown.user-account {
+  position: absolute;
+  top: 32px;
+  right: 32px;
+  width: 100%;
+}
+.avatar.circle {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 3px solid $coa-blue;
+}
+.coa-user {
+  display: inline-block;
+  padding: 16px;
+  line-height: 16px;
+  margin-left: 12px;
+  margin-right: 0px;
+  font-weight: bold;
+  background-color: $coa-background-color-secondary;
+  border-radius: $coa-border-radius;
+}
+.dropdown .dropdown-toggle {
+  color: inherit;
+  text-transform: inherit;
+  padding: 0;
 }

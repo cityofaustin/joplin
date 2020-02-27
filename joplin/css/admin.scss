@@ -6,6 +6,9 @@
 @import './buttons';
 @import './pages/edit';
 
+@import './_joplin_ui_transition.scss';
+
+
 // Wagtail overrides
 
 .full input {

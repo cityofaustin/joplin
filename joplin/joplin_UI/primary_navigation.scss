@@ -1,0 +1,72 @@
+// COA Global Nav (left sidebar)
+
+// .nav-wrapper,
+.nav-wrapper .inner {
+  // width: $nav-wrapper-width;
+  background-color: $coa-background-color-secondary !important;
+  border-top: solid $coa-border-color 2px;
+  border-right: solid $coa-border-color 2px;
+  box-sizing: border-box;
+}
+
+// .nav-main .menu-item a::before {
+//     font-size: 2rem;
+// }
+//
+// .nav-main .menu-active > a {
+//     border-left-color: $coa-color-lightest-blue;
+//     color: $coa-color-lightest-blue;
+// }
+
+// .wrapper {
+//     padding-top: $header-height;
+//     padding-left: $nav-wrapper-width;
+//     height: inherit;
+// }
+// .nav-wrapper,
+// .nav-wrapper .inner {
+//     width: $nav-wrapper-width;
+// }
+
+// .nav-main {
+//     position: static;
+//     overflow: hidden;
+// }
+// .nav-main a {
+//     padding-left: 10px;
+// }
+// .nav-main .footer {
+//     display: none;
+// }
+
+.nav-main .menu-item {
+    .icon-home:before {
+        content: 'create';
+    }
+
+    .icon-maps:before {
+        content: 'map';
+    }
+    .icon-locations:before {
+        content: 'location_on';
+    }
+    .icon-image:before {
+        content: 'photo';
+    }
+    .icon-contacts:before {
+        content: 'perm_contact_calendar';
+    }
+    .icon-users:before {
+        content: 'account_circle';
+    }
+    .icon-doc-full-inverse:before {
+        content: 'description';
+    }
+    .icon-settings:before {
+        content: 'settings_applications';
+    }
+}
+
+.nav-main .menu-item .material-icons span {
+  font-family: $coa-fontFamily;
+}

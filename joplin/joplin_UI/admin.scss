@@ -1,2 +1,12 @@
 @import './variables';
 @import './application_banner';
+@import './primary_navigation';
+
+body {
+  font-family: $coa-fontFamily;
+  color: $coa-text-color;
+  font-size: 100% !important;
+}
+.wrapper {
+  padding-top: 112px;
+}
