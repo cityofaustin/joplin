@@ -2,19 +2,8 @@ import factory
 import wagtail_factories
 from django.utils.text import slugify
 from base.models import *
-
-
-class PageFactory(wagtail_factories.factories.MP_NodeFactory):
-    """
-    little hack from wagtail_factories cause I don't want a hard-coded page title
-    note: when creating pages give it a parent (parent=<another page like home page>)
-    or else it'l be an orphan and you'll both be sad
-    """
-    title = factory.Faker('text')
-    slug = factory.LazyAttribute(lambda obj: slugify(obj.title))
-
-    class Meta:
-        model = Page
+from . import PageFactory
+from pytest_factoryboy import register
 
 
 class InformationPageTopicFactory(factory.django.DjangoModelFactory):

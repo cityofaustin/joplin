@@ -1,7 +1,7 @@
 import factory
 import wagtail_factories
 from base.models import *
-from .shared_factories import PageFactory
+from .. import PageFactory
 
 """
 DepartmentPage
