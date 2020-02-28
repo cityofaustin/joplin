@@ -26,7 +26,7 @@ The most basic way would be to:
 (or just 'shell')
 3. Import your factory:
 `from locations.factories import LocationPageFactory`
-`from base.locations import ServicePageFactory`
+`from base.factories.service_page import ServicePageFactory`
 4. `ServicePageFactory.create(parent=HomePage.objects.first())``
 or for a bunch
 `ServicePageFactory.create_batch(parent=HomePage.objects.first(), size=<integer of how ever many you want to make>)`
