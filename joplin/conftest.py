@@ -13,7 +13,7 @@ from django.core.management import call_command
 def django_db_setup(django_db_setup, django_db_blocker):
     print('loading datadump')
     with django_db_blocker.unblock():
-        call_command('loaddata', 'joplin/db/system-generated/staging.datadump.json')
+        call_command('loaddata', 'joplin/db/system-generated/prod.datadump.json')
 
 
 def register_factories(factories):

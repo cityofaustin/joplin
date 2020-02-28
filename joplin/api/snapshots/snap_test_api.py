@@ -296,7 +296,7 @@ snapshots['test_service 1'] = {
                 {
                     'node': {
                         'id': 'U2VydmljZVBhZ2VOb2RlOjI4NQ==',
-                        'title': 'Join the Community Police Review Commission'
+                        'title': 'Serve on the Community Police Review Commission'
                     }
                 },
                 {
@@ -326,7 +326,7 @@ snapshots['test_service 1'] = {
                 {
                     'node': {
                         'id': 'U2VydmljZVBhZ2VOb2RlOjM0MA==',
-                        'title': 'Find your pool, spa, PWIFF or fountain’s jurisdiction '
+                        'title': 'Find your pool, spa, PIWFF or fountain’s jurisdiction'
                     }
                 },
                 {
@@ -337,20 +337,56 @@ snapshots['test_service 1'] = {
                 },
                 {
                     'node': {
-                        'id': 'U2VydmljZVBhZ2VOb2RlOjM0NQ==',
-                        'title': 'service page and requirements check'
+                        'id': 'U2VydmljZVBhZ2VOb2RlOjM0Ng==',
+                        'title': 'Submit a plan review application for your new or remodeled pool, spa, public interactive water feature or fountain'
                     }
                 },
                 {
                     'node': {
                         'id': 'U2VydmljZVBhZ2VOb2RlOjM0Nw==',
-                        'title': 'apply commission test'
+                        'title': 'Get your pool plans reviewed by the Watershed, Development Services and Fire departments'
+                    }
+                },
+                {
+                    'node': {
+                        'id': 'U2VydmljZVBhZ2VOb2RlOjM0OQ==',
+                        'title': 'Prepare operational permit application materials for your pool, spa, public interactive water feature or fountain'
+                    }
+                },
+                {
+                    'node': {
+                        'id': 'U2VydmljZVBhZ2VOb2RlOjM1MA==',
+                        'title': 'Prepare for a certificate of occupancy inspection for your pool, spa, public interactive water feature or fountain'
+                    }
+                },
+                {
+                    'node': {
+                        'id': 'U2VydmljZVBhZ2VOb2RlOjM1MQ==',
+                        'title': 'Submit your operational permit and certificate of occupancy inspection applications for your pool'
                     }
                 },
                 {
                     'node': {
                         'id': 'U2VydmljZVBhZ2VOb2RlOjM1Mg==',
-                        'title': 'Testing streamfield requirements for services'
+                        'title': 'Schedule a pre-opening certificate of occupancy inspection for your pool, spa, public interactive water feature or fountain'
+                    }
+                },
+                {
+                    'node': {
+                        'id': 'U2VydmljZVBhZ2VOb2RlOjM1NA==',
+                        'title': 'Renew your pool, spa, public interactive water feature or fountain’s operational permit'
+                    }
+                },
+                {
+                    'node': {
+                        'id': 'U2VydmljZVBhZ2VOb2RlOjM1Nw==',
+                        'title': 'Apply for a change of ownership inspection for your pool, spa, public interactive water feature or fountain'
+                    }
+                },
+                {
+                    'node': {
+                        'id': 'U2VydmljZVBhZ2VOb2RlOjM1OQ==',
+                        'title': 'Request judicial records'
                     }
                 }
             ]
@@ -605,7 +641,7 @@ snapshots['test_information 1'] = {
                 {
                     'node': {
                         'id': 'SW5mb3JtYXRpb25QYWdlTm9kZTozMzg=',
-                        'title': 'Pool permit types and fees.'
+                        'title': 'Pool permit types and fees'
                     }
                 },
                 {
@@ -617,25 +653,25 @@ snapshots['test_information 1'] = {
                 {
                     'node': {
                         'id': 'SW5mb3JtYXRpb25QYWdlTm9kZTozNDI=',
-                        'title': 'What to expect if your pool receives violations. '
+                        'title': 'What to expect if your pool receives violations'
                     }
                 },
                 {
                     'node': {
-                        'id': 'SW5mb3JtYXRpb25QYWdlTm9kZTozNDg=',
-                        'title': 'Know what you need to know 🤔'
+                        'id': 'SW5mb3JtYXRpb25QYWdlTm9kZTozNDU=',
+                        'title': 'Pre-plan review checklist for new or remodeled pools, spas, and PIWFFs'
                     }
                 },
                 {
                     'node': {
-                        'id': 'SW5mb3JtYXRpb25QYWdlTm9kZTozNDk=',
-                        'title': 'Test page for FKA incremental builds'
+                        'id': 'SW5mb3JtYXRpb25QYWdlTm9kZTozNTM=',
+                        'title': 'Requirements to safely operate your pool, spa, public interactive water feature or fountain'
                     }
                 },
                 {
                     'node': {
-                        'id': 'SW5mb3JtYXRpb25QYWdlTm9kZTozNTA=',
-                        'title': 'Testing documents'
+                        'id': 'SW5mb3JtYXRpb25QYWdlTm9kZTozNTY=',
+                        'title': 'Report changes to pool, spa, public interactive water feature or fountain'
                     }
                 }
             ]
