@@ -14,7 +14,9 @@
 
 <script>
 // passing the constant from context_processors into a JS variable (boolean)
-const ISPRODUCTION = '{{ISPRODUCTION}}';
+// const ISPRODUCTION = '{{ISPRODUCTION}}';
+
+window.ISPRODUCTION = '{{ISPRODUCTION}}'; // 🚨REVERT BACK TO ☝️after Joplin UI complete.
 </script>
 {% render_bundle 'admin' %}
 {% if ISPRODUCTION == False %}
@@ -28,11 +30,11 @@ const ISPRODUCTION = '{{ISPRODUCTION}}';
         <img class="coa-seal wagtail-logo wagtail-logo__full" src="{% static 'images/coa_seal_transparent_color.png' %}" alt="Welcome to City of Austin CMS" width="60" />
         <div class="coa-easter-egg" onclick="toggleJoplinUI()"></div>
     </div>
-    <div class="dropdown user-account coa-user-options-dropdown">
+    <div class="dropdown user-account coa-account-dropdown">
         <div class="dropdown-toggle">
           <div class="user-account">
-            <div class="avatar circle"><img src="{% avatar_url user %}" alt="avatar" /></div>
-            <div class="user user-account-dropdown coa-user" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+            <div class="avatar circle coa-avatar"><img src="{% avatar_url user %}" alt="avatar" /></div>
+            <div class="user user-account-dropdown coa-user-name" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                 {{ request.user.first_name }} {{ request.user.last_name }}
                 <span class="icon icon-arrow-down-after"></span>
                 <ul class="user-account-dropdown-menu" aria-labelledby="user-account-dropdown">
@@ -47,14 +49,14 @@ const ISPRODUCTION = '{{ISPRODUCTION}}';
 <script onclick="toggleJoplinUI">
 
 const toggleJoplinUI = function() {
-  console.log('yo yo yo')
-  if (localStorage.joplinUI === 'on') {
-    localStorage.joplinUI = 'off'
-  } else {
-    localStorage.joplinUI = 'on'
+  if (window.ISPRODUCTION === "False") {
+    if (localStorage.joplinUI === 'on') {
+      localStorage.joplinUI = 'off'
+    } else {
+      localStorage.joplinUI = 'on'
+    }
+    window.location.reload()
   }
-  console.log("new Joplin UI is " + localStorage.joplinUI)
-  window.location.reload()
 }
 
 </script>

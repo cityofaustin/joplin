@@ -19,31 +19,28 @@
 }
 
 // User / Account DROPDOWN
-.dropdown.user-account {
+.coa-account-dropdown {
   position: absolute;
   top: 32px;
   right: 32px;
   width: 100%;
 }
-.avatar.circle {
+.coa-avatar {
   display: inline-block;
   width: 40px;
   height: 40px;
   padding: 0;
   border: 3px solid $coa-blue;
 }
-.coa-user {
+.coa-user-name {
   display: inline-block;
   padding: 16px;
   line-height: 16px;
   margin-left: 12px;
   margin-right: 0px;
   font-weight: bold;
+  color: $coa-text-color;
+  text-transform: none;
   background-color: $coa-background-color-secondary;
   border-radius: $coa-border-radius;
-}
-.dropdown .dropdown-toggle {
-  color: inherit;
-  text-transform: inherit;
-  padding: 0;
 }
