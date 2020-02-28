@@ -9,7 +9,7 @@ from base.forms import FormContainerForm
 from .janis_page import JanisBasePage
 
 from .widgets import countMe, countMeTextArea
-from publish_preflight.requirements import FieldPublishRequirement, RelationPublishRequirement, ConditionalPublishRequirement
+from publish_preflight.requirements import FieldPublishRequirement, RelationPublishRequirement, ConditionalPublishRequirement, DepartmentPublishRequirement
 
 class FormContainer(JanisBasePage):
     janis_url_page_type = "form"
@@ -28,7 +28,7 @@ class FormContainer(JanisBasePage):
         ConditionalPublishRequirement(
             RelationPublishRequirement("topics"),
             "or",
-            RelationPublishRequirement("related_departments"),
+            DepartmentPublishRequirement(),
             message="You must have at least 1 topic or 1 department selected.",
         ),
     )
@@ -39,21 +39,8 @@ class FormContainer(JanisBasePage):
         FieldPanel('title_ar'),
         FieldPanel('title_vi'),
         InlinePanel('topics', label='Topics'),
-        InlinePanel('related_departments', label='Related Departments'),
         FieldPanel('description', widget=countMeTextArea),
         FieldPanel('form_url'),
-    ]
-
-class FormContainerRelatedDepartments(ClusterableModel):
-    page = ParentalKey(FormContainer, related_name='related_departments', default=None)
-    related_department = models.ForeignKey(
-        "base.departmentPage",
-        on_delete=models.PROTECT,
-    )
-
-    panels = [
-        # Use a SnippetChooserPanel because blog.BlogAuthor is registered as a snippet
-        PageChooserPanel("related_department"),
     ]
 
 class FormContainerTopic(ClusterableModel):
