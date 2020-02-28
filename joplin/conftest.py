@@ -6,6 +6,16 @@ from base.factories.information_page import InformationPageContactFactory, Infor
 from base.factories import information_page, service_page, guide_page
 
 
+from django.core.management import call_command
+
+
+@pytest.fixture(scope='session')
+def django_db_setup(django_db_setup, django_db_blocker):
+    print('loading datadump')
+    with django_db_blocker.unblock():
+        call_command('loaddata', 'joplin/db/system-generated/staging.datadump.json')
+
+
 def register_factories(factories):
     """
     lil loop to go through and register factory objects

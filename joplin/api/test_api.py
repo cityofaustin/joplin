@@ -11,6 +11,7 @@ servicePageQuery = '''
     edges {
       node {
         id
+        title
       }
     }
   }
@@ -23,6 +24,7 @@ informationPageQuery = '''
     edges {
       node {
         id
+        title
       }
     }
   }
@@ -48,6 +50,7 @@ def test_information(snapshot):
     snapshot.assert_match(client.execute(informationPageQuery))
 
 
+# example using graphql test case
 class ResponseTestCase(GraphQLTestCase):
     # Here you need to inject your test case's schema
     GRAPHQL_SCHEMA = schema
@@ -56,4 +59,13 @@ class ResponseTestCase(GraphQLTestCase):
     def test_query(self):
         response = self.query(servicePageQuery)
         content = json.loads(response.content)
+        # do other assertions on content here or in other methods if you want
+        self.assertIn('data', content.keys())
         self.assertResponseNoErrors(response)
+
+# example using pytest, pretty sure this does basically the same thing
+@pytest.mark.django_db
+def test_service_query_has_data():
+    client = Client(schema)
+    content = client.execute(servicePageQuery)
+    assert 'data' in content.keys()
