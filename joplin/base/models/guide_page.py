@@ -19,7 +19,7 @@ from .translated_image import TranslatedImage
 
 from .widgets import countMe, countMeTextArea
 
-from publish_preflight.requirements import FieldPublishRequirement, RelationPublishRequirement, StreamFieldPublishRequirement, ConditionalPublishRequirement
+from publish_preflight.requirements import FieldPublishRequirement, RelationPublishRequirement, StreamFieldPublishRequirement, ConditionalPublishRequirement, DepartmentPublishRequirement
 
 
 def streamfield_has_pages(stream_value):
@@ -69,7 +69,7 @@ class GuidePage(JanisBasePage):
         ConditionalPublishRequirement(
             RelationPublishRequirement("topics"),
             "or",
-            RelationPublishRequirement("related_departments"),
+            DepartmentPublishRequirement(),
             message="You must have at least 1 topic or 1 department selected.",
         ),
     )
@@ -81,7 +81,6 @@ class GuidePage(JanisBasePage):
         FieldPanel('title_vi'),
         FieldPanel('description', widget=countMeTextArea),
         InlinePanel('topics', label='Topics'),
-        InlinePanel('related_departments', label='Related Departments'),
         ImageChooserPanel('image'),
         StreamFieldPanel('sections'),
         InlinePanel('contacts', label='Contacts'),
@@ -98,18 +97,6 @@ class GuidePageTopic(ClusterableModel):
 
     def __str__(self):
         return self.topic.text
-
-
-class GuidePageRelatedDepartments(ClusterableModel):
-    page = ParentalKey(GuidePage, related_name='related_departments', default=None)
-    related_department = models.ForeignKey(
-        "base.departmentPage",
-        on_delete=models.PROTECT,
-    )
-
-    panels = [
-        PageChooserPanel("related_department"),
-    ]
 
 
 class GuidePageContact(ClusterableModel):

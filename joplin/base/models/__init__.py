@@ -25,12 +25,12 @@ from .home_page import HomePage
 from .theme import Theme
 from .topic_collection_page import TopicCollectionPage
 from .topic_page import TopicPage, TopicPageTopicCollection, TopicPageTopPage
-from .service_page import ServicePage, ServicePageTopic, ServicePageContact, ServicePageRelatedDepartments
-from .information_page import InformationPage, InformationPageRelatedDepartments, InformationPageTopic, InformationPageContact
+from .service_page import ServicePage, ServicePageTopic, ServicePageContact
+from .information_page import InformationPage, InformationPageTopic, InformationPageContact
 from .department_page import DepartmentPage, DepartmentPageDirector, DepartmentPageContact, DepartmentPageTopPage, DepartmentPageRelatedPage
-from .official_documents_page import OfficialDocumentPage, OfficialDocumentPageOfficialDocument, OfficialDocumentPageRelatedDepartments, OfficialDocumentPageTopic
-from .guide_page import GuidePage, GuidePageTopic, GuidePageRelatedDepartments, GuidePageContact
-from .form_container import FormContainer, FormContainerRelatedDepartments, FormContainerTopic
+from .official_documents_page import OfficialDocumentPage, OfficialDocumentPageOfficialDocument, OfficialDocumentPageTopic
+from .guide_page import GuidePage, GuidePageTopic, GuidePageContact
+from .form_container import FormContainer, FormContainerTopic
 from .widgets import countMe, countMeTextArea
 from .site_settings import JanisBranchSettings
 from .deployment_log import DeploymentLog
@@ -137,35 +137,3 @@ class ProcessPageTopic(ClusterableModel):
 
     def __str__(self):
         return self.topic.text
-
-
-@register_snippet
-class Department(ClusterableModel):
-    slug = models.SlugField()
-    name = models.CharField(max_length=DEFAULT_MAX_LENGTH)
-    mission = models.TextField()
-    image = models.ForeignKey(
-        TranslatedImage, null=True, on_delete=models.SET_NULL, related_name='+')
-
-    panels = [
-        FieldPanel('name'),
-        FieldPanel('mission'),
-        InlinePanel('contacts', label='Contacts'),
-        ImageChooserPanel('image'),
-    ]
-
-    def __str__(self):
-        return self.name
-
-
-class DepartmentContact(ClusterableModel):
-    department = ParentalKey(Department, related_name='contacts')
-    contact = models.ForeignKey(
-        Contact, related_name='+', on_delete=models.CASCADE)
-
-    panels = [
-        SnippetChooserPanel('contact'),
-    ]
-
-    def __str__(self):
-        return self.department.name

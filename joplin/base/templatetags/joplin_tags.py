@@ -5,7 +5,8 @@ import graphene
 import os
 import json
 
-from base.models import TopicPage, Theme, DepartmentPage
+from base.models import TopicPage, Theme
+from groups.models import Department
 from wagtail.core import hooks
 import itertools
 
@@ -62,11 +63,14 @@ def themes_topics_tree(context):
 def departments_list(context):
     departments = []
 
-    for department in DepartmentPage.objects.all():
-        departments.append({
-            'title': department.title,
-            'id': department.id,
-        })
+    # If the user is an admin, we need to
+    # populate the list of departments for the modal
+    if context.request.user.is_superuser:
+        for department in Department.objects.all():
+            departments.append({
+                'title': department.name,
+                'id': department.id,
+            })
 
     return {
         'departments': json.dumps(departments)
