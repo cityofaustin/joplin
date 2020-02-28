@@ -11,7 +11,13 @@ from django.core.management import call_command
 
 @pytest.fixture(scope='session')
 def django_db_setup(django_db_setup, django_db_blocker):
-    print('loading datadump')
+    """
+    uses pytest-django to load data into a pytest fixture
+    this populates the test database
+    tests that are decoratored accordingly will use the db
+    eventually we'll want to make our factories robust and rely on a test db
+    as little possible, but this is a handy stop-gap
+    """
     with django_db_blocker.unblock():
         call_command('loaddata', 'joplin/db/system-generated/prod.datadump.json')
 
@@ -33,7 +39,9 @@ register_factories(information_page)
 register_factories(service_page)
 register_factories(guide_page)
 
-# example if we wanted to make a specific fixture for some tests
+# example if we wanted to make a specific fixture for some tests, we can flesh
+# this out with specific names or parameters, good for regression tests
+# TODO: example like 'page without topic'
 # @pytest.fixture()
 # def information_page(information_page_factory):
 #     return InformationPageFactory.build()

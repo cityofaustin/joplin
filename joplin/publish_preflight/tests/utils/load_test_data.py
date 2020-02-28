@@ -8,17 +8,20 @@ from base.models import (
     DepartmentPage
 )
 
+
 def load_test_data():
     home = HomePage.objects.first()
 
     # Create test user
-    user = User.objects.create_superuser(
-        "test@austintexas.io",
-        "test_password",
-        is_staff=True,
-        is_active=True,
-        is_superuser=True,
-    )
+    user = User.objects.get(email="test@austintexas.io")
+    if not user:
+        user = User.objects.create_superuser(
+            "test@austintexas.io",
+            "test_password",
+            is_staff=True,
+            is_active=True,
+            is_superuser=True,
+        )
 
     # Create Test Topic Collection Page
     topic_collection = TopicCollectionPage(**{

@@ -30,11 +30,6 @@ informationPageQuery = '''
   }
 }
 '''
-@pytest.fixture(scope='session')
-def django_db_setup(django_db_setup, django_db_blocker):
-    print('loading datadump')
-    with django_db_blocker.unblock():
-        call_command('loaddata', 'joplin/db/system-generated/prod.datadump.json')
 
 
 @pytest.mark.django_db
