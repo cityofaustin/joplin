@@ -150,9 +150,33 @@ ISTEST = DEPLOYMENT_MODE == "TEST"
 #
 default_db_url = f'sqlite:///{os.path.join(PROJECT_DIR, "db.sqlite3")}'
 DATABASES = {
-    'default': dj_database_url.config(default=default_db_url),
+    'default': dj_database_url.config(default=default_db_url, engine='django_postgrespool2', conn_max_age=0),
 }
 
+DATABASE_POOL_CLASS = 'sqlalchemy.pool.QueuePool'
+# https://github.com/lcd1232/django-postgrespool2#configuration
+
+# smaller pool to avoid going over connection limit
+# related to gunicorn worker settings
+safe_pool = {
+    'max_overflow': 8,
+    'pool_size': 4,
+    'recycle': 200
+}
+
+# we can have more connections on the heroku standard db, so lets open the pool
+# the formula is some combo of workers + worker_connections * pool_size + max_overflow
+# this could be bigger but I also upped worker_connections in gunicorn.conf
+bigger_pool = {
+    'max_overflow': 10,
+    'pool_size': 8,
+    'recycle': 500
+}
+
+if ISSTAGING or ISPRODUCTION:
+    DATABASE_POOL_ARGS = safe_pool
+else:
+    DATABASE_POOL_ARGS = safe_pool
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/

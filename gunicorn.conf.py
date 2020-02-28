@@ -1,16 +1,33 @@
+import multiprocessing
+from psycogreen.gevent import patch_psycopg
 import os
 DEPLOYMENT_MODE = os.environ.get('DEPLOYMENT_MODE')
 
+worker_class = 'gevent'
+workers = 2
+# to stay under heroku limit of 20 connections,
+# but with these should get caught by the pool
+worker_connections = 4
+preload = True
 pythonpath = "/app/joplin"
-reload = True
+
+#  see https://docs.gunicorn.org/en/stable/settings.html#max-requests
+max_requests = 500
+max_requests_jitter = 50
+timeout = 190
 
 if DEPLOYMENT_MODE in ("STAGING", "PRODUCTION"):
-    preload = True
     timeout = 190
-    # see https://docs.gunicorn.org/en/stable/settings.html#max-requests
-    max_requests = 100
-    max_requests_jitter = 50
-else:
+    worker_connections = 4
+    workers = 4
+
+
+if DEPLOYMENT_MODE in ("LOCAL", "REVIEW"):
     timeout = 190
     loglevel = "DEBUG"
-    preload = True
+    reload = True
+
+
+def post_fork(server, worker):
+    patch_psycopg()
+    worker.log.info("Made Psycopg2 run using gevent (for async stuff)")
