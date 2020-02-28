@@ -15,3 +15,12 @@ snapshots['test_service 1'] = {
         }
     }
 }
+
+snapshots['test_information 1'] = {
+    'data': {
+        'allInformationPages': {
+            'edges': [
+            ]
+        }
+    }
+}
