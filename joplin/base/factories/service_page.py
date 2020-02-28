@@ -1,7 +1,7 @@
 import factory
 import wagtail_factories
 from base.models import *
-from .. import PageFactory
+from base.factories import PageFactory
 
 
 class ServicePageTopicFactory(factory.django.DjangoModelFactory):

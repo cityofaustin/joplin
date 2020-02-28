@@ -45,6 +45,7 @@ pytest-factoryboy = "*"
 coverage = "*"
 django-coverage-plugin = "*"
 pytest-cov = "*"
+snapshottest = "*"
 
 [requires]
 python_version = "3.7"
