@@ -165,10 +165,14 @@
   font-weight: bold;
 }
 
-// Fix formatting to allow PublishPreflight errors to be inserted below field titles
 .object>.title-wrapper {
-  padding-left: 0;
   position: inherit;
+}
+
+// Fix formatting to allow PublishPreflight errors to be inserted below field titles
+// .tab-content makes sure to only select the formatting on the page edit view
+.tab-content .object>.title-wrapper {
+  padding-left: 0;
 }
 
 // Clean up weird whitespace on Relation InlinePanels that results from .title-wrapper no longer being position:absolute

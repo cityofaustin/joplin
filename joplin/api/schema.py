@@ -93,7 +93,7 @@ def expand_by_type(key, value):
 
 def try_get_api_representation(StreamChild):
     if StreamChild.block_type == "map_block":
-        # this has its own representation defition in blocks.py
+        # this has its own representation definition in blocks.py
         block = StreamChild.block.get_api_representation(StreamChild.value)
         return block
 
@@ -235,6 +235,26 @@ class LocationPageRelatedServices(DjangoObjectType):
         interfaces = [graphene.Node]
 
 
+class EventFilter(FilterSet):
+    order_by = OrderingFilter(
+        fields=(
+            ('date'),
+        )
+    )
+    # For reference:
+    # https://django-filter.readthedocs.io/en/master/ref/filterset.html#declaring-filterable-fields
+    # https://docs.djangoproject.com/en/3.0/ref/models/querysets/#lte
+
+    class Meta:
+        model = EventPage
+        fields = {
+            'date': ['exact', 'lte', 'gte'],
+            'live': ['exact'],
+            'id': ['exact'],
+            'canceled': ['exact'],
+        }
+
+
 class EventPageRemoteLocation(graphene.ObjectType):
     """
     Remote Location = non city owned location
@@ -355,7 +375,7 @@ class EventPageNode(DjangoObjectType):
 
     class Meta:
         model = EventPage
-        filter_fields = ['id', 'slug', 'live']
+        filter_fields =  ['id', 'slug', 'live', 'date']
         interfaces = [graphene.Node, DepartmentResolver]
 
     def resolve_locations(self, info):
@@ -922,7 +942,7 @@ class Query(graphene.ObjectType):
     all_guide_page_topics = DjangoFilterConnectionField(GuidePageTopicNode)
     all_location_pages = DjangoFilterConnectionField(LocationPageNode)
     all_form_container_topics = DjangoFilterConnectionField(FormContainerTopicNode)
-    all_event_pages = DjangoFilterConnectionField(EventPageNode)
+    all_event_pages = DjangoFilterConnectionField(EventPageNode, filterset_class=EventFilter)
 
     def resolve_site_structure(self, resolve_info):
         site_structure = SiteStructure()
