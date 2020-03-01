@@ -244,6 +244,15 @@ $(function() {
     }
   }
 
+  function updateFeeVisibility(visible) {
+    if(visible) {
+      $('.coa-eventFees').first().show('slow')
+    } else {
+      $('.coa-eventFees').first().hide('slow')
+    }
+  }
+  updateFeeVisibility(!($('#id_event_is_free').first().prop('checked')))
+
   // if we previously had a language stored in local storage, load the view for that language
   // otherwise, we default to english
   if (localStorage.selected_lang) {
@@ -373,6 +382,11 @@ $(function() {
     updateSelectedLanguageDropdown(state.currentLang);
   });
 
+  // When we change the value of the event is free checkbox
+  $('#id_event_is_free').change(function() {
+    updateFeeVisibility(!($('#id_event_is_free').first().prop('checked')))
+  })
+
   // Found this here: https://stackoverflow.com/a/31719339
   MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
 
@@ -398,34 +412,33 @@ $(function() {
   });
 
   // autocomplete for places
-  (function() {
-    var latlng = {
-      lat: 30.26,
-      lng: -97.73,
-    };
-    var placesAutocomplete = places({
-      appId: 'plHX3G9C5GRN',
-      apiKey: 'd9275f5f90784eb5ba59ff8ec581d9bb',
-      container: document.querySelector('#id_physical_street'),
-      templates: {
-        value: function(suggestion) {
-          return suggestion.name;
-        },
-      },
-    }).configure({
-      aroundLatLng: latlng.lat + ',' + latlng.lng,
-      aroundRadius: 10 * 4000, // 40km radius
-      type: 'address',
-    });
-    placesAutocomplete.on('change', function resultSelected(e) {
-      document.querySelector('#id_physical_state').value =
-        e.suggestion.administrative || '';
-      document.querySelector('#id_physical_city').value =
-        e.suggestion.city || '';
-      document.querySelector('#id_physical_zip').value =
-        e.suggestion.postcode || '';
-      document.querySelector('#id_physical_country').value =
-        e.suggestion.country || '';
-    });
-  })();
+  // Algolia is returning the incorrect zip code for some addresses in austin
+//  (function() {
+//    var latlng = {
+//      lat: 30.26,
+//      lng: -97.73,
+//    };
+//    var placesAutocomplete = places({
+//      appId: 'plHX3G9C5GRN',
+//      apiKey: 'd9275f5f90784eb5ba59ff8ec581d9bb',
+//      container: document.querySelector('#id_physical_street'),
+//      templates: {
+//        value: function(suggestion) {
+//          return suggestion.name;
+//        },
+//      },
+//    }).configure({
+//      aroundLatLng: latlng.lat + ',' + latlng.lng,
+//      aroundRadius: 10 * 4000, // 40km radius
+//      type: 'address',
+//    });
+//    placesAutocomplete.on('change', function resultSelected(e) {
+//      document.querySelector('#id_physical_state').value =
+//        e.suggestion.administrative || '';
+//      document.querySelector('#id_physical_city').value =
+//        e.suggestion.city || '';
+//      document.querySelector('#id_physical_zip').value =
+//        e.suggestion.postcode || '';
+//    });
+//  })();
 });

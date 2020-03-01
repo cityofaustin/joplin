@@ -15,20 +15,17 @@ from wagtail.core.blocks import *
 from wagtail.documents.models import Document
 from wagtail.core.rich_text import expand_db_html
 from base.models import (
-    TranslatedImage,
-    ServicePage, ServicePageContact, ServicePageTopic, ServicePageRelatedDepartments,
-    InformationPage, InformationPageContact, InformationPageTopic, InformationPageRelatedDepartments,
-    DepartmentPage, DepartmentPageContact, DepartmentPageDirector, DepartmentPageTopPage, DepartmentPageRelatedPage,
-    Theme, TopicCollectionPage, TopicPage, TopicPageTopicCollection, TopicPageTopPage,
-    Contact, Location, PhoneNumber, ContactDayAndDuration, Department, DepartmentContact,
-    OfficialDocumentPage, OfficialDocumentPageRelatedDepartments, OfficialDocumentPageTopic, OfficialDocumentPageOfficialDocument,
-    GuidePage, GuidePageTopic, GuidePageRelatedDepartments, GuidePageContact,
-    FormContainer, FormContainerRelatedDepartments, FormContainerTopic,
+    TranslatedImage, ServicePage, ServicePageContact, ServicePageTopic, InformationPage, InformationPageContact,
+    InformationPageTopic, DepartmentPage, DepartmentPageContact, DepartmentPageDirector, DepartmentPageTopPage,
+    DepartmentPageRelatedPage, Theme, TopicCollectionPage, TopicPage, TopicPageTopicCollection, TopicPageTopPage,
+    Contact, Location, PhoneNumber, ContactDayAndDuration, OfficialDocumentPage, OfficialDocumentPageTopic,
+    OfficialDocumentPageOfficialDocument, GuidePage, GuidePageTopic, GuidePageContact,
+    FormContainer, FormContainerTopic,
 )
 from .content_type_map import content_type_map
 import traceback
 from locations.models import LocationPage, LocationPageRelatedServices
-from events.models import EventPage, EventPageFee, EventPageRelatedDepartments
+from events.models import EventPage, EventPageFee
 from graphql_relay import to_global_id
 
 
@@ -159,6 +156,26 @@ def convert_stream_field(field, registry=None):
     return StreamFieldType(description=field.help_text, required=not field.null)
 
 
+class DepartmentPageNode(DjangoObjectType):
+    page_type = graphene.String()
+
+    class Meta:
+        model = DepartmentPage
+        filter_fields = ['id', 'slug', 'live']
+        interfaces = [graphene.Node]
+
+    def resolve_page_type(self, info):
+        return DepartmentPage.get_verbose_name().lower()
+
+
+class DepartmentResolver(graphene.Interface):
+    departments = graphene.List(DepartmentPageNode)
+
+    @classmethod
+    def resolve_departments(cls, instance, info):
+        return instance.departments()
+
+
 class DocumentNode(DjangoObjectType):
     class Meta:
         model = Document
@@ -195,19 +212,6 @@ class TopicNode(DjangoObjectType):
         interfaces = [graphene.Node]
 
 
-class DepartmentNode(DjangoObjectType):
-    class Meta:
-        model = Department
-        filter_fields = ['id', 'name']
-        interfaces = [graphene.Node]
-
-
-class DepartmentContactNode(DjangoObjectType):
-    class Meta:
-        model = DepartmentContact
-        interfaces = [graphene.Node]
-
-
 class LocationNode(DjangoObjectType):
     class Meta:
         model = Location
@@ -221,7 +225,7 @@ class LocationPageNode(DjangoObjectType):
         model = LocationPage
         filter_fields = ['id', 'slug', 'live']
         fields = '__all__'
-        interfaces = [graphene.Node]
+        interfaces = [graphene.Node, DepartmentResolver]
 
 
 class LocationPageRelatedServices(DjangoObjectType):
@@ -247,6 +251,7 @@ class EventFilter(FilterSet):
             'date': ['exact', 'lte', 'gte'],
             'live': ['exact'],
             'id': ['exact'],
+            'canceled': ['exact'],
         }
 
 
@@ -371,7 +376,7 @@ class EventPageNode(DjangoObjectType):
     class Meta:
         model = EventPage
         filter_fields =  ['id', 'slug', 'live', 'date']
-        interfaces = [graphene.Node]
+        interfaces = [graphene.Node, DepartmentResolver]
 
     def resolve_locations(self, info):
         repr_locations = []
@@ -389,10 +394,7 @@ class EventPageFeeNode(DjangoObjectType):
         interfaces = [graphene.Node]
 
 
-class EventPageRelatedDepartmentsNode(DjangoObjectType):
-    class Meta:
-        model = EventPageRelatedDepartments
-        interfaces = [graphene.Node]
+
 
 
 class ContactNode(DjangoObjectType):
@@ -432,36 +434,6 @@ class ServicePageTopicNode(DjangoObjectType):
         filter_fields = ['topic']
 
 
-class ServicePageRelatedDepartmentsNode(DjangoObjectType):
-    class Meta:
-        model = ServicePageRelatedDepartments
-        interfaces = [graphene.Node]
-
-
-class InformationPageRelatedDepartmentsNode(DjangoObjectType):
-    class Meta:
-        model = InformationPageRelatedDepartments
-        interfaces = [graphene.Node]
-
-
-class OfficialDocumentPageRelatedDepartmentsNode(DjangoObjectType):
-    class Meta:
-        model = OfficialDocumentPageRelatedDepartments
-        interfaces = [graphene.Node]
-
-
-class GuidePageRelatedDepartmentsNode(DjangoObjectType):
-    class Meta:
-        model = GuidePageRelatedDepartments
-        interfaces = [graphene.Node]
-
-
-class FormContainerRelatedDepartmentsNode(DjangoObjectType):
-    class Meta:
-        model = FormContainerRelatedDepartments
-        interfaces = [graphene.Node]
-
-
 class TranslatedImageNode(DjangoObjectType):
     class Meta:
         model = TranslatedImage
@@ -489,7 +461,7 @@ class ServicePageNode(DjangoObjectType):
     class Meta:
         model = ServicePage
         filter_fields = ['id', 'slug', 'live', 'coa_global']
-        interfaces = [graphene.Node]
+        interfaces = [graphene.Node, DepartmentResolver]
 
     def resolve_page_type(self, info):
         return ServicePage.get_verbose_name().lower()
@@ -504,22 +476,10 @@ class InformationPageNode(DjangoObjectType):
     class Meta:
         model = InformationPage
         filter_fields = ['id', 'slug', 'live', 'coa_global']
-        interfaces = [graphene.Node]
+        interfaces = [graphene.Node, DepartmentResolver]
 
     def resolve_page_type(self, info):
         return InformationPage.get_verbose_name().lower()
-
-
-class DepartmentPageNode(DjangoObjectType):
-    page_type = graphene.String()
-
-    class Meta:
-        model = DepartmentPage
-        filter_fields = ['id', 'slug', 'live']
-        interfaces = [graphene.Node]
-
-    def resolve_page_type(self, info):
-        return DepartmentPage.get_verbose_name().lower()
 
 
 class FormContainerNode(DjangoObjectType):
@@ -528,7 +488,7 @@ class FormContainerNode(DjangoObjectType):
     class Meta:
         model = FormContainer
         filter_fields = ['id', 'slug', 'live', 'coa_global']
-        interfaces = [graphene.Node]
+        interfaces = [graphene.Node, DepartmentResolver]
 
     def resolve_page_type(self, info):
         return FormContainer.get_verbose_name().lower()
@@ -561,7 +521,7 @@ class OfficialDocumentPageNode(DjangoObjectType):
     class Meta:
         model = OfficialDocumentPage
         filter_fields = ['id', 'slug', 'live', 'coa_global']
-        interfaces = [graphene.Node]
+        interfaces = [graphene.Node, DepartmentResolver]
 
     def resolve_page_type(self, info):
         return OfficialDocumentPage.get_verbose_name().lower()
@@ -654,7 +614,7 @@ class GuidePageNode(DjangoObjectType):
     class Meta:
         model = GuidePage
         filter_fields = ['id', 'slug', 'live', 'coa_global']
-        interfaces = [graphene.Node]
+        interfaces = [graphene.Node, DepartmentResolver]
 
     def resolve_sections(self, info):
         repr_sections = []
@@ -722,7 +682,7 @@ def get_structure_for_content_type(content_type):
     if not content_type_data:
         raise Exception(f'content_type [{content_type}] is not included in content_type_map')
 
-    pages = content_type_data["model"].objects.all()
+    pages = content_type_data["model"].objects.filter(live=True)
     for page in pages:
         page_global_id = graphene.Node.to_global_id(content_type_data["node"], page.id)
 
@@ -735,12 +695,15 @@ def get_structure_for_content_type(content_type):
         if page.coa_global:
             site_structure.append({'url': f'/{page.slug}/', 'type': content_type, 'id': page_global_id})
 
-        # For content_type models that have related departments
-        if hasattr(page, "related_departments"):
-            page_departments = page.related_departments.all()
-            for page_department in page_departments:
-                page_department_global_id = graphene.Node.to_global_id('DepartmentNode', page_department.related_department.id)
-                site_structure.append({'url': f'/{page_department.related_department.slug}/{page.slug}/', 'type': content_type, 'id': page_global_id, 'parent_department': page_department_global_id})
+        # To get offered by from departments, look at our page permissions
+        group_page_permissions = page.group_permissions.all()
+        for group_page_permission in group_page_permissions:
+            # Department groups have this
+            if hasattr(group_page_permission.group, "department"):
+                department_page = group_page_permission.group.department.department_page
+                if department_page:
+                    department_global_id = graphene.Node.to_global_id('DepartmentNode', department_page.id)
+                    site_structure.append({'url': f'/{department_page.slug}/{page.slug}/', 'type': content_type, 'id': page_global_id, 'parent_department': department_global_id})
 
         # For content_type models that have topics
         if hasattr(page, "topics"):
@@ -968,7 +931,6 @@ class Query(graphene.ObjectType):
     all_themes = DjangoFilterConnectionField(ThemeNode)
     all_topics = DjangoFilterConnectionField(TopicNode)
     all_topic_collections = DjangoFilterConnectionField(TopicCollectionNode)
-    all_departments = DjangoFilterConnectionField(DepartmentNode)
     all_official_document_pages = DjangoFilterConnectionField(
         OfficialDocumentPageNode)
     all_guide_pages = DjangoFilterConnectionField(GuidePageNode)
