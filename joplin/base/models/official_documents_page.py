@@ -15,7 +15,7 @@ from .janis_page import JanisBasePage
 from .constants import DEFAULT_MAX_LENGTH
 from .widgets import countMe, countMeTextArea, AUTHOR_LIMITS
 from countable_field import widgets
-from publish_preflight.requirements import FieldPublishRequirement, RelationPublishRequirement, ConditionalPublishRequirement
+from publish_preflight.requirements import FieldPublishRequirement, RelationPublishRequirement, ConditionalPublishRequirement, DepartmentPublishRequirement
 
 """
 This is a page that displays a list of Official Documents (model: umentPageOfficialDocument).
@@ -37,7 +37,7 @@ class OfficialDocumentPage(JanisBasePage):
         ConditionalPublishRequirement(
             RelationPublishRequirement("topics"),
             "or",
-            RelationPublishRequirement("related_departments"),
+            DepartmentPublishRequirement(),
             message="You must have at least 1 topic or 1 department selected.",
         )
     )
