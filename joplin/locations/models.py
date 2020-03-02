@@ -103,8 +103,10 @@ class LocationPage(JanisBasePage):
     base_form_class = LocationPageForm
 
     publish_requirements = (
-        FieldPublishRequirement("physical_street", message="A street is required for publishing"),
-        FieldPublishRequirement("physical_zip", message="Zip Code required for publishing")
+        FieldPublishRequirement("physical_street", message="Street address is required."),
+        FieldPublishRequirement("physical_zip", message="ZIP Code is required."),
+        FieldPublishRequirement("physical_city", message="City is required."),
+        FieldPublishRequirement("physical_state", message="State is required.")
     )
 
     content_panels = [

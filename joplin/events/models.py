@@ -92,10 +92,10 @@ class EventPage(JanisBasePage):
     base_form_class = EventPageForm
 
     publish_requirements = (
-        FieldPublishRequirement("description", message="A description is required for publishing", langs=["en"]),
-        FieldPublishRequirement("date", message="A date is required for publishing"),
-        FieldPublishRequirement("start_time", message="Start time is required for publishing"),
-        StreamFieldPublishRequirement("location_blocks"),
+        FieldPublishRequirement("description", message="Description is required.", langs=["en"]),
+        FieldPublishRequirement("date", message="Date is required."),
+        FieldPublishRequirement("start_time", message="Start time is required."),
+        StreamFieldPublishRequirement("location_blocks", message="Location is required."),
     )
 
     content_panels = [
