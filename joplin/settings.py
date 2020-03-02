@@ -82,10 +82,12 @@ INSTALLED_APPS = [
     'phonenumber_field',
     'countable_field',
     'flags',
-    'locations',
-    'publish_preflight',
-    'events',
     'silk',
+
+    'groups',
+    'publish_preflight',
+    'locations',
+    'events',
 ]
 
 MIDDLEWARE = [
@@ -155,11 +157,28 @@ DATABASES = {
 
 DATABASE_POOL_CLASS = 'sqlalchemy.pool.QueuePool'
 # https://github.com/lcd1232/django-postgrespool2#configuration
-DATABASE_POOL_ARGS = {
-    'max_overflow': 10,
-    'pool_size': 5,
-    'recycle': 300
+
+# smaller pool to avoid going over connection limit
+# related to gunicorn worker settings
+safe_pool = {
+    'max_overflow': 8,
+    'pool_size': 4,
+    'recycle': 200
 }
+
+# we can have more connections on the heroku standard db, so lets open the pool
+# the formula is some combo of workers + worker_connections * pool_size + max_overflow
+# this could be bigger but I also upped worker_connections in gunicorn.conf
+bigger_pool = {
+    'max_overflow': 10,
+    'pool_size': 8,
+    'recycle': 500
+}
+
+if ISSTAGING or ISPRODUCTION:
+    DATABASE_POOL_ARGS = safe_pool
+else:
+    DATABASE_POOL_ARGS = safe_pool
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
@@ -286,7 +305,7 @@ WAGTAIL_AUTO_UPDATE_PREVIEW = True
 BASE_URL = 'https://austintexas.io'
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '1iq1u6gs+xh3!bvrl-5$jqne%gpj)!wv5^h0$dc0y84xsdr-95'
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

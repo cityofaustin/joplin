@@ -188,3 +188,24 @@ class StreamFieldPublishRequirement(BasePublishRequirement):
             # If field is not translated, then get check value of "field_name"
             field_value = data.get(field_name)
             return self.evaluate(field_name, field_value)
+
+
+# A Publish Requirement for departments
+class DepartmentPublishRequirement(BasePublishRequirement):
+    def __init__(self, message=placeholder_message):
+        self.message = message
+
+    def check_criteria(self, form):
+        page = form.instance
+        group_page_permissions = page.group_permissions.all()
+
+        # If we have a department group with a department page, SUCCESS!
+        for group_page_permission in group_page_permissions:
+            # Department groups have this
+            if hasattr(group_page_permission.group, "department"):
+                department_page = group_page_permission.group.department.department_page
+                if department_page:
+                    return publish_success_factory()
+
+        # If we've made it here, it means we didn't find what we were looking for, FAILURE
+        return publish_error_factory('departments', 'department', 'missing department page')
