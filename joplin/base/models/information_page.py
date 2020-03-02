@@ -72,7 +72,7 @@ class InformationPage(JanisBasePage):
         # hidden for now, see: https://austininnovation.slack.com/archives/C8T4YD23T/p1570659780017500?thread_ts=1570659723.017100&cid=C8T4YD23T
         # StreamFieldPanel('options'),
         FieldPanel('additional_content'),
-        InlinePanel('contacts', label='Contacts'),
+        InlinePanel('contacts', label='Contacts', max_num=1),
     ]
 
 

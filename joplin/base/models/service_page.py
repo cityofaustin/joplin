@@ -142,7 +142,7 @@ class ServicePage(JanisBasePage):
             heading=additional_content.verbose_name,
             classname='coa-multiField-nopadding'
         ),
-        InlinePanel('contacts', label='Contacts'),
+        InlinePanel('contacts', label='Contacts', max_num=1),
     ]
 
 

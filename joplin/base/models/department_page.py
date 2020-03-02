@@ -67,7 +67,7 @@ class DepartmentPage(JanisBasePage):
             'data-max-count': AUTHOR_LIMITS['mission'],
             'data-count-direction': 'down'
         })),
-        InlinePanel('contacts', label='Contacts'),
+        InlinePanel('contacts', label='Contacts', max_num=1),
         InlinePanel('department_directors', label="Department Directors"),
         FieldPanel('job_listings'),
         InlinePanel('top_pages', heading='Links to top services', label='top link',
