@@ -153,11 +153,13 @@ class LocationPageOptions(TranslationOptions):
         'hours_exceptions',
     )
 
+
 @register(EventPage)
 class EventPageTranslationOptions(TranslationOptions):
     fields = (
         'description',
     )
+
 
 @register(EventPageFee)
 class EventPageFeeTranslationOptions(TranslationOptions):

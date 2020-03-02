@@ -682,7 +682,7 @@ def get_structure_for_content_type(content_type):
     if not content_type_data:
         raise Exception(f'content_type [{content_type}] is not included in content_type_map')
 
-    pages = content_type_data["model"].objects.all()
+    pages = content_type_data["model"].objects.filter(live=True)
     for page in pages:
         page_global_id = graphene.Node.to_global_id(content_type_data["node"], page.id)
 

@@ -55,7 +55,8 @@ def publish_success_factory():
 
 class BasePublishRequirement:
     # evaluate() is used by FieldPublishRequirement, StreamfieldPublishRequirement, and RelationPublishRequirement
-    # All PublishRequirements must return data in the same structure: either a publish_error_factory instance or a publish_success_factory instance
+    # All PublishRequirements must return data in the same structure: either a publish_error_factory instance or
+    # a publish_success_factory instance
     def evaluate(self, field_name, field_value):
         result = self.criteria(field_value)
         if not result:
