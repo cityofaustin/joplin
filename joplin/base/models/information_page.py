@@ -17,7 +17,7 @@ from .constants import WYSIWYG_GENERAL
 from .widgets import countMe, countMeTextArea
 from countable_field import widgets
 
-from publish_preflight.requirements import FieldPublishRequirement, RelationPublishRequirement, ConditionalPublishRequirement
+from publish_preflight.requirements import FieldPublishRequirement, RelationPublishRequirement, ConditionalPublishRequirement, DepartmentPublishRequirement
 
 
 class InformationPage(JanisBasePage):
@@ -53,7 +53,7 @@ class InformationPage(JanisBasePage):
             RelationPublishRequirement("topics"),
             "or",
             ConditionalPublishRequirement(
-                RelationPublishRequirement("related_departments"),
+                DepartmentPublishRequirement(),
                 "or",
                 FieldPublishRequirement("coa_global"),
             ),
@@ -67,25 +67,11 @@ class InformationPage(JanisBasePage):
         FieldPanel('title_ar'),
         FieldPanel('title_vi'),
         InlinePanel('topics', label='Topics'),
-        InlinePanel('related_departments', label='Related Departments'),
         FieldPanel('description', widget=countMeTextArea),
         # hidden for now, see: https://austininnovation.slack.com/archives/C8T4YD23T/p1570659780017500?thread_ts=1570659723.017100&cid=C8T4YD23T
         # StreamFieldPanel('options'),
         FieldPanel('additional_content'),
         InlinePanel('contacts', label='Contacts', max_num=1),
-    ]
-
-
-class InformationPageRelatedDepartments(ClusterableModel):
-    page = ParentalKey(InformationPage, related_name='related_departments', default=None)
-    related_department = models.ForeignKey(
-        "base.departmentPage",
-        on_delete=models.PROTECT,
-    )
-
-    panels = [
-        # Use a SnippetChooserPanel because blog.BlogAuthor is registered as a snippet
-        PageChooserPanel("related_department"),
     ]
 
 

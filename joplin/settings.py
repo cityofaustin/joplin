@@ -82,10 +82,12 @@ INSTALLED_APPS = [
     'phonenumber_field',
     'countable_field',
     'flags',
-    'locations',
-    'publish_preflight',
-    'events',
     'silk',
+
+    'groups',
+    'publish_preflight',
+    'locations',
+    'events',
 ]
 
 MIDDLEWARE = [
@@ -303,7 +305,7 @@ WAGTAIL_AUTO_UPDATE_PREVIEW = True
 BASE_URL = 'https://austintexas.io'
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '1iq1u6gs+xh3!bvrl-5$jqne%gpj)!wv5^h0$dc0y84xsdr-95'
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

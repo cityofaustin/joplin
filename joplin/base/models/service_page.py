@@ -18,7 +18,7 @@ from .contact import Contact
 from .constants import WYSIWYG_GENERAL, SHORT_DESCRIPTION_LENGTH
 from .widgets import countMe, countMeTextArea
 
-from publish_preflight.requirements import FieldPublishRequirement, StreamFieldPublishRequirement, ConditionalPublishRequirement, RelationPublishRequirement
+from publish_preflight.requirements import FieldPublishRequirement, StreamFieldPublishRequirement, ConditionalPublishRequirement, RelationPublishRequirement, DepartmentPublishRequirement
 
 
 WYSIWYG_SERVICE_STEP = ['ul', 'link', 'code', 'rich-text-button-link', 'document-link']
@@ -108,7 +108,7 @@ class ServicePage(JanisBasePage):
             RelationPublishRequirement("topics"),
             "or",
             ConditionalPublishRequirement(
-                RelationPublishRequirement("related_departments"),
+                DepartmentPublishRequirement(),
                 "or",
                 FieldPublishRequirement("coa_global"),
             ),
@@ -123,7 +123,6 @@ class ServicePage(JanisBasePage):
         FieldPanel('title_vi'),
         FieldPanel('short_description', widget=countMeTextArea),
         InlinePanel('topics', label='Topics'),
-        InlinePanel('related_departments', label='Related Departments'),
         MultiFieldPanel(
             [
                 HelpPanel(steps.help_text, classname="coa-helpPanel"),
@@ -166,17 +165,3 @@ class ServicePageContact(ClusterableModel):
 
     def __str__(self):
         return self.contact.name
-
-
-class ServicePageRelatedDepartments(ClusterableModel):
-    page = ParentalKey(
-        ServicePage, related_name='related_departments', default=None)
-    related_department = models.ForeignKey(
-        "base.departmentPage",
-        on_delete=models.PROTECT,
-    )
-
-    panels = [
-        # Use a SnippetChooserPanel because blog.BlogAuthor is registered as a snippet
-        PageChooserPanel("related_department"),
-    ]

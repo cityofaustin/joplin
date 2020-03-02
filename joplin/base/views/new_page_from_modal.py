@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404, redirect, render
 from django.http import HttpResponse
-from wagtail.core.models import Page, UserPagePermissionsProxy
+from wagtail.core.models import Page, UserPagePermissionsProxy, GroupPagePermission
 from django.core.exceptions import PermissionDenied
 from wagtail.admin.views import pages
 from wagtail.admin import messages
@@ -10,6 +10,7 @@ from django.conf import settings
 from base.models import ServicePage, ProcessPage, InformationPage, TopicPage, TopicCollectionPage, DepartmentPage, Theme, OfficialDocumentPage, GuidePage, FormContainer
 from locations.models import LocationPage
 from events.models import EventPage
+from groups.models import Department
 from base.models.site_settings import JanisBranchSettings
 from django.contrib.contenttypes.models import ContentType
 import json
@@ -60,6 +61,28 @@ def new_page_from_modal(request):
         # Save our draft
         page.save_revision()
         page.unpublish()  # Not sure why it seems to go live by default
+
+        if request.user.is_superuser:
+            # If the user's an admin, add the selected department from
+            # the create content modal
+            department_id = body['department']
+            department_group = Department.objects.get(pk=department_id)
+            GroupPagePermission.objects.create(
+                group=department_group,
+                page=page,
+                permission_type='edit'
+            )
+        else:
+            # If the user's not an admin, then we want to create a
+            # group permission object for each of the user's assigned departments
+            for user_group in request.user.groups.all():
+                # If we did this with non department groups it might cause issues
+                if user_group and hasattr(user_group, 'department'):
+                    GroupPagePermission.objects.create(
+                        group=user_group,
+                        page=page,
+                        permission_type='edit'
+                    )
 
         # Respond with the id of the new page
         response = HttpResponse(json.dumps({'id': page.id}), content_type="application/json")

@@ -143,7 +143,7 @@ class JanisBasePage(Page):
                         topic_collection_slug = self.topiccollections.first().topiccollection.slug or None
                     except AttributeError as e:
                         # this is for pages just under departments
-                        theme_slug = self.related_departments.all()[0].related_department.slug or None
+                        theme_slug = self.group_permissions.all()[0].group.department.department_page.slug or None
                     finally:
                         paths_list = [
                             base_url,
@@ -247,6 +247,17 @@ class JanisBasePage(Page):
                 return ("Live + Draft")
             else:
                 return ("Live")
+
+    # This goes through our group page permissions and looks for any related departments
+    def departments(self):
+        department_pages = []
+        for group_permission in self.group_permissions.all():
+            if(group_permission and
+               group_permission.group and
+               group_permission.group.department and
+               group_permission.group.department.department_page):
+                department_pages.append(group_permission.group.department.department_page)
+        return department_pages
 
     @cached_classmethod
     def get_edit_handler(cls):

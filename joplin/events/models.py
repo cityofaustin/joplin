@@ -14,11 +14,13 @@ from wagtail.core.fields import RichTextField, StreamField
 from wagtail.core.blocks import StreamBlock
 from wagtail.core.models import Orderable
 from wagtail.admin.edit_handlers import FieldPanel, PageChooserPanel, HelpPanel
+from base.forms import EventPageForm
 from base.models import JanisBasePage
 from base.models.widgets import countMe, AUTHOR_LIMITS
 from modelcluster.models import ClusterableModel
 from base.models.constants import DEFAULT_MAX_LENGTH, WYSIWYG_GENERAL
 from wagtail.snippets.edit_handlers import SnippetChooserPanel
+from publish_preflight.requirements import FieldPublishRequirement, StreamFieldPublishRequirement
 
 
 class EventPage(JanisBasePage):
@@ -87,6 +89,15 @@ class EventPage(JanisBasePage):
         default=False
     )
 
+    base_form_class = EventPageForm
+
+    publish_requirements = (
+        FieldPublishRequirement("description", message="Description is required.", langs=["en"]),
+        FieldPublishRequirement("date", message="Date is required."),
+        FieldPublishRequirement("start_time", message="Start time is required."),
+        StreamFieldPublishRequirement("location_blocks", message="Location is required."),
+    )
+
     content_panels = [
         FieldPanel('title_en', widget=countMe),
         FieldPanel('title_es', widget=countMe),
@@ -119,7 +130,6 @@ class EventPage(JanisBasePage):
             heading=registration_url.verbose_name,
             classname='coa-multiField-nopadding'
         ),
-        InlinePanel('related_departments', label='Related Departments'),
         SnippetChooserPanel('contact'),
         MultiFieldPanel(
             [
@@ -146,16 +156,4 @@ class EventPageFee(Orderable):
                 FieldPanel('fee_label', classname='col9'),
             ],
         ),
-    ]
-
-
-class EventPageRelatedDepartments(ClusterableModel):
-    page = ParentalKey(EventPage, related_name='related_departments', default=None)
-    related_department = models.ForeignKey(
-        "base.departmentPage",
-        on_delete=models.PROTECT,
-    )
-
-    panels = [
-        PageChooserPanel("related_department"),
     ]
