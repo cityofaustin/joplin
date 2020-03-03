@@ -14,14 +14,15 @@
 
 <script>
 // passing the constant from context_processors into a JS variable (boolean)
-// const ISPRODUCTION = '{{ISPRODUCTION}}';
-
+const ISPRODUCTION = '{{ISPRODUCTION}}';
 window.ISPRODUCTION = '{{ISPRODUCTION}}'; // 🚨REVERT BACK TO ☝️after Joplin UI complete.
 </script>
 {% render_bundle 'admin' %}
 {% if ISPRODUCTION == False %}
   {% render_bundle 'theme' %}
 {% endif %}
+
+
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans&display=swap" rel="stylesheet">
 {% include 'session_security/all.html' %}
@@ -46,7 +47,7 @@ window.ISPRODUCTION = '{{ISPRODUCTION}}'; // 🚨REVERT BACK TO ☝️after Jopl
         </div>
     </div>
 </div>
-<script onclick="toggleJoplinUI">
+<script>
 
 const toggleJoplinUI = function() {
   if (window.ISPRODUCTION === "False") {
