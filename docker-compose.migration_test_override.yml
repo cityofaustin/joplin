@@ -3,6 +3,7 @@ services:
   app:
     environment:
       DEPLOYMENT_MODE: "LOCAL"
+      DJANGO_SECRET_KEY: "fakekey"
     entrypoint: "./docker-entrypoint.sh"
     # Override gunicorn CMD
     command: ["echo", "\"No server needed at this step of the migration test: exiting app\""]

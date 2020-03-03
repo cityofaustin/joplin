@@ -4,7 +4,7 @@ from django.db.models.signals import post_save, post_delete
 from wagtail.core.signals import page_published, page_unpublished
 from graphene import Node
 from wagtail.core.models import Page
-from wagtail.admin.utils import get_object_usage
+from wagtail.admin.models import get_object_usage
 
 from base.models import Contact, Location, Map, GuidePage
 from groups.models import Department
