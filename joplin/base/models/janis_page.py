@@ -118,7 +118,8 @@ class JanisBasePage(Page):
             )
 
             # add hardcoded language path to base url
-            base_url = f"{self.janis_url_base('publish_janis_branch')}/en"
+            branch_settings = JanisBranchSettings.objects.first()
+            base_url = f"{branch_settings.get_publish_url_base()}/en"
 
             # Quick location page exception
             if self.content_type.name == 'location page':
@@ -196,36 +197,19 @@ class JanisBasePage(Page):
             # Janis will query from its default CMS_API if a param is not provided
             return url_end + f"?CMS_API={settings.CMS_API}"
 
-    def janis_url_base(self, janis_branch):
-        """
-        returns a valid url of the base URL in janis:
-            Use hardcoded JANIS_URL for staging and prod
-            Otherwise, use configurable branch setting
-
-        TODO: this and url_base in site settings could probably
-        be revisited for semantics to be less confusing
-        """
-        if settings.ISSTAGING or settings.ISPRODUCTION:
-            return os.getenv("JANIS_URL")
-        else:
-            branch_settings = JanisBranchSettings.objects.first()
-            return branch_settings.url_base(janis_branch)
-
-    # alias for url base function
-    janis_preview_url_start = janis_url_base
-
-    # TODO this function and preview_url_data are pretty similar, we can probably consolidate them
-    def janis_preview_url(self, revision=None, lang="en"):
-        return f"{self.janis_preview_url_start('preview_janis_branch')}/{lang}/{self.janis_preview_url_end(revision=revision)}"
-
     # data needed to construct preview URLs for any language
     # [janis_preview_url_start]/[lang]/[janis_preview_url_end]
     # ex: http://localhost:3000/es/preview/information/UGFnZVJldmlzaW9uTm9kZToyMjg=
     def preview_url_data(self, revision=None):
+        branch_settings = JanisBranchSettings.objects.first()
         return {
-            "janis_preview_url_start": self.janis_preview_url_start('preview_janis_branch'),
+            "janis_preview_url_start": branch_settings.get_preview_url_base(),
             "janis_preview_url_end": self.janis_preview_url_end(revision=revision),
         }
+
+    def janis_preview_url(self, revision=None, lang="en"):
+        data = preview_url_data(revision)
+        return f'{data["janis_preview_url_start"]}/{lang}/{data["janis_preview_url_end"]}'
 
     @property
     def status_string(self):
