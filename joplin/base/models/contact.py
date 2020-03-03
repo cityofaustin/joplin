@@ -42,7 +42,6 @@ class Contact(ClusterableModel):
         FieldPanel('name'),
         FieldPanel('email'),
         InlinePanel('phone_number', label='Phone Numbers'),
-        SnippetChooserPanel('location'),
         PageChooserPanel('location_page'),
         InlinePanel('hours', label='Hours'),
         FieldPanel('hours_exceptions'),
