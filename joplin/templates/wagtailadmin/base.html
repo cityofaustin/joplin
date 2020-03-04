@@ -16,17 +16,19 @@
 // passing the constant from context_processors into a JS variable (boolean)
 const ISPRODUCTION = '{{ISPRODUCTION}}';
 window.ISPRODUCTION = '{{ISPRODUCTION}}'; // 🚨REVERT BACK TO ☝️after Joplin UI complete.
+window.localStorage.joplinUI
 </script>
 {% render_bundle 'admin' %}
 {% if ISPRODUCTION == False %}
   {% render_bundle 'theme' %}
 {% endif %}
 
-
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans&display=swap" rel="stylesheet">
 {% include 'session_security/all.html' %}
-<div class="header coa-header">
+
+<!-- * -->
+<div class="header coa-header" id="coa-old_application_banner">
     <div>
         <img class="coa-seal wagtail-logo wagtail-logo__full" src="{% static 'images/coa_seal_transparent_color.png' %}" alt="Welcome to City of Austin CMS" width="60" />
         <div class="coa-easter-egg" onclick="toggleJoplinUI()"></div>
@@ -47,6 +49,12 @@ window.ISPRODUCTION = '{{ISPRODUCTION}}'; // 🚨REVERT BACK TO ☝️after Jopl
         </div>
     </div>
 </div>
+<!-- * 👀
+  # - NOTE: Saveing this for potential Development of Joplin UI Later
+  # - Below, adding joplin_UI html to overrides obove block. 
+-->
+{% include 'joplin_UI.html' with component="application_banner" %}
+
 <script>
 
 const toggleJoplinUI = function() {

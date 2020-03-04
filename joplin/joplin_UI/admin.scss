@@ -2,11 +2,23 @@
 @import './application_banner';
 @import './primary_navigation';
 
+/*
+  Joplin UI Default Values
+*/
+
 body {
-  font-family: $coa-fontFamily;
+  font-family: $coa-font-family;
   color: $coa-text-color;
-  font-size: 100% !important;
+  font-size: $coa-font-size-md;
 }
+
+// Some CSS attribures need the "*" because they don't auto-inherit by default.
+body * {
+  line-height: $coa-line-hight;
+  color: $coa-text-color;
+}
+
+// DEAL WITH THIS!
 .wrapper {
   padding-top: 112px;
 }

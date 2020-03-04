@@ -1,8 +1,8 @@
-.coa-header { // change name coa-application-banner(NOTE: this will effect old styles)
-  background-color: $coa-background-color !important;
+#coa-application_banner {
   position: fixed;
   z-index: 1;
   width: 100%;
+  background-color: $coa-background-color;
 }
 .coa-seal {
   display: block;
@@ -16,31 +16,70 @@
   left: 52px;
   min-width: 10px;
   min-height: 10px;
+  background-color: $coa-transparent;
 }
 
-// User / Account DROPDOWN
-.coa-account-dropdown {
-  position: absolute;
-  top: 32px;
-  right: 32px;
-  width: 100%;
-}
+// User / Account Section
 .coa-avatar {
   display: inline-block;
   width: 40px;
   height: 40px;
   padding: 0;
+  margin-bottom: 2px;
   border: 3px solid $coa-blue;
 }
 .coa-user-name {
   display: inline-block;
-  padding: 16px;
-  line-height: 16px;
+  padding: 17px 16px;
   margin-left: 12px;
   margin-right: 0px;
-  font-weight: bold;
-  color: $coa-text-color;
+  font-weight: $coa-font-weight;
+  text-align: left;
+  min-width: 158px;
   text-transform: none;
   background-color: $coa-background-color-secondary;
-  border-radius: $coa-border-radius;
+  border-radius: $coa-button-border-radius;
+}
+
+// User Account Navigation
+.coa-account-navigation {
+  position: absolute;
+  top: 32px;
+  right: 20px;
+  width: 100%;
+}
+.open .coa-user-name { // Joplin UI NOTE: `.open` is a wagtail class. It's dynamically added and removed. So, in this case, we need to leverage our custom .coa class to inherit it's value dynamically.
+  border-radius: $coa-button-border-radius $coa-button-border-radius 0 0;
+  box-shadow: 0 3px 3px 0 rgba(0,0,0,.2);
+}
+.coa-user-dropdown-arrow {
+  float: right;
+  margin-top: 5px;
+  margin-left: 10px;
+  width: 12px;
+  transition: .3s transform;
+}
+.open .coa-user-dropdown-arrow {
+  transform: rotate(-180deg);
+  transition: .3s transform;
+}
+
+// Dropdown Menu
+.open .coa-user-dropdown-menu {
+  position: absolute;
+  right: 8px;
+  top: 50px;
+  margin-left: 70px;
+  opacity: 1;
+  transition: opacity $coa-transition-delay linear !important;
+  border-radius: 0 0 $coa-button-border-radius $coa-button-border-radius;
+}
+.open .coa-user-dropdown-menu > li {
+  background-color: $coa-background-color-secondary;
+  border-top: solid 1px $coa-border-color;
+}
+.open .coa-user-dropdown-menu > li > a {
+  color: $coa-text-color;
+  text-transform: none;
+  font-weight: $coa-font-weight;
 }

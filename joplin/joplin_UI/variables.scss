@@ -1,7 +1,10 @@
-// Types
-$coa-fontFamily: 'Medium IBM Plex Sans', sans-serif;
-$coa-fontSize-md: 1rem;
-$coa-fontSize-sm-icon: 1.25rem;
+// Font and Sizes
+$coa-font-family: 'Medium IBM Plex Sans', sans-serif;
+$coa-line-hight: 1rem;
+$coa-font-weight: bold;
+
+$coa-font-size-md: 1rem;
+$coa-font-size-sm-icon: 1.25rem;
 
 // Colors
 $coa-blue: #0050D8;
@@ -10,11 +13,13 @@ $coa-border-color: #DCDEE0; // just make "coa-light-gray"
 $coa-background-color: #FFFFFF; // just make "coa-white"
 $coa-background-color-secondary: #F9F9F9; // just make "coa-off-white"
 
-// Sizes
+// Padding and Margins
 $coa-active-left-boarder-width: 7px;
 
-// Left sidebar nav
+// Left sidebar nav !(Should be specifc CSS - MOVE out)
 $nav-wrapper-width: 180px;
 
 // misc...
-$coa-border-radius: 4px;
+$coa-button-border-radius: 4px;
+$coa-transparent: rgba(0,0,0,0);
+$coa-transition-delay: 0.3s;
