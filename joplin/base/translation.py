@@ -4,7 +4,7 @@ from wagtail.images.models import Image
 
 
 from .models import ThreeOneOne, TopicPage, TopicCollectionPage, Theme, ServicePage, ProcessPage, ProcessPageStep, DepartmentPage, DepartmentPageDirector, InformationPage, OfficialDocumentPage, OfficialDocumentPageOfficialDocument, TranslatedImage, Map, HomePage, GuidePage, FormContainer
-from locations.models import LocationPage
+from locations.models import LocationPage, LocationPageRelatedServices
 from events.models import EventPage, EventPageFee
 
 
@@ -165,4 +165,10 @@ class EventPageTranslationOptions(TranslationOptions):
 class EventPageFeeTranslationOptions(TranslationOptions):
     fields = (
         'fee_label',
+    )
+
+@register(LocationPageRelatedServices)
+class LocationPageRelatedServicesTranslationOptions(TranslationOptions):
+    fields = (
+        'hours_exceptions',
     )

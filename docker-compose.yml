@@ -19,6 +19,7 @@ services:
       JANIS_URL: $JANIS_URL
       STYLEGUIDE_URL: https://cityofaustin.github.io/digital-services-style-guide
       DATABASE_URL: $DATABASE_URL
+      DJANGO_SECRET_KEY: "fake_key"
     depends_on:
       - "db"
     stdin_open: true
