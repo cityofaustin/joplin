@@ -172,3 +172,4 @@ class LocationPageRelatedServicesTranslationOptions(TranslationOptions):
     fields = (
         'hours_exceptions',
     )
+
