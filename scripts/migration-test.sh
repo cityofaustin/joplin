@@ -3,21 +3,21 @@ set -o errexit
 CURRENT_DIR=`dirname $BASH_SOURCE`
 source $CURRENT_DIR/docker-helpers.sh
 
-function clean_up {
-  if [ -f "$TMP_DATADUMP" ]; then
-    echo "#### Deleting intermediate temp datadump"
-    rm $TMP_DATADUMP
-  fi
-  if [ -f "$PLACEHOLDER_DATADUMP" ]; then
-    echo "#### Deleting intermediate temp datadump"
-    rm $PLACEHOLDER_DATADUMP
-  fi
-  if [ ! -z "$COMPOSE_PROJECT_NAME" ]; then
-    echo "#### Shutting down containers safely"
-    stop_project_containers $COMPOSE_PROJECT_NAME
-  fi
-}
-trap clean_up EXIT
+# function clean_up {
+#   if [ -f "$TMP_DATADUMP" ]; then
+#     echo "#### Deleting intermediate temp datadump"
+#     rm $TMP_DATADUMP
+#   fi
+#   if [ -f "$PLACEHOLDER_DATADUMP" ]; then
+#     echo "#### Deleting intermediate temp datadump"
+#     rm $PLACEHOLDER_DATADUMP
+#   fi
+#   if [ ! -z "$COMPOSE_PROJECT_NAME" ]; then
+#     echo "#### Shutting down containers safely"
+#     stop_project_containers $COMPOSE_PROJECT_NAME
+#   fi
+# }
+# trap clean_up EXIT
 
 function get_heroku_datadump {
   APPNAME=$1
@@ -26,7 +26,7 @@ function get_heroku_datadump {
   heroku run -xa $APPNAME python ./joplin/manage.py dumpdata --exclude=wagtailcore.GroupCollectionPermission --indent 2 --natural-foreign --natural-primary -- | \
     python ./scripts/remove_logs_from_json_stream.py | \
     jq '(.[] | select(.model == "users.user") | .fields.password) |= "pbkdf2_sha256$150000$GJQ1UoZlgrC4$Ir0Uww/i9f2VKzHznU4B1uaHbdCxRnZ69w12cIvxWP0="' \
-    > $TMP_DATADUMP
+    > $TMP_DATADUMP ; sleep 100
 }
 
 function make_placeholder_datadump {

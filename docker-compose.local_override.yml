@@ -4,6 +4,8 @@ services:
   app:
     volumes:
       - '.:/app'
+    environment:
+      DJANGO_SECRET_KEY: 'sosecret'
   assets:
     image: $DOCKER_TAG_ASSETS
     volumes:

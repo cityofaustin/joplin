@@ -7,6 +7,7 @@ services:
     environment:
       POSTGRES_DB: 'joplin'
       POSTGRES_USER: 'joplin'
+      DJANGO_SECRET_KEY: 'sosecret'
     command: -p ${JOPLIN_DB_CONTAINER_PORT}
   app:
     image: $DOCKER_TAG_APP
