@@ -2,6 +2,7 @@
 
 NOTE: This readme was created during the great redesign of 2020.
 - I (Bob) created these notes and guidelines once I developed a pattern during the build-out of the new design.
+- I'm sorry. I know it's messy. I'll clean it up as I go along. 
 
 ### Joplin UI: general workflow and development with wagtail templates
 
@@ -24,7 +25,7 @@ Here are a set of "guidelines" I created for myself when developing the Joplin U
 - "Pull up" wagtail core templates when needed to add specific ids and classes.
   - Sometime when modifying our css, we find that the template and element do not exist within our code base. So, we need to find the template within the wagtail admin and add it to our existing code base within the same directory.
   - Example: We need to change a specific style of an element. We then discover, after inspecting, that it has a class of `listing-filter`. However, when we search our code-base, we do not find the html element where the class is applied.
-  - This usually means the template is within wagtail's admin code base, so we need to add the file to _our_ code base to modify the html. 
+  - This usually means the template is within wagtail's admin code base, so we need to add the file to _our_ code base to modify the html.
   - We can search our own wagtail code within our library, or here's an example search result from within wagtails github: https://github.com/wagtail/wagtail/search?q=listing-filter&unscoped_q=listing-filter
   - We now have found the correct class and can create a new file in our code base in the same location, with the same name that houses the same code!
   - And, django + wagtail know to use our code instead of the file from the library.
