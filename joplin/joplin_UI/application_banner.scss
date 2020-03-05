@@ -1,6 +1,6 @@
 #coa-application_banner {
   position: fixed;
-  z-index: 1;
+  z-index: 1; // Check if needed after droping old UI
   width: 100%;
   background-color: $coa-background-color;
 }
@@ -36,9 +36,13 @@
   font-weight: $coa-font-weight;
   text-align: left;
   min-width: 158px;
-  text-transform: none;
   background-color: $coa-background-color-secondary;
   border-radius: $coa-button-border-radius;
+  transition: box-shadow $coa-transition-delay ease-in-out !important;
+}
+.coa-user-name:hover {
+  box-shadow: 0 3px 3px 0 rgba(0,0,0,.2);
+  transition: box-shadow $coa-quick-transition-delay ease-in-out !important;
 }
 
 // User Account Navigation
@@ -71,7 +75,7 @@
   top: 50px;
   margin-left: 70px;
   opacity: 1;
-  transition: opacity $coa-transition-delay linear !important;
+  transition: opacity $coa-transition-delay ease-in-out !important;
   border-radius: 0 0 $coa-button-border-radius $coa-button-border-radius;
 }
 .open .coa-user-dropdown-menu > li {

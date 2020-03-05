@@ -16,9 +16,13 @@ body {
 body * {
   line-height: $coa-line-hight;
   color: $coa-text-color;
+  text-transform: none; // Wagtail wants to make a bunch of stuff all caps. We don't want that - this stops that.
 }
 
-// DEAL WITH THIS!
-.wrapper {
-  padding-top: 112px;
+// Wagtail Global Overrides (Check if needed after droping old UI)
+#wagtail > div.wrapper, #wagtail > div.wrapper > main {
+  background-color: $coa-white-01 !important;
+}
+#wagtail .content {
+  background-color: $coa-white-01 !important;
 }

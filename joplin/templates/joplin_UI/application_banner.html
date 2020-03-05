@@ -14,7 +14,6 @@
         <div class="avatar circle coa-avatar"><img src="{% avatar_url user %}" alt="avatar" /></div>
         <div class="user user-account-dropdown coa-user-name" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
           {{ request.user.first_name }} {{ request.user.last_name }}
-          <!-- <span class="icon icon-arrow-down-after coa-user-dropdown-arrow"></span> -->
           <img class="coa-user-dropdown-arrow" src="/static/images/icon_down_arrow.svg" alt="Down Arrow Icon">
           <ul class="coa-user-dropdown-menu" aria-labelledby="user-account-dropdown">
             <li><a href="{% url 'wagtailadmin_account' %}" >{% trans "Account settings" %}</a></li>
@@ -28,21 +27,17 @@
 
 <script>
 
-  /* 🚨
-    ONLY USED FOR JOPLIN_UI TRANSTION PERIOD
-  👇 */
-  console.log("component :", "{{component}}" )
-  if (window.localStorage.joplinUI == "on") {
-    const joplinUI = document.getElementById("coa-application_banner")
-    joplinUI.style.display = "block"
-    const oldUI = document.getElementById("coa-old_application_banner")
-    oldUI.style.display = "none"
-    oldUI.innerHTML = ""
-    oldUI.innerHTML = null
+const toggleJoplinUI = function() {
+  if (window.ISPRODUCTION === "False") {
+    if (localStorage.joplinUI === 'on') {
+      localStorage.joplinUI = 'off'
+    } else {
+      localStorage.joplinUI = 'on'
+    }
+    window.location.reload()
   }
-  // 🚨END
+}
 
 </script>
-
 
 {% endblock %}

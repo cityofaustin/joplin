@@ -1,72 +1,77 @@
-// COA Global Nav (left sidebar)
-
-// .nav-wrapper,
-.nav-wrapper .inner {
-  // width: $nav-wrapper-width;
+#coa-primary_navigation {
+  width: $nav-wrapper-width;
+  padding-top: 112px;
+}
+#coa-primary_navigation .inner {
   background-color: $coa-background-color-secondary !important;
+  width: $nav-wrapper-width;
+  padding-top: 1px;
   border-top: solid $coa-border-color 2px;
   border-right: solid $coa-border-color 2px;
   box-sizing: border-box;
 }
-
-// .nav-main .menu-item a::before {
-//     font-size: 2rem;
-// }
-//
-// .nav-main .menu-active > a {
-//     border-left-color: $coa-color-lightest-blue;
-//     color: $coa-color-lightest-blue;
-// }
-
-// .wrapper {
-//     padding-top: $header-height;
-//     padding-left: $nav-wrapper-width;
-//     height: inherit;
-// }
-// .nav-wrapper,
-// .nav-wrapper .inner {
-//     width: $nav-wrapper-width;
-// }
-
-// .nav-main {
-//     position: static;
-//     overflow: hidden;
-// }
-// .nav-main a {
-//     padding-left: 10px;
-// }
-// .nav-main .footer {
-//     display: none;
-// }
-
-.nav-main .menu-item {
-    .icon-home:before {
-        content: 'create';
-    }
-
-    .icon-maps:before {
-        content: 'map';
-    }
-    .icon-locations:before {
-        content: 'location_on';
-    }
-    .icon-image:before {
-        content: 'photo';
-    }
-    .icon-contacts:before {
-        content: 'perm_contact_calendar';
-    }
-    .icon-users:before {
-        content: 'account_circle';
-    }
-    .icon-doc-full-inverse:before {
-        content: 'description';
-    }
-    .icon-settings:before {
-        content: 'settings_applications';
-    }
+#coa-primary_navigation .inner .logo {
+  display: none;
+}
+#coa-primary_navigation .nav-main .menu-active {
+  background-color: $coa-background-color-secondary;
+  text-shadow: none !important;
 }
 
-.nav-main .menu-item .material-icons span {
+#coa-primary_navigation .nav-main .footer {
+  display: none;
+}
+#coa-primary_navigation .nav-main .menu-item > a {
+  padding-left: 21px;
+}
+#coa-primary_navigation .nav-main .menu-active > a {
+  border-left-color: $coa-blue;
+  border-left-width: 7px;
+  padding-left: 17px;
+}
+#coa-primary_navigation .nav-main .menu-item > a:hover {
+  text-shadow: none !important;
+  background-color: $coa-background-color;
+}
+#coa-primary_navigation .nav-main .menu-item {
+  .icon-home:before {
+    content: 'description';
+    font-size: $coa-icon-font-size;
+  }
+  .icon-maps:before {
+    content: 'map';
+    font-size: $coa-icon-font-size;
+  }
+  .icon-locations:before {
+    content: 'location_on';
+    font-size: $coa-icon-font-size;
+  }
+  .icon-image:before {
+    content: 'photo';
+    font-size: $coa-icon-font-size;
+  }
+  .icon-contacts:before {
+    content: 'perm_contact_calendar';
+    font-size: $coa-icon-font-size;
+  }
+  .icon-users:before {
+    content: 'account_circle';
+    font-size: $coa-icon-font-size;
+  }
+  .icon-doc-full-inverse:before {
+    content: 'description';
+    font-size: $coa-icon-font-size;
+  }
+  .icon-settings:before {
+    content: 'settings';
+    font-size: $coa-icon-font-size;
+  }
+}
+#coa-primary_navigation .nav-main .material-icons {
+  color: $coa-text-color;
+}
+
+#coa-primary_navigation .nav-main .menu-item .material-icons span {
   font-family: $coa-font-family;
+  color: $coa-text-color;
 }

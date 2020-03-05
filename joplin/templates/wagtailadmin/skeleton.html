@@ -1,0 +1,78 @@
+{# NOTE: This template was added("copy/pasted") from the wagtail library #}
+{# - Having it within our code base allows us modify the html/css to fit our UI needs. #}
+
+
+<!doctype html>
+{% load wagtailadmin_tags i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+{% get_current_language_bidi as LANGUAGE_BIDI %}
+<html class="no-js" lang="{{ LANGUAGE_CODE }}" dir="{% if LANGUAGE_BIDI %}rtl{% else %}ltr{% endif %}">
+<head>
+    <meta charset="utf-8" />
+    <title>{% block branding_title %}Wagtail{% endblock %} - {% block titletag %}{% endblock %}</title>
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex" />
+
+    <script src="{% versioned_static 'wagtailadmin/js/vendor/modernizr-2.6.2.min.js' %}"></script>
+
+    <link rel="stylesheet" href="{% versioned_static 'wagtailadmin/css/normalize.css' %}" />
+
+    {% block css %}{% endblock %}
+
+    {% block branding_favicon %}{% endblock %}
+</head>
+<body id="wagtail" class="{% block bodyclass %}{% endblock %} {% if messages %}has-messages{% endif %} focus-outline-on">
+    <!--[if lt IE 9]>
+        <p class="capabilitymessage">{% blocktrans %}You are using an <strong>outdated</strong> browser not supported by this software. Please <a href="https://browsehappy.com/">upgrade your browser</a>.{% endblocktrans %}</p>
+    <![endif]-->
+    <noscript class="capabilitymessage">
+        {% blocktrans %}
+            Javascript is required to use Wagtail, but it is currently disabled.<br />
+            Here are the <a href="https://www.enable-javascript.com/" target="_blank" rel="noopener noreferrer">instructions how to enable JavaScript in your web browser</a>.
+        {% endblocktrans %}
+    </noscript>
+
+    {% block js %}{% endblock %}
+
+    {% include 'joplin_UI/index.html' %}
+
+    <div class="wrapper" id="coa-wrapper">
+       {% block furniture %}{% endblock %}
+    </div>
+</body>
+</html>
+
+
+<script>
+
+// 🚨ONLY USED FOR JOPLIN_UI TRANSTION PERIOD👇
+if (window.localStorage.joplinUI == "on") {
+
+  const application_banner = document.getElementById("coa-application_banner")
+  application_banner.style.display = "block"
+
+  const primary_navigation = document.getElementById("coa-primary_navigation")
+  primary_navigation.style.display = "block"
+
+
+  const old_application_banner = document.getElementById("coa-old_application_banner")
+  old_application_banner.style.display = "none"
+  old_application_banner.innerHTML = ""
+  old_application_banner.innerHTML = null
+
+  const wrapper = document.getElementById("coa-wrapper")
+  wrapper.style.paddingTop = "112px"
+  // wrapper.style.display = "none"
+  // wrapper.innerHTML = ""
+  // wrapper.innerHTML = null
+
+  const navWrapper = wrapper.querySelector('.nav-wrapper')
+  navWrapper.style.display = "none"
+  navWrapper.innerHTML = ""
+  navWrapper.innerHTML = null
+}
+// End 🚨
+
+
+</script>
