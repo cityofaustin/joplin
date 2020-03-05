@@ -43,6 +43,9 @@ const ChooseTitleStep = ({
   handleTitleInputChange,
   characterCount,
   maxCharacterCount,
+  departmentList,
+  selectedDepartment,
+  handleDepartmentSelect
 }) => (
   <div className="CreateContentModal__step">
     <h2 className="CreateContentModal__header">
@@ -68,6 +71,16 @@ const ChooseTitleStep = ({
       autoFocus
       onChange={handleTitleInputChange}
     />
+    { // We don't get sent a list of departments unless the user is an admin
+      // so if we have one, we should show the dropdown
+      !!departmentList && !!departmentList.length &&
+    <label htmlFor="page-department" className="ChooseTitleStep__input-label">
+      Pick a department
+      <select id="page-department" value={selectedDepartment} onChange={handleDepartmentSelect}>
+        <option value=''></option>
+        {departmentList.map(dept => <option value={dept.id}>{dept.title}</option>)}
+      </select>
+    </label>}
 
     {pageType === 'department' ? (
       <div>

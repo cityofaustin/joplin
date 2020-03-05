@@ -7,6 +7,7 @@ from wagtail.core.models import Page
 from wagtail.admin.utils import get_object_usage
 
 from base.models import Contact, Location, Map, GuidePage
+from groups.models import Department
 from wagtail.documents.models import Document
 from base.signals.aws_publish import get_http_request, create_build_aws
 from base.signals.netlify_publish import netlify_publish
@@ -97,6 +98,7 @@ def find_pages_in_guides(changed_id):
 @receiver(post_save, sender=Contact)
 @receiver(post_save, sender=Location)
 @receiver(post_save, sender=Map)
+@receiver(post_save, sender=Department)
 def handle_post_save_signal(sender, **kwargs):
     pages_global_ids = []
     if flag_enabled('INCREMENTAL BUILDS'):

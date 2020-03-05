@@ -15,7 +15,7 @@ from .janis_page import JanisBasePage
 from .constants import DEFAULT_MAX_LENGTH
 from .widgets import countMe, countMeTextArea, AUTHOR_LIMITS
 from countable_field import widgets
-from publish_preflight.requirements import FieldPublishRequirement, RelationPublishRequirement, ConditionalPublishRequirement
+from publish_preflight.requirements import FieldPublishRequirement, RelationPublishRequirement, ConditionalPublishRequirement, DepartmentPublishRequirement
 
 """
 This is a page that displays a list of Official Documents (model: umentPageOfficialDocument).
@@ -37,7 +37,7 @@ class OfficialDocumentPage(JanisBasePage):
         ConditionalPublishRequirement(
             RelationPublishRequirement("topics"),
             "or",
-            RelationPublishRequirement("related_departments"),
+            DepartmentPublishRequirement(),
             message="You must have at least 1 topic or 1 department selected.",
         )
     )
@@ -49,7 +49,6 @@ class OfficialDocumentPage(JanisBasePage):
         FieldPanel('title_vi'),
         FieldPanel('description', widget=countMeTextArea),
         InlinePanel('topics', label='Topics'),
-        InlinePanel('related_departments', label='Related Departments'),
         InlinePanel('official_documents', label="Documents", heading="Entries will be listed by document date (newest first)."),
     ]
 
@@ -84,18 +83,6 @@ class OfficialDocumentPageOfficialDocument(Orderable):
 
     class Meta:
         indexes = [models.Index(fields=['-date'])]
-
-
-class OfficialDocumentPageRelatedDepartments(ClusterableModel):
-    page = ParentalKey(OfficialDocumentPage, related_name='related_departments', default=None)
-    related_department = models.ForeignKey(
-        "base.departmentPage",
-        on_delete=models.PROTECT,
-    )
-
-    panels = [
-        PageChooserPanel("related_department"),
-    ]
 
 
 class OfficialDocumentPageTopic(ClusterableModel):

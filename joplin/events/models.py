@@ -11,13 +11,16 @@ from wagtail.admin.edit_handlers import (
 from locations.models import LocationPage
 from base.models import Contact
 from wagtail.core.fields import RichTextField, StreamField
+from wagtail.core.blocks import StreamBlock
 from wagtail.core.models import Orderable
 from wagtail.admin.edit_handlers import FieldPanel, PageChooserPanel, HelpPanel
+from base.forms import EventPageForm
 from base.models import JanisBasePage
 from base.models.widgets import countMe, AUTHOR_LIMITS
 from modelcluster.models import ClusterableModel
 from base.models.constants import DEFAULT_MAX_LENGTH, WYSIWYG_GENERAL
 from wagtail.snippets.edit_handlers import SnippetChooserPanel
+from publish_preflight.requirements import FieldPublishRequirement, StreamFieldPublishRequirement
 
 
 class EventPage(JanisBasePage):
@@ -35,36 +38,39 @@ class EventPage(JanisBasePage):
     end_time = models.TimeField(blank=True, null=True)
 
     location_blocks = StreamField(
-        [
-            ('city_location', StructBlock(
-                [
-                    ('location_page', PageChooserBlock(label="Location", page_type=[LocationPage], classname='do-not-hide')),
-                    ('additional_details_en', TextBlock(label='Any other necessary location details, such as room number [en]', required=False)),
-                    ('additional_details_es', TextBlock(label='Any other necessary location details, such as room number [es]', required=False)),
-                    ('additional_details_ar', TextBlock(label='Any other necessary location details, such as room number [ar]', required=False)),
-                    ('additional_details_vi', TextBlock(label='Any other necessary location details, such as room number [vi]', required=False)),
-                ]
-            )),
-            ('remote_location', StructBlock(
-                [
-                    ('name_en', TextBlock(label='Name of venue [en]')),
-                    ('name_es', TextBlock(label='Name of venue [es]', required=False)),
-                    ('name_ar', TextBlock(label='Name of venue [ar]', required=False)),
-                    ('name_vi', TextBlock(label='Name of venue [vi]', required=False)),
-                    ('street', TextBlock(label='Street', required=False)),
-                    ('unit', TextBlock(label='Unit', required=False)),
-                    ('city', TextBlock(label='City', required=False)),
-                    ('state', TextBlock(label='State', required=False)),
-                    ('zip', TextBlock(label='ZIP', required=False)),
-                    ('additional_details_en', TextBlock(label='Any other necessary location details, such as room number [en]', required=False)),
-                    ('additional_details_es', TextBlock(label='Any other necessary location details, such as room number [es]', required=False)),
-                    ('additional_details_ar', TextBlock(label='Any other necessary location details, such as room number [ar]', required=False)),
-                    ('additional_details_vi', TextBlock(label='Any other necessary location details, such as room number [vi]', required=False)),
-                ],
-            )),
-        ],
-        verbose_name='Add location of event',
-        blank=True
+        StreamBlock(
+            [
+                ('city_location', StructBlock(
+                    [
+                        ('location_page', PageChooserBlock(label="Location", page_type=[LocationPage], classname='do-not-hide')),
+                        ('additional_details_en', TextBlock(label='Any other necessary location details, such as room number [en]', required=False)),
+                        ('additional_details_es', TextBlock(label='Any other necessary location details, such as room number [es]', required=False)),
+                        ('additional_details_ar', TextBlock(label='Any other necessary location details, such as room number [ar]', required=False)),
+                        ('additional_details_vi', TextBlock(label='Any other necessary location details, such as room number [vi]', required=False)),
+                    ]
+                )),
+                ('remote_location', StructBlock(
+                    [
+                        ('name_en', TextBlock(label='Name of venue [en]')),
+                        ('name_es', TextBlock(label='Name of venue [es]', required=False)),
+                        ('name_ar', TextBlock(label='Name of venue [ar]', required=False)),
+                        ('name_vi', TextBlock(label='Name of venue [vi]', required=False)),
+                        ('street', TextBlock(label='Street', required=False)),
+                        ('unit', TextBlock(label='Unit', required=False)),
+                        ('city', TextBlock(label='City', required=False)),
+                        ('state', TextBlock(label='State', required=False)),
+                        ('zip', TextBlock(label='ZIP', required=False)),
+                        ('additional_details_en', TextBlock(label='Any other necessary location details, such as room number [en]', required=False)),
+                        ('additional_details_es', TextBlock(label='Any other necessary location details, such as room number [es]', required=False)),
+                        ('additional_details_ar', TextBlock(label='Any other necessary location details, such as room number [ar]', required=False)),
+                        ('additional_details_vi', TextBlock(label='Any other necessary location details, such as room number [vi]', required=False)),
+                    ],
+                )),
+            ],
+            verbose_name='Add location of event',
+            blank=True,
+            max_num=1,
+        )
     )
 
     event_is_free = models.BooleanField(verbose_name="This event is free", default=True)
@@ -81,6 +87,15 @@ class EventPage(JanisBasePage):
         verbose_name="Cancel this event",
         help_text="Canceling an event will not unpublish it, but it will display the event as canceled.",
         default=False
+    )
+
+    base_form_class = EventPageForm
+
+    publish_requirements = (
+        FieldPublishRequirement("description", message="Description is required.", langs=["en"]),
+        FieldPublishRequirement("date", message="Date is required."),
+        FieldPublishRequirement("start_time", message="Start time is required."),
+        StreamFieldPublishRequirement("location_blocks", message="Location is required."),
     )
 
     content_panels = [
@@ -115,7 +130,6 @@ class EventPage(JanisBasePage):
             heading=registration_url.verbose_name,
             classname='coa-multiField-nopadding'
         ),
-        InlinePanel('related_departments', label='Related Departments'),
         SnippetChooserPanel('contact'),
         MultiFieldPanel(
             [
@@ -142,16 +156,4 @@ class EventPageFee(Orderable):
                 FieldPanel('fee_label', classname='col9'),
             ],
         ),
-    ]
-
-
-class EventPageRelatedDepartments(ClusterableModel):
-    page = ParentalKey(EventPage, related_name='related_departments', default=None)
-    related_department = models.ForeignKey(
-        "base.departmentPage",
-        on_delete=models.PROTECT,
-    )
-
-    panels = [
-        PageChooserPanel("related_department"),
     ]

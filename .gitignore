@@ -5,7 +5,7 @@ __pycache__/
 .vscode/
 venv
 .idea/*
-!.idea/runConfigurations/*
+.idea/runConfigurations/*
 *node_modules
 *webpack_bundles
 *webpack-stats.json

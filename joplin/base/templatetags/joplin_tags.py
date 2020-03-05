@@ -5,7 +5,8 @@ import graphene
 import os
 import json
 
-from base.models import TopicPage, Theme, DepartmentPage
+from base.models import TopicPage, Theme
+from groups.models import Department
 from wagtail.core import hooks
 import itertools
 
@@ -23,6 +24,7 @@ STYLEGUIDE_PAGES = {
     'process page': '/pick-the-perfect-content-type/process-page',
     'information page': '/pick-the-perfect-content-type/information-page',
     'department page': '/pick-the-perfect-content-type/department-page',
+    'location page': '/pick-the-perfect-content-type/location-page',
     'topic page': '',
     'topic collection page': '',
     'official document page': '/pick-the-perfect-content-type/official-documents-page',
@@ -62,11 +64,14 @@ def themes_topics_tree(context):
 def departments_list(context):
     departments = []
 
-    for department in DepartmentPage.objects.all():
-        departments.append({
-            'title': department.title,
-            'id': department.id,
-        })
+    # If the user is an admin, we need to
+    # populate the list of departments for the modal
+    if context.request.user.is_superuser:
+        for department in Department.objects.all():
+            departments.append({
+                'title': department.name,
+                'id': department.id,
+            })
 
     return {
         'departments': json.dumps(departments)
