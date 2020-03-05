@@ -101,6 +101,8 @@ class ServicePage(JanisBasePage):
         verbose_name='Write a description of this service'
     )
 
+    contact = models.ForeignKey(Contact, related_name='+', blank=True, null=True, on_delete=models.SET_NULL)
+
     publish_requirements = (
         FieldPublishRequirement("short_description", message="A description is required", langs=["en"]),
         StreamFieldPublishRequirement("steps", langs=["en"]),
@@ -142,6 +144,7 @@ class ServicePage(JanisBasePage):
             classname='coa-multiField-nopadding'
         ),
         InlinePanel('contacts', label='Contacts', max_num=1),
+        SnippetChooserPanel('contact'),
     ]
 
 

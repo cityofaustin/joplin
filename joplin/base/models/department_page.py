@@ -49,6 +49,8 @@ class DepartmentPage(JanisBasePage):
         blank=True
     )
 
+    contact = models.ForeignKey(Contact, related_name='+', blank=True, null=True, on_delete=models.SET_NULL)
+
     base_form_class = DepartmentPageForm
 
     publish_requirements = (
@@ -68,6 +70,7 @@ class DepartmentPage(JanisBasePage):
             'data-count-direction': 'down'
         })),
         InlinePanel('contacts', label='Contacts', max_num=1),
+        SnippetChooserPanel('contact'),
         InlinePanel('department_directors', label="Department Directors"),
         FieldPanel('job_listings'),
         InlinePanel('top_pages', heading='Links to top services', label='top link',

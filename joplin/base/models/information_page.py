@@ -42,6 +42,8 @@ class InformationPage(JanisBasePage):
         blank=True
     )
 
+    contact = models.ForeignKey(Contact, related_name='+', blank=True, null=True, on_delete=models.SET_NULL)
+
     # TODO: Add images array field
 
     base_form_class = InformationPageForm
@@ -72,6 +74,7 @@ class InformationPage(JanisBasePage):
         # StreamFieldPanel('options'),
         FieldPanel('additional_content'),
         InlinePanel('contacts', label='Contacts', max_num=1),
+        SnippetChooserPanel('contact'),
     ]
 
 

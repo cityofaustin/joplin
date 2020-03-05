@@ -60,6 +60,8 @@ class GuidePage(JanisBasePage):
         blank=True
     )
 
+    contact = models.ForeignKey(Contact, related_name='+', blank=True, null=True, on_delete=models.SET_NULL)
+
     base_form_class = GuidePageForm
 
     publish_requirements = (
@@ -84,6 +86,7 @@ class GuidePage(JanisBasePage):
         ImageChooserPanel('image'),
         StreamFieldPanel('sections'),
         InlinePanel('contacts', label='Contacts', max_num=1),
+        SnippetChooserPanel('contact'),
     ]
 
 
