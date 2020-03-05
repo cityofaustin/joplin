@@ -66,6 +66,10 @@
     content: 'settings';
     font-size: $coa-icon-font-size;
   }
+  .icon-group:before {
+    content: 'account_balance';
+    font-size: $coa-icon-font-size;
+  }
 }
 #coa-primary_navigation .nav-main .material-icons {
   color: $coa-text-color;
