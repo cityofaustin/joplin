@@ -8,8 +8,11 @@ from base.models import (
     TopicPage, TopicCollectionPage, TopicPageTopicCollection,
     DepartmentPage
 )
+import pytest
 
 # pipenv run joplin/manage.py test publish_preflight.tests.test_information_page_publish_preflight
+
+
 class PublishPreflightInformationPage(TestCase):
     # Load fresh data for every test to avoid cross-contamination
     def setUp(self):

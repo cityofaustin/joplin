@@ -34,6 +34,7 @@ class LocationPageRelatedServicesFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = models.LocationPageRelatedServices
 
+
 class LocationPageFactory(PageFactory):
     alternate_name = factory.Faker('text')
 
@@ -59,16 +60,14 @@ class LocationPageFactory(PageFactory):
     I'm almost proud of myself for how hacky this is, ask me about it sometime
     """
     for field in models.LocationPageRelatedServices._meta.fields:
-         if field.get_internal_type() == 'TimeField':
-             locals()[field.name] = factory.Faker('time', pattern="%H:%M", end_datetime=None)
+        if field.get_internal_type() == 'TimeField':
+            locals()[field.name] = factory.Faker('time', pattern="%H:%M", end_datetime=None)
     del field
-    # related_services = factory.RelatedFactoryList(LocationPageRelatedServicesFactory, size=3)
 
     class Meta:
         model = models.LocationPage
 
-    # @factory.post_generation
-    # def create_related_services(self, create, extracted, **kwargs):
-    #     if create:
-    #         # Create Blog Links
-    #         LocationPageRelatedServicesFactory.create_batch(2, page=self)
+    @factory.post_generation
+    def create_related_services(self, create, extracted, **kwargs):
+        if create:
+            LocationPageRelatedServicesFactory.create_batch(2, page=self)

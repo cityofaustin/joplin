@@ -13,16 +13,8 @@ from base.signals.janis_build_triggers import collect_pages, collect_pages_snipp
 import pytest
 
 
+@pytest.mark.django_db
 class TestCollectPages(TestCase):
-    @classmethod
-    def setUpTestData(cls):
-        # setup test data: run once to set up non modified test data for all class methods
-        # currently loading prod data. This is a short term solution since our prod data may be overwritten
-        # and could disrupt the tests. Goal is to get some solid fixtures written that are tied to the tests
-        print("loading test data: prod datadump...")
-        os.environ['LOAD_DATA'] = 'prod'
-        call_command('load_joplin_data')
-        print("test data loaded")
 
     def test_official_document_page(self):
         changed_page = OfficialDocumentPage.objects.get(id=128)
