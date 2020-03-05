@@ -83,7 +83,7 @@ class GuidePage(JanisBasePage):
         InlinePanel('topics', label='Topics'),
         ImageChooserPanel('image'),
         StreamFieldPanel('sections'),
-        InlinePanel('contacts', label='Contacts'),
+        InlinePanel('contacts', label='Contacts', max_num=1),
     ]
 
 
