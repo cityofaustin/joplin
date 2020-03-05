@@ -24,6 +24,7 @@ STYLEGUIDE_PAGES = {
     'process page': '/pick-the-perfect-content-type/process-page',
     'information page': '/pick-the-perfect-content-type/information-page',
     'department page': '/pick-the-perfect-content-type/department-page',
+    'location page': '/pick-the-perfect-content-type/location-page',
     'topic page': '',
     'topic collection page': '',
     'official document page': '/pick-the-perfect-content-type/official-documents-page',
