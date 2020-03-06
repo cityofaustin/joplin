@@ -5,7 +5,8 @@ import graphene
 import os
 import json
 
-from base.models import TopicPage, Theme
+from base.models import Theme
+from pages.topic_page.models import TopicPage
 from groups.models import Department
 from wagtail.core import hooks
 import itertools

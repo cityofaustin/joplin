@@ -9,11 +9,10 @@ class HomePage(Page):
     parent_page_types = []
     # subpage_types = ['base.ServicePage', 'base.ProcessPage', 'base.InformationPage', 'base.DepartmentPage']
     subpage_types = [
-        'base.ServicePage',
-        'base.ProcessPage',
-        'base.InformationPage',
-        'base.DepartmentPage',
-        'base.TopicPage',
+        'service_page.ServicePage',
+        'information_page.InformationPage',
+        'department_page.DepartmentPage',
+        'topic_page.TopicPage',
         'locations.LocationPage',
         'events.EventPage'
     ]

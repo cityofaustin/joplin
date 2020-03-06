@@ -175,7 +175,7 @@ class LocationPageRelatedServices(Orderable):
 
     page = ParentalKey(LocationPage, related_name='related_services', default=None)
     related_service = models.ForeignKey(
-        "base.servicePage",
+        "service_page.servicePage",
         on_delete=models.PROTECT,
     )
     hours_same_as_location = models.BooleanField(default=False, verbose_name="The hours for this service are the same as the location hours")

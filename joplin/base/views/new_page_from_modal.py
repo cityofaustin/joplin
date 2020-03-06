@@ -7,7 +7,15 @@ from wagtail.admin import messages
 from django.utils.translation import ugettext as _
 from django.urls import reverse
 from django.conf import settings
-from base.models import ServicePage, ProcessPage, InformationPage, TopicPage, TopicCollectionPage, DepartmentPage, Theme, OfficialDocumentPage, GuidePage, FormContainer
+from base.models import Theme
+from pages.service_page.models import ServicePage
+from pages.information_page.models import InformationPage
+from pages.topic_page.models import TopicPage
+from pages.topic_collection_page.models import TopicCollectionPage
+from pages.department_page.models import DepartmentPage
+from pages.official_documents_page.models import OfficialDocumentPage
+from pages.guide_page.models import GuidePage
+from pages.form_container.models import FormContainer
 from locations.models import LocationPage
 from events.models import EventPage
 from groups.models import Department
