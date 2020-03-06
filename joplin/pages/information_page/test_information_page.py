@@ -1,5 +1,5 @@
 from pages.information_page.models import InformationPageContact
-from pages.information_page.factory import InformationPageContactFactory, InformationPageFactory
+from pages.information_page.factories import InformationPageContactFactory, InformationPageFactory
 import pytest
 
 

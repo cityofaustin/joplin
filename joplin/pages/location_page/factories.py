@@ -2,7 +2,7 @@ import factory
 import wagtail_factories
 from django.utils.text import slugify
 from wagtail.core.models import Collection, Page
-from base.models import ServicePage
+from pages.service_page.models import ServicePage
 from . import models
 
 

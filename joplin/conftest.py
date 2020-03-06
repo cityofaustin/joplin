@@ -2,8 +2,8 @@ from pytest_factoryboy import register
 import pytest
 import inspect
 from factory.base import FactoryMetaClass
-from pages.information_page.factory import InformationPageContactFactory, InformationPageFactory
-from base.factories import information_page, service_page, guide_page
+from pages.information_page import factories as information_page_factories
+# from base.factories import service_page, guide_page
 
 
 from django.core.management import call_command
@@ -18,8 +18,9 @@ def django_db_setup(django_db_setup, django_db_blocker):
     eventually we'll want to make our factories robust and rely on a test db
     as little possible, but this is a handy stop-gap
     """
-    with django_db_blocker.unblock():
-        call_command('loaddata', 'joplin/db/system-generated/prod.datadump.json')
+    # with django_db_blocker.unblock():
+        # this is definitely not working right now
+        # call_command('loaddata', 'joplin/db/system-generated/prod.datadump.json')
 
 
 def register_factories(factories):
@@ -35,9 +36,9 @@ def register_factories(factories):
             register(object)
 
 
-register_factories(information_page)
-register_factories(service_page)
-register_factories(guide_page)
+register_factories(information_page_factories)
+# register_factories(service_page)
+# register_factories(guide_page)
 
 # example if we wanted to make a specific fixture for some tests, we can flesh
 # this out with specific names or parameters, good for regression tests

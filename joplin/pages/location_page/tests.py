@@ -2,7 +2,7 @@ from django.core.exceptions import ValidationError
 from django.test import TestCase
 from django.core.exceptions import NON_FIELD_ERRORS
 import pdb
-from locations.models import LocationPageRelatedServices
+from pages.location_page.models import LocationPageRelatedServices
 from . import models, factories
 from contextlib import contextmanager
 import pytest

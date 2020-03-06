@@ -9,7 +9,7 @@ from pytest_factoryboy import register
 
 
 class InformationPageTopicFactory(factory.django.DjangoModelFactory):
-    page = factory.SubFactory('base.factories.information_page.InformationPageFactory')
+    page = factory.SubFactory('pages.information_page.factories.InformationPageFactory')
     # TODO: make this factory, atm it chooses from existing topic pages
     topic = factory.Iterator(TopicPage.objects.all())
 
@@ -18,7 +18,7 @@ class InformationPageTopicFactory(factory.django.DjangoModelFactory):
 
 
 class InformationPageContactFactory(factory.django.DjangoModelFactory):
-    page = factory.SubFactory('base.factories.information_page.InformationPageFactory')
+    page = factory.SubFactory('pages.information_page.factories.InformationPageFactory')
     # TODO: make this factory
     contact = factory.Iterator(Contact.objects.all())
 
