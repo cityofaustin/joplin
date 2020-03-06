@@ -1,4 +1,4 @@
-from base.models import InformationPageContact
+from pages.information_page.models import InformationPageContact
 from base.factories.information_page import InformationPageContactFactory, InformationPageFactory
 import pytest
 

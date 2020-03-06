@@ -3,10 +3,15 @@ from django.core.management import call_command
 import os
 from graphene import Node
 
-from base.models import (
-    TopicPage, TopicCollectionPage, ServicePage, GuidePage, InformationPage, OfficialDocumentPage, DepartmentPage,
-    Map, Contact
-)
+from base.models import Map, Contact
+from pages.information_page.models import InformationPage
+from pages.topic_page.models import TopicPage
+from pages.topic_collection_page.models import TopicCollectionPage
+from pages.department_page.models import DepartmentPage
+from pages.service_page.models import ServicePage
+from pages.guide_page.models import GuidePage
+from pages.official_documents_page.models import OfficialDocumentPage
+
 from wagtail.documents.models import Document
 
 from base.signals.janis_build_triggers import collect_pages, collect_pages_snippet
