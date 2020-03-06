@@ -45,7 +45,7 @@ class FormContainer(JanisBasePage):
 
 class FormContainerTopic(ClusterableModel):
     page = ParentalKey(FormContainer, related_name='topics')
-    topic = models.ForeignKey('base.TopicPage', verbose_name='Select a Topic', related_name='+', on_delete=models.CASCADE)
+    topic = models.ForeignKey('topic_page.TopicPage', verbose_name='Select a Topic', related_name='+', on_delete=models.CASCADE)
 
     panels = [
         PageChooserPanel('topic'),

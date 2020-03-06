@@ -2,8 +2,18 @@ from wagtail_modeltranslation.translation import register, TranslationOptions
 from wagtail.core.models import Page
 from wagtail.images.models import Image
 
+from base.models import TranslatedImage, Theme, Contact, Location, PhoneNumber, ContactDayAndDuration, ThreeOneOne, Map, HomePage
 
-from .models import ThreeOneOne, TopicPage, TopicCollectionPage, Theme, ServicePage, ProcessPage, ProcessPageStep, DepartmentPage, DepartmentPageDirector, InformationPage, OfficialDocumentPage, OfficialDocumentPageOfficialDocument, TranslatedImage, Map, HomePage, GuidePage, FormContainer
+from pages.topic_collection_page.models import TopicCollectionPage
+from pages.topic_page.models import TopicPage, TopicPageTopicCollection, TopicPageTopPage
+from pages.service_page.models import ServicePage, ServicePageTopic, ServicePageContact
+from pages.information_page.models import InformationPage, InformationPageTopic, InformationPageContact
+from pages.department_page.models import DepartmentPage, DepartmentPageDirector, DepartmentPageContact, DepartmentPageTopPage, DepartmentPageRelatedPage
+from pages.official_documents_page.models import OfficialDocumentPage, OfficialDocumentPageOfficialDocument, OfficialDocumentPageTopic
+from pages.guide_page.models import GuidePage, GuidePageTopic, GuidePageContact
+from pages.form_container.models import FormContainer, FormContainerTopic
+
+
 from locations.models import LocationPage, LocationPageRelatedServices
 from events.models import EventPage, EventPageFee
 
@@ -67,26 +77,6 @@ class ServicePageTranslationOptions(TranslationOptions):
         'additional_content',
         'steps',
         'short_description',
-    )
-
-
-@register(ProcessPage)
-class ProcessPageTranslationOptions(TranslationOptions):
-    fields = (
-        'description',
-    )
-
-
-@register(ProcessPageStep)
-class ProcessPageStepTranslationOptions(TranslationOptions):
-    fields = (
-        'title',
-        'short_title',
-        'link_title',
-        'description',
-        'overview_steps',
-        'detailed_content',
-        'quote',
     )
 
 

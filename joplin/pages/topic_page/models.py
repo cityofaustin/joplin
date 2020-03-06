@@ -62,7 +62,7 @@ class TopicPageTopPage(Orderable):
 
 class TopicPageTopicCollection(ClusterableModel):
     page = ParentalKey(TopicPage, related_name='topiccollections')
-    topiccollection = models.ForeignKey('base.TopicCollectionPage', verbose_name='Select a Topic Collection', related_name='+', on_delete=models.CASCADE)
+    topiccollection = models.ForeignKey('topic_collection_page.TopicCollectionPage', verbose_name='Select a Topic Collection', related_name='+', on_delete=models.CASCADE)
 
     panels = [
         PageChooserPanel('topiccollection'),
