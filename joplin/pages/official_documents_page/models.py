@@ -10,10 +10,10 @@ from wagtail.core.models import Orderable
 from wagtail.documents.models import Document
 from wagtail.documents.edit_handlers import DocumentChooserPanel
 
-from .janis_page import JanisBasePage
+from pages.base_page.models import JanisBasePage
 
-from .constants import DEFAULT_MAX_LENGTH
-from .widgets import countMe, countMeTextArea, AUTHOR_LIMITS
+from base.models.constants import DEFAULT_MAX_LENGTH
+from base.models.widgets import countMe, countMeTextArea, AUTHOR_LIMITS
 from countable_field import widgets
 from publish_preflight.requirements import FieldPublishRequirement, RelationPublishRequirement, ConditionalPublishRequirement, DepartmentPublishRequirement
 

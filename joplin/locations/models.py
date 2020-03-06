@@ -14,7 +14,7 @@ from wagtail.admin.edit_handlers import (
 from base.models.translated_image import TranslatedImage
 
 
-from base.models import JanisBasePage
+from pages.base_page.models import JanisBasePage
 from base.models.widgets import countMe
 from base.models.constants import DEFAULT_MAX_LENGTH
 from base.forms import LocationPageForm

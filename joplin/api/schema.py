@@ -14,14 +14,18 @@ from django_filters import FilterSet, OrderingFilter
 from wagtail.core.blocks import *
 from wagtail.documents.models import Document
 from wagtail.core.rich_text import expand_db_html
-from base.models import (
-    TranslatedImage, ServicePage, ServicePageContact, ServicePageTopic, InformationPage, InformationPageContact,
-    InformationPageTopic, DepartmentPage, DepartmentPageContact, DepartmentPageDirector, DepartmentPageTopPage,
-    DepartmentPageRelatedPage, Theme, TopicCollectionPage, TopicPage, TopicPageTopicCollection, TopicPageTopPage,
-    Contact, Location, PhoneNumber, ContactDayAndDuration, OfficialDocumentPage, OfficialDocumentPageTopic,
-    OfficialDocumentPageOfficialDocument, GuidePage, GuidePageTopic, GuidePageContact,
-    FormContainer, FormContainerTopic,
-)
+from base.models import TranslatedImage, Theme, Contact, Location, PhoneNumber, ContactDayAndDuration
+
+from pages.topic_collection_page.models import TopicCollectionPage
+from pages.topic_page.models import TopicPage, TopicPageTopicCollection, TopicPageTopPage
+from pages.service_page.models import ServicePage, ServicePageTopic, ServicePageContact
+from pages.information_page.models import InformationPage, InformationPageTopic, InformationPageContact
+from pages.department_page.models import DepartmentPage, DepartmentPageDirector, DepartmentPageContact, DepartmentPageTopPage, DepartmentPageRelatedPage
+from pages.official_documents_page.models import OfficialDocumentPage, OfficialDocumentPageOfficialDocument, OfficialDocumentPageTopic
+from pages.guide_page.models import GuidePage, GuidePageTopic, GuidePageContact
+from pages.form_container.models import FormContainer, FormContainerTopic
+
+
 from .content_type_map import content_type_map
 import traceback
 from locations.models import LocationPage, LocationPageRelatedServices

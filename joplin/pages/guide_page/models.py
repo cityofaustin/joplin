@@ -11,13 +11,13 @@ from wagtail.images.edit_handlers import ImageChooserPanel
 
 from base.forms import GuidePageForm
 
-from .janis_page import JanisBasePage
-from .information_page import InformationPage
-from .service_page import ServicePage
-from .contact import Contact
-from .translated_image import TranslatedImage
+from pages.base_page.models import JanisBasePage
+from pages.information_page.models import InformationPage
+from pages.service_page.models import ServicePage
+from base.models.contact import Contact
+from base.models.translated_image import TranslatedImage
 
-from .widgets import countMe, countMeTextArea
+from base.models.widgets import countMe, countMeTextArea
 
 from publish_preflight.requirements import FieldPublishRequirement, RelationPublishRequirement, StreamFieldPublishRequirement, ConditionalPublishRequirement, DepartmentPublishRequirement
 

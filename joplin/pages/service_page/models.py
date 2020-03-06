@@ -11,12 +11,12 @@ from wagtail.snippets.edit_handlers import SnippetChooserPanel
 from base.blocks import SnippetChooserBlockWithAPIGoodness, WhatDoIDoWithBlock, CollectionScheduleBlock, RecollectBlock
 from base.forms import ServicePageForm
 
-from .janis_page import JanisBasePage
+from pages.base_page.models import JanisBasePage
 from locations.models import LocationPage
-from .contact import Contact
+from base.models.contact import Contact
 
-from .constants import WYSIWYG_GENERAL, SHORT_DESCRIPTION_LENGTH
-from .widgets import countMe, countMeTextArea
+from base.models.constants import WYSIWYG_GENERAL, SHORT_DESCRIPTION_LENGTH
+from base.models.widgets import countMe, countMeTextArea
 
 from publish_preflight.requirements import FieldPublishRequirement, StreamFieldPublishRequirement, ConditionalPublishRequirement, RelationPublishRequirement, DepartmentPublishRequirement
 

@@ -6,9 +6,9 @@ from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, PageChooserPane
 
 from base.forms import FormContainerForm
 
-from .janis_page import JanisBasePage
+from pages.base_page.models import JanisBasePage
 
-from .widgets import countMe, countMeTextArea
+from base.models.widgets import countMe, countMeTextArea
 from publish_preflight.requirements import FieldPublishRequirement, RelationPublishRequirement, ConditionalPublishRequirement, DepartmentPublishRequirement
 
 class FormContainer(JanisBasePage):

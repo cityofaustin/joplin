@@ -11,16 +11,16 @@ from wagtail.snippets.edit_handlers import SnippetChooserPanel
 
 from base.forms import DepartmentPageForm
 
-from .janis_page import JanisBasePage
-from .information_page import InformationPage
-from .service_page import ServicePage
-from .guide_page import GuidePage
-from .official_documents_page import OfficialDocumentPage
-from .translated_image import TranslatedImage
-from .contact import Contact
+from pages.base_page.models import JanisBasePage
+from pages.information_page.models import InformationPage
+from pages.service_page.models import ServicePage
+from pages.guide_page.models import GuidePage
+from pages.official_documents_page.models import OfficialDocumentPage
+from base.models.translated_image import TranslatedImage
+from base.models.contact import Contact
 
-from .constants import DEFAULT_MAX_LENGTH, WYSIWYG_GENERAL
-from .widgets import countMe, AUTHOR_LIMITS
+from base.models.constants import DEFAULT_MAX_LENGTH, WYSIWYG_GENERAL
+from base.models.widgets import countMe, AUTHOR_LIMITS
 from countable_field import widgets
 from publish_preflight.requirements import FieldPublishRequirement
 

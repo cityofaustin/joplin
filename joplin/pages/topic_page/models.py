@@ -8,15 +8,15 @@ from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.core.models import Orderable
 
 from pages.information_page.models import InformationPage
-from .service_page import ServicePage
-from .guide_page import GuidePage
-from .official_documents_page import OfficialDocumentPage
+from pages.service_page.models import ServicePage
+from pages.guide_page.models import GuidePage
+from pages.official_documents_page.models import OfficialDocumentPage
 
 from base.forms import TopicPageForm
 
-from .janis_page import JanisBasePage
-from .translated_image import TranslatedImage
-from .widgets import countMe, countMeTextArea
+from pages.base_page.models import JanisBasePage
+from base.models.translated_image import TranslatedImage
+from base.models.widgets import countMe, countMeTextArea
 from publish_preflight.requirements import RelationPublishRequirement
 
 

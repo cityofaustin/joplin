@@ -24,13 +24,6 @@ from pages.base_page.models import JanisBasePage
 from .home_page import HomePage
 from .theme import Theme
 from pages.topic_collection_page.models import TopicCollectionPage
-from pages.topic_page.models import TopicPage, TopicPageTopicCollection, TopicPageTopPage
-from .service_page import ServicePage, ServicePageTopic, ServicePageContact
-from .information_page import InformationPage, InformationPageTopic, InformationPageContact
-from .department_page import DepartmentPage, DepartmentPageDirector, DepartmentPageContact, DepartmentPageTopPage, DepartmentPageRelatedPage
-from .official_documents_page import OfficialDocumentPage, OfficialDocumentPageOfficialDocument, OfficialDocumentPageTopic
-from .guide_page import GuidePage, GuidePageTopic, GuidePageContact
-from .form_container import FormContainer, FormContainerTopic
 from .widgets import countMe, countMeTextArea
 from .site_settings import JanisBranchSettings
 from .deployment_log import DeploymentLog
