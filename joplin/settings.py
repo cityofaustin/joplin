@@ -88,6 +88,11 @@ INSTALLED_APPS = [
     'publish_preflight',
     'locations',
     'events',
+    'pages',
+    'pages.base_page',
+    'pages.information_page',
+    'pages.topic_collection_page',
+    'pages.topic_page',
 ]
 
 MIDDLEWARE = [

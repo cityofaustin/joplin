@@ -5,9 +5,9 @@ from wagtail.images.edit_handlers import ImageChooserPanel
 
 from base.forms import TopicCollectionPageForm
 
-from .janis_page import JanisBasePage
-from .translated_image import TranslatedImage
-from .widgets import countMe, countMeTextArea
+from pages.base_page.models import JanisBasePage
+from base.models.translated_image import TranslatedImage
+from base.models.widgets import countMe, countMeTextArea
 from publish_preflight.requirements import FieldPublishRequirement
 
 

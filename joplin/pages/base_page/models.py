@@ -11,7 +11,7 @@ from wagtail.core.models import Page
 from wagtail.core.fields import RichTextField
 from flags.state import flag_enabled
 
-from joplin.base.models.site_settings import JanisBranchSettings
+from base.models.site_settings import JanisBranchSettings
 
 
 class JanisBasePage(Page):

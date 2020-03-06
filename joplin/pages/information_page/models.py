@@ -8,16 +8,16 @@ from wagtail.core.blocks import RichTextBlock
 from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, PageChooserPanel, StreamFieldPanel
 from wagtail.snippets.edit_handlers import SnippetChooserPanel
 
-from joplin.base.forms import InformationPageForm
+from base.forms import InformationPageForm
 
-from joplin.pages.base_page import JanisBasePage
-from joplin.base.contact import Contact
+from pages.base_page.models import JanisBasePage
+from base.models.contact import Contact
 
-from joplin.base.constants import WYSIWYG_GENERAL
-from joplin.base.widgets import countMe, countMeTextArea
+from base.models.constants import WYSIWYG_GENERAL
+from base.models.widgets import countMe, countMeTextArea
 from countable_field import widgets
 
-from joplin.publish_preflight.requirements import FieldPublishRequirement, RelationPublishRequirement, ConditionalPublishRequirement, DepartmentPublishRequirement
+from publish_preflight.requirements import FieldPublishRequirement, RelationPublishRequirement, ConditionalPublishRequirement, DepartmentPublishRequirement
 
 
 class InformationPage(JanisBasePage):

@@ -7,7 +7,7 @@ from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, PageChooserPane
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.core.models import Orderable
 
-from .information_page import InformationPage
+from pages.information_page.models import InformationPage
 from .service_page import ServicePage
 from .guide_page import GuidePage
 from .official_documents_page import OfficialDocumentPage

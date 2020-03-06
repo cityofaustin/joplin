@@ -20,11 +20,11 @@ from .location import Location
 from .map import Map
 from .constants import WYSIWYG_GENERAL, DEFAULT_MAX_LENGTH, SHORT_DESCRIPTION_LENGTH
 
-from .janis_page import JanisBasePage
+from pages.base_page.models import JanisBasePage
 from .home_page import HomePage
 from .theme import Theme
-from .topic_collection_page import TopicCollectionPage
-from .topic_page import TopicPage, TopicPageTopicCollection, TopicPageTopPage
+from pages.topic_collection_page.models import TopicCollectionPage
+from pages.topic_page.models import TopicPage, TopicPageTopicCollection, TopicPageTopPage
 from .service_page import ServicePage, ServicePageTopic, ServicePageContact
 from .information_page import InformationPage, InformationPageTopic, InformationPageContact
 from .department_page import DepartmentPage, DepartmentPageDirector, DepartmentPageContact, DepartmentPageTopPage, DepartmentPageRelatedPage
