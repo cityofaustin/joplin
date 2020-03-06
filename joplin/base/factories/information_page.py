@@ -3,7 +3,7 @@ import wagtail_factories
 from django.utils.text import slugify
 from base.models import *
 from pages.topic_page.models import TopicPage
-from pages.department_page.models import DepartmentPage
+from pages.information_page.models import InformationPageTopic, InformationPageContact, InformationPage
 from . import PageFactory
 from pytest_factoryboy import register
 
@@ -15,15 +15,6 @@ class InformationPageTopicFactory(factory.django.DjangoModelFactory):
 
     class Meta:
         model = InformationPageTopic
-
-
-class InformationPageRelatedDepartmentsFactory(factory.django.DjangoModelFactory):
-    page = factory.SubFactory('base.factories.information_page.InformationPageFactory')
-    # TODO: make this factory
-    related_department = factory.Iterator(DepartmentPage.objects.all())
-
-    class Meta:
-        model = InformationPageRelatedDepartments
 
 
 class InformationPageContactFactory(factory.django.DjangoModelFactory):
@@ -49,5 +40,4 @@ class InformationPageFactory(PageFactory):
     def create_related_objects(self, create, extracted, **kwargs):
         if create:
             InformationPageTopicFactory.create_batch(2, page=self)
-            InformationPageRelatedDepartmentsFactory.create_batch(2, page=self)
             InformationPageContactFactory.create_batch(2, page=self)
