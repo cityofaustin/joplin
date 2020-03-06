@@ -15,13 +15,14 @@ class InformationPageTopicFactory(factory.django.DjangoModelFactory):
         model = InformationPageTopic
 
 
-class InformationPageRelatedDepartmentsFactory(factory.django.DjangoModelFactory):
-    page = factory.SubFactory('base.factories.information_page.InformationPageFactory')
-    # TODO: make this factory
-    related_department = factory.Iterator(DepartmentPage.objects.all())
-
-    class Meta:
-        model = InformationPageRelatedDepartments
+# TODO: reimplement with new model
+# class InformationPageRelatedDepartmentsFactory(factory.django.DjangoModelFactory):
+#     page = factory.SubFactory('base.factories.information_page.InformationPageFactory')
+#     # TODO: make this factory
+#     related_department = factory.Iterator(DepartmentPage.objects.all())
+#
+#     class Meta:
+#         model = InformationPageRelatedDepartments
 
 
 class InformationPageContactFactory(factory.django.DjangoModelFactory):
@@ -47,5 +48,6 @@ class InformationPageFactory(PageFactory):
     def create_related_objects(self, create, extracted, **kwargs):
         if create:
             InformationPageTopicFactory.create_batch(2, page=self)
-            InformationPageRelatedDepartmentsFactory.create_batch(2, page=self)
+            # TODO: reimplement with new model
+            # InformationPageRelatedDepartmentsFactory.create_batch(2, page=self)
             InformationPageContactFactory.create_batch(2, page=self)
