@@ -2,6 +2,8 @@ import factory
 import wagtail_factories
 from django.utils.text import slugify
 from base.models import *
+from pages.topic_page.models import TopicPage
+from pages.department_page.models import DepartmentPage
 from . import PageFactory
 from pytest_factoryboy import register
 
