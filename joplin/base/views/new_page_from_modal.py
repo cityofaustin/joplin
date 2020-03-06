@@ -63,7 +63,7 @@ def new_page_from_modal(request):
             page = EventPage(**data)
 
         # Add it as a child of home
-        home = Page.objects.get(id=3)
+        home = Page.objects.get(id=2)
         home.add_child(instance=page)
 
         # Save our draft
@@ -74,12 +74,13 @@ def new_page_from_modal(request):
             # If the user's an admin, add the selected department from
             # the create content modal
             department_id = body['department']
-            department_group = Department.objects.get(pk=department_id)
-            GroupPagePermission.objects.create(
-                group=department_group,
-                page=page,
-                permission_type='edit'
-            )
+            if department_id:
+                department_group = Department.objects.get(pk=department_id)
+                GroupPagePermission.objects.create(
+                    group=department_group,
+                    page=page,
+                    permission_type='edit'
+                )
         else:
             # If the user's not an admin, then we want to create a
             # group permission object for each of the user's assigned departments
