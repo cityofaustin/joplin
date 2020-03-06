@@ -1,7 +1,6 @@
 import factory
 import wagtail_factories
-from base.models import *
-from .. import PageFactory
+from pages.factory import PageFactory
 
 """
 DepartmentPage
@@ -17,4 +16,4 @@ class DepartmentPageFactory(PageFactory):
     mission = factory.Faker('text')
 
     class Meta:
-        model = base.models.DepartmentPage
+        model = pages.department_page.DepartmentPage

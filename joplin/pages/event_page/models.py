@@ -15,7 +15,7 @@ from wagtail.core.blocks import StreamBlock
 from wagtail.core.models import Orderable
 from wagtail.admin.edit_handlers import FieldPanel, PageChooserPanel, HelpPanel
 from base.forms import EventPageForm
-from base.models import JanisBasePage
+from pages.models import JanisBasePage
 from base.models.widgets import countMe, AUTHOR_LIMITS
 from modelcluster.models import ClusterableModel
 from base.models.constants import DEFAULT_MAX_LENGTH, WYSIWYG_GENERAL

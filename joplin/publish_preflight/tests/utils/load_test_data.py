@@ -8,6 +8,7 @@ from pages.topic_collection_page.models import TopicCollectionPage
 from pages.department_page.models import DepartmentPage
 
 
+# Todo: replace this with 
 def load_test_data():
     home = HomePage.objects.first()
 

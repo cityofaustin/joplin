@@ -1,10 +1,10 @@
 import factory
 import wagtail_factories
 from django.utils.text import slugify
-from base.models import *
 from pages.topic_page.models import TopicPage
 from pages.information_page.models import InformationPageTopic, InformationPageContact, InformationPage
-from . import PageFactory
+from pages.factory import PageFactory
+from base.models import Contact
 from pytest_factoryboy import register
 
 
