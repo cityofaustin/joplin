@@ -22,3 +22,11 @@ yarn.lock
 
 # Temporary datadumps
 joplin/db/system-generated/tmp.datadump.json
+
+# test & coverage stuff
+
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+*.cover

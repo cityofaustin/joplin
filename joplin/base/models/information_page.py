@@ -21,9 +21,13 @@ from publish_preflight.requirements import FieldPublishRequirement, RelationPubl
 
 
 class InformationPage(JanisBasePage):
+    """
+    Basic page model primarly for providing informational content
+    """
     janis_url_page_type = "information"
 
     description = models.TextField(blank=True, verbose_name='Write a description of this page')
+    # TODO: remove options? They don't appear to be used in info pages anymore
     options = StreamField(
         [
             ('option', RichTextBlock(

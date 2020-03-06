@@ -209,7 +209,7 @@ Testing documentation can be found [here](./README/testing.md).
 4. Run that migration with:
     - `docker exec -it joplin_app_1 python joplin/manage.py migrate`
 5. Test that your migration works with
-    - `./scripts/migration-test.sh`
+    - `SOURCE=prod ./scripts/migration-test.sh`
 
 ## Adding new content types
 
