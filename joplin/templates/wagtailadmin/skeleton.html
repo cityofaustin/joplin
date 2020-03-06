@@ -1,6 +1,7 @@
 {# NOTE: This template was added("copy/pasted") from the wagtail library #}
 {# - Having it within our code base allows us modify the html/css to fit our UI needs. #}
-
+{# - CAUTION: This is the top level injection of html in our templeting system. #}
+{#   - Future changes to wagtail should be checked out in the skeleton.html within the wagtail library. #}
 
 <!doctype html>
 {% load wagtailadmin_tags i18n %}
@@ -17,6 +18,8 @@
     <script src="{% versioned_static 'wagtailadmin/js/vendor/modernizr-2.6.2.min.js' %}"></script>
 
     <link rel="stylesheet" href="{% versioned_static 'wagtailadmin/css/normalize.css' %}" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Medium+IBM+Plex+Sans&display=swap" rel="stylesheet">
 
     {% block css %}{% endblock %}
 

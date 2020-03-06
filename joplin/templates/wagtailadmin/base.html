@@ -21,8 +21,7 @@ window.ISPRODUCTION = ISPRODUCTION
 {% if ISPRODUCTION == False %}
   {% render_bundle 'theme' %}
 {% endif %}
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
-  rel="stylesheet">
+
 {% include 'session_security/all.html' %}
 
 <div class="header coa-header" id="coa-old_application_banner">

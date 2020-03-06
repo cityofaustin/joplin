@@ -2,7 +2,7 @@
 
 NOTE: This readme was created during the great redesign of 2020.
 - I (Bob) created these notes and guidelines once I developed a pattern during the build-out of the new design.
-- I'm sorry. I know it's messy. I'll clean it up as I go along. 
+- I'm sorry. I know it's messy. I'll clean it up as I go along.
 
 ### Joplin UI: general workflow and development with wagtail templates
 
@@ -31,3 +31,8 @@ Here are a set of "guidelines" I created for myself when developing the Joplin U
   - And, django + wagtail know to use our code instead of the file from the library.
   - so now we can add a specific `coa-listing-filter` class and style that class within a corresponding .scss file.
 - Be as unobtrusive to the original state as possible, and inject new code with spacific documentation when needed.
+
+# Resources:
+
+Wagtail's styleguide enpoint - `/admin/styleguide/` - 👇Staging Example.
+- https://joplin-staging.herokuapp.com/admin/styleguide/
