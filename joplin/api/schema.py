@@ -28,8 +28,8 @@ from pages.form_container.models import FormContainer, FormContainerTopic
 
 from .content_type_map import content_type_map
 import traceback
-from locations.models import LocationPage, LocationPageRelatedServices
-from events.models import EventPage, EventPageFee
+from pages.location_page.models import LocationPage, LocationPageRelatedServices
+from pages.event_page.models import EventPage, EventPageFee
 from graphql_relay import to_global_id
 
 

@@ -12,7 +12,7 @@ from base.blocks import SnippetChooserBlockWithAPIGoodness, WhatDoIDoWithBlock, 
 from base.forms import ServicePageForm
 
 from pages.base_page.models import JanisBasePage
-from locations.models import LocationPage
+from pages.location_page.models import LocationPage
 from base.models.contact import Contact
 
 from base.models.constants import WYSIWYG_GENERAL, SHORT_DESCRIPTION_LENGTH

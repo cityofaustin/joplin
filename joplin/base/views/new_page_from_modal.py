@@ -16,8 +16,8 @@ from pages.department_page.models import DepartmentPage
 from pages.official_documents_page.models import OfficialDocumentPage
 from pages.guide_page.models import GuidePage
 from pages.form_container.models import FormContainer
-from locations.models import LocationPage
-from events.models import EventPage
+from pages.location_page.models import LocationPage
+from pages.event_page.models import EventPage
 from groups.models import Department
 from base.models.site_settings import JanisBranchSettings
 from django.contrib.contenttypes.models import ContentType

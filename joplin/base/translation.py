@@ -14,8 +14,8 @@ from pages.guide_page.models import GuidePage, GuidePageTopic, GuidePageContact
 from pages.form_container.models import FormContainer, FormContainerTopic
 
 
-from locations.models import LocationPage, LocationPageRelatedServices
-from events.models import EventPage, EventPageFee
+from pages.location_page.models import LocationPage, LocationPageRelatedServices
+from pages.event_page.models import EventPage, EventPageFee
 
 
 @register(Image)
