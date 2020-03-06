@@ -9,7 +9,7 @@ from pages.information_page.models import InformationPage
 from pages.topic_page.models import TopicPage
 from pages.guide_page.models import GuidePageTopic, GuidePageContact, GuidePage
 from wagtail.core import blocks
-from .. import PageFactory, TextBlockFactory
+from base.factories import PageFactory, TextBlockFactory
 
 """
 almost working
