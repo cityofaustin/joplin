@@ -2,7 +2,7 @@ from pytest_factoryboy import register
 import pytest
 import inspect
 from factory.base import FactoryMetaClass
-from base.factories.information_page import InformationPageContactFactory, InformationPageFactory
+from pages.information_page.factory import InformationPageContactFactory, InformationPageFactory
 from base.factories import information_page, service_page, guide_page
 
 

@@ -15,6 +15,7 @@ from .constants import WYSIWYG_GENERAL, DEFAULT_MAX_LENGTH, SHORT_DESCRIPTION_LE
 
 from .theme import Theme
 from pages.topic_collection_page.models import TopicCollectionPage
+from .home_page import HomePage
 from .widgets import countMe, countMeTextArea
 from .site_settings import JanisBranchSettings
 from .deployment_log import DeploymentLog
@@ -32,12 +33,3 @@ class TopicCollectionPageTopicCollection(ClusterableModel):
 
     def __str__(self):
         return self.topiccollection.text
-
-
-@register_snippet
-class ThreeOneOne(ClusterableModel):
-    title = models.CharField(max_length=DEFAULT_MAX_LENGTH)
-    url = models.URLField()
-
-    def __str__(self):
-        return self.title

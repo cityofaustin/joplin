@@ -5,5 +5,5 @@ import pytest
 
 @pytest.mark.django_db
 def test_information_page_factory(information_page_factory):
-    page = information_page_factory.build(description="Dark and stormy")
+    page = InformationPageFactory.build(description="Dark and stormy")
     assert page.description == "Dark and stormy"
