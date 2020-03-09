@@ -11,6 +11,7 @@ from groups.models import Department
 from wagtail.documents.models import Document
 from base.signals.aws_publish import get_http_request, create_build_aws
 from base.signals.netlify_publish import netlify_publish
+from base.signals.publish_v2 import publish_v2
 from flags.state import flag_enabled
 
 import logging
@@ -30,6 +31,7 @@ def trigger_build(sender, pages_ids, action='saved', instance=None):
         create_build_aws(sender, instance, request=get_http_request())
     elif settings.ISREVIEW:
         netlify_publish()
+        publish_v2(pages_ids)
 
 
 def collect_pages(instance):

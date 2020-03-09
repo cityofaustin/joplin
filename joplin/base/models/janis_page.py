@@ -208,7 +208,7 @@ class JanisBasePage(Page):
         }
 
     def janis_preview_url(self, revision=None, lang="en"):
-        data = preview_url_data(revision)
+        data = self.preview_url_data(revision)
         return f'{data["janis_preview_url_start"]}/{lang}/{data["janis_preview_url_end"]}'
 
     @property
