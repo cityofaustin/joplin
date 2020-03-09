@@ -1,0 +1,17 @@
+/*
+  This is a Temporary file, only used during the transition into the new Joplin_UI
+  Once that's complete, we'll be able to...
+  ... 🚨remove this file!
+
+  This is the style for a hidden button implimented on template/wagtailadmin/base.html and joplin_UI/applicatin_banner.html
+  - It toggles what css to load onto the site. joplin/css <or> joplin/joplin_ui
+  - click the lamp on the city seal to see effect🧞‍♂️🧞‍♀️✨.
+*/
+
+.coa-easter-egg {
+  position: absolute;
+  top: 35px;
+  left: 37px;
+  min-width: 10px;
+  min-height: 10px;
+}

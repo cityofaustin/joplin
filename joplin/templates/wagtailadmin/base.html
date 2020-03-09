@@ -14,25 +14,30 @@
 
 <script>
 // passing the constant from context_processors into a JS variable (boolean)
-const ISPRODUCTION = '{{ISPRODUCTION}}';
+const ISPRODUCTION = '{{ISPRODUCTION}}'
+window.ISPRODUCTION = ISPRODUCTION
 </script>
 {% render_bundle 'admin' %}
 {% if ISPRODUCTION == False %}
   {% render_bundle 'theme' %}
 {% endif %}
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
-      rel="stylesheet">
+
 {% include 'session_security/all.html' %}
-<div class="header coa-header">
+
+<div class="header coa-header" id="coa-old_application_banner">
     <div>
-        <img class="wagtail-logo wagtail-logo__full" src="{% static 'images/coa_seal_transparent_white.png' %}" alt="Welcome to City of Austin CMS" width="60" />
+        <img class="coa-seal wagtail-logo wagtail-logo__full" src="{% static 'images/coa_seal_transparent_white.png' %}" alt="Welcome to City of Austin CMS" width="60" />
+        <!-- 🚨ONLY USED FOR JOPLIN_UI TRANSTION PERIOD👇  -->
+        <!-- NOTE: this function is declared in joplin/templates/joplin_UI/application_banner.html -->
+        <div class="coa-easter-egg" onclick="toggleJoplinUI()"></div>
+        <!-- 🚨End-->
     </div>
-    <div class="dropdown user-account">
+    <div class="dropdown user-account coa-account-dropdown">
         <div class="dropdown-toggle">
           <div class="user-account">
-            <div class="avatar circle"><img src="{% avatar_url user %}" alt="avatar" /></div>
-            <div class="user coa-user user-account-dropdown " type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                {{ request.user.first_name|default:request.user.get_username }}
+            <div class="avatar circle coa-avatar"><img src="{% avatar_url user %}" alt="avatar" /></div>
+            <div class="user user-account-dropdown coa-user-name" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                {{ request.user.first_name }} {{ request.user.last_name }}
                 <span class="icon icon-arrow-down-after"></span>
                 <ul class="user-account-dropdown-menu" aria-labelledby="user-account-dropdown">
                     <li><a href="{% url 'wagtailadmin_account' %}" class="icon icon-user">{% trans "Account settings" %}</a></li>

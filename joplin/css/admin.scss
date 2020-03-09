@@ -6,6 +6,10 @@
 @import './buttons';
 @import './pages/edit';
 
+// This is the css that create the hidden button in the lamp in the seal to toggle joplin UI transition.
+@import './../joplin_UI/_joplin_ui_transition.scss';
+
+
 // Wagtail overrides
 
 .full input {
