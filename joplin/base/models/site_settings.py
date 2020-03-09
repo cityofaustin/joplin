@@ -42,7 +42,7 @@ class JanisBranchSettings(BaseSetting):
 
 
     # branch_type is either "publish_janis_branch" or "preview_janis_branch"
-    def __get_url_for_pr(branch_type):
+    def __get_url_for_pr(self, branch_type):
         # Netlify site names are limited to 63 characters
         return f"https://{('coa-pub-v2-' + getattr(self, branch_type).lower())[:63]}.netlify.com"
 
