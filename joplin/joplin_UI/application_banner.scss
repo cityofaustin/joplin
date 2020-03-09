@@ -78,6 +78,10 @@
   transition: opacity $coa-transition-delay ease-in-out !important;
   border-radius: 0 0 $coa-button-border-radius $coa-button-border-radius;
 }
+.open .coa-user-dropdown-menu > li > a:hover {
+  background-color: $coa-background-color;
+}
+
 .open .coa-user-dropdown-menu > li {
   background-color: $coa-background-color-secondary;
   border-top: solid 1px $coa-border-color;
