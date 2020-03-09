@@ -21,6 +21,8 @@ import json
 # When you want to publish a page directly from the home page, this route is called.
 # The publish button on the edit/ page sends a "action-publish" message directly to wagtail.
 # "action-publish" does not use this endpoint.
+
+
 def publish(request, page_id):
     # We'll get a weird MetaClass for our page.base_form_class if we don't use page.specific
     page = get_object_or_404(Page, id=page_id).specific
@@ -80,16 +82,17 @@ def publish(request, page_id):
         'next': next_url,
     })
 
+
 # This was the url added to urls.py
 url = url(r'admin/pages/(\d+)/publish/$', joplin_views.publish, name='publish')
 
 # This was the logic added to @hooks.register('register_joplin_page_listing_more_buttons')
 # in order to add a "Publish" option to the Content List View's "more" dropdown
-if page_perms.can_publish() and page.has_unpublished_changes:
-    yield Button(
-        _('Publish'),
-        reverse('publish', args=[page.id]),
-        attrs={'title': _("Publish page '{title}'").format(
-            title=page.get_admin_display_title())},
-        priority=50
-    )
+# if page_perms.can_publish() and page.has_unpublished_changes:
+#     yield Button(
+#         _('Publish'),
+#         reverse('publish', args=[page.id]),
+#         attrs={'title': _("Publish page '{title}'").format(
+#             title=page.get_admin_display_title())},
+#         priority=50
+#     )

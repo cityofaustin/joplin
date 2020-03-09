@@ -13,10 +13,14 @@ import fileinput
 '''
 
 start_of_json_pattern = re.compile("^\[")
+end_of_json_pattern = re.compile("^\]")
 in_json = False
 
 for line in fileinput.input():
-    if in_json:
+    if end_of_json_pattern.match(line):
+        sys.stdout.write(line)
+        in_json = False
+    elif in_json:
         sys.stdout.write(line)
     elif start_of_json_pattern.match(line):
         in_json = True
