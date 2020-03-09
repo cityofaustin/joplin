@@ -6,10 +6,6 @@ logger = logging.getLogger(__name__)
 
 
 def publish_v2(page_ids=[]):
-    if settings.ISLOCAL:
-        logger.debug("Running locally, skipping publisher_v2 invocation")
-        return None
-
     publish_janis_branch = getattr(JanisBranchSettings.objects.first(), 'publish_janis_branch')
     if not publish_janis_branch:
         logger.debug("publish_janis_branch must be set in order to publish.")
