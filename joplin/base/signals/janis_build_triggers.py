@@ -30,9 +30,11 @@ def trigger_build(sender, pages_ids, action='saved', instance=None):
     if settings.ISSTAGING or settings.ISPRODUCTION:
         create_build_aws(sender, instance, request=get_http_request())
     elif settings.ISREVIEW:
-        netlify_publish()
         if flag_enabled('INCREMENTAL BUILDS'):
             publish_v2(pages_ids)
+        else:
+            netlify_publish()
+
 
 def collect_pages(instance):
     # does this work on page deletion? pages arent deleted right, just unpublished?
