@@ -63,6 +63,7 @@ default_branch_vars = {
     "LOAD_DATA": "prod",
     "MONITOR_PERFORMANCE": False,
     "DELETION_PROTECTION": 0,
+    "DJANGO_LOG_LEVEL": "INFO",
 }
 config.update(default_branch_vars)
 

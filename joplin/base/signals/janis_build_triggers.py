@@ -15,7 +15,7 @@ from base.signals.publish_v2 import publish_v2
 from flags.state import flag_enabled
 
 import logging
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('joplin')
 
 JANIS_SLUG_URL = settings.JANIS_SLUG_URL
 
@@ -26,13 +26,13 @@ def trigger_build(sender, pages_ids, action='saved', instance=None):
     source = name of snippet or object triggering build
     """
     trigger_object = instance
-    logger.debug(f'{trigger_object} {action}, triggering build')
+    logger.info(f'{trigger_object} {action}, triggering build')
     if settings.ISSTAGING or settings.ISPRODUCTION:
         create_build_aws(sender, instance, request=get_http_request())
-    elif settings.ISREVIEW or settings.ISLOCAL:
+    elif settings.ISREVIEW:
         netlify_publish()
-        publish_v2(pages_ids)
-
+        if flag_enabled('INCREMENTAL BUILDS'):
+            publish_v2(pages_ids)
 
 def collect_pages(instance):
     # does this work on page deletion? pages arent deleted right, just unpublished?

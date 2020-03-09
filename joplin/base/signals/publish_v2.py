@@ -2,13 +2,13 @@ import os, json, requests, logging
 from django.conf import settings
 from base.models.site_settings import JanisBranchSettings
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('joplin')
 
 
 def publish_v2(page_ids=[]):
     publish_janis_branch = getattr(JanisBranchSettings.objects.first(), 'publish_janis_branch')
     if not publish_janis_branch:
-        logger.debug("publish_janis_branch must be set in order to publish.")
+        logger.info("publish_janis_branch must be set in order to publish.")
         return None
 
     headers = {
@@ -26,5 +26,5 @@ def publish_v2(page_ids=[]):
         "build_type": "all_pages",
     }
     publisher_res = requests.post(url, data=json.dumps(data), headers=headers)
-    logger.debug("publish_v2() Starting task")
-    logger.debug(publisher_res.json())
+    logger.info("publish_v2() Starting task")
+    logger.info(publisher_res.json())
