@@ -141,7 +141,7 @@ class EventPage(JanisBasePage):
         ),
     ]
 
-    parent_page_types = ['base.HomePage']
+    parent_page_types = ['pages.HomePage']
 
 
 class EventPageFee(Orderable):

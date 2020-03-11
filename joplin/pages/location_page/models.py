@@ -98,7 +98,7 @@ class LocationPage(JanisBasePage):
     nearest_bus_2 = models.IntegerField(null=True, blank=True)
     nearest_bus_3 = models.IntegerField(null=True, blank=True)
 
-    parent_page_types = ['base.HomePage']
+    parent_page_types = ['pages.HomePage']
 
     base_form_class = LocationPageForm
 
