@@ -314,7 +314,7 @@ snapshots['test_service 1'] = {
                 {
                     'node': {
                         'id': 'U2VydmljZVBhZ2VOb2RlOjMzNA==',
-                        'title': 'Report smoking in a public place'
+                        'title': 'Report smoking or vaping in a public place'
                     }
                 },
                 {
@@ -387,6 +387,30 @@ snapshots['test_service 1'] = {
                     'node': {
                         'id': 'U2VydmljZVBhZ2VOb2RlOjM1OQ==',
                         'title': 'Request judicial records'
+                    }
+                },
+                {
+                    'node': {
+                        'id': 'U2VydmljZVBhZ2VOb2RlOjM3MQ==',
+                        'title': 'Get help with rent and utility payments'
+                    }
+                },
+                {
+                    'node': {
+                        'id': 'U2VydmljZVBhZ2VOb2RlOjM3Mw==',
+                        'title': 'Testing'
+                    }
+                },
+                {
+                    'node': {
+                        'id': 'U2VydmljZVBhZ2VOb2RlOjM3OQ==',
+                        'title': 'File a citizen complaint'
+                    }
+                },
+                {
+                    'node': {
+                        'id': 'U2VydmljZVBhZ2VOb2RlOjM4MQ==',
+                        'title': 'Handle a parking ticket'
                     }
                 }
             ]
@@ -672,6 +696,18 @@ snapshots['test_information 1'] = {
                     'node': {
                         'id': 'SW5mb3JtYXRpb25QYWdlTm9kZTozNTY=',
                         'title': 'Report changes to pool, spa, public interactive water feature or fountain'
+                    }
+                },
+                {
+                    'node': {
+                        'id': 'SW5mb3JtYXRpb25QYWdlTm9kZTozNzI=',
+                        'title': 'Population history'
+                    }
+                },
+                {
+                    'node': {
+                        'id': 'SW5mb3JtYXRpb25QYWdlTm9kZTozNzc=',
+                        'title': 'Rules of municipal court'
                     }
                 }
             ]

@@ -1,0 +1,28 @@
+@import './variables';
+@import './application_banner';
+@import './primary_navigation';
+
+/*
+  Joplin UI Default Values
+*/
+
+body {
+  font-family: $coa-font-family;
+  color: $coa-text-color;
+  font-size: $coa-font-size-md;
+}
+
+// Some CSS attribures need the "*" because they don't auto-inherit by default.
+body * {
+  line-height: $coa-line-hight;
+  color: $coa-text-color;
+  text-transform: none; // Wagtail wants to make a bunch of stuff all caps. We don't want that - this stops that.
+}
+
+// Wagtail Global Overrides (Check if needed after droping old UI)
+#wagtail > div.wrapper, #wagtail > div.wrapper > main {
+  background-color: $coa-white-01 !important;
+}
+#wagtail .content {
+  background-color: $coa-white-01 !important;
+}
