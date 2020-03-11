@@ -26,12 +26,12 @@ import pytest
 class TestCollectPages(TestCase):
 
     def test_official_document_page(self):
-        home_page = HomePageFactory.create()
-        official_document_page = OfficialDocumentPageFactory.create(parent=home_page)
+        home_page = HomePageFactory()
+        official_document_page = OfficialDocumentPageFactory(parent=home_page)
         # returns our Official complaint and discipline documents page
         global_ids = collect_pages(official_document_page)
         # Which is linked on the Office of Police Oversight Department Page
-        department_page = DepartmentPageFactory.create(parent=home_page)
+        department_page = DepartmentPageFactory(parent=home_page)
         global_page_id = Node.to_global_id(department_page.get_verbose_name().lower(), department_page.id)
         self.assertTrue(global_page_id in global_ids)
 
