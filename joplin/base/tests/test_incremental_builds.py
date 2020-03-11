@@ -11,6 +11,7 @@ from pages.department_page.models import DepartmentPage
 from pages.service_page.models import ServicePage
 from pages.guide_page.models import GuidePage
 from pages.official_documents_page.models import OfficialDocumentPage
+from pages.official_docuemnts_page.factories import OfficialDocumentPageFactory
 
 from wagtail.documents.models import Document
 
@@ -22,6 +23,7 @@ import pytest
 class TestCollectPages(TestCase):
 
     def test_official_document_page(self):
+        OfficialDocumentPageFactory.create(parent=HomePage.objects.first())
         changed_page = OfficialDocumentPage.objects.get(id=128)
         # returns our Official complaint and discipline documents page
         global_ids = collect_pages(changed_page)

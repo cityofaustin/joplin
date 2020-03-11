@@ -15,7 +15,7 @@ from .constants import WYSIWYG_GENERAL, DEFAULT_MAX_LENGTH, SHORT_DESCRIPTION_LE
 
 from .theme import Theme
 from pages.topic_collection_page.models import TopicCollectionPage
-from .home_page import HomePage
+from pages.home_page.models import HomePage
 from .widgets import countMe, countMeTextArea
 from .site_settings import JanisBranchSettings
 from .deployment_log import DeploymentLog
