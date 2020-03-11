@@ -11,7 +11,9 @@ from pages.department_page.models import DepartmentPage
 from pages.service_page.models import ServicePage
 from pages.guide_page.models import GuidePage
 from pages.official_documents_page.models import OfficialDocumentPage
-from pages.official_docuemnts_page.factories import OfficialDocumentPageFactory
+from pages.official_documents_page.factories import OfficialDocumentPageFactory
+from pages.home_page.models import HomePage
+from pages.home_page.factories import HomePageFactory
 
 from wagtail.documents.models import Document
 
@@ -23,10 +25,10 @@ import pytest
 class TestCollectPages(TestCase):
 
     def test_official_document_page(self):
-        OfficialDocumentPageFactory.create(parent=HomePage.objects.first())
-        changed_page = OfficialDocumentPage.objects.get(id=128)
+        home_page = HomePageFactory.create()
+        official_document_page = OfficialDocumentPageFactory(parent=home_page)
         # returns our Official complaint and discipline documents page
-        global_ids = collect_pages(changed_page)
+        global_ids = collect_pages(official_document_page)
         # Which is linked on the Office of Police Oversight Department Page
         department_page = DepartmentPage.objects.get(id=27)
         global_page_id = Node.to_global_id(department_page.get_verbose_name().lower(), department_page.id)
