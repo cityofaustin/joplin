@@ -49,7 +49,7 @@ def collect_pages(instance):
     global_page_id = Node.to_global_id(instance.get_verbose_name(), instance.id)
     global_ids.append(global_page_id)
 
-    if instance.get_verbose_name() is 'Service Page' or 'Information Page':
+    if instance.get_verbose_name() is 'Service Page' or instance.get_verbose_name() is 'Information Page':
         guide_ids = find_pages_in_guides(instance.id)
         global_ids.extend(guide_ids)
 

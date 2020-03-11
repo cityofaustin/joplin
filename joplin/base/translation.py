@@ -2,8 +2,9 @@ from wagtail_modeltranslation.translation import register, TranslationOptions
 from wagtail.core.models import Page
 from wagtail.images.models import Image
 
-from base.models import TranslatedImage, Theme, Contact, Location, PhoneNumber, ContactDayAndDuration, Map, HomePage
+from base.models import TranslatedImage, Theme, Contact, Location, PhoneNumber, ContactDayAndDuration, Map
 
+from pages.base_page.models import JanisBasePage
 from pages.topic_collection_page.models import TopicCollectionPage
 from pages.topic_page.models import TopicPage, TopicPageTopicCollection, TopicPageTopPage
 from pages.service_page.models import ServicePage, ServicePageTopic, ServicePageContact
@@ -12,6 +13,7 @@ from pages.department_page.models import DepartmentPage, DepartmentPageDirector,
 from pages.official_documents_page.models import OfficialDocumentPage, OfficialDocumentPageOfficialDocument, OfficialDocumentPageTopic
 from pages.guide_page.models import GuidePage, GuidePageTopic, GuidePageContact
 from pages.form_container.models import FormContainer, FormContainerTopic
+from pages.home_page.models import HomePage
 
 
 from pages.location_page.models import LocationPage, LocationPageRelatedServices
@@ -28,6 +30,11 @@ class TranslatedImageTranslationOptions(TranslationOptions):
     fields = (
         'title',
     )
+
+
+@register(JanisBasePage)
+class JanisBasePageTranslationOptions(TranslationOptions):
+    pass
 
 
 @register(TopicPage)
