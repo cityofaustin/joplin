@@ -17,19 +17,19 @@ from wagtail.documents.models import Document
 from base.signals.janis_build_triggers import collect_pages, collect_pages_snippet
 import pytest
 
-#
-# @pytest.mark.django_db
-# class TestCollectPages(TestCase):
 
-    # def test_official_document_page(self):
-    #     changed_page = OfficialDocumentPage.objects.get(id=128)
-    #     # returns our Official complaint and discipline documents page
-    #     global_ids = collect_pages(changed_page)
-    #     # Which is linked on the Office of Police Oversight Department Page
-    #     department_page = DepartmentPage.objects.get(id=27)
-    #     global_page_id = Node.to_global_id(department_page.get_verbose_name().lower(), department_page.id)
-    #     self.assertTrue(global_page_id in global_ids)
-    #
+@pytest.mark.django_db
+class TestCollectPages(TestCase):
+
+    def test_official_document_page(self):
+        changed_page = OfficialDocumentPage.objects.get(id=128)
+        # returns our Official complaint and discipline documents page
+        global_ids = collect_pages(changed_page)
+        # Which is linked on the Office of Police Oversight Department Page
+        department_page = DepartmentPage.objects.get(id=27)
+        global_page_id = Node.to_global_id(department_page.get_verbose_name().lower(), department_page.id)
+        self.assertTrue(global_page_id in global_ids)
+
     # def test_service_page_in_guide_page(self):
     #     """
     #     Service Pages are inserted in Guide Pages in a ListBlock(PageChooserBlock) and are not connected by ForeignKeys
