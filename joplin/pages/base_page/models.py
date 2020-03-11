@@ -24,7 +24,7 @@ class JanisBasePage(Page):
     setup work smoothly
     """
 
-    parent_page_types = ['pages.HomePage']
+    parent_page_types = ['home_page.HomePage']
     subpage_types = []
     search_fields = Page.search_fields + [
         index.RelatedFields('owner', [

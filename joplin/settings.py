@@ -98,6 +98,7 @@ INSTALLED_APPS = [
     'pages.service_page',
     'pages.topic_collection_page',
     'pages.topic_page',
+    'pages.home_page',
 
 ]
 

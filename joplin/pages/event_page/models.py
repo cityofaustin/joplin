@@ -141,8 +141,6 @@ class EventPage(JanisBasePage):
         ),
     ]
 
-    parent_page_types = ['pages.HomePage']
-
 
 class EventPageFee(Orderable):
     page = ParentalKey(EventPage, related_name='fees', default=None)
