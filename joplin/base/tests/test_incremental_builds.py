@@ -6,6 +6,7 @@ from graphene import Node
 from base.models import Map, Contact
 from pages.information_page.models import InformationPage
 from pages.topic_page.models import TopicPage
+from pages.topic_page.factories import TopicPageFactory
 from pages.topic_collection_page.models import TopicCollectionPage
 from pages.department_page.models import DepartmentPage
 from pages.department_page.factories import DepartmentPageFactory
@@ -27,10 +28,9 @@ class TestCollectPages(TestCase):
 
     def test_official_document_page(self):
         home_page = HomePageFactory.create()
-        official_document_page = OfficialDocumentPageFactory.create(parent=home_page)
         topic_page = TopicPageFactory(parent=home_page)
+        official_document_page = OfficialDocumentPageFactory.create(parent=home_page)
 
-        # Se
 
         # When collecting page ids based on the updated page
         global_ids = collect_pages(official_document_page)
