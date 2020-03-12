@@ -6,25 +6,10 @@ from pages.official_documents_page.models import OfficialDocumentPage, OfficialD
 from pages.factory import PageFactory
 from pages.topic_page_factories import TopicPageFactory
 
+from joplin.pages.base_page.factories import JanisBasePageWithTopicsFactory
 
 
-class OfficialDocumentPageTopicFactory(factory.django.DjangoModelFactory):
-    page = factory.SubFactory('official_documents_page.factories.GuidePageFactory')
-    topic = TopicPageFactory(parent=home_page)
-
-    class Meta:
-        model = OfficialDocumentPageTopic
-
-
-
-
-
-
-class OfficialDocumentPageFactory(PageFactory):
+class OfficialDocumentPageFactory(JanisBasePageWithTopicsFactory):
     class Meta:
         model = OfficialDocumentPage
 
-    @factory.post_generation
-    def create_related_objects(self, create, extracted, **kwargs):
-        if create:
-            OfficialDocumentPageTopicFactory.create_batch(2, page=self)
