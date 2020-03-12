@@ -1,3 +1,9 @@
-from django.test import TestCase
+from pages.base_page.factories import JanisBasePageFactory
+import pytest
 
-# Create your tests here.
+
+@pytest.mark.django_db
+def test_base_page_coa_global_url():
+    page = JanisBasePageFactory.build(slug="global_slug", coa_global=True)
+    url = page.janis_url()
+    assert url == 'http://fake.base.url/global_slug/'

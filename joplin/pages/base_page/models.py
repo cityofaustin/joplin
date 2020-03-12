@@ -61,7 +61,7 @@ class JanisBasePage(Page):
         # todo verify this logic
         # todo write tests for this logic
         if self.coa_global:
-            return ['{base_url}/{page_slug}'.format(base_url=self.janis_url_base('publish_janis_branch'),
+            return ['{base_url}{page_slug}/'.format(base_url=self.janis_url_base('publish_janis_branch'),
                                                     page_slug=self.slug)]
 
         # If we're under departments
@@ -69,7 +69,7 @@ class JanisBasePage(Page):
         departments = self.departments()
         if len(departments) > 0:
             return [
-                '{base_url}/{department_slug}/{page_slug}'.format(base_url=self.janis_url_base('publish_janis_branch'),
+                '{base_url}{department_slug}/{page_slug}/'.format(base_url=self.janis_url_base('publish_janis_branch'),
                                                                   department_slug=department.slug, page_slug=self.slug)
                 for department in departments]
 
@@ -246,7 +246,12 @@ class JanisBasePage(Page):
             return os.getenv("JANIS_URL")
         else:
             branch_settings = JanisBranchSettings.objects.first()
-            return branch_settings.url_base(janis_branch)
+            if branch_settings:
+                return branch_settings.url_base(janis_branch)
+            else:
+                # If we've made it here, we don't have a base url
+                # let's just make up a fake one
+                return "http://fake.base.url/"
 
     # alias for url base function
     janis_preview_url_start = janis_url_base
