@@ -84,6 +84,20 @@ class DepartmentPage(JanisBasePage):
                     min_num=None, max_num=4)
     ]
 
+    def janis_urls(self):
+        """
+        Department pages should have at most one url
+        """
+
+        # check the one to one relationship of pages to department groups
+        # it's the only time we should have a url for a department page
+        # todo write tests for this
+        if self.department:
+            return ['{base_url}/{page_slug}'.format(base_url=self.janis_url_base('publish_janis_branch'),
+                                                    page_slug=self.slug)]
+
+        return []
+
 
 class DepartmentPageDirector(Orderable):
     page = ParentalKey(DepartmentPage, related_name='department_directors')

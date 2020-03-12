@@ -64,7 +64,14 @@ class JanisBasePage(Page):
             return ['{base_url}/{page_slug}'.format(base_url=self.janis_url_base('publish_janis_branch'),
                                                     page_slug=self.slug)]
 
-        # todo department logic here
+        # If we're under departments
+        # todo test this
+        departments = self.departments()
+        if len(departments) > 0:
+            return [
+                '{base_url}/{department_slug}/{page_slug}'.format(base_url=self.janis_url_base('publish_janis_branch'),
+                                                                  department_slug=department.slug, page_slug=self.slug)
+                for department in departments]
 
         # make sure we return an empty array if we don't have any urls
         # todo write tests for this logic
@@ -78,6 +85,7 @@ class JanisBasePage(Page):
             return urls[0]
 
         return '#'
+
     # def janis_url(self):
     #     """
     #     This function parses various attributes of related content types to construct the
