@@ -6,13 +6,13 @@ from base.models import TranslatedImage, Theme, Contact, Location, PhoneNumber, 
 
 from pages.base_page.models import JanisBasePage
 from pages.topic_collection_page.models import TopicCollectionPage
-from pages.topic_page.models import TopicPage, TopicPageTopicCollection, TopicPageTopPage
-from pages.service_page.models import ServicePage, ServicePageTopic, ServicePageContact
-from pages.information_page.models import InformationPage, InformationPageTopic, InformationPageContact
+from pages.topic_page.models import TopicPage, TopicPageTopPage
+from pages.service_page.models import ServicePage, ServicePageContact
+from pages.information_page.models import InformationPage, InformationPageContact
 from pages.department_page.models import DepartmentPage, DepartmentPageDirector, DepartmentPageContact, DepartmentPageTopPage, DepartmentPageRelatedPage
-from pages.official_documents_page.models import OfficialDocumentPage, OfficialDocumentPageOfficialDocument, OfficialDocumentPageTopic
-from pages.guide_page.models import GuidePage, GuidePageTopic, GuidePageContact
-from pages.form_container.models import FormContainer, FormContainerTopic
+from pages.official_documents_page.models import OfficialDocumentPage, OfficialDocumentPageOfficialDocument
+from pages.guide_page.models import GuidePage, GuidePageContact
+from pages.form_container.models import FormContainer
 from pages.home_page.models import HomePage
 
 

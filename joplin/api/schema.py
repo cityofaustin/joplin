@@ -202,13 +202,6 @@ class TopicCollectionNode(DjangoObjectType):
         interfaces = [graphene.Node]
 
 
-class TopicPageTopicCollectionNode(DjangoObjectType):
-    class Meta:
-        model = TopicPageTopicCollection
-        interfaces = [graphene.Node]
-        filter_fields = ['topiccollection']
-
-
 class TopicNode(DjangoObjectType):
     class Meta:
         model = TopicPage
@@ -398,9 +391,6 @@ class EventPageFeeNode(DjangoObjectType):
         interfaces = [graphene.Node]
 
 
-
-
-
 class ContactNode(DjangoObjectType):
     class Meta:
         model = Contact
@@ -429,13 +419,6 @@ class GuidePageContactNode(DjangoObjectType):
     class Meta:
         model = GuidePageContact
         interfaces = [graphene.Node]
-
-
-class ServicePageTopicNode(DjangoObjectType):
-    class Meta:
-        model = ServicePageTopic
-        interfaces = [graphene.Node]
-        filter_fields = ['topic']
 
 
 class TranslatedImageNode(DjangoObjectType):
@@ -779,20 +762,6 @@ class InformationPageContactNode(DjangoObjectType):
         interfaces = [graphene.Node]
 
 
-class InformationPageTopicNode(DjangoObjectType):
-    class Meta:
-        model = InformationPageTopic
-        interfaces = [graphene.Node]
-        filter_fields = ['topic']
-
-
-class FormContainerTopicNode(DjangoObjectType):
-    class Meta:
-        model = FormContainerTopic
-        interfaces = [graphene.Node]
-        filter_fields = ['topic']
-
-
 class DepartmentPageContactNode(DjangoObjectType):
     class Meta:
         model = DepartmentPageContact
@@ -886,20 +855,6 @@ class TopicPageTopPageNode(DjangoObjectType):
         interfaces = [graphene.Node]
 
 
-class OfficialDocumentPageTopicNode(DjangoObjectType):
-    class Meta:
-        model = OfficialDocumentPageTopic
-        interfaces = [graphene.Node]
-        filter_fields = ['topic']
-
-
-class GuidePageTopicNode(DjangoObjectType):
-    class Meta:
-        model = GuidePageTopic
-        interfaces = [graphene.Node]
-        filter_fields = ['topic']
-
-
 def get_page_with_preview_data(page, session):
     # Wagtail saves preview data in the session. We want to mimick what they're doing to generate the built-in preview.
     # https://github.com/wagtail/wagtail/blob/db6d36845f3f2c5d7009a22421c2efab9968aa24/wagtail/admin/views/pages.py#L544
@@ -939,13 +894,7 @@ class Query(graphene.ObjectType):
         OfficialDocumentPageNode)
     all_guide_pages = DjangoFilterConnectionField(GuidePageNode)
     all_form_containers = DjangoFilterConnectionField(FormContainerNode)
-    all_topic_page_topic_collections = DjangoFilterConnectionField(TopicPageTopicCollectionNode)
-    all_service_page_topics = DjangoFilterConnectionField(ServicePageTopicNode)
-    all_information_page_topics = DjangoFilterConnectionField(InformationPageTopicNode)
-    all_official_document_page_topics = DjangoFilterConnectionField(OfficialDocumentPageTopicNode)
-    all_guide_page_topics = DjangoFilterConnectionField(GuidePageTopicNode)
     all_location_pages = DjangoFilterConnectionField(LocationPageNode)
-    all_form_container_topics = DjangoFilterConnectionField(FormContainerTopicNode)
     all_event_pages = DjangoFilterConnectionField(EventPageNode, filterset_class=EventFilter)
 
     def resolve_site_structure(self, resolve_info):
