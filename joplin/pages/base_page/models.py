@@ -49,128 +49,157 @@ class JanisBasePage(Page):
 
     coa_global = models.BooleanField(default=False, verbose_name='Make this a top level page')
 
+    def janis_urls(self):
+        """
+        This should handle coa_global and department stuff
+        """
+
+        # If we're global, even if we have a department, we should only exist at
+        # /page_slug
+        # and not at
+        # /department_slug/page_slug
+        # todo verify this logic
+        # todo write tests for this logic
+        if self.coa_global:
+            return ['{base_url}/{page_slug}'.format(base_url=self.janis_url_base('publish_janis_branch'),
+                                                    page_slug=self.slug)]
+
+        # todo department logic here
+
+        # make sure we return an empty array if we don't have any urls
+        # todo write tests for this logic
+        # todo test not null
+        # todo test length 0
+        return []
+
     def janis_url(self):
-        """
-        This function parses various attributes of related content types to construct the
-        expected url structure for janis.
+        urls = self.janis_urls()
+        if len(urls) > 0:
+            return urls[0]
 
-        For attributes with multiple relations, it ONLY takes the FIRST one.
-        """
-        try:
-            """
-             These use ternary operators with some appropriate conditionals
-             the idea is: return this value in these cases or tell use you got
-             nothing (see the privacy policy info page for example).
-
-             'None' responses get filtered out and removed from the URL path.
-
-             TODO:
-             make this more abstract(potentially not by content type)
-             further check if the order of conditionals affects performance
-             Better utilization of querysets may be possible for better performance
-            """
-            page_slug = self.slug or None
-            has_no_theme = [
-                'service page',
-                'topic page',
-                'information page',
-                'department page',
-                'guide page',
-                'official document page',
-                'form container',
-                'location page',
-                'event page'
-            ]
-            has_no_topic_collection = has_no_theme
-
-            has_no_topic = [
-                'topic page',
-                'topic collection page',
-                'department page',
-                'location page',
-                'event page'
-            ]
-
-            theme_slug = (
-                self.theme.slug
-                if self.content_type.name not in has_no_theme
-                else None
-            )
-            # https://docs.djangoproject.com/en/2.2/ref/models/querysets/#first
-            topic_collection_slug = (
-                self.topiccollections.first().topiccollection.slug
-                if
-                (
-                    self.content_type.name not in has_no_topic_collection and
-                    # https://docs.djangoproject.com/en/2.2/ref/models/querysets/#exists
-                    self.topiccollections.exists()
-                )
-                else None
-            )
-            topic_slug = (
-                self.topics.first().topic.slug
-                if
-                (
-                    self.content_type.name not in has_no_topic and
-                    self.topics.exists()
-                )
-                else None
-            )
-
-            # add hardcoded language path to base url
-            base_url = f"{self.janis_url_base('publish_janis_branch')}/en"
-
-            # Quick location page exception
-            if self.content_type.name == 'location page':
-                location_url = base_url + '/location/' + page_slug
-                return location_url
-
-            # Quick event page exception
-            if self.content_type.name == 'event page':
-                event_url = base_url + f'/event/{self.date.year}/{self.date.month}/{self.date.day}/{page_slug}/'
-                return event_url
-
-            # attributes for the url are needed by not discovered yet lets fetch them
-            # looking for missing elements, deducing content type from what works and what dosen't
-            # this is pretty ugly and ought to be cleaned up
-            if theme_slug is None and self.content_type.name != 'department page':
-                try:
-                    theme_slug = self.topics.first().topic.topiccollections.first().topiccollection.theme.slug or None
-                    topic_collection_slug = self.topics.first().topic.topiccollections.first().topiccollection.slug or None
-                except AttributeError as e:
-                    try:
-                        theme_slug = self.topiccollections.first().topiccollection.theme.slug or None
-                        topic_collection_slug = self.topiccollections.first().topiccollection.slug or None
-                    except AttributeError as e:
-                        # this is for pages just under departments
-                        theme_slug = self.group_permissions.all()[0].group.department.department_page.slug or None
-                    finally:
-                        paths_list = [
-                            base_url,
-                            theme_slug,
-                            topic_collection_slug,
-                            topic_slug,
-                            page_slug]
-                        janis_url = '/'.join(filter(None, (paths_list)))
-                        return janis_url
-            # collect all our path elements
-            paths_list = [
-                base_url,
-                theme_slug,
-                topic_collection_slug,
-                topic_slug,
-                page_slug
-            ]
-            # join them together, filtering out empty ones
-
-            janis_url = '/'.join(filter(None, (paths_list)))
-            return janis_url
-        except Exception as e:
-            # right now this is a catch-all,
-            print("!janis url error!:", self.title, e)
-            print(traceback.format_exc())
-            return "#"
-            pass
+        return '#'
+    # def janis_url(self):
+    #     """
+    #     This function parses various attributes of related content types to construct the
+    #     expected url structure for janis.
+    #
+    #     For attributes with multiple relations, it ONLY takes the FIRST one.
+    #     """
+    #     try:
+    #         """
+    #          These use ternary operators with some appropriate conditionals
+    #          the idea is: return this value in these cases or tell use you got
+    #          nothing (see the privacy policy info page for example).
+    #
+    #          'None' responses get filtered out and removed from the URL path.
+    #
+    #          TODO:
+    #          make this more abstract(potentially not by content type)
+    #          further check if the order of conditionals affects performance
+    #          Better utilization of querysets may be possible for better performance
+    #         """
+    #         page_slug = self.slug or None
+    #         has_no_theme = [
+    #             'service page',
+    #             'topic page',
+    #             'information page',
+    #             'department page',
+    #             'guide page',
+    #             'official document page',
+    #             'form container',
+    #             'location page',
+    #             'event page'
+    #         ]
+    #         has_no_topic_collection = has_no_theme
+    #
+    #         has_no_topic = [
+    #             'topic page',
+    #             'topic collection page',
+    #             'department page',
+    #             'location page',
+    #             'event page'
+    #         ]
+    #
+    #         theme_slug = (
+    #             self.theme.slug
+    #             if self.content_type.name not in has_no_theme
+    #             else None
+    #         )
+    #         # https://docs.djangoproject.com/en/2.2/ref/models/querysets/#first
+    #         topic_collection_slug = (
+    #             self.topiccollections.first().topiccollection.slug
+    #             if
+    #             (
+    #                 self.content_type.name not in has_no_topic_collection and
+    #                 # https://docs.djangoproject.com/en/2.2/ref/models/querysets/#exists
+    #                 self.topiccollections.exists()
+    #             )
+    #             else None
+    #         )
+    #         topic_slug = (
+    #             self.topics.first().topic.slug
+    #             if
+    #             (
+    #                 self.content_type.name not in has_no_topic and
+    #                 self.topics.exists()
+    #             )
+    #             else None
+    #         )
+    #
+    #         # add hardcoded language path to base url
+    #         base_url = f"{self.janis_url_base('publish_janis_branch')}/en"
+    #
+    #         # Quick location page exception
+    #         if self.content_type.name == 'location page':
+    #             location_url = base_url + '/location/' + page_slug
+    #             return location_url
+    #
+    #         # Quick event page exception
+    #         if self.content_type.name == 'event page':
+    #             event_url = base_url + f'/event/{self.date.year}/{self.date.month}/{self.date.day}/{page_slug}/'
+    #             return event_url
+    #
+    #         # attributes for the url are needed by not discovered yet lets fetch them
+    #         # looking for missing elements, deducing content type from what works and what dosen't
+    #         # this is pretty ugly and ought to be cleaned up
+    #         if theme_slug is None and self.content_type.name != 'department page':
+    #             try:
+    #                 theme_slug = self.topics.first().topic.topiccollections.first().topiccollection.theme.slug or None
+    #                 topic_collection_slug = self.topics.first().topic.topiccollections.first().topiccollection.slug or None
+    #             except AttributeError as e:
+    #                 try:
+    #                     theme_slug = self.topiccollections.first().topiccollection.theme.slug or None
+    #                     topic_collection_slug = self.topiccollections.first().topiccollection.slug or None
+    #                 except AttributeError as e:
+    #                     # this is for pages just under departments
+    #                     theme_slug = self.group_permissions.all()[0].group.department.department_page.slug or None
+    #                 finally:
+    #                     paths_list = [
+    #                         base_url,
+    #                         theme_slug,
+    #                         topic_collection_slug,
+    #                         topic_slug,
+    #                         page_slug]
+    #                     janis_url = '/'.join(filter(None, (paths_list)))
+    #                     return janis_url
+    #         # collect all our path elements
+    #         paths_list = [
+    #             base_url,
+    #             theme_slug,
+    #             topic_collection_slug,
+    #             topic_slug,
+    #             page_slug
+    #         ]
+    #         # join them together, filtering out empty ones
+    #
+    #         janis_url = '/'.join(filter(None, (paths_list)))
+    #         return janis_url
+    #     except Exception as e:
+    #         # right now this is a catch-all,
+    #         print("!janis url error!:", self.title, e)
+    #         print(traceback.format_exc())
+    #         return "#"
+    #         pass
 
     def janis_preview_url_end(self, revision=None):
         """
