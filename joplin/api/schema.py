@@ -734,7 +734,7 @@ class SiteStructure(graphene.ObjectType):
     def resolve_structure_json(self, resolve_info, *args, **kwargs):
         # our structure here can be id: page dict
         site_structure = []
-        topic_collections = TopicCollectionPage.objects.all()
+        topic_collections = TopicCollectionPage.objects.filter(live=True)
         for topic_collection in topic_collections:
             if not topic_collection.theme:
                 continue
@@ -742,7 +742,7 @@ class SiteStructure(graphene.ObjectType):
             topic_collection_global_id = graphene.Node.to_global_id('TopicCollectionNode', topic_collection.id)
             site_structure.append({'url': f'/{topic_collection.theme.slug}/{topic_collection.slug}/', 'type': 'topic collection', 'id': topic_collection_global_id})
 
-        topics = TopicPage.objects.all()
+        topics = TopicPage.objects.filter(live=True)
         for topic in topics:
             topic_global_id = graphene.Node.to_global_id('TopicNode', topic.id)
             topic_tcs = topic.topiccollections.all()
@@ -753,7 +753,7 @@ class SiteStructure(graphene.ObjectType):
                 topic_tc_global_id = graphene.Node.to_global_id('TopicCollectionNode', tc.topiccollection.id)
                 site_structure.append({'url': f'/{tc.topiccollection.theme.slug}/{tc.topiccollection.slug}/{topic.slug}/', 'type': 'topic', 'id': topic_global_id, 'parent_topic_collection': topic_tc_global_id})
 
-        departments = DepartmentPage.objects.all()
+        departments = DepartmentPage.objects.filter(live=True)
         for department in departments:
             department_global_id = graphene.Node.to_global_id('DepartmentNode', department.id)
             site_structure.append({'url': f'/{department.slug}/', 'type': 'department', 'id': department_global_id})
@@ -864,6 +864,7 @@ class TopicPageTopPageNode(DjangoObjectType):
     slug = graphene.String()
     page_id = graphene.ID()
     page_type = graphene.String()
+    live = graphene.Boolean()
 
     def resolve_page_id(self, info):
         return get_global_id_from_content_type(self)
@@ -876,6 +877,9 @@ class TopicPageTopPageNode(DjangoObjectType):
 
     def resolve_page_type(self, info):
         return self.page.content_type.name
+
+    def resolve_live(self, info):
+        return get_page_from_content_type(self).live
 
     class Meta:
         model = TopicPageTopPage
