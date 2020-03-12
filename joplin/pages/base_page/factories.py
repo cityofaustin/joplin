@@ -2,9 +2,8 @@ import factory
 import wagtail_factories
 from django.utils.text import slugify
 from wagtail.core.models import Collection, Page
-from pages.official_documents_page.models import OfficialDocumentPage, OfficialDocumentPageTopic
 from pages.factory import PageFactory
-from pages.topic_page_factories import TopicPageFactory
+from pages.topic_page.factories import TopicPageFactory
 
 from pages.base_page.models import JanisBasePage
 from pages.topic_page.models import JanisBasePageWithTopics, JanisBasePageTopic
