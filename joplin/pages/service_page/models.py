@@ -20,11 +20,12 @@ from base.models.widgets import countMe, countMeTextArea
 
 from publish_preflight.requirements import FieldPublishRequirement, StreamFieldPublishRequirement, ConditionalPublishRequirement, RelationPublishRequirement, DepartmentPublishRequirement
 
+from joplin.pages.topic_page.models import JanisBasePageWithTopics
 
 WYSIWYG_SERVICE_STEP = ['ul', 'link', 'code', 'rich-text-button-link', 'document-link']
 
 
-class ServicePage(JanisBasePage):
+class ServicePage(JanisBasePageWithTopics):
     janis_url_page_type = "services"
 
     steps = StreamField(
@@ -142,15 +143,6 @@ class ServicePage(JanisBasePage):
             classname='coa-multiField-nopadding'
         ),
         InlinePanel('contacts', label='Contacts'),
-    ]
-
-
-class ServicePageTopic(ClusterableModel):
-    page = ParentalKey(ServicePage, related_name='topics')
-    topic = models.ForeignKey('topic_page.TopicPage', verbose_name='Select a Topic', related_name='+', on_delete=models.CASCADE)
-
-    panels = [
-        PageChooserPanel('topic'),
     ]
 
 

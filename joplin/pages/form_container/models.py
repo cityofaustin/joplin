@@ -11,7 +11,10 @@ from pages.base_page.models import JanisBasePage
 from base.models.widgets import countMe, countMeTextArea
 from publish_preflight.requirements import FieldPublishRequirement, RelationPublishRequirement, ConditionalPublishRequirement, DepartmentPublishRequirement
 
-class FormContainer(JanisBasePage):
+from joplin.pages.topic_page.models import JanisBasePageWithTopics
+
+
+class FormContainer(JanisBasePageWithTopics):
     janis_url_page_type = "form"
     base_form_class = FormContainerForm
 
@@ -42,14 +45,3 @@ class FormContainer(JanisBasePage):
         FieldPanel('description', widget=countMeTextArea),
         FieldPanel('form_url'),
     ]
-
-class FormContainerTopic(ClusterableModel):
-    page = ParentalKey(FormContainer, related_name='topics')
-    topic = models.ForeignKey('topic_page.TopicPage', verbose_name='Select a Topic', related_name='+', on_delete=models.CASCADE)
-
-    panels = [
-        PageChooserPanel('topic'),
-    ]
-
-    def __str__(self):
-        return self.topic.text

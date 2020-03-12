@@ -19,8 +19,10 @@ from countable_field import widgets
 
 from publish_preflight.requirements import FieldPublishRequirement, RelationPublishRequirement, ConditionalPublishRequirement, DepartmentPublishRequirement
 
+from joplin.pages.topic_page.models import JanisBasePageWithTopics
 
-class InformationPage(JanisBasePage):
+
+class InformationPage(JanisBasePageWithTopics):
     """
     Basic page model primarly for providing informational content
     """
@@ -89,15 +91,3 @@ class InformationPageContact(ClusterableModel):
 
     def __str__(self):
         return self.contact.name
-
-
-class InformationPageTopic(ClusterableModel):
-    page = ParentalKey(InformationPage, related_name='topics')
-    topic = models.ForeignKey('topic_page.TopicPage', verbose_name='Select a Topic', related_name='+', on_delete=models.CASCADE)
-
-    panels = [
-        PageChooserPanel('topic'),
-    ]
-
-    def __str__(self):
-        return self.topic.text

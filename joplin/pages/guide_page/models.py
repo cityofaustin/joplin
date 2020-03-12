@@ -21,6 +21,8 @@ from base.models.widgets import countMe, countMeTextArea
 
 from publish_preflight.requirements import FieldPublishRequirement, RelationPublishRequirement, StreamFieldPublishRequirement, ConditionalPublishRequirement, DepartmentPublishRequirement
 
+from joplin.pages.topic_page.models import JanisBasePageWithTopics
+
 
 def streamfield_has_pages(stream_value):
     """
@@ -38,7 +40,7 @@ def streamfield_has_pages(stream_value):
     return False
 
 
-class GuidePage(JanisBasePage):
+class GuidePage(JanisBasePageWithTopics):
     """
     A guide page aggregates several pages together into a user-friendly view
     Since the number of related pages in a section could be arbitrary, it's
@@ -96,18 +98,6 @@ class GuidePage(JanisBasePage):
         StreamFieldPanel('sections'),
         InlinePanel('contacts', label='Contacts'),
     ]
-
-
-class GuidePageTopic(ClusterableModel):
-    page = ParentalKey(GuidePage, related_name='topics')
-    topic = models.ForeignKey('topic_page.TopicPage', verbose_name='Select a Topic', related_name='+', on_delete=models.CASCADE)
-
-    panels = [
-        PageChooserPanel('topic'),
-    ]
-
-    def __str__(self):
-        return self.topic.text
 
 
 class GuidePageContact(ClusterableModel):
