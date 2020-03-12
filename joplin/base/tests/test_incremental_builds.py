@@ -26,6 +26,7 @@ import pytest
 @pytest.mark.django_db
 class TestCollectPages(TestCase):
 
+    @pytest.mark.django_db
     def test_official_document_page(self):
         home_page = HomePageFactory.create()
         # topic_page = TopicPageFactory(parent=home_page)

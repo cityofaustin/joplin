@@ -3,12 +3,12 @@ from wagtail.core.models import Page
 from users.models import User
 from base.models import HomePage
 from pages.information_page.models import InformationPage
-from pages.topic_page.models import TopicPage, TopicPageTopicCollection
+from pages.topic_page.models import TopicPage
 from pages.topic_collection_page.models import TopicCollectionPage
 from pages.department_page.models import DepartmentPage
 
 
-# Todo: replace this with 
+# Todo: replace this with
 def load_test_data():
     home = HomePage.objects.first()
 

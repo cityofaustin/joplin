@@ -39,8 +39,8 @@ def register_factories(factories):
             register(object)
 
 
-register_factories(information_page_factories)
-register_factories(department_page_factories)
+# register_factories(information_page_factories)
+# register_factories(department_page_factories)
 register_factories(official_document_page_factories)
 # register_factories(service_page)
 # register_factories(guide_page)

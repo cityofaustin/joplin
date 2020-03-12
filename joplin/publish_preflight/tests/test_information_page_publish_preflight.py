@@ -4,8 +4,8 @@ from django.test import TestCase
 from .utils.make_form import make_form
 from .utils.load_test_data import load_test_data
 
-from pages.information_page.models import InformationPage, InformationPageTopic
-from pages.topic_page.models import TopicPage, TopicPageTopicCollection
+from pages.information_page.models import InformationPage
+from pages.topic_page.models import TopicPage
 from pages.topic_collection_page.models import TopicCollectionPage
 from pages.department_page.models import DepartmentPage
 import pytest
