@@ -6,7 +6,7 @@ from django.db import models, ProgrammingError
 from django.conf import settings
 from wagtail.search import index
 from wagtail.utils.decorators import cached_classmethod
-from wagtail.admin.edit_handlers import FieldPanel, ObjectList, TabbedInterface
+from wagtail.admin.edit_handlers import FieldPanel, ObjectList, TabbedInterface, PageChooserPanel
 from wagtail.core.models import Page
 from wagtail.core.fields import RichTextField
 from flags.state import flag_enabled
@@ -252,10 +252,10 @@ class JanisBasePage(Page):
     def departments(self):
         department_pages = []
         for group_permission in self.group_permissions.all():
-            if(group_permission and
-               group_permission.group and
-               group_permission.group.department and
-               group_permission.group.department.department_page):
+            if (group_permission and
+                group_permission.group and
+                group_permission.group.department and
+                group_permission.group.department.department_page):
                 department_pages.append(group_permission.group.department.department_page)
         return department_pages
 
@@ -265,7 +265,8 @@ class JanisBasePage(Page):
             return cls.edit_handler.bind_to(model=cls)
 
         editor_panels = [
-            ObjectList(cls.content_panels + [AdminOnlyFieldPanel('coa_global', classname="admin-only-field")], heading='Content'),
+            ObjectList(cls.content_panels + [AdminOnlyFieldPanel('coa_global', classname="admin-only-field")],
+                       heading='Content'),
             ObjectList(cls.notes_content_panel, heading='Notes')
 
         ]

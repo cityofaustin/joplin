@@ -15,12 +15,13 @@ from pages.official_documents_page.models import OfficialDocumentPage
 from base.forms import TopicPageForm
 
 from pages.base_page.models import JanisBasePage
+from pages.topic_collection_page.models import JanisBasePageWithTopicCollections
 from base.models.translated_image import TranslatedImage
 from base.models.widgets import countMe, countMeTextArea
 from publish_preflight.requirements import RelationPublishRequirement
 
 
-class TopicPage(JanisBasePage):
+class TopicPage(JanisBasePageWithTopicCollections):
     janis_url_page_type = "topic"
 
     description = models.TextField(blank=True)
@@ -31,7 +32,7 @@ class TopicPage(JanisBasePage):
 
     publish_requirements = (
         RelationPublishRequirement('top_pages'),
-        RelationPublishRequirement('topiccollections'),
+        RelationPublishRequirement('topic_collections'),
     )
 
     content_panels = [
@@ -41,7 +42,7 @@ class TopicPage(JanisBasePage):
         FieldPanel('title_vi'),
         FieldPanel('description', widget=countMeTextArea),
         ImageChooserPanel('image'),
-        InlinePanel('topiccollections', label='Topic Collections this page belongs to'),
+        InlinePanel('topic_collections', label='Topic Collections this page belongs to'),
         InlinePanel('top_pages', heading='Links to top pages', label='top link',
                     help_text='Add links to 1-4 top pages or guides (4 maximum allowed).',
                     min_num=None, max_num=4),
@@ -60,10 +61,18 @@ class TopicPageTopPage(Orderable):
         return self.page.title
 
 
-class TopicPageTopicCollection(ClusterableModel):
-    page = ParentalKey(TopicPage, related_name='topiccollections')
-    topiccollection = models.ForeignKey('topic_collection_page.TopicCollectionPage', verbose_name='Select a Topic Collection', related_name='+', on_delete=models.CASCADE)
+class JanisBasePageWithTopics(JanisBasePage):
+    pass
+
+
+class JanisBasePageTopic(ClusterableModel):
+    page = ParentalKey(JanisBasePageWithTopics, related_name='topics')
+    topic = models.ForeignKey('topic_page.TopicPage', verbose_name='Select a Topic', related_name='+',
+                              on_delete=models.CASCADE)
 
     panels = [
-        PageChooserPanel('topiccollection'),
+        PageChooserPanel('topic'),
     ]
+
+    def __str__(self):
+        return self.topic.text

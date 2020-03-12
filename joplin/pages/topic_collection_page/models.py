@@ -1,6 +1,8 @@
 from django.db import models
+from modelcluster.fields import ParentalKey
+from modelcluster.models import ClusterableModel
 
-from wagtail.admin.edit_handlers import FieldPanel, InlinePanel
+from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, PageChooserPanel
 from wagtail.images.edit_handlers import ImageChooserPanel
 
 from base.forms import TopicCollectionPageForm
@@ -12,14 +14,14 @@ from publish_preflight.requirements import FieldPublishRequirement
 
 
 class TopicCollectionPage(JanisBasePage):
-    janis_url_page_type = "topiccollection"
+    janis_url_page_type = "topic_collection"
 
     description = models.TextField(blank=True)
 
     theme = models.ForeignKey(
         'base.Theme',
         on_delete=models.PROTECT,
-        related_name='topicCollectionPages',
+        related_name='topic_collection_pages',
         null=True, blank=True,
     )
 
@@ -39,5 +41,18 @@ class TopicCollectionPage(JanisBasePage):
         FieldPanel('description', widget=countMeTextArea),
         FieldPanel('theme'),
         ImageChooserPanel('image'),
-        InlinePanel('topiccollections', label='Topic Collections this page belongs to'),
+    ]
+
+
+class JanisBasePageWithTopicCollections(JanisBasePage):
+    pass
+
+
+class JanisBasePageTopicCollection(ClusterableModel):
+    page = ParentalKey(JanisBasePageWithTopicCollections, related_name='topic_collections')
+    topic_collection = models.ForeignKey('topic_collection_page.TopicCollectionPage',
+                                         verbose_name='Select a Topic Collection', related_name='+',
+                                         on_delete=models.CASCADE)
+    panels = [
+        PageChooserPanel('topic_collection'),
     ]

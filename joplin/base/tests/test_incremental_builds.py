@@ -28,15 +28,16 @@ class TestCollectPages(TestCase):
 
     def test_official_document_page(self):
         home_page = HomePageFactory.create()
-        topic_page = TopicPageFactory(parent=home_page)
+        # topic_page = TopicPageFactory(parent=home_page)
         official_document_page = OfficialDocumentPageFactory.create(parent=home_page)
+
 
 
         # When collecting page ids based on the updated page
         global_ids = collect_pages(official_document_page)
 
         # Make sure we found the department page id
-        global_page_id = Node.to_global_id(department_page.get_verbose_name().lower(), department_page.id)
+        # global_page_id = Node.to_global_id(department_page.get_verbose_name().lower(), department_page.id)
         self.assertTrue(global_page_id in global_ids)
 
     # def test_service_page_in_guide_page(self):

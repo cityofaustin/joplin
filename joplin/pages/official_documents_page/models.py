@@ -10,12 +10,13 @@ from wagtail.core.models import Orderable
 from wagtail.documents.models import Document
 from wagtail.documents.edit_handlers import DocumentChooserPanel
 
-from pages.base_page.models import JanisBasePage
+from pages.base_page.models import JanisBasePage, JanisBasePageWithTopics
 
 from base.models.constants import DEFAULT_MAX_LENGTH
 from base.models.widgets import countMe, countMeTextArea, AUTHOR_LIMITS
 from countable_field import widgets
-from publish_preflight.requirements import FieldPublishRequirement, RelationPublishRequirement, ConditionalPublishRequirement, DepartmentPublishRequirement
+from publish_preflight.requirements import FieldPublishRequirement, RelationPublishRequirement, \
+    ConditionalPublishRequirement, DepartmentPublishRequirement
 
 """
 This is a page that displays a list of Official Documents (model: umentPageOfficialDocument).
@@ -25,14 +26,15 @@ Eventually the OfficialDocumentPageOfficialDocument should be replaced by a mode
 """
 
 
-class OfficialDocumentPage(JanisBasePage):
+class OfficialDocumentPage(JanisBasePageWithTopics):
     janis_url_page_type = "official_document"
     base_form_class = OfficialDocumentPageForm
 
     description = models.TextField(blank=True)
 
     publish_requirements = (
-        FieldPublishRequirement("description", langs=["en"], message="You need to write a description before publishing"),
+        FieldPublishRequirement("description", langs=["en"],
+                                message="You need to write a description before publishing"),
         RelationPublishRequirement('official_documents'),
         ConditionalPublishRequirement(
             RelationPublishRequirement("topics"),
@@ -49,7 +51,8 @@ class OfficialDocumentPage(JanisBasePage):
         FieldPanel('title_vi'),
         FieldPanel('description', widget=countMeTextArea),
         InlinePanel('topics', label='Topics'),
-        InlinePanel('official_documents', label="Documents", heading="Entries will be listed by document date (newest first)."),
+        InlinePanel('official_documents', label="Documents",
+                    heading="Entries will be listed by document date (newest first)."),
     ]
 
 
@@ -83,15 +86,3 @@ class OfficialDocumentPageOfficialDocument(Orderable):
 
     class Meta:
         indexes = [models.Index(fields=['-date'])]
-
-
-class OfficialDocumentPageTopic(ClusterableModel):
-    page = ParentalKey(OfficialDocumentPage, related_name='topics')
-    topic = models.ForeignKey('topic_page.TopicPage', verbose_name='Select a Topic', related_name='+', on_delete=models.CASCADE)
-
-    panels = [
-        PageChooserPanel('topic'),
-    ]
-
-    def __str__(self):
-        return self.topic.text
