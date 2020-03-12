@@ -21,7 +21,7 @@ from base.models.widgets import countMe, countMeTextArea
 
 from publish_preflight.requirements import FieldPublishRequirement, RelationPublishRequirement, StreamFieldPublishRequirement, ConditionalPublishRequirement, DepartmentPublishRequirement
 
-from joplin.pages.topic_page.models import JanisBasePageWithTopics
+from pages.topic_page.models import JanisBasePageWithTopics
 
 
 def streamfield_has_pages(stream_value):

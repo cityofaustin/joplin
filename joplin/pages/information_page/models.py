@@ -19,7 +19,7 @@ from countable_field import widgets
 
 from publish_preflight.requirements import FieldPublishRequirement, RelationPublishRequirement, ConditionalPublishRequirement, DepartmentPublishRequirement
 
-from joplin.pages.topic_page.models import JanisBasePageWithTopics
+from pages.topic_page.models import JanisBasePageWithTopics
 
 
 class InformationPage(JanisBasePageWithTopics):

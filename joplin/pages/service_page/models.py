@@ -20,7 +20,7 @@ from base.models.widgets import countMe, countMeTextArea
 
 from publish_preflight.requirements import FieldPublishRequirement, StreamFieldPublishRequirement, ConditionalPublishRequirement, RelationPublishRequirement, DepartmentPublishRequirement
 
-from joplin.pages.topic_page.models import JanisBasePageWithTopics
+from pages.topic_page.models import JanisBasePageWithTopics
 
 WYSIWYG_SERVICE_STEP = ['ul', 'link', 'code', 'rich-text-button-link', 'document-link']
 

@@ -11,7 +11,7 @@ from pages.base_page.models import JanisBasePage
 from base.models.widgets import countMe, countMeTextArea
 from publish_preflight.requirements import FieldPublishRequirement, RelationPublishRequirement, ConditionalPublishRequirement, DepartmentPublishRequirement
 
-from joplin.pages.topic_page.models import JanisBasePageWithTopics
+from pages.topic_page.models import JanisBasePageWithTopics
 
 
 class FormContainer(JanisBasePageWithTopics):

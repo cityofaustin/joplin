@@ -6,8 +6,8 @@ from pages.official_documents_page.models import OfficialDocumentPage, OfficialD
 from pages.factory import PageFactory
 from pages.topic_page_factories import TopicPageFactory
 
-from joplin.pages.base_page.models import JanisBasePage
-from joplin.pages.topic_page.models import JanisBasePageWithTopics, JanisBasePageTopic
+from pages.base_page.models import JanisBasePage
+from pages.topic_page.models import JanisBasePageWithTopics, JanisBasePageTopic
 
 
 class JanisBasePageFactory(PageFactory):

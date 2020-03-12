@@ -6,7 +6,7 @@ from pages.official_documents_page.models import OfficialDocumentPage, OfficialD
 from pages.factory import PageFactory
 from pages.topic_page_factories import TopicPageFactory
 
-from joplin.pages.base_page.factories import JanisBasePageWithTopicsFactory
+from pages.base_page.factories import JanisBasePageWithTopicsFactory
 
 
 class OfficialDocumentPageFactory(JanisBasePageWithTopicsFactory):
