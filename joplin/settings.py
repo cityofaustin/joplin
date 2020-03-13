@@ -317,7 +317,7 @@ WAGTAIL_AUTO_UPDATE_PREVIEW = True
 BASE_URL = 'https://austintexas.io'
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'fake_key')
 
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
