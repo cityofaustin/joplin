@@ -1,0 +1,59 @@
+from pages.topic_collection_page.factories import TopicCollectionPageFactory, JanisBasePageWithTopicCollectionsFactory
+import pytest
+
+
+# If we don't have a theme
+@pytest.mark.django_db
+def test_topic_collection_page_no_theme_urls():
+    page = TopicCollectionPageFactory.build(slug="topic_collection_slug")
+
+    # by default the factory makes a theme for our topic collections,
+    # so let's clear it out here
+    page.theme.slug = None
+
+    urls = page.janis_urls()
+    url = page.janis_url()
+
+    assert urls == []
+    assert url == '#'
+
+
+# If we have a theme
+@pytest.mark.django_db
+def test_topic_collection_page_with_theme_urls():
+    page = TopicCollectionPageFactory.create(slug="topic_collection_slug")
+
+    urls = page.janis_urls()
+    url = page.janis_url()
+
+    assert urls == ['http://fake.base.url/theme_slug/topic_collection_slug/']
+    assert url == 'http://fake.base.url/theme_slug/topic_collection_slug/'
+
+
+# If we don't have a topic collection
+@pytest.mark.django_db
+def test_janis_page_with_topic_collections_no_urls():
+    page = JanisBasePageWithTopicCollectionsFactory.build(slug="page_slug")
+
+    urls = page.janis_urls()
+    url = page.janis_url()
+
+    assert urls == []
+    assert url == '#'
+
+
+# If we have topic collections
+@pytest.mark.django_db
+def test_janis_page_with_topic_collections_urls():
+    page = JanisBasePageWithTopicCollectionsFactory.create(slug="page_slug")
+    topic_collections = [base_page_topic_collection.topic_collection for base_page_topic_collection in
+                         page.topic_collections.all()]
+
+    urls = page.janis_urls()
+    url = page.janis_url()
+
+    expected_urls = ['http://fake.base.url/theme_slug/{topic_collection_slug}/page_slug/'.format(
+        topic_collection_slug=topic_collection.slug) for topic_collection in topic_collections]
+
+    assert urls == expected_urls
+    assert url == expected_urls[0]

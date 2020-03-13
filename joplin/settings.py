@@ -86,8 +86,20 @@ INSTALLED_APPS = [
 
     'groups',
     'publish_preflight',
-    'locations',
-    'events',
+    'pages',
+    'pages.base_page',
+    'pages.department_page',
+    'pages.event_page',
+    'pages.form_container',
+    'pages.guide_page',
+    'pages.information_page',
+    'pages.location_page',
+    'pages.official_documents_page',
+    'pages.service_page',
+    'pages.topic_collection_page',
+    'pages.topic_page',
+    'pages.home_page',
+
 ]
 
 MIDDLEWARE = [

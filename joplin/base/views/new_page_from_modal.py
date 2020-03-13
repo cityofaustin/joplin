@@ -7,9 +7,17 @@ from wagtail.admin import messages
 from django.utils.translation import ugettext as _
 from django.urls import reverse
 from django.conf import settings
-from base.models import ServicePage, ProcessPage, InformationPage, TopicPage, TopicCollectionPage, DepartmentPage, Theme, OfficialDocumentPage, GuidePage, FormContainer
-from locations.models import LocationPage
-from events.models import EventPage
+from base.models import Theme
+from pages.service_page.models import ServicePage
+from pages.information_page.models import InformationPage
+from pages.topic_page.models import TopicPage
+from pages.topic_collection_page.models import TopicCollectionPage
+from pages.department_page.models import DepartmentPage
+from pages.official_documents_page.models import OfficialDocumentPage
+from pages.guide_page.models import GuidePage
+from pages.form_container.models import FormContainer
+from pages.location_page.models import LocationPage
+from pages.event_page.models import EventPage
 from groups.models import Department
 from base.models.site_settings import JanisBranchSettings
 from django.contrib.contenttypes.models import ContentType
@@ -55,7 +63,7 @@ def new_page_from_modal(request):
             page = EventPage(**data)
 
         # Add it as a child of home
-        home = Page.objects.get(id=3)
+        home = Page.objects.get(id=2)
         home.add_child(instance=page)
 
         # Save our draft
@@ -66,12 +74,13 @@ def new_page_from_modal(request):
             # If the user's an admin, add the selected department from
             # the create content modal
             department_id = body['department']
-            department_group = Department.objects.get(pk=department_id)
-            GroupPagePermission.objects.create(
-                group=department_group,
-                page=page,
-                permission_type='edit'
-            )
+            if department_id:
+                department_group = Department.objects.get(pk=department_id)
+                GroupPagePermission.objects.create(
+                    group=department_group,
+                    page=page,
+                    permission_type='edit'
+                )
         else:
             # If the user's not an admin, then we want to create a
             # group permission object for each of the user's assigned departments

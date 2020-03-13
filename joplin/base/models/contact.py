@@ -24,7 +24,7 @@ class Contact(ClusterableModel):
     email = models.EmailField(blank=True)
     location = models.ForeignKey(
         Location, null=True, blank=True, related_name='+', on_delete=models.SET_NULL)
-    location_page = models.ForeignKey('locations.LocationPage', verbose_name='Select a Location', related_name='+', on_delete=models.SET_NULL, null=True, blank=True)
+    location_page = models.ForeignKey('location_page.LocationPage', verbose_name='Select a Location', related_name='+', on_delete=models.SET_NULL, null=True, blank=True)
     hours_exceptions = models.TextField(max_length=255, blank=True)
 
     social_media = StreamField(

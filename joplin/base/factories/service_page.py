@@ -2,6 +2,8 @@ import factory
 import wagtail_factories
 from base.models import *
 from base.factories import PageFactory
+from pages.topic_page.models import TopicPage
+from pages.service_page.models import ServicePage, ServicePageTopic, ServicePageContact
 
 
 class ServicePageTopicFactory(factory.django.DjangoModelFactory):
@@ -11,15 +13,6 @@ class ServicePageTopicFactory(factory.django.DjangoModelFactory):
 
     class Meta:
         model = ServicePageTopic
-
-
-class ServicePageRelatedDepartmentsFactory(factory.django.DjangoModelFactory):
-    page = factory.SubFactory('base.factories.service_page.ServicePageFactory')
-    # TODO: make this factory
-    related_department = factory.Iterator(DepartmentPage.objects.all())
-
-    class Meta:
-        model = ServicePageRelatedDepartments
 
 
 class ServicePageContactFactory(factory.django.DjangoModelFactory):
@@ -48,5 +41,4 @@ class ServicePageFactory(PageFactory):
     def create_related_objects(self, create, extracted, **kwargs):
         if create:
             ServicePageTopicFactory.create_batch(2, page=self)
-            ServicePageRelatedDepartmentsFactory.create_batch(2, page=self)
             ServicePageContactFactory.create_batch(2, page=self)

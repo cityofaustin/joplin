@@ -91,16 +91,16 @@ class Command(BaseCommand):
                 'db/fixtures/local_admin_user.json',
                 (os.getenv("DEPLOYMENT_MODE") == "LOCAL")
             )
-            load_fixture(
-                "load_janis_branch_settings",
-                'db/fixtures/janis_branch_settings.json',
-                (not os.getenv("DEPLOYMENT_MODE") in ("STAGING", "PRODUCTION"))
-            )
-            load_fixture(
-                "set_group_permissions",
-                'db/fixtures/group_permissions_settings.json',
-                (not os.getenv("DEPLOYMENT_MODE") in ("STAGING", "PRODUCTION"))
-            )
+            # load_fixture(
+            #     "load_janis_branch_settings",
+            #     'db/fixtures/janis_branch_settings.json',
+            #     (not os.getenv("DEPLOYMENT_MODE") in ("STAGING", "PRODUCTION"))
+            # )
+            # load_fixture(
+            #     "set_group_permissions",
+            #     'db/fixtures/group_permissions_settings.json',
+            #     (not os.getenv("DEPLOYMENT_MODE") in ("STAGING", "PRODUCTION"))
+            # )
             load_fixture(
                 "set_themes",
                 'db/fixtures/themes.json',
