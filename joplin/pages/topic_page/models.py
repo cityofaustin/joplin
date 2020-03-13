@@ -60,9 +60,21 @@ class TopicPageTopPage(Orderable):
 
 class JanisBasePageWithTopics(JanisBasePage):
     def janis_urls(self):
-        return ['blarg', 'blargy']
+        # get the base urls (global/department)
+        urls = super().janis_urls()
 
-    pass
+        # if we're global, skip topics
+        # todo: verify this logic
+        if self.coa_global:
+            return urls
+
+        # todo don't just pretend to extend use topics
+        for topic in self.topics.all():
+            urls.extend(
+                ['topic_page_url/{page_slug}/'.format(topic_page_url='blarg', page_slug=self.slug) for topic_page_url in
+                 topic.janis_urls()])
+
+        return urls
 
 
 class JanisBasePageTopic(ClusterableModel):
