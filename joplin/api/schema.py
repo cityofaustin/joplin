@@ -663,99 +663,6 @@ class PageRevisionNode(DjangoObjectType):
         interfaces = [graphene.Node]
 
 
-def get_structure_for_content_type(content_type):
-    site_structure = []
-    content_type_data = content_type_map.get(content_type, None)
-    if not content_type_data:
-        raise Exception(f'content_type [{content_type}] is not included in content_type_map')
-
-    pages = content_type_data["model"].objects.filter(live=True)
-    for page in pages:
-        page_global_id = graphene.Node.to_global_id(content_type_data["node"], page.id)
-
-        # Only publish event pages at the date based url
-        if content_type == 'event page':
-            if page.date:
-                site_structure.append({'url': f'/event/{page.date.year}/{page.date.month}/{page.date.day}/{page.slug}/', 'type': content_type, 'id': page_global_id})
-            continue
-
-        if page.coa_global:
-            site_structure.append({'url': f'/{page.slug}/', 'type': content_type, 'id': page_global_id})
-
-        # To get offered by from departments, look at our page permissions
-        group_page_permissions = page.group_permissions.all()
-        for group_page_permission in group_page_permissions:
-            # Department groups have this
-            if hasattr(group_page_permission.group, "department"):
-                department_page = group_page_permission.group.department.department_page
-                if department_page:
-                    department_global_id = graphene.Node.to_global_id('DepartmentNode', department_page.id)
-                    site_structure.append({'url': f'/{department_page.slug}/{page.slug}/', 'type': content_type, 'id': page_global_id, 'parent_department': department_global_id})
-
-        # For content_type models that have topics
-        if hasattr(page, "topics"):
-            page_topics = page.topics.all()
-            for page_topic in page_topics:
-                page_topic_global_id = graphene.Node.to_global_id('TopicNode', page_topic.topic.id)
-                page_topic_tcs = page_topic.topic.topiccollections.all()
-                for tc in page_topic_tcs:
-                    if not tc.topiccollection.theme:
-                        continue
-
-                    page_topic_tc_global_id = graphene.Node.to_global_id('TopicCollectionNode', tc.topiccollection.id)
-                    site_structure.append({'url': f'/{tc.topiccollection.theme.slug}/{tc.topiccollection.slug}/{page_topic.topic.slug}/{page.slug}/', 'type': content_type, 'id': page_global_id, 'parent_topic': page_topic_global_id, 'grandparent_topic_collection': page_topic_tc_global_id})
-
-        # Location pages need urls
-        if content_type == 'location page':
-            site_structure.append({'url': f'/location/{page.slug}/', 'type': content_type, 'id': page_global_id})
-
-    return site_structure
-
-
-class SiteStructure(graphene.ObjectType):
-    value = GenericScalar()
-    structure_json = JSONString()
-
-    # json isn't a great way to do this, we should
-    # figure out how to make it queryable
-    def resolve_structure_json(self, resolve_info, *args, **kwargs):
-        # our structure here can be id: page dict
-        site_structure = []
-        topic_collections = TopicCollectionPage.objects.all()
-        for topic_collection in topic_collections:
-            if not topic_collection.theme:
-                continue
-
-            topic_collection_global_id = graphene.Node.to_global_id('TopicCollectionNode', topic_collection.id)
-            site_structure.append({'url': f'/{topic_collection.theme.slug}/{topic_collection.slug}/', 'type': 'topic collection', 'id': topic_collection_global_id})
-
-        topics = TopicPage.objects.all()
-        for topic in topics:
-            topic_global_id = graphene.Node.to_global_id('TopicNode', topic.id)
-            topic_tcs = topic.topiccollections.all()
-            for tc in topic_tcs:
-                if not tc.topiccollection.theme:
-                    continue
-
-                topic_tc_global_id = graphene.Node.to_global_id('TopicCollectionNode', tc.topiccollection.id)
-                site_structure.append({'url': f'/{tc.topiccollection.theme.slug}/{tc.topiccollection.slug}/{topic.slug}/', 'type': 'topic', 'id': topic_global_id, 'parent_topic_collection': topic_tc_global_id})
-
-        departments = DepartmentPage.objects.all()
-        for department in departments:
-            department_global_id = graphene.Node.to_global_id('DepartmentNode', department.id)
-            site_structure.append({'url': f'/{department.slug}/', 'type': 'department', 'id': department_global_id})
-
-        site_structure.extend(get_structure_for_content_type('service page'))
-        site_structure.extend(get_structure_for_content_type('information page'))
-        site_structure.extend(get_structure_for_content_type('official document page'))
-        site_structure.extend(get_structure_for_content_type('guide page'))
-        site_structure.extend(get_structure_for_content_type('form container'))
-        site_structure.extend(get_structure_for_content_type('location page'))
-        site_structure.extend(get_structure_for_content_type('event page'))
-
-        return site_structure
-
-
 class InformationPageContactNode(DjangoObjectType):
     class Meta:
         model = InformationPageContact
@@ -883,7 +790,6 @@ class Query(graphene.ObjectType):
     department_page = graphene.Node.Field(DepartmentPageNode)
     all_service_pages = DjangoFilterConnectionField(ServicePageNode)
     page_revision = graphene.Field(PageRevisionNode, id=graphene.ID())
-    site_structure = graphene.Field(SiteStructure)
     all_page_revisions = DjangoFilterConnectionField(PageRevisionNode)
     all_information_pages = DjangoFilterConnectionField(InformationPageNode)
     all_department_pages = DjangoFilterConnectionField(DepartmentPageNode)
@@ -896,10 +802,6 @@ class Query(graphene.ObjectType):
     all_form_containers = DjangoFilterConnectionField(FormContainerNode)
     all_location_pages = DjangoFilterConnectionField(LocationPageNode)
     all_event_pages = DjangoFilterConnectionField(EventPageNode, filterset_class=EventFilter)
-
-    def resolve_site_structure(self, resolve_info):
-        site_structure = SiteStructure()
-        return site_structure
 
     def resolve_page_revision(self, resolve_info, id=None):
         revision = graphene.Node.get_node_from_global_id(resolve_info, id)
