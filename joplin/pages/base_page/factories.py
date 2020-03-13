@@ -8,11 +8,23 @@ from pages.home_page.factories import HomePageFactory
 
 from pages.base_page.models import JanisBasePage
 from pages.topic_page.models import JanisBasePageWithTopics, JanisBasePageTopic
+from groups.factories import DepartmentFactory
+
+
+class GroupPagePermissionFactory(factory.django.DjangoModelFactory):
+    page = factory.SubFactory('base_page.factories.JanisBasePageFactory')
+    department = factory.SubFactory(DepartmentFactory)
 
 
 class JanisBasePageFactory(PageFactory):
     class Meta:
         model = JanisBasePage
+
+    @factory.post_generation
+    def create_related_objects(self, create, extracted, **kwargs):
+        if create:
+            GroupPagePermissionFactory.create_batch(2, page=self)
+
 
 
 class JanisBasePageTopicFactory(factory.django.DjangoModelFactory):

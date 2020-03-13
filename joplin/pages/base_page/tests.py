@@ -52,3 +52,22 @@ def test_base_page_with_department_coa_global_url():
     # todo associate department here
     url = page.janis_url()
     assert url == 'http://fake.base.url/global_slug/'
+
+# If we have an associated department,
+# and coa_global=False (top level is not checked)
+@pytest.mark.django_db
+def test_base_page_with_department_not_global_urls():
+    page = JanisBasePageFactory.create(slug="global_slug", coa_global=False)
+    # todo associate department here
+    urls = page.janis_urls()
+
+    # since it's global, it should ignore the departments and just publish at the top level
+    assert urls == ['http://fake.base.url/global_slug/']
+
+
+@pytest.mark.django_db
+def test_base_page_with_department_not_global_url():
+    page = JanisBasePageFactory.create(slug="global_slug", coa_global=False)
+    # todo associate department here
+    url = page.janis_url()
+    assert url == 'http://fake.base.url/global_slug/'
