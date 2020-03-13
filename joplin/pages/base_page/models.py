@@ -58,14 +58,11 @@ class JanisBasePage(Page):
         # /page_slug
         # and not at
         # /department_slug/page_slug
-        # todo verify this logic
-        # todo write tests for this logic
         if self.coa_global:
             return ['{base_url}{page_slug}/'.format(base_url=self.janis_url_base('publish_janis_branch'),
                                                     page_slug=self.slug)]
 
         # If we're under departments
-        # todo test this
         departments = self.departments()
         if len(departments) > 0:
             return [

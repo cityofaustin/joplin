@@ -59,6 +59,9 @@ class TopicPageTopPage(Orderable):
 
 
 class JanisBasePageWithTopics(JanisBasePage):
+    def janis_urls(self):
+        return ['blarg', 'blargy']
+
     pass
 
 
