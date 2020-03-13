@@ -11,7 +11,7 @@ class JanisBasePageFactory(PageFactory):
         model = JanisBasePage
 
     @factory.post_generation
-    def create_related_objects(self, create, extracted, **kwargs):
+    def create_related_departments(self, create, extracted, **kwargs):
         if create:
             GroupPagePermissionFactory.create_batch(2, page=self)
 
@@ -29,6 +29,6 @@ class JanisBasePageWithTopicsFactory(JanisBasePageFactory):
         model = JanisBasePageWithTopics
 
     @factory.post_generation
-    def create_related_objects(self, create, extracted, **kwargs):
+    def create_parent_topics(self, create, extracted, **kwargs):
         if create:
             JanisBasePageTopicFactory.create_batch(2, page=self)
