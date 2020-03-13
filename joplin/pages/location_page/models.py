@@ -168,6 +168,11 @@ class LocationPage(JanisBasePage):
         ),
     ]
 
+    def janis_urls(self):
+        # todo implement location page urls
+
+        return ['#todo']
+
 
 class LocationPageRelatedServices(Orderable):
 
