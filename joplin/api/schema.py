@@ -24,6 +24,7 @@ from pages.department_page.models import DepartmentPage, DepartmentPageDirector,
 from pages.official_documents_page.models import OfficialDocumentPage, OfficialDocumentPageOfficialDocument
 from pages.guide_page.models import GuidePage, GuidePageContact
 from pages.form_container.models import FormContainer
+from pages.base_page.models import JanisBasePage
 
 
 from .content_type_map import content_type_map
@@ -158,6 +159,18 @@ class StreamFieldType(Scalar):
 @convert_django_field.register(StreamField)
 def convert_stream_field(field, registry=None):
     return StreamFieldType(description=field.help_text, required=not field.null)
+
+
+class JanisBasePageNode(DjangoObjectType):
+    janis_urls = graphene.List(graphene.String)
+
+    class Meta:
+        model = JanisBasePage
+        filter_fields = ['id', 'slug', 'live']
+        interfaces = [graphene.Node]
+
+    def resolve_janis_urls(self, info):
+        return self.specific.janis_urls()
 
 
 class DepartmentPageNode(DjangoObjectType):
@@ -784,8 +797,12 @@ def get_page_with_preview_data(page, session):
     return obj
 
 
+
+
 class Query(graphene.ObjectType):
     debug = graphene.Field(DjangoDebug, name='__debug')
+
+    all_pages = DjangoFilterConnectionField(JanisBasePageNode)
 
     department_page = graphene.Node.Field(DepartmentPageNode)
     all_service_pages = DjangoFilterConnectionField(ServicePageNode)

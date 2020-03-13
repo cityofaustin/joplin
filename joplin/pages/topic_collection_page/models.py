@@ -14,6 +14,8 @@ from publish_preflight.requirements import FieldPublishRequirement
 
 
 class TopicCollectionPage(JanisBasePage):
+    janis_url_page_type = "topiccollection"
+
     description = models.TextField(blank=True)
 
     theme = models.ForeignKey(
