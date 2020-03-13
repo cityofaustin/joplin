@@ -12,7 +12,7 @@ class PageFactory(wagtail_factories.factories.MP_NodeFactory):
     note: when creating pages give it a parent (parent=<another page like home page>)
     or else it'l be an orphan and you'll both be sad
     """
-    title = factory.Faker('text')
+    title = factory.Faker('first_name')
     slug = factory.LazyAttribute(lambda obj: slugify(obj.title))
 
     class Meta:

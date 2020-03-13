@@ -7,15 +7,13 @@ import pytest
 @pytest.mark.django_db
 def test_base_page_no_department_not_global_urls():
     page = JanisBasePageFactory.build(slug="global_slug", coa_global=False)
+
     urls = page.janis_urls()
-    assert urls == []
-
-
-@pytest.mark.django_db
-def test_base_page_no_department_not_global_url():
-    page = JanisBasePageFactory.build(slug="global_slug", coa_global=False)
     url = page.janis_url()
+
+    assert urls == []
     assert url == '#'
+
 
 # If we don't have any associated department,
 # and coa_global=True (top level is checked)
@@ -23,14 +21,10 @@ def test_base_page_no_department_not_global_url():
 def test_base_page_no_department_coa_global_urls():
     page = JanisBasePageFactory.build(slug="global_slug", coa_global=True)
     urls = page.janis_urls()
+    url = page.janis_url()
 
     # since it's global, it should ignore the departments and just publish at the top level
     assert urls == ['http://fake.base.url/global_slug/']
-
-@pytest.mark.django_db
-def test_base_page_no_department_coa_global_url():
-    page = JanisBasePageFactory.build(slug="global_slug", coa_global=True)
-    url = page.janis_url()
     assert url == 'http://fake.base.url/global_slug/'
 
 
@@ -39,35 +33,30 @@ def test_base_page_no_department_coa_global_url():
 @pytest.mark.django_db
 def test_base_page_with_department_coa_global_urls():
     page = JanisBasePageFactory.build(slug="global_slug", coa_global=True)
-    # todo associate department here
     urls = page.janis_urls()
+    url = page.janis_url()
 
     # since it's global, it should ignore the departments and just publish at the top level
     assert urls == ['http://fake.base.url/global_slug/']
-
-
-@pytest.mark.django_db
-def test_base_page_with_department_coa_global_url():
-    page = JanisBasePageFactory.build(slug="global_slug", coa_global=True)
-    # todo associate department here
-    url = page.janis_url()
     assert url == 'http://fake.base.url/global_slug/'
+
 
 # If we have an associated department,
 # and coa_global=False (top level is not checked)
 @pytest.mark.django_db
 def test_base_page_with_department_not_global_urls():
-    page = JanisBasePageFactory.create(slug="global_slug", coa_global=False)
-    # todo associate department here
+    # Using .create() here makes it so the factory also creates
+    # our GroupPagePermissions to associate departments
+    page = JanisBasePageFactory.create(slug="page_slug", coa_global=False)
+
+    # Set expected urls using group page permission department slugs
+    expected_urls = ['http://fake.base.url/{department_slug}/{page_slug}/'.format(
+        department_slug=permission.group.department.department_page.slug, page_slug=page.slug) for permission in
+                     page.group_permissions.all()]
+
     urls = page.janis_urls()
-
-    # since it's global, it should ignore the departments and just publish at the top level
-    assert urls == ['http://fake.base.url/global_slug/']
-
-
-@pytest.mark.django_db
-def test_base_page_with_department_not_global_url():
-    page = JanisBasePageFactory.create(slug="global_slug", coa_global=False)
-    # todo associate department here
     url = page.janis_url()
-    assert url == 'http://fake.base.url/global_slug/'
+
+    # we should get a url under every department
+    assert urls == expected_urls
+    assert url == expected_urls[0]
