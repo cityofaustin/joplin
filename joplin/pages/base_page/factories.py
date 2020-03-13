@@ -1,6 +1,5 @@
 import factory
 from pages.factory import PageFactory
-from pages.topic_page.factories import TopicPageFactory
 
 from pages.base_page.models import JanisBasePage
 from pages.topic_page.models import JanisBasePageWithTopics, JanisBasePageTopic
@@ -19,7 +18,7 @@ class JanisBasePageFactory(PageFactory):
 
 class JanisBasePageTopicFactory(factory.django.DjangoModelFactory):
     page = factory.SubFactory('base_page.factories.JanisBasePageWithTopicsFactory')
-    topic = factory.SubFactory(TopicPageFactory)
+    topic = factory.SubFactory('pages.topic_page.factories.TopicPageFactory')
 
     class Meta:
         model = JanisBasePageTopic

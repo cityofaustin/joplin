@@ -68,11 +68,9 @@ class JanisBasePageWithTopics(JanisBasePage):
         if self.coa_global:
             return urls
 
-        # todo don't just pretend to extend use topics
         for base_page_topic in self.topics.all():
-            urls.extend(
-                ['topic_page_url/{page_slug}/'.format(topic_page_url='blarg', page_slug=self.slug) for topic_page_url in
-                 base_page_topic.topic.janis_urls()])
+            urls.extend(['{topic_page_url}{page_slug}/'.format(topic_page_url=topic_page_url, page_slug=self.slug) for
+                         topic_page_url in base_page_topic.topic.janis_urls()])
 
         return urls
 

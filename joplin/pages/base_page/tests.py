@@ -90,19 +90,19 @@ def test_base_page_with_topics_no_topic_no_department_coa_global_urls():
     assert url == 'http://fake.base.url/global_slug/'
 
 
-# If we have an associated department,
-# and we don't have any associated topic pages
+# If we don't have an associated department,
+# and we have associated topic pages
 # and coa_global=False (top level is not checked)
 @pytest.mark.django_db
-def test_base_page_with_topics_with_department_not_global_urls():
+def test_base_page_with_topics_no_department_not_global_urls():
     # Using .create() here makes it so the factory also creates
     # our GroupPagePermissions to associate departments
     page = JanisBasePageWithTopicsFactory.create(slug="page_slug", coa_global=False)
 
-    # Set expected urls using group page permission department slugs
-    expected_urls = ['http://fake.base.url/{department_slug}/{page_slug}/'.format(
-        department_slug=permission.group.department.department_page.slug, page_slug=page.slug) for permission in
-                     page.group_permissions.all()]
+    # Set expected urls using parent topic pages
+    expected_urls = []
+    for base_page_topic in page.topics.all():
+        expected_urls.extend(['{topic_url}page_slug/'.format(topic_url=url) for url in base_page_topic.topic.janis_urls()])
 
     urls = page.janis_urls()
     url = page.janis_url()
@@ -110,3 +110,5 @@ def test_base_page_with_topics_with_department_not_global_urls():
     # we should get a url under every department
     assert urls == expected_urls
     assert url == expected_urls[0]
+
+
