@@ -14,8 +14,6 @@ from publish_preflight.requirements import FieldPublishRequirement
 
 
 class TopicCollectionPage(JanisBasePage):
-    janis_url_page_type = "topic_collection"
-
     description = models.TextField(blank=True)
 
     theme = models.ForeignKey(
@@ -43,9 +41,21 @@ class TopicCollectionPage(JanisBasePage):
         ImageChooserPanel('image'),
     ]
 
+    def janis_urls(self):
+        # Add the urls for each topic collection, these pages only
+        # should publish at /theme_slug/topic_collection_slug/page_slug
+        return ['{base_url}{theme_slug}/{page_slug}/'.format(base_url=self.janis_url_base('publish_janis_branch'), theme_slug='blarg', page_slug=self.slug)]
+
 
 class JanisBasePageWithTopicCollections(JanisBasePage):
-    pass
+    def janis_urls(self):
+        # Add the urls for each topic collection, these pages only
+        # should publish at /theme_slug/topic_collection_slug/page_slug
+        topic_collections = self.topic_collections.all()
+
+        return ['{topic_collection_url}/{page_slug}/'.format(
+            topic_collection_url=topic_collection.janis_url(), page_slug=self.slug)
+            for topic_collection in topic_collections]
 
 
 class JanisBasePageTopicCollection(ClusterableModel):
