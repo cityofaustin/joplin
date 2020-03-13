@@ -1,19 +1,14 @@
 import factory
 import wagtail_factories
 from django.utils.text import slugify
-from wagtail.core.models import Collection, Page
+from wagtail.core.models import Collection, Page, GroupPagePermission
 from pages.factory import PageFactory
 from pages.topic_page.factories import TopicPageFactory
 from pages.home_page.factories import HomePageFactory
 
 from pages.base_page.models import JanisBasePage
 from pages.topic_page.models import JanisBasePageWithTopics, JanisBasePageTopic
-from groups.factories import DepartmentFactory
-
-
-class GroupPagePermissionFactory(factory.django.DjangoModelFactory):
-    page = factory.SubFactory('base_page.factories.JanisBasePageFactory')
-    department = factory.SubFactory(DepartmentFactory)
+from groups.factories import GroupPagePermissionFactory
 
 
 class JanisBasePageFactory(PageFactory):
