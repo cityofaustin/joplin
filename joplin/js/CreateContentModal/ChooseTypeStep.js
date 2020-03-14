@@ -113,16 +113,16 @@ const ChooseTypeStep = ({
     },
   ];
 
-  const importPages = [
+  const importerPages = [
     {
-      type: 'singlePage',
+      type: 'importSinglePage',
       name: 'Single page',
       image: singlePageImage,
       description:
         'Import a single page',
     },
     {
-      type: 'fullSite',
+      type: 'importFullSite',
       name: 'Full site',
       image: fullSiteImage,
       description:
@@ -183,6 +183,19 @@ const ChooseTypeStep = ({
                   name={topicPage.name}
                   image={topicPage.image}
                   description={topicPage.description}
+                />
+              ))}
+            </React.Fragment>
+          )}
+          {importer && (
+            <React.Fragment>
+              {importerPages.map((importerPage, index) => (
+                <PageTypeComponent
+                  type={importerPage.type}
+                  handleTypeSelect={handleTypeSelect}
+                  name={importerPage.name}
+                  image={importerPage.image}
+                  description={importerPage.description}
                 />
               ))}
             </React.Fragment>
