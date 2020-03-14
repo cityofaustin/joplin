@@ -2,29 +2,23 @@ from urllib.parse import urlparse
 from pathlib import Path
 from gql import gql, Client
 from gql.transport.requests import RequestsHTTPTransport
+import json
 
-query = gql('''
-{
-	allDepartmentPages {
-    edges {
-      node {
-        topPages {
-          edges {
-            node {
+queries = {
+    'information': gql('''
+    query getInformationPageRevision($id:ID) {
+      allPageRevisions(id:$id) {
+        edges {
+          node {
+            asInformationPage {
               title
-              slug
-              department {
-                slug
-              }
             }
           }
         }
       }
     }
-  }
+    '''),
 }
-''')
-
 
 ENDPOINTS = {
     'janis.austintexas.io': 'https://joplin-staging.herokuapp.com/api/graphql'
@@ -49,7 +43,7 @@ class PageImporter:
             fetch_schema_from_transport=True,
         )
 
-        result = client.execute(query)
+        result = client.execute(queries[self.page_type], variable_values=json.dumps({'id': self.revision_id}))
         blarg = 3
 
     def parse_janis_preview_url(self, path):
