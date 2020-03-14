@@ -3,24 +3,27 @@ from pathlib import Path
 from gql import gql, Client
 from gql.transport.requests import RequestsHTTPTransport
 
-
-
-client = Client(
-    retries=3,
-    transport=sample_transport,
-    fetch_schema_from_transport=True,
-)
-
 query = gql('''
-    query getContinents {
-      continents {
-        code
-        name
+{
+	allDepartmentPages {
+    edges {
+      node {
+        topPages {
+          edges {
+            node {
+              title
+              slug
+              department {
+                slug
+              }
+            }
+          }
+        }
       }
     }
+  }
+}
 ''')
-
-client.execute(query)
 
 
 ENDPOINTS = {
@@ -29,16 +32,25 @@ ENDPOINTS = {
 
 
 class PageImporter:
-    sample_transport = RequestsHTTPTransport(
-        url='https://countries.trevorblades.com/',
-        use_json=True,
-        headers={
-            "Content-type": "application/json",
-        },
-        verify=False
-    )
 
-    def 
+    def query_page_with_graphql(self):
+        sample_transport = RequestsHTTPTransport(
+            url=self.joplin_api_endpoint,
+            # use_json=True,
+            # headers={
+            #     "Content-type": "application/json",
+            # },
+            verify=False
+        )
+
+        client = Client(
+            retries=3,
+            transport=sample_transport,
+            fetch_schema_from_transport=True,
+        )
+
+        result = client.execute(query)
+        blarg = 3
 
     def parse_janis_preview_url(self, path):
         # for now, just assuming these parts are always right
