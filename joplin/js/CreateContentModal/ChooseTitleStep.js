@@ -21,6 +21,8 @@ const getPageHeading = pageType => {
       return 'Write the name of this location.';
     case 'event':
       return 'Write the name of this event.';
+    case 'importSinglePage':
+      return 'Paste a preview URL for the page you want to import';
     default:
       return '';
   }
@@ -32,6 +34,8 @@ const getInputLabel = pageType => {
       return 'Location name';
     case 'event':
       return 'Event name';
+    case 'importSinglePage':
+      return 'URL'
     default:
       return 'Page Title';
   }

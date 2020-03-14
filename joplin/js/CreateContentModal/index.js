@@ -12,7 +12,7 @@ import ButtonBar from './ButtonBar.js';
 
 import './index.scss';
 
-const MAX_TITLE_LENGTH = 58;
+const MAX_TITLE_LENGTH = 9000;
 const DEPARTMENT_LIST = window.departments;
 
 const stepsEnum = {

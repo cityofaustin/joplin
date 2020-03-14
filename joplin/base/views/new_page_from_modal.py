@@ -23,6 +23,11 @@ from base.models.site_settings import JanisBranchSettings
 from django.contrib.contenttypes.models import ContentType
 import json
 
+def import_page_from_url(url):
+    blarg = url
+    print(blarg)
+    return 3
+
 def new_page_from_modal(request):
     user_perms = UserPagePermissionsProxy(request.user)
     if not user_perms.can_edit_pages():
@@ -32,9 +37,20 @@ def new_page_from_modal(request):
         # Get the page data
         body = json.loads(request.body)
         print(body['type'])
+
+        # if we got an import request, let's go try some importing
+        if body['type'] == 'importSinglePage':
+            # Respond with the id of the new page
+            new_page_id = import_page_from_url(body['title'])
+            response = HttpResponse(json.dumps({'id': new_page_id}), content_type="application/json")
+            return response
+
+
         data = {}
         data['title'] = body['title']
         data['owner'] = request.user
+
+
 
         # Create the page
         if body['type'] == 'service':
