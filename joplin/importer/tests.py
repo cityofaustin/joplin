@@ -1,6 +1,7 @@
 import pytest
 from importer.page_importer import PageImporter
 
+
 def test_parse_janis_preview_url():
     preview_url = 'https://janis.austintexas.io/en/preview/information/UGFnZVJldmlzaW9uTm9kZToyNjI4'
 
@@ -21,4 +22,6 @@ def test_get_information_page_from_revision():
     page_importer = PageImporter(preview_url)
     page_dictionary = page_importer.get_page_dictionary_from_revision()
 
+    assert page_dictionary['id'] == 'SW5mb3JtYXRpb25QYWdlTm9kZToxMjM='
     assert page_dictionary['title'] == 'Fire safety checklist for mobile food vendors'
+    assert page_dictionary['description'] == 'Any mobile food vendor who uses propane or propane accessories and operates in the City of Austin or Travis County must get a fire safety inspection.'
