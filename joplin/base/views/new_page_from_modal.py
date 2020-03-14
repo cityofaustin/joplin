@@ -19,11 +19,13 @@ from pages.form_container.models import FormContainer
 from pages.location_page.models import LocationPage
 from pages.event_page.models import EventPage
 from groups.models import Department
+from importer.page_importer import PageImporter
 from base.models.site_settings import JanisBranchSettings
 from django.contrib.contenttypes.models import ContentType
 import json
 
 def import_page_from_url(url):
+    page_importer = PageImporter(url)
     blarg = url
     print(blarg)
     return 3
