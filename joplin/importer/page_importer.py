@@ -27,7 +27,7 @@ ENDPOINTS = {
 
 class PageImporter:
 
-    def query_page_with_graphql(self):
+    def get_page_dictionary_from_revision(self):
         sample_transport = RequestsHTTPTransport(
             url=self.joplin_api_endpoint,
             # use_json=True,
@@ -44,7 +44,11 @@ class PageImporter:
         )
 
         result = client.execute(queries[self.page_type], variable_values=json.dumps({'id': self.revision_id}))
-        blarg = 3
+        revision_node = result['allPageRevisions']['edges'][0]['node']
+
+        # this gets us into the 'as____Page' stuff
+        page_dictionary_from_revision = next(iter(revision_node.values()))
+        return page_dictionary_from_revision
 
     def parse_janis_preview_url(self, path):
         # for now, just assuming these parts are always right
@@ -73,4 +77,5 @@ class PageImporter:
         self.language = ''
         self.page_type = ''
         self.revision_id = ''
+        self.revision_node = None
         self.parse_url()
