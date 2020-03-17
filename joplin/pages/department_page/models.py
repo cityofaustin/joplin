@@ -23,6 +23,7 @@ from base.models.constants import DEFAULT_MAX_LENGTH, WYSIWYG_GENERAL
 from base.models.widgets import countMe, AUTHOR_LIMITS
 from countable_field import widgets
 from publish_preflight.requirements import FieldPublishRequirement
+from base.models.site_settings import JanisBranchSettings
 
 
 class DepartmentPage(JanisBasePage):
@@ -88,11 +89,12 @@ class DepartmentPage(JanisBasePage):
         """
         Department pages should have at most one url
         """
+        branch_settings = JanisBranchSettings.objects.first()
 
         # check the one to one relationship of pages to department groups
         # it's the only time we should have a url for a department page
         if hasattr(self, 'department'):
-            return ['{base_url}{page_slug}/'.format(base_url=self.janis_url_base('publish_janis_branch'),
+            return ['{base_url}{page_slug}/'.format(base_url=branch_settings.get_publish_url_base(),
                                                     page_slug=self.slug)]
 
         return []

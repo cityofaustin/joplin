@@ -11,6 +11,7 @@ from pages.base_page.models import JanisBasePage
 from base.models.translated_image import TranslatedImage
 from base.models.widgets import countMe, countMeTextArea
 from publish_preflight.requirements import FieldPublishRequirement
+from base.models.site_settings import JanisBranchSettings
 
 
 class TopicCollectionPage(JanisBasePage):
@@ -44,9 +45,11 @@ class TopicCollectionPage(JanisBasePage):
     ]
 
     def janis_urls(self):
+        branch_settings = JanisBranchSettings.objects.first()
+
         # should publish at /theme_slug/topic_collection_slug/
         if self.theme.slug:
-            return ['{base_url}{theme_slug}/{page_slug}/'.format(base_url=self.janis_url_base('publish_janis_branch'),
+            return ['{base_url}{theme_slug}/{page_slug}/'.format(base_url=branch_settings.get_publish_url_base(),
                                                                  theme_slug=self.theme.slug, page_slug=self.slug)]
 
         return []
