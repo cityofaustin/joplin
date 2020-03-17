@@ -57,3 +57,23 @@ def test_janis_page_with_topic_collections_urls():
 
     assert urls == expected_urls
     assert url == expected_urls[0]
+
+
+# Try importing using dummy data in a page_dictionary
+@pytest.mark.django_db
+def test_import_dummy_data_from_page_dictionary():
+    page_dictionary = {
+        'id': 'VG9waWNDb2xsZWN0aW9uTm9kZTo0',
+        'title': 'topic collection title [en]',
+        'slug': 'topic-collection-title-en',
+        'description': 'topic collection description [en]',
+        'theme': {
+            'id': 'VGhlbWVOb2RlOjE=',
+            'slug': 'theme-slug-en',
+            'text': 'theme text [en]',
+            'description': 'theme description [en]'
+        }
+    }
+
+
+
