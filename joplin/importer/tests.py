@@ -66,8 +66,14 @@ def test_get_dummy_topic_collection_page_from_revision():
     assert page_dictionary['title'] == 'topic collection title [en]'
     assert page_dictionary['slug'] == 'topic-collection-title-en'
     assert page_dictionary['description'] == 'topic collection description [en]'
+
+    # adding themes as a part of our topic collection query
+    # instead of importing/testing them separately
     assert page_dictionary['theme'] == {
-        'id': 'VGhlbWVOb2RlOjE='
+        'id': 'VGhlbWVOb2RlOjE=',
+        'slug': 'theme-slug-en',
+        'text': 'theme text [en]',
+        'description': 'theme description [en]'
     }
 
 # this test will start breaking once we no longer have this revision in the db

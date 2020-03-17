@@ -8,11 +8,14 @@ queries = {
           node {
             asTopicCollectionPage {
               id
-                title
+              title
               slug
               description
-                        theme {
+              theme {
                 id
+                slug
+                text
+                description
               }
             }
           }
