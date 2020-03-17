@@ -5,6 +5,7 @@ from gql.transport.requests import RequestsHTTPTransport
 import json
 from importer.queries import queries
 
+
 ENDPOINTS = {
     'janis.austintexas.io': 'https://joplin-staging.herokuapp.com/api/graphql'
 }
