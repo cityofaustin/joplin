@@ -92,3 +92,7 @@ def test_import_dummy_data_from_page_dictionary():
     assert page.slug == page_dictionary['slug']
     assert page.description == page_dictionary['description']
     assert page.imported_revision_id == revision_id
+
+# todo: test with existing theme (theme slug matches)
+# todo: test importing a page again (same revision id)
+# todo: test importing a page again (same slug, different revision id)

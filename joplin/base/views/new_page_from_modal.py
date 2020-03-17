@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404, redirect, render
 from django.http import HttpResponse
 from wagtail.core.models import Page, UserPagePermissionsProxy, GroupPagePermission
-from django.core.exceptions import PermissionDenied
+from django.core.exceptions import PermissionDenied, ValidationError
 from wagtail.admin.views import pages
 from wagtail.admin import messages
 from django.utils.translation import ugettext as _
@@ -12,7 +12,7 @@ from pages.service_page.models import ServicePage
 from pages.information_page.models import InformationPage
 from pages.topic_page.models import TopicPage
 from pages.topic_collection_page.models import TopicCollectionPage
-from pages.topic_collection_page.factories import ThemeFactory, TopicCollectionPageFactory
+from pages.topic_collection_page.factories import create_topic_collection_page_from_page_dictionary
 from pages.department_page.models import DepartmentPage
 from pages.official_documents_page.models import OfficialDocumentPage
 from pages.guide_page.models import GuidePage
@@ -32,19 +32,13 @@ def import_page_from_url(url):
     revision_id = page_importer.revision_id
     page_dictionary = page_importer.get_page_dictionary_from_revision()
 
-    # todo: move this logic elsewhere and don't hardcode it to topic collection pages
-    theme = ThemeFactory.create(slug=page_dictionary['theme']['slug'], text=page_dictionary['theme']['text'],
-                                description=page_dictionary['theme']['description'])
+    # todo: not hardcode to topic collection
+    # try:
+    page_id = create_topic_collection_page_from_page_dictionary(page_dictionary, revision_id)
+    # except ValidationError as err:
+    #     x = err
 
-    # Set home as parent
-    # todo: not hardcode home
-    # todo: move this to base page factory?
-    home = Page.objects.get(id=2)
-    page = TopicCollectionPageFactory.create(imported_revision_id=revision_id, title=page_dictionary['title'],
-                                             slug=page_dictionary['slug'], description=page_dictionary['description'],
-                                             theme=theme, parent=home)
-
-    return page.id
+    return page_id
 
 
 def new_page_from_modal(request):
