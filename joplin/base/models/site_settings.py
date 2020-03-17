@@ -40,24 +40,19 @@ class JanisBranchSettings(BaseSetting):
         FieldPanel('publish_janis_branch'),
     ]
 
-
-    # branch_type is either "publish_janis_branch" or "preview_janis_branch"
-    def __get_url_for_pr(self, branch_type):
-        # Netlify site names are limited to 63 characters
-        return f"https://{('janis-v3-' + getattr(self, branch_type).lower())[:63]}.netlify.com"
-
-
-    def get_preview_url_base(self):
-        if settings.ISSTAGING or settings.ISPRODUCTION:
-            return settings.JANIS_URL
-        elif self.preview_input == "url":
+    # Convert branch name to a netlify URL
+    def url_base(self, janis_branch):
+        """
+        Returns base url depending on branch setting
+        """
+        # if input is a full URL, we don't need to construct one
+        if self.preview_input == "url":
             return self.preview_janis_url
         else:
-            return self.__get_url_for_pr("preview_janis_branch")
-
-
-    def get_publish_url_base(self):
-        if settings.ISSTAGING or settings.ISPRODUCTION:
-            return settings.JANIS_URL
-        else:
-            return self.__get_url_for_pr("publish_janis_branch")
+            try:
+                # Netlify site names are limited to 63 characters
+                return f"https://{('janis-' + getattr(self, janis_branch))[:63]}.netlify.com"
+            except AttributeError as e:
+                # TODO: better handling, I think this defaults back to staging/prod as is
+                print("something missing", e)
+                pass
