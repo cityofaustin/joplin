@@ -1,6 +1,5 @@
 # Joplin 3 - CMS for the City of Austin
 
->>>>>>> v3
 Joplin is the Authoring Interface for adding and editing content for alpha.austin.gov.
 
 <img src="/README/authoring_interface.png" align="middle" width="500" >
