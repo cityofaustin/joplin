@@ -493,3 +493,6 @@ LOGGING = {
         },
     },
 }
+
+# Temporary variables to toggle features for v3 while its still in development
+V3_WIP = bool(strtobool(os.environ.get('V3_WIP', str(False))))

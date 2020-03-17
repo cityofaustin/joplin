@@ -64,6 +64,7 @@ default_branch_vars = {
     "MONITOR_PERFORMANCE": False,
     "DELETION_PROTECTION": 0,
     "DJANGO_LOG_LEVEL": "INFO",
+    "V3_WIP": False,
 }
 config.update(default_branch_vars)
 

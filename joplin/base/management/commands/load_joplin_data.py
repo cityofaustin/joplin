@@ -89,18 +89,27 @@ class Command(BaseCommand):
             load_fixture(
                 "load_test_admin",
                 'db/fixtures/local_admin_user.json',
-                (os.getenv("DEPLOYMENT_MODE") == "LOCAL")
+                (
+                    os.getenv("DEPLOYMENT_MODE") == "LOCAL"
+                    or settings.V3_WIP # if we don't LOAD_DATA in v3, we still need to add a test admin user
+                )
             )
-            # load_fixture(
-            #     "load_janis_branch_settings",
-            #     'db/fixtures/janis_branch_settings.json',
-            #     (not os.getenv("DEPLOYMENT_MODE") in ("STAGING", "PRODUCTION"))
-            # )
-            # load_fixture(
-            #     "set_group_permissions",
-            #     'db/fixtures/group_permissions_settings.json',
-            #     (not os.getenv("DEPLOYMENT_MODE") in ("STAGING", "PRODUCTION"))
-            # )
+            load_fixture(
+                "load_janis_branch_settings",
+                'db/fixtures/janis_branch_settings.json',
+                (
+                    not os.getenv("DEPLOYMENT_MODE") in ("STAGING", "PRODUCTION")
+                    and not settings.V3_WIP
+                )
+            )
+            load_fixture(
+                "set_group_permissions",
+                'db/fixtures/group_permissions_settings.json',
+                (
+                    not os.getenv("DEPLOYMENT_MODE") in ("STAGING", "PRODUCTION")
+                    and not settings.V3_WIP
+                )
+            )
             load_fixture(
                 "set_themes",
                 'db/fixtures/themes.json',
