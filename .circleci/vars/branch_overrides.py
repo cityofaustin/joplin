@@ -13,6 +13,9 @@ branch_overrides = {
         # "DEBUG_TOOLBAR": True,
         # "DEBUG": 1,
     },
+    "3690-incremental": {
+        "LOAD_DATA": "",
+    },
     "v3": {
         "LOAD_DATA": "",
     },
