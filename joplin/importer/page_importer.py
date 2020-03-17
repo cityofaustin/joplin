@@ -3,43 +3,7 @@ from pathlib import Path
 from gql import gql, Client
 from gql.transport.requests import RequestsHTTPTransport
 import json
-
-queries = {
-    'information': gql('''
-        query getInformationPageRevision($id:ID) {
-          allPageRevisions(id:$id) {
-            edges {
-              node {
-                asInformationPage {
-                  id
-                  title
-                  topics {
-                    edges {
-                      node {
-                        id
-                      }
-                    }
-                  }
-                  departments {
-                    id
-                  }
-                  description
-                  additionalContent
-                  contacts {
-                    edges {
-                      node {
-                        id
-                      }
-                    }
-                  }
-                  coaGlobal
-                }
-              }
-            }
-          }
-        }
-    '''),
-}
+from importer.queries import queries
 
 ENDPOINTS = {
     'janis.austintexas.io': 'https://joplin-staging.herokuapp.com/api/graphql'

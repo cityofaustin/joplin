@@ -2,39 +2,28 @@ from gql import gql
 
 queries = {
     'topic': gql('''
-    query getTopicPageRevision($id:ID) {
-      allPageRevisions(id:$id) {
+    query getTopicPageRevision($id: ID) {
+      allPageRevisions(id: $id) {
         edges {
           node {
-            asInformationPage {
+            asTopicPage {
               id
-              title
-              topics {
-                edges {
-                  node {
-                    id
-                  }
-                }
-              }
-              departments {
-                id
-              }
+                title
+              slug
               description
-              additionalContent
-              contacts {
+              topiccollections {
                 edges {
                   node {
                     id
                   }
                 }
               }
-              coaGlobal
             }
           }
         }
       }
     }
-'''),
+    '''),
     'information': gql('''
         query getInformationPageRevision($id:ID) {
           allPageRevisions(id:$id) {

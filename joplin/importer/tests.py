@@ -45,6 +45,15 @@ def test_get_dummy_topic_page_from_revision():
     page_importer = PageImporter(preview_url)
     page_dictionary = page_importer.get_page_dictionary_from_revision()
 
-    assert page_dictionary['id'] == 'SW5mb3JtYXRpb25QYWdlTm9kZToxMjM='
-    assert page_dictionary['title'] == 'Fire safety checklist for mobile food vendors'
-    assert page_dictionary['description'] == 'Any mobile food vendor who uses propane or propane accessories and operates in the City of Austin or Travis County must get a fire safety inspection.'
+    assert page_dictionary['id'] == 'VG9waWNOb2RlOjU='
+    assert page_dictionary['title'] == 'topic title [en]'
+    assert page_dictionary['slug'] == 'topic-title-en'
+    assert page_dictionary['description'] == 'topic description [en]'
+    # todo actually make sure we create pages for these/check for them
+    assert page_dictionary['topiccollections'] == {
+        'edges': [
+            {'node': {
+                'id': 'VG9waWNQYWdlVG9waWNDb2xsZWN0aW9uTm9kZTox'
+            }}
+        ]
+    }
