@@ -1,4 +1,4 @@
-from urllib.parse import urlparse
+from urllib.parse import urlparse, parse_qs
 from pathlib import Path
 from gql import gql, Client
 from gql.transport.requests import RequestsHTTPTransport
@@ -84,6 +84,10 @@ class PageImporter:
         # get a joplin api endpoint
         if parse_result.hostname in ENDPOINTS:
             self.joplin_api_endpoint = ENDPOINTS[parse_result.hostname]
+
+        if 'CMS_API' in parse_result.query:
+            qs = parse_qs(parse_result.query)
+            self.joplin_api_endpoint = qs['CMS_API'][0]
 
         # get a path object to play with
         path = Path(parse_result.path)
