@@ -6,7 +6,7 @@ from modelcluster.models import ClusterableModel
 
 class Department(ClusterableModel, Group):
     department_page = models.OneToOneField(
-        "base.departmentPage",
+        "department_page.departmentPage",
         on_delete=models.CASCADE,
         null=True,
         blank=True

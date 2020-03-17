@@ -4,8 +4,12 @@ import wagtail_factories
 from django.utils.text import slugify
 from wagtail.core.models import Collection, Page
 from base.models import *
+from pages.service_page.models import ServicePage
+from pages.information_page.models import InformationPage
+from pages.topic_page.models import TopicPage
+from pages.guide_page.models import GuidePageTopic, GuidePageContact, GuidePage
 from wagtail.core import blocks
-from .. import PageFactory, TextBlockFactory
+from base.factories import PageFactory, TextBlockFactory
 
 """
 almost working
@@ -39,15 +43,6 @@ class GuidePageTopicFactory(factory.django.DjangoModelFactory):
         model = GuidePageTopic
 
 
-class GuidePageRelatedDepartmentsFactory(factory.django.DjangoModelFactory):
-    page = factory.SubFactory('base.factories.guide_page.GuidePageFactory')
-
-    related_department = factory.Iterator(DepartmentPage.objects.all())
-
-    class Meta:
-        model = GuidePageRelatedDepartments
-
-
 class GuidePageContactFactory(factory.django.DjangoModelFactory):
     page = factory.SubFactory('base.factories.guide_page.GuidePageFactory')
     contact = factory.Iterator(Contact.objects.all())
@@ -68,5 +63,4 @@ class GuidePageFactory(PageFactory):
     def create_related_objects(self, create, extracted, **kwargs):
         if create:
             GuidePageTopicFactory.create_batch(2, page=self)
-            GuidePageRelatedDepartmentsFactory.create_batch(2, page=self)
             GuidePageContactFactory.create_batch(2, page=self)

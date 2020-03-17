@@ -10,6 +10,7 @@
       <env name="DATABASE_URL" value="postgres://joplin@127.0.0.1:5433/joplin" />
       <env name="JANIS_URL" value="http://localhost:3000" />
       <env name="DEPLOYMENT_MODE" value="TEST" />
+      <env name="DJANGO_SECRET_KEY" value="blarg" />
     </envs>
     <option name="SDK_HOME" value="" />
     <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/joplin" />

@@ -87,8 +87,20 @@ INSTALLED_APPS = [
 
     'groups',
     'publish_preflight',
-    'locations',
-    'events',
+    'pages',
+    'pages.base_page',
+    'pages.department_page',
+    'pages.event_page',
+    'pages.form_container',
+    'pages.guide_page',
+    'pages.information_page',
+    'pages.location_page',
+    'pages.official_documents_page',
+    'pages.service_page',
+    'pages.topic_collection_page',
+    'pages.topic_page',
+    'pages.home_page',
+
 ]
 
 MIDDLEWARE = [
@@ -306,7 +318,7 @@ WAGTAIL_AUTO_UPDATE_PREVIEW = True
 BASE_URL = 'https://austintexas.io'
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'fake_key')
 
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

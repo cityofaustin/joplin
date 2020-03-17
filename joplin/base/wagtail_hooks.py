@@ -115,7 +115,7 @@ if settings.ISLOCAL or settings.ISREVIEW:
 
     @hooks.register('register_admin_menu_item')
     def register_options_menu_item():
-        return BranchSettingsMenuItem('Options', "/admin/settings/base/janisbranchsettings/2/", classnames="material-icons icon-settings", order=60)
+        return BranchSettingsMenuItem('Options', "/admin/settings/base/janisbranchsettings/1/", classnames="material-icons icon-settings", order=60)
 
 # example of rendering custom nested menu items
 # class LocationModelAdmin(ModelAdmin):

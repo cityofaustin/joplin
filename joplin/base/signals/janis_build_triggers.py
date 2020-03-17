@@ -6,7 +6,8 @@ from graphene import Node
 from wagtail.core.models import Page
 from wagtail.admin.models import get_object_usage
 
-from base.models import Contact, Location, Map, GuidePage
+from base.models import Contact, Location, Map
+from pages.guide_page.models import GuidePage
 from groups.models import Department
 from wagtail.documents.models import Document
 from base.signals.aws_publish import get_http_request, create_build_aws
@@ -52,7 +53,7 @@ def collect_pages(instance):
     global_page_id = Node.to_global_id(instance.get_verbose_name(), instance.id)
     global_ids.append(global_page_id)
 
-    if instance.get_verbose_name() is 'Service Page' or 'Information Page':
+    if instance.get_verbose_name() is 'Service Page' or instance.get_verbose_name() is 'Information Page':
         guide_ids = find_pages_in_guides(instance.id)
         global_ids.extend(guide_ids)
 

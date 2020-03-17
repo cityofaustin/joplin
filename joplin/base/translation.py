@@ -2,10 +2,22 @@ from wagtail_modeltranslation.translation import register, TranslationOptions
 from wagtail.core.models import Page
 from wagtail.images.models import Image
 
+from base.models import TranslatedImage, Theme, Contact, Location, PhoneNumber, ContactDayAndDuration, Map
 
-from .models import ThreeOneOne, TopicPage, TopicCollectionPage, Theme, ServicePage, ProcessPage, ProcessPageStep, DepartmentPage, DepartmentPageDirector, InformationPage, OfficialDocumentPage, OfficialDocumentPageOfficialDocument, TranslatedImage, Map, HomePage, GuidePage, FormContainer
-from locations.models import LocationPage, LocationPageRelatedServices
-from events.models import EventPage, EventPageFee
+from pages.base_page.models import JanisBasePage
+from pages.topic_collection_page.models import TopicCollectionPage
+from pages.topic_page.models import TopicPage, TopicPageTopPage
+from pages.service_page.models import ServicePage, ServicePageContact
+from pages.information_page.models import InformationPage, InformationPageContact
+from pages.department_page.models import DepartmentPage, DepartmentPageDirector, DepartmentPageContact, DepartmentPageTopPage, DepartmentPageRelatedPage
+from pages.official_documents_page.models import OfficialDocumentPage, OfficialDocumentPageOfficialDocument
+from pages.guide_page.models import GuidePage, GuidePageContact
+from pages.form_container.models import FormContainer
+from pages.home_page.models import HomePage
+
+
+from pages.location_page.models import LocationPage, LocationPageRelatedServices
+from pages.event_page.models import EventPage, EventPageFee
 
 
 @register(Image)
@@ -20,11 +32,9 @@ class TranslatedImageTranslationOptions(TranslationOptions):
     )
 
 
-@register(ThreeOneOne)
-class ThreeOneOneTranslationOptions(TranslationOptions):
-    fields = (
-        'title',
-    )
+@register(JanisBasePage)
+class JanisBasePageTranslationOptions(TranslationOptions):
+    pass
 
 
 @register(TopicPage)
@@ -67,26 +77,6 @@ class ServicePageTranslationOptions(TranslationOptions):
         'additional_content',
         'steps',
         'short_description',
-    )
-
-
-@register(ProcessPage)
-class ProcessPageTranslationOptions(TranslationOptions):
-    fields = (
-        'description',
-    )
-
-
-@register(ProcessPageStep)
-class ProcessPageStepTranslationOptions(TranslationOptions):
-    fields = (
-        'title',
-        'short_title',
-        'link_title',
-        'description',
-        'overview_steps',
-        'detailed_content',
-        'quote',
     )
 
 

@@ -14,18 +14,23 @@ from django_filters import FilterSet, OrderingFilter
 from wagtail.core.blocks import *
 from wagtail.documents.models import Document
 from wagtail.core.rich_text import expand_db_html
-from base.models import (
-    TranslatedImage, ServicePage, ServicePageContact, ServicePageTopic, InformationPage, InformationPageContact,
-    InformationPageTopic, DepartmentPage, DepartmentPageContact, DepartmentPageDirector, DepartmentPageTopPage,
-    DepartmentPageRelatedPage, Theme, TopicCollectionPage, TopicPage, TopicPageTopicCollection, TopicPageTopPage,
-    Contact, Location, PhoneNumber, ContactDayAndDuration, OfficialDocumentPage, OfficialDocumentPageTopic,
-    OfficialDocumentPageOfficialDocument, GuidePage, GuidePageTopic, GuidePageContact,
-    FormContainer, FormContainerTopic,
-)
+from base.models import TranslatedImage, Theme, Contact, Location, PhoneNumber, ContactDayAndDuration
+
+from pages.topic_collection_page.models import TopicCollectionPage
+from pages.topic_page.models import TopicPage, TopicPageTopPage
+from pages.service_page.models import ServicePage, ServicePageContact
+from pages.information_page.models import InformationPage, InformationPageContact
+from pages.department_page.models import DepartmentPage, DepartmentPageDirector, DepartmentPageContact, DepartmentPageTopPage, DepartmentPageRelatedPage
+from pages.official_documents_page.models import OfficialDocumentPage, OfficialDocumentPageOfficialDocument
+from pages.guide_page.models import GuidePage, GuidePageContact
+from pages.form_container.models import FormContainer
+from pages.base_page.models import JanisBasePage
+
+
 from .content_type_map import content_type_map
 import traceback
-from locations.models import LocationPage, LocationPageRelatedServices
-from events.models import EventPage, EventPageFee
+from pages.location_page.models import LocationPage, LocationPageRelatedServices
+from pages.event_page.models import EventPage, EventPageFee
 from graphql_relay import to_global_id
 
 
@@ -156,6 +161,18 @@ def convert_stream_field(field, registry=None):
     return StreamFieldType(description=field.help_text, required=not field.null)
 
 
+class JanisBasePageNode(DjangoObjectType):
+    janis_urls = graphene.List(graphene.String)
+
+    class Meta:
+        model = JanisBasePage
+        filter_fields = ['id', 'slug', 'live']
+        interfaces = [graphene.Node]
+
+    def resolve_janis_urls(self, info):
+        return self.specific.janis_urls()
+
+
 class DepartmentPageNode(DjangoObjectType):
     page_type = graphene.String()
 
@@ -196,13 +213,6 @@ class TopicCollectionNode(DjangoObjectType):
         model = TopicCollectionPage
         filter_fields = ['id', 'slug', 'live']
         interfaces = [graphene.Node]
-
-
-class TopicPageTopicCollectionNode(DjangoObjectType):
-    class Meta:
-        model = TopicPageTopicCollection
-        interfaces = [graphene.Node]
-        filter_fields = ['topiccollection']
 
 
 class TopicNode(DjangoObjectType):
@@ -394,9 +404,6 @@ class EventPageFeeNode(DjangoObjectType):
         interfaces = [graphene.Node]
 
 
-
-
-
 class ContactNode(DjangoObjectType):
     class Meta:
         model = Contact
@@ -425,13 +432,6 @@ class GuidePageContactNode(DjangoObjectType):
     class Meta:
         model = GuidePageContact
         interfaces = [graphene.Node]
-
-
-class ServicePageTopicNode(DjangoObjectType):
-    class Meta:
-        model = ServicePageTopic
-        interfaces = [graphene.Node]
-        filter_fields = ['topic']
 
 
 class TranslatedImageNode(DjangoObjectType):
@@ -676,117 +676,10 @@ class PageRevisionNode(DjangoObjectType):
         interfaces = [graphene.Node]
 
 
-def get_structure_for_content_type(content_type):
-    site_structure = []
-    content_type_data = content_type_map.get(content_type, None)
-    if not content_type_data:
-        raise Exception(f'content_type [{content_type}] is not included in content_type_map')
-
-    pages = content_type_data["model"].objects.filter(live=True)
-    for page in pages:
-        page_global_id = graphene.Node.to_global_id(content_type_data["node"], page.id)
-
-        # Only publish event pages at the date based url
-        if content_type == 'event page':
-            if page.date:
-                site_structure.append({'url': f'/event/{page.date.year}/{page.date.month}/{page.date.day}/{page.slug}/', 'type': content_type, 'id': page_global_id})
-            continue
-
-        if page.coa_global:
-            site_structure.append({'url': f'/{page.slug}/', 'type': content_type, 'id': page_global_id})
-
-        # To get offered by from departments, look at our page permissions
-        group_page_permissions = page.group_permissions.all()
-        for group_page_permission in group_page_permissions:
-            # Department groups have this
-            if hasattr(group_page_permission.group, "department"):
-                department_page = group_page_permission.group.department.department_page
-                if department_page:
-                    department_global_id = graphene.Node.to_global_id('DepartmentNode', department_page.id)
-                    site_structure.append({'url': f'/{department_page.slug}/{page.slug}/', 'type': content_type, 'id': page_global_id, 'parent_department': department_global_id})
-
-        # For content_type models that have topics
-        if hasattr(page, "topics"):
-            page_topics = page.topics.all()
-            for page_topic in page_topics:
-                page_topic_global_id = graphene.Node.to_global_id('TopicNode', page_topic.topic.id)
-                page_topic_tcs = page_topic.topic.topiccollections.all()
-                for tc in page_topic_tcs:
-                    if not tc.topiccollection.theme:
-                        continue
-
-                    page_topic_tc_global_id = graphene.Node.to_global_id('TopicCollectionNode', tc.topiccollection.id)
-                    site_structure.append({'url': f'/{tc.topiccollection.theme.slug}/{tc.topiccollection.slug}/{page_topic.topic.slug}/{page.slug}/', 'type': content_type, 'id': page_global_id, 'parent_topic': page_topic_global_id, 'grandparent_topic_collection': page_topic_tc_global_id})
-
-        # Location pages need urls
-        if content_type == 'location page':
-            site_structure.append({'url': f'/location/{page.slug}/', 'type': content_type, 'id': page_global_id})
-
-    return site_structure
-
-
-class SiteStructure(graphene.ObjectType):
-    value = GenericScalar()
-    structure_json = JSONString()
-
-    # json isn't a great way to do this, we should
-    # figure out how to make it queryable
-    def resolve_structure_json(self, resolve_info, *args, **kwargs):
-        # our structure here can be id: page dict
-        site_structure = []
-        topic_collections = TopicCollectionPage.objects.all()
-        for topic_collection in topic_collections:
-            if not topic_collection.theme:
-                continue
-
-            topic_collection_global_id = graphene.Node.to_global_id('TopicCollectionNode', topic_collection.id)
-            site_structure.append({'url': f'/{topic_collection.theme.slug}/{topic_collection.slug}/', 'type': 'topic collection', 'id': topic_collection_global_id})
-
-        topics = TopicPage.objects.all()
-        for topic in topics:
-            topic_global_id = graphene.Node.to_global_id('TopicNode', topic.id)
-            topic_tcs = topic.topiccollections.all()
-            for tc in topic_tcs:
-                if not tc.topiccollection.theme:
-                    continue
-
-                topic_tc_global_id = graphene.Node.to_global_id('TopicCollectionNode', tc.topiccollection.id)
-                site_structure.append({'url': f'/{tc.topiccollection.theme.slug}/{tc.topiccollection.slug}/{topic.slug}/', 'type': 'topic', 'id': topic_global_id, 'parent_topic_collection': topic_tc_global_id})
-
-        departments = DepartmentPage.objects.all()
-        for department in departments:
-            department_global_id = graphene.Node.to_global_id('DepartmentNode', department.id)
-            site_structure.append({'url': f'/{department.slug}/', 'type': 'department', 'id': department_global_id})
-
-        site_structure.extend(get_structure_for_content_type('service page'))
-        site_structure.extend(get_structure_for_content_type('information page'))
-        site_structure.extend(get_structure_for_content_type('official document page'))
-        site_structure.extend(get_structure_for_content_type('guide page'))
-        site_structure.extend(get_structure_for_content_type('form container'))
-        site_structure.extend(get_structure_for_content_type('location page'))
-        site_structure.extend(get_structure_for_content_type('event page'))
-
-        return site_structure
-
-
 class InformationPageContactNode(DjangoObjectType):
     class Meta:
         model = InformationPageContact
         interfaces = [graphene.Node]
-
-
-class InformationPageTopicNode(DjangoObjectType):
-    class Meta:
-        model = InformationPageTopic
-        interfaces = [graphene.Node]
-        filter_fields = ['topic']
-
-
-class FormContainerTopicNode(DjangoObjectType):
-    class Meta:
-        model = FormContainerTopic
-        interfaces = [graphene.Node]
-        filter_fields = ['topic']
 
 
 class DepartmentPageContactNode(DjangoObjectType):
@@ -882,20 +775,6 @@ class TopicPageTopPageNode(DjangoObjectType):
         interfaces = [graphene.Node]
 
 
-class OfficialDocumentPageTopicNode(DjangoObjectType):
-    class Meta:
-        model = OfficialDocumentPageTopic
-        interfaces = [graphene.Node]
-        filter_fields = ['topic']
-
-
-class GuidePageTopicNode(DjangoObjectType):
-    class Meta:
-        model = GuidePageTopic
-        interfaces = [graphene.Node]
-        filter_fields = ['topic']
-
-
 def get_page_with_preview_data(page, session):
     # Wagtail saves preview data in the session. We want to mimick what they're doing to generate the built-in preview.
     # https://github.com/wagtail/wagtail/blob/db6d36845f3f2c5d7009a22421c2efab9968aa24/wagtail/admin/views/pages.py#L544
@@ -918,13 +797,16 @@ def get_page_with_preview_data(page, session):
     return obj
 
 
+
+
 class Query(graphene.ObjectType):
     debug = graphene.Field(DjangoDebug, name='__debug')
+
+    all_pages = DjangoFilterConnectionField(JanisBasePageNode)
 
     department_page = graphene.Node.Field(DepartmentPageNode)
     all_service_pages = DjangoFilterConnectionField(ServicePageNode)
     page_revision = graphene.Field(PageRevisionNode, id=graphene.ID())
-    site_structure = graphene.Field(SiteStructure)
     all_page_revisions = DjangoFilterConnectionField(PageRevisionNode)
     all_information_pages = DjangoFilterConnectionField(InformationPageNode)
     all_department_pages = DjangoFilterConnectionField(DepartmentPageNode)
@@ -935,18 +817,8 @@ class Query(graphene.ObjectType):
         OfficialDocumentPageNode)
     all_guide_pages = DjangoFilterConnectionField(GuidePageNode)
     all_form_containers = DjangoFilterConnectionField(FormContainerNode)
-    all_topic_page_topic_collections = DjangoFilterConnectionField(TopicPageTopicCollectionNode)
-    all_service_page_topics = DjangoFilterConnectionField(ServicePageTopicNode)
-    all_information_page_topics = DjangoFilterConnectionField(InformationPageTopicNode)
-    all_official_document_page_topics = DjangoFilterConnectionField(OfficialDocumentPageTopicNode)
-    all_guide_page_topics = DjangoFilterConnectionField(GuidePageTopicNode)
     all_location_pages = DjangoFilterConnectionField(LocationPageNode)
-    all_form_container_topics = DjangoFilterConnectionField(FormContainerTopicNode)
     all_event_pages = DjangoFilterConnectionField(EventPageNode, filterset_class=EventFilter)
-
-    def resolve_site_structure(self, resolve_info):
-        site_structure = SiteStructure()
-        return site_structure
 
     def resolve_page_revision(self, resolve_info, id=None):
         revision = graphene.Node.get_node_from_global_id(resolve_info, id)

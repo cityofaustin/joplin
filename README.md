@@ -1,5 +1,6 @@
-# Joplin - CMS for the City of Austin
-..
+# Joplin 3 - CMS for the City of Austin
+
+>>>>>>> v3
 Joplin is the Authoring Interface for adding and editing content for alpha.austin.gov.
 
 <img src="/README/authoring_interface.png" align="middle" width="500" >
@@ -479,3 +480,5 @@ HEROKU_JANIS_APP_NAME=janis-staging ./scripts/serve-local.sh
 #### Syncing prod data to staging
 
 1. ```heroku pg:copy joplin::DATABASE_URL DATABASE_URL -a joplin-staging```
+
+[Changelog](https://github.com/cityofaustin/techstack/blob/master/changelogs/joplin.md)
