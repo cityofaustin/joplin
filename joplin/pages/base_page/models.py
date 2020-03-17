@@ -53,20 +53,21 @@ class JanisBasePage(Page):
         """
         This should handle coa_global and department stuff
         """
+        branch_settings = JanisBranchSettings.objects.first()
 
         # If we're global, even if we have a department, we should only exist at
         # /page_slug
         # and not at
         # /department_slug/page_slug
         if self.coa_global:
-            return ['{base_url}{page_slug}/'.format(base_url=self.janis_url_base('publish_janis_branch'),
+            return ['{base_url}{page_slug}/'.format(base_url=branch_settings.get_publish_url_base(),
                                                     page_slug=self.slug)]
 
         # If we're under departments
         departments = self.departments()
         if len(departments) > 0:
             return [
-                '{base_url}{department_slug}/{page_slug}/'.format(base_url=self.janis_url_base('publish_janis_branch'),
+                '{base_url}{department_slug}/{page_slug}/'.format(base_url=branch_settings.get_publish_url_base(),
                                                                   department_slug=department.slug, page_slug=self.slug)
                 for department in departments]
 
@@ -103,33 +104,6 @@ class JanisBasePage(Page):
             # Pass address of CMS_API if we are not running on Staging or Production
             # Janis will query from its default CMS_API if a param is not provided
             return url_end + f"?CMS_API={settings.CMS_API}"
-
-    def janis_url_base(self, janis_branch):
-        """
-        returns a valid url of the base URL in janis:
-            Use hardcoded JANIS_URL for staging and prod
-            Otherwise, use configurable branch setting
-
-        TODO: this and url_base in site settings could probably
-        be revisited for semantics to be less confusing
-        """
-        if settings.ISSTAGING or settings.ISPRODUCTION:
-            return os.getenv("JANIS_URL")
-        else:
-            branch_settings = JanisBranchSettings.objects.first()
-            if branch_settings:
-                return branch_settings.url_base(janis_branch)
-            else:
-                # If we've made it here, we don't have a base url
-                # let's just make up a fake one
-                return "http://fake.base.url/"
-
-    # alias for url base function
-    janis_preview_url_start = janis_url_base
-
-    # TODO this function and preview_url_data are pretty similar, we can probably consolidate them
-    def janis_preview_url(self, revision=None, lang="en"):
-        return f"{self.janis_preview_url_start('preview_janis_branch')}/{lang}/{self.janis_preview_url_end(revision=revision)}"
 
     # data needed to construct preview URLs for any language
     # [janis_preview_url_start]/[lang]/[janis_preview_url_end]
