@@ -12,6 +12,7 @@ from pages.service_page.models import ServicePage
 from pages.information_page.models import InformationPage
 from pages.topic_page.models import TopicPage
 from pages.topic_collection_page.models import TopicCollectionPage
+from pages.topic_collection_page.factories import ThemeFactory, TopicCollectionPageFactory
 from pages.department_page.models import DepartmentPage
 from pages.official_documents_page.models import OfficialDocumentPage
 from pages.guide_page.models import GuidePage
@@ -24,11 +25,27 @@ from base.models.site_settings import JanisBranchSettings
 from django.contrib.contenttypes.models import ContentType
 import json
 
+
 def import_page_from_url(url):
     page_importer = PageImporter(url)
-    blarg = url
-    print(blarg)
-    return 3
+
+    revision_id = page_importer.revision_id
+    page_dictionary = page_importer.get_page_dictionary_from_revision()
+
+    # todo: move this logic elsewhere and don't hardcode it to topic collection pages
+    theme = ThemeFactory.create(slug=page_dictionary['theme']['slug'], text=page_dictionary['theme']['text'],
+                                description=page_dictionary['theme']['description'])
+
+    # Set home as parent
+    # todo: not hardcode home
+    # todo: move this to base page factory?
+    home = Page.objects.get(id=2)
+    page = TopicCollectionPageFactory.create(imported_revision_id=revision_id, title=page_dictionary['title'],
+                                             slug=page_dictionary['slug'], description=page_dictionary['description'],
+                                             theme=theme, parent=home)
+
+    return page.id
+
 
 def new_page_from_modal(request):
     user_perms = UserPagePermissionsProxy(request.user)
@@ -47,12 +64,9 @@ def new_page_from_modal(request):
             response = HttpResponse(json.dumps({'id': new_page_id}), content_type="application/json")
             return response
 
-
         data = {}
         data['title'] = body['title']
         data['owner'] = request.user
-
-
 
         # Create the page
         if body['type'] == 'service':
@@ -81,8 +95,8 @@ def new_page_from_modal(request):
             page = EventPage(**data)
 
         # Add it as a child of home
-        home = Page.objects.get(id=2)
-        home.add_child(instance=page)
+        # home = Page.objects.get(id=2)
+        # home.add_child(instance=page)
 
         # Save our draft
         page.save_revision()

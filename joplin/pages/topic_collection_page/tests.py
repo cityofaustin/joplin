@@ -77,7 +77,8 @@ def test_import_dummy_data_from_page_dictionary():
         }
     }
 
-    theme = ThemeFactory.build(slug=page_dictionary['theme']['slug'], text=page_dictionary['theme']['text'], description=page_dictionary['theme']['description'])
+    theme = ThemeFactory.build(slug=page_dictionary['theme']['slug'], text=page_dictionary['theme']['text'],
+                               description=page_dictionary['theme']['description'])
 
     assert theme.slug == page_dictionary['theme']['slug']
     assert theme.text == page_dictionary['theme']['text']
