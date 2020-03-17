@@ -1,4 +1,4 @@
-from pages.topic_collection_page.factories import TopicCollectionPageFactory, JanisBasePageWithTopicCollectionsFactory
+from pages.topic_collection_page.factories import TopicCollectionPageFactory, JanisBasePageWithTopicCollectionsFactory, ThemeFactory
 import pytest
 
 
@@ -75,5 +75,9 @@ def test_import_dummy_data_from_page_dictionary():
         }
     }
 
+    theme = ThemeFactory.build(slug='theme-slug-en', text='theme text [en]', description='theme description [en]')
+    page = TopicCollectionPageFactory.build(title='topic collection title [en]', slug='topic-collection-title-en',
+                                            description='topic collection description [en]', theme=theme)
 
 
+    blarg = 3
