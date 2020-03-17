@@ -48,6 +48,7 @@ class JanisBasePage(Page):
     ]
 
     coa_global = models.BooleanField(default=False, verbose_name='Make this a top level page')
+    imported_revision_id = models.TextField(blank=True)
 
     def janis_urls(self):
         """
