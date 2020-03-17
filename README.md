@@ -480,4 +480,6 @@ HEROKU_JANIS_APP_NAME=janis-staging ./scripts/serve-local.sh
 
 1. ```heroku pg:copy joplin::DATABASE_URL DATABASE_URL -a joplin-staging```
 
-[Changelog](https://github.com/cityofaustin/techstack/blob/master/changelogs/joplin.md)
+#### Changelog
+
+We update the [Changelog](https://github.com/cityofaustin/techstack/blob/master/changelogs/joplin.md) in techstack with each update to production.
