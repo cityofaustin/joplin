@@ -44,6 +44,12 @@ vars_from_circleci = [
     "DJANGO_SECRET_KEY",  # CircleCI
     "ALGOLIA_APP_ID",  # CircleCI
     "ALGOLIA_API_KEY",  # CircleCI
+    "CI_COA_PUBLISHER_V2_URL_PR",
+    "COA_PUBLISHER_V2_API_KEY_PR",
+    "CI_COA_PUBLISHER_V2_URL_STAGING",
+    "COA_PUBLISHER_V2_API_KEY_STAGING",
+    "CI_COA_PUBLISHER_V2_URL_PROD",
+    "COA_PUBLISHER_V2_API_KEY_PROD",
 ]
 for v in vars_from_circleci:
     config[v] = os.getenv(v, "")
@@ -57,6 +63,8 @@ default_branch_vars = {
     "LOAD_DATA": "prod",
     "MONITOR_PERFORMANCE": False,
     "DELETION_PROTECTION": 0,
+    "DJANGO_LOG_LEVEL": "INFO",
+    "V3_WIP": False,
 }
 config.update(default_branch_vars)
 

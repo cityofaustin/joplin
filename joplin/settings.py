@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
 import os
+import logging
 from distutils.util import strtobool
 from urllib.parse import urlparse
 
@@ -462,3 +463,36 @@ if SCOUT_MONITOR:
     ] + INSTALLED_APPS
 
     SCOUT_NAME = os.environ.get('APPNAME')
+
+
+# Set configs for Janis Publisher_v2
+if ISREVIEW:
+    PUBLISHER_V2_URL=os.getenv("CI_COA_PUBLISHER_V2_URL_PR")
+    PUBLISHER_V2_API_KEY=os.getenv("COA_PUBLISHER_V2_API_KEY_PR")
+elif ISSTAGING:
+    PUBLISHER_V2_URL=os.getenv("CI_COA_PUBLISHER_V2_URL_STAGING")
+    PUBLISHER_V2_API_KEY=os.getenv("COA_PUBLISHER_V2_API_KEY_STAGING")
+elif ISPRODUCTION:
+    PUBLISHER_V2_URL=os.getenv("CI_COA_PUBLISHER_V2_URL_PROD")
+    PUBLISHER_V2_API_KEY=os.getenv("COA_PUBLISHER_V2_API_KEY_PROD")
+
+
+# Set logger level
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'joplin': {
+            'handlers': ['console'],
+            'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
+        },
+    },
+}
+
+# Temporary variables to toggle features for v3 while its still in development
+V3_WIP = bool(strtobool(os.environ.get('V3_WIP', str(False))))

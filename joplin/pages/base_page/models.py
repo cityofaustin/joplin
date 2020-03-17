@@ -10,7 +10,6 @@ from wagtail.admin.edit_handlers import FieldPanel, ObjectList, TabbedInterface,
 from wagtail.core.models import Page
 from wagtail.core.fields import RichTextField
 from flags.state import flag_enabled
-
 from base.models.site_settings import JanisBranchSettings
 
 
@@ -109,7 +108,6 @@ class JanisBasePage(Page):
         returns a valid url of the base URL in janis:
             Use hardcoded JANIS_URL for staging and prod
             Otherwise, use configurable branch setting
-
         TODO: this and url_base in site settings could probably
         be revisited for semantics to be less confusing
         """
@@ -124,21 +122,18 @@ class JanisBasePage(Page):
                 # let's just make up a fake one
                 return "http://fake.base.url/"
 
-    # alias for url base function
-    janis_preview_url_start = janis_url_base
-
-    # TODO this function and preview_url_data are pretty similar, we can probably consolidate them
-    def janis_preview_url(self, revision=None, lang="en"):
-        return f"{self.janis_preview_url_start('preview_janis_branch')}/{lang}/{self.janis_preview_url_end(revision=revision)}"
-
     # data needed to construct preview URLs for any language
     # [janis_preview_url_start]/[lang]/[janis_preview_url_end]
     # ex: http://localhost:3000/es/preview/information/UGFnZVJldmlzaW9uTm9kZToyMjg=
     def preview_url_data(self, revision=None):
         return {
-            "janis_preview_url_start": self.janis_preview_url_start('preview_janis_branch'),
+            "janis_preview_url_start": self.janis_url_base('preview_janis_branch'),
             "janis_preview_url_end": self.janis_preview_url_end(revision=revision),
         }
+
+    def janis_preview_url(self, revision=None, lang="en"):
+        data = self.preview_url_data(revision)
+        return f'{data["janis_preview_url_start"]}/{lang}/{data["janis_preview_url_end"]}'
 
     @property
     def status_string(self):

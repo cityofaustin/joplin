@@ -12,10 +12,11 @@ from groups.models import Department
 from wagtail.documents.models import Document
 from base.signals.aws_publish import get_http_request, create_build_aws
 from base.signals.netlify_publish import netlify_publish
+from base.signals.publish_v2 import publish_v2
 from flags.state import flag_enabled
 
 import logging
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('joplin')
 
 JANIS_SLUG_URL = settings.JANIS_SLUG_URL
 
@@ -26,11 +27,14 @@ def trigger_build(sender, pages_ids, action='saved', instance=None):
     source = name of snippet or object triggering build
     """
     trigger_object = instance
-    logger.debug(f'{trigger_object} {action}, triggering build')
+    logger.info(f'{trigger_object} {action}, triggering build')
     if settings.ISSTAGING or settings.ISPRODUCTION:
         create_build_aws(sender, instance, request=get_http_request())
     elif settings.ISREVIEW:
-        netlify_publish()
+        if flag_enabled('INCREMENTAL BUILDS'):
+            publish_v2(pages_ids)
+        else:
+            netlify_publish()
 
 
 def collect_pages(instance):
