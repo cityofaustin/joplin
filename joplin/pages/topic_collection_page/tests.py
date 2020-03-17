@@ -1,4 +1,5 @@
-from pages.topic_collection_page.factories import TopicCollectionPageFactory, JanisBasePageWithTopicCollectionsFactory, ThemeFactory
+from pages.topic_collection_page.factories import TopicCollectionPageFactory, JanisBasePageWithTopicCollectionsFactory, \
+    ThemeFactory
 import pytest
 
 
@@ -62,6 +63,7 @@ def test_janis_page_with_topic_collections_urls():
 # Try importing using dummy data in a page_dictionary
 @pytest.mark.django_db
 def test_import_dummy_data_from_page_dictionary():
+    revision_id = 'UGFnZVJldmlzaW9uTm9kZToxMw=='
     page_dictionary = {
         'id': 'VG9waWNDb2xsZWN0aW9uTm9kZTo0',
         'title': 'topic collection title [en]',
@@ -75,9 +77,17 @@ def test_import_dummy_data_from_page_dictionary():
         }
     }
 
-    theme = ThemeFactory.build(slug='theme-slug-en', text='theme text [en]', description='theme description [en]')
-    page = TopicCollectionPageFactory.build(title='topic collection title [en]', slug='topic-collection-title-en',
-                                            description='topic collection description [en]', theme=theme)
+    theme = ThemeFactory.build(slug=page_dictionary['theme']['slug'], text=page_dictionary['theme']['text'], description=page_dictionary['theme']['description'])
 
+    assert theme.slug == page_dictionary['theme']['slug']
+    assert theme.text == page_dictionary['theme']['text']
+    assert theme.description == page_dictionary['theme']['description']
 
-    blarg = 3
+    page = TopicCollectionPageFactory.build(imported_revision_id=revision_id, title=page_dictionary['title'],
+                                            slug=page_dictionary['slug'], description=page_dictionary['description'],
+                                            theme=theme)
+
+    assert page.title == page_dictionary['title']
+    assert page.slug == page_dictionary['slug']
+    assert page.description == page_dictionary['description']
+    assert page.imported_revision_id == revision_id
