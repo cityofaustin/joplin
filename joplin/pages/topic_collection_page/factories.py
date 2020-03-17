@@ -41,14 +41,21 @@ def create_topic_collection_page_from_page_dictionary(page_dictionary, revision_
     # first check to see if we already imported this page
     # if we did, just go to the edit page for it without changing the db
     # todo: maybe change this to allow updating pages in the future?
-    page = TopicCollectionPage.objects.get(imported_revision_id=revision_id)
+    try:
+        page = TopicCollectionPage.objects.get(imported_revision_id=revision_id)
+    except TopicCollectionPage.DoesNotExist:
+        page = None
     if page:
         return page.id
+
 
     # since we don't have a page matching the revision id, we should look
     # for other matches, for now let's just use slug
     # todo: figure out what we want the logic around importing a page with the same slug to look like
-    page = TopicCollectionPage.objects.get(slug=page_dictionary['slug'])
+    try:
+        page = TopicCollectionPage.objects.get(slug=page_dictionary['slug'])
+    except TopicCollectionPage.DoesNotExist:
+        page = None
     if page:
         return page.id
 
@@ -57,7 +64,10 @@ def create_topic_collection_page_from_page_dictionary(page_dictionary, revision_
     # check to see if we already have this theme imported
     # todo: use something other than slug here
     # todo: add imported id to themes
-    theme = Theme.objects.get(slug=page_dictionary['theme']['slug'])
+    try:
+        theme = Theme.objects.get(slug=page_dictionary['theme']['slug'])
+    except Theme.DoesNotExist:
+        theme = None
     if not theme:
         theme = ThemeFactory.create(slug=page_dictionary['theme']['slug'],
                                     text=page_dictionary['theme']['text'],
