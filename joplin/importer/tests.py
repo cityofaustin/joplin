@@ -59,6 +59,16 @@ def test_get_information_page_from_revision():
 def test_get_dummy_topic_collection_page_from_revision():
     preview_url = 'http://janis-austin-gov-staging.s3-website-us-east-1.amazonaws.com/en/preview/topiccollection/UGFnZVJldmlzaW9uTm9kZToxMw==?CMS_API=https://joplin-pr-4116-importer-j2-tes.herokuapp.com/api/graphql'
 
+    page_importer = PageImporter(preview_url)
+    page_dictionary = page_importer.get_page_dictionary_from_revision()
+
+    assert page_dictionary['id'] == 'VG9waWNDb2xsZWN0aW9uTm9kZTo0'
+    assert page_dictionary['title'] == 'topic collection title [en]'
+    assert page_dictionary['slug'] == 'topic-collection-title-en'
+    assert page_dictionary['description'] == 'topic collection description [en]'
+    assert page_dictionary['theme'] == {
+        'id': 'VGhlbWVOb2RlOjE='
+    }
 
 # this test will start breaking once we no longer have this revision in the db
 # todo: figure out a good way to mock api responses

@@ -1,6 +1,25 @@
 from gql import gql
 
 queries = {
+    'topiccollection': gql('''
+    query getTopicPageRevision($id: ID) {
+      allPageRevisions(id: $id) {
+        edges {
+          node {
+            asTopicCollectionPage {
+              id
+                title
+              slug
+              description
+                        theme {
+                id
+              }
+            }
+          }
+        }
+      }
+    }
+    '''),
     'topic': gql('''
     query getTopicPageRevision($id: ID) {
       allPageRevisions(id: $id) {
