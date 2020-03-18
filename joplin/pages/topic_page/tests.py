@@ -1,7 +1,8 @@
 import pytest
 
 # Try importing using dummy data in a page_dictionary
-from pages.topic_collection_page.factories import ThemeFactory, TopicCollectionPageFactory
+from pages.topic_collection_page.factories import ThemeFactory, TopicCollectionPageFactory, \
+    create_topic_collection_page_from_page_dictionary
 from pages.topic_page.factories import TopicPageFactory, create_topic_page_from_page_dictionary
 
 
@@ -158,29 +159,47 @@ def test_import_from_page_dictionary_twice_different_revisions():
     # not sure if we need to check this or not so I'm checking it
     assert list(page.topic_collections.all()) == list(second_page.topic_collections.all())
 
-#
-#
-# # when importing a page with an existing theme,
-# # we should use the existing theme for the page
-# @pytest.mark.django_db
-# def test_import_from_page_dictionary_existing_theme():
-#     revision_id = 'UGFnZVJldmlzaW9uTm9kZToxMw=='
-#     page_dictionary = {
-#         'id': 'VG9waWNDb2xsZWN0aW9uTm9kZTo0',
-#         'title': 'topic collection title [en]',
-#         'slug': 'topic-collection-title-en',
-#         'description': 'topic collection description [en]',
-#         'theme': {
-#             'id': 'VGhlbWVOb2RlOjE=',
-#             'slug': 'theme-slug-en',
-#             'text': 'theme text [en]',
-#             'description': 'theme description [en]'
-#         }
-#     }
-#
-#     theme = ThemeFactory.create(slug=page_dictionary['theme']['slug'], text=page_dictionary['theme']['text'],
-#                                 description=page_dictionary['theme']['description'])
-#
-#     page = create_topic_collection_page_from_page_dictionary(page_dictionary, revision_id)
-#
-#     assert page.theme == theme
+
+# when importing a page with an existing topic collection,
+# we should use the existing theme for the page
+@pytest.mark.django_db
+def test_import_from_page_dictionary_existing_topic_collections():
+    revision_id = 'UGFnZVJldmlzaW9uTm9kZToxMg=='
+    page_dictionary = {
+        'id': 'VG9waWNOb2RlOjU=',
+        'title': 'topic title [en]',
+        'slug': 'topic-title-en',
+        'description': 'topic description [en]',
+        'topiccollections': {
+            'edges': [{
+                'node': {
+                    'topiccollection': {
+                        'id': 'VG9waWNDb2xsZWN0aW9uTm9kZTo0',
+                        'title': 'topic collection title [en]',
+                        'slug': 'topic-collection-title-en',
+                        'description': 'topic collection description [en]',
+                        'theme': {
+                            'id': 'VGhlbWVOb2RlOjE=',
+                            'slug': 'theme-slug-en',
+                            'text': 'theme text [en]',
+                            'description': 'theme description [en]'
+                        },
+                        'liveRevision': {
+                            'id': 'UGFnZVJldmlzaW9uTm9kZToz'
+                        }
+                    }
+                }
+            }]
+        }
+    }
+
+    topic_collection_page_dictionaries = [edge['node']['topiccollection'] for edge in
+                                          page_dictionary['topiccollections']['edges']]
+
+    topic_collection_pages = [
+        create_topic_collection_page_from_page_dictionary(dictionary, dictionary['liveRevision']['id']) for dictionary
+        in topic_collection_page_dictionaries]
+
+    page = create_topic_page_from_page_dictionary(page_dictionary, revision_id)
+
+    assert page.theme == topic_collection_pages
