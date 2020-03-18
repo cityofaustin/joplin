@@ -37,7 +37,16 @@ queries = {
                     edges {
                       node {
                         topiccollection {
+                          id
+                          title
                           slug
+                          description
+                          theme {
+                            id
+                            slug
+                            text
+                            description
+                          }
                           liveRevision {
                             id
                           }

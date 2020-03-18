@@ -94,7 +94,16 @@ def test_get_dummy_topic_page_from_revision():
         'edges': [{
             'node': {
                 'topiccollection': {
+                    'id': 'VG9waWNDb2xsZWN0aW9uTm9kZTo0',
+                    'title': 'topic collection title [en]',
                     'slug': 'topic-collection-title-en',
+                    'description': 'topic collection description [en]',
+                    'theme': {
+                        'id': 'VGhlbWVOb2RlOjE=',
+                        'slug': 'theme-slug-en',
+                        'text': 'theme text [en]',
+                        'description': 'theme description [en]'
+                    },
                     'liveRevision': {
                         'id': 'UGFnZVJldmlzaW9uTm9kZToz'
                     }
