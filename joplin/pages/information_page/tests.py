@@ -162,3 +162,126 @@ def test_import_from_page_dictionary_twice():
     assert second_page == page
     # not sure if we need to check this or not so I'm checking it
     assert list(page.topics.all()) == list(second_page.topics.all())
+
+
+# when importing the same page twice, with a different revision id
+# we should just return the id of the previously imported page
+# todo: decide if this is how we want this to work
+@pytest.mark.django_db
+def test_import_from_page_dictionary_twice_different_revisions():
+    first_revision_id = 'first_revision_id'
+    second_revision_id = 'second_revision_id'
+    page_dictionary = {
+        'id': 'SW5mb3JtYXRpb25QYWdlTm9kZTo2',
+        'title': 'information page title [en]',
+        'slug': 'information-page-title-en',
+        'description': 'information page description [en]',
+        'topics': {
+            'edges': [{
+                'node': {
+                    'topic': {
+                        'id': 'VG9waWNOb2RlOjU=',
+                        'title': 'topic title [en]',
+                        'slug': 'topic-title-en',
+                        'description': 'topic description [en]',
+                        'topiccollections': {
+                            'edges': [{
+                                'node': {
+                                    'topiccollection': {
+                                        'id': 'VG9waWNDb2xsZWN0aW9uTm9kZTo0',
+                                        'title': 'topic collection title [en]',
+                                        'slug': 'topic-collection-title-en',
+                                        'description': 'topic collection description [en]',
+                                        'theme': {
+                                            'id': 'VGhlbWVOb2RlOjE=',
+                                            'slug': 'theme-slug-en',
+                                            'text': 'theme text [en]',
+                                            'description': 'theme description [en]'
+                                        },
+                                        'liveRevision': {
+                                            'id': 'UGFnZVJldmlzaW9uTm9kZToz'
+                                        }
+                                    }
+                                }
+                            }]
+                        },
+                        'liveRevision': {
+                            'id': 'UGFnZVJldmlzaW9uTm9kZToxMg=='
+                        }
+                    }
+                }
+            }]
+        },
+        'additionalContent': '<p>information page additional content [en]</p>',
+        'coaGlobal': False
+    }
+
+    # get the page we're creating
+    page = create_information_page_from_page_dictionary(page_dictionary, first_revision_id)
+
+    # try making it again
+    second_page = create_information_page_from_page_dictionary(page_dictionary, second_revision_id)
+
+    assert second_page == page
+    # not sure if we need to check this or not so I'm checking it
+    assert list(page.topics.all()) == list(second_page.topics.all())
+
+
+# when importing a page with an existing topic,
+# we should use the existing topic for the page
+@pytest.mark.django_db
+def test_import_from_page_dictionary_existing_topic():
+    revision_id = 'UGFnZVJldmlzaW9uTm9kZToxMQ=='
+    page_dictionary = {
+        'id': 'SW5mb3JtYXRpb25QYWdlTm9kZTo2',
+        'title': 'information page title [en]',
+        'slug': 'information-page-title-en',
+        'description': 'information page description [en]',
+        'topics': {
+            'edges': [{
+                'node': {
+                    'topic': {
+                        'id': 'VG9waWNOb2RlOjU=',
+                        'title': 'topic title [en]',
+                        'slug': 'topic-title-en',
+                        'description': 'topic description [en]',
+                        'topiccollections': {
+                            'edges': [{
+                                'node': {
+                                    'topiccollection': {
+                                        'id': 'VG9waWNDb2xsZWN0aW9uTm9kZTo0',
+                                        'title': 'topic collection title [en]',
+                                        'slug': 'topic-collection-title-en',
+                                        'description': 'topic collection description [en]',
+                                        'theme': {
+                                            'id': 'VGhlbWVOb2RlOjE=',
+                                            'slug': 'theme-slug-en',
+                                            'text': 'theme text [en]',
+                                            'description': 'theme description [en]'
+                                        },
+                                        'liveRevision': {
+                                            'id': 'UGFnZVJldmlzaW9uTm9kZToz'
+                                        }
+                                    }
+                                }
+                            }]
+                        },
+                        'liveRevision': {
+                            'id': 'UGFnZVJldmlzaW9uTm9kZToxMg=='
+                        }
+                    }
+                }
+            }]
+        },
+        'additionalContent': '<p>information page additional content [en]</p>',
+        'coaGlobal': False
+    }
+
+    topic_page_dictionaries = [edge['node']['topic'] for edge in page_dictionary['topics']['edges']]
+    topic_pages = [create_topic_page_from_page_dictionary(dictionary, dictionary['liveRevision']['id']) for dictionary in topic_page_dictionaries]
+
+    page = create_information_page_from_page_dictionary(page_dictionary, revision_id)
+
+    topics_on_page = [base_page_topic.topic for base_page_topic in page.topics.all()]
+
+    assert topics_on_page == topic_pages
