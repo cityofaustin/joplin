@@ -123,3 +123,58 @@ def test_get_dummy_topic_page_from_revision():
             }
         }]
     }
+
+
+# this test will start breaking once we no longer have this revision in the db
+# todo: figure out a good way to mock api responses
+# https://docs.python.org/3/library/unittest.mock.html
+# @patch('module.ClassName2')
+def test_get_dummy_information_page_from_revision():
+    preview_url = 'http://janis-austin-gov-staging.s3-website-us-east-1.amazonaws.com/en/preview/information/UGFnZVJldmlzaW9uTm9kZToxMQ==?CMS_API=https://joplin-pr-4116-importer-j2-tes.herokuapp.com/api/graphql'
+
+    page_importer = PageImporter(preview_url)
+    page_dictionary = page_importer.get_page_dictionary_from_revision()
+
+    assert page_dictionary['id'] == 'SW5mb3JtYXRpb25QYWdlTm9kZTo2'
+    assert page_dictionary['title'] == 'information page title [en]'
+    assert page_dictionary['slug'] == 'information-page-title-en'
+    assert page_dictionary['description'] == 'information page description [en]'
+    assert page_dictionary['topics'] == {
+        'edges': [{
+            'node': {
+                'topic': {
+                    'id': 'VG9waWNOb2RlOjU=',
+                    'title': 'topic title [en]',
+                    'slug': 'topic-title-en',
+                    'description': 'topic description [en]',
+                    'topiccollections': {
+                        'edges': [{
+                            'node': {
+                                'topiccollection': {
+                                    'id': 'VG9waWNDb2xsZWN0aW9uTm9kZTo0',
+                                    'title': 'topic collection title [en]',
+                                    'slug': 'topic-collection-title-en',
+                                    'description': 'topic collection description [en]',
+                                    'theme': {
+                                        'id': 'VGhlbWVOb2RlOjE=',
+                                        'slug': 'theme-slug-en',
+                                        'text': 'theme text [en]',
+                                        'description': 'theme description [en]'
+                                    },
+                                    'liveRevision': {
+                                        'id': 'UGFnZVJldmlzaW9uTm9kZToz'
+                                    }
+                                }
+                            }
+                        }]
+                    },
+                    'liveRevision': {
+                        'id': 'UGFnZVJldmlzaW9uTm9kZToxMg=='
+                    }
+                }
+            }
+        }]
+    }
+    assert page_dictionary['additionalContent'] == '<p>information page additional content [en]</p>'
+    #     todo contacts
+    assert not page_dictionary['coaGlobal']
