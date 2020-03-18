@@ -90,11 +90,15 @@ def test_get_dummy_topic_page_from_revision():
     assert page_dictionary['title'] == 'topic title [en]'
     assert page_dictionary['slug'] == 'topic-title-en'
     assert page_dictionary['description'] == 'topic description [en]'
-    # todo actually make sure we create pages for these/check for them
     assert page_dictionary['topiccollections'] == {
-        'edges': [
-            {'node': {
-                'id': 'VG9waWNQYWdlVG9waWNDb2xsZWN0aW9uTm9kZTox'
-            }}
-        ]
+        'edges': [{
+            'node': {
+                'topiccollection': {
+                    'slug': 'topic-collection-title-en',
+                    'liveRevision': {
+                        'id': 'UGFnZVJldmlzaW9uTm9kZToz'
+                    }
+                }
+            }
+        }]
     }

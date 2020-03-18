@@ -24,27 +24,32 @@ queries = {
     }
     '''),
     'topic': gql('''
-    query getTopicPageRevision($id: ID) {
-      allPageRevisions(id: $id) {
-        edges {
-          node {
-            asTopicPage {
-              id
-                title
-              slug
-              description
-              topiccollections {
-                edges {
-                  node {
-                    id
+        query getTopicPageRevision($id: ID) {
+          allPageRevisions(id: $id) {
+            edges {
+              node {
+                asTopicPage {
+                  id
+                  title
+                  slug
+                  description
+                  topiccollections {
+                    edges {
+                      node {
+                        topiccollection {
+                          slug
+                          liveRevision {
+                            id
+                          }
+                        }
+                      }
+                    }
                   }
                 }
               }
             }
           }
         }
-      }
-    }
     '''),
     'information': gql('''
         query getInformationPageRevision($id:ID) {
