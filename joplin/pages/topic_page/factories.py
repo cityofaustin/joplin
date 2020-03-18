@@ -48,6 +48,6 @@ def create_topic_page_from_page_dictionary(page_dictionary, revision_id):
     page = TopicPageFactory.create(imported_revision_id=revision_id, title=page_dictionary['title'],
                                    slug=page_dictionary['slug'],
                                    description=page_dictionary['description'],
-                                   topic_collections=topic_collection_pages)
+                                   add_topic_collections=topic_collection_pages)
 
     return page

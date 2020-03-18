@@ -109,6 +109,8 @@ def test_import_from_page_dictionary_twice():
     second_page = create_topic_page_from_page_dictionary(page_dictionary, revision_id)
 
     assert second_page == page
+    # not sure if we need to check this or not so I'm checking it
+    assert list(page.topic_collections.all()) == list(second_page.topic_collections.all())
 
 #
 # # when importing the same page twice, with a different revision id

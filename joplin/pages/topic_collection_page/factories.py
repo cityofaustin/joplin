@@ -33,9 +33,19 @@ class JanisBasePageWithTopicCollectionsFactory(JanisBasePageFactory):
         model = JanisBasePageWithTopicCollections
 
     @factory.post_generation
-    def create_related_objects(self, create, extracted, **kwargs):
+    def add_topic_collections(self, create, extracted, **kwargs):
+        if extracted:
+            # A list of topic collections were passed in, use them
+            for topic_collection in extracted:
+                # todo: check to see if we already have the basepagetopiccollection objects made
+                JanisBasePageTopicCollectionFactory.create(page=self, topic_collection=topic_collection)
+            return
+
+        # todo figure out if this is really what we want this factory to do
         if create:
             JanisBasePageTopicCollectionFactory.create_batch(2, page=self)
+
+
 
 def create_topic_collection_page_from_page_dictionary(page_dictionary, revision_id):
     # first check to see if we already imported this page
