@@ -7,19 +7,37 @@ from pages.topic_page.factories import TopicPageFactory
 
 @pytest.mark.django_db
 def test_import_dummy_data_from_page_dictionary():
-    topic_collection_page_revision_id = 'UGFnZVJldmlzaW9uTm9kZToz'
-    topic_collection_page_dictionary = {
-        'id': 'VG9waWNDb2xsZWN0aW9uTm9kZTo0',
-        'title': 'topic collection title [en]',
-        'slug': 'topic-collection-title-en',
-        'description': 'topic collection description [en]',
-        'theme': {
-            'id': 'VGhlbWVOb2RlOjE=',
-            'slug': 'theme-slug-en',
-            'text': 'theme text [en]',
-            'description': 'theme description [en]'
+    revision_id = 'UGFnZVJldmlzaW9uTm9kZToxMg=='
+    page_dictionary = {
+        'id': 'VG9waWNOb2RlOjU=',
+        'title': 'topic title [en]',
+        'slug': 'topic-title-en',
+        'description': 'topic description [en]',
+        'topiccollections': {
+            'edges': [{
+                'node': {
+                    'topiccollection': {
+                        'id': 'VG9waWNDb2xsZWN0aW9uTm9kZTo0',
+                        'title': 'topic collection title [en]',
+                        'slug': 'topic-collection-title-en',
+                        'description': 'topic collection description [en]',
+                        'theme': {
+                            'id': 'VGhlbWVOb2RlOjE=',
+                            'slug': 'theme-slug-en',
+                            'text': 'theme text [en]',
+                            'description': 'theme description [en]'
+                        },
+                        'liveRevision': {
+                            'id': 'UGFnZVJldmlzaW9uTm9kZToz'
+                        }
+                    }
+                }
+            }]
         }
     }
+
+    topic_collection_page_dictionary = page_dictionary['topiccollections']['edges'][0]['node']['topiccollection']
+    topic_collection_page_revision_id = topic_collection_page_dictionary['liveRevision']['id']
 
     theme = ThemeFactory.build(slug=topic_collection_page_dictionary['theme']['slug'],
                                text=topic_collection_page_dictionary['theme']['text'],
@@ -39,26 +57,6 @@ def test_import_dummy_data_from_page_dictionary():
     assert topic_collection.slug == topic_collection_page_dictionary['slug']
     assert topic_collection.description == topic_collection_page_dictionary['description']
     assert topic_collection.imported_revision_id == topic_collection_page_revision_id
-
-    revision_id = 'UGFnZVJldmlzaW9uTm9kZToxMg=='
-    page_dictionary = {
-        'id': 'VG9waWNOb2RlOjU=',
-        'title': 'topic title [en]',
-        'slug': 'topic-title-en',
-        'description': 'topic description [en]',
-        'topiccollections': {
-            'edges': [{
-                'node': {
-                    'topiccollection': {
-                        'slug': 'topic-collection-title-en',
-                        'liveRevision': {
-                            'id': 'UGFnZVJldmlzaW9uTm9kZToz'
-                        }
-                    }
-                }
-            }]
-        }
-    }
 
     page = TopicPageFactory.build(imported_revision_id=revision_id, title=page_dictionary['title'],
                                   slug=page_dictionary['slug'],
