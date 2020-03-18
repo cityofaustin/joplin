@@ -39,6 +39,18 @@ def test_parse_topic_collection_page_dummy_data_janis_preview_url():
     assert page_importer.revision_id == 'UGFnZVJldmlzaW9uTm9kZToxMw=='
 
 
+def test_parse_information_page_dummy_data_janis_preview_url():
+    preview_url = 'http://janis-austin-gov-staging.s3-website-us-east-1.amazonaws.com/en/preview/information/UGFnZVJldmlzaW9uTm9kZToxMQ==?CMS_API=https://joplin-pr-4116-importer-j2-tes.herokuapp.com/api/graphql'
+
+    page_importer = PageImporter(preview_url)
+
+    assert page_importer.url_to_parse == preview_url
+    assert page_importer.joplin_api_endpoint == 'https://joplin-pr-4116-importer-j2-tes.herokuapp.com/api/graphql'
+    assert page_importer.language == 'en'
+    assert page_importer.page_type == 'information'
+    assert page_importer.revision_id == 'UGFnZVJldmlzaW9uTm9kZToxMQ=='
+
+
 # this test will start breaking once we no longer have this revision in the db
 # todo: figure out a good way to mock api responses
 def test_get_information_page_from_revision():
