@@ -27,8 +27,8 @@ class JanisBasePageWithTopicsFactory(JanisBasePageFactory):
     @factory.post_generation
     def add_topics(self, create, extracted, **kwargs):
         if extracted:
-            # A list of topic collections were passed in, use them
-            for topic in extracted:
+            # A list of topics were passed in, use them
+            for topic in extracted['topics']:
                 # todo: check to see if we already have the basepagetopiccollection objects made
                 JanisBasePageTopicFactory.create(page=self, topic=topic)
             return
