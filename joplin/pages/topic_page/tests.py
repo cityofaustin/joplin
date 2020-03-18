@@ -202,4 +202,6 @@ def test_import_from_page_dictionary_existing_topic_collections():
 
     page = create_topic_page_from_page_dictionary(page_dictionary, revision_id)
 
-    assert page.theme == topic_collection_pages
+    topic_collections_on_page = [base_page_topic_collection.topic_collection for base_page_topic_collection in page.topic_collections.all()]
+
+    assert topic_collections_on_page == topic_collection_pages
