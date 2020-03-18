@@ -121,5 +121,34 @@ def test_import_from_page_dictionary_twice():
     assert second_page_id == page_id
 
 
+# when importing the same page twice, with a different revision id
+# we should just return the id of the previously imported page
+# todo: decide if this is how we want this to work
+@pytest.mark.django_db
+def test_import_from_page_dictionary_twice_different_revisions():
+    first_revision_id = 'first_revision_id'
+    second_revision_id = 'second_revision_id'
+    page_dictionary = {
+        'id': 'VG9waWNDb2xsZWN0aW9uTm9kZTo0',
+        'title': 'topic collection title [en]',
+        'slug': 'topic-collection-title-en',
+        'description': 'topic collection description [en]',
+        'theme': {
+            'id': 'VGhlbWVOb2RlOjE=',
+            'slug': 'theme-slug-en',
+            'text': 'theme text [en]',
+            'description': 'theme description [en]'
+        }
+    }
+
+    # get the id of the page we're creating
+    page_id = create_topic_collection_page_from_page_dictionary(page_dictionary, first_revision_id)
+
+    # try making it again
+    second_page_id = create_topic_collection_page_from_page_dictionary(page_dictionary, second_revision_id)
+
+    assert second_page_id == page_id
+
+
 # todo: test with existing theme (theme slug matches)
 # todo: test importing a page again (same slug, different revision id)
