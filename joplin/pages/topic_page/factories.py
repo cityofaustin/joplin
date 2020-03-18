@@ -1,9 +1,10 @@
 from pages.topic_page.models import TopicPage
-from pages.topic_collection_page.factories import JanisBasePageWithTopicCollectionsFactory
+from pages.topic_collection_page.factories import JanisBasePageWithTopicCollectionsFactory, \
+    create_topic_collection_page_from_page_dictionary
+from wagtail.core.models import Page
 
 
 class TopicPageFactory(JanisBasePageWithTopicCollectionsFactory):
-
     class Meta:
         model = TopicPage
 
@@ -19,7 +20,6 @@ def create_topic_page_from_page_dictionary(page_dictionary, revision_id):
     if page:
         return page
 
-
     # since we don't have a page matching the revision id, we should look
     # for other matches, for now let's just use slug
     # todo: figure out what we want the logic around importing a page with the same slug to look like
@@ -33,22 +33,11 @@ def create_topic_page_from_page_dictionary(page_dictionary, revision_id):
     # since we don't have a page matching the revision id or the slug
     # we need to create a page, which needs a topic collection if it has one
     # run through the topic collection logic here
-    topic_collection_page_revision_ids = []
-    # todo get topic collection page revision ids in and then use importer to make the pages
-    topic_collection_pages = []
-
-
-
-    # todo: use something other than slug here
-    # todo: add imported id to themes
-    try:
-        theme = Theme.objects.get(slug=page_dictionary['theme']['slug'])
-    except Theme.DoesNotExist:
-        theme = None
-    if not theme:
-        theme = ThemeFactory.create(slug=page_dictionary['theme']['slug'],
-                                    text=page_dictionary['theme']['text'],
-                                    description=page_dictionary['theme']['description'])
+    topic_collection_page_dictionaries = [edge['node']['topiccollection'] for edge in
+                                          page_dictionary['topiccollections']['edges']]
+    topic_collection_pages = [
+        create_topic_collection_page_from_page_dictionary(dictionary, dictionary['liveRevision']['id']) for dictionary
+        in topic_collection_page_dictionaries]
 
     # Set home as parent
     # todo: not hardcode home
@@ -56,8 +45,9 @@ def create_topic_page_from_page_dictionary(page_dictionary, revision_id):
     home = Page.objects.get(id=2)
 
     # make the page
-    page = TopicCollectionPageFactory.create(imported_revision_id=revision_id, title=page_dictionary['title'],
-                                             slug=page_dictionary['slug'], description=page_dictionary['description'],
-                                             theme=theme, parent=home)
+    page = TopicPageFactory.create(imported_revision_id=revision_id, title=page_dictionary['title'],
+                                   slug=page_dictionary['slug'],
+                                   description=page_dictionary['description'],
+                                   topic_collections=topic_collection_pages)
 
     return page
