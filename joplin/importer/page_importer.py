@@ -5,6 +5,7 @@ from gql.transport.requests import RequestsHTTPTransport
 import json
 from importer.queries import queries
 
+from pages.topic_collection_page.factories import create_topic_collection_page_from_page_dictionary
 
 ENDPOINTS = {
     'janis.austintexas.io': 'https://joplin-staging.herokuapp.com/api/graphql'
@@ -12,6 +13,16 @@ ENDPOINTS = {
 
 
 class PageImporter:
+
+    # todo maybe this should be static so we don't need to make an importer instance
+    def create_page(self, page_dictionary, revision_id):
+        page_creator_dictionary = {
+            'topiccollection': create_topic_collection_page_from_page_dictionary,
+        }
+
+        page = page_creator_dictionary[self.page_type](page_dictionary, revision_id)
+
+        return page
 
     def get_page_dictionary_from_revision(self):
         sample_transport = RequestsHTTPTransport(

@@ -32,13 +32,9 @@ def import_page_from_url(url):
     revision_id = page_importer.revision_id
     page_dictionary = page_importer.get_page_dictionary_from_revision()
 
-    # todo: not hardcode to topic collection
-    # try:
-    page_id = create_topic_collection_page_from_page_dictionary(page_dictionary, revision_id)
-    # except ValidationError as err:
-    #     x = err
+    page = page_importer.create_page(page_dictionary, revision_id)
 
-    return page_id
+    return page.id
 
 
 def new_page_from_modal(request):
