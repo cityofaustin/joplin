@@ -39,6 +39,9 @@ def create_topic_page_from_page_dictionary(page_dictionary, revision_id):
         create_topic_collection_page_from_page_dictionary(dictionary, dictionary['liveRevision']['id']) for dictionary
         in topic_collection_page_dictionaries]
 
+    # todo: actually get departments here
+    related_departments = ['just a string']
+
     # Set home as parent
     # todo: not hardcode home
     # todo: move this to base page factory?
@@ -47,6 +50,7 @@ def create_topic_page_from_page_dictionary(page_dictionary, revision_id):
     # make the page
     page = TopicPageFactory.create(imported_revision_id=revision_id, title=page_dictionary['title'],
                                    slug=page_dictionary['slug'], description=page_dictionary['description'],
-                                   add_topic_collections=topic_collection_pages, parent=home)
+                                   add_topic_collections=topic_collection_pages,
+                                   add_related_departments=related_departments, parent=home)
 
     return page

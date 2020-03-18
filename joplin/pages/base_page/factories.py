@@ -11,9 +11,18 @@ class JanisBasePageFactory(PageFactory):
         model = JanisBasePage
 
     @factory.post_generation
-    def create_related_departments(self, create, extracted, **kwargs):
+    def add_related_departments(self, create, extracted, **kwargs):
+        if extracted:
+            # A list of departments were passed in, use them
+            # for related_department in extracted:
+                # todo: add department stuff here
+                # GroupPagePermissionFactory.create(page=self, topic_collection=topic_collection)
+            return
+
+        # todo figure out if this is really what we want this factory to do
         if create:
             GroupPagePermissionFactory.create_batch(2, page=self)
+
 
 
 class JanisBasePageTopicFactory(factory.django.DjangoModelFactory):
