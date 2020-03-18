@@ -112,13 +112,13 @@ def test_import_from_page_dictionary_twice():
         }
     }
 
-    # get the id of the page we're creating
-    page_id = create_topic_collection_page_from_page_dictionary(page_dictionary, revision_id)
+    # get the page we're creating
+    page = create_topic_collection_page_from_page_dictionary(page_dictionary, revision_id)
 
     # try making it again
-    second_page_id = create_topic_collection_page_from_page_dictionary(page_dictionary, revision_id)
+    second_page = create_topic_collection_page_from_page_dictionary(page_dictionary, revision_id)
 
-    assert second_page_id == page_id
+    assert second_page == page
 
 
 # when importing the same page twice, with a different revision id
@@ -141,14 +141,35 @@ def test_import_from_page_dictionary_twice_different_revisions():
         }
     }
 
-    # get the id of the page we're creating
-    page_id = create_topic_collection_page_from_page_dictionary(page_dictionary, first_revision_id)
+    # get the page we're creating
+    page = create_topic_collection_page_from_page_dictionary(page_dictionary, first_revision_id)
 
     # try making it again
-    second_page_id = create_topic_collection_page_from_page_dictionary(page_dictionary, second_revision_id)
+    second_page = create_topic_collection_page_from_page_dictionary(page_dictionary, second_revision_id)
 
-    assert second_page_id == page_id
+    assert second_page == page
 
+# when importing a page with an existing theme,
+# we should use the existing theme for the page
+@pytest.mark.django_db
+def test_import_from_page_dictionary_existing_theme():
+    revision_id = 'UGFnZVJldmlzaW9uTm9kZToxMw=='
+    page_dictionary = {
+        'id': 'VG9waWNDb2xsZWN0aW9uTm9kZTo0',
+        'title': 'topic collection title [en]',
+        'slug': 'topic-collection-title-en',
+        'description': 'topic collection description [en]',
+        'theme': {
+            'id': 'VGhlbWVOb2RlOjE=',
+            'slug': 'theme-slug-en',
+            'text': 'theme text [en]',
+            'description': 'theme description [en]'
+        }
+    }
 
-# todo: test with existing theme (theme slug matches)
-# todo: test importing a page again (same slug, different revision id)
+    theme = ThemeFactory.create(slug=page_dictionary['theme']['slug'], text=page_dictionary['theme']['text'],
+                        description=page_dictionary['theme']['description'])
+
+    page = create_topic_collection_page_from_page_dictionary(page_dictionary, revision_id)
+
+    assert page.theme == theme

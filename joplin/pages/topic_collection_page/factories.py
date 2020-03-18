@@ -46,7 +46,7 @@ def create_topic_collection_page_from_page_dictionary(page_dictionary, revision_
     except TopicCollectionPage.DoesNotExist:
         page = None
     if page:
-        return page.id
+        return page
 
 
     # since we don't have a page matching the revision id, we should look
@@ -57,7 +57,7 @@ def create_topic_collection_page_from_page_dictionary(page_dictionary, revision_
     except TopicCollectionPage.DoesNotExist:
         page = None
     if page:
-        return page.id
+        return page
 
     # since we don't have a page matching the revision id or the slug
     # we need to create a page, first we need to
@@ -83,4 +83,4 @@ def create_topic_collection_page_from_page_dictionary(page_dictionary, revision_
                                              slug=page_dictionary['slug'], description=page_dictionary['description'],
                                              theme=theme, parent=home)
 
-    return page.id
+    return page
