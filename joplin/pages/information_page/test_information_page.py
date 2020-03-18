@@ -86,10 +86,19 @@ def test_import_dummy_data_from_page_dictionary():
                                    description=topic_page_dictionary['description'],
                                    topic_collections=[topic_collection])
 
-    assert topic.title == page_dictionary['title']
-    assert topic.slug == page_dictionary['slug']
-    assert topic.description == page_dictionary['description']
+    assert topic.title == topic_page_dictionary['title']
+    assert topic.slug == topic_page_dictionary['slug']
+    assert topic.description == topic_page_dictionary['description']
     assert topic.topic_collections.first() == topic_collection
 
     page = InformationPageFactory.build(imported_revision_id=revision_id, title=page_dictionary['title'],
-                                        slug=page_dictionary['slug'], description=page_dictionary['description'], )
+                                        slug=page_dictionary['slug'], description=page_dictionary['description'],
+                                        topics=[topic], additional_content=page_dictionary['additionalContent'],
+                                        coa_global=page_dictionary['coaGlobal'])
+
+    assert page.title == page_dictionary['title']
+    assert page.slug == page_dictionary['slug']
+    assert page.description == page_dictionary['description']
+    assert page.topics.first() == topic
+    assert page.additional_content == page_dictionary['additionalContent']
+    assert page.coa_global == page_dictionary['coaGlobal']
