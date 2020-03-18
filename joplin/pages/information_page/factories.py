@@ -54,7 +54,7 @@ def create_information_page_from_page_dictionary(page_dictionary, revision_id):
     # make the page
     page = InformationPageFactory.create(imported_revision_id=revision_id, title=page_dictionary['title'],
                                          slug=page_dictionary['slug'], description=page_dictionary['description'],
-                                         add_topics=topic_pages,
+                                         add_topics=topic_pages, add_related_departments=related_departments,
                                          additional_content=page_dictionary['additionalContent'],
                                          coa_global=page_dictionary['coaGlobal'], parent=home)
 
