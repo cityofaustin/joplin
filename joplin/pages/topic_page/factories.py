@@ -1,12 +1,41 @@
-from pages.topic_page.models import TopicPage
+import factory
+from pages.topic_page.models import TopicPage, JanisBasePageTopic, JanisBasePageWithTopics
 from pages.topic_collection_page.factories import JanisBasePageWithTopicCollectionsFactory, \
     create_topic_collection_page_from_page_dictionary
 from wagtail.core.models import Page
+
+from pages.base_page.factories import JanisBasePageFactory
 
 
 class TopicPageFactory(JanisBasePageWithTopicCollectionsFactory):
     class Meta:
         model = TopicPage
+
+
+class JanisBasePageTopicFactory(factory.django.DjangoModelFactory):
+    page = factory.SubFactory('base_page.factories.JanisBasePageWithTopicsFactory')
+    topic = factory.SubFactory(TopicPageFactory)
+
+    class Meta:
+        model = JanisBasePageTopic
+
+
+class JanisBasePageWithTopicsFactory(JanisBasePageFactory):
+    class Meta:
+        model = JanisBasePageWithTopics
+
+    @factory.post_generation
+    def add_topics(self, create, extracted, **kwargs):
+        if extracted:
+            # A list of topic collections were passed in, use them
+            for topic in extracted:
+                # todo: check to see if we already have the basepagetopiccollection objects made
+                JanisBasePageTopicFactory.create(page=self, topic=topic)
+            return
+
+        # todo figure out if this is really what we want this factory to do
+        if create:
+            JanisBasePageTopicFactory.create_batch(2, page=self)
 
 
 def create_topic_page_from_page_dictionary(page_dictionary, revision_id):
@@ -35,6 +64,7 @@ def create_topic_page_from_page_dictionary(page_dictionary, revision_id):
     # run through the topic collection logic here
     topic_collection_page_dictionaries = [edge['node']['topiccollection'] for edge in
                                           page_dictionary['topiccollections']['edges']]
+
     topic_collection_pages = [
         create_topic_collection_page_from_page_dictionary(dictionary, dictionary['liveRevision']['id']) for dictionary
         in topic_collection_page_dictionaries]

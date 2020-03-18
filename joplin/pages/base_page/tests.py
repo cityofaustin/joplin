@@ -1,4 +1,5 @@
-from pages.base_page.factories import JanisBasePageFactory, JanisBasePageWithTopicsFactory
+from pages.base_page.factories import JanisBasePageFactory
+from pages.topic_page.factories import JanisBasePageWithTopicsFactory
 import pytest
 
 
