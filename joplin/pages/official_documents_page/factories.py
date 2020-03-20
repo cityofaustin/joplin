@@ -6,7 +6,7 @@ from pages.official_documents_page.models import OfficialDocumentPage
 from pages.factory import PageFactory
 from pages.topic_page.factories import TopicPageFactory
 
-from pages.base_page.factories import JanisBasePageWithTopicsFactory
+from pages.topic_page.factories import JanisBasePageWithTopicsFactory
 
 
 class OfficialDocumentPageFactory(JanisBasePageWithTopicsFactory):
