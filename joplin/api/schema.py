@@ -506,11 +506,43 @@ class OfficialDocumentFilter(FilterSet):
         fields = ['date']
 
 
+class OfficialDocumentNodeDocument(graphene.ObjectType):
+    filename = graphene.String()
+    fileSize = graphene.String()
+
+    class Meta:
+        model = OfficialDocumentPageOfficialDocument
+        interfaces = [graphene.Node]
+
+    def resolve_filename(self, info):
+        # return f"poot"
+        return OfficialDocumentPageOfficialDocument.document
+        #return OfficialDocumentPageOfficialDocument.document_es
+
+
 class OfficialDocumentPageOfficialDocumentNode(DjangoObjectType):
+    authoring_office = graphene.String()
+    document = graphene.Field(OfficialDocumentNodeDocument)
+
     class Meta:
         model = OfficialDocumentPageOfficialDocument
         filter_fields = ['date']
         interfaces = [graphene.Node]
+
+    def resolve_document(self, info):
+        print(OfficialDocumentPageOfficialDocument.pk)
+        if django.utils.translation.get_language() == 'es':
+            print(OfficialDocumentNodeDocument.get(id))
+            return {"filename": OfficialDocumentPageOfficialDocument.filename, "fileSize": OfficialDocumentNodeDocument.fileSize}
+        return OfficialDocumentPageOfficialDocument.document
+
+    # check language and return file based on language
+    # def resolve_authoring_office(self, info):
+    #     print(type(OfficialDocumentPageOfficialDocument.document))
+    #     if django.utils.translation.get_language() == 'es':
+    #         return f"lo hice bien"
+    #     return OfficialDocumentPageOfficialDocument.document
+
 
 
 class OfficialDocumentPageNode(DjangoObjectType):
