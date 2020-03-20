@@ -67,7 +67,7 @@ class OfficialDocumentPageOfficialDocument(Orderable):
     summary = models.TextField(verbose_name="Document summary")
     name = models.CharField(verbose_name="Name of Document", max_length=DEFAULT_MAX_LENGTH)
     document = models.ForeignKey(Document, null=True, on_delete=models.SET_NULL, related_name='+', verbose_name="Document [en]")
-    document_es = models.ForeignKey(Document, null=True, on_delete=models.SET_NULL, related_name='+', verbose_name="Document [es]")
+    document_es = models.ForeignKey(Document, blank=True, null=True, on_delete=models.SET_NULL, related_name='+', verbose_name="Document [es]")
 
     panels = [
         FieldPanel('date'),
