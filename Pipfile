@@ -46,6 +46,8 @@ coverage = "*"
 django-coverage-plugin = "*"
 pytest-cov = "*"
 snapshottest = "*"
+requirments = "*"
+requests = "*"
 
 [requires]
 python_version = "3.7"

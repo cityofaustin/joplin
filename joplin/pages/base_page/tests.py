@@ -49,6 +49,8 @@ def test_base_page_with_department_not_global_urls():
     # our GroupPagePermissions to associate departments
     page = JanisBasePageFactory.create(slug="page_slug", coa_global=False)
 
+    # ! 🚨Here...
+
     # Set expected urls using group page permission department slugs
     expected_urls = ['http://fake.base.url/{department_slug}/{page_slug}/'.format(
         department_slug=permission.group.department.department_page.slug, page_slug=page.slug) for permission in
@@ -130,4 +132,3 @@ def test_base_page_with_topics_with_topic_with_department_coa_global_urls():
 
     assert urls == ['http://fake.base.url/global_slug_2/']
     assert url == 'http://fake.base.url/global_slug_2/'
-

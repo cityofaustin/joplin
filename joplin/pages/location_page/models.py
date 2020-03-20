@@ -170,6 +170,8 @@ class LocationPage(JanisBasePage):
 
     def janis_urls(self):
         # todo implement location page urls
+        # ok...
+
 
         return ['#todo']
 
