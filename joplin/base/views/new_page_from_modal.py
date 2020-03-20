@@ -27,12 +27,7 @@ import json
 
 
 def import_page_from_url(url):
-    page_importer = PageImporter(url)
-
-    revision_id = page_importer.revision_id
-    page_dictionary = page_importer.get_page_dictionary_from_revision()
-
-    page = page_importer.create_page(page_dictionary, revision_id)
+    page = PageImporter(url).fetch_page_data().create_page()
 
     return page.id
 
@@ -61,8 +56,6 @@ def new_page_from_modal(request):
         # Create the page
         if body['type'] == 'service':
             page = ServicePage(**data)
-        elif body['type'] == 'process':
-            page = ProcessPage(**data)
         elif body['type'] == 'information':
             page = InformationPage(**data)
         elif body['type'] == 'topic':
@@ -85,8 +78,8 @@ def new_page_from_modal(request):
             page = EventPage(**data)
 
         # Add it as a child of home
-        # home = Page.objects.get(id=2)
-        # home.add_child(instance=page)
+        home = Page.objects.get(id=2)
+        home.add_child(instance=page)
 
         # Save our draft
         page.save_revision()

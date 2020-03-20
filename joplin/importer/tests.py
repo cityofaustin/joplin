@@ -8,7 +8,6 @@ def test_parse_janis_preview_url():
 
     page_importer = PageImporter(preview_url)
 
-    assert page_importer.url_to_parse == preview_url
     assert page_importer.joplin_api_endpoint == 'https://joplin-staging.herokuapp.com/api/graphql'
     assert page_importer.language == 'en'
     assert page_importer.page_type == 'information'
@@ -20,7 +19,6 @@ def test_parse_topic_page_dummy_data_janis_preview_url():
 
     page_importer = PageImporter(preview_url)
 
-    assert page_importer.url_to_parse == preview_url
     assert page_importer.joplin_api_endpoint == 'https://joplin-pr-4116-importer-j2-tes.herokuapp.com/api/graphql'
     assert page_importer.language == 'en'
     assert page_importer.page_type == 'topic'
@@ -32,7 +30,6 @@ def test_parse_topic_collection_page_dummy_data_janis_preview_url():
 
     page_importer = PageImporter(preview_url)
 
-    assert page_importer.url_to_parse == preview_url
     assert page_importer.joplin_api_endpoint == 'https://joplin-pr-4116-importer-j2-tes.herokuapp.com/api/graphql'
     assert page_importer.language == 'en'
     assert page_importer.page_type == 'topiccollection'
@@ -44,7 +41,6 @@ def test_parse_information_page_dummy_data_janis_preview_url():
 
     page_importer = PageImporter(preview_url)
 
-    assert page_importer.url_to_parse == preview_url
     assert page_importer.joplin_api_endpoint == 'https://joplin-pr-4116-importer-j2-tes.herokuapp.com/api/graphql'
     assert page_importer.language == 'en'
     assert page_importer.page_type == 'information'
@@ -56,8 +52,7 @@ def test_parse_information_page_dummy_data_janis_preview_url():
 def test_get_information_page_from_revision():
     preview_url = 'https://janis.austintexas.io/en/preview/information/UGFnZVJldmlzaW9uTm9kZToyNjI4'
 
-    page_importer = PageImporter(preview_url)
-    page_dictionary = page_importer.get_page_dictionary_from_revision()
+    page_dictionary = PageImporter(preview_url).fetch_page_data().page_dictionary
 
     assert page_dictionary['id'] == 'SW5mb3JtYXRpb25QYWdlTm9kZToxMjM='
     assert page_dictionary['title'] == 'Fire safety checklist for mobile food vendors'
@@ -71,8 +66,7 @@ def test_get_information_page_from_revision():
 def test_get_dummy_topic_collection_page_from_revision():
     preview_url = 'http://janis-austin-gov-staging.s3-website-us-east-1.amazonaws.com/en/preview/topiccollection/UGFnZVJldmlzaW9uTm9kZToxMw==?CMS_API=https://joplin-pr-4116-importer-j2-tes.herokuapp.com/api/graphql'
 
-    page_importer = PageImporter(preview_url)
-    page_dictionary = page_importer.get_page_dictionary_from_revision()
+    page_dictionary = PageImporter(preview_url).fetch_page_data().page_dictionary
 
     assert page_dictionary['id'] == 'VG9waWNDb2xsZWN0aW9uTm9kZTo0'
     assert page_dictionary['title'] == 'topic collection title [en]'
@@ -95,8 +89,7 @@ def test_get_dummy_topic_collection_page_from_revision():
 def test_get_dummy_topic_page_from_revision():
     preview_url = 'http://janis-austin-gov-staging.s3-website-us-east-1.amazonaws.com/en/preview/topic/UGFnZVJldmlzaW9uTm9kZToxMg==?CMS_API=https://joplin-pr-4116-importer-j2-tes.herokuapp.com/api/graphql'
 
-    page_importer = PageImporter(preview_url)
-    page_dictionary = page_importer.get_page_dictionary_from_revision()
+    page_dictionary = PageImporter(preview_url).fetch_page_data().page_dictionary
 
     assert page_dictionary['id'] == 'VG9waWNOb2RlOjU='
     assert page_dictionary['title'] == 'topic title [en]'
@@ -132,8 +125,7 @@ def test_get_dummy_topic_page_from_revision():
 def test_get_dummy_information_page_from_revision():
     preview_url = 'http://janis-austin-gov-staging.s3-website-us-east-1.amazonaws.com/en/preview/information/UGFnZVJldmlzaW9uTm9kZToxMQ==?CMS_API=https://joplin-pr-4116-importer-j2-tes.herokuapp.com/api/graphql'
 
-    page_importer = PageImporter(preview_url)
-    page_dictionary = page_importer.get_page_dictionary_from_revision()
+    page_dictionary = PageImporter(preview_url).fetch_page_data().page_dictionary
 
     assert page_dictionary['id'] == 'SW5mb3JtYXRpb25QYWdlTm9kZTo2'
     assert page_dictionary['title'] == 'information page title [en]'

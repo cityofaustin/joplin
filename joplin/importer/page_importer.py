@@ -15,23 +15,21 @@ ENDPOINTS = {
 
 
 class PageImporter:
-
-    # todo maybe this should be static so we don't need to make an importer instance
-    def create_page(self, page_dictionary, revision_id):
+    def create_page(self):
         page_creator_dictionary = {
             'topiccollection': create_topic_collection_page_from_page_dictionary,
             'topic': create_topic_page_from_page_dictionary,
             'information': create_information_page_from_page_dictionary
         }
 
-        page = page_creator_dictionary[self.page_type](page_dictionary, revision_id)
+        page = page_creator_dictionary[self.page_type](self.page_dictionary, self.revision_id)
 
         return page
 
-    def get_page_dictionary_from_revision(self):
+    def fetch_page_data(self):
         sample_transport = RequestsHTTPTransport(
             url=self.joplin_api_endpoint,
-            # use_json=True,
+            # todo: use headers to get different languages
             # headers={
             #     "Content-type": "application/json",
             # },
@@ -49,17 +47,16 @@ class PageImporter:
 
         # this gets us into the 'as____Page' stuff
         page_dictionary_from_revision = next(iter(revision_node.values()))
-        return page_dictionary_from_revision
 
-    def parse_janis_preview_url(self, path):
-        # for now, just assuming these parts are always right
-        self.language = path.parts[1]
-        self.page_type = path.parts[3]
-        self.revision_id = path.parts[4]
+        # set the page dictionary on ourselves but also return it
+        self.page_dictionary = page_dictionary_from_revision
 
-    def parse_url(self):
+        # return ourselves for method chaining
+        return self
+
+    def __init__(self, url):
         # get a urllib.parse result to play with
-        parse_result = urlparse(self.url_to_parse)
+        parse_result = urlparse(url)
 
         # get a joplin api endpoint
         if parse_result.hostname in ENDPOINTS:
@@ -74,13 +71,9 @@ class PageImporter:
 
         # figure out if we're a janis preview url
         if 'preview' in path.parts:
-            self.parse_janis_preview_url(path)
+            # for now, just assuming these parts are always right
+            self.language = path.parts[1]
+            self.page_type = path.parts[3]
+            self.revision_id = path.parts[4]
 
-    def __init__(self, url):
-        self.url_to_parse = url
-        self.joplin_api_endpoint = ''
-        self.language = ''
-        self.page_type = ''
-        self.revision_id = ''
-        self.revision_node = None
-        self.parse_url()
+        self.page_dictionary = None
