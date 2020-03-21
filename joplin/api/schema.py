@@ -517,12 +517,20 @@ class OfficialDocumentPageOfficialDocumentNode(DjangoObjectType):
         interfaces = [graphene.Node]
 
     def resolve_document(self, info):
-        print(OfficialDocumentPageOfficialDocument.document_es)
+        english_doc = OfficialDocumentNodeDocument(
+            filename=self.document.filename,
+            fileSize=self.document.file_size,
+        )
         if django.utils.translation.get_language() == 'es':
             if OfficialDocumentPageOfficialDocument.document_es:
-                return OfficialDocumentPageOfficialDocument.document_es
-            return OfficialDocumentPageOfficialDocument.document
-        return OfficialDocumentPageOfficialDocument.document
+                return OfficialDocumentNodeDocument(
+                    filename=self.document_es.filename,
+                    fileSize=self.document_es.file_size,
+                )
+            else:
+                return english_doc
+        else:
+            return english_doc
 
 
 class OfficialDocumentPageNode(DjangoObjectType):
