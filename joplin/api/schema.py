@@ -522,7 +522,7 @@ class OfficialDocumentPageOfficialDocumentNode(DjangoObjectType):
             fileSize=self.document.file_size,
         )
         if django.utils.translation.get_language() == 'es':
-            if OfficialDocumentPageOfficialDocument.document_es:
+            if self.document_es:
                 return OfficialDocumentNodeDocument(
                     filename=self.document_es.filename,
                     fileSize=self.document_es.file_size,
