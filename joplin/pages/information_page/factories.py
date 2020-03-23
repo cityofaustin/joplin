@@ -8,6 +8,7 @@ from base.models import Contact
 from pytest_factoryboy import register
 from wagtail.core.models import Page
 from pages.topic_page.factories import JanisBasePageWithTopicsFactory, create_topic_page_from_page_dictionary
+from pages.home_page.models import HomePage
 
 
 class InformationPageFactory(JanisBasePageWithTopicsFactory):
@@ -47,9 +48,8 @@ def create_information_page_from_page_dictionary(page_dictionary, revision_id):
     related_departments = ['just a string']
 
     # Set home as parent
-    # todo: not hardcode home
     # todo: move this to base page factory?
-    home = Page.objects.get(id=2)
+    home = HomePage.objects.first()
 
     # make the page
     page = InformationPageFactory.create(imported_revision_id=revision_id, title=page_dictionary['title'],
