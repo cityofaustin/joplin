@@ -77,19 +77,18 @@ def test_base_page_with_topics_no_topic_no_department_not_global_urls():
     assert url == '#'
 
 
-# todo figure out db error stuff and uncomment this one
 # # If we don't have any associated department,
 # # and we don't have any associated topic pages
 # # and coa_global=True (top level page is checked)
-# @pytest.mark.django_db
-# def test_base_page_with_topics_no_topic_no_department_coa_global_urls():
-#     page = JanisBasePageWithTopicsFactory.build(slug="global_slug", coa_global=True)
-#
-#     urls = page.janis_urls()
-#     url = page.janis_url()
-#
-#     assert urls == ['http://fake.base.url/global_slug/']
-#     assert url == 'http://fake.base.url/global_slug/'
+@pytest.mark.django_db
+def test_base_page_with_topics_no_topic_no_department_coa_global_urls():
+    page = JanisBasePageWithTopicsFactory.build(slug="global_slug", coa_global=True)
+
+    urls = page.janis_urls()
+    url = page.janis_url()
+
+    assert urls == ['http://fake.base.url/global_slug/']
+    assert url == 'http://fake.base.url/global_slug/'
 
 
 # If we have associated departments,
@@ -132,4 +131,3 @@ def test_base_page_with_topics_with_department_not_global_urls():
 #
 #     assert urls == ['http://fake.base.url/global_slug_2/']
 #     assert url == 'http://fake.base.url/global_slug_2/'
-
