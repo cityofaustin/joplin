@@ -2,6 +2,7 @@ import factory
 from pages.topic_page.models import TopicPage, JanisBasePageTopic, JanisBasePageWithTopics
 from pages.topic_collection_page.factories import JanisBasePageWithTopicCollectionsFactory, \
     create_topic_collection_page_from_page_dictionary
+from pages.home_page.models import HomePage
 from wagtail.core.models import Page
 
 from pages.base_page.factories import JanisBasePageFactory
@@ -73,9 +74,8 @@ def create_topic_page_from_page_dictionary(page_dictionary, revision_id):
     related_departments = ['just a string']
 
     # Set home as parent
-    # todo: not hardcode home
     # todo: move this to base page factory?
-    home = Page.objects.get(id=2)
+    home = HomePage.objects.first()
 
     # make the page
     page = TopicPageFactory.create(imported_revision_id=revision_id, title=page_dictionary['title'],
