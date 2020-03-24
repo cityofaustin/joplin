@@ -27,7 +27,6 @@ queries = {
             edges {
               node {
                 asTopicPage {
-                  id
                   title
                   slug
                   description
@@ -35,12 +34,10 @@ queries = {
                     edges {
                       node {
                         topiccollection {
-                          id
                           title
                           slug
                           description
                           theme {
-                            id
                             slug
                             text
                             description

@@ -6,7 +6,7 @@ import json
 from importer.queries import queries
 
 from pages.topic_collection_page.factories import create_topic_collection_page_from_importer_dictionaries
-from pages.topic_page.factories import create_topic_page_from_page_dictionary
+from pages.topic_page.factories import create_topic_page_from_importer_dictionaries
 from pages.information_page.factories import create_information_page_from_importer_dictionaries
 
 ENDPOINTS = {
@@ -18,7 +18,7 @@ class PageImporter:
     def create_page(self):
         page_creators = {
             'topiccollection': create_topic_collection_page_from_importer_dictionaries,
-            'topic': create_topic_page_from_page_dictionary,
+            'topic': create_topic_page_from_importer_dictionaries,
             'information': create_information_page_from_importer_dictionaries
         }
 
