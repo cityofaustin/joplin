@@ -12,6 +12,7 @@ class JanisBasePageFactory(PageFactory):
 
     @factory.post_generation
     def add_related_departments(self, create, extracted, **kwargs):
+        # TODO: add option to pass in already created departments
         if extracted:
             # A list of departments were passed in, use them
             # for related_department in extracted:
@@ -19,9 +20,10 @@ class JanisBasePageFactory(PageFactory):
                 # GroupPagePermissionFactory.create(page=self, topic_collection=topic_collection)
             return
 
-        # todo figure out if this is really what we want this factory to do
+        # pass "add_related_departments__dummy"=True into Factory() to make dummy departments
         if create:
-            GroupPagePermissionFactory.create_batch(2, page=self)
+            if (kwargs.get("dummy", False)):
+                GroupPagePermissionFactory.create_batch(2, page=self)
 
 
 

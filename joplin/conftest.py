@@ -34,7 +34,6 @@ def register_factories(factories):
     register(InformationPageFactory)
     but without having to write them all out
     """
-    print("??")
     for name, object in inspect.getmembers(factories):
         if isinstance(object, FactoryMetaClass) and not object._meta.abstract:
             register(object)

@@ -13,18 +13,34 @@ from pages.home_page.models import HomePage
 
 
 class ServicePageFactory(JanisBasePageWithTopicsFactory):
+    @classmethod
+    def create(cls, *args, **kwargs):
+        # Convert steps into StreamField-parseable json dump
+        steps = kwargs.pop("steps", [])
+        formatted_steps = json.dumps([
+            {
+                u'type': u'{0}'.format(step['type']),
+                u'value': u'{0}'.format(step['value'])
+            }
+            for step in steps
+        ])
+        kwargs["steps"] = formatted_steps
+        return super(ServicePageFactory, cls).create(*args, **kwargs)
+
+
     class Meta:
         model = ServicePage
 
 
-def create_service_page_from_page_dictionary(page_dictionary, revision_id):
+def create_service_page_from_page_dictionary(page_dictionary, revision_id=None):
     # Check if page with revision_id has already been imported
-    try:
-        page = ServicePage.objects.get(imported_revision_id=revision_id)
-    except ServicePage.DoesNotExist:
-        page = None
-    if page:
-        return page
+    if revision_id:
+        try:
+            page = ServicePage.objects.get(imported_revision_id=revision_id)
+        except ServicePage.DoesNotExist:
+            page = None
+        if page:
+            return page
 
     # Check if page with slug has already been imported
     try:
@@ -48,13 +64,13 @@ def create_service_page_from_page_dictionary(page_dictionary, revision_id):
     # todo: move this to base page factory?
     home = HomePage.objects.first()
 
-    steps = json.dumps([
-        {
-            u'type': u'{0}'.format(step['type']),
-            u'value': u'{0}'.format(step['value'])
-        }
-        for step in page_dictionary['steps']
-    ])
+    # steps = json.dumps([
+    #     {
+    #         u'type': u'{0}'.format(step['type']),
+    #         u'value': u'{0}'.format(step['value'])
+    #     }
+    #     for step in page_dictionary['steps']
+    # ])
 
     page = ServicePageFactory.create(
         imported_revision_id=revision_id,
@@ -64,7 +80,7 @@ def create_service_page_from_page_dictionary(page_dictionary, revision_id):
         add_related_departments=related_departments,
         coa_global=page_dictionary['coaGlobal'],
         parent=home,
-        steps=steps,
+        steps=page_dictionary['steps'],
         dynamic_content=page_dictionary['dynamicContent'],
         additional_content=page_dictionary['additionalContent'],
         short_description=page_dictionary['shortDescription'],
