@@ -52,6 +52,7 @@ def create_theme_from_importer_dictionaries(theme_dictionaries):
     # todo: add imported id to themes
     try:
         theme = Theme.objects.get(slug=theme_dictionaries['en']['slug'])
+        return theme
     except Theme.DoesNotExist:
         theme = None
     if not theme:
@@ -74,7 +75,6 @@ def create_topic_collection_page_from_importer_dictionaries(page_dictionaries, r
     if page:
         return page
 
-
     # since we don't have a page matching the revision id, we should look
     # for other matches, for now let's just use the english slug
     # todo: figure out what we want the logic around importing a page with the same slug to look like
@@ -85,21 +85,26 @@ def create_topic_collection_page_from_importer_dictionaries(page_dictionaries, r
     if page:
         return page
 
-
     # since we don't have a page matching the revision id or the slug
-    # we need to create a page, first we need to
-    # check to see if we already have this theme imported
-    # todo: not hardcode langs in here
-    theme = create_theme_from_importer_dictionaries({'en': page_dictionaries['en']['theme'], 'es': page_dictionaries['es']['theme']})
+    # make the combined page dictionary
+    combined_dictionary = page_dictionaries['en']
 
+    # set the revision id
+    combined_dictionary['imported_revision_id'] = revision_id
+
+    # set the theme
+    # todo: not hardcode langs in here
+    combined_dictionary['theme'] = create_theme_from_importer_dictionaries({'en': page_dictionaries['en']['theme'], 'es': page_dictionaries['es']['theme']})
 
     # Set home as parent
     # todo: move this to base page factory?
-    home = HomePage.objects.first()
+    combined_dictionary['parent'] = HomePage.objects.first()
 
-    # make the page
-    # page = TopicCollectionPageFactory.create(imported_revision_id=revision_id, title=page_dictionary['title'],
-    #                                          slug=page_dictionary['slug'], description=page_dictionary['description'],
-    #                                          theme=theme, parent=home)
+    # set the translated fields
+    for field in TopicCollectionPageFactory._meta.model._meta.fields:
+        if field.column.endswith("_es"):
+            if field.column[:-3] in page_dictionaries['es']:
+                combined_dictionary[field.column] = page_dictionaries['es'][field.column[:-3]]
 
-    return page
+    # create the page
+    return TopicCollectionPageFactory.create(**combined_dictionary)
