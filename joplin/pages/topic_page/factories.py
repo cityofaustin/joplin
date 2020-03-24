@@ -72,31 +72,26 @@ def create_topic_page_from_importer_dictionaries(page_dictionaries, revision_id)
             'es': page_dictionaries['es']['topiccollections']['edges'][index]['node']['topiccollection'],
         }, page_dictionaries['en']['topiccollections']['edges'][index]['node']['topiccollection']['liveRevision']['id']))
     combined_dictionary['add_topic_collections'] = topic_collection_pages
-    blarggo = 4
-    # blargggg = len(page_dictionaries['en']['topiccollections']['edges'])
-    # for edge in page_dictionaries['en']['topiccollections']['edges']:
-    #     topic_collection_pages.append(create_topic_collection_page_from_importer_dictionaries({'en': edge['node']['topiccollection']}))
-    #
-    # # we need to create a page, which needs a topic collection if it has one
-    # # run through the topic collection logic here
-    # topic_collection_page_dictionaries_en = [edge['node']['topiccollection'] for edge in
-    #                                       page_dictionaries['en']['topiccollections']['edges']]
-    #
-    # topic_collection_pages = [
-    #     create_topic_collection_page_from_page_dictionaries(dictionary, dictionary['liveRevision']['id']) for dictionary
-    #     in topic_collection_page_dictionaries]
 
-    # todo: actually get departments here
-    related_departments = ['just a string']
+    # remove topiccollections if we have it because:
+    # * it's in english only
+    # * the factory doesn't know what to do with it
+    # todo: why isn't pop working?
+    if 'topiccollections' in combined_dictionary:
+        del combined_dictionary['topiccollections']
+
 
     # Set home as parent
-    # todo: move this to base page factory?
-    home = HomePage.objects.first()
+    combined_dictionary['parent'] = HomePage.objects.first()
 
-    # make the page
-    # page = TopicPageFactory.create(imported_revision_id=revision_id, title=page_dictionary['title'],
-    #                                slug=page_dictionary['slug'], description=page_dictionary['description'],
-    #                                add_topic_collections=topic_collection_pages,
-    #                                add_related_departments=related_departments, parent=home)
+    # set the translated fields
+    for field in TopicPageFactory._meta.model._meta.fields:
+        if field.column.endswith("_es"):
+            if field.column[:-3] in page_dictionaries['es']:
+                combined_dictionary[field.column] = page_dictionaries['es'][field.column[:-3]]
 
+    # todo: actually get departments here
+    combined_dictionary['add_related_departments'] = ['just a string']
+
+    page = TopicPageFactory.create(**combined_dictionary)
     return page

@@ -102,7 +102,6 @@ def create_topic_collection_page_from_importer_dictionaries(page_dictionaries, r
     combined_dictionary['theme'] = create_theme_from_importer_dictionaries({'en': page_dictionaries['en']['theme'], 'es': page_dictionaries['es']['theme']})
 
     # Set home as parent
-    # todo: move this to base page factory?
     combined_dictionary['parent'] = HomePage.objects.first()
 
     # set the translated fields
