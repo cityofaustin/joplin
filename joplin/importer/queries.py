@@ -7,12 +7,10 @@ queries = {
         edges {
           node {
             asTopicCollectionPage {
-              id
               title
               slug
               description
               theme {
-                id
                 slug
                 text
                 description

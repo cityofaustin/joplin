@@ -1,7 +1,7 @@
 import factory
 from pages.topic_page.models import TopicPage, JanisBasePageTopic, JanisBasePageWithTopics
 from pages.topic_collection_page.factories import JanisBasePageWithTopicCollectionsFactory, \
-    create_topic_collection_page_from_page_dictionary
+    create_topic_collection_page_from_importer_dictionaries
 from pages.home_page.models import HomePage
 from wagtail.core.models import Page
 

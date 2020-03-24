@@ -5,9 +5,9 @@ from gql.transport.requests import RequestsHTTPTransport
 import json
 from importer.queries import queries
 
-from pages.topic_collection_page.factories import create_topic_collection_page_from_page_dictionary
+from pages.topic_collection_page.factories import create_topic_collection_page_from_importer_dictionaries
 from pages.topic_page.factories import create_topic_page_from_page_dictionary
-from pages.information_page.factories import create_information_page_from_page_dictionary
+from pages.information_page.factories import create_information_page_from_importer_dictionaries
 
 ENDPOINTS = {
     'janis.austintexas.io': 'https://joplin-staging.herokuapp.com/api/graphql'
@@ -16,13 +16,13 @@ ENDPOINTS = {
 
 class PageImporter:
     def create_page(self):
-        page_creator_dictionary = {
-            'topiccollection': create_topic_collection_page_from_page_dictionary,
+        page_creators = {
+            'topiccollection': create_topic_collection_page_from_importer_dictionaries,
             'topic': create_topic_page_from_page_dictionary,
-            'information': create_information_page_from_page_dictionary
+            'information': create_information_page_from_importer_dictionaries
         }
 
-        page = page_creator_dictionary[self.page_type](self.page_dictionary, self.revision_id)
+        page = page_creators[self.page_type](self.page_dictionaries, self.revision_id)
 
         return page
 
