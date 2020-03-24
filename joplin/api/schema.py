@@ -825,4 +825,4 @@ class Query(graphene.ObjectType):
         return revision
 
 
-schema = graphene.Schema(query=Query)
+schema = graphene.Schema(query=Query, auto_camelcase=False)

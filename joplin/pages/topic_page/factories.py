@@ -80,6 +80,13 @@ def create_topic_page_from_importer_dictionaries(page_dictionaries, revision_id)
     if 'topiccollections' in combined_dictionary:
         del combined_dictionary['topiccollections']
 
+    # remove liveRevision if we have it
+    # todo: why isn't pop working?
+    if 'liveRevision' in combined_dictionary:
+        del combined_dictionary['liveRevision']
+
+    # set the revision id
+    combined_dictionary['imported_revision_id'] = revision_id
 
     # Set home as parent
     combined_dictionary['parent'] = HomePage.objects.first()

@@ -17,10 +17,6 @@ class InformationPageFactory(JanisBasePageWithTopicsFactory):
 
 
 def create_information_page_from_importer_dictionaries(page_dictionaries, revision_id):
-    # leaving this here and moving to topic collection to start
-    blargyy = [(field.column, field.column[:-3]) for field in InformationPageFactory._meta.model._meta.fields if
-               field.column.endswith("_es")]
-
     # first check to see if we already imported this page
     # if we did, just go to the edit page for it without changing the db
     # todo: maybe change this to allow updating pages in the future?
@@ -42,24 +38,36 @@ def create_information_page_from_importer_dictionaries(page_dictionaries, revisi
         return page
 
     # since we don't have a page matching the revision id or the slug
-    # we need to create a page, which needs a topic if it has one
-    # run through the topic logic here
-    topic_page_dictionaries = [edge['node']['topic'] for edge in page_dictionary['topics']['edges']]
-    topic_pages = [create_topic_page_from_page_dictionary(dictionary, dictionary['liveRevision']['id']) for dictionary
-                   in topic_page_dictionaries]
+    # make the combined page dictionary
+    combined_dictionary = page_dictionaries['en']
 
-    # todo: actually get departments here
-    related_departments = ['just a string']
+    # associate/create topic pages
+    topic_pages = []
+    for index in range(len(page_dictionaries['en']['topics']['edges'])):
+        topic_pages.append(create_topic_page_from_importer_dictionaries({
+            'en': page_dictionaries['en']['topics']['edges'][index]['node']['topic'],
+            'es': page_dictionaries['es']['topics']['edges'][index]['node']['topic'],
+        }, page_dictionaries['en']['topics']['edges'][index]['node']['topic']['liveRevision']['id']))
+    combined_dictionary['add_topics'] = topic_pages
+
+    # remove topics if we have it because:
+    # * it's in english only
+    # * the factory doesn't know what to do with it
+    # todo: why isn't pop working?
+    if 'topics' in combined_dictionary:
+        del combined_dictionary['topics']
 
     # Set home as parent
-    # todo: move this to base page factory?
-    home = HomePage.objects.first()
+    combined_dictionary['parent'] = HomePage.objects.first()
 
-    # make the page
-    page = InformationPageFactory.create(imported_revision_id=revision_id, title=page_dictionary['title'],
-                                         slug=page_dictionary['slug'], description=page_dictionary['description'],
-                                         add_topics={'topics': topic_pages}, add_related_departments=related_departments,
-                                         additional_content=page_dictionary['additionalContent'],
-                                         coa_global=page_dictionary['coaGlobal'], parent=home)
+    # set the translated fields
+    for field in InformationPageFactory._meta.model._meta.fields:
+        if field.column.endswith("_es"):
+            if field.column[:-3] in page_dictionaries['es']:
+                combined_dictionary[field.column] = page_dictionaries['es'][field.column[:-3]]
 
+    # todo: actually get departments here
+    combined_dictionary['add_related_departments'] = ['just a string']
+
+    page = InformationPageFactory.create(**combined_dictionary)
     return page
