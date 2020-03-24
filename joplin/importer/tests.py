@@ -47,6 +47,17 @@ def test_parse_information_page_dummy_data_janis_preview_url():
     assert page_importer.revision_id == 'UGFnZVJldmlzaW9uTm9kZToxMQ=='
 
 
+def test_parse_service_page_dummy_data_janis_preview_url():
+    preview_url = 'https://janis.austintexas.io/en/preview/services/UGFnZVJldmlzaW9uTm9kZTozNDQ4'
+
+    page_importer = PageImporter(preview_url)
+
+    assert page_importer.joplin_api_endpoint == 'https://joplin-staging.herokuapp.com/api/graphql'
+    assert page_importer.language == 'en'
+    assert page_importer.page_type == 'services'
+    assert page_importer.revision_id == 'UGFnZVJldmlzaW9uTm9kZTozNDQ4'
+
+
 # this test will start breaking once we no longer have this revision in the db
 # todo: figure out a good way to mock api responses
 def test_get_information_page_from_revision():
@@ -169,4 +180,59 @@ def test_get_dummy_information_page_from_revision():
     }
     assert page_dictionary['additionalContent'] == '<p>information page additional content [en]</p>'
     #     todo contacts
+    assert not page_dictionary['coaGlobal']
+
+
+def test_get_dummy_service_page_from_revision():
+    preview_url = 'https://janis.austintexas.io/en/preview/services/UGFnZVJldmlzaW9uTm9kZTozNDQ4'
+
+    page_dictionary = PageImporter(preview_url).fetch_page_data().page_dictionary
+    assert page_dictionary['id'] == 'U2VydmljZVBhZ2VOb2RlOjU='
+    assert page_dictionary['title'] == 'Get your bulk items collectedd'
+    assert page_dictionary['slug'] == 'bulk-item-pickup'
+    assert page_dictionary['shortDescription'] == 'Twice a year, Austin residential trash and recycling customers can place large items out on the curb to be picked up. These items include appliances, furniture, and carpet.'
+    assert page_dictionary['dynamicContent'] == []
+    assert page_dictionary['steps'] == [
+        {   'id': '387583c9-5aaa-40b2-acdb-a197e32a4f6d',
+            'type': 'basic_step',
+            'value': '<p>Use the this tool to see what bulk items can be picked '
+                     'up. Bulk items are items that are too large for your trash '
+                     'cart, such as appliances, furniture, and '
+                     'carpet.</p><p></p><p><code>APPBLOCK: What do I do '
+                     'with</code></p>'},
+        {   'id': '3b80d7f5-1cce-480f-be13-217784eabcd9',
+            'type': 'basic_step',
+            'value': '<p>Consider donating your items before placing them on the '
+                     'curb for pickup.</p>'},
+        {   'id': '15b9a848-91ed-41be-857a-0b44a5580eb0',
+            'type': 'basic_step',
+            'value': '<p>Look up your bulk pickup weeks. We only collect bulk '
+                     'items from Austin residential trash and recycling customers '
+                     'twice a year, and customers have different pickup '
+                     'weeks.</p><p></p><p><code>APPBLOCK: Collection '
+                     'Schedule</code></p>'},
+        {   'id': 'a8b677b9-d8d0-4c45-baa6-894e4e504c97',
+            'type': 'basic_step',
+            'value': '<p>Review the bulk item pickup do’s and don’ts below.</p>'},
+        {   'id': '9cce1999-8a7f-4400-922d-ae6b03e41d68',
+            'type': 'basic_step',
+            'value': '<p>Place bulk items at the curb in front of your house by '
+                     '6:30 am on the first day of your scheduled collection '
+                     'week.</p>'},
+        {   'id': 'bb6b732d-177d-4a89-b179-882f2166aa63',
+            'type': 'basic_step',
+            'value': '<p>Separate items into three '
+                     'piles:</p><ul><li>Metal—includes appliances, doors must be '
+                     'removed</li><li>Passenger car tires—limit of eight tires per '
+                     'household, rims must be removed, no truck or tractor '
+                     'tires</li><li>Non-metal items—includes carpeting and '
+                     'nail-free lumber</li></ul>'},
+        {   'id': '47a7c5da-7afe-4fd0-9de0-03045938ef24',
+            'type': 'basic_step',
+            'value': '<p>The three separate piles are collected by different '
+                     'trucks and may be collected at different times throughout '
+                     'the week.</p>'}
+    ]
+    assert page_dictionary['topics'] == { 'edges': [] }
+    assert page_dictionary['additionalContent'] == '<h2>Bulk item pickup do’s and don’ts</h2><p>Do not put bulk items in bags, boxes, or other containers. Bags will be treated as extra trash and are subject to extra trash fees.</p><p>Do not place any items under low hanging tree limbs or power lines.</p><p>Do not place items in an alley in any area in front of a vacant lot or in front of a business. Items will not be collected from these areas.</p><p>To prevent damage to your property, keep bulk items 5 feet away from your:</p><ul><li>Trash cart</li><li>Mailbox</li><li>Fences or walls</li><li>Water meter</li><li>Telephone connection box</li><li>Parked cars</li></ul>'
     assert not page_dictionary['coaGlobal']
