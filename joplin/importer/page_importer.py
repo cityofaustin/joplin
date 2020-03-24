@@ -8,6 +8,7 @@ from importer.queries import queries
 from pages.topic_collection_page.factories import create_topic_collection_page_from_page_dictionary
 from pages.topic_page.factories import create_topic_page_from_page_dictionary
 from pages.information_page.factories import create_information_page_from_page_dictionary
+from pages.service_page.factories import create_service_page_from_page_dictionary
 
 ENDPOINTS = {
     'janis.austintexas.io': 'https://joplin-staging.herokuapp.com/api/graphql'
@@ -19,7 +20,8 @@ class PageImporter:
         page_creator_dictionary = {
             'topiccollection': create_topic_collection_page_from_page_dictionary,
             'topic': create_topic_page_from_page_dictionary,
-            'information': create_information_page_from_page_dictionary
+            'information': create_information_page_from_page_dictionary,
+            'services': create_service_page_from_page_dictionary,
         }
 
         page = page_creator_dictionary[self.page_type](self.page_dictionary, self.revision_id)
