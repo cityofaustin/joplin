@@ -16,4 +16,9 @@ branch_overrides = {
     "3503-concurrency": {
         "LOAD_DATA": "",
     },
+    "pytest": {
+        "DELETION_PROTECTION": 1,
+        "LOAD_DATA": "",
+        "DEBUG": 0,
+    }
 }
