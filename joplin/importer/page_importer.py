@@ -27,29 +27,28 @@ class PageImporter:
         return page
 
     def fetch_page_data(self):
-        sample_transport = RequestsHTTPTransport(
-            url=self.joplin_api_endpoint,
-            # todo: use headers to get different languages
-            # headers={
-            #     "Content-type": "application/json",
-            # },
-            verify=False
-        )
+        # todo: don't just hardcode lang here
+        for lang in ['en', 'es']:
+            sample_transport = RequestsHTTPTransport(
+                url=self.joplin_api_endpoint,
+                headers={'Accept-Language': lang},
+                verify=False
+            )
 
-        client = Client(
-            retries=3,
-            transport=sample_transport,
-            fetch_schema_from_transport=True,
-        )
+            client = Client(
+                retries=3,
+                transport=sample_transport,
+                fetch_schema_from_transport=True,
+            )
 
-        result = client.execute(queries[self.page_type], variable_values=json.dumps({'id': self.revision_id}))
-        revision_node = result['allPageRevisions']['edges'][0]['node']
+            result = client.execute(queries[self.page_type], variable_values=json.dumps({'id': self.revision_id}))
+            revision_node = result['allPageRevisions']['edges'][0]['node']
 
-        # this gets us into the 'as____Page' stuff
-        page_dictionary_from_revision = next(iter(revision_node.values()))
+            # this gets us into the 'as____Page' stuff
+            page_dictionary_from_revision = next(iter(revision_node.values()))
 
-        # set the page dictionary on ourselves but also return it
-        self.page_dictionary = page_dictionary_from_revision
+            # set the page dictionary for this lang
+            self.page_dictionaries[lang] = page_dictionary_from_revision
 
         # return ourselves for method chaining
         return self
@@ -76,4 +75,4 @@ class PageImporter:
             self.page_type = path.parts[3]
             self.revision_id = path.parts[4]
 
-        self.page_dictionary = None
+        self.page_dictionaries = {}

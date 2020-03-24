@@ -16,7 +16,11 @@ class InformationPageFactory(JanisBasePageWithTopicsFactory):
         model = InformationPage
 
 
-def create_information_page_from_page_dictionary(page_dictionary, revision_id):
+def create_information_page_from_importer_dictionaries(page_dictionaries, revision_id):
+    # leaving this here and moving to topic collection to start
+    blargyy = [(field.column, field.column[:-3]) for field in InformationPageFactory._meta.model._meta.fields if
+               field.column.endswith("_es")]
+
     # first check to see if we already imported this page
     # if we did, just go to the edit page for it without changing the db
     # todo: maybe change this to allow updating pages in the future?
@@ -28,10 +32,10 @@ def create_information_page_from_page_dictionary(page_dictionary, revision_id):
         return page
 
     # since we don't have a page matching the revision id, we should look
-    # for other matches, for now let's just use slug
+    # for other matches, for now let's just use english slug
     # todo: figure out what we want the logic around importing a page with the same slug to look like
     try:
-        page = InformationPage.objects.get(slug=page_dictionary['slug'])
+        page = InformationPage.objects.get(slug=page_dictionaries['en']['slug'])
     except InformationPage.DoesNotExist:
         page = None
     if page:
