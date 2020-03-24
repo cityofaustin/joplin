@@ -71,7 +71,10 @@ class OfficialDocumentPageOfficialDocument(Orderable):
     authoring_office = models.CharField(verbose_name="Authoring office of document", max_length=DEFAULT_MAX_LENGTH)
     summary = models.TextField(verbose_name="Document summary")
     name = models.CharField(verbose_name="Name of Document", max_length=DEFAULT_MAX_LENGTH)
-    document = models.ForeignKey(Document, null=True, blank=False, on_delete=models.SET_NULL, related_name='+')
+    document = models.ForeignKey(Document, null=True, blank=False, on_delete=models.SET_NULL, related_name='+',
+                                 verbose_name="Document [en]")
+    document_es = models.ForeignKey(Document, blank=True, null=True, on_delete=models.SET_NULL, related_name='+',
+                                    verbose_name="Document [es]")
 
     panels = [
         FieldPanel('date'),
@@ -83,7 +86,8 @@ class OfficialDocumentPageOfficialDocument(Orderable):
             'data-count-direction': 'down'
         })),
         FieldPanel('name', widget=countMe),
-        DocumentChooserPanel('document')
+        DocumentChooserPanel('document'),
+        DocumentChooserPanel('document_es')
     ]
 
     class Meta:
