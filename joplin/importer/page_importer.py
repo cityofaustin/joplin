@@ -3,15 +3,18 @@ from pathlib import Path
 from gql import gql, Client
 from gql.transport.requests import RequestsHTTPTransport
 import json
-from importer.queries import queries
+from django.core.exceptions import ValidationError
 
+from importer.queries import queries
 from pages.topic_collection_page.factories import create_topic_collection_page_from_page_dictionary
 from pages.topic_page.factories import create_topic_page_from_page_dictionary
 from pages.information_page.factories import create_information_page_from_page_dictionary
 from pages.service_page.factories import create_service_page_from_page_dictionary
 
+# TODO: this could be retrieved programmatically from the netlify API for PR apps
 ENDPOINTS = {
-    'janis.austintexas.io': 'https://joplin-staging.herokuapp.com/api/graphql'
+    'janis.austintexas.io': 'https://joplin-staging.herokuapp.com/api/graphql',
+    'janis-pytest.netlify.com': 'https://joplin-pr-pytest.herokuapp.com/api/graphql',
 }
 
 
@@ -35,7 +38,7 @@ class PageImporter:
             # headers={
             #     "Content-type": "application/json",
             # },
-            verify=False
+            verify=True
         )
 
         client = Client(
@@ -67,6 +70,9 @@ class PageImporter:
         if 'CMS_API' in parse_result.query:
             qs = parse_qs(parse_result.query)
             self.joplin_api_endpoint = qs['CMS_API'][0]
+
+        if not hasattr(self, 'joplin_api_endpoint'):
+            raise ValidationError(f"hostname [{parse_result.hostname}] does not have a joplin_api_endpoint configured.")
 
         # get a path object to play with
         path = Path(parse_result.path)
