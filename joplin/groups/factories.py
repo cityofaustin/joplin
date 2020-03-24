@@ -5,7 +5,7 @@ from wagtail.core.models import GroupPagePermission
 
 class DepartmentFactory(factory.DjangoModelFactory):
     department_page = factory.SubFactory('pages.department_page.factories.DepartmentPageFactory')
-    name = factory.Faker('first_name')
+    name = factory.Sequence(lambda n: f'Test Department {n}')
 
     class Meta:
         model = Department

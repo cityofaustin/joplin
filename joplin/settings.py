@@ -84,6 +84,7 @@ INSTALLED_APPS = [
     'countable_field',
     'flags',
     'silk',
+    'gql',
 
     'groups',
     'publish_preflight',
@@ -327,7 +328,7 @@ HEROKU_KEY = os.getenv('HEROKU_KEY')
 HEROKU_JANIS_APP_NAME = os.getenv('HEROKU_JANIS_APP_NAME')
 JANIS_URL = os.getenv('JANIS_URL', 'http://localhost:3000')
 
-JANIS_CMS_API = os.getenv('JANIS_CMS_API')
+JANIS_CMS_API = os.getenv('JANIS_CMS_API', 'http://localhost:8000/api/graphql')
 JANIS_CMS_MEDIA = os.getenv('JANIS_CMS_MEDIA')
 JANIS_CMS_DOCS = os.getenv('JANIS_CMS_DOCS')
 

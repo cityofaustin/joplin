@@ -1,4 +1,5 @@
-from pages.base_page.factories import JanisBasePageFactory, JanisBasePageWithTopicsFactory
+from pages.base_page.factories import JanisBasePageFactory
+from pages.topic_page.factories import JanisBasePageWithTopicsFactory
 import pytest
 
 
@@ -78,19 +79,18 @@ def test_base_page_with_topics_no_topic_no_department_not_global_urls():
     assert url == '#'
 
 
-# todo figure out db error stuff and uncomment this one
 # # If we don't have any associated department,
 # # and we don't have any associated topic pages
 # # and coa_global=True (top level page is checked)
-# @pytest.mark.django_db
-# def test_base_page_with_topics_no_topic_no_department_coa_global_urls():
-#     page = JanisBasePageWithTopicsFactory.build(slug="global_slug", coa_global=True)
-#
-#     urls = page.janis_urls()
-#     url = page.janis_url()
-#
-#     assert urls == ['http://fake.base.url/global_slug/']
-#     assert url == 'http://fake.base.url/global_slug/'
+@pytest.mark.django_db
+def test_base_page_with_topics_no_topic_no_department_coa_global_urls():
+    page = JanisBasePageWithTopicsFactory.build(slug="global_slug", coa_global=True)
+
+    urls = page.janis_urls()
+    url = page.janis_url()
+
+    assert urls == ['http://fake.base.url/global_slug/']
+    assert url == 'http://fake.base.url/global_slug/'
 
 
 # If we have associated departments,
@@ -120,9 +120,11 @@ def test_base_page_with_topics_with_department_not_global_urls():
     assert url == expected_urls[0]
 
 
+# todo: figure out how to get department permissions working in a test db setting so we don't get random failures
 # If we have associated departments,
 # and we have associated topic pages
 # and coa_global=True (top level is checked)
+<<<<<<< HEAD
 @pytest.mark.django_db
 def test_base_page_with_topics_with_topic_with_department_coa_global_urls():
     page = JanisBasePageWithTopicsFactory.create(slug="global_slug_2", coa_global=True)
@@ -132,3 +134,14 @@ def test_base_page_with_topics_with_topic_with_department_coa_global_urls():
 
     assert urls == ['http://fake.base.url/global_slug_2/']
     assert url == 'http://fake.base.url/global_slug_2/'
+=======
+# @pytest.mark.django_db
+# def test_base_page_with_topics_with_topic_with_department_coa_global_urls():
+#     page = JanisBasePageWithTopicsFactory.create(slug="global_slug_2", coa_global=True)
+#
+#     urls = page.janis_urls()
+#     url = page.janis_url()
+#
+#     assert urls == ['http://fake.base.url/global_slug_2/']
+#     assert url == 'http://fake.base.url/global_slug_2/'
+>>>>>>> v3

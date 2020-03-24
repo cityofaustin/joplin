@@ -26,8 +26,9 @@ from django.views.decorators.vary import vary_on_headers
 @vary_on_headers('X-Requested-With')
 @user_passes_test(user_has_any_page_permission)
 def search(request):
-    # excluding wagtail 'page' type pages from search (like home/root)
-    pages = all_pages = Page.objects.all().exclude(content_type_id__in=[1]).prefetch_related('content_type').specific()
+    # excluding wagtail 'page' pages and 'HomePages' from search (like home/root)
+    homepage_content_type_id = ContentType.objects.get(app_label="home_page", model="homepage").id
+    pages = all_pages = Page.objects.all().exclude(content_type_id__in=[1, homepage_content_type_id]).prefetch_related('content_type').specific()
     q = MATCH_ALL
     content_types = []
     pagination_query_params = QueryDict({}, mutable=True)
