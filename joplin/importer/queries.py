@@ -3,14 +3,16 @@ from gql import gql
 queries = {
     'topiccollection': gql('''
     query getTopicCollectionPageRevision($id: ID) {
-      all_page_revisions(id: $id) {
+      allPageRevisions(id: $id) {
         edges {
           node {
-            as_topic_collection_page {
+            asTopicCollectionPage {
+              id
               title
               slug
               description
               theme {
+                id
                 slug
                 text
                 description
@@ -23,10 +25,11 @@ queries = {
     '''),
     'topic': gql('''
         query getTopicPageRevision($id: ID) {
-          all_page_revisions(id: $id) {
+          allPageRevisions(id: $id) {
             edges {
               node {
-                as_topic_page {
+                asTopicPage {
+                  id
                   title
                   slug
                   description
@@ -34,15 +37,17 @@ queries = {
                     edges {
                       node {
                         topiccollection {
+                          id
                           title
                           slug
                           description
                           theme {
+                            id
                             slug
                             text
                             description
                           }
-                          live_revision {
+                          liveRevision {
                             id
                           }
                         }
@@ -57,10 +62,11 @@ queries = {
     '''),
     'information': gql('''
     query getInformationPageRevision($id: ID) {
-      all_page_revisions(id: $id) {
+      allPageRevisions(id: $id) {
         edges {
           node {
-            as_information_page {
+            asInformationPage {
+              id
               title
               slug
               description
@@ -68,6 +74,7 @@ queries = {
                 edges {
                   node {
                     topic {
+                      id
                       title
                       slug
                       description
@@ -75,29 +82,31 @@ queries = {
                         edges {
                           node {
                             topiccollection {
+                              id
                               title
                               slug
                               description
                               theme {
+                                id
                                 slug
                                 text
                                 description
                               }
-                              live_revision {
+                              liveRevision {
                                 id
                               }
                             }
                           }
                         }
                       }
-                      live_revision {
+                      liveRevision {
                         id
                       }
                     }
                   }
                 }
               }
-              additional_content
+              additionalContent
               contacts {
                 edges {
                   node {
@@ -107,7 +116,7 @@ queries = {
                   }
                 }
               }
-              coa_global
+              coaGlobal
             }
           }
         }
