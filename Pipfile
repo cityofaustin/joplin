@@ -47,6 +47,7 @@ django-coverage-plugin = "*"
 pytest-cov = "*"
 snapshottest = "*"
 gql = "*"
+stringcase = "*"
 
 [requires]
 python_version = "3.7"

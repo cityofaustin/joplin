@@ -8,7 +8,7 @@ from pages.factory import PageFactory
 from base.models import Contact
 from pytest_factoryboy import register
 from wagtail.core.models import Page
-from pages.topic_page.factories import JanisBasePageWithTopicsFactory, create_topic_page_from_page_dictionary
+from pages.topic_page.factories import JanisBasePageWithTopicsFactory, create_topic_page_from_importer_dictionaries
 from pages.home_page.models import HomePage
 
 
@@ -53,9 +53,10 @@ def create_service_page_from_page_dictionary(page_dictionary, revision_id=None):
     # since we don't have a page matching the revision id or the slug
     # we need to create a page, which needs a topic if it has one
     # run through the topic logic here
-    topic_page_dictionaries = [edge['node']['topic'] for edge in page_dictionary['topics']['edges']]
-    topic_pages = [create_topic_page_from_page_dictionary(dictionary, dictionary['liveRevision']['id']) for dictionary
-                   in topic_page_dictionaries]
+    # topic_page_dictionaries = [edge['node']['topic'] for edge in page_dictionary['topics']['edges']]
+    # topic_pages = [create_topic_page_from_page_dictionary(dictionary, dictionary['liveRevision']['id']) for dictionary
+    #                in topic_page_dictionaries]
+    # todo: whatever works for info once we get there
 
     # todo: actually get departments here
     related_departments = ['just a string']
@@ -72,18 +73,18 @@ def create_service_page_from_page_dictionary(page_dictionary, revision_id=None):
     #     for step in page_dictionary['steps']
     # ])
 
-    page = ServicePageFactory.create(
-        imported_revision_id=revision_id,
-        title=page_dictionary['title'],
-        slug=page_dictionary['slug'],
-        add_topics={'topics': topic_pages},
-        add_related_departments=related_departments,
-        coa_global=page_dictionary['coaGlobal'],
-        parent=home,
-        steps=page_dictionary['steps'],
-        dynamic_content=page_dictionary['dynamicContent'],
-        additional_content=page_dictionary['additionalContent'],
-        short_description=page_dictionary['shortDescription'],
-    )
-
-    return page
+    # page = ServicePageFactory.create(
+    #     imported_revision_id=revision_id,
+    #     title=page_dictionary['title'],
+    #     slug=page_dictionary['slug'],
+    #     add_topics={'topics': topic_pages},
+    #     add_related_departments=related_departments,
+    #     coa_global=page_dictionary['coaGlobal'],
+    #     parent=home,
+    #     steps=page_dictionary['steps'],
+    #     dynamic_content=page_dictionary['dynamicContent'],
+    #     additional_content=page_dictionary['additionalContent'],
+    #     short_description=page_dictionary['shortDescription'],
+    # )
+    #
+    # return page

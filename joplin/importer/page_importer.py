@@ -4,6 +4,7 @@ from gql import gql, Client
 from gql.transport.requests import RequestsHTTPTransport
 import json
 from django.core.exceptions import ValidationError
+from stringcase import snakecase
 
 from importer.queries import queries
 from pages.topic_collection_page.factories import create_topic_collection_page_from_importer_dictionaries
@@ -23,8 +24,8 @@ class PageImporter:
         page_creators = {
             'topiccollection': create_topic_collection_page_from_importer_dictionaries,
             'topic': create_topic_page_from_importer_dictionaries,
-            'information': create_information_page_from_importer_dictionaries
-			'services': create_service_page_from_page_dictionary,
+            'information': create_information_page_from_importer_dictionaries,
+            'services': create_service_page_from_page_dictionary,
         }
 
         page = page_creators[self.page_type](self.page_dictionaries, self.revision_id)
@@ -37,7 +38,7 @@ class PageImporter:
             sample_transport = RequestsHTTPTransport(
                 url=self.joplin_api_endpoint,
                 headers={'Accept-Language': lang},
-            verify=True
+                verify=True
             )
 
             client = Client(
@@ -52,8 +53,9 @@ class PageImporter:
             # this gets us into the 'as____Page' stuff
             page_dictionary_from_revision = next(iter(revision_node.values()))
 
-            # set the page dictionary for this lang
-            self.page_dictionaries[lang] = page_dictionary_from_revision
+            # set the deCamelCased page dictionary for this lang
+            self.page_dictionaries[lang] = {snakecase(key): value for key, value in
+                                            page_dictionary_from_revision.items()}
 
         # return ourselves for method chaining
         return self
