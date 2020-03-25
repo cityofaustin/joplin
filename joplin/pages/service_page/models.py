@@ -102,6 +102,8 @@ class ServicePage(JanisBasePageWithTopics):
         verbose_name='Write a description of this service'
     )
 
+    contact = models.ForeignKey(Contact, related_name='+', on_delete=models.CASCADE)
+
     publish_requirements = (
         FieldPublishRequirement("short_description", message="A description is required", langs=["en"]),
         StreamFieldPublishRequirement("steps", langs=["en"]),
@@ -142,18 +144,5 @@ class ServicePage(JanisBasePageWithTopics):
             heading=additional_content.verbose_name,
             classname='coa-multiField-nopadding'
         ),
-        InlinePanel('contacts', label='Contacts'),
-    ]
-
-
-class ServicePageContact(ClusterableModel):
-    page = ParentalKey(ServicePage, related_name='contacts')
-    contact = models.ForeignKey(
-        Contact, related_name='+', on_delete=models.CASCADE)
-
-    panels = [
         SnippetChooserPanel('contact'),
     ]
-
-    def __str__(self):
-        return self.contact.name
