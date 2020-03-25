@@ -2,7 +2,6 @@ import pytest
 
 from importer.page_importer import PageImporter
 from pages.service_page.models import ServicePage
-from pages.service_page.factories import ServicePageFactory, create_service_page_from_page_dictionary
 
 
 @pytest.mark.django_db
