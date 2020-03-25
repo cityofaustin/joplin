@@ -4,7 +4,7 @@ from gql import gql, Client
 from gql.transport.requests import RequestsHTTPTransport
 import json
 from django.core.exceptions import ValidationError
-from stringcase import snakecase
+from humps import decamelize
 
 from importer.queries import queries
 from pages.topic_collection_page.factories import create_topic_collection_page_from_importer_dictionaries
@@ -54,8 +54,7 @@ class PageImporter:
             page_dictionary_from_revision = next(iter(revision_node.values()))
 
             # set the deCamelCased page dictionary for this lang
-            self.page_dictionaries[lang] = {snakecase(key): value for key, value in
-                                            page_dictionary_from_revision.items()}
+            self.page_dictionaries[lang] = decamelize(page_dictionary_from_revision)
 
         # return ourselves for method chaining
         return self
