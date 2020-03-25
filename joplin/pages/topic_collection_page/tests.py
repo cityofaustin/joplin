@@ -2,28 +2,30 @@ from pages.topic_collection_page.factories import TopicCollectionPageFactory, Ja
     ThemeFactory, create_topic_collection_page_from_importer_dictionaries, create_theme_from_importer_dictionaries
 import pytest
 
-page_dictionaries = {
-    'en': {
-        'title': 'topic collection title [en]',
-        'slug': 'topic-collection-title-en',
-        'description': 'topic collection description [en]',
-        'theme': {
-            'slug': 'theme-slug-en',
-            'text': 'theme text [en]',
-            'description': 'theme description [en]'
-        }
-    },
-    'es': {
-        'title': 'topic collection title [es]',
-        'slug': 'topic-collection-title-es',
-        'description': 'topic collection description [es]',
-        'theme': {
-            'slug': 'theme-slug-es',
-            'text': 'theme text [es]',
-            'description': 'theme description [es]'
+
+def page_dictionaries():
+    return {
+        'en': {
+            'title': 'topic collection title [en]',
+            'slug': 'topic-collection-title-en',
+            'description': 'topic collection description [en]',
+            'theme': {
+                'slug': 'theme-slug-en',
+                'text': 'theme text [en]',
+                'description': 'theme description [en]'
+            }
+        },
+        'es': {
+            'title': 'topic collection title [es]',
+            'slug': 'topic-collection-title-es',
+            'description': 'topic collection description [es]',
+            'theme': {
+                'slug': 'theme-slug-es',
+                'text': 'theme text [es]',
+                'description': 'theme description [es]'
+            }
         }
     }
-}
 
 
 # If we don't have a theme
@@ -91,10 +93,10 @@ def test_import_from_page_dictionary_twice():
     revision_id = 'UGFnZVJldmlzaW9uTm9kZToxMw=='
 
     # get the page we're creating
-    page = create_topic_collection_page_from_importer_dictionaries(page_dictionaries, revision_id)
+    page = create_topic_collection_page_from_importer_dictionaries(page_dictionaries(), revision_id)
 
     # try making it again
-    second_page = create_topic_collection_page_from_importer_dictionaries(page_dictionaries, revision_id)
+    second_page = create_topic_collection_page_from_importer_dictionaries(page_dictionaries(), revision_id)
 
     assert second_page == page
 
@@ -108,10 +110,10 @@ def test_import_from_page_dictionary_twice_different_revisions():
     second_revision_id = 'second_revision_id'
 
     # get the page we're creating
-    page = create_topic_collection_page_from_importer_dictionaries(page_dictionaries, first_revision_id)
+    page = create_topic_collection_page_from_importer_dictionaries(page_dictionaries(), first_revision_id)
 
     # try making it again
-    second_page = create_topic_collection_page_from_importer_dictionaries(page_dictionaries, second_revision_id)
+    second_page = create_topic_collection_page_from_importer_dictionaries(page_dictionaries(), second_revision_id)
 
     assert second_page == page
 
@@ -122,11 +124,11 @@ def test_import_from_page_dictionary_existing_theme():
     revision_id = 'UGFnZVJldmlzaW9uTm9kZToxMw=='
 
     theme_dictionaries = {
-        'en': page_dictionaries['en']['theme'],
-        'es': page_dictionaries['es']['theme']
+        'en': page_dictionaries()['en']['theme'],
+        'es': page_dictionaries()['es']['theme']
     }
     theme = create_theme_from_importer_dictionaries(theme_dictionaries)
 
-    page = create_topic_collection_page_from_importer_dictionaries(page_dictionaries, revision_id)
+    page = create_topic_collection_page_from_importer_dictionaries(page_dictionaries(), revision_id)
 
     assert page.theme == theme

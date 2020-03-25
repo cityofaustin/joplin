@@ -105,12 +105,12 @@ def test_get_dummy_topic_collection_page_from_revision(remote_staging_preview_ur
 def test_get_dummy_topic_page_from_revision(remote_staging_preview_url, remote_pytest_api):
     preview_url = f'{remote_staging_preview_url}/topic/UGFnZVJldmlzaW9uTm9kZToxMg==?CMS_API={remote_pytest_api}'
 
-    page_dictionary = PageImporter(preview_url).fetch_page_data().page_dictionary
+    page_dictionaries = PageImporter(preview_url).fetch_page_data().page_dictionaries
 
-    assert page_dictionary['title'] == 'topic title [en]'
-    assert page_dictionary['slug'] == 'topic-title-en'
-    assert page_dictionary['description'] == 'topic description [en]'
-    assert page_dictionary['topiccollections'] == {
+    assert page_dictionaries['en']['title'] == 'topic title [en]'
+    assert page_dictionaries['en']['slug'] == 'topic-title-en'
+    assert page_dictionaries['en']['description'] == 'topic description [en]'
+    assert page_dictionaries['en']['topiccollections'] == {
         'edges': [{
             'node': {
                 'topiccollection': {
@@ -122,7 +122,7 @@ def test_get_dummy_topic_page_from_revision(remote_staging_preview_url, remote_p
                         'text': 'theme text [en]',
                         'description': 'theme description [en]'
                     },
-                    'liveRevision': {
+                    'live_revision': {
                         'id': 'UGFnZVJldmlzaW9uTm9kZToz'
                     }
                 }
@@ -138,12 +138,12 @@ def test_get_dummy_topic_page_from_revision(remote_staging_preview_url, remote_p
 def test_get_dummy_information_page_from_revision(remote_staging_preview_url, remote_pytest_api):
     preview_url = f'{remote_staging_preview_url}/information/UGFnZVJldmlzaW9uTm9kZToxMQ==?CMS_API={remote_pytest_api}'
 
-    page_dictionary = PageImporter(preview_url).fetch_page_data().page_dictionary
+    page_dictionaries = PageImporter(preview_url).fetch_page_data().page_dictionaries
 
-    assert page_dictionary['title'] == 'information page title [en]'
-    assert page_dictionary['slug'] == 'information-page-title-en'
-    assert page_dictionary['description'] == 'information page description [en]'
-    assert page_dictionary['topics'] == {
+    assert page_dictionaries['en']['title'] == 'information page title [en]'
+    assert page_dictionaries['en']['slug'] == 'information-page-title-en'
+    assert page_dictionaries['en']['description'] == 'information page description [en]'
+    assert page_dictionaries['en']['topics'] == {
         'edges': [{
             'node': {
                 'topic': {
@@ -162,34 +162,34 @@ def test_get_dummy_information_page_from_revision(remote_staging_preview_url, re
                                         'text': 'theme text [en]',
                                         'description': 'theme description [en]'
                                     },
-                                    'liveRevision': {
+                                    'live_revision': {
                                         'id': 'UGFnZVJldmlzaW9uTm9kZToz'
                                     }
                                 }
                             }
                         }]
                     },
-                    'liveRevision': {
+                    'live_revision': {
                         'id': 'UGFnZVJldmlzaW9uTm9kZToxMg=='
                     }
                 }
             }
         }]
     }
-    assert page_dictionary['additionalContent'] == '<p>information page additional content [en]</p>'
+    assert page_dictionaries['en']['additional_content'] == '<p>information page additional content [en]</p>'
     #     todo contacts
-    assert not page_dictionary['coaGlobal']
+    assert not page_dictionaries['en']['coa_global']
 
 
 def test_get_dummy_service_page_from_revision(remote_staging_preview_url, remote_pytest_api):
     preview_url = f'{remote_staging_preview_url}/services/UGFnZVJldmlzaW9uTm9kZToyMQ==?CMS_API={remote_pytest_api}'
 
-    page_dictionary = PageImporter(preview_url).fetch_page_data().page_dictionary
-    assert page_dictionary['title'] == 'Get your bulk items collected'
-    assert page_dictionary['slug'] == 'bulk-item-pickup'
-    assert page_dictionary['shortDescription'] == 'Twice a year, Austin residential trash and recycling customers can place large items out on the curb to be picked up. These items include appliances, furniture, and carpet.'
-    assert page_dictionary['dynamicContent'] == []
-    assert page_dictionary['steps'] == [
+    page_dictionaries = PageImporter(preview_url).fetch_page_data().page_dictionaries
+    assert page_dictionaries['en']['title'] == 'Get your bulk items collected'
+    assert page_dictionaries['en']['slug'] == 'bulk-item-pickup'
+    assert page_dictionaries['en']['short_description'] == 'Twice a year, Austin residential trash and recycling customers can place large items out on the curb to be picked up. These items include appliances, furniture, and carpet.'
+    assert page_dictionaries['en']['dynamic_content'] == []
+    assert page_dictionaries['en']['steps'] == [
         {   'id': '8ae81673-200e-4ef9-a744-28b38752d7ac',
             'type': 'basic_step',
             'value': '<p>Use the this tool to see what bulk items can be picked '
@@ -230,6 +230,6 @@ def test_get_dummy_service_page_from_revision(remote_staging_preview_url, remote
                      'trucks and may be collected at different times throughout '
                      'the week.</p>'}
     ]
-    assert page_dictionary['topics'] == { 'edges': [] }
-    assert page_dictionary['additionalContent'] == '<h2>Bulk item pickup do’s and don’ts</h2><p>Do not put bulk items in bags, boxes, or other containers. Bags will be treated as extra trash and are subject to extra trash fees.</p><p>Do not place any items under low hanging tree limbs or power lines.</p><p>Do not place items in an alley in any area in front of a vacant lot or in front of a business. Items will not be collected from these areas.</p><p>To prevent damage to your property, keep bulk items 5 feet away from your:</p><ul><li>Trash cart</li><li>Mailbox</li><li>Fences or walls</li><li>Water meter</li><li>Telephone connection box</li><li>Parked cars</li></ul>'
-    assert not page_dictionary['coaGlobal']
+    assert page_dictionaries['en']['topics'] == { 'edges': [] }
+    assert page_dictionaries['en']['additional_content'] == '<h2>Bulk item pickup do’s and don’ts</h2><p>Do not put bulk items in bags, boxes, or other containers. Bags will be treated as extra trash and are subject to extra trash fees.</p><p>Do not place any items under low hanging tree limbs or power lines.</p><p>Do not place items in an alley in any area in front of a vacant lot or in front of a business. Items will not be collected from these areas.</p><p>To prevent damage to your property, keep bulk items 5 feet away from your:</p><ul><li>Trash cart</li><li>Mailbox</li><li>Fences or walls</li><li>Water meter</li><li>Telephone connection box</li><li>Parked cars</li></ul>'
+    assert not page_dictionaries['en']['coa_global']
