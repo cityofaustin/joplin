@@ -16,8 +16,8 @@ from wagtail.documents.models import Document
 from wagtail.core.rich_text import expand_db_html
 from base.models import TranslatedImage, Theme, Contact, Location, PhoneNumber, ContactDayAndDuration
 
-from pages.topic_collection_page.models import TopicCollectionPage
-from pages.topic_page.models import TopicPage, TopicPageTopPage
+from pages.topic_collection_page.models import TopicCollectionPage, JanisBasePageWithTopicCollections
+from pages.topic_page.models import TopicPage, TopicPageTopPage, JanisBasePageWithTopics
 from pages.service_page.models import ServicePage, ServicePageContact
 from pages.information_page.models import InformationPage, InformationPageContact
 from pages.department_page.models import DepartmentPage, DepartmentPageDirector, DepartmentPageContact, DepartmentPageTopPage, DepartmentPageRelatedPage
@@ -171,6 +171,20 @@ class JanisBasePageNode(DjangoObjectType):
 
     def resolve_janis_urls(self, info):
         return self.specific.janis_urls()
+
+
+class JanisBasePageWithTopicCollectionsNode(DjangoObjectType):
+    class Meta:
+        model = JanisBasePageWithTopicCollections
+        filter_fields = ['id', 'slug', 'live']
+        interfaces = [graphene.Node]
+
+
+class JanisBasePageWithTopicsNode(DjangoObjectType):
+    class Meta:
+        model = JanisBasePageWithTopics
+        filter_fields = ['id', 'slug', 'live']
+        interfaces = [graphene.Node]
 
 
 class DepartmentPageNode(DjangoObjectType):
@@ -506,11 +520,34 @@ class OfficialDocumentFilter(FilterSet):
         fields = ['date']
 
 
+class OfficialDocumentNodeDocument(graphene.ObjectType):
+    filename = graphene.String()
+    fileSize = graphene.String()
+
+
 class OfficialDocumentPageOfficialDocumentNode(DjangoObjectType):
+    document = graphene.Field(OfficialDocumentNodeDocument)
+
     class Meta:
         model = OfficialDocumentPageOfficialDocument
         filter_fields = ['date']
         interfaces = [graphene.Node]
+
+    def resolve_document(self, info):
+        english_doc = OfficialDocumentNodeDocument(
+            filename=self.document.filename,
+            fileSize=self.docuemnt.file_size,
+        )
+        if django.utils.translation.get_language() == 'es':
+            if self.document_es:
+                return OfficialDocumentNodeDocument(
+                    filename=self.document_es.filename,
+                    fileSize=self.document_es.file_size,
+                )
+            else:
+                return english_doc
+        else:
+            return english_doc
 
 
 class OfficialDocumentPageNode(DjangoObjectType):

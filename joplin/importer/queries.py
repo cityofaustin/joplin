@@ -114,4 +114,69 @@ queries = {
       }
     }
     '''),
+    'services': gql('''
+    query getServicePageRevision($id: ID) {
+      allPageRevisions(id: $id) {
+        edges {
+          node {
+            asServicePage {
+              id
+              title
+              slug
+              shortDescription
+              dynamicContent
+              steps
+              topics {
+                edges {
+                  node {
+                    topic {
+                      id
+                      title
+                      slug
+                      description
+                      topiccollections {
+                        edges {
+                          node {
+                            topiccollection {
+                              id
+                              title
+                              slug
+                              description
+                              theme {
+                                id
+                                slug
+                                text
+                                description
+                              }
+                              liveRevision {
+                                id
+                              }
+                            }
+                          }
+                        }
+                      }
+                      liveRevision {
+                        id
+                      }
+                    }
+                  }
+                }
+              }
+              additionalContent
+              contacts {
+                edges {
+                  node {
+                    contact {
+                      id
+                    }
+                  }
+                }
+              }
+              coaGlobal
+            }
+          }
+        }
+      }
+    }
+    '''),
 }

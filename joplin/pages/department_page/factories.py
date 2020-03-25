@@ -4,7 +4,6 @@ from pages.factory import PageFactory
 
 
 class DepartmentPageFactory(PageFactory):
-
     mission = factory.Faker('text')
 
     class Meta:

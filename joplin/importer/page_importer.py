@@ -3,14 +3,18 @@ from pathlib import Path
 from gql import gql, Client
 from gql.transport.requests import RequestsHTTPTransport
 import json
-from importer.queries import queries
+from django.core.exceptions import ValidationError
 
+from importer.queries import queries
 from pages.topic_collection_page.factories import create_topic_collection_page_from_importer_dictionaries
 from pages.topic_page.factories import create_topic_page_from_importer_dictionaries
 from pages.information_page.factories import create_information_page_from_importer_dictionaries
+from pages.service_page.factories import create_service_page_from_page_dictionary
 
+# TODO: this could be retrieved programmatically from the netlify API for PR apps
 ENDPOINTS = {
-    'janis.austintexas.io': 'https://joplin-staging.herokuapp.com/api/graphql'
+    'janis.austintexas.io': 'https://joplin-staging.herokuapp.com/api/graphql',
+    'janis-pytest.netlify.com': 'https://joplin-pr-pytest.herokuapp.com/api/graphql',
 }
 
 
@@ -20,6 +24,7 @@ class PageImporter:
             'topiccollection': create_topic_collection_page_from_importer_dictionaries,
             'topic': create_topic_page_from_importer_dictionaries,
             'information': create_information_page_from_importer_dictionaries
+			'services': create_service_page_from_page_dictionary,
         }
 
         page = page_creators[self.page_type](self.page_dictionaries, self.revision_id)
@@ -32,7 +37,7 @@ class PageImporter:
             sample_transport = RequestsHTTPTransport(
                 url=self.joplin_api_endpoint,
                 headers={'Accept-Language': lang},
-                verify=False
+            verify=True
             )
 
             client = Client(
@@ -42,7 +47,7 @@ class PageImporter:
             )
 
             result = client.execute(queries[self.page_type], variable_values=json.dumps({'id': self.revision_id}))
-            revision_node = result['all_page_revisions']['edges'][0]['node']
+            revision_node = result['allPageRevisions']['edges'][0]['node']
 
             # this gets us into the 'as____Page' stuff
             page_dictionary_from_revision = next(iter(revision_node.values()))
@@ -64,6 +69,9 @@ class PageImporter:
         if 'CMS_API' in parse_result.query:
             qs = parse_qs(parse_result.query)
             self.joplin_api_endpoint = qs['CMS_API'][0]
+
+        if not hasattr(self, 'joplin_api_endpoint'):
+            raise ValidationError(f"hostname [{parse_result.hostname}] does not have a joplin_api_endpoint configured.")
 
         # get a path object to play with
         path = Path(parse_result.path)
