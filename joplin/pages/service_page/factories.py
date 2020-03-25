@@ -66,23 +66,6 @@ def create_service_page_from_importer_dictionaries(page_dictionaries, revision_i
         }, page_dictionaries['en']['topics']['edges'][index]['node']['topic']['live_revision']['id']))
     combined_dictionary['add_topics'] = {'topics': topic_pages}
 
-    # parse out steps
-    # todo: not hardcode langs
-    # combined_dictionary['steps'] = json.dumps([
-    #     {
-    #         u'type': u'{0}'.format(step['type']),
-    #         u'value': u'{0}'.format(step['value'])
-    #     }
-    #     for step in page_dictionaries['en']['steps']
-    # ])
-    # combined_dictionary['steps_es'] = json.dumps([
-    #     {
-    #         u'type': u'{0}'.format(step['type']),
-    #         u'value': u'{0}'.format(step['value'])
-    #     }
-    #     for step in page_dictionaries['es']['steps']
-    # ])
-
     # remove topics if we have it because:
     # * it's in english only
     # * the factory doesn't know what to do with it
