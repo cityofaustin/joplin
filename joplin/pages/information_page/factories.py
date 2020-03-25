@@ -47,7 +47,7 @@ def create_information_page_from_importer_dictionaries(page_dictionaries, revisi
         topic_pages.append(create_topic_page_from_importer_dictionaries({
             'en': page_dictionaries['en']['topics']['edges'][index]['node']['topic'],
             'es': page_dictionaries['es']['topics']['edges'][index]['node']['topic'],
-        }, page_dictionaries['en']['topics']['edges'][index]['node']['topic']['liveRevision']['id']))
+        }, page_dictionaries['en']['topics']['edges'][index]['node']['topic']['live_revision']['id']))
     combined_dictionary['add_topics'] = topic_pages
 
     # remove topics if we have it because:
@@ -56,6 +56,13 @@ def create_information_page_from_importer_dictionaries(page_dictionaries, revisi
     # todo: why isn't pop working?
     if 'topics' in combined_dictionary:
         del combined_dictionary['topics']
+
+    # remove contacts if we have it because:
+    # * it might be what's wrong rn
+    # todo: why isn't pop working?
+    if 'contacts' in combined_dictionary:
+        del combined_dictionary['contacts']
+
 
     # Set home as parent
     combined_dictionary['parent'] = HomePage.objects.first()
@@ -67,7 +74,7 @@ def create_information_page_from_importer_dictionaries(page_dictionaries, revisi
                 combined_dictionary[field.column] = page_dictionaries['es'][field.column[:-3]]
 
     # todo: actually get departments here
-    combined_dictionary['add_related_departments'] = ['just a string']
+    # combined_dictionary['add_related_departments'] = ['just a string']
 
     page = InformationPageFactory.create(**combined_dictionary)
     return page

@@ -70,7 +70,7 @@ def create_topic_page_from_importer_dictionaries(page_dictionaries, revision_id)
         topic_collection_pages.append(create_topic_collection_page_from_importer_dictionaries({
             'en': page_dictionaries['en']['topiccollections']['edges'][index]['node']['topiccollection'],
             'es': page_dictionaries['es']['topiccollections']['edges'][index]['node']['topiccollection'],
-        }, page_dictionaries['en']['topiccollections']['edges'][index]['node']['topiccollection']['liveRevision']['id']))
+        }, page_dictionaries['en']['topiccollections']['edges'][index]['node']['topiccollection']['live_revision']['id']))
     combined_dictionary['add_topic_collections'] = topic_collection_pages
 
     # remove topiccollections if we have it because:
@@ -82,8 +82,8 @@ def create_topic_page_from_importer_dictionaries(page_dictionaries, revision_id)
 
     # remove liveRevision if we have it
     # todo: why isn't pop working?
-    if 'liveRevision' in combined_dictionary:
-        del combined_dictionary['liveRevision']
+    if 'live_revision' in combined_dictionary:
+        del combined_dictionary['live_revision']
 
     # set the revision id
     combined_dictionary['imported_revision_id'] = revision_id

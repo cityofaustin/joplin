@@ -91,8 +91,8 @@ def create_topic_collection_page_from_importer_dictionaries(page_dictionaries, r
 
     # remove liveRevision if we have it
     # todo: why isn't pop working?
-    if 'liveRevision' in combined_dictionary:
-        del combined_dictionary['liveRevision']
+    if 'live_revision' in combined_dictionary:
+        del combined_dictionary['live_revision']
 
     # set the revision id
     combined_dictionary['imported_revision_id'] = revision_id

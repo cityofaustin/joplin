@@ -3,10 +3,10 @@ from gql import gql
 queries = {
     'topiccollection': gql('''
     query getTopicCollectionPageRevision($id: ID) {
-      allPageRevisions(id: $id) {
+      all_page_revisions(id: $id) {
         edges {
           node {
-            asTopicCollectionPage {
+            as_topic_collection_page {
               title
               slug
               description
@@ -23,10 +23,10 @@ queries = {
     '''),
     'topic': gql('''
         query getTopicPageRevision($id: ID) {
-          allPageRevisions(id: $id) {
+          all_page_revisions(id: $id) {
             edges {
               node {
-                asTopicPage {
+                as_topic_page {
                   title
                   slug
                   description
@@ -42,7 +42,7 @@ queries = {
                             text
                             description
                           }
-                          liveRevision {
+                          live_revision {
                             id
                           }
                         }
@@ -57,10 +57,10 @@ queries = {
     '''),
     'information': gql('''
     query getInformationPageRevision($id: ID) {
-      allPageRevisions(id: $id) {
+      all_page_revisions(id: $id) {
         edges {
           node {
-            asInformationPage {
+            as_information_page {
               title
               slug
               description
@@ -83,21 +83,21 @@ queries = {
                                 text
                                 description
                               }
-                              liveRevision {
+                              live_revision {
                                 id
                               }
                             }
                           }
                         }
                       }
-                      liveRevision {
+                      live_revision {
                         id
                       }
                     }
                   }
                 }
               }
-              additionalContent
+              additional_content
               contacts {
                 edges {
                   node {
@@ -107,7 +107,7 @@ queries = {
                   }
                 }
               }
-              coaGlobal
+              coa_global
             }
           }
         }

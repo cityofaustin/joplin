@@ -42,7 +42,7 @@ class PageImporter:
             )
 
             result = client.execute(queries[self.page_type], variable_values=json.dumps({'id': self.revision_id}))
-            revision_node = result['allPageRevisions']['edges'][0]['node']
+            revision_node = result['all_page_revisions']['edges'][0]['node']
 
             # this gets us into the 'as____Page' stuff
             page_dictionary_from_revision = next(iter(revision_node.values()))
