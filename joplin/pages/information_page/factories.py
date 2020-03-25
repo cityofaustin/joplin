@@ -48,7 +48,7 @@ def create_information_page_from_importer_dictionaries(page_dictionaries, revisi
             'en': page_dictionaries['en']['topics']['edges'][index]['node']['topic'],
             'es': page_dictionaries['es']['topics']['edges'][index]['node']['topic'],
         }, page_dictionaries['en']['topics']['edges'][index]['node']['topic']['live_revision']['id']))
-    combined_dictionary['add_topics'] = topic_pages
+    combined_dictionary['add_topics'] = {'topics': topic_pages}
 
     # remove topics if we have it because:
     # * it's in english only
