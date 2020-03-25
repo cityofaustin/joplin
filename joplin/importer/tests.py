@@ -84,17 +84,15 @@ def test_parse_service_page_dummy_data_janis_preview_url(remote_staging_preview_
 def test_get_dummy_topic_collection_page_from_revision(remote_staging_preview_url, remote_pytest_api):
     preview_url = f'{remote_staging_preview_url}/topiccollection/UGFnZVJldmlzaW9uTm9kZToxMw==?CMS_API={remote_pytest_api}'
 
-    page_dictionary = PageImporter(preview_url).fetch_page_data().page_dictionary
+    page_dictionaries = PageImporter(preview_url).fetch_page_data().page_dictionaries
 
-    assert page_dictionary['id'] == 'VG9waWNDb2xsZWN0aW9uTm9kZTo0'
-    assert page_dictionary['title'] == 'topic collection title [en]'
-    assert page_dictionary['slug'] == 'topic-collection-title-en'
-    assert page_dictionary['description'] == 'topic collection description [en]'
+    assert page_dictionaries['en']['title'] == 'topic collection title [en]'
+    assert page_dictionaries['en']['slug'] == 'topic-collection-title-en'
+    assert page_dictionaries['en']['description'] == 'topic collection description [en]'
 
     # adding themes as a part of our topic collection query
     # instead of importing/testing them separately
-    assert page_dictionary['theme'] == {
-        'id': 'VGhlbWVOb2RlOjE=',
+    assert page_dictionaries['en']['theme'] == {
         'slug': 'theme-slug-en',
         'text': 'theme text [en]',
         'description': 'theme description [en]'
@@ -109,7 +107,6 @@ def test_get_dummy_topic_page_from_revision(remote_staging_preview_url, remote_p
 
     page_dictionary = PageImporter(preview_url).fetch_page_data().page_dictionary
 
-    assert page_dictionary['id'] == 'VG9waWNOb2RlOjU='
     assert page_dictionary['title'] == 'topic title [en]'
     assert page_dictionary['slug'] == 'topic-title-en'
     assert page_dictionary['description'] == 'topic description [en]'
@@ -117,12 +114,10 @@ def test_get_dummy_topic_page_from_revision(remote_staging_preview_url, remote_p
         'edges': [{
             'node': {
                 'topiccollection': {
-                    'id': 'VG9waWNDb2xsZWN0aW9uTm9kZTo0',
                     'title': 'topic collection title [en]',
                     'slug': 'topic-collection-title-en',
                     'description': 'topic collection description [en]',
                     'theme': {
-                        'id': 'VGhlbWVOb2RlOjE=',
                         'slug': 'theme-slug-en',
                         'text': 'theme text [en]',
                         'description': 'theme description [en]'
@@ -145,7 +140,6 @@ def test_get_dummy_information_page_from_revision(remote_staging_preview_url, re
 
     page_dictionary = PageImporter(preview_url).fetch_page_data().page_dictionary
 
-    assert page_dictionary['id'] == 'SW5mb3JtYXRpb25QYWdlTm9kZTo2'
     assert page_dictionary['title'] == 'information page title [en]'
     assert page_dictionary['slug'] == 'information-page-title-en'
     assert page_dictionary['description'] == 'information page description [en]'
@@ -153,7 +147,6 @@ def test_get_dummy_information_page_from_revision(remote_staging_preview_url, re
         'edges': [{
             'node': {
                 'topic': {
-                    'id': 'VG9waWNOb2RlOjU=',
                     'title': 'topic title [en]',
                     'slug': 'topic-title-en',
                     'description': 'topic description [en]',
@@ -161,12 +154,10 @@ def test_get_dummy_information_page_from_revision(remote_staging_preview_url, re
                         'edges': [{
                             'node': {
                                 'topiccollection': {
-                                    'id': 'VG9waWNDb2xsZWN0aW9uTm9kZTo0',
                                     'title': 'topic collection title [en]',
                                     'slug': 'topic-collection-title-en',
                                     'description': 'topic collection description [en]',
                                     'theme': {
-                                        'id': 'VGhlbWVOb2RlOjE=',
                                         'slug': 'theme-slug-en',
                                         'text': 'theme text [en]',
                                         'description': 'theme description [en]'
@@ -194,7 +185,6 @@ def test_get_dummy_service_page_from_revision(remote_staging_preview_url, remote
     preview_url = f'{remote_staging_preview_url}/services/UGFnZVJldmlzaW9uTm9kZToyMQ==?CMS_API={remote_pytest_api}'
 
     page_dictionary = PageImporter(preview_url).fetch_page_data().page_dictionary
-    assert page_dictionary['id'] == 'U2VydmljZVBhZ2VOb2RlOjc='
     assert page_dictionary['title'] == 'Get your bulk items collected'
     assert page_dictionary['slug'] == 'bulk-item-pickup'
     assert page_dictionary['shortDescription'] == 'Twice a year, Austin residential trash and recycling customers can place large items out on the curb to be picked up. These items include appliances, furniture, and carpet.'
