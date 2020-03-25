@@ -16,15 +16,17 @@ class ServicePageFactory(JanisBasePageWithTopicsFactory):
     @classmethod
     def create(cls, *args, **kwargs):
         # Convert steps into StreamField-parseable json dump
-        steps = kwargs.pop("steps", [])
-        formatted_steps = json.dumps([
-            {
-                u'type': u'{0}'.format(step['type']),
-                u'value': u'{0}'.format(step['value'])
-            }
-            for step in steps
-        ])
-        kwargs["steps"] = formatted_steps
+        step_keywords = ['steps', 'steps_es']
+        for step_keyword in step_keywords:
+            steps = kwargs.pop(step_keyword, [])
+            formatted_steps = json.dumps([
+                {
+                    u'type': u'{0}'.format(step['type']),
+                    u'value': u'{0}'.format(step['value'])
+                }
+                for step in steps
+            ])
+            kwargs[step_keyword] = formatted_steps
         return super(ServicePageFactory, cls).create(*args, **kwargs)
 
 
@@ -32,7 +34,7 @@ class ServicePageFactory(JanisBasePageWithTopicsFactory):
         model = ServicePage
 
 
-def create_service_page_from_page_dictionary(page_dictionary, revision_id=None):
+def create_service_page_from_importer_dictionaries(page_dictionaries, revision_id=None):
     # Check if page with revision_id has already been imported
     if revision_id:
         try:
@@ -42,49 +44,70 @@ def create_service_page_from_page_dictionary(page_dictionary, revision_id=None):
         if page:
             return page
 
-    # Check if page with slug has already been imported
+    # Check if page with (english) slug has already been imported
     try:
-        page = ServicePage.objects.get(slug=page_dictionary['slug'])
+        page = ServicePage.objects.get(slug=page_dictionaries['en']['slug'])
     except ServicePage.DoesNotExist:
         page = None
     if page:
         return page
 
     # since we don't have a page matching the revision id or the slug
-    # we need to create a page, which needs a topic if it has one
-    # run through the topic logic here
-    # topic_page_dictionaries = [edge['node']['topic'] for edge in page_dictionary['topics']['edges']]
-    # topic_pages = [create_topic_page_from_page_dictionary(dictionary, dictionary['liveRevision']['id']) for dictionary
-    #                in topic_page_dictionaries]
-    # todo: whatever works for info once we get there
+    # make the combined page dictionary
+    combined_dictionary = page_dictionaries['en']
 
-    # todo: actually get departments here
-    related_departments = ['just a string']
+    # todo: figure out where to move this so it isn't copypasta in information page
+    # associate/create topic pages
+    topic_pages = []
+    for index in range(len(page_dictionaries['en']['topics']['edges'])):
+        topic_pages.append(create_topic_page_from_importer_dictionaries({
+            'en': page_dictionaries['en']['topics']['edges'][index]['node']['topic'],
+            'es': page_dictionaries['es']['topics']['edges'][index]['node']['topic'],
+        }, page_dictionaries['en']['topics']['edges'][index]['node']['topic']['live_revision']['id']))
+    combined_dictionary['add_topics'] = {'topics': topic_pages}
 
-    # Set home as parent
-    # todo: move this to base page factory?
-    home = HomePage.objects.first()
-
-    # steps = json.dumps([
+    # parse out steps
+    # todo: not hardcode langs
+    # combined_dictionary['steps'] = json.dumps([
     #     {
     #         u'type': u'{0}'.format(step['type']),
     #         u'value': u'{0}'.format(step['value'])
     #     }
-    #     for step in page_dictionary['steps']
+    #     for step in page_dictionaries['en']['steps']
+    # ])
+    # combined_dictionary['steps_es'] = json.dumps([
+    #     {
+    #         u'type': u'{0}'.format(step['type']),
+    #         u'value': u'{0}'.format(step['value'])
+    #     }
+    #     for step in page_dictionaries['es']['steps']
     # ])
 
-    # page = ServicePageFactory.create(
-    #     imported_revision_id=revision_id,
-    #     title=page_dictionary['title'],
-    #     slug=page_dictionary['slug'],
-    #     add_topics={'topics': topic_pages},
-    #     add_related_departments=related_departments,
-    #     coa_global=page_dictionary['coaGlobal'],
-    #     parent=home,
-    #     steps=page_dictionary['steps'],
-    #     dynamic_content=page_dictionary['dynamicContent'],
-    #     additional_content=page_dictionary['additionalContent'],
-    #     short_description=page_dictionary['shortDescription'],
-    # )
-    #
-    # return page
+    # remove topics if we have it because:
+    # * it's in english only
+    # * the factory doesn't know what to do with it
+    # todo: why isn't pop working?
+    if 'topics' in combined_dictionary:
+        del combined_dictionary['topics']
+
+    # remove contacts if we have it because:
+    # * it might be what's wrong rn
+    # todo: why isn't pop working?
+    if 'contacts' in combined_dictionary:
+        del combined_dictionary['contacts']
+
+    # Set home as parent
+    combined_dictionary['parent'] = HomePage.objects.first()
+
+    # set the translated fields
+    for field in ServicePageFactory._meta.model._meta.fields:
+        if field.column.endswith("_es"):
+            if field.column[:-3] in page_dictionaries['es']:
+                combined_dictionary[field.column] = page_dictionaries['es'][field.column[:-3]]
+
+
+    # todo: actually get departments here
+    # combined_dictionary['add_related_departments'] = ['just a string']
+
+    page = ServicePageFactory.create(**combined_dictionary)
+    return page

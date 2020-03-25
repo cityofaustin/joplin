@@ -41,6 +41,7 @@ def create_information_page_from_importer_dictionaries(page_dictionaries, revisi
     # make the combined page dictionary
     combined_dictionary = page_dictionaries['en']
 
+    # todo: figure out where to move this so it isn't copypasta in service page
     # associate/create topic pages
     topic_pages = []
     for index in range(len(page_dictionaries['en']['topics']['edges'])):
