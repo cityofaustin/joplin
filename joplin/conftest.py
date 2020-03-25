@@ -41,7 +41,7 @@ def register_factories(factories):
 
 # register_factories(information_page_factories)
 # register_factories(department_page_factories)
-register_factories(official_document_page_factories)
+# register_factories(official_document_page_factories)
 # register_factories(service_page)
 # register_factories(guide_page)
 
@@ -51,3 +51,22 @@ register_factories(official_document_page_factories)
 # @pytest.fixture()
 # def information_page(information_page_factory):
 #     return InformationPageFactory.build()
+
+'''
+Fixtures created in conftest.py can be used in any test without importing.
+https://docs.pytest.org/en/latest/fixture.html#conftest-py-sharing-fixture-functions
+'''
+@pytest.fixture()
+def remote_pytest_api():
+    return 'https://joplin-pr-pytest.herokuapp.com/api/graphql'
+
+
+# TODO: Once preview urls work on Janis with v3, then we can use this URL
+@pytest.fixture()
+def remote_pytest_preview_url():
+    return 'https://janis-pytest.netlify.com/en/preview'
+
+
+@pytest.fixture()
+def remote_staging_preview_url():
+    return 'https://janis.austintexas.io/en/preview'

@@ -27,6 +27,7 @@ class JanisBasePageWithTopicsFactory(JanisBasePageFactory):
 
     @factory.post_generation
     def add_topics(self, create, extracted, **kwargs):
+        # TODO: add option to pass in already created topics
         if extracted:
             # A list of topics were passed in, use them
             for topic in extracted['topics']:
@@ -34,9 +35,10 @@ class JanisBasePageWithTopicsFactory(JanisBasePageFactory):
                 JanisBasePageTopicFactory.create(page=self, topic=topic)
             return
 
-        # todo figure out if this is really what we want this factory to do
+        # pass "add_topics__dummy"=True into Factory() to make dummy topics
         if create:
-            JanisBasePageTopicFactory.create_batch(2, page=self)
+            if (kwargs.get("dummy", False)):
+                JanisBasePageTopicFactory.create_batch(2, page=self)
 
 
 def create_topic_page_from_page_dictionary(page_dictionary, revision_id):
