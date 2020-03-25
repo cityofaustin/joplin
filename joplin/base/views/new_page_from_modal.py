@@ -12,7 +12,7 @@ from pages.service_page.models import ServicePage
 from pages.information_page.models import InformationPage
 from pages.topic_page.models import TopicPage
 from pages.topic_collection_page.models import TopicCollectionPage
-from pages.topic_collection_page.factories import create_topic_collection_page_from_page_dictionary
+from pages.topic_collection_page.factories import create_topic_collection_page_from_importer_dictionaries
 from pages.department_page.models import DepartmentPage
 from pages.official_documents_page.models import OfficialDocumentPage
 from pages.guide_page.models import GuidePage
