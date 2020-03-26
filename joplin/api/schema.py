@@ -14,15 +14,16 @@ from django_filters import FilterSet, OrderingFilter
 from wagtail.core.blocks import *
 from wagtail.documents.models import Document
 from wagtail.core.rich_text import expand_db_html
-from base.models import TranslatedImage, Theme, Contact, Location, PhoneNumber, ContactDayAndDuration
+from snippets.contact.models import Contact, PhoneNumber, ContactDayAndDuration
+from base.models import TranslatedImage, Theme
 
 from pages.topic_collection_page.models import TopicCollectionPage, JanisBasePageWithTopicCollections
 from pages.topic_page.models import TopicPage, TopicPageTopPage, JanisBasePageWithTopics
-from pages.service_page.models import ServicePage, ServicePageContact
-from pages.information_page.models import InformationPage, InformationPageContact
-from pages.department_page.models import DepartmentPage, DepartmentPageDirector, DepartmentPageContact, DepartmentPageTopPage, DepartmentPageRelatedPage
+from pages.service_page.models import ServicePage
+from pages.information_page.models import InformationPage
+from pages.department_page.models import DepartmentPage, DepartmentPageDirector, DepartmentPageTopPage, DepartmentPageRelatedPage
 from pages.official_documents_page.models import OfficialDocumentPage, OfficialDocumentPageOfficialDocument
-from pages.guide_page.models import GuidePage, GuidePageContact
+from pages.guide_page.models import GuidePage
 from pages.form_container.models import FormContainer
 from pages.base_page.models import JanisBasePage
 
@@ -236,14 +237,6 @@ class TopicNode(DjangoObjectType):
         interfaces = [graphene.Node]
 
 
-class LocationNode(DjangoObjectType):
-    class Meta:
-        model = Location
-        filter_fields = ['id']
-        fields = '__all__'
-        interfaces = [graphene.Node]
-
-
 class LocationPageNode(DjangoObjectType):
     class Meta:
         model = LocationPage
@@ -433,18 +426,6 @@ class ContactPhoneNumbers(DjangoObjectType):
 class ContactDayAndDurationNode(DjangoObjectType):
     class Meta:
         model = ContactDayAndDuration
-        interfaces = [graphene.Node]
-
-
-class ServicePageContactNode(DjangoObjectType):
-    class Meta:
-        model = ServicePageContact
-        interfaces = [graphene.Node]
-
-
-class GuidePageContactNode(DjangoObjectType):
-    class Meta:
-        model = GuidePageContact
         interfaces = [graphene.Node]
 
 
@@ -710,18 +691,6 @@ class PageRevisionNode(DjangoObjectType):
     class Meta:
         model = PageRevision
         filter_fields = ['id']
-        interfaces = [graphene.Node]
-
-
-class InformationPageContactNode(DjangoObjectType):
-    class Meta:
-        model = InformationPageContact
-        interfaces = [graphene.Node]
-
-
-class DepartmentPageContactNode(DjangoObjectType):
-    class Meta:
-        model = DepartmentPageContact
         interfaces = [graphene.Node]
 
 
