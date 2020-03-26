@@ -73,6 +73,8 @@ class GuidePage(JanisBasePageWithTopics):
         blank=True
     )
 
+    contact = models.ForeignKey(Contact, related_name='+', blank=True, null=True, on_delete=models.SET_NULL)
+
     base_form_class = GuidePageForm
 
     publish_requirements = (
@@ -96,17 +98,5 @@ class GuidePage(JanisBasePageWithTopics):
         InlinePanel('topics', label='Topics'),
         ImageChooserPanel('image'),
         StreamFieldPanel('sections'),
-        InlinePanel('contacts', label='Contacts'),
-    ]
-
-
-class GuidePageContact(ClusterableModel):
-    page = ParentalKey(GuidePage, related_name='contacts')
-    contact = models.ForeignKey(Contact, related_name='+', on_delete=models.CASCADE)
-
-    panels = [
         SnippetChooserPanel('contact'),
     ]
-
-    def __str__(self):
-        return self.contact.name

@@ -102,7 +102,7 @@ class ServicePage(JanisBasePageWithTopics):
         verbose_name='Write a description of this service'
     )
 
-    contact = models.ForeignKey(Contact, related_name='+', on_delete=models.CASCADE)
+    contact = models.ForeignKey(Contact, related_name='+', blank=True, null=True, on_delete=models.SET_NULL)
 
     publish_requirements = (
         FieldPublishRequirement("short_description", message="A description is required", langs=["en"]),
