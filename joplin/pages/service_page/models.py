@@ -13,7 +13,7 @@ from base.forms import ServicePageForm
 
 from pages.base_page.models import JanisBasePage
 from pages.location_page.models import LocationPage
-from base.models.contact import Contact
+from snippets.contact.models import Contact
 
 from base.models.constants import WYSIWYG_GENERAL, SHORT_DESCRIPTION_LENGTH
 from base.models.widgets import countMe, countMeTextArea

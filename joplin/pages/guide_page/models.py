@@ -14,7 +14,7 @@ from base.forms import GuidePageForm
 from pages.base_page.models import JanisBasePage
 from pages.information_page.models import InformationPage
 from pages.service_page.models import ServicePage
-from base.models.contact import Contact
+from snippets.contact.models import Contact
 from base.models.translated_image import TranslatedImage
 
 from base.models.widgets import countMe, countMeTextArea

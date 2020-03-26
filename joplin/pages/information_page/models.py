@@ -11,7 +11,7 @@ from wagtail.snippets.edit_handlers import SnippetChooserPanel
 from base.forms import InformationPageForm
 
 from pages.base_page.models import JanisBasePage
-from base.models.contact import Contact
+from snippets.contact.models import Contact
 
 from base.models.constants import WYSIWYG_GENERAL
 from base.models.widgets import countMe, countMeTextArea

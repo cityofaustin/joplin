@@ -2,7 +2,6 @@ from django.conf import settings
 from django.dispatch import receiver
 from django.db.models.signals import post_save
 from wagtail.core.signals import page_published, page_unpublished
-from base.models import Contact, Location, Map
 from base.models.site_settings import JanisBranchSettings
 
 import os

@@ -17,7 +17,7 @@ from pages.service_page.models import ServicePage
 from pages.guide_page.models import GuidePage
 from pages.official_documents_page.models import OfficialDocumentPage
 from base.models.translated_image import TranslatedImage
-from base.models.contact import Contact
+from snippets.contact.models import Contact
 
 from base.models.constants import DEFAULT_MAX_LENGTH, WYSIWYG_GENERAL
 from base.models.widgets import countMe, AUTHOR_LIMITS
