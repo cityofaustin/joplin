@@ -169,9 +169,11 @@ class LocationPage(JanisBasePage):
     ]
 
     def janis_urls(self):
-        # todo implement location page urls
-
-        return ['#todo']
+        # 🔥 Finish Notes - pattern match > "publish at /theme_slug/topic_collection_slug/"
+        if self.slug:
+            return ['{base_url}{page_type}/{page_slug}'.format(base_url=self.janis_url_base('publish_janis_branch'),
+                                                           page_type=self.janis_url_page_type, page_slug=self.slug)]
+        return []
 
 
 class LocationPageRelatedServices(Orderable):
