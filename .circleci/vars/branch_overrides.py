@@ -18,7 +18,7 @@ branch_overrides = {
         "V3_WIP": True,
     },
     "v3": {
-        "LOAD_DATA": "",
+        "LOAD_DATA": "dummy",
         "V3_WIP": True,
     },
     "4148-add-homepage": {

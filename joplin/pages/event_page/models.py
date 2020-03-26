@@ -9,7 +9,7 @@ from wagtail.admin.edit_handlers import (
 )
 
 from pages.location_page.models import LocationPage
-from base.models import Contact
+from snippets.contact.models import Contact
 from wagtail.core.fields import RichTextField, StreamField
 from wagtail.core.blocks import StreamBlock
 from wagtail.core.models import Orderable

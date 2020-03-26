@@ -3,7 +3,6 @@ from django.core.management import call_command
 import os
 from graphene import Node
 
-from base.models import Map, Contact
 from pages.information_page.models import InformationPage
 from pages.topic_page.models import TopicPage
 from pages.topic_page.factories import TopicPageFactory
