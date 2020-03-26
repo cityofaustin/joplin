@@ -8,6 +8,9 @@ from django.db import connection
 from django.conf import settings
 
 
+import pages.service_page.fixtures as service_page_fixtures
+
+
 class Command(BaseCommand):
     help = "Load initial seeding data into your app"
 
@@ -67,7 +70,7 @@ class Command(BaseCommand):
                     DeploymentLog(operation="load_data", value="staging", completed=True).save()
                 elif (LOAD_DATA == "dummy"):
                     print("Adding dummy datadump")
-                    run_load_data_command('db/system-generated/dummy.datadump.json')
+                    service_page_fixtures.load_all()
                     DeploymentLog(operation="load_data", value="dummy", completed=True).save()
                 elif (LOAD_DATA == "new_datadump"):
                     print("Adding new migration test datadump")
