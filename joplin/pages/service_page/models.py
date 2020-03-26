@@ -79,7 +79,6 @@ class ServicePage(JanisBasePageWithTopics):
 
     dynamic_content = StreamField(
         [
-            ('map_block', SnippetChooserBlockWithAPIGoodness('base.Map', icon='site')),
             ('what_do_i_do_with_block', WhatDoIDoWithBlock()),
             ('collection_schedule_block', CollectionScheduleBlock()),
             ('recollect_block', RecollectBlock()),
