@@ -2,7 +2,7 @@ import factory
 import wagtail_factories
 from django.utils.text import slugify
 from pages.topic_page.models import TopicPage
-from pages.information_page.models import InformationPageContact, InformationPage
+from pages.information_page.models import InformationPage
 from pages.factory import PageFactory
 from base.models import Contact
 from pytest_factoryboy import register
