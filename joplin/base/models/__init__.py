@@ -7,7 +7,6 @@ from wagtail.snippets.models import register_snippet
 from wagtail.admin.edit_handlers import PageChooserPanel
 
 from .translated_image import TranslatedImage
-from .map import Map
 from .constants import WYSIWYG_GENERAL, DEFAULT_MAX_LENGTH, SHORT_DESCRIPTION_LENGTH
 
 from .theme import Theme

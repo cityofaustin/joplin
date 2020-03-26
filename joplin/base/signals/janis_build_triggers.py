@@ -6,7 +6,6 @@ from graphene import Node
 from wagtail.core.models import Page
 from wagtail.admin.models import get_object_usage
 
-from base.models import Map
 from snippets.contact.models import Contact
 from pages.guide_page.models import GuidePage
 from groups.models import Department
@@ -102,7 +101,6 @@ def find_pages_in_guides(changed_id):
 # we might want to log but not trigger a build? need some sort of queue
 @receiver(post_save, sender=Document)
 @receiver(post_save, sender=Contact)
-@receiver(post_save, sender=Map)
 @receiver(post_save, sender=Department)
 def handle_post_save_signal(sender, **kwargs):
     pages_global_ids = []
@@ -132,7 +130,6 @@ def page_unpublished_signal(sender, **kwargs):
 
 @receiver(post_delete, sender=Document)
 @receiver(post_delete, sender=Contact)
-@receiver(post_delete, sender=Map)
 def handle_post_delete_signal(sender, **kwargs):
     pages_global_ids = []
     if flag_enabled('INCREMENTAL BUILDS'):
