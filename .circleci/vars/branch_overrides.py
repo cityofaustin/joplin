@@ -32,5 +32,9 @@ branch_overrides = {
     "4165-streamfields": {
         "LOAD_DATA": "",
         "V3_WIP": True,
+    },
+    "4165-service-page-tests": {
+        "LOAD_DATA": "dummy",
+        "V3_WIP": True,
     }
 }
