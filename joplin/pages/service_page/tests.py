@@ -34,18 +34,6 @@ def test_create_service_page_with_2_steps():
 
 
 @pytest.mark.django_db
-def test_create_service_page_with_2_steps():
-    page = fixtures.steps_2()
-    expected_steps = components.steps_2
-    assert isinstance(page, ServicePage)
-    assert page.title == "Service Page with 2 Steps"
-    assert page.slug == "2-step-yee-haw"
-    for i, step in enumerate(page.steps.stream_data):
-        assert step["type"] == expected_steps[i]["type"]
-        assert step["value"] == expected_steps[i]["value"]
-
-
-@pytest.mark.django_db
 def test_create_service_page_with_appblock_steps():
     page = fixtures.steps_with_appblocks()
     expected_steps = components.steps_with_appblocks
