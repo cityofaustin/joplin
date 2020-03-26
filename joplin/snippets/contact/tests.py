@@ -8,5 +8,5 @@ import snippets.contact.fixtures as fixtures
 def test_create_contact_with_name():
     contact = fixtures.name()
     assert isinstance(contact, Contact)
-    assert contact.name == "Service Page with title"
+    assert contact.name == "Contact name"
 

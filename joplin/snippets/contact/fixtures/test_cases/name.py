@@ -1,6 +1,5 @@
 import os
-from pages.service_page.fixtures.helpers.create_fixture import create_fixture
-import pages.service_page.fixtures.helpers.components as components
+from snippets.contact.fixtures.helpers.create_fixture import create_fixture
 
 
 # A contact with only a name
