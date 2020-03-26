@@ -12,7 +12,6 @@ from wagtail.core.models import Orderable
 from phonenumber_field.modelfields import PhoneNumberField
 from phonenumber_field.widgets import PhoneNumberInternationalFallbackWidget
 
-from .location import Location
 from .day_and_duration import DayAndDuration
 
 from .constants import DEFAULT_MAX_LENGTH
