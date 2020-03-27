@@ -138,7 +138,9 @@ fragments["hours"] = GraphqlParser('''
     sundayStartTime2
     sundayEndTime2
     hoursExceptions
-''')
+''').substitute(
+
+)
 
 fragments["location"] = GraphqlParser('''
     title
@@ -244,7 +246,7 @@ unparsed_query_strings = {
         }
       }
     }
-''',
+    ''',
 }
 
 query_strings = {
