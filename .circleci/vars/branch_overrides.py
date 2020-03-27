@@ -36,5 +36,9 @@ branch_overrides = {
     "4165-service-page-tests": {
         "LOAD_DATA": "dummy",
         "V3_WIP": True,
+    },
+    "4164-loc-urls": {
+        "LOAD_DATA": "dummy",
+        "V3_WIP": True,
     }
 }
