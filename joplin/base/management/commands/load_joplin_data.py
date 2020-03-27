@@ -7,7 +7,7 @@ from base.models import DeploymentLog
 from django.db import connection
 from django.conf import settings
 
-
+import snippets.contact.fixtures as contact_fixtures
 import pages.service_page.fixtures as service_page_fixtures
 
 
@@ -70,6 +70,7 @@ class Command(BaseCommand):
                     DeploymentLog(operation="load_data", value="staging", completed=True).save()
                 elif (LOAD_DATA == "dummy"):
                     print("Adding dummy datadump")
+                    contact_fixtures.load_all()
                     service_page_fixtures.load_all()
                     DeploymentLog(operation="load_data", value="dummy", completed=True).save()
                 elif (LOAD_DATA == "new_datadump"):
