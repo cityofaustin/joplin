@@ -16,7 +16,7 @@
 #     def test_missing_related_service_hours_raises_error(self):
 #         with self.assertRaisesMessage(Exception, 'Please either check this or input hours for this service'):
 #             self.related_service.clean()
-# 
+#
 #     def test_missing_required_fields(self):
 #         try:
 #             self.related_service.full_clean()

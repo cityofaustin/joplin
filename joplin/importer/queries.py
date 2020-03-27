@@ -108,6 +108,14 @@ fragments["services"] = GraphqlParser('''
     contact=fragments["contact"],
 )
 
+fragments["location"] = GraphqlParser('''
+    title
+    slug
+    coaGlobal
+''').substitute(
+
+)
+
 unparsed_query_strings = {
     'topiccollection': '''
         query getTopicCollectionPageRevision($id: ID) {
@@ -161,6 +169,19 @@ unparsed_query_strings = {
           }
         }
     ''',
+    'location': '''
+    query getLocationPageRevision($id: ID) {
+      allPageRevisions(id: $id) {
+        edges {
+          node {
+            asLocationPage {
+              $$$location
+            }
+          }
+        }
+      }
+    }
+''',
 }
 
 query_strings = {
