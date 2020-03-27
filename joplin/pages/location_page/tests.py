@@ -1,26 +1,21 @@
-from django.core.exceptions import ValidationError
-from django.test import TestCase
-from django.core.exceptions import NON_FIELD_ERRORS
-import pdb
-from pages.location_page.models import LocationPageRelatedServices
-from . import models, factories
-from contextlib import contextmanager
 import pytest
 
+from importer.page_importer import PageImporter
+from pages.location_page.models import LocationPage
+import pages.location_page.fixtures as fixtures
+import pages.location_page.fixtures.helpers.components as components
 
-@pytest.mark.xfail
-class LocationPageRelatedServiceTests(TestCase):
-    def setUp(self):
-        self.related_service = models.LocationPageRelatedServices()
 
-    def test_missing_related_service_hours_raises_error(self):
-        with self.assertRaisesMessage(Exception, 'Please either check this or input hours for this service'):
-            self.related_service.clean()
+@pytest.mark.django_db
+def test_create_location_page_from_api(remote_staging_preview_url, remote_pytest_api):
+    url = f'{remote_staging_preview_url}/location/UGFnZVJldmlzaW9uTm9kZToyMw==?CMS_API={remote_pytest_api}'
+    page = PageImporter(url).fetch_page_data().create_page()
+    assert isinstance(page, LocationPage)
 
-    def test_missing_required_fields(self):
-        try:
-            self.related_service.full_clean()
-        except ValidationError as e:
-            self.assertTrue('hours_same_as_location' in e.message_dict)
-            self.assertTrue('related_service' in e.message_dict)
-            self.assertTrue('page' in e.message_dict)
+
+@pytest.mark.django_db
+def test_create_location_page_with_title():
+    page = fixtures.title()
+    assert isinstance(page, LocationPage)
+    assert page.title == "Location page with title"
+    assert page.slug == "location-page-with-title"

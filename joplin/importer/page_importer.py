@@ -11,6 +11,7 @@ from pages.topic_collection_page.factories import create_topic_collection_page_f
 from pages.topic_page.factories import create_topic_page_from_importer_dictionaries
 from pages.information_page.factories import create_information_page_from_importer_dictionaries
 from pages.service_page.factories import create_service_page_from_importer_dictionaries
+from pages.location_page.factories import create_location_page_from_importer_dictionaries
 
 # TODO: this could be retrieved programmatically from the netlify API for PR apps
 ENDPOINTS = {
@@ -26,6 +27,7 @@ class PageImporter:
             'topic': create_topic_page_from_importer_dictionaries,
             'information': create_information_page_from_importer_dictionaries,
             'services': create_service_page_from_importer_dictionaries,
+            'location': create_location_page_from_importer_dictionaries
         }
 
         page = page_creators[self.page_type](self.page_dictionaries, self.revision_id)

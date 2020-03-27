@@ -77,6 +77,17 @@ def test_parse_service_page_dummy_data_janis_preview_url(remote_staging_preview_
     assert page_importer.revision_id == 'UGFnZVJldmlzaW9uTm9kZTozNDQ4'
 
 
+def test_parse_location_page_dummy_data_janis_preview_url(remote_staging_preview_url, remote_pytest_api):
+    preview_url = f'{remote_staging_preview_url}/location/UGFnZVJldmlzaW9uTm9kZToyMw==?CMS_API={remote_pytest_api}'
+
+    page_importer = PageImporter(preview_url)
+
+    assert page_importer.joplin_api_endpoint == remote_pytest_api
+    assert page_importer.language == 'en'
+    assert page_importer.page_type == 'location'
+    assert page_importer.revision_id == 'UGFnZVJldmlzaW9uTm9kZToyMw=='
+
+
 # this test will start breaking once we no longer have this revision in the db
 # todo: figure out a good way to mock api responses
 # https://docs.python.org/3/library/unittest.mock.html
@@ -232,4 +243,13 @@ def test_get_dummy_service_page_from_revision(remote_staging_preview_url, remote
     ]
     assert page_dictionaries['en']['topics'] == { 'edges': [] }
     assert page_dictionaries['en']['additional_content'] == '<h2>Bulk item pickup do’s and don’ts</h2><p>Do not put bulk items in bags, boxes, or other containers. Bags will be treated as extra trash and are subject to extra trash fees.</p><p>Do not place any items under low hanging tree limbs or power lines.</p><p>Do not place items in an alley in any area in front of a vacant lot or in front of a business. Items will not be collected from these areas.</p><p>To prevent damage to your property, keep bulk items 5 feet away from your:</p><ul><li>Trash cart</li><li>Mailbox</li><li>Fences or walls</li><li>Water meter</li><li>Telephone connection box</li><li>Parked cars</li></ul>'
+    assert not page_dictionaries['en']['coa_global']
+
+
+def test_get_dummy_location_page_from_revision(remote_staging_preview_url, remote_pytest_api):
+    preview_url = f'{remote_staging_preview_url}/location/UGFnZVJldmlzaW9uTm9kZToyMw==?CMS_API={remote_pytest_api}'
+
+    page_dictionaries = PageImporter(preview_url).fetch_page_data().page_dictionaries
+    assert page_dictionaries['en']['title'] == 'Location name [en]'
+    assert page_dictionaries['en']['slug'] == 'location-name-en'
     assert not page_dictionaries['en']['coa_global']
