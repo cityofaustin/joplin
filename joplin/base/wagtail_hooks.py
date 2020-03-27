@@ -77,18 +77,8 @@ def register_page_list_menu_item():
 
 
 @hooks.register('register_admin_menu_item')
-def register_map_menu_item():
-    return PermissionMenuItem('Maps', "/admin/snippets/base/map/", classnames='material-icons icon-maps', order=20)
-
-
-@hooks.register('register_admin_menu_item')
-def register_locations_menu_item():
-    return PermissionMenuItem('Locations', "/admin/snippets/base/location/", classnames='material-icons icon-locations', order=30)
-
-
-@hooks.register('register_admin_menu_item')
 def register_contacts_menu_item():
-    return PermissionMenuItem('Contacts', "/admin/snippets/base/contact/", classnames='material-icons icon-contacts', order=40)
+    return PermissionMenuItem('Contacts', "/admin/snippets/contact/contact/", classnames='material-icons icon-contacts', order=40)
 
 
 @hooks.register('register_admin_menu_item')
