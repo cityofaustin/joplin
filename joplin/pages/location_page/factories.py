@@ -83,10 +83,11 @@ def create_location_page_from_importer_dictionaries(page_dictionaries, revision_
     # fix them up for our bus_2 and time_2 needs (instead of time2 bus2)
     combined_dictionary = change_keys(combined_dictionary, fix_nums)
 
-    # for now, just get the title from the page on related service and clear it out
-    for edge in combined_dictionary['related_services']['edges']:
-        edge['node']['hours_exceptions'] += edge['node']['related_service']['title']
-        del edge['node']['related_service']
+    # todo: maybe get this related service logic working
+    # # for now, just get the title from the page on related service and clear it out
+    # for edge in combined_dictionary['related_services']['edges']:
+    #     edge['node']['hours_exceptions'] += edge['node']['related_service']['title']
+    #     del edge['node']['related_service']
 
     page = LocationPageFactory.create(**combined_dictionary)
     return page
