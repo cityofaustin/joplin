@@ -4,15 +4,15 @@ import pages.service_page.fixtures.helpers.components as components
 
 
 # A Service page with only a title
-def contact():
+def new_contact():
     page_data = {
         "imported_revision_id": None,
         "live": False,
         "parent": components.home(),
         "coa_global": False,
-        "title": "Service Page with contact",
-        "slug": "service-page-with-contact",
+        "title": "Service page with new contact",
+        "slug": "service-page-with-new-contact",
+        "contact": components.new_contact()
     }
-    # todo: actually do contact stuff
 
     return create_fixture(page_data, os.path.basename(__file__))
