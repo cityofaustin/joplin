@@ -169,7 +169,7 @@ class LocationPage(JanisBasePage):
     ]
 
     def janis_urls(self):
-        # 🔥 Finish Notes - pattern match > "publish at /theme_slug/topic_collection_slug/"
+        # Should publish at /location/<location-page-slug>/"
         if self.slug:
             return ['{base_url}{page_type}/{page_slug}'.format(base_url=self.janis_url_base('publish_janis_branch'),
                                                            page_type=self.janis_url_page_type, page_slug=self.slug)]
