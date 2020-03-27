@@ -7,19 +7,7 @@ from pages.location_page.models import LocationPage
 class LocationPageFactory(JanisBasePageFactory):
     @classmethod
     def create(cls, *args, **kwargs):
-        # todo: figure out what goes here
-        # Convert steps into StreamField-parseable json dump
-        # step_keywords = ['steps', 'steps_es']
-        # for step_keyword in step_keywords:
-        #     steps = kwargs.pop(step_keyword, [])
-        #     formatted_steps = json.dumps([
-        #         {
-        #             u'type': u'{0}'.format(step['type']),
-        #             u'value': u'{0}'.format(step['value'])
-        #         }
-        #         for step in steps
-        #     ])
-        #     kwargs[step_keyword] = formatted_steps
+        # todo: put some stuff for related service hours here
         return super(LocationPageFactory, cls).create(*args, **kwargs)
 
 
