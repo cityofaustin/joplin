@@ -182,10 +182,16 @@ class JanisBasePageWithTopicCollectionsNode(DjangoObjectType):
 
 
 class JanisBasePageWithTopicsNode(DjangoObjectType):
+    departments = graphene.List(graphene.String)
+
     class Meta:
         model = JanisBasePageWithTopics
         filter_fields = ['id', 'slug', 'live']
         interfaces = [graphene.Node]
+
+    def resolve_departments(self, info):
+        print(self)
+        return self.departments
 
 
 class DepartmentPageNode(DjangoObjectType):
