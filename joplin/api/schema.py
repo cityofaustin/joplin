@@ -237,10 +237,18 @@ class TopicCollectionNode(DjangoObjectType):
 
 
 class TopicNode(DjangoObjectType):
+    topiccollections = graphene.List(TopicCollectionNode)
+
     class Meta:
         model = TopicPage
         filter_fields = ['id', 'slug', 'live']
         interfaces = [graphene.Node]
+
+    def resolve_topiccollections(self, info):
+        tc = []
+        for t in self.topic_collections.values():
+            tc.append(TopicCollectionPage.objects.get(id=t['topic_collection_id']))
+        return tc
 
 
 class LocationPageNode(DjangoObjectType):
