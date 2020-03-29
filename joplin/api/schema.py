@@ -181,19 +181,6 @@ class JanisBasePageWithTopicCollectionsNode(DjangoObjectType):
         interfaces = [graphene.Node]
 
 
-class JanisBasePageWithTopicsNode(DjangoObjectType):
-    departments = graphene.List(graphene.String)
-
-    class Meta:
-        model = JanisBasePageWithTopics
-        filter_fields = ['id', 'slug', 'live']
-        interfaces = [graphene.Node]
-
-    def resolve_departments(self, info):
-        print(self)
-        return self.departments
-
-
 class DepartmentPageNode(DjangoObjectType):
     page_type = graphene.String()
 
@@ -212,6 +199,18 @@ class DepartmentResolver(graphene.Interface):
     @classmethod
     def resolve_departments(cls, instance, info):
         return instance.departments()
+
+
+class JanisBasePageWithTopicsNode(DjangoObjectType):
+    departments = graphene.List(DepartmentPageNode)
+
+    class Meta:
+        model = JanisBasePageWithTopics
+        filter_fields = ['id', 'slug', 'live']
+        interfaces = [graphene.Node]
+
+    def resolve_departments(self, info):
+        return self.departments()
 
 
 class DocumentNode(DjangoObjectType):
