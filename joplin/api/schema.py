@@ -181,13 +181,6 @@ class JanisBasePageWithTopicCollectionsNode(DjangoObjectType):
         interfaces = [graphene.Node]
 
 
-class JanisBasePageWithTopicsNode(DjangoObjectType):
-    class Meta:
-        model = JanisBasePageWithTopics
-        filter_fields = ['id', 'slug', 'live']
-        interfaces = [graphene.Node]
-
-
 class DepartmentPageNode(DjangoObjectType):
     page_type = graphene.String()
 
@@ -206,6 +199,18 @@ class DepartmentResolver(graphene.Interface):
     @classmethod
     def resolve_departments(cls, instance, info):
         return instance.departments()
+
+
+class JanisBasePageWithTopicsNode(DjangoObjectType):
+    departments = graphene.List(DepartmentPageNode)
+
+    class Meta:
+        model = JanisBasePageWithTopics
+        filter_fields = ['id', 'slug', 'live']
+        interfaces = [graphene.Node]
+
+    def resolve_departments(self, info):
+        return self.departments()
 
 
 class DocumentNode(DjangoObjectType):
@@ -231,10 +236,18 @@ class TopicCollectionNode(DjangoObjectType):
 
 
 class TopicNode(DjangoObjectType):
+    topiccollections = graphene.List(TopicCollectionNode)
+
     class Meta:
         model = TopicPage
         filter_fields = ['id', 'slug', 'live']
         interfaces = [graphene.Node]
+
+    def resolve_topiccollections(self, info):
+        tc = []
+        for t in self.topic_collections.values():
+            tc.append(TopicCollectionPage.objects.get(id=t['topic_collection_id']))
+        return tc
 
 
 class LocationPageNode(DjangoObjectType):
