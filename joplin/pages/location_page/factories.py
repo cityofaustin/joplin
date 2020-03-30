@@ -1,73 +1,81 @@
-import factory
-import wagtail_factories
-from django.utils.text import slugify
-from wagtail.core.models import Collection, Page
-from pages.service_page.models import ServicePage
-from . import models
+import json
+from pages.base_page.factories import JanisBasePageFactory
+from pages.home_page.models import HomePage
+from pages.location_page.models import LocationPage
 
 
-class PageFactory(wagtail_factories.factories.MP_NodeFactory):
-    """
-    little hack from wagtail_factories cause I don't want a hard-coded page title
-    note: when creating pages give it a parent (parent=<another page like home page>)
-    or else it'l be an orphan and you'll both be sad
-    """
-    title = factory.Faker('text')
-    slug = factory.LazyAttribute(lambda obj: slugify(obj.title))
+class LocationPageFactory(JanisBasePageFactory):
+    @classmethod
+    def create(cls, *args, **kwargs):
+        # todo: put some stuff for related service hours here
+        return super(LocationPageFactory, cls).create(*args, **kwargs)
+
 
     class Meta:
-        model = Page
+        model = LocationPage
 
 
-class LocationPageRelatedServicesFactory(factory.django.DjangoModelFactory):
-    # find all your fields [f.name for f in MyModel._meta.get_fields()]
-    page = factory.SubFactory('locations.factories.LocationPageFactory')
-    # page = factory.Iterator(models.LocationPage.objects.all())
-    related_service = factory.Iterator(ServicePage.objects.all())
-    hours_exceptions = factory.Faker('text')
-
-    # for field in models.LocationPageRelatedServices._meta.fields:
-    #      if field.get_internal_type() == 'TimeField':
-    #          locals()[field.name] = factory.Faker('time', pattern="%H:%M", end_datetime=None)
-    # del field
-
-    class Meta:
-        model = models.LocationPageRelatedServices
+# decamelize gives us time2 instead of time_2
+# let's go aheead and recursively fix that
+def fix_nums(k): return k.translate(str.maketrans({'1': '_1', '2': '_2', '3': '_3'}))
 
 
-class LocationPageFactory(PageFactory):
-    alternate_name = factory.Faker('text')
-
-    physical_street = factory.Faker('street_address')
-    physical_unit = factory.Faker('secondary_address')
-    physical_city = factory.Faker('city')
-    physical_state = factory.Faker('state_abbr')
-    physical_country = factory.Faker('country_code')
-    physical_zip = factory.Faker('zipcode_in_state')
-
-    physical_location_photo = factory.SubFactory(wagtail_factories.ImageFactory)
-
-    mailing_street = factory.Faker('street_address')
-    mailing_city = factory.Faker('city')
-    mailing_state = factory.Faker('state_abbr')
-    mailing_country = factory.Faker('country_code')
-    mailing_zip = factory.Faker('zipcode_in_state')
-
-    nearest_bus_1 = factory.Faker('random_int', min=0, max=999, step=1)
-    nearest_bus_2 = factory.Faker('random_int', min=0, max=999, step=1)
-    nearest_bus_3 = factory.Faker('random_int', min=0, max=999, step=1)
+def change_keys(obj, convert):
     """
-    I'm almost proud of myself for how hacky this is, ask me about it sometime
+    Recursively goes through the dictionary obj and replaces keys with the convert function.
     """
-    for field in models.LocationPageRelatedServices._meta.fields:
-        if field.get_internal_type() == 'TimeField':
-            locals()[field.name] = factory.Faker('time', pattern="%H:%M", end_datetime=None)
-    del field
+    if isinstance(obj, (str, int, float)):
+        return obj
+    if isinstance(obj, dict):
+        new = obj.__class__()
+        for k, v in obj.items():
+            new[convert(k)] = change_keys(v, convert)
+    elif isinstance(obj, (list, set, tuple)):
+        new = obj.__class__(change_keys(v, convert) for v in obj)
+    else:
+        return obj
+    return new
 
-    class Meta:
-        model = models.LocationPage
 
-    @factory.post_generation
-    def create_related_services(self, create, extracted, **kwargs):
-        if create:
-            LocationPageRelatedServicesFactory.create_batch(2, page=self)
+def create_location_page_from_importer_dictionaries(page_dictionaries, revision_id=None):
+    # Check if page with revision_id has already been imported
+    if revision_id:
+        try:
+            page = LocationPage.objects.get(imported_revision_id=revision_id)
+        except LocationPage.DoesNotExist:
+            page = None
+        if page:
+            return page
+
+    # Check if page with (english) slug has already been imported
+    try:
+        page = LocationPage.objects.get(slug=page_dictionaries['en']['slug'])
+    except LocationPage.DoesNotExist:
+        page = None
+    if page:
+        return page
+
+    # since we don't have a page matching the revision id or the slug
+    # make the combined page dictionary
+    combined_dictionary = page_dictionaries['en']
+
+    # Set home as parent
+    combined_dictionary['parent'] = HomePage.objects.first()
+
+    # set the translated fields
+    for field in LocationPageFactory._meta.model._meta.fields:
+        if field.column.endswith("_es"):
+            if field.column[:-3] in page_dictionaries['es']:
+                combined_dictionary[field.column] = page_dictionaries['es'][field.column[:-3]]
+
+    # fix them up for our bus_2 and time_2 needs (instead of time2 bus2)
+    combined_dictionary = change_keys(combined_dictionary, fix_nums)
+
+    # todo: maybe get this related service logic working
+    # # for now, just get the title from the page on related service and clear it out
+    # for edge in combined_dictionary['related_services']['edges']:
+    #     edge['node']['hours_exceptions'] += edge['node']['related_service']['title']
+    #     del edge['node']['related_service']
+
+    page = LocationPageFactory.create(**combined_dictionary)
+    return page
