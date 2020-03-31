@@ -10,7 +10,6 @@ class LocationPageFactory(JanisBasePageFactory):
         # todo: put some stuff for related service hours here
         return super(LocationPageFactory, cls).create(*args, **kwargs)
 
-
     class Meta:
         model = LocationPage
 
