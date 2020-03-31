@@ -16,14 +16,14 @@ def title():
 
     return create_fixture(page_data, os.path.basename(__file__))
 
-def title_and_address():
-    page_data = {
-        "imported_revision_id": None,
-        "live": False,
-        "parent": components.home(),
-        "coa_global": False,
-        "title": "Location page with title",
-        "slug": "location-page-with-title",
-    }
-
-    return create_fixture(page_data, os.path.basename(__file__))
+# def title_and_address():
+#     page_data = {
+#         "imported_revision_id": None,
+#         "live": False,
+#         "parent": components.home(),
+#         "coa_global": False,
+#         "title": "Location page with title",
+#         "slug": "location-page-with-title",
+#     }
+#
+#     return create_fixture(page_data, os.path.basename(__file__))
