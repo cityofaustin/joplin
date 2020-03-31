@@ -10,6 +10,7 @@
     {% include "wagtailadmin/shared/header.html" with title=editing_str subtitle=user.get_username merged=1 tabbed=1 icon="user" %}
     <!-- COA Change: Instead of choosing all groups on one level, we split groups up into "roles" and "departments" -->
     {{ form|get_user_groups|json_script:"user-groups" }}
+    {{ form|get_user_errors|json_script:"user-errors" }}
     {% render_bundle 'user' %}
     <ul class="tab-nav merged">
         <li class="active"><a href="#account">{% trans "Account" %}</a></li>
