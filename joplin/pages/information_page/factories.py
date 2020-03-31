@@ -74,7 +74,7 @@ def create_information_page_from_importer_dictionaries(page_dictionaries, revisi
                 combined_dictionary[field.column] = page_dictionaries['es'][field.column[:-3]]
 
     # todo: actually get departments here
-    # combined_dictionary['add_related_departments'] = ['just a string']
+    # combined_dictionary['add_department'] = ['just a string']
 
     page = InformationPageFactory.create(**combined_dictionary)
     return page
