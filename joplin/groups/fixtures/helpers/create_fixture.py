@@ -2,7 +2,7 @@ from groups.models import Department
 from groups.factories import DepartmentFactory
 
 
-# Skips creating fixture if Group with slug already exists
+# Skips creating fixture if Group with name already exists
 def create_fixture(group_data, fixture_name):
     try:
         group = Department.objects.get(name=group_data['name'])
