@@ -501,4 +501,3 @@ V3_WIP = bool(strtobool(os.environ.get('V3_WIP', str(False))))
 AUTH_USER_MODEL = 'users.User'
 WAGTAIL_USER_EDIT_FORM = 'users.forms.CustomUserEditForm'
 WAGTAIL_USER_CREATION_FORM = 'users.forms.CustomUserCreationForm'
-# WAGTAIL_USER_CUSTOM_FIELDS = ['roles', 'department']
