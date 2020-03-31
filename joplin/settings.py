@@ -246,8 +246,6 @@ WAGTAILDOCS_SERVE_METHOD = 'direct'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
-AUTH_USER_MODEL = 'users.User'
-
 CORS_ORIGIN_ALLOW_ALL = True
 ALLOWED_HOSTS = [
     'localhost',
@@ -498,3 +496,9 @@ LOGGING = {
 
 # Temporary variables to toggle features for v3 while its still in development
 V3_WIP = bool(strtobool(os.environ.get('V3_WIP', str(False))))
+
+# Custom User Form Settings
+AUTH_USER_MODEL = 'users.User'
+WAGTAIL_USER_EDIT_FORM = 'users.forms.CustomUserEditForm'
+WAGTAIL_USER_CREATION_FORM = 'users.forms.CustomUserCreationForm'
+# WAGTAIL_USER_CUSTOM_FIELDS = ['roles', 'department']
