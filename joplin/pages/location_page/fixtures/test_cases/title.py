@@ -3,7 +3,7 @@ from pages.location_page.fixtures.helpers.create_fixture import create_fixture
 import pages.location_page.fixtures.helpers.components as components
 
 
-# A Service page with only a title
+# A Location page with only a title
 def title():
     page_data = {
         "imported_revision_id": None,
