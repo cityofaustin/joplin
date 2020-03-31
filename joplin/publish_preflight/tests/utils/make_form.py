@@ -1,5 +1,7 @@
 from django.contrib.contenttypes.models import ContentType
 
+
+# Logic extracted from wagtail/admin/views/pages.py
 def make_form(page, fake_request):
     parent = page.get_parent()
     content_type = ContentType.objects.get_for_model(page)
