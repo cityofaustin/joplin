@@ -1,6 +1,7 @@
 import factory
 from groups.models import Department
 from wagtail.core.models import GroupPagePermission
+from pages.department_page.factories import DepartmentPageFactory
 
 
 class DepartmentFactory(factory.DjangoModelFactory):
@@ -14,13 +15,12 @@ class DepartmentFactory(factory.DjangoModelFactory):
         # pass "add_department_page__dummy"=True into Factory() to make dummy department page
         if create:
             if (kwargs.get("dummy", False)):
-                department_page = factory.SubFactory('pages.department_page.factories.DepartmentPageFactory')
-                # TODO, add it to group
+                self.department_page = DepartmentPageFactory(title=self.name)
 
 
 class GroupPagePermissionFactory(factory.django.DjangoModelFactory):
     page = factory.SubFactory('base_page.factories.JanisBasePageFactory')
-    group = factory.SubFactory(DepartmentFactory)
+    group = factory.SubFactory(DepartmentFactory, add_department_page__dummy=True)
 
     class Meta:
         model = GroupPagePermission

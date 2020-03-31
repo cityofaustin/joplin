@@ -18,7 +18,7 @@ def test_department_page_no_department_group():
 # If we don't have any associated department group
 @pytest.mark.django_db
 def test_department_page_with_department_group():
-    department = DepartmentFactory.create()
+    department = DepartmentFactory.create(add_department_page__dummy=True)
     page = department.department_page
 
     urls = page.janis_urls()
