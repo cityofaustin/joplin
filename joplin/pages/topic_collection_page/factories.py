@@ -14,7 +14,7 @@ class ThemeFactory(factory.django.DjangoModelFactory):
         model = Theme
 
 
-class TopicCollectionPageFactory(PageFactory):
+class TopicCollectionPageFactory(JanisBasePageFactory):
     theme = factory.SubFactory(ThemeFactory)
 
     class Meta:
@@ -22,8 +22,14 @@ class TopicCollectionPageFactory(PageFactory):
 
 
 class JanisBasePageTopicCollectionFactory(factory.django.DjangoModelFactory):
-    page = factory.SubFactory('base_page.factories.JanisBasePageWithTopicCollectionsFactory')
-    topic_collection = factory.SubFactory(TopicCollectionPageFactory)
+    page = factory.SubFactory(
+        'base_page.factories.JanisBasePageWithTopicCollectionsFactory',
+        add_department__dummy=True
+    )
+    topic_collection = factory.SubFactory(
+        TopicCollectionPageFactory,
+        add_department__dummy=True
+    )
 
     class Meta:
         model = JanisBasePageTopicCollection

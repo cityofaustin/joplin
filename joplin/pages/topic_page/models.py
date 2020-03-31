@@ -74,6 +74,11 @@ class JanisBasePageWithTopics(JanisBasePage):
 
         return urls
 
+    def departments(self):
+        departments = super().departments()
+
+        return departments
+
 
 class JanisBasePageTopic(ClusterableModel):
     page = ParentalKey(JanisBasePageWithTopics, related_name='topics')
