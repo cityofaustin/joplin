@@ -3,14 +3,18 @@ import json
 import factory
 from pages.base_page.factories import JanisBasePageFactory
 from pages.home_page.models import HomePage
+from pages.service_page.models import ServicePage
 from pages.location_page.models import LocationPage, LocationPageRelatedServices
+import pages.service_page.fixtures as service_page_fixtures
 
 
 class LocationPageRelatedServicesFactory(factory.django.DjangoModelFactory):
     # find all your fields [f.name for f in MyModel._meta.get_fields()]
     page = factory.SubFactory('pages.location_page.factories.LocationPageFactory')
     # page = factory.Iterator(models.LocationPage.objects.all())
-    # related_service = factory.Iterator(ServicePage.objects.all())
+    # todo: actually get the service page relation
+    related_service = factory.SubFactory('pages.service_page.factories.ServicePageFactory')
+    # related_service = factory.Faker(ServicePage)
     # hours_exceptions = factory.Faker('text')
 
     # for field in models.LocationPageRelatedServices._meta.fields:
