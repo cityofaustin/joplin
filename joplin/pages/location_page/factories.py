@@ -8,7 +8,6 @@ from pages.location_page.models import LocationPage, LocationPageRelatedServices
 
 class LocationPageRelatedServicesFactory(factory.django.DjangoModelFactory):
     page = factory.SubFactory('pages.location_page.factories.LocationPageFactory')
-    # todo: actually get the service page relation
     related_service = factory.SubFactory('pages.service_page.factories.ServicePageFactory')
 
     class Meta:
