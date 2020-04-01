@@ -108,11 +108,16 @@ def create_location_page_from_importer_dictionaries(page_dictionaries, revision_
     for edge in combined_dictionary['related_services']['edges']:
         service_to_add = edge['node']
         service_to_add['hours_exceptions'] += service_to_add['related_service']['title']
-        related_service = ServicePage.objects.first()
+
+        # We really are just trying to get hours imported here, but we can't save
+        # without having a page FK'd out to, so we use a placeholder service for now.
+        # In order to update this, we'll need to go into the location page and manually update the related service
+        related_service = ServicePage.objects.get(slug='placeholder_service_for_hours')
         if not related_service:
             related_service_dictionary = {
                 'parent': combined_dictionary['parent'],
-                'title': "related service"+service_to_add['related_service']['title']
+                'title': "placeholder service for hours",
+                'slug': "placeholder_service_for_hours"
             }
             related_service = ServicePageFactory.create(**related_service_dictionary)
         del service_to_add['related_service']
