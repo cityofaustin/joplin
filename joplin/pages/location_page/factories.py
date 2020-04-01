@@ -93,6 +93,8 @@ def create_location_page_from_importer_dictionaries(page_dictionaries, revision_
     combined_dictionary['add_related_services'] = []
     for edge in combined_dictionary['related_services']['edges']:
         location_page_related_service_to_add = edge['node']
+
+        # since we're using a placeholder service, let's at least get the title somewhere to help us find the page
         location_page_related_service_to_add['hours_exceptions'] += location_page_related_service_to_add['related_service']['title']
 
         # We really are just trying to get hours imported here, but we can't save
