@@ -107,7 +107,6 @@ def test_get_dummy_topic_collection_page_from_revision(remote_staging_preview_ur
         'description': 'theme description [en]'
     }
 
-
 # this test will start breaking once we no longer have this revision in the db
 # todo: figure out a good way to mock api responses
 # https://docs.python.org/3/library/unittest.mock.html
