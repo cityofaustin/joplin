@@ -200,8 +200,7 @@ def test_get_dummy_service_page_from_revision(remote_staging_preview_url, remote
     page_dictionaries = PageImporter(preview_url).fetch_page_data().page_dictionaries
     assert page_dictionaries['en']['title'] == 'Get your bulk items collected'
     assert page_dictionaries['en']['slug'] == 'bulk-item-pickup'
-    assert page_dictionaries['en'][
-               'short_description'] == 'Twice a year, Austin residential trash and recycling customers can place large items out on the curb to be picked up. These items include appliances, furniture, and carpet.'
+    assert page_dictionaries['en']['short_description'] == 'Twice a year, Austin residential trash and recycling customers can place large items out on the curb to be picked up. These items include appliances, furniture, and carpet.'
     assert page_dictionaries['en']['dynamic_content'] == []
     assert page_dictionaries['en']['steps'] == [
         {'id': '8ae81673-200e-4ef9-a744-28b38752d7ac',
