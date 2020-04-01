@@ -1,21 +1,48 @@
 import json
+
+import factory
 from pages.base_page.factories import JanisBasePageFactory
 from pages.home_page.models import HomePage
-from pages.location_page.models import LocationPage
+from pages.location_page.models import LocationPage, LocationPageRelatedServices
+
+
+class LocationPageRelatedServicesFactory(factory.django.DjangoModelFactory):
+    # find all your fields [f.name for f in MyModel._meta.get_fields()]
+    page = factory.SubFactory('pages.location_page.factories.LocationPageFactory')
+    # page = factory.Iterator(models.LocationPage.objects.all())
+    # related_service = factory.Iterator(ServicePage.objects.all())
+    # hours_exceptions = factory.Faker('text')
+
+    # for field in models.LocationPageRelatedServices._meta.fields:
+    #      if field.get_internal_type() == 'TimeField':
+    #          locals()[field.name] = factory.Faker('time', pattern="%H:%M", end_datetime=None)
+    # del field
+
+    class Meta:
+        model = LocationPageRelatedServices
 
 
 class LocationPageFactory(JanisBasePageFactory):
     @classmethod
     def create(cls, *args, **kwargs):
-        # todo: put some stuff for related service hours here
         return super(LocationPageFactory, cls).create(*args, **kwargs)
+
+    @factory.post_generation
+    def add_related_services(self, create, extracted, **kwargs):
+        if extracted:
+            # A list of related services were passed in,
+            # this includes info about hours for the related service
+            # todo: actually link the related service
+            for related_service in extracted:
+                LocationPageRelatedServicesFactory.create(page=self, **related_service)
+            return
 
     class Meta:
         model = LocationPage
 
 
 # decamelize gives us time2 instead of time_2
-# let's go aheead and recursively fix that
+# let's go ahead and recursively fix that
 def fix_nums(k): return k.translate(str.maketrans({'1': '_1', '2': '_2', '3': '_3'}))
 
 
@@ -72,9 +99,13 @@ def create_location_page_from_importer_dictionaries(page_dictionaries, revision_
 
     # todo: maybe get this related service logic working
     # # for now, just get the title from the page on related service and clear it out
-    # for edge in combined_dictionary['related_services']['edges']:
-    #     edge['node']['hours_exceptions'] += edge['node']['related_service']['title']
-    #     del edge['node']['related_service']
+    combined_dictionary['add_related_services'] = []
+    for edge in combined_dictionary['related_services']['edges']:
+        service_to_add = edge['node']
+        service_to_add['hours_exceptions'] += service_to_add['related_service']['title']
+        del service_to_add['related_service']
+        combined_dictionary['add_related_services'].append(service_to_add)
+    del combined_dictionary['related_services']
 
     page = LocationPageFactory.create(**combined_dictionary)
     return page
