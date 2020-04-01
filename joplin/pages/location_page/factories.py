@@ -4,6 +4,7 @@ import factory
 from pages.base_page.factories import JanisBasePageFactory
 from pages.home_page.models import HomePage
 from pages.service_page.models import ServicePage
+from pages.service_page.factories import ServicePageFactory
 from pages.location_page.models import LocationPage, LocationPageRelatedServices
 import pages.service_page.fixtures as service_page_fixtures
 
@@ -37,8 +38,8 @@ class LocationPageFactory(JanisBasePageFactory):
             # A list of related services were passed in,
             # this includes info about hours for the related service
             # todo: actually link the related service
-            for related_service in extracted:
-                LocationPageRelatedServicesFactory.create(page=self, **related_service)
+            for location_page_related_service in extracted:
+                LocationPageRelatedServicesFactory.create(page=self, **location_page_related_service)
             return
 
     class Meta:
@@ -107,7 +108,15 @@ def create_location_page_from_importer_dictionaries(page_dictionaries, revision_
     for edge in combined_dictionary['related_services']['edges']:
         service_to_add = edge['node']
         service_to_add['hours_exceptions'] += service_to_add['related_service']['title']
+        related_service = ServicePage.objects.first()
+        if not related_service:
+            related_service_dictionary = {
+                'parent': combined_dictionary['parent'],
+                'title': "related service"+service_to_add['related_service']['title']
+            }
+            related_service = ServicePageFactory.create(**related_service_dictionary)
         del service_to_add['related_service']
+        service_to_add['related_service'] = related_service
         combined_dictionary['add_related_services'].append(service_to_add)
     del combined_dictionary['related_services']
 
