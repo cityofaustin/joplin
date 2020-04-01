@@ -112,12 +112,16 @@ def create_location_page_from_importer_dictionaries(page_dictionaries, revision_
         # We really are just trying to get hours imported here, but we can't save
         # without having a page FK'd out to, so we use a placeholder service for now.
         # In order to update this, we'll need to go into the location page and manually update the related service
-        related_service = ServicePage.objects.get(slug='placeholder_service_for_hours')
+        # Check if page with (english) slug has already been imported
+        try:
+            related_service = ServicePage.objects.get(slug='placeholder_service_for_hours')
+        except ServicePage.DoesNotExist:
+            related_service = None
         if not related_service:
             related_service_dictionary = {
                 'parent': combined_dictionary['parent'],
-                'title': "placeholder service for hours",
-                'slug': "placeholder_service_for_hours"
+                'title': 'placeholder service for hours',
+                'slug': 'placeholder_service_for_hours'
             }
             related_service = ServicePageFactory.create(**related_service_dictionary)
         del service_to_add['related_service']
