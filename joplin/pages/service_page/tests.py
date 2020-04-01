@@ -14,6 +14,13 @@ def test_create_service_page_from_api(remote_staging_preview_url, remote_pytest_
 
 
 @pytest.mark.django_db
+def test_create_service_page_with_contact_from_api(remote_staging_preview_url, remote_pytest_api):
+    url = f'{remote_staging_preview_url}/services/UGFnZVJldmlzaW9uTm9kZToyOA==?CMS_API={remote_pytest_api}'
+    page = PageImporter(url).fetch_page_data().create_page()
+    assert isinstance(page, ServicePage)
+
+
+@pytest.mark.django_db
 def test_create_service_page_with_title():
     page = fixtures.title()
     assert isinstance(page, ServicePage)

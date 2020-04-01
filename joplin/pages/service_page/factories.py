@@ -8,6 +8,7 @@ from pages.factory import PageFactory
 from pytest_factoryboy import register
 from wagtail.core.models import Page
 from pages.topic_page.factories import JanisBasePageWithTopicsFactory, create_topic_page_from_importer_dictionaries
+from pages.location_page.factories import create_location_page_from_importer_dictionaries
 from pages.home_page.models import HomePage
 
 
@@ -71,6 +72,16 @@ def create_service_page_from_importer_dictionaries(page_dictionaries, revision_i
     # todo: why isn't pop working?
     if 'topics' in combined_dictionary:
         del combined_dictionary['topics']
+
+    # associate/create contact
+    if len(page_dictionaries['en']['contacts']['edges']):
+        combined_dictionary['contact'] = {
+            'name': page_dictionaries['en']['contacts']['edges'][0]['node']['contact']['name'],
+            'location_page': create_location_page_from_importer_dictionaries({
+                'en':  page_dictionaries['en']['contacts']['edges'][0]['node']['contact']['location_page'],
+                'es': page_dictionaries['en']['contacts']['edges'][0]['node']['contact']['location_page']
+            })
+        }
 
     # remove contacts if we have it because:
     # * it might be what's wrong rn

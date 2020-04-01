@@ -312,3 +312,9 @@ def test_get_dummy_location_page_from_revision(remote_staging_preview_url, remot
 
     assert page_dictionaries['en']['slug'] == 'location-name-en'
     assert not page_dictionaries['en']['coa_global']
+
+
+def test_get_dummy_location_page_from_revision(remote_staging_preview_url, remote_pytest_api):
+    preview_url = f'{remote_staging_preview_url}/location/UGFnZVJldmlzaW9uTm9kZTozMA==?CMS_API={remote_pytest_api}'
+
+    page_dictionaries = PageImporter(preview_url).fetch_page_data().page_dictionaries

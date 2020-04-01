@@ -44,70 +44,6 @@ fragments["topic"] = GraphqlParser('''
     topiccollection=fragments["topiccollection"]
 )
 
-fragments["contact"] = '''
-    id
-'''
-
-fragments["information"] = GraphqlParser('''
-    title
-    slug
-    coaGlobal
-    description
-    additionalContent
-    topics {
-      edges {
-        node {
-          topic {
-            $$$topic
-          }
-        }
-      }
-    }
-    contacts {
-      edges {
-        node {
-          contact {
-            $$$contact
-          }
-        }
-      }
-    }
-''').substitute(
-    topic=fragments["topic"],
-    contact=fragments["contact"],
-)
-
-fragments["services"] = GraphqlParser('''
-    title
-    slug
-    coaGlobal
-    shortDescription
-    steps
-    dynamicContent
-    additionalContent
-    topics {
-      edges {
-        node {
-          topic {
-            $$$topic
-          }
-        }
-      }
-    }
-    contacts {
-      edges {
-        node {
-          contact {
-            $$$contact
-          }
-        }
-      }
-    }
-''').substitute(
-    topic=fragments["topic"],
-    contact=fragments["contact"],
-)
-
 fragments["hours"] = GraphqlParser('''
     mondayStartTime
     mondayEndTime
@@ -179,6 +115,75 @@ fragments["location"] = GraphqlParser('''
     $$$hours
 ''').substitute(
     hours=fragments["hours"],
+)
+
+fragments["contact"] = GraphqlParser('''
+    name
+    locationPage {
+        $$$location
+    }
+''').substitute(
+    location=fragments["location"]
+)
+
+fragments["information"] = GraphqlParser('''
+    title
+    slug
+    coaGlobal
+    description
+    additionalContent
+    topics {
+      edges {
+        node {
+          topic {
+            $$$topic
+          }
+        }
+      }
+    }
+    contacts {
+      edges {
+        node {
+          contact {
+            $$$contact
+          }
+        }
+      }
+    }
+''').substitute(
+    topic=fragments["topic"],
+    contact=fragments["contact"],
+)
+
+fragments["services"] = GraphqlParser('''
+    title
+    slug
+    coaGlobal
+    shortDescription
+    steps
+    dynamicContent
+    additionalContent
+    topics {
+      edges {
+        node {
+          topic {
+            $$$topic
+          }
+        }
+      }
+    }
+    contacts {
+      edges {
+        node {
+          contact {
+            $$$contact
+          }
+        }
+      }
+    }
+''').substitute(
+    topic=fragments["topic"],
+    contact=fragments["contact"],
 )
 
 unparsed_query_strings = {
