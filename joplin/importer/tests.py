@@ -3,9 +3,6 @@ from importer.page_importer import PageImporter
 from django.core.exceptions import ValidationError
 
 
-# from unittest.mock import patch
-
-
 def test_parse_janis_preview_url(remote_pytest_preview_url, remote_pytest_api):
     preview_url = f'{remote_pytest_preview_url}/information/UGFnZVJldmlzaW9uTm9kZToyNjI4'
 
