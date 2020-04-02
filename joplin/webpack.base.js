@@ -16,6 +16,7 @@ module.exports = {
     janisBranchSettings: path.resolve(__dirname, "./js/janisBranchSettings.js"),
     theme: path.resolve(__dirname, "./js/theme.js"),
     publishPreflight: path.resolve(__dirname, "./js/PublishPreflight/index.js"),
+    user: path.resolve(__dirname, "./users/js/index.js"),
   },
   module: {
     rules: [

@@ -382,6 +382,7 @@ The migration process currently consists of 3 commands:
         # Then Rebuild (be sure to have the heroku cli installed in your machine)
         REBUILD=on ./scripts/serve-local.sh
         ```
+- `pipenv run ./joplin/manage.py shell_plus`
 
 ---
 

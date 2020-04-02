@@ -89,7 +89,7 @@ def create_service_page_from_importer_dictionaries(page_dictionaries, revision_i
 
 
     # todo: actually get departments here
-    # combined_dictionary['add_related_departments'] = ['just a string']
+    # combined_dictionary['add_department'] = ['just a string']
 
     page = ServicePageFactory.create(**combined_dictionary)
     return page

@@ -14,8 +14,14 @@ class TopicPageFactory(JanisBasePageWithTopicCollectionsFactory):
 
 
 class JanisBasePageTopicFactory(factory.django.DjangoModelFactory):
-    page = factory.SubFactory('base_page.factories.JanisBasePageWithTopicsFactory')
-    topic = factory.SubFactory(TopicPageFactory)
+    page = factory.SubFactory(
+        'base_page.factories.JanisBasePageWithTopicsFactory',
+        add_department__dummy=True,
+    )
+    topic = factory.SubFactory(
+        TopicPageFactory,
+        add_department__dummy=True,
+    )
 
     class Meta:
         model = JanisBasePageTopic
@@ -100,7 +106,7 @@ def create_topic_page_from_importer_dictionaries(page_dictionaries, revision_id)
                 combined_dictionary[field.column] = page_dictionaries['es'][field.column[:-3]]
 
     # todo: actually get departments here
-    combined_dictionary['add_related_departments'] = ['just a string']
+    combined_dictionary['add_department'] = ['just a string']
 
     page = TopicPageFactory.create(**combined_dictionary)
     return page
