@@ -26,13 +26,21 @@ def test_create_location_page_with_title():
 @pytest.mark.django_db
 def test_location_page_with_urls():
     janis_url_page_type = 'location'
+    #
+    # page = LocationPageFactory.create(
+    #     slug="page_slug",
+    #     coa_global=False,
+    # )
+    #
+    # page = fixtures.title()
+    page = fixtures
 
-    page = LocationPageFactory.create(
-        slug="page_slug",
-        coa_global=False,
-    )
+
+    for x,y in page:
+        print(location_page)
 
     # Set expected urls using janis url page type and location page slugs
+
     expected_urls = ['http://fake.base.url/{page_type}/{page_slug}'.format(
                             page_type=janis_url_page_type,
                             page_slug=page.slug)]
