@@ -58,9 +58,14 @@ class JanisBasePageWithTopicCollections(JanisBasePage):
         # should publish at /theme_slug/topic_collection_slug/page_slug
         topic_collections = self.topic_collections.all()
 
-        return ['{topic_collection_url}{page_slug}/'.format(
-            topic_collection_url=base_page_topic_collection.topic_collection.janis_url(), page_slug=self.slug)
-            for base_page_topic_collection in topic_collections]
+        # return ['{topic_collection_url}{page_slug}/'.format(
+        #     topic_collection_url=base_page_topic_collection.topic_collection.janis_url(), page_slug=self.slug)
+        #     for base_page_topic_collection in topic_collections]
+
+        return [{'url': '{topic_collection_url}{page_slug}/'.format(
+            topic_collection_url=base_page_topic_collection.topic_collection.janis_url(), page_slug=self.slug),
+           'parentType': 'topic'}
+            for base_page_topic_collection in topic_collections] #string interpolation is messing up
 
 
 class JanisBasePageTopicCollection(ClusterableModel):

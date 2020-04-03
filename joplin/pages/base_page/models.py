@@ -66,8 +66,9 @@ class JanisBasePage(Page):
         departments = self.departments()
         if len(departments) > 0:
             return [
-                '{base_url}{department_slug}/{page_slug}/'.format(base_url=self.janis_url_base('publish_janis_branch'),
-                                                                  department_slug=department.slug, page_slug=self.slug)
+                {'url': '{base_url}{department_slug}/{page_slug}/'.format(base_url=self.janis_url_base('publish_janis_branch'),
+                                                                  department_slug=department.slug, page_slug=self.slug),
+                 'parentType': 'department'}
                 for department in departments]
 
         # make sure we return an empty array if we don't have any urls

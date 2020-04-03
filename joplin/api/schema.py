@@ -170,6 +170,10 @@ class JanisBasePageNode(DjangoObjectType):
         filter_fields = ['id', 'slug', 'live']
         interfaces = [graphene.Node]
 
+    # alternately could go through the non specific ones (which are the depts)
+    # and then go through the specific ones, which are the topics (removing the dupes)
+    # also coaglobal ???
+
     def resolve_janis_urls(self, info):
         return self.specific.janis_urls()
 
@@ -739,6 +743,9 @@ def get_global_id_from_content_type(self):
     node = content_type_map[content_type]["node"]
     global_id = graphene.Node.to_global_id(node, self.page_id)
     return global_id
+
+# def get instances?
+# return a dictionary with url and thing?
 
 
 class DepartmentPageTopPageNode(DjangoObjectType):
