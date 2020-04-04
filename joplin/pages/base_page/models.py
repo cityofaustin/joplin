@@ -63,7 +63,7 @@ class JanisBasePage(Page):
         departments = self.departments()
         if len(departments) > 0:
             return [
-                    f'{department.slug}/{self.slug}/'
+                    f'/{department.slug}/{self.slug}/'
                     for department in departments
                 ]
 

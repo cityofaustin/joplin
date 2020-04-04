@@ -46,7 +46,7 @@ class TopicCollectionPage(JanisBasePage):
     def janis_urls(self):
         # should publish at /theme_slug/topic_collection_slug/
         if self.theme.slug:
-            return [f'{self.theme.slug}/{self.slug}/']
+            return [f'/{self.theme.slug}/{self.slug}/']
 
         return []
 
@@ -59,7 +59,7 @@ class JanisBasePageWithTopicCollections(JanisBasePage):
 
         for base_page_topic_collection in self.topic_collections.all():
             for topic_collection_url in base_page_topic_collection.topic_collection.janis_urls():
-                urls.append(f'/{topic_collection_url}{self.slug}/')
+                urls.append(f'{topic_collection_url}{self.slug}/')
 
         return urls
 
