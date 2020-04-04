@@ -59,7 +59,7 @@ class JanisBasePageWithTopicCollections(JanisBasePage):
 
         for base_page_topic_collection in self.topic_collections.all():
             for topic_collection_url in base_page_topic_collection.topic_collection.janis_urls():
-                urls.append({'url': f'{topic_collection_url}{self.slug}/', 'type': 'topic'})
+                urls.append(f'/{topic_collection_url}{self.slug}/')
 
         return urls
 

@@ -63,10 +63,9 @@ class JanisBasePage(Page):
         departments = self.departments()
         if len(departments) > 0:
             return [
-                {'url': f'{department.slug}/{self.slug}/',
-                 'type': 'department'}
-                for department in departments
-            ]
+                    f'{department.slug}/{self.slug}/'
+                    for department in departments
+                ]
 
         # make sure we return an empty array if we don't have any urls
         return []
