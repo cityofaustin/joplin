@@ -475,7 +475,7 @@ class ServicePageNode(DjangoObjectType):
         return ServicePage.get_verbose_name().lower()
 
     def resolve_janis_url(self, info):
-        return self.janis_url()
+        return self.janis_publish_url()
 
 
 class InformationPageNode(DjangoObjectType):
@@ -596,7 +596,7 @@ class GuidePageSectionPageBlock(graphene.ObjectType):
             if page:
                 break
         if page:
-            return page.janis_url()
+            return page.janis_publish_url()
         else:
             return '#'
 

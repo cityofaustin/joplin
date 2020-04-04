@@ -12,7 +12,7 @@ from groups.models import Department
 from wagtail.documents.models import Document
 from base.signals.aws_publish import get_http_request, create_build_aws
 from base.signals.netlify_publish import netlify_publish
-from base.signals.publish_v2 import publish_v2
+from base.signals.publish_v3 import publish_v3
 from flags.state import flag_enabled
 
 import logging
@@ -32,7 +32,7 @@ def trigger_build(sender, pages_ids, action='saved', instance=None):
         create_build_aws(sender, instance, request=get_http_request())
     elif settings.ISREVIEW:
         if flag_enabled('INCREMENTAL BUILDS'):
-            publish_v2(pages_ids)
+            publish_v3(pages_ids)
         else:
             netlify_publish()
 
