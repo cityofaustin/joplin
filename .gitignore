@@ -10,9 +10,9 @@ venv
 *webpack_bundles
 *webpack-stats.json
 local
-media/*/*.jpg
-media/*/*.png
-media/*/*.jpeg
+media/documents/*
+media/images/*
+media/original_images/*
 *.log
 joplin/db/smuggler/*
 env.sh

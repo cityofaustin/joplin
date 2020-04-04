@@ -13,7 +13,6 @@ from .theme import Theme
 from pages.topic_collection_page.models import TopicCollectionPage
 from pages.home_page.models import HomePage
 from .widgets import countMe, countMeTextArea
-from .site_settings import JanisBranchSettings
 from .deployment_log import DeploymentLog
 
 # TODO: Remove everything below this comment

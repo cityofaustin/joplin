@@ -46,8 +46,7 @@ class TopicCollectionPage(JanisBasePage):
     def janis_urls(self):
         # should publish at /theme_slug/topic_collection_slug/
         if self.theme.slug:
-            return ['{base_url}{theme_slug}/{page_slug}/'.format(base_url=self.janis_url_base('publish_janis_branch'),
-                                                                 theme_slug=self.theme.slug, page_slug=self.slug)]
+            return [f'{self.theme.slug}/{self.slug}/']
 
         return []
 
@@ -56,16 +55,13 @@ class JanisBasePageWithTopicCollections(JanisBasePage):
     def janis_urls(self):
         # Add the urls for each topic collection, these pages only
         # should publish at /theme_slug/topic_collection_slug/page_slug
-        topic_collections = self.topic_collections.all()
+        urls = []
 
-        # return ['{topic_collection_url}{page_slug}/'.format(
-        #     topic_collection_url=base_page_topic_collection.topic_collection.janis_url(), page_slug=self.slug)
-        #     for base_page_topic_collection in topic_collections]
+        for base_page_topic_collection in self.topic_collections.all():
+            for topic_collection_url in base_page_topic_collection.topic_collection.janis_urls():
+                urls.append({'url': f'{topic_collection_url}{self.slug}/', 'type': 'topic'})
 
-        return [{'url': '{topic_collection_url}{page_slug}/'.format(
-            topic_collection_url=base_page_topic_collection.topic_collection.janis_url(), page_slug=self.slug),
-           'parentType': 'topic'}
-            for base_page_topic_collection in topic_collections] #string interpolation is messing up
+        return urls
 
 
 class JanisBasePageTopicCollection(ClusterableModel):

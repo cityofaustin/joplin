@@ -22,7 +22,6 @@ from pages.event_page.models import EventPage
 from pages.home_page.models import HomePage
 from groups.models import Department
 from importer.page_importer import PageImporter
-from base.models.site_settings import JanisBranchSettings
 from django.contrib.contenttypes.models import ContentType
 import json
 

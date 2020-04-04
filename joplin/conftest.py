@@ -5,8 +5,7 @@ from factory.base import FactoryMetaClass
 from pages.information_page import factories as information_page_factories
 from pages.official_documents_page import factories as official_document_page_factories
 from pages.department_page import factories as department_page_factories
-# from pages.
-# from base.factories import service_page, guide_page
+import pages.home_page.fixtures as home_page_fixtures
 
 
 from django.core.management import call_command
@@ -39,19 +38,6 @@ def register_factories(factories):
             register(object)
 
 
-# register_factories(information_page_factories)
-# register_factories(department_page_factories)
-# register_factories(official_document_page_factories)
-# register_factories(service_page)
-# register_factories(guide_page)
-
-# example if we wanted to make a specific fixture for some tests, we can flesh
-# this out with specific names or parameters, good for regression tests
-# TODO: example like 'page without topic'
-# @pytest.fixture()
-# def information_page(information_page_factory):
-#     return InformationPageFactory.build()
-
 '''
 Fixtures created in conftest.py can be used in any test without importing.
 https://docs.pytest.org/en/latest/fixture.html#conftest-py-sharing-fixture-functions
@@ -70,3 +56,13 @@ def remote_pytest_preview_url():
 @pytest.fixture()
 def remote_staging_preview_url():
     return 'https://janis.austintexas.io/en/preview'
+
+
+@pytest.fixture()
+def home_page():
+    return home_page_fixtures.pytest()
+
+
+@pytest.fixture()
+def expected_publish_url_base():
+    return "https://janis-v3-pytest.netlify.com"

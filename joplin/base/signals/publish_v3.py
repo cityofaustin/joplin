@@ -1,12 +1,16 @@
 import os, json, requests, logging
 from django.conf import settings
-from base.models.site_settings import JanisBranchSettings
+from pages.home_page.models import HomePage
 
 logger = logging.getLogger('joplin')
 
 
-def publish_v2(page_ids=[]):
-    publish_janis_branch = getattr(JanisBranchSettings.objects.first(), 'publish_janis_branch')
+def publish_v3(page_ids=[]):
+    # TODO: we want to extract the publish_janis_branch() for each page_id that we're publishing.
+    # That logic must happen earlier in the collect_pages logic.
+    # Even though this will work for now, it should not be hardcoded to be the first HomePage object.
+    publish_janis_branch = HomePage.objects.first().publish_janis_branch()
+
     if not publish_janis_branch:
         logger.info("publish_janis_branch must be set in order to publish.")
         return None
@@ -26,5 +30,5 @@ def publish_v2(page_ids=[]):
         "build_type": "all_pages",
     }
     publisher_res = requests.post(url, data=json.dumps(data), headers=headers)
-    logger.info("publish_v2() Starting task")
+    logger.info("publish_v3() Starting task")
     logger.info(publisher_res.json())
