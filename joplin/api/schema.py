@@ -464,7 +464,6 @@ class Language(graphene.Enum):
 
 class ServicePageNode(DjangoObjectType):
     page_type = graphene.String()
-    # TODO: remove janis_url from ServicePageNode? Is this still required?
     janis_url = graphene.String()
 
     class Meta:
