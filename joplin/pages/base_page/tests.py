@@ -5,7 +5,7 @@ import pytest
 
 # If we don't have any associated department,
 # and coa_global=False (top level page isn't checked)
-@pytest.mark.django_db(transaction=False)
+@pytest.mark.django_db()
 def test_base_page_no_department_not_global_urls(home_page):
     page = JanisBasePageFactory.create(slug="global_slug", coa_global=False, parent=home_page)
 
@@ -104,7 +104,7 @@ def test_base_page_with_topics_no_topic_no_department_coa_global_urls(home_page,
 # If we have associated departments,
 # and we have associated topic pages
 # and coa_global=False (top level is not checked)
-@pytest.mark.django_db(transaction=False)
+@pytest.mark.django_db()
 def test_base_page_with_topics_with_department_not_global_urls(home_page, expected_publish_url_base):
     # Using .create() here makes it so the factory also creates
     # our GroupPagePermissions to associate departments
@@ -137,7 +137,7 @@ def test_base_page_with_topics_with_department_not_global_urls(home_page, expect
 # If we have associated departments,
 # and we have associated topic pages
 # and coa_global=True (top level is checked)
-@pytest.mark.django_db(transaction=False)
+@pytest.mark.django_db()
 def test_base_page_with_topics_with_topic_with_department_coa_global_urls(home_page, expected_publish_url_base):
     page = JanisBasePageWithTopicsFactory.create(slug="global_slug_2", coa_global=True, parent=home_page)
 
