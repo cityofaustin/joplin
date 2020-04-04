@@ -5,8 +5,8 @@ from pages.home_page.fixtures.helpers.create_fixture import create_fixture
 # A HomePage page for use with our pytest janis branch
 def pytest():
     page_data = {
-        "publish_janis_branch": "pytest",
-        "preview_janis_branch": "pytest",
+        "publish_janis_branch_for_pr": "pytest",
+        "preview_janis_branch_for_pr": "pytest",
         "slug": "pytest",
         "title": "pytest",
     }

@@ -65,4 +65,4 @@ def home_page():
 
 @pytest.fixture()
 def expected_publish_url_base():
-    return "https://janis-v3-pytest.netlify.app"
+    return "https://janis-v3-pytest.netlify.com"

@@ -10,7 +10,6 @@ from wagtail.admin.edit_handlers import FieldPanel, ObjectList, TabbedInterface,
 from wagtail.core.models import Page
 from wagtail.core.fields import RichTextField
 from flags.state import flag_enabled
-from base.models.site_settings import JanisBranchSettings
 
 
 class JanisBasePage(Page):

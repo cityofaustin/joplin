@@ -1,6 +1,5 @@
 from django import template
 from django.conf import settings
-from base.models.site_settings import JanisBranchSettings
 import graphene
 import os
 import json
