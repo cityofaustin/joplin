@@ -40,5 +40,13 @@ branch_overrides = {
     "4146-loc-urls": {
         "LOAD_DATA": "dummy",
         "V3_WIP": True,
+    },
+    "4146-loc-urls": {
+        "LOAD_DATA": "dummy",
+        "V3_WIP": True,
+    },
+    "4184-events-urls": {
+        "LOAD_DATA": "dummy",
+        "V3_WIP": True,
     }
 }
