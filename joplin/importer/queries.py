@@ -44,79 +44,6 @@ fragments["topic"] = GraphqlParser('''
     topiccollection=fragments["topiccollection"]
 )
 
-fragments["hours"] = GraphqlParser('''
-    mondayStartTime
-    mondayEndTime
-    mondayStartTime2
-    mondayEndTime2
-    tuesdayStartTime
-    tuesdayEndTime
-    tuesdayStartTime2
-    tuesdayEndTime2
-    wednesdayStartTime
-    wednesdayEndTime
-    wednesdayStartTime2
-    wednesdayEndTime2
-    thursdayStartTime
-    thursdayEndTime
-    thursdayStartTime2
-    thursdayEndTime2
-    fridayStartTime
-    fridayEndTime
-    fridayStartTime2
-    fridayEndTime2
-    saturdayStartTime
-    saturdayEndTime
-    saturdayStartTime2
-    saturdayEndTime2
-    sundayStartTime
-    sundayEndTime
-    sundayStartTime2
-    sundayEndTime2
-    hoursExceptions
-''').substitute(
-
-)
-
-fragments["location"] = GraphqlParser('''
-    title
-    slug
-    coaGlobal
-    physicalStreet
-    physicalUnit
-    physicalCity
-    physicalState
-    physicalZip
-    mailingStreet
-    mailingCity
-    mailingState
-    mailingZip
-    phoneNumber
-    phoneDescription
-    email
-    nearestBus1
-    nearestBus2
-    nearestBus3
-    physicalLocationPhoto {
-      filename
-      title
-    }
-    relatedServices {
-      edges {
-        node {
-          relatedService {
-            title
-          }
-          hoursSameAsLocation
-          $$$hours
-        }
-      }
-    }
-    $$$hours
-''').substitute(
-    hours=fragments["hours"],
-)
-
 fragments["contact"] = GraphqlParser('''
     name
     phoneNumber {
@@ -195,6 +122,79 @@ fragments["services"] = GraphqlParser('''
 ''').substitute(
     topic=fragments["topic"],
     contact=fragments["contact"],
+)
+
+fragments["hours"] = GraphqlParser('''
+    mondayStartTime
+    mondayEndTime
+    mondayStartTime2
+    mondayEndTime2
+    tuesdayStartTime
+    tuesdayEndTime
+    tuesdayStartTime2
+    tuesdayEndTime2
+    wednesdayStartTime
+    wednesdayEndTime
+    wednesdayStartTime2
+    wednesdayEndTime2
+    thursdayStartTime
+    thursdayEndTime
+    thursdayStartTime2
+    thursdayEndTime2
+    fridayStartTime
+    fridayEndTime
+    fridayStartTime2
+    fridayEndTime2
+    saturdayStartTime
+    saturdayEndTime
+    saturdayStartTime2
+    saturdayEndTime2
+    sundayStartTime
+    sundayEndTime
+    sundayStartTime2
+    sundayEndTime2
+    hoursExceptions
+''').substitute(
+
+)
+
+fragments["location"] = GraphqlParser('''
+    title
+    slug
+    coaGlobal
+    physicalStreet
+    physicalUnit
+    physicalCity
+    physicalState
+    physicalZip
+    mailingStreet
+    mailingCity
+    mailingState
+    mailingZip
+    phoneNumber
+    phoneDescription
+    email
+    nearestBus1
+    nearestBus2
+    nearestBus3
+    physicalLocationPhoto {
+      filename
+      title
+    }
+    relatedServices {
+      edges {
+        node {
+          relatedService {
+            title
+          }
+          hoursSameAsLocation
+          $$$hours
+        }
+      }
+    }
+    $$$hours
+''').substitute(
+    hours=fragments["hours"],
 )
 
 unparsed_query_strings = {
