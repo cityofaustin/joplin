@@ -165,19 +165,19 @@ fragments["location"] = GraphqlParser('''
       filename
       title
     }
+    relatedServices {
+      edges {
+        node {
+          relatedService {
+            title
+          }
+          hoursSameAsLocation
+          $$$hours
+        }
+      }
+    }
     $$$hours
 ''').substitute(
-    # relatedServices {
-    #   edges {
-    #     node {
-    #       relatedService {
-    #         title
-    #       }
-    #       hoursSameAsLocation
-    #       $$$hours
-    #     }
-    #   }
-    # }
     hours=fragments["hours"],
 )
 

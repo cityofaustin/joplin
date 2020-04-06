@@ -1,22 +1,39 @@
-import json
+import factory
 from pages.base_page.factories import JanisBasePageFactory
 from pages.home_page.models import HomePage
-from pages.location_page.models import LocationPage
+from pages.service_page.models import ServicePage
+from pages.service_page.factories import ServicePageFactory
+from pages.location_page.models import LocationPage, LocationPageRelatedServices
+
+
+class LocationPageRelatedServicesFactory(factory.django.DjangoModelFactory):
+    page = factory.SubFactory('pages.location_page.factories.LocationPageFactory')
+    related_service = factory.SubFactory('pages.service_page.factories.ServicePageFactory')
+
+    class Meta:
+        model = LocationPageRelatedServices
 
 
 class LocationPageFactory(JanisBasePageFactory):
     @classmethod
     def create(cls, *args, **kwargs):
-        # todo: put some stuff for related service hours here
         return super(LocationPageFactory, cls).create(*args, **kwargs)
 
+    @factory.post_generation
+    def add_related_services(self, create, extracted, **kwargs):
+        if extracted:
+            # A list of related services were passed in,
+            # this includes info about hours for the related service
+            for location_page_related_service in extracted:
+                LocationPageRelatedServicesFactory.create(page=self, **location_page_related_service)
+            return
 
     class Meta:
         model = LocationPage
 
 
 # decamelize gives us time2 instead of time_2
-# let's go aheead and recursively fix that
+# let's go ahead and recursively fix that
 def fix_nums(k): return k.translate(str.maketrans({'1': '_1', '2': '_2', '3': '_3'}))
 
 
@@ -73,9 +90,32 @@ def create_location_page_from_importer_dictionaries(page_dictionaries, revision_
 
     # todo: maybe get this related service logic working
     # # for now, just get the title from the page on related service and clear it out
-    # for edge in combined_dictionary['related_services']['edges']:
-    #     edge['node']['hours_exceptions'] += edge['node']['related_service']['title']
-    #     del edge['node']['related_service']
+    combined_dictionary['add_related_services'] = []
+    for edge in combined_dictionary['related_services']['edges']:
+        location_page_related_service_to_add = edge['node']
+
+        # since we're using a placeholder service, let's at least get the title somewhere to help us find the page
+        location_page_related_service_to_add['hours_exceptions'] += location_page_related_service_to_add['related_service']['title']
+
+        # We really are just trying to get hours imported here, but we can't save
+        # without having a page FK'd out to, so we use a placeholder service for now.
+        # In order to update this, we'll need to go into the location page and manually update the related service
+        # Check if page with (english) slug has already been imported
+        try:
+            related_service = ServicePage.objects.get(slug='placeholder_service_for_hours')
+        except ServicePage.DoesNotExist:
+            related_service = None
+        if not related_service:
+            related_service_dictionary = {
+                'parent': combined_dictionary['parent'],
+                'title': 'placeholder service for hours',
+                'slug': 'placeholder_service_for_hours'
+            }
+            related_service = ServicePageFactory.create(**related_service_dictionary)
+        del location_page_related_service_to_add['related_service']
+        location_page_related_service_to_add['related_service'] = related_service
+        combined_dictionary['add_related_services'].append(location_page_related_service_to_add)
+    del combined_dictionary['related_services']
 
     page = LocationPageFactory.create(**combined_dictionary)
     return page
