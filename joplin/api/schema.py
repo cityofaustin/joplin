@@ -475,7 +475,7 @@ class ServicePageNode(DjangoObjectType):
         return ServicePage.get_verbose_name().lower()
 
     def resolve_janis_url(self, info):
-        return self.janis_publish_url()
+        return self.janis_urls()
 
 
 class InformationPageNode(DjangoObjectType):

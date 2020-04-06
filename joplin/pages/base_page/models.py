@@ -70,6 +70,19 @@ class JanisBasePage(Page):
         # make sure we return an empty array if we don't have any urls
         return []
 
+    def janis_instances(self):
+        if self.coa_global:
+            return [{'global': f'{self.slug}/'}]
+
+        departments = self.departments()
+        if len(departments) > 0:
+            return [
+                {'url': f'{department.slug}/{self.slug}/',
+                 'parent': department}
+                for department in departments
+            ]
+
+        return []
 
     def janis_preview_url_end(self, revision=None):
         """
@@ -145,8 +158,12 @@ class JanisBasePage(Page):
             else:
                 return ("Live")
 
-    # This goes through our group page permissions and looks for any related departments
     def departments(self):
+        """
+         This goes through our group page permissions and looks for any related departments
+         If the department does not have a department page associated with it, it will not return
+        :return: list of DepartmentPages
+        """
         department_pages = []
         for group_permission in self.group_permissions.all():
             if (group_permission and

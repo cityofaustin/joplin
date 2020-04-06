@@ -13,7 +13,7 @@ branch_overrides = {
         # "DEBUG_TOOLBAR": True,
         # "DEBUG": 1,
     },
-    "4224-resolve-dept": {
+    "4227-resolve-cn": {
         "LOAD_DATA": "",
         "V3_WIP": True,
     },

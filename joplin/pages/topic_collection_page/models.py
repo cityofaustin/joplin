@@ -50,16 +50,38 @@ class TopicCollectionPage(JanisBasePage):
 
         return []
 
+    def janis_instances(self):
+        if self.theme.slug:
+            return [
+                {'url': f'{self.theme.slug}/{self.slug}/'}
+                # do I need to include the grandparent here? tc dont have CN but extending....?
+            ]
+
+        return []
+
 
 class JanisBasePageWithTopicCollections(JanisBasePage):
     def janis_urls(self):
         # Add the urls for each topic collection, these pages only
-        # should publish at /theme_slug/topic_collection_slug/page_slug
+        # should publish at /theme_slug/topic_collection_slug/topic_page_slug
         urls = []
 
         for base_page_topic_collection in self.topic_collections.all():
             for topic_collection_url in base_page_topic_collection.topic_collection.janis_urls():
                 urls.append(f'{topic_collection_url}{self.slug}/')
+
+        return urls
+
+    def janis_instances(self):
+
+        urls = []
+
+        for base_page_topic_collection in self.topic_collections.all():
+            for topic_collection_url in base_page_topic_collection.topic_collection.janis_urls():
+                urls.append({
+                    'url': f'{topic_collection_url}{self.slug}/',
+                    'grandparent': base_page_topic_collection.topic_collection
+                })
 
         return urls
 
