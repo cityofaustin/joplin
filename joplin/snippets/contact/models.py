@@ -6,14 +6,12 @@ from modelcluster.fields import ParentalKey
 from wagtail.snippets.models import register_snippet
 from wagtail.core.fields import StreamField
 from wagtail.core.blocks import URLBlock
-from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, StreamFieldPanel, FieldRowPanel, PageChooserPanel
-from wagtail.snippets.edit_handlers import SnippetChooserPanel
+from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, StreamFieldPanel, PageChooserPanel
 from wagtail.core.models import Orderable
 from phonenumber_field.modelfields import PhoneNumberField
 from phonenumber_field.widgets import PhoneNumberInternationalFallbackWidget
-
-
 from base.models.constants import DEFAULT_MAX_LENGTH
+
 
 @register_snippet
 class Contact(ClusterableModel):
@@ -35,7 +33,7 @@ class Contact(ClusterableModel):
     panels = [
         FieldPanel('name'),
         FieldPanel('email'),
-        InlinePanel('phone_number', label='Phone Numbers'),
+        InlinePanel('phone_numbers', label='Phone Numbers'),
         StreamFieldPanel('social_media'),
         PageChooserPanel('location_page'),
     ]
@@ -44,16 +42,12 @@ class Contact(ClusterableModel):
         return self.name
 
 
-class PhoneNumber(Orderable):
-    phone_description = models.CharField(
-        max_length=DEFAULT_MAX_LENGTH, blank=True)
+class ContactPhoneNumber(Orderable):
+    phone_description = models.CharField(max_length=DEFAULT_MAX_LENGTH, blank=True)
     phone_number = PhoneNumberField()
-    contact = ParentalKey(Contact, related_name='phone_number')
+    contact = ParentalKey(Contact, related_name='phone_numbers')
 
     content_panels = [
-
-        FieldPanel('phone_number',
-                   widget=PhoneNumberInternationalFallbackWidget),
+        FieldPanel('phone_number', widget=PhoneNumberInternationalFallbackWidget),
         FieldPanel('phone_description')
-
     ]
