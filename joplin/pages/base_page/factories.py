@@ -10,6 +10,7 @@ class JanisBasePageFactory(PageFactory):
     class Meta:
         model = JanisBasePage
 
+
     @factory.post_generation
     def add_department(self, create, extracted, **kwargs):
         # TODO: add option to pass in already created departments

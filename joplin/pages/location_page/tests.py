@@ -24,22 +24,23 @@ def test_create_location_page_with_title():
 # If location page is live
 # and coa_global=False (top level is not checked)
 @pytest.mark.django_db
-def test_location_page_with_urls():
+def test_location_page_with_urls(home_page, expected_publish_url_base):
     janis_url_page_type = 'location'
 
     page = LocationPageFactory.create(
         slug="page_slug",
         coa_global=False,
+        parent=home_page,
     )
 
     # Set expected urls using janis url page type and location page slugs
-    expected_urls = ['http://fake.base.url/{page_type}/{page_slug}'.format(
+    expected_urls = ['{page_type}/{page_slug}'.format(
                             page_type=janis_url_page_type,
                             page_slug=page.slug)]
 
     urls = page.janis_urls()
-    url = page.janis_url()
+    janis_publish_url = page.janis_publish_url()
 
     # we should get a url under every location
     assert urls == expected_urls
-    assert url == expected_urls[0]
+    assert janis_publish_url == f'{expected_publish_url_base}/{expected_urls[0]}'

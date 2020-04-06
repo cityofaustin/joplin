@@ -10,7 +10,6 @@ from wagtail.admin.edit_handlers import FieldPanel, ObjectList, TabbedInterface,
 from wagtail.core.models import Page
 from wagtail.core.fields import RichTextField
 from flags.state import flag_enabled
-from base.models.site_settings import JanisBranchSettings
 
 
 class JanisBasePage(Page):
@@ -53,32 +52,24 @@ class JanisBasePage(Page):
         """
         This should handle coa_global and department stuff
         """
-
         # If we're global, even if we have a department, we should only exist at
         # /page_slug
         # and not at
         # /department_slug/page_slug
         if self.coa_global:
-            return ['{base_url}{page_slug}/'.format(base_url=self.janis_url_base('publish_janis_branch'),
-                                                    page_slug=self.slug)]
+            return [f'{self.slug}/']
 
         # If we're under departments
         departments = self.departments()
         if len(departments) > 0:
             return [
-                '{base_url}{department_slug}/{page_slug}/'.format(base_url=self.janis_url_base('publish_janis_branch'),
-                                                                  department_slug=department.slug, page_slug=self.slug)
-                for department in departments]
+                f'{department.slug}/{self.slug}/'
+                for department in departments
+            ]
 
         # make sure we return an empty array if we don't have any urls
         return []
 
-    def janis_url(self):
-        urls = self.janis_urls()
-        if len(urls) > 0:
-            return urls[0]
-
-        return '#'
 
     def janis_preview_url_end(self, revision=None):
         """
@@ -104,37 +95,34 @@ class JanisBasePage(Page):
             # Janis will query from its default CMS_API if a param is not provided
             return url_end + f"?CMS_API={settings.CMS_API}"
 
-    def janis_url_base(self, janis_branch):
-        """
-        returns a valid url of the base URL in janis:
-            Use hardcoded JANIS_URL for staging and prod
-            Otherwise, use configurable branch setting
-        TODO: this and url_base in site settings could probably
-        be revisited for semantics to be less confusing
-        """
-        if settings.ISSTAGING or settings.ISPRODUCTION:
-            return os.getenv("JANIS_URL")
-        else:
-            branch_settings = JanisBranchSettings.objects.first()
-            if branch_settings:
-                return branch_settings.url_base(janis_branch)
-            else:
-                # If we've made it here, we don't have a base url
-                # let's just make up a fake one
-                return "http://fake.base.url/"
 
-    # data needed to construct preview URLs for any language
+    # Returns data needed to construct preview URLs for any language.
+    # This is used both in base_page/models.py and on the frontend edit page django template.
     # [janis_preview_url_start]/[lang]/[janis_preview_url_end]
     # ex: http://localhost:3000/es/preview/information/UGFnZVJldmlzaW9uTm9kZToyMjg=
     def preview_url_data(self, revision=None):
         return {
-            "janis_preview_url_start": self.janis_url_base('preview_janis_branch'),
+            "janis_preview_url_start": self.get_parent().specific.preview_url_base(),
             "janis_preview_url_end": self.janis_preview_url_end(revision=revision),
         }
 
     def janis_preview_url(self, revision=None, lang="en"):
         data = self.preview_url_data(revision)
         return f'{data["janis_preview_url_start"]}/{lang}/{data["janis_preview_url_end"]}'
+
+
+    # Used by page_status_tag.html
+    # Choose the first janis_url path for now.
+    def janis_publish_url(self):
+        paths = self.janis_urls()
+        if len(paths) > 0:
+            first_path = paths[0]
+            parent_home_page = self.get_parent()
+            if parent_home_page:
+                return f'{parent_home_page.specific.publish_url_base()}/{first_path}'
+        # Default to returning same page as url
+        return "#"
+
 
     @property
     def status_string(self):

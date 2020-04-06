@@ -13,7 +13,7 @@ branch_overrides = {
         # "DEBUG_TOOLBAR": True,
         # "DEBUG": 1,
     },
-    "4224-resolve-dept": {
+    "4223-resolve-tc": {
         "LOAD_DATA": "",
         "V3_WIP": True,
     },
@@ -29,8 +29,8 @@ branch_overrides = {
         "LOAD_DATA": "dummy",
         "V3_WIP": True,
     },
-    "4165-streamfields": {
-        "LOAD_DATA": "",
+    "4239-home-page": {
+        "LOAD_DATA": "dummy",
         "V3_WIP": True,
     },
     "4165-service-page-tests": {

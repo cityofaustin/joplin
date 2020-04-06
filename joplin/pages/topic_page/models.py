@@ -26,7 +26,7 @@ class TopicPage(JanisBasePageWithTopicCollections):
     base_form_class = TopicPageForm
 
     publish_requirements = (
-        RelationPublishRequirement('top_pages'),
+        # RelationPublishRequirement('top_pages'),
         RelationPublishRequirement('topic_collections'),
     )
 

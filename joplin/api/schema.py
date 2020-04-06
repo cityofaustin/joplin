@@ -17,7 +17,7 @@ from wagtail.core.rich_text import expand_db_html
 from snippets.contact.models import Contact, PhoneNumber, ContactDayAndDuration
 from base.models import TranslatedImage, Theme
 
-from pages.topic_collection_page.models import TopicCollectionPage, JanisBasePageWithTopicCollections
+from pages.topic_collection_page.models import TopicCollectionPage, JanisBasePageWithTopicCollections, JanisBasePageTopicCollection
 from pages.topic_page.models import TopicPage, TopicPageTopPage, JanisBasePageWithTopics
 from pages.service_page.models import ServicePage
 from pages.information_page.models import InformationPage
@@ -250,6 +250,14 @@ class TopicNode(DjangoObjectType):
         return tc
 
 
+class JanisBasePageTopicCollectionNode(DjangoObjectType):
+    class Meta:
+        model = JanisBasePageTopicCollection
+        filter_fields = ['topic_collection']
+        fields = '__all__'
+        interfaces = [graphene.Node]
+
+
 class LocationPageNode(DjangoObjectType):
     class Meta:
         model = LocationPage
@@ -475,7 +483,7 @@ class ServicePageNode(DjangoObjectType):
         return ServicePage.get_verbose_name().lower()
 
     def resolve_janis_url(self, info):
-        return self.janis_url()
+        return self.janis_publish_url()
 
 
 class InformationPageNode(DjangoObjectType):
@@ -596,7 +604,7 @@ class GuidePageSectionPageBlock(graphene.ObjectType):
             if page:
                 break
         if page:
-            return page.janis_url()
+            return page.janis_publish_url()
         else:
             return '#'
 
@@ -838,6 +846,7 @@ class Query(graphene.ObjectType):
     all_form_containers = DjangoFilterConnectionField(FormContainerNode)
     all_location_pages = DjangoFilterConnectionField(LocationPageNode)
     all_event_pages = DjangoFilterConnectionField(EventPageNode, filterset_class=EventFilter)
+    topic_collection_topics = DjangoFilterConnectionField(JanisBasePageTopicCollectionNode)
 
     def resolve_page_revision(self, resolve_info, id=None):
         revision = graphene.Node.get_node_from_global_id(resolve_info, id)
