@@ -163,5 +163,5 @@ def test_create_information_page_with_new_contact():
     page = fixtures.new_contact()
     assert isinstance(page, InformationPage)
 
-    assert page.title == 'Information page with contact'
+    assert page.title == 'Information page with new contact'
     assert page.contact.name == 'New contact'
