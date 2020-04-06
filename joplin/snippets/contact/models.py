@@ -20,7 +20,6 @@ class Contact(ClusterableModel):
     name = models.CharField(max_length=DEFAULT_MAX_LENGTH)
     email = models.EmailField(blank=True)
     location_page = models.ForeignKey('location_page.LocationPage', verbose_name='Select a Location', related_name='+', on_delete=models.SET_NULL, null=True, blank=True)
-    hours_exceptions = models.TextField(max_length=255, blank=True)
 
     social_media = StreamField(
         [
@@ -37,57 +36,12 @@ class Contact(ClusterableModel):
         FieldPanel('name'),
         FieldPanel('email'),
         InlinePanel('phone_number', label='Phone Numbers'),
-        PageChooserPanel('location_page'),
-        InlinePanel('hours', label='Hours'),
-        FieldPanel('hours_exceptions'),
         StreamFieldPanel('social_media'),
+        PageChooserPanel('location_page'),
     ]
 
     def __str__(self):
         return self.name
-
-
-class DayAndDuration(ClusterableModel):
-    """
-    creates a model to choose day of week and hourly ranges
-    you can use this to define operating hours for a service or location
-    """
-    MONDAY = 'Monday'
-    TUESDAY = 'Tuesday'
-    WEDNESDAY = 'Wednesday'
-    THURSDAY = 'Thursday'
-    FRIDAY = 'Friday'
-    SATURDAY = 'Saturday'
-    SUNDAY = 'Sunday'
-    DAY_OF_WEEK_CHOICES = (
-        (MONDAY, 'Monday'),
-        (TUESDAY, 'Tuesday'),
-        (WEDNESDAY, 'Wednesday'),
-        (THURSDAY, 'Thursday'),
-        (FRIDAY, 'Friday'),
-        (SATURDAY, 'Saturday'),
-        (SUNDAY, 'Sunday'),
-    )
-
-    day_of_week = models.CharField(max_length=20, choices=DAY_OF_WEEK_CHOICES)
-    start_time = models.TimeField()
-    end_time = models.TimeField()
-
-    panels = [
-        FieldRowPanel(
-            children=[
-                FieldPanel('day_of_week', classname="col5"),
-                FieldPanel('start_time', classname="col3"),
-                FieldPanel('end_time', classname="col3"),
-
-            ],
-            classname="full"
-        ),
-    ]
-
-    def __str__(self):
-        return f'{self.day_of_week} {self.start_time} - {self.end_time}'
-
 
 
 class PhoneNumber(Orderable):
@@ -102,12 +56,4 @@ class PhoneNumber(Orderable):
                    widget=PhoneNumberInternationalFallbackWidget),
         FieldPanel('phone_description')
 
-    ]
-
-
-class ContactDayAndDuration(Orderable, DayAndDuration):
-    contact = ParentalKey(Contact, related_name='hours')
-
-    content_panels = [
-        SnippetChooserPanel('day_and_duration'),
     ]
