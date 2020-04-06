@@ -7,6 +7,7 @@ from pages.service_page.models import ServicePage
 from pages.factory import PageFactory
 from pytest_factoryboy import register
 from wagtail.core.models import Page
+from snippets.contact.factories import create_contact_from_importer_dictionaries
 from pages.topic_page.factories import JanisBasePageWithTopicsFactory, create_topic_page_from_importer_dictionaries
 from pages.home_page.models import HomePage
 
@@ -66,14 +67,17 @@ def create_service_page_from_importer_dictionaries(page_dictionaries, revision_i
     combined_dictionary['add_topics'] = {'topics': topic_pages}
 
     # remove topics if we have it because:
-    # * it's in english only
-    # * the factory doesn't know what to do with it
+    # * we just added it up above
     # todo: why isn't pop working?
     if 'topics' in combined_dictionary:
         del combined_dictionary['topics']
 
+    # associate/create contact
+    if len(page_dictionaries['en']['contacts']['edges']):
+        combined_dictionary['contact'] = create_contact_from_importer_dictionaries(page_dictionaries)
+
     # remove contacts if we have it because:
-    # * it might be what's wrong rn
+    # * we just added it up above
     # todo: why isn't pop working?
     if 'contacts' in combined_dictionary:
         del combined_dictionary['contacts']

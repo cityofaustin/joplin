@@ -1,18 +1,18 @@
 import os
-from pages.service_page.fixtures.helpers.create_fixture import create_fixture
-import pages.service_page.fixtures.helpers.components as components
+from pages.information_page.fixtures.helpers.create_fixture import create_fixture
+import pages.information_page.fixtures.helpers.components as components
 import snippets.contact.fixtures.helpers.components as contact_components
 
 
-# A Service page with a contact
+# An information page with a contact
 def new_contact():
     page_data = {
         "imported_revision_id": None,
         "live": False,
         "parent": components.home(),
         "coa_global": False,
-        "title": "Service page with new contact",
-        "slug": "service-page-with-new-contact",
+        "title": "Information page with new contact",
+        "slug": "information-page-with-new-contact",
         "contact": contact_components.new_contact()
     }
 
