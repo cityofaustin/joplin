@@ -14,7 +14,7 @@ from django_filters import FilterSet, OrderingFilter
 from wagtail.core.blocks import *
 from wagtail.documents.models import Document
 from wagtail.core.rich_text import expand_db_html
-from snippets.contact.models import Contact, PhoneNumber
+from snippets.contact.models import Contact, ContactPhoneNumber
 from base.models import TranslatedImage, Theme
 
 from pages.topic_collection_page.models import TopicCollectionPage, JanisBasePageWithTopicCollections, JanisBasePageTopicCollection
@@ -438,9 +438,9 @@ class ContactNode(DjangoObjectType):
         interfaces = [graphene.Node]
 
 
-class ContactPhoneNumbers(DjangoObjectType):
+class ContactPhoneNumberNode(DjangoObjectType):
     class Meta:
-        model = PhoneNumber
+        model = ContactPhoneNumber
         interfaces = [graphene.Node]
 
 
