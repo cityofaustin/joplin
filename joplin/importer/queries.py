@@ -61,7 +61,7 @@ fragments["contact"] = GraphqlParser('''
         slug
     }
 ''').substitute(
-    location=fragments["location"]
+
 )
 
 fragments["information"] = GraphqlParser('''
