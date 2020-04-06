@@ -2,6 +2,7 @@
     components.py contains elements that may be used
     interchangeably with multiple fixtures
 '''
+import os
 from snippets.contact.fixtures.helpers.create_fixture import create_fixture
 
 

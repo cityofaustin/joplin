@@ -18,6 +18,8 @@ def test_create_service_page_with_contact_from_api(remote_staging_preview_url, r
     url = f'{remote_staging_preview_url}/services/UGFnZVJldmlzaW9uTm9kZToyOA==?CMS_API={remote_pytest_api}'
     page = PageImporter(url).fetch_page_data().create_page()
     assert isinstance(page, ServicePage)
+    assert page.title == 'Service page with contact'
+    assert page.contact.name == 'Contact name'
 
 
 @pytest.mark.django_db
