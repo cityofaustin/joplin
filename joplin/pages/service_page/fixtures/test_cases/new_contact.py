@@ -4,7 +4,7 @@ import pages.service_page.fixtures.helpers.components as components
 import snippets.contact.fixtures.helpers.components as contact_components
 
 
-# A Service page with only a title
+# A Service page with a contact
 def new_contact():
     page_data = {
         "imported_revision_id": None,
