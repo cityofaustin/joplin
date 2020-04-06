@@ -4,6 +4,7 @@ from pages.topic_page.factories import TopicPageFactory, create_topic_page_from_
 from pages.information_page.factories import InformationPageFactory, create_information_page_from_importer_dictionaries
 from humps import decamelize
 from importer.page_importer import PageImporter
+import pages.information_page.fixtures as fixtures
 
 
 def page_dictionaries():
@@ -155,3 +156,12 @@ def test_create_information_page_with_contact_from_api(remote_staging_preview_ur
     assert isinstance(page, InformationPage)
     assert page.title == 'Information page with contact'
     assert page.contact.name == 'Contact name'
+
+
+@pytest.mark.django_db
+def test_create_information_page_with_new_contact():
+    page = fixtures.new_contact()
+    assert isinstance(page, InformationPage)
+
+    assert page.title == 'Information page with contact'
+    assert page.contact.name == 'New contact'

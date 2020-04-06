@@ -326,3 +326,17 @@ def test_get_dummy_service_page_with_contact_from_revision(remote_staging_previe
          'email': '',
          'social_media': [],
          'location_page': {'slug': 'location-name-en'}}}}]}
+
+
+def test_get_dummy_information_page_with_contact_from_revision(remote_staging_preview_url, remote_pytest_api):
+    preview_url = f'{remote_staging_preview_url}/information/UGFnZVJldmlzaW9uTm9kZToyNQ==?CMS_API={remote_pytest_api}'
+
+    page_dictionaries = PageImporter(preview_url).fetch_page_data().page_dictionaries
+    assert page_dictionaries['en']['title'] == 'Information page with contact'
+    assert page_dictionaries['en']['slug'] == 'information-page-with-contact'
+    assert page_dictionaries['en']['contacts'] == {'edges': [{'node': {'contact':
+        {'name': 'Contact name',
+         'phone_number': {'edges': []},
+         'email': '',
+         'social_media': [],
+         'location_page': {'slug': 'location-name-en'}}}}]}
