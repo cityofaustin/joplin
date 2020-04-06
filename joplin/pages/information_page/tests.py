@@ -12,6 +12,7 @@ def page_dictionaries():
             'title': 'information page title [en]',
             'slug': 'information-page-title-en',
             'description': 'information page description [en]',
+            'contacts': {'edges': []},
             'topics': {
                 'edges': [{
                     'node': {
