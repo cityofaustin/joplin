@@ -3,21 +3,11 @@
     interchangeably with multiple fixtures
 '''
 from pages.home_page.models import HomePage
-from snippets.contact.models import Contact
-from snippets.contact.fixtures.helpers.create_fixture import create_fixture as create_contact_fixture
 import os
 
 
 def home():
     return HomePage.objects.first()
-
-
-def new_contact():
-    contact_data = {
-        "name": "New contact",
-    }
-
-    return create_contact_fixture(contact_data, os.path.basename(__file__))
 
 
 dynamic_content = '<h2>Bulk item pickup do’s and don’ts</h2><p>Do not put bulk items in bags, boxes, or other containers. Bags will be treated as extra trash and are subject to extra trash fees.</p><p>Do not place any items under low hanging tree limbs or power lines.</p><p>Do not place items in an alley in any area in front of a vacant lot or in front of a business. Items will not be collected from these areas.</p><p>To prevent damage to your property, keep bulk items 5 feet away from your:</p><ul><li>Trash cart</li><li>Mailbox</li><li>Fences or walls</li><li>Water meter</li><li>Telephone connection box</li><li>Parked cars</li></ul>'
