@@ -19,9 +19,16 @@ def create_contact_from_importer_dictionaries(page_dictionaries):
     if contact:
         return contact
 
+    # Check if we have the associated location page
+    try:
+        location_page_slug = page_dictionaries['en']['contacts']['edges'][0]['node']['contact']['location_page']['slug']
+        location_page = LocationPage.objects.get(slug=location_page_slug)
+    except LocationPage.DoesNotExist:
+        location_page = None
+
     contact_dictionary = {
         'name': page_dictionaries['en']['contacts']['edges'][0]['node']['contact']['name'],
-        'location_page': LocationPage.objects.first()
+        'location_page': location_page
     }
 
     contact = ContactFactory.create(**contact_dictionary)

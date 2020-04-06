@@ -119,8 +119,19 @@ fragments["location"] = GraphqlParser('''
 
 fragments["contact"] = GraphqlParser('''
     name
+    phoneNumber {
+      edges {
+        node {
+          id
+          phoneDescription
+          phoneNumber
+        }
+      }
+    }
+    email
+    socialMedia
     locationPage {
-        $$$location
+        slug
     }
 ''').substitute(
     location=fragments["location"]

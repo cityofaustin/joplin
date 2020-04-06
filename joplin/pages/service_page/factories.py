@@ -67,8 +67,7 @@ def create_service_page_from_importer_dictionaries(page_dictionaries, revision_i
     combined_dictionary['add_topics'] = {'topics': topic_pages}
 
     # remove topics if we have it because:
-    # * it's in english only
-    # * the factory doesn't know what to do with it
+    # * we just added it up above
     # todo: why isn't pop working?
     if 'topics' in combined_dictionary:
         del combined_dictionary['topics']
@@ -78,7 +77,7 @@ def create_service_page_from_importer_dictionaries(page_dictionaries, revision_i
         combined_dictionary['contact'] = create_contact_from_importer_dictionaries(page_dictionaries)
 
     # remove contacts if we have it because:
-    # * it might be what's wrong rn
+    # * we just added it up above
     # todo: why isn't pop working?
     if 'contacts' in combined_dictionary:
         del combined_dictionary['contacts']
