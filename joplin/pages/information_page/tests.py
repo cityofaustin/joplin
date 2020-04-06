@@ -1,7 +1,9 @@
 import pytest
+from pages.information_page.models import InformationPage
 from pages.topic_page.factories import TopicPageFactory, create_topic_page_from_importer_dictionaries
 from pages.information_page.factories import InformationPageFactory, create_information_page_from_importer_dictionaries
 from humps import decamelize
+from importer.page_importer import PageImporter
 
 
 def page_dictionaries():
@@ -143,3 +145,12 @@ def test_import_from_page_dictionary_existing_topic():
     topics_on_page = [base_page_topic.topic for base_page_topic in page.topics.all()]
 
     assert topics_on_page == topic_pages
+
+
+@pytest.mark.django_db
+def test_create_information_page_with_contact_from_api(remote_staging_preview_url, remote_pytest_api):
+    url = f'{remote_staging_preview_url}/information/UGFnZVJldmlzaW9uTm9kZToyNQ==?CMS_API={remote_pytest_api}'
+    page = PageImporter(url).fetch_page_data().create_page()
+    assert isinstance(page, InformationPage)
+    assert page.title == 'Information page with contact'
+    assert page.contact.name == 'Contact name'
