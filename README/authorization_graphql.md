@@ -44,4 +44,6 @@ mutation TokenAuth($username: String!, $password: String!) {
 }
 ```
 
+<img src="/README/get_graphql_auth_token.png" align="middle" width="500" >
+
 Note: you must use a superuser's username and password in order to access data from resolvers that are `@superuser_required`.
