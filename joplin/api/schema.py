@@ -6,12 +6,10 @@ from graphene_django.converter import convert_django_field
 from graphene_django.debug import DjangoDebug
 from graphene_django.filter import DjangoFilterConnectionField
 from graphene.types import Scalar
-from graphene.types.json import JSONString
 from graphene.types.generic import GenericScalar
 from wagtail.core.fields import StreamField, RichTextField
 from wagtail.core.models import PageRevision
 from django_filters import FilterSet, OrderingFilter
-from wagtail.core.blocks import *
 from wagtail.documents.models import Document
 from wagtail.core.rich_text import expand_db_html
 from snippets.contact.models import Contact, ContactPhoneNumber
@@ -160,6 +158,37 @@ class StreamFieldType(Scalar):
 @convert_django_field.register(StreamField)
 def convert_stream_field(field, registry=None):
     return StreamFieldType(description=field.help_text, required=not field.null)
+
+'''
+class GuidePageSectionPageBlock(graphene.ObjectType):
+    value = GenericScalar()
+    url = graphene.String()
+    service_page = graphene.Field(ServicePageNode)
+
+    def resolve_url(self, resolve_info, *args, **kwargs):
+        page = None
+        for model in [
+            ServicePage,
+            InformationPage,
+            FormContainer,
+        ]:
+            page = self.__resolve_guide_page_section_as(model)
+            if page:
+                break
+        if page:
+            return page.janis_publish_url()
+        else:
+            return '#'
+
+    def resolve_service_page(self, info):
+        return self.__resolve_guide_page_section_as(ServicePage)
+
+    def resolve_information_page(self, info):
+        return self.__resolve_guide_page_section_as(InformationPage)
+
+    def resolve_form_container(self, info):
+        return self.__resolve_guide_page_section_as(FormContainer)
+'''
 
 
 class JanisBasePageNode(DjangoObjectType):
@@ -579,6 +608,7 @@ class GuidePageSectionPageBlock(graphene.ObjectType):
     information_page = graphene.Field(InformationPageNode)
     form_container = graphene.Field(FormContainerNode)
 
+    # probably need this
     def __resolve_guide_page_section_as(self, model):
         page = None
         try:
@@ -660,6 +690,46 @@ class GuidePageNode(DjangoObjectType):
     def resolve_page_type(self, info):
         return GuidePage.get_verbose_name().lower()
 
+
+class ContextualNavBlock(graphene.ObjectType):
+    # This uses graphene ObjectType resolvers, see:
+    # https://docs.graphene-python.org/en/latest/types/objecttypes/#resolvers
+    url = graphene.String()
+    parent = graphene.Field(JanisBasePageNode) # it needs to be either department node or topic node
+    grandparent = graphene.Field(TopicCollectionNode)
+    related_to = graphene.Field(JanisBasePageTopicCollectionNode)
+
+    def __resolve_parent_as(self, model):
+        page = None
+        try:
+            page = model.objects.get(id=self.value)
+        except ObjectDoesNotExist:
+            pass
+        return page
+
+    def resolve_url(self, info):
+        return 'url'
+
+    def resolve_parent(self, resolve_info, *args, **kwargs):
+        page = None
+        for model in [
+            TopicCollectionPage,
+            DepartmentPage,
+            TopicPage,
+        ]:
+            page = self.__resolve_parent_as(model)
+            if page:
+                break
+        if page:
+            return page
+        else:
+            return None
+
+    def resolve_grandparent(self, info):
+        return 'grandparent'
+
+    def resolve_related_to(self, info):
+        return 'related to'
 
 class PageRevisionNode(DjangoObjectType):
     as_service_page = graphene.NonNull(ServicePageNode)
