@@ -220,7 +220,7 @@ class DepartmentPageNode(DjangoObjectType):
 
     @superuser_required
     def resolve_owner(self, info):
-        return self.owner
+        return resolve_owner_handler(self, info)
 
 
 class DepartmentResolver(graphene.Interface):
@@ -543,7 +543,6 @@ class ServicePageNode(DjangoObjectType):
 
 class InformationPageNode(DjangoObjectType):
     page_type = graphene.String()
-    owner = graphene.Field(OwnerNode)
 
     class Meta:
         model = InformationPage
