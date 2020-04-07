@@ -46,16 +46,7 @@ class TopicCollectionPage(JanisBasePage):
     def janis_urls(self):
         # should publish at /theme_slug/topic_collection_slug/
         if self.theme.slug:
-            return [f'{self.theme.slug}/{self.slug}/']
-
-        return []
-
-    def janis_instances(self):
-        if self.theme.slug:
-            return [
-                {'url': f'{self.theme.slug}/{self.slug}/'}
-                # do I need to include the grandparent here? tc dont have CN but extending....?
-            ]
+            return [{'url': f'/{self.theme.slug}/{self.slug}/'}]
 
         return []
 
