@@ -94,7 +94,7 @@ class DepartmentPage(JanisBasePage):
         # check the one to one relationship of pages to department groups
         # it's the only time we should have a url for a department page
         if hasattr(self, 'department'):
-            return [f'{self.slug}/']
+            return [{'url': f'/{self.slug}/'}]
 
         return []
 

@@ -63,25 +63,12 @@ class JanisBasePage(Page):
         departments = self.departments()
         if len(departments) > 0:
             return [
-                f'{department.slug}/{self.slug}/'
+                {'url': f'/{department.slug}/{self.slug}/',
+                 'parent': department }
                 for department in departments
             ]
 
         # make sure we return an empty array if we don't have any urls
-        return []
-
-    def janis_instances(self):
-        if self.coa_global:
-            return [{'global': f'{self.slug}/'}]
-
-        departments = self.departments()
-        if len(departments) > 0:
-            return [
-                {'url': f'{department.slug}/{self.slug}/',
-                 'parent': department}
-                for department in departments
-            ]
-
         return []
 
     def janis_preview_url_end(self, revision=None):
