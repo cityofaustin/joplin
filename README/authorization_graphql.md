@@ -37,8 +37,8 @@ Slightly easier tutorial: https://www.howtographql.com/graphql-python/4-authenti
 Request a token by passing this mutation into graphql.
 
 ```
-mutation TokenAuth($username: String!, $password: String!) {
-  tokenAuth(username: $username, password: $password) {
+mutation TokenAuth($email: String!, $password: String!) {
+  tokenAuth(email: $email, password: $password) {
     token
   }
 }
