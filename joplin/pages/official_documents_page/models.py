@@ -37,7 +37,7 @@ class OfficialDocumentPage(JanisBasePageWithTopics):
     publish_requirements = (
         FieldPublishRequirement("description", langs=["en"],
                                 message="You need to write a description before publishing"),
-        RelationPublishRequirement('official_documents'),
+        RelationPublishRequirement('documents'),
         ConditionalPublishRequirement(
             RelationPublishRequirement("topics"),
             "or",
@@ -47,25 +47,21 @@ class OfficialDocumentPage(JanisBasePageWithTopics):
     )
 
     content_panels = [
-        FieldPanel('title_en', widget=countMe),
-        FieldPanel('title_es', widget=countMe),
-        FieldPanel('title_ar'),
-        FieldPanel('title_vi'),
         FieldPanel('description', widget=countMeTextArea),
         InlinePanel('topics', label='Topics'),
-        InlinePanel('official_documents', label="Documents",
+        InlinePanel('documents', label="Documents",
                     heading="Entries will be listed by document date (newest first)."),
     ]
 
 
 """
-An OfficialDocumentPageOfficialDocument is an Official Document belonging to a single OfficialDocumentPage.
-One OfficialDocumentPage can have many OfficialDocumentPageOfficialDocuments.
+An OfficialDocumentPageDocument is a Document belonging to a single OfficialDocumentPage.
+One OfficialDocumentPage can have many OfficialDocumentPageDocuments.
 """
 
 
-class OfficialDocumentPageOfficialDocument(Orderable):
-    page = ParentalKey(OfficialDocumentPage, related_name='official_documents')
+class OfficialDocumentPageDocument(Orderable):
+    page = ParentalKey(OfficialDocumentPage, related_name='documents')
     date = models.DateField(verbose_name="Document date", null=True)
     title = models.CharField(verbose_name="Document title", max_length=DEFAULT_MAX_LENGTH)
     authoring_office = models.CharField(verbose_name="Authoring office of document", max_length=DEFAULT_MAX_LENGTH)
