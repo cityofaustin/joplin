@@ -289,9 +289,9 @@ class LocationPageNode(DjangoObjectType):
         fields = '__all__'
         interfaces = [graphene.Node, DepartmentResolver]
 
-        @superuser_required
-        def resolve_owner(self, info):
-            return resolve_owner_handler(self, info)
+    @superuser_required
+    def resolve_owner(self, info):
+        return resolve_owner_handler(self, info)
 
 
 class LocationPageRelatedServices(DjangoObjectType):
