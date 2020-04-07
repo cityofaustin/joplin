@@ -1032,6 +1032,8 @@ def get_page_with_preview_data(page, session):
     return obj
 
 
+# Allow users to request JWT token for authorization-protected resolvers
+# https://django-graphql-jwt.domake.io/en/latest/quickstart.html
 class Mutation(graphene.ObjectType):
     token_auth = graphql_jwt.ObtainJSONWebToken.Field()
     verify_token = graphql_jwt.Verify.Field()
