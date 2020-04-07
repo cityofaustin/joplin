@@ -193,6 +193,7 @@ class GuidePageSectionPageBlock(graphene.ObjectType):
 
 class JanisBasePageNode(DjangoObjectType):
     janis_urls = graphene.List(graphene.String)
+    #janis_urls = graphene.List(ContextualNavBlock)
 
     class Meta:
         model = JanisBasePage
@@ -200,6 +201,23 @@ class JanisBasePageNode(DjangoObjectType):
         interfaces = [graphene.Node]
 
     def resolve_janis_urls(self, info):
+        # thing = self.specific.janis_urls()
+        # urls = []
+        # for i in self.specific.janis_urls():
+        #     try:
+        #         u = i['url']
+        #     except ObjectDoesNotExist:
+        #         pass
+        #     try:
+        #         p = i['parent']
+        #     except ObjectDoesNotExist:
+        #         pass
+        #     try:
+        #         c = i['grandparent']
+        #     except ObjectDoesNotExist:
+        #         pass
+        #     urls.append(i)
+        # return urls
         return self.specific.janis_urls()
 
 

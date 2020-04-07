@@ -72,10 +72,10 @@ class JanisBasePageWithTopics(JanisBasePage):
             for topic_page_url in base_page_topic.topic.janis_urls():
                 tu = topic_page_url
                 urls.extend([{
-                    'url': '/{topic_page_url}/{page_slug}/'.format(topic_page_url=topic_page_url['url'], page_slug=self.slug),
+                    'url': "{topic_page_url}{page_slug}".format(topic_page_url=topic_page_url['url'], page_slug=self.slug),
                     'parent': base_page_topic.topic,
                     'grandparent': topic_page_url['parent']}])
-
+                print(urls)
         return urls
 
     def departments(self):

@@ -59,8 +59,9 @@ class JanisBasePageWithTopicCollections(JanisBasePage):
 
         for base_page_topic_collection in self.topic_collections.all():
             for topic_collection_url in base_page_topic_collection.topic_collection.janis_urls():
+                tc = topic_collection_url
                 urls.append({
-                    'url': f'/{topic_collection_url}{self.slug}/',
+                    'url': f'{topic_collection_url["url"]}{self.slug}/',
                     'parent': base_page_topic_collection.topic_collection
                 })
 
