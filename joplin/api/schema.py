@@ -159,36 +159,7 @@ class StreamFieldType(Scalar):
 def convert_stream_field(field, registry=None):
     return StreamFieldType(description=field.help_text, required=not field.null)
 
-'''
-class GuidePageSectionPageBlock(graphene.ObjectType):
-    value = GenericScalar()
-    url = graphene.String()
-    service_page = graphene.Field(ServicePageNode)
-
-    def resolve_url(self, resolve_info, *args, **kwargs):
-        page = None
-        for model in [
-            ServicePage,
-            InformationPage,
-            FormContainer,
-        ]:
-            page = self.__resolve_guide_page_section_as(model)
-            if page:
-                break
-        if page:
-            return page.janis_publish_url()
-        else:
-            return '#'
-
-    def resolve_service_page(self, info):
-        return self.__resolve_guide_page_section_as(ServicePage)
-
-    def resolve_information_page(self, info):
-        return self.__resolve_guide_page_section_as(InformationPage)
-
-    def resolve_form_container(self, info):
-        return self.__resolve_guide_page_section_as(FormContainer)
-'''
+# class ContextualNavData(Scalar):
 
 
 class JanisBasePageNode(DjangoObjectType):
@@ -201,22 +172,26 @@ class JanisBasePageNode(DjangoObjectType):
         interfaces = [graphene.Node]
 
     def resolve_janis_urls(self, info):
-        # thing = self.specific.janis_urls()
-        # urls = []
-        # for i in self.specific.janis_urls():
-        #     try:
-        #         u = i['url']
-        #     except ObjectDoesNotExist:
-        #         pass
-        #     try:
-        #         p = i['parent']
-        #     except ObjectDoesNotExist:
-        #         pass
-        #     try:
-        #         c = i['grandparent']
-        #     except ObjectDoesNotExist:
-        #         pass
-        #     urls.append(i)
+        urls = []
+        for i in self.specific.janis_urls():
+            instance = {}
+            try:
+                instance['url'] = i['url']
+            except ObjectDoesNotExist:
+                pass
+            try:
+                parent_url = i['parent'].url
+                parent_title = i['parent'].title
+                instance['parent'] = {'url': parent_url, 'title': parent_title}
+            except ObjectDoesNotExist:
+                pass
+            try:
+                grandparent_url = i['grandparent'].url
+                grandparent_title = i['grandparent'].title
+                instance['grandparent'] = {'url': grandparent_url, 'title': grandparent_title}
+            except ObjectDoesNotExist:
+                pass
+            urls.extend(instance)
         # return urls
         return self.specific.janis_urls()
 
@@ -749,6 +724,7 @@ class ContextualNavBlock(graphene.ObjectType):
     def resolve_related_to(self, info):
         return 'related to'
 
+
 class PageRevisionNode(DjangoObjectType):
     as_service_page = graphene.NonNull(ServicePageNode)
     as_information_page = graphene.NonNull(InformationPageNode)
@@ -904,8 +880,6 @@ def get_page_with_preview_data(page, session):
     obj = form.save(commit=False)
 
     return obj
-
-
 
 
 class Query(graphene.ObjectType):
