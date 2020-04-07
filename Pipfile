@@ -48,6 +48,7 @@ pytest-cov = "*"
 snapshottest = "*"
 gql = "*"
 pyhumps = "*"
+django-graphql-jwt = "*"
 
 [requires]
 python_version = "3.7"
