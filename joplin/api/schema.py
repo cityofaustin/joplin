@@ -14,6 +14,9 @@ from django_filters import FilterSet, OrderingFilter
 from wagtail.core.blocks import *
 from wagtail.documents.models import Document
 from wagtail.core.rich_text import expand_db_html
+import graphql_jwt
+from graphql_jwt.decorators import superuser_required
+
 from base.models import (
     TranslatedImage, ServicePage, ServicePageContact, ServicePageTopic, InformationPage, InformationPageContact,
     InformationPageTopic, DepartmentPage, DepartmentPageContact, DepartmentPageDirector, DepartmentPageTopPage,
@@ -156,6 +159,54 @@ def convert_stream_field(field, registry=None):
     return StreamFieldType(description=field.help_text, required=not field.null)
 
 
+'''
+    Note: we do NOT want to use DjangoObjectType for the User model.
+    Otherwise owners and users will be visible on all nodes by default.
+    We want Nodes to be explicit if they want to resolve users,
+    and we want those resolvers to be wrapped in a @superuser_required decorator for authorization.
+    TODO: handle importing of department groups for non-superusers.
+'''
+class OwnerNode(graphene.ObjectType):
+    id = graphene.ID()
+    first_name = graphene.String()
+    last_name = graphene.String()
+    email = graphene.String()
+    is_superuser = graphene.String()
+
+    @superuser_required
+    def resolve_id(self, info):
+        return self.id
+
+    @superuser_required
+    def resolve_first_name(self, info):
+        return self.first_name
+
+    @superuser_required
+    def resolve_last_name(self, info):
+        return self.last_name
+
+    @superuser_required
+    def resolve_email(self, info):
+        return self.email
+
+    @superuser_required
+    def resolve_is_superuser(self, info):
+        return self.is_superuser
+
+
+# Add this method to a PageNode to allow authorized users to see page owner data.
+def resolve_owner_handler(self, info):
+    owner = self.owner
+    if owner:
+        return OwnerNode(
+            id=owner.id,
+            first_name=owner.first_name,
+            last_name=owner.last_name,
+            email=owner.email,
+            is_superuser=owner.is_superuser,
+        )
+
+
 class DepartmentPageNode(DjangoObjectType):
     page_type = graphene.String()
 
@@ -166,6 +217,10 @@ class DepartmentPageNode(DjangoObjectType):
 
     def resolve_page_type(self, info):
         return DepartmentPage.get_verbose_name().lower()
+
+    @superuser_required
+    def resolve_owner(self, info):
+        return self.owner
 
 
 class DepartmentResolver(graphene.Interface):
@@ -197,6 +252,9 @@ class TopicCollectionNode(DjangoObjectType):
         filter_fields = ['id', 'slug', 'live']
         interfaces = [graphene.Node]
 
+    @superuser_required
+    def resolve_owner(self, info):
+        return resolve_owner_handler(self, info)
 
 class TopicPageTopicCollectionNode(DjangoObjectType):
     class Meta:
@@ -210,6 +268,10 @@ class TopicNode(DjangoObjectType):
         model = TopicPage
         filter_fields = ['id', 'slug', 'live']
         interfaces = [graphene.Node]
+
+    @superuser_required
+    def resolve_owner(self, info):
+        return resolve_owner_handler(self, info)
 
 
 class LocationNode(DjangoObjectType):
@@ -226,6 +288,10 @@ class LocationPageNode(DjangoObjectType):
         filter_fields = ['id', 'slug', 'live']
         fields = '__all__'
         interfaces = [graphene.Node, DepartmentResolver]
+
+        @superuser_required
+        def resolve_owner(self, info):
+            return resolve_owner_handler(self, info)
 
 
 class LocationPageRelatedServices(DjangoObjectType):
@@ -387,6 +453,10 @@ class EventPageNode(DjangoObjectType):
 
         return repr_locations
 
+    @superuser_required
+    def resolve_owner(self, info):
+        return resolve_owner_handler(self, info)
+
 
 class EventPageFeeNode(DjangoObjectType):
     class Meta:
@@ -466,9 +536,14 @@ class ServicePageNode(DjangoObjectType):
     def resolve_janis_url(self, info):
         return self.janis_url()
 
+    @superuser_required
+    def resolve_owner(self, info):
+        return resolve_owner_handler(self, info)
+
 
 class InformationPageNode(DjangoObjectType):
     page_type = graphene.String()
+    owner = graphene.Field(OwnerNode)
 
     class Meta:
         model = InformationPage
@@ -477,6 +552,10 @@ class InformationPageNode(DjangoObjectType):
 
     def resolve_page_type(self, info):
         return InformationPage.get_verbose_name().lower()
+
+    @superuser_required
+    def resolve_owner(self, info):
+        return resolve_owner_handler(self, info)
 
 
 class FormContainerNode(DjangoObjectType):
@@ -489,6 +568,10 @@ class FormContainerNode(DjangoObjectType):
 
     def resolve_page_type(self, info):
         return FormContainer.get_verbose_name().lower()
+
+    @superuser_required
+    def resolve_owner(self, info):
+        return resolve_owner_handler(self, info)
 
 
 class OfficialDocumentFilter(FilterSet):
@@ -545,6 +628,10 @@ class OfficialDocumentPageNode(DjangoObjectType):
 
     def resolve_page_type(self, info):
         return OfficialDocumentPage.get_verbose_name().lower()
+
+    @superuser_required
+    def resolve_owner(self, info):
+        return resolve_owner_handler(self, info)
 
 
 def resolve_guide_page_section_as(model, self):
@@ -646,6 +733,10 @@ class GuidePageNode(DjangoObjectType):
 
     def resolve_page_type(self, info):
         return GuidePage.get_verbose_name().lower()
+
+    @superuser_required
+    def resolve_owner(self, info):
+        return resolve_owner_handler(self, info)
 
 
 class PageRevisionNode(DjangoObjectType):
@@ -942,6 +1033,12 @@ def get_page_with_preview_data(page, session):
     return obj
 
 
+class Mutation(graphene.ObjectType):
+    token_auth = graphql_jwt.ObtainJSONWebToken.Field()
+    verify_token = graphql_jwt.Verify.Field()
+    refresh_token = graphql_jwt.Refresh.Field()
+
+
 class Query(graphene.ObjectType):
     debug = graphene.Field(DjangoDebug, name='__debug')
 
@@ -977,4 +1074,4 @@ class Query(graphene.ObjectType):
         return revision
 
 
-schema = graphene.Schema(query=Query)
+schema = graphene.Schema(query=Query, mutation=Mutation)
