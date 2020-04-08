@@ -141,6 +141,13 @@ class EventPage(JanisBasePage):
         ),
     ]
 
+    def janis_urls(self):
+        # Should publish at event/<fullYear>/<month>/<day>/<slug>"
+        # Example: event/2020/4/10/event-1
+        if self.slug and self.date.year and self.date.month and self.date.day:
+            return [f'{self.janis_url_page_type}/{self.date.year}/{self.date.month}/{self.date.day}/{self.slug}']
+        return []
+
 
 class EventPageFee(Orderable):
     page = ParentalKey(EventPage, related_name='fees', default=None)

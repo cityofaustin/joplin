@@ -259,11 +259,20 @@ class JanisBasePageTopicCollectionNode(DjangoObjectType):
 
 
 class LocationPageNode(DjangoObjectType):
+    page_type = graphene.String()
+    janis_urls = graphene.List(graphene.String)
+
     class Meta:
         model = LocationPage
         filter_fields = ['id', 'slug', 'live']
         fields = '__all__'
         interfaces = [graphene.Node, DepartmentResolver]
+
+    def resolve_page_type(self, info):
+        return LocationPage.get_verbose_name().lower()
+
+    def resolve_janis_urls(self, info):
+        return self.janis_urls()
 
 
 class LocationPageRelatedServices(DjangoObjectType):
@@ -410,6 +419,8 @@ class EventPageLocation(graphene.ObjectType):
 
 class EventPageNode(DjangoObjectType):
     locations = graphene.List(EventPageLocation)
+    page_type = graphene.String()
+    janis_urls = graphene.List(graphene.String)
 
     class Meta:
         model = EventPage
@@ -424,6 +435,12 @@ class EventPageNode(DjangoObjectType):
             repr_locations.append(EventPageLocation(value=value, location_type=location_type))
 
         return repr_locations
+
+    def resolve_page_type(self, info):
+        return EventPage.get_verbose_name().lower()
+
+    def resolve_janis_urls(self, info):
+        return self.janis_urls()
 
 
 class EventPageFeeNode(DjangoObjectType):
