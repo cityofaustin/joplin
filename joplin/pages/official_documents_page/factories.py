@@ -127,6 +127,9 @@ def create_official_documents_page_from_importer_dictionaries(page_dictionaries,
 
 
 def create_document_from_importer_dictionary(document_dictionary):
+    for field in DocumentFactory._meta.model._meta.fields:
+        blarg = 3
+
     # Check if a document with the same filename has already been imported
     try:
         document = Document.objects.get(filename=document_dictionary['filename'])
@@ -138,6 +141,8 @@ def create_document_from_importer_dictionary(document_dictionary):
     document_dictionary = {
         'name': 'blarg',
     }
+
+    return None
 
     document = DocumentFactory.create(**document_dictionary)
     return document
