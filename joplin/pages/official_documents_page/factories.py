@@ -19,12 +19,10 @@ class OfficialDocumentPageFactory(JanisBasePageWithTopicsFactory):
 
     @factory.post_generation
     def add_official_documents_page_documents(self, create, extracted, **kwargs):
-        # TODO: add option to pass in already created topics
         if extracted:
             # A list of topics were passed in, use them
-            for add_official_documents_page_document in extracted['official_documents_page_documents']:
-                official_docs_blarg = extracted['official_documents_page_documents']
-                OfficialDocumentPageDocumentFactory.create(page=self, **official_docs_blarg)
+            for official_documents_page_document in extracted['official_documents_page_documents']:
+                OfficialDocumentPageDocumentFactory.create(page=self, **official_documents_page_document)
             return
 
 
@@ -108,21 +106,23 @@ def create_official_documents_page_from_importer_dictionaries(page_dictionaries,
         en_node = page_dictionaries['en']['official_documents']['edges'][index]['node']
         es_node = page_dictionaries['es']['official_documents']['edges'][index]['node']
 
-        en_node['document'] = create_document_from_importer_dictionary(en_node['document'])
-        es_node['document'] = create_document_from_importer_dictionary(es_node['document'])
+        combined_node = en_node
+        combined_node['title_es'] = es_node['title']
+        combined_node['authoring_office_es'] = es_node['authoring_office']
+        combined_node['summary_es'] = es_node['summary']
+        combined_node['name_es'] = es_node['name']
+        combined_node['document'] = create_document_from_importer_dictionary(en_node['document'])
+        combined_node['document_es'] = create_document_from_importer_dictionary(es_node['document'])
 
-        official_documents_page_documents.append({
-            'en': en_node,
-            'es': es_node,
-        })
+        official_documents_page_documents.append(combined_node)
     combined_dictionary['add_official_documents_page_documents'] = {'official_documents_page_documents': official_documents_page_documents}
 
-    # remove topics if we have it because:
+    # remove official_documents if we have it because:
     # * we just added it up above
+    # * it has been renamed
     # todo: why isn't pop working?
-    if 'topics' in combined_dictionary:
-        del combined_dictionary['topics']
-
+    if 'official_documents' in combined_dictionary:
+        del combined_dictionary['official_documents']
 
     page = OfficialDocumentPageFactory.create(**combined_dictionary)
     return page
