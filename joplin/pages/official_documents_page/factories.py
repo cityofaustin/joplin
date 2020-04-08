@@ -112,7 +112,10 @@ def create_official_documents_page_from_importer_dictionaries(page_dictionaries,
         combined_node['summary_es'] = es_node['summary']
         combined_node['name_es'] = es_node['name']
         combined_node['document'] = create_document_from_importer_dictionary(en_node['document'])
-        combined_node['document_es'] = create_document_from_importer_dictionary(es_node['document'])
+        # we're assuming we have different filenames for english and spanish docs,
+        # so if they're the same don't import it
+        if en_node['document']['filename'] != en_node['document']['filename']:
+            combined_node['document_es'] = create_document_from_importer_dictionary(es_node['document'])
 
         official_documents_page_documents.append(combined_node)
     combined_dictionary['add_official_documents_page_documents'] = {'official_documents_page_documents': official_documents_page_documents}
