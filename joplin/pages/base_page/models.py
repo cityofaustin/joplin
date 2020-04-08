@@ -78,14 +78,15 @@ class JanisBasePage(Page):
         # and not at
         # /department_slug/page_slug
         if self.coa_global:
-            return [{'url': f'{self.slug}/'}]
+            return [{'url': f'{self.slug}/', 'parent': None, 'grandparent': None}]
 
         # If we're under departments
         departments = self.departments()
         if len(departments) > 0:
             return [
                 {'url': f'/{department.slug}/{self.slug}/',
-                 'parent': department}
+                 'parent': department,
+                 'grandparent': None}
                 for department in departments
             ]
 

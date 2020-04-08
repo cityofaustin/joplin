@@ -174,7 +174,7 @@ class ContextualNavData(graphene.ObjectType):
 
 
 class JanisBasePageNode(DjangoObjectType):
-    janis_urls =  graphene.List(graphene.String)
+    janis_urls = graphene.List(graphene.String)
     janis_instances = graphene.List(ContextualNavData)
 
     class Meta:
@@ -188,34 +188,24 @@ class JanisBasePageNode(DjangoObjectType):
     def resolve_janis_instances(self, info, *args, **kwargs):
         urls = []
         for i in self.specific.janis_instances():
-            try:
+            if i['url']:
                 url = i['url']
-            except ObjectDoesNotExist:
+            else:
                 url = ''
-            try:
-                parent_data = i['parent']
-                title = parent_data.title
+            if i['parent']:
                 parent = ContextualNavInstance(
-                            id=parent_data.id, #wrong id
-                            title=parent_data.title,
-                            url=parent_data.url)
-            except ObjectDoesNotExist:
-                parent = ContextualNavInstance(
-                            id='',
-                            title='',
-                            url='')
-            try:
-                grandparent_data = i['grandparent']
+                    id=i['parent'].id,  # wrong id
+                    title=i['parent'].title,
+                    url=i['parent'].url)
+            else:
+                parent = None
+            if i['grandparent']:
                 grandparent = ContextualNavInstance(
-                    id=grandparent_data.id,
-                    title=grandparent_data.title,
-                    url=grandparent_data.url
-                )
-            except ObjectDoesNotExist:
-                grandparent = ContextualNavInstance(
-                    id='',
-                    title='',
-                    url='')
+                    id=i['grandparent'].id,
+                    title=i['grandparent'].title,
+                    url=i['grandparent'].url)
+            else:
+                grandparent = None
             instance = ContextualNavData(parent=parent, grandparent=grandparent, url=url)
             urls.append(instance)
         return urls

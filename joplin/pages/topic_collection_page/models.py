@@ -53,11 +53,10 @@ class TopicCollectionPage(JanisBasePage):
     def janis_instances(self):
         """
         Topic Collections do not have contextual nav on Janis
-        do I need this?
         """
         # should publish at /theme_slug/topic_collection_slug/
         if self.theme.slug:
-            return [{'url': f'/{self.theme.slug}/{self.slug}/'}]
+            return [{'url': f'/{self.theme.slug}/{self.slug}/', 'parent': None, 'grandparent': None}]
 
         return []
 
@@ -80,10 +79,12 @@ class JanisBasePageWithTopicCollections(JanisBasePage):
         instances = []
 
         for base_page_topic_collection in self.topic_collections.all():
-            for topic_collection_url in base_page_topic_collection.topic_collection.janis_urls():
+            for topic_collection_url in base_page_topic_collection.topic_collection.janis_instances():
+                tc = base_page_topic_collection.topic_collection
                 instances.append({
                     'url': f'{topic_collection_url["url"]}{self.slug}/',
-                    'parent': base_page_topic_collection.topic_collection
+                    'parent': base_page_topic_collection.topic_collection,
+                    'grandparent': None,
                 })
 
         return instances

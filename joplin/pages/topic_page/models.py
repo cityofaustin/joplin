@@ -84,7 +84,9 @@ class JanisBasePageWithTopics(JanisBasePage):
             return instances
 
         for base_page_topic in self.topics.all():
-            for topic_page_url in base_page_topic.topic.janis_urls():
+            for topic_page_url in base_page_topic.topic.janis_instances():
+                t = topic_page_url['parent']
+                p = base_page_topic.topic
                 instances.extend([{
                     'url': "{topic_page_url}{page_slug}".format(topic_page_url=topic_page_url['url'], page_slug=self.slug),
                     'parent': base_page_topic.topic,
