@@ -159,41 +159,64 @@ class StreamFieldType(Scalar):
 def convert_stream_field(field, registry=None):
     return StreamFieldType(description=field.help_text, required=not field.null)
 
-# class ContextualNavData(Scalar):
+
+class ContextualNavInstance(graphene.ObjectType):
+    id = graphene.String()
+    url = graphene.String()
+    title = graphene.String()
+
+
+class ContextualNavData(graphene.ObjectType):
+    url = graphene.String()
+    parent = graphene.Field(ContextualNavInstance)
+    grandparent = graphene.Field(ContextualNavInstance)
+    #related_to = graphene.List(JanisBasePageTopicCollectionNode)
 
 
 class JanisBasePageNode(DjangoObjectType):
-    janis_urls = graphene.List(graphene.String)
-    #janis_urls = graphene.List(ContextualNavBlock)
+    # janis_urls = graphene.List(graphene.String)
+    janis_urls = graphene.List(ContextualNavData)
 
     class Meta:
         model = JanisBasePage
         filter_fields = ['id', 'slug', 'live']
         interfaces = [graphene.Node]
 
-    def resolve_janis_urls(self, info):
+    def resolve_janis_urls(self, info, *args, **kwargs):
         urls = []
         for i in self.specific.janis_urls():
-            instance = {}
             try:
-                instance['url'] = i['url']
+                url = i['url']
             except ObjectDoesNotExist:
-                pass
+                url = ''
             try:
-                parent_url = i['parent'].url
-                parent_title = i['parent'].title
-                instance['parent'] = {'url': parent_url, 'title': parent_title}
+                parent_data = i['parent']
+                title = parent_data.title
+                parent = ContextualNavInstance(
+                            id=parent_data.id, #wrong id
+                            title=parent_data.title,
+                            url=parent_data.url)
             except ObjectDoesNotExist:
-                pass
+                parent = ContextualNavInstance(
+                            id='',
+                            title='',
+                            url='')
             try:
-                grandparent_url = i['grandparent'].url
-                grandparent_title = i['grandparent'].title
-                instance['grandparent'] = {'url': grandparent_url, 'title': grandparent_title}
+                grandparent_data = i['grandparent']
+                grandparent = ContextualNavInstance(
+                    id=grandparent_data.id,
+                    title=grandparent_data.title,
+                    url=grandparent_data.url
+                )
             except ObjectDoesNotExist:
-                pass
-            urls.extend(instance)
-        # return urls
-        return self.specific.janis_urls()
+                grandparent = ContextualNavInstance(
+                    id='',
+                    title='',
+                    url='')
+            instance = ContextualNavData(parent=parent, grandparent=grandparent, url=url)
+            urls.append(instance)
+        return urls
+        # return self.specific.janis_urls()
 
 
 class JanisBasePageWithTopicCollectionsNode(DjangoObjectType):
