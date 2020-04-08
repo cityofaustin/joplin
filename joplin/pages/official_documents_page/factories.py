@@ -29,7 +29,6 @@ class OfficialDocumentPageFactory(JanisBasePageWithTopicsFactory):
 class DocumentFactory(factory.DjangoModelFactory):
     @classmethod
     def create(cls, *args, **kwargs):
-        # todo: document file stuff here
         return super(DocumentFactory, cls).create(*args, **kwargs)
 
     class Meta:
