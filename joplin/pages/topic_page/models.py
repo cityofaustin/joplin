@@ -69,12 +69,27 @@ class JanisBasePageWithTopics(JanisBasePage):
             return urls
 
         for base_page_topic in self.topics.all():
+            urls.extend(['{topic_page_url}{page_slug}/'.format(topic_page_url=topic_page_url, page_slug=self.slug) for
+                         topic_page_url in base_page_topic.topic.janis_urls()])
+
+        return urls
+
+    def janis_instances(self):
+        # get the base urls (global/department)
+        instances = super().janis_instances()
+
+        # if we're global, skip topics
+        # todo: verify this logic -- check if we need this
+        if self.coa_global:
+            return instances
+
+        for base_page_topic in self.topics.all():
             for topic_page_url in base_page_topic.topic.janis_urls():
-                urls.extend([{
+                instances.extend([{
                     'url': "{topic_page_url}{page_slug}".format(topic_page_url=topic_page_url['url'], page_slug=self.slug),
                     'parent': base_page_topic.topic,
                     'grandparent': topic_page_url['parent']}])
-        return urls
+        return instances
 
     def departments(self):
         departments = super().departments()

@@ -46,6 +46,17 @@ class TopicCollectionPage(JanisBasePage):
     def janis_urls(self):
         # should publish at /theme_slug/topic_collection_slug/
         if self.theme.slug:
+            return [f'/{self.theme.slug}/{self.slug}/']
+
+        return []
+
+    def janis_instances(self):
+        """
+        Topic Collections do not have contextual nav on Janis
+        do I need this?
+        """
+        # should publish at /theme_slug/topic_collection_slug/
+        if self.theme.slug:
             return [{'url': f'/{self.theme.slug}/{self.slug}/'}]
 
         return []
@@ -54,18 +65,28 @@ class TopicCollectionPage(JanisBasePage):
 class JanisBasePageWithTopicCollections(JanisBasePage):
     def janis_urls(self):
         # Add the urls for each topic collection, these pages only
-        # should publish at /theme_slug/topic_collection_slug/topic_page_slug
+        # should publish at /theme_slug/topic_collection_slug/page_slug
         urls = []
 
         for base_page_topic_collection in self.topic_collections.all():
             for topic_collection_url in base_page_topic_collection.topic_collection.janis_urls():
-                tc = topic_collection_url
-                urls.append({
+                urls.append(f'{topic_collection_url}{self.slug}/')
+
+        return urls
+
+    def janis_instances(self):
+        # Add the urls for each topic collection, these pages only
+        # should publish at /theme_slug/topic_collection_slug/topic_page_slug
+        instances = []
+
+        for base_page_topic_collection in self.topic_collections.all():
+            for topic_collection_url in base_page_topic_collection.topic_collection.janis_urls():
+                instances.append({
                     'url': f'{topic_collection_url["url"]}{self.slug}/',
                     'parent': base_page_topic_collection.topic_collection
                 })
 
-        return urls
+        return instances
 
 
 class JanisBasePageTopicCollection(ClusterableModel):

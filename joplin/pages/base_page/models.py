@@ -62,9 +62,30 @@ class JanisBasePage(Page):
         # If we're under departments
         departments = self.departments()
         if len(departments) > 0:
+            return [f'/{department.slug}/{self.slug}/'
+                    for department in departments
+                    ]
+
+        # make sure we return an empty array if we don't have any urls
+        return []
+
+    def janis_instances(self):
+        """
+        This should handle coa_global and department stuff
+        """
+        # If we're global, even if we have a department, we should only exist at
+        # /page_slug
+        # and not at
+        # /department_slug/page_slug
+        if self.coa_global:
+            return [{'url': f'{self.slug}/'}]
+
+        # If we're under departments
+        departments = self.departments()
+        if len(departments) > 0:
             return [
                 {'url': f'/{department.slug}/{self.slug}/',
-                 'parent': department }
+                 'parent': department}
                 for department in departments
             ]
 

@@ -174,17 +174,20 @@ class ContextualNavData(graphene.ObjectType):
 
 
 class JanisBasePageNode(DjangoObjectType):
-    # janis_urls = graphene.List(graphene.String)
-    janis_urls = graphene.List(ContextualNavData)
+    janis_urls =  graphene.List(graphene.String)
+    janis_instances = graphene.List(ContextualNavData)
 
     class Meta:
         model = JanisBasePage
         filter_fields = ['id', 'slug', 'live']
         interfaces = [graphene.Node]
 
-    def resolve_janis_urls(self, info, *args, **kwargs):
+    def resolve_janis_urls(self, info):
+        return self.specific.janis_urls()
+
+    def resolve_janis_instances(self, info, *args, **kwargs):
         urls = []
-        for i in self.specific.janis_urls():
+        for i in self.specific.janis_instances():
             try:
                 url = i['url']
             except ObjectDoesNotExist:
@@ -216,7 +219,6 @@ class JanisBasePageNode(DjangoObjectType):
             instance = ContextualNavData(parent=parent, grandparent=grandparent, url=url)
             urls.append(instance)
         return urls
-        # return self.specific.janis_urls()
 
 
 class JanisBasePageWithTopicCollectionsNode(DjangoObjectType):
