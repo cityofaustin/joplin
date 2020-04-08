@@ -403,7 +403,7 @@ if(ISPRODUCTION or ISSTAGING or ISREVIEW):
         # All non-production apps share a staging/media folder
         AWS_LOCATION = f"review/{os.getenv('CIRCLE_BRANCH')}/static"
         AWS_IS_GZIPPED = True
-        MEDIAFILES_LOCATION = 'staging/media'
+        MEDIAFILES_LOCATION = f"review/{os.getenv('CIRCLE_BRANCH')}/media"
 
     # We now change the storage mode to S3 via Boto for default, static and dbbackup
     STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'

@@ -32,23 +32,7 @@ def create_event_page_from_importer_dictionaries(page_dictionaries, revision_id)
     # make the combined page dictionary
     combined_dictionary = page_dictionaries['en']
 
-    # todo: figure out where to move this so it isn't copypasta in service page
-    # # associate/create topic pages
-    # topic_pages = []
-    # for index in range(len(page_dictionaries['en']['topics']['edges'])):
-    #     topic_pages.append(create_topic_page_from_importer_dictionaries({
-    #         'en': page_dictionaries['en']['topics']['edges'][index]['node']['topic'],
-    #         'es': page_dictionaries['es']['topics']['edges'][index]['node']['topic'],
-    #     }, page_dictionaries['en']['topics']['edges'][index]['node']['topic']['live_revision']['id']))
-    # combined_dictionary['add_topics'] = {'topics': topic_pages}
-
-    # remove topics if we have it because:
-    # * it's in english only
-    # * the factory doesn't know what to do with it
-    # # todo: why isn't pop working?
-    # if 'topics' in combined_dictionary:
-    #     del combined_dictionary['topics']
-
+    # todo: contacts
     # remove contacts if we have it because:
     # * it might be what's wrong rn
     # todo: why isn't pop working?

@@ -10,7 +10,7 @@ from pages.topic_page.models import TopicPage, TopicPageTopPage
 from pages.service_page.models import ServicePage
 from pages.information_page.models import InformationPage
 from pages.department_page.models import DepartmentPage, DepartmentPageDirector, DepartmentPageTopPage, DepartmentPageRelatedPage
-from pages.official_documents_page.models import OfficialDocumentPage, OfficialDocumentPageOfficialDocument
+from pages.official_documents_page.models import OfficialDocumentPage, OfficialDocumentPageDocument
 from pages.guide_page.models import GuidePage
 from pages.form_container.models import FormContainer
 from pages.home_page.models import HomePage
@@ -104,8 +104,8 @@ class OfficialDocumentPageTranslationOptions(TranslationOptions):
     )
 
 
-@register(OfficialDocumentPageOfficialDocument)
-class OfficialDocumentPageOfficialDocumentTranslationOptions(TranslationOptions):
+@register(OfficialDocumentPageDocument)
+class OfficialDocumentPageDocumentTranslationOptions(TranslationOptions):
     fields = (
         'title',
         'summary',

@@ -9,36 +9,12 @@
     branch_overrides are not required for every branch.
 '''
 branch_overrides = {
-    "3218-go-fast": {
-        # "DEBUG_TOOLBAR": True,
-        # "DEBUG": 1,
-    },
-    "4223-resolve-tc": {
-        "LOAD_DATA": "",
-        "V3_WIP": True,
-    },
     "v3": {
-        "LOAD_DATA": "dummy",
+        "LOAD_DATA": "fixtures",
         "V3_WIP": True,
     },
-    "4148-add-homepage": {
-        "LOAD_DATA": "",
-        "V3_WIP": True,
-    },
-    "4047-separate-groups": {
-        "LOAD_DATA": "dummy",
-        "V3_WIP": True,
-    },
-    "4239-home-page": {
-        "LOAD_DATA": "dummy",
-        "V3_WIP": True,
-    },
-    "4165-service-page-tests": {
-        "LOAD_DATA": "dummy",
-        "V3_WIP": True,
-    },
-    "4184-event-urls": {
-        "LOAD_DATA": "dummy",
+    "4170-documents": {
+        "LOAD_DATA": "fixtures",
         "V3_WIP": True,
     }
 }

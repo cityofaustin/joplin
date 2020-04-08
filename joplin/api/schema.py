@@ -22,7 +22,7 @@ from pages.topic_page.models import TopicPage, TopicPageTopPage, JanisBasePageWi
 from pages.service_page.models import ServicePage
 from pages.information_page.models import InformationPage
 from pages.department_page.models import DepartmentPage, DepartmentPageDirector, DepartmentPageTopPage, DepartmentPageRelatedPage
-from pages.official_documents_page.models import OfficialDocumentPage, OfficialDocumentPageOfficialDocument
+from pages.official_documents_page.models import OfficialDocumentPage, OfficialDocumentPageDocument
 from pages.guide_page.models import GuidePage
 from pages.form_container.models import FormContainer
 from pages.base_page.models import JanisBasePage
@@ -529,31 +529,31 @@ class OfficialDocumentFilter(FilterSet):
     )
 
     class Meta:
-        model = OfficialDocumentPageOfficialDocument
+        model = OfficialDocumentPageDocument
         fields = ['date']
 
 
-class OfficialDocumentNodeDocument(graphene.ObjectType):
+class DocumentNodeDocument(graphene.ObjectType):
     filename = graphene.String()
     fileSize = graphene.String()
 
 
-class OfficialDocumentPageOfficialDocumentNode(DjangoObjectType):
-    document = graphene.Field(OfficialDocumentNodeDocument)
+class OfficialDocumentPageDocumentNode(DjangoObjectType):
+    document = graphene.Field(DocumentNodeDocument)
 
     class Meta:
-        model = OfficialDocumentPageOfficialDocument
+        model = OfficialDocumentPageDocument
         filter_fields = ['date']
         interfaces = [graphene.Node]
 
     def resolve_document(self, info):
-        english_doc = OfficialDocumentNodeDocument(
+        english_doc = DocumentNodeDocument(
             filename=self.document.filename,
             fileSize=self.docuemnt.file_size,
         )
         if django.utils.translation.get_language() == 'es':
             if self.document_es:
-                return OfficialDocumentNodeDocument(
+                return DocumentNodeDocument(
                     filename=self.document_es.filename,
                     fileSize=self.document_es.file_size,
                 )
@@ -566,7 +566,7 @@ class OfficialDocumentPageOfficialDocumentNode(DjangoObjectType):
 class OfficialDocumentPageNode(DjangoObjectType):
     page_type = graphene.String()
     official_documents = DjangoFilterConnectionField(
-        OfficialDocumentPageOfficialDocumentNode, filterset_class=OfficialDocumentFilter)
+        OfficialDocumentPageDocumentNode, filterset_class=OfficialDocumentFilter)
 
     class Meta:
         model = OfficialDocumentPage
