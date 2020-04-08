@@ -38,21 +38,23 @@ class OfficialDocumentPageDocumentFactory(factory.DjangoModelFactory):
         model = OfficialDocumentPageDocument
 
 
-def create_official_documents_page_document_from_importer_dictionaries(page_dictionaries):
+def create_official_documents_page_document_from_importer_dictionaries(official_documents_page_document_dictionaries, page):
     # Check if an official documents page document with the same name has already been imported
     try:
-        document = OfficialDocumentPageDocument.objects.get(name=page_dictionaries['en']['contacts']['edges'][0]['node']['contact']['name'])
-    except Document.DoesNotExist:
-        document = None
-    if document:
-        return document
+        official_documents_page_document = OfficialDocumentPageDocument.objects.get(name=official_documents_page_document_dictionaries['en']['name'])
+    except OfficialDocumentPageDocument.DoesNotExist:
+        official_documents_page_document = None
+    if official_documents_page_document:
+        return official_documents_page_document
 
-    document_dictionary = {
+    official_documents_page_document_dictionary = {
+        'page':
         'name': 'blarg',
+
     }
 
-    document = DocumentFactory.create(**document_dictionary)
-    return document
+    official_documents_page_document = OfficialDocumentPageDocumentFactory.create(**official_documents_page_document_dictionary)
+    return official_documents_page_document
 
 
 def create_official_documents_page_from_importer_dictionaries(page_dictionaries, revision_id=None):
