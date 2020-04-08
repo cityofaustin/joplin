@@ -133,7 +133,6 @@ def create_document_from_importer_dictionary(document_dictionary):
     # let's try to get it from both the staging and prod s3 buckets (since that's what janis does)
     file_name = document_dictionary['filename']
 
-    response = None
     for url in [
         f'https://joplin-austin-gov-static.s3.amazonaws.com/production/media/documents/{file_name}',
         f'https://joplin-austin-gov-static.s3.amazonaws.com/staging/media/documents/{file_name}'
@@ -155,5 +154,5 @@ def create_document_from_importer_dictionary(document_dictionary):
         return document
 
     # It has not been imported, let's do it!
-    document = DocumentFactory.create(file=ContentFile(response.content, name='lovechicken.pdf'), title=file_name)
+    document = DocumentFactory.create(file=ContentFile(response.content, name=file_name), title=file_name)
     return document
