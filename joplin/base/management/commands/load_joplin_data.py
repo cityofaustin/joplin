@@ -10,6 +10,7 @@ from django.conf import settings
 import snippets.contact.fixtures as contact_fixtures
 import pages.service_page.fixtures as service_page_fixtures
 import pages.location_page.fixtures as location_page_fixtures
+import pages.event_page.fixtures as event_page_fixtures
 
 
 class Command(BaseCommand):
@@ -61,20 +62,17 @@ class Command(BaseCommand):
             if not load_data_result:
                 LOAD_DATA = os.getenv("LOAD_DATA")
                 DATABASE_URL = os.getenv("DATABASE_URL")
-                if (LOAD_DATA == "prod"):
+                if LOAD_DATA == 'prod':
                     print("Adding prod datadump")
                     run_load_data_command('db/system-generated/prod.datadump.json')
                     DeploymentLog(operation="load_data", value="prod", completed=True).save()
-                elif (LOAD_DATA == "staging"):
-                    print("Adding staging datadump")
-                    run_load_data_command('db/system-generated/staging.datadump.json')
-                    DeploymentLog(operation="load_data", value="staging", completed=True).save()
-                elif (LOAD_DATA == "dummy"):
-                    print("Adding dummy datadump")
+                elif LOAD_DATA == 'fixtures':
+                    print("Adding fixture data")
                     contact_fixtures.load_all()
                     service_page_fixtures.load_all()
+                    event_page_fixtures.load_all()
                     location_page_fixtures.load_all()
-                    DeploymentLog(operation="load_data", value="dummy", completed=True).save()
+                    DeploymentLog(operation="load_data", value="fixtures", completed=True).save()
                 elif (LOAD_DATA == "new_datadump"):
                     print("Adding new migration test datadump")
                     run_load_data_command('db/system-generated/tmp.datadump.json')
