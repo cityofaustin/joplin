@@ -104,7 +104,6 @@ MIDDLEWARE = [
     'wagtail.contrib.redirects.middleware.RedirectMiddleware',
     'session_security.middleware.SessionSecurityMiddleware',
     'flags.middleware.FlagConditionsMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
 ]
 
 
@@ -323,14 +322,8 @@ GRAPHENE = {
     'SCHEMA': 'api.schema.schema',
     'MIDDLEWARE': [
         'graphene_django.debug.DjangoDebugMiddleware',
-        'graphql_jwt.middleware.JSONWebTokenMiddleware',
     ]
 }
-
-AUTHENTICATION_BACKENDS = [
-    'django.contrib.auth.backends.ModelBackend',
-    'graphql_jwt.backends.JSONWebTokenBackend',
-]
 
 # Assume DB default settings for LOCAL env
 DBBACKUP_STORAGE = 'django.core.files.storage.FileSystemStorage'
