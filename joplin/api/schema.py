@@ -394,9 +394,6 @@ class EventPageFeeNode(DjangoObjectType):
         interfaces = [graphene.Node]
 
 
-
-
-
 class ContactNode(DjangoObjectType):
     class Meta:
         model = Contact
@@ -506,11 +503,34 @@ class OfficialDocumentFilter(FilterSet):
         fields = ['date']
 
 
+class OfficialDocumentNodeDocument(graphene.ObjectType):
+    filename = graphene.String()
+    fileSize = graphene.String()
+
+
 class OfficialDocumentPageOfficialDocumentNode(DjangoObjectType):
+    document = graphene.Field(OfficialDocumentNodeDocument)
+
     class Meta:
         model = OfficialDocumentPageOfficialDocument
         filter_fields = ['date']
         interfaces = [graphene.Node]
+
+    def resolve_document(self, info):
+        english_doc = OfficialDocumentNodeDocument(
+            filename=self.document.filename,
+            fileSize=self.document.file_size,
+        )
+        if django.utils.translation.get_language() == 'es':
+            if self.document_es:
+                return OfficialDocumentNodeDocument(
+                    filename=self.document_es.filename,
+                    fileSize=self.document_es.file_size,
+                )
+            else:
+                return english_doc
+        else:
+            return english_doc
 
 
 class OfficialDocumentPageNode(DjangoObjectType):
