@@ -2,17 +2,57 @@ import factory
 import wagtail_factories
 from django.utils.text import slugify
 from wagtail.core.models import Collection, Page
-from pages.official_documents_page.models import OfficialDocumentPage
+from pages.official_documents_page.models import OfficialDocumentPage, OfficialDocumentPageDocument
 from pages.factory import PageFactory
 from pages.topic_page.factories import TopicPageFactory
 
 from pages.topic_page.factories import JanisBasePageWithTopicsFactory, create_topic_page_from_importer_dictionaries
 from pages.home_page.models import HomePage
+from wagtail.documents.models import Document
 
 class OfficialDocumentPageFactory(JanisBasePageWithTopicsFactory):
     class Meta:
         model = OfficialDocumentPage
 
+
+class DocumentFactory(factory.DjangoModelFactory):
+    @classmethod
+    def create(cls, *args, **kwargs):
+        # todo: document file stuff here
+        return super(DocumentFactory, cls).create(*args, **kwargs)
+
+    class Meta:
+        model = Document
+
+
+class OfficialDocumentPageDocumentFactory(factory.DjangoModelFactory):
+    page = factory.SubFactory(
+        'official_documents_page.factories.OfficialDocumentsPageFactory',
+    )
+
+    document = factory.SubFactory(
+        DocumentFactory
+    )
+
+    class Meta:
+        model = OfficialDocumentPageDocument
+
+
+def create_official_documents_page_document_from_importer_dictionaries(page_dictionaries):
+    # Check if an official documents page document with the same name has already been imported
+    try:
+        document = OfficialDocumentPageDocument.objects.get(name=page_dictionaries['en']['contacts']['edges'][0]['node']['contact']['name'])
+    except Document.DoesNotExist:
+        document = None
+    if document:
+        return document
+
+    document_dictionary = {
+        'name': 'blarg',
+    }
+
+    document = DocumentFactory.create(**document_dictionary)
+    return document
 
 
 def create_official_documents_page_from_importer_dictionaries(page_dictionaries, revision_id=None):
@@ -66,7 +106,38 @@ def create_official_documents_page_from_importer_dictionaries(page_dictionaries,
     # todo: actually get departments here
     # combined_dictionary['add_department'] = ['just a string']
 
-    # todo: get the actual docs
+    # associate/create official document page documents
+    official_documents_page_documents = []
+    for index in range(len(page_dictionaries['en']['official_documents']['edges'])):
+        official_documents_page_documents.append(create_official_documents_page_document_from_importer_dictionaries({
+            'en': page_dictionaries['en']['official_documents']['edges'][index]['node'],
+            'es': page_dictionaries['es']['official_documents']['edges'][index]['node'],
+        }))
+    combined_dictionary['add_official_documents_page_documents'] = {'official_documents_page_documents': official_documents_page_documents}
+
+    # remove topics if we have it because:
+    # * we just added it up above
+    # todo: why isn't pop working?
+    if 'topics' in combined_dictionary:
+        del combined_dictionary['topics']
+
 
     page = OfficialDocumentPageFactory.create(**combined_dictionary)
     return page
+
+
+def create_document_from_importer_dictionaries(page_dictionaries):
+    # Check if a document with the same filename has already been imported
+    try:
+        document = Document.objects.get(name=page_dictionaries['en']['contacts']['edges'][0]['node']['contact']['name'])
+    except Document.DoesNotExist:
+        document = None
+    if document:
+        return document
+
+    document_dictionary = {
+        'name': 'blarg',
+    }
+
+    document = DocumentFactory.create(**document_dictionary)
+    return document
