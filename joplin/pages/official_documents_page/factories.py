@@ -1,5 +1,6 @@
 import factory
 import requests
+import hashlib
 import wagtail_factories
 from django.utils.text import slugify
 from wagtail.core.models import Collection, Page
@@ -130,30 +131,20 @@ def create_official_documents_page_from_importer_dictionaries(page_dictionaries,
 def create_document_from_importer_dictionary(document_dictionary):
     # right now we're just going off filename, so first let's see if we can download the file
     url = 'https://joplin-austin-gov-static.s3.amazonaws.com/staging/media/documents/lovechicken.pdf'
-    r = requests.get(url)
-    # try just making a doc from it
-    document = Document(title="Love chicken")
-    document.file.save('lovechicken.pdf', ContentFile(r.content))
+    response = requests.get(url)
 
-    # todo: figure out how to make docs in wagtail
+    # wagtail calculates document hashes this way
+    # https://github.com/wagtail/wagtail/blob/081705fc7a2d9aec75da25a3593b490f3c145d2b/wagtail/documents/models.py#L115
+    file_hash = hashlib.sha1(response.content).hexdigest()
 
-    for field in DocumentFactory._meta.model._meta.fields:
-        blarg = 3
-    # todo: looks like we have a file hash, let's see how docs makes that
-
-    # Check if a document with the same filename has already been imported
+    # Check if a document with the same hash has already been imported
     try:
-        document = Document.objects.get(filename=document_dictionary['filename'])
+        document = Document.objects.get(file_hash=file_hash)
     except Document.DoesNotExist:
         document = None
     if document:
         return document
 
-    document_dictionary = {
-        'name': 'blarg',
-    }
-
-    return None
-
-    document = DocumentFactory.create(**document_dictionary)
+    # It has not been imported, let's do it!
+    document = DocumentFactory.create(file=ContentFile(response.content, name='lovechicken.pdf'))
     return document
