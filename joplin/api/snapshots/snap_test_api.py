@@ -412,6 +412,12 @@ snapshots['test_service 1'] = {
                         'id': 'U2VydmljZVBhZ2VOb2RlOjM4MQ==',
                         'title': 'Handle a parking ticket'
                     }
+                },
+                {
+                    'node': {
+                        'id': 'U2VydmljZVBhZ2VOb2RlOjM4Mg==',
+                        'title': 'Get basic services at neighborhood centers'
+                    }
                 }
             ]
         }
