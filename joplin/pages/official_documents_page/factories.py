@@ -129,6 +129,7 @@ def create_official_documents_page_from_importer_dictionaries(page_dictionaries,
 def create_document_from_importer_dictionary(document_dictionary):
     for field in DocumentFactory._meta.model._meta.fields:
         blarg = 3
+    # todo: looks like we have a file hash, let's see how docs makes that
 
     # Check if a document with the same filename has already been imported
     try:
