@@ -111,8 +111,8 @@ def create_official_documents_page_from_importer_dictionaries(page_dictionaries,
         combined_node['authoring_office_es'] = es_node['authoring_office']
         combined_node['summary_es'] = es_node['summary']
         combined_node['name_es'] = es_node['name']
-        combined_node['document'] = create_document_from_importer_dictionary(en_node['document'])
-        combined_node['document_es'] = create_document_from_importer_dictionary(es_node['document'])
+        combined_node['document'] = create_document_from_importer_dictionary(en_node['document'], en_node['title'])
+        combined_node['document_es'] = create_document_from_importer_dictionary(es_node['document'], es_node['title'])
 
         official_documents_page_documents.append(combined_node)
     combined_dictionary['add_official_documents_page_documents'] = {'official_documents_page_documents': official_documents_page_documents}
@@ -128,7 +128,7 @@ def create_official_documents_page_from_importer_dictionaries(page_dictionaries,
     return page
 
 
-def create_document_from_importer_dictionary(document_dictionary):
+def create_document_from_importer_dictionary(document_dictionary, title):
     # right now we're just going off filename, so first let's see if we can download the file
     url = 'https://joplin-austin-gov-static.s3.amazonaws.com/staging/media/documents/lovechicken.pdf'
     response = requests.get(url)
@@ -146,5 +146,5 @@ def create_document_from_importer_dictionary(document_dictionary):
         return document
 
     # It has not been imported, let's do it!
-    document = DocumentFactory.create(file=ContentFile(response.content, name='lovechicken.pdf'))
+    document = DocumentFactory.create(file=ContentFile(response.content, name='lovechicken.pdf'), title=title)
     return document
