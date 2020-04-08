@@ -10,9 +10,20 @@ from pages.topic_page.factories import JanisBasePageWithTopicsFactory, create_to
 from pages.home_page.models import HomePage
 from wagtail.documents.models import Document
 
+
 class OfficialDocumentPageFactory(JanisBasePageWithTopicsFactory):
     class Meta:
         model = OfficialDocumentPage
+
+    @factory.post_generation
+    def add_official_documents_page_documents(self, create, extracted, **kwargs):
+        # TODO: add option to pass in already created topics
+        if extracted:
+            # A list of topics were passed in, use them
+            for add_official_documents_page_document in extracted['official_documents_page_documents']:
+                official_docs_blarg = extracted['official_documents_page_documents']
+                OfficialDocumentPageDocumentFactory.create(page=self, **official_docs_blarg)
+            return
 
 
 class DocumentFactory(factory.DjangoModelFactory):
@@ -36,25 +47,6 @@ class OfficialDocumentPageDocumentFactory(factory.DjangoModelFactory):
 
     class Meta:
         model = OfficialDocumentPageDocument
-
-
-def create_official_documents_page_document_from_importer_dictionaries(official_documents_page_document_dictionaries, page):
-    # Check if an official documents page document with the same name has already been imported
-    try:
-        official_documents_page_document = OfficialDocumentPageDocument.objects.get(name=official_documents_page_document_dictionaries['en']['name'])
-    except OfficialDocumentPageDocument.DoesNotExist:
-        official_documents_page_document = None
-    if official_documents_page_document:
-        return official_documents_page_document
-
-    official_documents_page_document_dictionary = {
-        'page':
-        'name': 'blarg',
-
-    }
-
-    official_documents_page_document = OfficialDocumentPageDocumentFactory.create(**official_documents_page_document_dictionary)
-    return official_documents_page_document
 
 
 def create_official_documents_page_from_importer_dictionaries(page_dictionaries, revision_id=None):
@@ -108,13 +100,19 @@ def create_official_documents_page_from_importer_dictionaries(page_dictionaries,
     # todo: actually get departments here
     # combined_dictionary['add_department'] = ['just a string']
 
-    # associate/create official document page documents
+    # associate/create documents
     official_documents_page_documents = []
     for index in range(len(page_dictionaries['en']['official_documents']['edges'])):
-        official_documents_page_documents.append(create_official_documents_page_document_from_importer_dictionaries({
-            'en': page_dictionaries['en']['official_documents']['edges'][index]['node'],
-            'es': page_dictionaries['es']['official_documents']['edges'][index]['node'],
-        }))
+        en_node = page_dictionaries['en']['official_documents']['edges'][index]['node']
+        es_node = page_dictionaries['es']['official_documents']['edges'][index]['node']
+
+        en_node['document'] = create_document_from_importer_dictionary(en_node['document'])
+        es_node['document'] = create_document_from_importer_dictionary(es_node['document'])
+
+        official_documents_page_documents.append({
+            'en': en_node,
+            'es': es_node,
+        })
     combined_dictionary['add_official_documents_page_documents'] = {'official_documents_page_documents': official_documents_page_documents}
 
     # remove topics if we have it because:
@@ -128,10 +126,10 @@ def create_official_documents_page_from_importer_dictionaries(page_dictionaries,
     return page
 
 
-def create_document_from_importer_dictionaries(page_dictionaries):
+def create_document_from_importer_dictionary(document_dictionary):
     # Check if a document with the same filename has already been imported
     try:
-        document = Document.objects.get(name=page_dictionaries['en']['contacts']['edges'][0]['node']['contact']['name'])
+        document = Document.objects.get(filename=document_dictionary['filename'])
     except Document.DoesNotExist:
         document = None
     if document:
