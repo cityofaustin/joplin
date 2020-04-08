@@ -105,6 +105,8 @@ def create_official_documents_page_from_importer_dictionaries(page_dictionaries,
     for index in range(len(page_dictionaries['en']['official_documents']['edges'])):
         en_node = page_dictionaries['en']['official_documents']['edges'][index]['node']
         es_node = page_dictionaries['es']['official_documents']['edges'][index]['node']
+        en_filename = en_node['document']['filename']
+        es_filename = es_node['document']['filename']
 
         combined_node = en_node
         combined_node['title_es'] = es_node['title']
@@ -112,9 +114,10 @@ def create_official_documents_page_from_importer_dictionaries(page_dictionaries,
         combined_node['summary_es'] = es_node['summary']
         combined_node['name_es'] = es_node['name']
         combined_node['document'] = create_document_from_importer_dictionary(en_node['document'])
-        # we're assuming we have different filenames for english and spanish docs,
-        # so if they're the same don't import it
-        if en_node['document']['filename'] != en_node['document']['filename']:
+        # the api gives us the english doc for janis links if we don't have a spanish doc
+        # we're assuming we have different filenames for english and spanish docs
+        # so we only import the spanish doc if we have a different filename
+        if es_filename != en_filename:
             combined_node['document_es'] = create_document_from_importer_dictionary(es_node['document'])
 
         official_documents_page_documents.append(combined_node)
