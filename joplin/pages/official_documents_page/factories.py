@@ -1,4 +1,5 @@
 import factory
+import requests
 import wagtail_factories
 from django.utils.text import slugify
 from wagtail.core.models import Collection, Page
@@ -9,7 +10,7 @@ from pages.topic_page.factories import TopicPageFactory
 from pages.topic_page.factories import JanisBasePageWithTopicsFactory, create_topic_page_from_importer_dictionaries
 from pages.home_page.models import HomePage
 from wagtail.documents.models import Document
-
+from django.core.files.base import ContentFile
 
 class OfficialDocumentPageFactory(JanisBasePageWithTopicsFactory):
     class Meta:
@@ -127,6 +128,15 @@ def create_official_documents_page_from_importer_dictionaries(page_dictionaries,
 
 
 def create_document_from_importer_dictionary(document_dictionary):
+    # right now we're just going off filename, so first let's see if we can download the file
+    url = 'https://joplin-austin-gov-static.s3.amazonaws.com/staging/media/documents/lovechicken.pdf'
+    r = requests.get(url)
+    # try just making a doc from it
+    document = Document(title="Love chicken")
+    document.file.save('lovechicken.pdf', ContentFile(r.content))
+
+    # todo: figure out how to make docs in wagtail
+
     for field in DocumentFactory._meta.model._meta.fields:
         blarg = 3
     # todo: looks like we have a file hash, let's see how docs makes that
