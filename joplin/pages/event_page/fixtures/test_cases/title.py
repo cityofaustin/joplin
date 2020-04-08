@@ -12,7 +12,6 @@ def title():
         "coa_global": False,
         "title": "Event page with title",
         "slug": "Event-page-with-title",
-        "date": "2020-6-22"
     }
 
     return create_fixture(page_data, os.path.basename(__file__))
