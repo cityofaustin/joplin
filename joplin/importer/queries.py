@@ -44,9 +44,25 @@ fragments["topic"] = GraphqlParser('''
     topiccollection=fragments["topiccollection"]
 )
 
-fragments["contact"] = '''
-    id
-'''
+fragments["contact"] = GraphqlParser('''
+    name
+    phoneNumber {
+      edges {
+        node {
+          id
+          phoneDescription
+          phoneNumber
+        }
+      }
+    }
+    email
+    socialMedia
+    locationPage {
+        slug
+    }
+''').substitute(
+
+)
 
 fragments["information"] = GraphqlParser('''
     title
