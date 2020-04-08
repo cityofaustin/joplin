@@ -130,8 +130,17 @@ def create_official_documents_page_from_importer_dictionaries(page_dictionaries,
 
 def create_document_from_importer_dictionary(document_dictionary):
     # right now we're just going off filename, so first let's see if we can download the file
-    url = 'https://joplin-austin-gov-static.s3.amazonaws.com/staging/media/documents/lovechicken.pdf'
-    response = requests.get(url)
+    # let's try to get it from both the staging and prod s3 buckets (since that's what janis does)
+    file_name = document_dictionary['filename']
+
+    response = None
+    for url in [
+        f'https://joplin-austin-gov-static.s3.amazonaws.com/production/media/documents/{file_name}',
+        f'https://joplin-austin-gov-static.s3.amazonaws.com/staging/media/documents/{file_name}'
+    ]:
+        response = requests.get(url)
+        if response.status_code == 200:
+            break
 
     # wagtail calculates document hashes this way
     # https://github.com/wagtail/wagtail/blob/081705fc7a2d9aec75da25a3593b490f3c145d2b/wagtail/documents/models.py#L115
@@ -146,5 +155,5 @@ def create_document_from_importer_dictionary(document_dictionary):
         return document
 
     # It has not been imported, let's do it!
-    document = DocumentFactory.create(file=ContentFile(response.content, name='lovechicken.pdf'), title=document_dictionary['filename'])
+    document = DocumentFactory.create(file=ContentFile(response.content, name='lovechicken.pdf'), title=file_name)
     return document
