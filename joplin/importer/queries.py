@@ -155,6 +155,33 @@ fragments["official_document"] = GraphqlParser('''
     topic=fragments["topic"],
 )
 
+fragments['department'] = GraphqlParser('''
+    title
+    whatWeDo
+    mission
+    contacts {
+      edges {
+        node {
+          contact {
+            $$$contact
+          }
+        }
+      }
+    }
+    departmentDirectors {
+      edges {
+        node {
+          name
+          title
+          about
+        }
+      }
+    }
+    jobListings
+''').substitute(
+    contact=fragments["contact"],
+)
+
 fragments["hours"] = GraphqlParser('''
     mondayStartTime
     mondayEndTime
