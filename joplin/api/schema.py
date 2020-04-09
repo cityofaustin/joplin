@@ -209,6 +209,7 @@ def resolve_owner_handler(self, info):
 
 class DepartmentPageNode(DjangoObjectType):
     page_type = graphene.String()
+    owner = graphene.Field(OwnerNode)
 
     class Meta:
         model = DepartmentPage
@@ -247,6 +248,8 @@ class ThemeNode(DjangoObjectType):
 
 
 class TopicCollectionNode(DjangoObjectType):
+    owner = graphene.Field(OwnerNode)
+
     class Meta:
         model = TopicCollectionPage
         filter_fields = ['id', 'slug', 'live']
@@ -264,6 +267,8 @@ class TopicPageTopicCollectionNode(DjangoObjectType):
 
 
 class TopicNode(DjangoObjectType):
+    owner = graphene.Field(OwnerNode)
+
     class Meta:
         model = TopicPage
         filter_fields = ['id', 'slug', 'live']
@@ -283,6 +288,8 @@ class LocationNode(DjangoObjectType):
 
 
 class LocationPageNode(DjangoObjectType):
+    owner = graphene.Field(OwnerNode)
+
     class Meta:
         model = LocationPage
         filter_fields = ['id', 'slug', 'live']
@@ -438,6 +445,7 @@ class EventPageLocation(graphene.ObjectType):
 
 class EventPageNode(DjangoObjectType):
     locations = graphene.List(EventPageLocation)
+    owner = graphene.Field(OwnerNode)
 
     class Meta:
         model = EventPage
@@ -524,6 +532,7 @@ class Language(graphene.Enum):
 class ServicePageNode(DjangoObjectType):
     page_type = graphene.String()
     janis_url = graphene.String()
+    owner = graphene.Field(OwnerNode)
 
     class Meta:
         model = ServicePage
@@ -543,6 +552,7 @@ class ServicePageNode(DjangoObjectType):
 
 class InformationPageNode(DjangoObjectType):
     page_type = graphene.String()
+    owner = graphene.Field(OwnerNode)
 
     class Meta:
         model = InformationPage
@@ -559,6 +569,7 @@ class InformationPageNode(DjangoObjectType):
 
 class FormContainerNode(DjangoObjectType):
     page_type = graphene.String()
+    owner = graphene.Field(OwnerNode)
 
     class Meta:
         model = FormContainer
@@ -619,6 +630,7 @@ class OfficialDocumentPageNode(DjangoObjectType):
     page_type = graphene.String()
     official_documents = DjangoFilterConnectionField(
         OfficialDocumentPageOfficialDocumentNode, filterset_class=OfficialDocumentFilter)
+    owner = graphene.Field(OwnerNode)
 
     class Meta:
         model = OfficialDocumentPage
@@ -716,6 +728,7 @@ class GuidePageSection(graphene.ObjectType):
 class GuidePageNode(DjangoObjectType):
     sections = graphene.List(GuidePageSection)
     page_type = graphene.String()
+    owner = graphene.Field(OwnerNode)
 
     class Meta:
         model = GuidePage
