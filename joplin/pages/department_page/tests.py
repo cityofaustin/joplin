@@ -31,5 +31,5 @@ def test_department_page_with_department_group(home_page, expected_publish_url_b
     urls = page.janis_urls()
     janis_publish_url = page.janis_publish_url()
 
-    assert urls == [f'{page.slug}/']
+    assert urls == [f'/{page.slug}/']
     assert janis_publish_url == f'{expected_publish_url_base}/{page.slug}/'

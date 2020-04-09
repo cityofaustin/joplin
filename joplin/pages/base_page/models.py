@@ -57,7 +57,7 @@ class JanisBasePage(Page):
         # and not at
         # /department_slug/page_slug
         if self.coa_global:
-            return [f'{self.slug}/']
+            return [f'/{self.slug}/']
 
         # If we're under departments
         departments = self.departments()

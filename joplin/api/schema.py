@@ -185,7 +185,7 @@ class JanisBasePageNode(DjangoObjectType):
     def resolve_janis_urls(self, info):
         return self.specific.janis_urls()
 
-    def resolve_janis_instances(self, info, *args, **kwargs):
+    def resolve_janis_instances(self, info):
         urls = []
         for i in self.specific.janis_instances():
             if i['url']:
