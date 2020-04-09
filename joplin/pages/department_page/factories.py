@@ -1,15 +1,30 @@
 import factory
-from pages.department_page.models import DepartmentPage
+from pages.department_page.models import DepartmentPage, DepartmentPageDirector
 from pages.factory import PageFactory
 from snippets.contact.factories import create_contact_from_importer_dictionaries
 from pages.home_page.models import HomePage
 
 
-class DepartmentPageFactory(PageFactory):
-    mission = factory.Faker('text')
+class DepartmentPageDirectorFactory(factory.DjangoModelFactory):
+    page = factory.SubFactory(
+        'department_page.factories.DepartmentPageFactory',
+    )
 
     class Meta:
+        model = DepartmentPageDirector
+
+
+class DepartmentPageFactory(PageFactory):
+    class Meta:
         model = DepartmentPage
+
+    @factory.post_generation
+    def add_department_directors(self, create, extracted, **kwargs):
+        if extracted:
+            # A list of topics were passed in, use them
+            for director in extracted['department_directors']:
+                DepartmentPageDirectorFactory.create(page=self, **director)
+            return
 
 
 def create_department_page_from_importer_dictionaries(page_dictionaries, revision_id):
@@ -47,9 +62,21 @@ def create_department_page_from_importer_dictionaries(page_dictionaries, revisio
     if 'contacts' in combined_dictionary:
         del combined_dictionary['contacts']
 
-    #  todo: get department directors working
+    # create/associate department directors
+    department_directors = []
+    for index in range(len(page_dictionaries['en']['department_directors']['edges'])):
+        en_node = page_dictionaries['en']['department_directors']['edges'][index]['node']
+        es_node = page_dictionaries['es']['department_directors']['edges'][index]['node']
+
+        combined_node = en_node
+        combined_node['title_es'] = es_node['title']
+        combined_node['about_es'] = es_node['about']
+
+        department_directors.append(combined_node)
+    combined_dictionary['add_department_directors'] = {'department_directors': department_directors}
+
     # remove directors if we have it because:
-    # * we just added it up above todo actually add it up above
+    # * we just added it up above
     # todo: why isn't pop working?
     if 'department_directors' in combined_dictionary:
         del combined_dictionary['department_directors']
