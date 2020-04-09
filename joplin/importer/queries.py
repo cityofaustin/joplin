@@ -124,6 +124,37 @@ fragments["services"] = GraphqlParser('''
     contact=fragments["contact"],
 )
 
+fragments["official_document"] = GraphqlParser('''
+    title
+    slug
+    description
+    topics {
+      edges {
+        node {
+          topic {
+            $$$topic
+          }
+        }
+      }
+    }
+    officialDocuments {
+      edges {
+        node {
+          date
+          title
+          authoringOffice
+          summary
+          name
+          document {
+            filename
+          }
+        }
+      }
+    }
+''').substitute(
+    topic=fragments["topic"],
+)
+
 fragments["hours"] = GraphqlParser('''
     mondayStartTime
     mondayEndTime
@@ -251,17 +282,30 @@ unparsed_query_strings = {
         }
     ''',
     'location': '''
-    query getLocationPageRevision($id: ID) {
-      allPageRevisions(id: $id) {
-        edges {
-          node {
-            asLocationPage {
-              $$$location
+        query getLocationPageRevision($id: ID) {
+          allPageRevisions(id: $id) {
+            edges {
+              node {
+                asLocationPage {
+                  $$$location
+                }
+              }
             }
           }
         }
-      }
-    }
+    ''',
+    'official_document': '''
+        query getOfficialDocumentPageRevision($id: ID) {
+          allPageRevisions(id: $id) {
+            edges {
+              node {
+                asOfficialDocumentPage {
+                  $$$official_document
+                }
+              }
+            }
+          }
+        }
     ''',
 }
 
