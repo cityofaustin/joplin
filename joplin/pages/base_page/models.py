@@ -132,16 +132,17 @@ class JanisBasePage(Page):
         data = self.preview_url_data(revision)
         return f'{data["janis_preview_url_start"]}/{lang}/{data["janis_preview_url_end"]}'
 
-
-    # Used by page_status_tag.html
-    # Choose the first janis_url path for now.
     def janis_publish_url(self):
+        '''
+        Used by page_status_tag.html
+        :return: the first janis_url path for now
+        '''
         paths = self.janis_urls()
         if len(paths) > 0:
             first_path = paths[0]
             parent_home_page = self.get_parent()
             if parent_home_page:
-                return f'{parent_home_page.specific.publish_url_base()}/{first_path}'
+                return f'{parent_home_page.specific.publish_url_base()}{first_path}'
         # Default to returning same page as url
         return "#"
 
