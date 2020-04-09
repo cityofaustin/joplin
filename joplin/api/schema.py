@@ -199,7 +199,7 @@ class JanisBasePageNode(DjangoObjectType):
                 parent = ContextualNavInstance(
                     id=global_id,
                     title=i['parent'].title,
-                    url=i['parent'].url)
+                    url=i['parent'].specific.janis_urls()[0])
             else:
                 parent = None
             if i['grandparent']:
@@ -208,7 +208,7 @@ class JanisBasePageNode(DjangoObjectType):
                 grandparent = ContextualNavInstance(
                     id=global_id,
                     title=i['grandparent'].title,
-                    url=i['grandparent'].url)
+                    url=i['grandparent'].specific.janis_urls()[0])
             else:
                 grandparent = None
             instance = ContextualNavData(parent=parent, grandparent=grandparent, url=url)
