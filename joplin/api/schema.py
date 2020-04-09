@@ -194,7 +194,7 @@ class JanisBasePageNode(DjangoObjectType):
             else:
                 url = ''
             if i['parent']:
-                node = content_type_map[t.content_type.name]["node"]
+                node = content_type_map[i['parent'].content_type.name]["node"]
                 global_id = graphene.Node.to_global_id(node, i['parent'].content_type_id)
                 parent = ContextualNavInstance(
                     id=global_id,
