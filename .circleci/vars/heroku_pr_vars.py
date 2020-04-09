@@ -52,7 +52,7 @@ for v in vars_from_circleci:
 default_branch_vars = {
     "PYTHONUNBUFFERED": 1,
     "WEB_CONCURRENCY": 2,
-    "DEBUG": 0,
+    "DEBUG": 1,
     "DEBUG_TOOLBAR": False,
     "LOAD_DATA": "prod",
     "MONITOR_PERFORMANCE": False,

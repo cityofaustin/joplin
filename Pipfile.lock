@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "7d3b1edeb343f1681908028fe51abab3a391d8ba6c584c1e33ef4b874f57f7ca"
+            "sha256": "88459c194386afd4d0e5df93173283efce76d10e492d9ed2510dad7ddca0e4ff"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -264,14 +264,6 @@
             ],
             "index": "pypi",
             "version": "==4.2.4"
-        },
-        "django-graphql-jwt": {
-            "hashes": [
-                "sha256:2189f6d1a13b827d486780fa74a631a15e4f7f0235a3a87a487736b5b0dc4690",
-                "sha256:468e09b8ce67324fcba21dc33b7c1ea9d234bfc10df7cbfe9c5477be0302f933"
-            ],
-            "index": "pypi",
-            "version": "==0.3.1"
         },
         "django-modelcluster": {
             "hashes": [
@@ -732,13 +724,6 @@
             ],
             "version": "==2.6.1"
         },
-        "pyjwt": {
-            "hashes": [
-                "sha256:5c6eca3c2940464d106b99ba83b00c6add741c9becaec087fb7ccdefea71350e",
-                "sha256:8d59a976fb773f3e6a39c85636357c4f0e242707394cadadd9814f5cbaa20e96"
-            ],
-            "version": "==1.7.1"
-        },
         "pympler": {
             "hashes": [
                 "sha256:f74cd2982c5cd92ded55561191945616f2bb904a0ae5cdacdb566c6696bdb922"
@@ -943,7 +928,7 @@
                 "sha256:2f3db8b19923a873b3e5256dc9c2dedfa883e33d87c690d9c7913e1f40673cdc",
                 "sha256:87716c2d2a7121198ebcb7ce7cccf6ce5e9ba539041cfbaeecfb641dc0bf6acc"
             ],
-            "markers": "python_version >= '3.4'",
+            "markers": "python_version >= '3.5'",
             "version": "==1.25.8"
         },
         "wagtail": {
@@ -1263,7 +1248,7 @@
                 "sha256:2f3db8b19923a873b3e5256dc9c2dedfa883e33d87c690d9c7913e1f40673cdc",
                 "sha256:87716c2d2a7121198ebcb7ce7cccf6ce5e9ba539041cfbaeecfb641dc0bf6acc"
             ],
-            "markers": "python_version >= '3.4'",
+            "markers": "python_version >= '3.5'",
             "version": "==1.25.8"
         },
         "werkzeug": {
