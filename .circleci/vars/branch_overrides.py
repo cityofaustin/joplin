@@ -16,7 +16,7 @@ branch_overrides = {
     "4169-import-department-pages": {
         "LOAD_DATA": "fixtures",
         "V3_WIP": True,
-    }
+    },
     "base-content-type": {
         "LOAD_DATA": "fixtures",
         "V3_WIP": True,
