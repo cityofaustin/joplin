@@ -3,7 +3,6 @@ from wagtail.core.models import Page
 from wagtail.images.models import Image
 
 from base.models import TranslatedImage, Theme
-
 from pages.base_page.models import JanisBasePage
 from pages.topic_collection_page.models import TopicCollectionPage
 from pages.topic_page.models import TopicPage, TopicPageTopPage
@@ -14,8 +13,6 @@ from pages.official_documents_page.models import OfficialDocumentPage, OfficialD
 from pages.guide_page.models import GuidePage
 from pages.form_container.models import FormContainer
 from pages.home_page.models import HomePage
-
-
 from pages.location_page.models import LocationPage, LocationPageRelatedServices
 from pages.event_page.models import EventPage, EventPageFee
 
@@ -154,4 +151,3 @@ class LocationPageRelatedServicesTranslationOptions(TranslationOptions):
     fields = (
         'hours_exceptions',
     )
-
