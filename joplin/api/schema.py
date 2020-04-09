@@ -24,7 +24,7 @@ from pages.topic_page.models import TopicPage, TopicPageTopPage, JanisBasePageWi
 from pages.service_page.models import ServicePage
 from pages.information_page.models import InformationPage
 from pages.department_page.models import DepartmentPage, DepartmentPageDirector, DepartmentPageTopPage, DepartmentPageRelatedPage
-from pages.official_documents_page.models import OfficialDocumentPage, OfficialDocumentPageOfficialDocument
+from pages.official_documents_page.models import OfficialDocumentPage, OfficialDocumentPageDocument
 from pages.guide_page.models import GuidePage
 from pages.form_container.models import FormContainer
 from pages.base_page.models import JanisBasePage
@@ -316,15 +316,25 @@ class JanisBasePageTopicCollectionNode(DjangoObjectType):
 
 
 class LocationPageNode(DjangoObjectType):
+    page_type = graphene.String()
+    janis_urls = graphene.List(graphene.String)
+
     class Meta:
         model = LocationPage
         filter_fields = ['id', 'slug', 'live']
         fields = '__all__'
         interfaces = [graphene.Node, DepartmentResolver]
 
+
     @superuser_required
     def resolve_owner(self, info):
         return resolve_owner_handler(self, info)
+
+    def resolve_page_type(self, info):
+        return LocationPage.get_verbose_name().lower()
+
+    def resolve_janis_urls(self, info):
+        return self.janis_urls()
 
 
 class LocationPageRelatedServices(DjangoObjectType):
@@ -471,6 +481,8 @@ class EventPageLocation(graphene.ObjectType):
 
 class EventPageNode(DjangoObjectType):
     locations = graphene.List(EventPageLocation)
+    page_type = graphene.String()
+    janis_urls = graphene.List(graphene.String)
 
     class Meta:
         model = EventPage
@@ -489,6 +501,12 @@ class EventPageNode(DjangoObjectType):
     @superuser_required
     def resolve_owner(self, info):
         return resolve_owner_handler(self, info)
+
+    def resolve_page_type(self, info):
+        return EventPage.get_verbose_name().lower()
+
+    def resolve_janis_urls(self, info):
+        return self.janis_urls()
 
 
 class EventPageFeeNode(DjangoObjectType):
@@ -589,31 +607,31 @@ class OfficialDocumentFilter(FilterSet):
     )
 
     class Meta:
-        model = OfficialDocumentPageOfficialDocument
+        model = OfficialDocumentPageDocument
         fields = ['date']
 
 
-class OfficialDocumentNodeDocument(graphene.ObjectType):
+class DocumentNodeDocument(graphene.ObjectType):
     filename = graphene.String()
     fileSize = graphene.String()
 
 
-class OfficialDocumentPageOfficialDocumentNode(DjangoObjectType):
-    document = graphene.Field(OfficialDocumentNodeDocument)
+class OfficialDocumentPageDocumentNode(DjangoObjectType):
+    document = graphene.Field(DocumentNodeDocument)
 
     class Meta:
-        model = OfficialDocumentPageOfficialDocument
+        model = OfficialDocumentPageDocument
         filter_fields = ['date']
         interfaces = [graphene.Node]
 
     def resolve_document(self, info):
-        english_doc = OfficialDocumentNodeDocument(
+        english_doc = DocumentNodeDocument(
             filename=self.document.filename,
             fileSize=self.docuemnt.file_size,
         )
         if django.utils.translation.get_language() == 'es':
             if self.document_es:
-                return OfficialDocumentNodeDocument(
+                return DocumentNodeDocument(
                     filename=self.document_es.filename,
                     fileSize=self.document_es.file_size,
                 )
@@ -626,7 +644,7 @@ class OfficialDocumentPageOfficialDocumentNode(DjangoObjectType):
 class OfficialDocumentPageNode(DjangoObjectType):
     page_type = graphene.String()
     official_documents = DjangoFilterConnectionField(
-        OfficialDocumentPageOfficialDocumentNode, filterset_class=OfficialDocumentFilter)
+        OfficialDocumentPageDocumentNode, filterset_class=OfficialDocumentFilter)
 
     class Meta:
         model = OfficialDocumentPage
