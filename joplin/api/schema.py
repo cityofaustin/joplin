@@ -193,7 +193,6 @@ class JanisBasePageNode(DjangoObjectType):
             else:
                 url = ''
             if i['parent']:
-                t = i['parent']
                 node = content_type_map[t.content_type.name]["node"]
                 global_id = graphene.Node.to_global_id(node, i['parent'].content_type_id)
                 parent = ContextualNavInstance(
@@ -817,47 +816,6 @@ class GuidePageNode(DjangoObjectType):
         return resolve_owner_handler(self, info)
 
 
-class ContextualNavBlock(graphene.ObjectType):
-    # This uses graphene ObjectType resolvers, see:
-    # https://docs.graphene-python.org/en/latest/types/objecttypes/#resolvers
-    url = graphene.String()
-    parent = graphene.Field(JanisBasePageNode) # it needs to be either department node or topic node
-    grandparent = graphene.Field(TopicCollectionNode)
-    related_to = graphene.Field(JanisBasePageTopicCollectionNode)
-
-    def __resolve_parent_as(self, model):
-        page = None
-        try:
-            page = model.objects.get(id=self.value)
-        except ObjectDoesNotExist:
-            pass
-        return page
-
-    def resolve_url(self, info):
-        return 'url'
-
-    def resolve_parent(self, resolve_info, *args, **kwargs):
-        page = None
-        for model in [
-            TopicCollectionPage,
-            DepartmentPage,
-            TopicPage,
-        ]:
-            page = self.__resolve_parent_as(model)
-            if page:
-                break
-        if page:
-            return page
-        else:
-            return None
-
-    def resolve_grandparent(self, info):
-        return 'grandparent'
-
-    def resolve_related_to(self, info):
-        return 'related to'
-
-
 class PageRevisionNode(DjangoObjectType):
     as_service_page = graphene.NonNull(ServicePageNode)
     as_information_page = graphene.NonNull(InformationPageNode)
@@ -923,8 +881,6 @@ def get_page_from_content_type(self):
 
 # Get a page global_id from a page chooser node
 # Works for any content_type defined in content_type_map
-
-# todo breadcrumb
 def get_global_id_from_content_type(self):
     content_type = self.page.content_type.name
     node = content_type_map[content_type]["node"]

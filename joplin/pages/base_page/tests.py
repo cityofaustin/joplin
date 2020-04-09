@@ -69,7 +69,7 @@ def test_base_page_with_department_not_global_urls(home_page, expected_publish_u
     janis_publish_url = page.janis_publish_url()
 
     # we should get a url under every department
-    #assert urls == expected_urls
+    assert urls == expected_urls
     assert janis_publish_url == f'{expected_publish_url_base}{expected_urls[0]}'
 
 
