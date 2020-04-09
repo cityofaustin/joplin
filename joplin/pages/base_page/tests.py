@@ -144,5 +144,5 @@ def test_base_page_with_topics_with_topic_with_department_coa_global_urls(home_p
     urls = page.janis_urls()
     janis_publish_url = page.janis_publish_url()
 
-    assert urls == ['global_slug_2/']
+    assert urls == ['/global_slug_2/']
     assert janis_publish_url == f'{expected_publish_url_base}/global_slug_2/'

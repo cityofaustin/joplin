@@ -52,8 +52,8 @@ def test_topic_collection_page_with_theme_urls(home_page, expected_publish_url_b
     urls = page.janis_urls()
     janis_publish_url = page.janis_publish_url()
 
-    assert urls == ['/theme_slug/topic_collection_slug/']
-    assert janis_publish_url == f'{expected_publish_url_base}/theme_slug/topic_collection_slug/'
+    assert urls == ['theme_slug/topic_collection_slug/']
+    assert janis_publish_url == f'{expected_publish_url_base}theme_slug/topic_collection_slug/'
 
 
 # If we don't have a topic collection
