@@ -179,7 +179,8 @@ class JanisBasePageNode(DjangoObjectType):
         return self.content_type
 
     def resolve_short_description(self, info):
-        return self.specific.short_description
+        if hasattr(self.specific, "short_description"):
+            return self.specific.short_description
 
 
 class JanisBasePageWithTopicCollectionsNode(DjangoObjectType):
