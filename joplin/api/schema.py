@@ -193,15 +193,20 @@ class JanisBasePageNode(DjangoObjectType):
             else:
                 url = ''
             if i['parent']:
+                t = i['parent']
+                node = content_type_map[t.content_type.name]["node"]
+                global_id = graphene.Node.to_global_id(node, i['parent'].content_type_id)
                 parent = ContextualNavInstance(
-                    id=i['parent'].id,  # wrong id
+                    id=global_id,
                     title=i['parent'].title,
                     url=i['parent'].url)
             else:
                 parent = None
             if i['grandparent']:
+                node = content_type_map[i['grandparent'].content_type.name]["node"]
+                global_id = graphene.Node.to_global_id(node, i['grandparent'].content_type_id)
                 grandparent = ContextualNavInstance(
-                    id=i['grandparent'].id,
+                    id=global_id,
                     title=i['grandparent'].title,
                     url=i['grandparent'].url)
             else:
@@ -823,7 +828,7 @@ def get_page_from_content_type(self):
 # Get a page global_id from a page chooser node
 # Works for any content_type defined in content_type_map
 
-
+# todo breadcrumb
 def get_global_id_from_content_type(self):
     content_type = self.page.content_type.name
     node = content_type_map[content_type]["node"]
