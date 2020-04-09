@@ -33,7 +33,7 @@ else
   DOCKER_TAG_1="cityofaustin/joplin-app:pr-${CIRCLE_BRANCH}-${SHA}"
   DOCKER_TAG_2="cityofaustin/joplin-app:pr-${CIRCLE_BRANCH}-latest"
 fi
-DOCKER_TAG_HEROKU=https://registry.heroku.com/$APPNAME/web
+DOCKER_TAG_HEROKU=registry.heroku.com/$APPNAME/web
 
 ########################################
 # Declare Functions
