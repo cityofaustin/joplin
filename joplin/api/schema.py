@@ -170,7 +170,8 @@ class ContextualNavData(graphene.ObjectType):
     url = graphene.String()
     parent = graphene.Field(ContextualNavInstance)
     grandparent = graphene.Field(ContextualNavInstance)
-    #related_to = graphene.List(JanisBasePageTopicCollectionNode)
+    # TODO: determine if this is possible in a later issue
+    # related_to = graphene.List(JanisBasePageTopicCollectionNode)
 
 
 class JanisBasePageNode(DjangoObjectType):
@@ -186,7 +187,7 @@ class JanisBasePageNode(DjangoObjectType):
         return self.specific.janis_urls()
 
     def resolve_janis_instances(self, info):
-        urls = []
+        instances = []
         for i in self.specific.janis_instances():
             if i['url']:
                 url = i['url']
@@ -211,8 +212,8 @@ class JanisBasePageNode(DjangoObjectType):
             else:
                 grandparent = None
             instance = ContextualNavData(parent=parent, grandparent=grandparent, url=url)
-            urls.append(instance)
-        return urls
+            instances.append(instance)
+        return instances
 
 
 class JanisBasePageWithTopicCollectionsNode(DjangoObjectType):
@@ -595,7 +596,7 @@ class Language(graphene.Enum):
 
 class ServicePageNode(DjangoObjectType):
     page_type = graphene.String()
-    janis_url = graphene.String()
+    janis_url = graphene.List(graphene.String)
     owner = graphene.Field(OwnerNode)
 
     class Meta:
