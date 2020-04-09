@@ -46,6 +46,7 @@ coverage = "*"
 django-coverage-plugin = "*"
 pytest-cov = "*"
 snapshottest = "*"
+django-graphql-jwt = "*"
 
 [requires]
 python_version = "3.7"
