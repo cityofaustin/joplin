@@ -728,7 +728,6 @@ class GuidePageSectionPageBlock(graphene.ObjectType):
     information_page = graphene.Field(InformationPageNode)
     form_container = graphene.Field(FormContainerNode)
 
-    # probably need this
     def __resolve_guide_page_section_as(self, model):
         page = None
         try:
