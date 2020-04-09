@@ -23,9 +23,10 @@ from pages.official_documents_page.models import OfficialDocumentPage
 from pages.official_documents_page.factories import OfficialDocumentPageFactory
 from pages.department_page.models import DepartmentPage
 from pages.department_page.factories import DepartmentPageFactory
+from pages.event_page.models import EventPage
+from pages.event_page.factories import EventPageFactory
 
-
-def create_contact(contact_data):
+def create_contact_from_importer(contact_data):
     # Check if a contact with the same name has already been imported
     try:
         contact = Contact.objects.get(name=contact_data['name'])
@@ -51,7 +52,7 @@ def create_contact(contact_data):
     return contact
 
 
-def create_theme(theme_dictionaries):
+def create_theme_from_importer(theme_dictionaries):
     # todo: use something other than slug here
     # todo: add imported id to themes
     try:
@@ -69,7 +70,7 @@ def create_theme(theme_dictionaries):
     return ThemeFactory.create(**combined_dictionary)
 
 
-def create_document(document_dictionary):
+def create_document_from_importer(document_dictionary):
     # right now we're just going off filename, so first let's see if we can download the file
     # let's try to get it from both the staging and prod s3 buckets (since that's what janis does)
     file_name = document_dictionary['filename']
@@ -99,7 +100,7 @@ def create_document(document_dictionary):
     return document
 
 
-def create_page(page_type, page_dictionaries, revision_id):
+def create_page_from_importer(page_type, page_dictionaries, revision_id=None):
     page_type_map = {
         "information": {
             "model": InformationPage,
@@ -129,6 +130,10 @@ def create_page(page_type, page_dictionaries, revision_id):
             "model": DepartmentPage,
             "factory": DepartmentPageFactory,
         },
+        "event": {
+            "model": EventPage,
+            "factory": EventPageFactory,
+        }
     }
     model = page_type_map[page_type]["model"]
     factory = page_type_map[page_type]["factory"]
@@ -167,7 +172,7 @@ def create_page(page_type, page_dictionaries, revision_id):
                 'es': page_dictionaries['es']['topics']['edges'][index]['node']['topic'],
             }
             revision_id = page_dictionaries['en']['topics']['edges'][index]['node']['topic']['live_revision']['id']
-            topic_page = create_page(
+            topic_page = create_page_from_importer(
                 'topics',
                 topic_page_dictionaries,
                 revision_id
@@ -190,7 +195,7 @@ def create_page(page_type, page_dictionaries, revision_id):
                 'es': page_dictionaries['es']['topiccollections']['edges'][index]['node']['topiccollection'],
             }
             revision_id = page_dictionaries['en']['topiccollections']['edges'][index]['node']['topiccollection']['live_revision']['id']
-            topic_collection_page = create_page(
+            topic_collection_page = create_page_from_importer(
                 'topiccollection',
                 topic_collection_page_dictionaries,
                 revision_id
@@ -203,7 +208,7 @@ def create_page(page_type, page_dictionaries, revision_id):
     # Only applies to TopicCollectionPages
     # todo: not hardcode langs in here
     if 'theme' in combined_dictionary:
-        combined_dictionary['theme'] = create_theme({
+        combined_dictionary['theme'] = create_theme_from_importer({
             'en': page_dictionaries['en']['theme'],
             'es': page_dictionaries['es']['theme']
         })
@@ -227,7 +232,7 @@ def create_page(page_type, page_dictionaries, revision_id):
     # associate/create contact
     if 'contacts' in combined_dictionary:
         if len(page_dictionaries['en']['contacts']['edges']):
-            combined_dictionary['contact'] = create_contact(
+            combined_dictionary['contact'] = create_contact_from_importer(
                 page_dictionaries['en']['contacts']['edges'][0]['node']['contact']
             )
         del combined_dictionary['contacts']
@@ -279,12 +284,12 @@ def create_page(page_type, page_dictionaries, revision_id):
             combined_node['authoring_office_es'] = es_node['authoring_office']
             combined_node['summary_es'] = es_node['summary']
             combined_node['name_es'] = es_node['name']
-            combined_node['document'] = create_document(en_node['document'])
+            combined_node['document'] = create_document_from_importer(en_node['document'])
             # the api gives us the english doc for janis links if we don't have a spanish doc
             # we're assuming we have different filenames for english and spanish docs
             # so we only import the spanish doc if we have a different filename
             if es_filename != en_filename:
-                combined_node['document_es'] = create_document(es_node['document'])
+                combined_node['document_es'] = create_document_from_importer(es_node['document'])
 
             official_documents_page_documents.append(combined_node)
         combined_dictionary['add_official_documents_page_documents'] = {'official_documents_page_documents': official_documents_page_documents}
@@ -302,8 +307,8 @@ def create_page(page_type, page_dictionaries, revision_id):
 
     # Set home as parent
     '''
-        HomePage.objects.first() must be retrieved here at the end of create_page(), rather than the beginning.
-        Why? Because our HomePage model might have changed during the course of create_page() if other pages
+        HomePage.objects.first() must be retrieved here at the end of create_page_from_importer(), rather than the beginning.
+        Why? Because our HomePage model might have changed during the course of create_page_from_importer() if other pages
         were added (like topics).
         If our 'parent' is an instance of an outdated HomePage, then there will be wagtail path conflicts for your page.
     '''

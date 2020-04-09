@@ -7,7 +7,7 @@ from django.core.exceptions import ValidationError
 from humps import decamelize
 
 from importer.queries import queries
-import importer.creators as creators
+from importer.create_from_importer import create_page_from_importer
 
 # TODO: this could be retrieved programmatically from the netlify API for PR apps
 ENDPOINTS = {
@@ -35,7 +35,7 @@ def change_keys(obj, convert):
 
 class PageImporter:
     def create_page(self):
-        return creators.create_page(self.page_type, self.page_dictionaries, self.revision_id)
+        return create_page_from_importer(self.page_type, self.page_dictionaries, self.revision_id)
 
 
     def __clean_page_data(self, page_dictionary_from_revision):
