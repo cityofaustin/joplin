@@ -156,6 +156,7 @@ fragments["official_document"] = GraphqlParser('''
 )
 
 fragments['department'] = GraphqlParser('''
+    slug
     title
     whatWeDo
     mission
@@ -334,6 +335,19 @@ unparsed_query_strings = {
           }
         }
     ''',
+    'department': '''
+    query getDepartmentPageRevision($id: ID) {
+      allPageRevisions(id: $id) {
+        edges {
+          node {
+            asDepartmentPage {
+              $$$department
+            }
+          }
+        }
+      }
+    }
+''',
 }
 
 query_strings = {

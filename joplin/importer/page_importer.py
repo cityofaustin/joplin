@@ -13,6 +13,7 @@ from pages.information_page.factories import create_information_page_from_import
 from pages.service_page.factories import create_service_page_from_importer_dictionaries
 from pages.location_page.factories import create_location_page_from_importer_dictionaries
 from pages.official_documents_page.factories import create_official_documents_page_from_importer_dictionaries
+from pages.department_page.factories import create_department_page_from_importer_dictionaries
 
 # TODO: this could be retrieved programmatically from the netlify API for PR apps
 ENDPOINTS = {
@@ -30,6 +31,7 @@ class PageImporter:
             'services': create_service_page_from_importer_dictionaries,
             'location': create_location_page_from_importer_dictionaries,
             'official_document': create_official_documents_page_from_importer_dictionaries,
+            'department': create_department_page_from_importer_dictionaries
         }
 
         page = page_creators[self.page_type](self.page_dictionaries, self.revision_id)
