@@ -155,6 +155,34 @@ fragments["official_document"] = GraphqlParser('''
     topic=fragments["topic"],
 )
 
+fragments['department'] = GraphqlParser('''
+    slug
+    title
+    whatWeDo
+    mission
+    contacts {
+      edges {
+        node {
+          contact {
+            $$$contact
+          }
+        }
+      }
+    }
+    departmentDirectors {
+      edges {
+        node {
+          name
+          title
+          about
+        }
+      }
+    }
+    jobListings
+''').substitute(
+    contact=fragments["contact"],
+)
+
 fragments["hours"] = GraphqlParser('''
     mondayStartTime
     mondayEndTime
@@ -307,6 +335,19 @@ unparsed_query_strings = {
           }
         }
     ''',
+    'department': '''
+    query getDepartmentPageRevision($id: ID) {
+      allPageRevisions(id: $id) {
+        edges {
+          node {
+            asDepartmentPage {
+              $$$department
+            }
+          }
+        }
+      }
+    }
+''',
 }
 
 query_strings = {

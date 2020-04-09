@@ -1,4 +1,6 @@
 from pages.department_page.factories import DepartmentPageFactory
+from pages.department_page.models import DepartmentPage
+from importer.page_importer import PageImporter
 from groups.factories import DepartmentFactory
 import pytest
 
@@ -33,3 +35,10 @@ def test_department_page_with_department_group(home_page, expected_publish_url_b
 
     assert urls == [f'/{page.slug}/']
     assert janis_publish_url == f'{expected_publish_url_base}/{page.slug}/'
+
+
+@pytest.mark.django_db
+def test_create_department_page_from_api(remote_staging_preview_url, remote_pytest_api):
+    url = f'{remote_staging_preview_url}/department/UGFnZVJldmlzaW9uTm9kZTo0MQ==?CMS_API={remote_pytest_api}'
+    page = PageImporter(url).fetch_page_data().create_page()
+    assert isinstance(page, DepartmentPage)

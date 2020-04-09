@@ -21,7 +21,7 @@ from publish_preflight.requirements import FieldPublishRequirement, RelationPubl
 from pages.topic_page.models import JanisBasePageWithTopics
 
 """
-This is a page that displays a list of Official Documents (model: umentPageOfficialDocument).
+This is a page that displays a list of Official Documents (model: DocumentPageOfficialDocument).
 This page can be assigned to multiple topics or departments.
 The Documents will be displayed in date descending order (newest first by the "date" field).
 Eventually the OfficialDocumentPageOfficialDocument should be replaced by a model using Wagtail Documents
