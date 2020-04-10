@@ -7,13 +7,7 @@ from django.core.exceptions import ValidationError
 from humps import decamelize
 
 from importer.queries import queries
-from pages.topic_collection_page.factories import create_topic_collection_page_from_importer_dictionaries
-from pages.topic_page.factories import create_topic_page_from_importer_dictionaries
-from pages.information_page.factories import create_information_page_from_importer_dictionaries
-from pages.service_page.factories import create_service_page_from_importer_dictionaries
-from pages.location_page.factories import create_location_page_from_importer_dictionaries
-from pages.official_documents_page.factories import create_official_documents_page_from_importer_dictionaries
-from pages.department_page.factories import create_department_page_from_importer_dictionaries
+from importer.create_from_importer import create_page_from_importer
 
 # TODO: this could be retrieved programmatically from the netlify API for PR apps
 ENDPOINTS = {
@@ -22,21 +16,40 @@ ENDPOINTS = {
 }
 
 
+def change_keys(obj, convert):
+    """
+    Recursively goes through the dictionary obj and replaces keys with the convert function.
+    """
+    if isinstance(obj, (str, int, float)):
+        return obj
+    if isinstance(obj, dict):
+        new = obj.__class__()
+        for k, v in obj.items():
+            new[convert(k)] = change_keys(v, convert)
+    elif isinstance(obj, (list, set, tuple)):
+        new = obj.__class__(change_keys(v, convert) for v in obj)
+    else:
+        return obj
+    return new
+
+
 class PageImporter:
     def create_page(self):
-        page_creators = {
-            'topiccollection': create_topic_collection_page_from_importer_dictionaries,
-            'topic': create_topic_page_from_importer_dictionaries,
-            'information': create_information_page_from_importer_dictionaries,
-            'services': create_service_page_from_importer_dictionaries,
-            'location': create_location_page_from_importer_dictionaries,
-            'official_document': create_official_documents_page_from_importer_dictionaries,
-            'department': create_department_page_from_importer_dictionaries
-        }
+        return create_page_from_importer(self.page_type, self.page_dictionaries, self.revision_id)
 
-        page = page_creators[self.page_type](self.page_dictionaries, self.revision_id)
 
-        return page
+    def __clean_page_data(self, page_dictionary_from_revision):
+        # set the deCamelCased page dictionary
+        cleaned_page_dictionary = decamelize(page_dictionary_from_revision)
+
+        if self.page_type == "location":
+            # Undo some of the changes caused by decamelize
+            # time2 and bus2 needs to be bus_2 and time_2
+            def fix_nums(k): return k.translate(str.maketrans({'1': '_1', '2': '_2', '3': '_3'}))
+            cleaned_page_dictionary = change_keys(cleaned_page_dictionary, fix_nums)
+
+        return cleaned_page_dictionary
+
 
     def fetch_page_data(self):
         # todo: don't just hardcode lang here
@@ -59,11 +72,11 @@ class PageImporter:
             # this gets us into the 'as____Page' stuff
             page_dictionary_from_revision = next(iter(revision_node.values()))
 
-            # set the deCamelCased page dictionary for this lang
-            self.page_dictionaries[lang] = decamelize(page_dictionary_from_revision)
+            self.page_dictionaries[lang] = self.__clean_page_data(page_dictionary_from_revision)
 
         # return ourselves for method chaining
         return self
+
 
     def __init__(self, url):
         # get a urllib.parse result to play with

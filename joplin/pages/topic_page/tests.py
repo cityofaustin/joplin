@@ -1,10 +1,13 @@
 import pytest
+from humps import decamelize
 
 # Try importing using dummy data in a page_dictionary
-from pages.topic_collection_page.factories import ThemeFactory, TopicCollectionPageFactory, \
-    create_topic_collection_page_from_importer_dictionaries
-from pages.topic_page.factories import TopicPageFactory, create_topic_page_from_importer_dictionaries
-from humps import decamelize
+from pages.topic_collection_page.factories import ThemeFactory, TopicCollectionPageFactory
+from pages.topic_page.factories import TopicPageFactory
+
+from importer.create_from_importer import create_page_from_importer
+create_topic_page_from_importer_dictionaries = lambda page_dictionaries, revision_id=None: create_page_from_importer('topics', page_dictionaries, revision_id)
+create_topic_collection_page_from_importer_dictionaries = lambda page_dictionaries, revision_id=None: create_page_from_importer('topiccollection', page_dictionaries, revision_id)
 
 
 def page_dictionaries():
