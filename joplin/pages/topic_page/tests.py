@@ -6,6 +6,8 @@ from pages.topic_collection_page.factories import ThemeFactory, TopicCollectionP
 from pages.topic_page.factories import TopicPageFactory
 
 from importer.create_from_importer import create_page_from_importer
+import pages.topic_page.fixtures as fixtures
+from pages.topic_page.models import TopicPage
 create_topic_page_from_importer_dictionaries = lambda page_dictionaries, revision_id=None: create_page_from_importer('topics', page_dictionaries, revision_id)
 create_topic_collection_page_from_importer_dictionaries = lambda page_dictionaries, revision_id=None: create_page_from_importer('topiccollection', page_dictionaries, revision_id)
 
@@ -117,3 +119,9 @@ def test_import_from_page_dictionary_existing_topic_collections():
     topic_collections_on_page = [base_page_topic_collection.topic_collection for base_page_topic_collection in page.topic_collections.all()]
 
     assert topic_collections_on_page == topic_collection_pages
+
+
+@pytest.mark.django_db
+def test_kitchen_sink():
+    page = fixtures.kitchen_sink()
+    assert isinstance(page, TopicPage)

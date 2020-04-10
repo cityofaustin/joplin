@@ -61,3 +61,9 @@ def test_create_service_page_with_new_contact():
 
     assert page.title == 'Service page with new contact'
     assert page.contact.name == 'New contact'
+
+
+@pytest.mark.django_db
+def test_kitchen_sink():
+    page = fixtures.kitchen_sink()
+    assert isinstance(page, ServicePage)
