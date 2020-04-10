@@ -17,7 +17,7 @@ branch_overrides = {
         "LOAD_DATA": "fixtures",
         "V3_WIP": True,
     },
-    "fixtures-for-janis": {
+    "official-docs-fixture": {
         "LOAD_DATA": "fixtures",
         "V3_WIP": True,
     }
