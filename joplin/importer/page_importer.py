@@ -56,7 +56,10 @@ class PageImporter:
         for lang in ['en', 'es']:
             sample_transport = RequestsHTTPTransport(
                 url=self.joplin_api_endpoint,
-                headers={'Accept-Language': lang},
+                headers={
+                    'Accept-Language': lang,
+                    'Authorization': f'JWT {self.jwt_token}',
+                },
                 verify=True
             )
 
@@ -78,7 +81,7 @@ class PageImporter:
         return self
 
 
-    def __init__(self, url):
+    def __init__(self, url, jwt_token):
         # get a urllib.parse result to play with
         parse_result = urlparse(url)
 
@@ -102,5 +105,7 @@ class PageImporter:
             self.language = path.parts[1]
             self.page_type = path.parts[3]
             self.revision_id = path.parts[4]
+
+        self.jwt_token = jwt_token
 
         self.page_dictionaries = {}
