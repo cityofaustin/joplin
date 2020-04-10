@@ -12,6 +12,7 @@ import snippets.theme.fixtures as theme_fixtures
 import pages.topic_collection_page.fixtures as topic_collection_page_fixtures
 import pages.topic_page.fixtures as topic_page_fixtures
 import pages.service_page.fixtures as service_page_fixtures
+import pages.official_documents_page.fixtures as official_documents_page_fixtures
 import pages.location_page.fixtures as location_page_fixtures
 import pages.event_page.fixtures as event_page_fixtures
 
@@ -76,6 +77,7 @@ class Command(BaseCommand):
                     topic_collection_page_fixtures.load_all()
                     topic_page_fixtures.load_all()
                     service_page_fixtures.load_all()
+                    official_documents_page_fixtures.load_all()
                     event_page_fixtures.load_all()
                     location_page_fixtures.load_all()
                     DeploymentLog(operation="load_data", value="fixtures", completed=True).save()
