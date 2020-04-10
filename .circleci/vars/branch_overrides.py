@@ -24,5 +24,9 @@ branch_overrides = {
     "base-content-type": {
         "LOAD_DATA": "fixtures",
         "V3_WIP": True,
+    },
+    "test-pr-build": {
+        "LOAD_DATA": "fixtures",
+        "V3_WIP": True,
     }
 }
