@@ -9,6 +9,7 @@ from django.conf import settings
 
 import snippets.contact.fixtures as contact_fixtures
 import snippets.theme.fixtures as theme_fixtures
+import pages.topic_collection_page.fixtures as topic_collection_page_fixtures
 import pages.service_page.fixtures as service_page_fixtures
 import pages.location_page.fixtures as location_page_fixtures
 import pages.event_page.fixtures as event_page_fixtures
@@ -71,6 +72,7 @@ class Command(BaseCommand):
                     print("Adding fixture data")
                     contact_fixtures.load_all()
                     theme_fixtures.load_all()
+                    topic_collection_page_fixtures.load_all()
                     service_page_fixtures.load_all()
                     event_page_fixtures.load_all()
                     location_page_fixtures.load_all()
