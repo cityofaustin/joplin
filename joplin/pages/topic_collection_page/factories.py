@@ -40,7 +40,7 @@ class JanisBasePageWithTopicCollectionsFactory(JanisBasePageFactory):
     def add_topic_collections(self, create, extracted, **kwargs):
         if extracted:
             # A list of topic collections were passed in, use them
-            for topic_collection in extracted:
+            for topic_collection in extracted['topic_collections']:
                 # todo: check to see if we already have the basepagetopiccollection objects made
                 JanisBasePageTopicCollectionFactory.create(page=self, topic_collection=topic_collection)
             return

@@ -1,6 +1,7 @@
 import os
 from pages.service_page.fixtures.helpers.create_fixture import create_fixture
 import pages.service_page.fixtures.helpers.components as components
+from pages.topic_page.fixtures.test_cases import kitchen_sink as kitchen_sink_topic
 
 
 # A "kitchen sink" service page
@@ -14,7 +15,7 @@ def kitchen_sink():
         "title_es": "Kitchen sink service page [es]",
         "slug": "kitchen-sink-service-page",
         "add_topics": {
-            "topics": []
+            "topics": [kitchen_sink_topic]
         },
         "short_description": "Kitchen sink service page short description [en]",
         "dynamic_content": components.dynamic_content,
