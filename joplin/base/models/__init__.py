@@ -9,7 +9,7 @@ from wagtail.admin.edit_handlers import PageChooserPanel
 from .translated_image import TranslatedImage
 from .constants import WYSIWYG_GENERAL, DEFAULT_MAX_LENGTH, SHORT_DESCRIPTION_LENGTH
 
-from .theme import Theme
+from snippets.theme.models import Theme
 from pages.topic_collection_page.models import TopicCollectionPage
 from pages.home_page.models import HomePage
 from .widgets import countMe, countMeTextArea

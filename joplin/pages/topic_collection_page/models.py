@@ -11,6 +11,7 @@ from pages.base_page.models import JanisBasePage
 from base.models.translated_image import TranslatedImage
 from base.models.widgets import countMe, countMeTextArea
 from publish_preflight.requirements import FieldPublishRequirement
+from snippets.theme.models import Theme
 
 
 class TopicCollectionPage(JanisBasePage):
@@ -19,7 +20,7 @@ class TopicCollectionPage(JanisBasePage):
     description = models.TextField(blank=True)
 
     theme = models.ForeignKey(
-        'base.Theme',
+        Theme,
         on_delete=models.PROTECT,
         related_name='topic_collection_pages',
         null=True, blank=True,
