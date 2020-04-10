@@ -21,7 +21,7 @@ class TopicCollectionPage(JanisBasePage):
 
     theme = models.ForeignKey(
         Theme,
-        on_delete=models.PROTECT,
+        on_delete=models.SET_NULL,
         related_name='topic_collection_pages',
         null=True, blank=True,
     )
