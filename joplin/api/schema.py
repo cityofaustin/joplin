@@ -678,7 +678,7 @@ class OfficialDocumentPageDocumentNode(DjangoObjectType):
     def resolve_document(self, info):
         english_doc = DocumentNodeDocument(
             filename=self.document.filename,
-            fileSize=self.docuemnt.file_size,
+            fileSize=self.document.file_size,
         )
         if django.utils.translation.get_language() == 'es':
             if self.document_es:
