@@ -15,6 +15,7 @@ import pages.service_page.fixtures as service_page_fixtures
 import pages.official_documents_page.fixtures as official_documents_page_fixtures
 import pages.location_page.fixtures as location_page_fixtures
 import pages.event_page.fixtures as event_page_fixtures
+import pages.department_page.fixtures as department_page_fixtures
 
 
 class Command(BaseCommand):
@@ -80,6 +81,7 @@ class Command(BaseCommand):
                     official_documents_page_fixtures.load_all()
                     event_page_fixtures.load_all()
                     location_page_fixtures.load_all()
+                    department_page_fixtures.load_all()
                     DeploymentLog(operation="load_data", value="fixtures", completed=True).save()
                 elif (LOAD_DATA == "new_datadump"):
                     print("Adding new migration test datadump")
