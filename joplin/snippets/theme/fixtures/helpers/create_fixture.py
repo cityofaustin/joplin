@@ -10,7 +10,7 @@ def create_fixture(theme_data, fixture_name):
         theme = None
     if theme:
         print(f"Skipping theme fixture: {fixture_name}")
-        return None
+        return theme
 
     theme = ThemeFactory.create(**theme_data)
     print(f"Built theme fixture: {fixture_name}")

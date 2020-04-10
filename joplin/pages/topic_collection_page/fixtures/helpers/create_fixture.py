@@ -10,7 +10,7 @@ def create_fixture(page_data, fixture_name):
         page = None
     if page:
         print(f"Skipping topic collection page fixture: {fixture_name}")
-        return None
+        return page
 
     page = TopicCollectionPageFactory.create(**page_data)
     print(f"Built topic collection page fixture: {fixture_name}")
