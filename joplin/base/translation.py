@@ -2,7 +2,8 @@ from wagtail_modeltranslation.translation import register, TranslationOptions
 from wagtail.core.models import Page
 from wagtail.images.models import Image
 
-from base.models import TranslatedImage, Theme
+from base.models import TranslatedImage
+from snippets.theme.models import Theme
 from pages.base_page.models import JanisBasePage
 from pages.topic_collection_page.models import TopicCollectionPage
 from pages.topic_page.models import TopicPage, TopicPageTopPage

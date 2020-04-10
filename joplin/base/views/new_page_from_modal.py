@@ -1,18 +1,11 @@
-from django.shortcuts import get_object_or_404, redirect, render
 from django.http import HttpResponse
-from wagtail.core.models import Page, UserPagePermissionsProxy, GroupPagePermission
-from django.core.exceptions import PermissionDenied, ValidationError
-from wagtail.admin.views import pages
-from wagtail.admin import messages
-from django.utils.translation import ugettext as _
-from django.urls import reverse
-from django.conf import settings
-from base.models import Theme
+from wagtail.core.models import UserPagePermissionsProxy, GroupPagePermission
+from django.core.exceptions import PermissionDenied
+from snippets.theme.models import Theme
 from pages.service_page.models import ServicePage
 from pages.information_page.models import InformationPage
 from pages.topic_page.models import TopicPage
 from pages.topic_collection_page.models import TopicCollectionPage
-from pages.topic_collection_page.factories import create_topic_collection_page_from_importer_dictionaries
 from pages.department_page.models import DepartmentPage
 from pages.official_documents_page.models import OfficialDocumentPage
 from pages.guide_page.models import GuidePage
@@ -22,7 +15,6 @@ from pages.event_page.models import EventPage
 from pages.home_page.models import HomePage
 from groups.models import Department
 from importer.page_importer import PageImporter
-from django.contrib.contenttypes.models import ContentType
 import json
 
 

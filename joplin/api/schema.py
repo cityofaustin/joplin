@@ -6,19 +6,18 @@ from graphene_django.converter import convert_django_field
 from graphene_django.debug import DjangoDebug
 from graphene_django.filter import DjangoFilterConnectionField
 from graphene.types import Scalar
-from graphene.types.json import JSONString
 from graphene.types.generic import GenericScalar
 from wagtail.core.fields import StreamField, RichTextField
 from wagtail.core.models import PageRevision
 from django_filters import FilterSet, OrderingFilter
-from wagtail.core.blocks import *
 from wagtail.documents.models import Document
 from wagtail.core.rich_text import expand_db_html
 import graphql_jwt
 from graphql_jwt.decorators import superuser_required
 
 from snippets.contact.models import Contact, ContactPhoneNumber
-from base.models import TranslatedImage, Theme
+from snippets.theme.models import Theme
+from base.models import TranslatedImage
 from pages.topic_collection_page.models import TopicCollectionPage, JanisBasePageWithTopicCollections, JanisBasePageTopicCollection
 from pages.topic_page.models import TopicPage, TopicPageTopPage, JanisBasePageWithTopics
 from pages.service_page.models import ServicePage
@@ -162,8 +161,23 @@ def convert_stream_field(field, registry=None):
     return StreamFieldType(description=field.help_text, required=not field.null)
 
 
+class ContextualNavInstance(graphene.ObjectType):
+    id = graphene.String()
+    url = graphene.String()
+    title = graphene.String()
+
+
+class ContextualNavData(graphene.ObjectType):
+    url = graphene.String()
+    parent = graphene.Field(ContextualNavInstance)
+    grandparent = graphene.Field(ContextualNavInstance)
+    # TODO: determine if this is possible in a later issue
+    # related_to = graphene.List(JanisBasePageTopicCollectionNode)
+
+
 class JanisBasePageNode(DjangoObjectType):
     janis_urls = graphene.List(graphene.String)
+    janis_instances = graphene.List(ContextualNavData)
 
     class Meta:
         model = JanisBasePage
@@ -172,6 +186,35 @@ class JanisBasePageNode(DjangoObjectType):
 
     def resolve_janis_urls(self, info):
         return self.specific.janis_urls()
+
+    def resolve_janis_instances(self, info):
+        instances = []
+        for i in self.specific.janis_instances():
+            if i['url']:
+                url = i['url']
+            else:
+                url = ''
+            if i['parent']:
+                node = content_type_map[i['parent'].content_type.name]["node"]
+                global_id = graphene.Node.to_global_id(node, i['parent'].content_type_id)
+                parent = ContextualNavInstance(
+                    id=global_id,
+                    title=i['parent'].title,
+                    url=i['parent'].specific.janis_urls()[0])
+            else:
+                parent = None
+            if i['grandparent']:
+                node = content_type_map[i['grandparent'].content_type.name]["node"]
+                global_id = graphene.Node.to_global_id(node, i['grandparent'].content_type_id)
+                grandparent = ContextualNavInstance(
+                    id=global_id,
+                    title=i['grandparent'].title,
+                    url=i['grandparent'].specific.janis_urls()[0])
+            else:
+                grandparent = None
+            instance = ContextualNavData(parent=parent, grandparent=grandparent, url=url)
+            instances.append(instance)
+        return instances
 
 
 class JanisBasePageWithTopicCollectionsNode(DjangoObjectType):
@@ -554,7 +597,7 @@ class Language(graphene.Enum):
 
 class ServicePageNode(DjangoObjectType):
     page_type = graphene.String()
-    janis_url = graphene.String()
+    janis_url = graphene.List(graphene.String)
     owner = graphene.Field(OwnerNode)
 
     class Meta:
@@ -566,7 +609,7 @@ class ServicePageNode(DjangoObjectType):
         return ServicePage.get_verbose_name().lower()
 
     def resolve_janis_url(self, info):
-        return self.janis_publish_url()
+        return self.janis_urls()
 
     @superuser_required
     def resolve_owner(self, info):
@@ -839,8 +882,6 @@ def get_page_from_content_type(self):
 
 # Get a page global_id from a page chooser node
 # Works for any content_type defined in content_type_map
-
-
 def get_global_id_from_content_type(self):
     content_type = self.page.content_type.name
     node = content_type_map[content_type]["node"]

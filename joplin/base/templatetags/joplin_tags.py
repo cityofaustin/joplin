@@ -4,7 +4,7 @@ import graphene
 import os
 import json
 
-from base.models import Theme
+from snippets.theme.models import Theme
 from pages.topic_page.models import TopicPage
 from groups.models import Department
 from wagtail.core import hooks

@@ -8,6 +8,9 @@ from django.db import connection
 from django.conf import settings
 
 import snippets.contact.fixtures as contact_fixtures
+import snippets.theme.fixtures as theme_fixtures
+import pages.topic_collection_page.fixtures as topic_collection_page_fixtures
+import pages.topic_page.fixtures as topic_page_fixtures
 import pages.service_page.fixtures as service_page_fixtures
 import pages.location_page.fixtures as location_page_fixtures
 import pages.event_page.fixtures as event_page_fixtures
@@ -69,6 +72,9 @@ class Command(BaseCommand):
                 elif LOAD_DATA == 'fixtures':
                     print("Adding fixture data")
                     contact_fixtures.load_all()
+                    theme_fixtures.load_all()
+                    topic_collection_page_fixtures.load_all()
+                    topic_page_fixtures.load_all()
                     service_page_fixtures.load_all()
                     event_page_fixtures.load_all()
                     location_page_fixtures.load_all()
@@ -114,11 +120,11 @@ class Command(BaseCommand):
             #         and not settings.V3_WIP
             #     )
             # )
-            load_fixture(
-                "set_themes",
-                'db/fixtures/themes.json',
-                (os.getenv("DEPLOYMENT_MODE") == "LOCAL")
-            )
+            # load_fixture(
+            #     "set_themes",
+            #     'db/fixtures/themes.json',
+            #     (os.getenv("DEPLOYMENT_MODE") == "LOCAL")
+            # )
 
         finally:
             stdout.close()

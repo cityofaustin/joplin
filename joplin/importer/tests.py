@@ -263,51 +263,51 @@ def test_get_dummy_location_page_from_revision(remote_staging_preview_url, remot
     assert page_dictionaries['en']['phone_number'] == '+15128675309'
     assert page_dictionaries['en']['phone_description'] == 'Jenny'
     assert page_dictionaries['en']['email'] == 'tommy@tut.one'
-    assert page_dictionaries['en']['nearest_bus1'] == 1
-    assert page_dictionaries['en']['nearest_bus2'] == 2
-    assert page_dictionaries['en']['nearest_bus3'] == 3
+    assert page_dictionaries['en']['nearest_bus_1'] == 1
+    assert page_dictionaries['en']['nearest_bus_2'] == 2
+    assert page_dictionaries['en']['nearest_bus_3'] == 3
     assert page_dictionaries['en']['physical_location_photo'] is None
     assert page_dictionaries['en']['related_services'] == {'edges': [{'node': {
         'related_service': {'title': 'Service page with contact'}, 'hours_same_as_location': False,
-        'monday_start_time': '12:00:00', 'monday_end_time': '17:00:00', 'monday_start_time2': None,
-        'monday_end_time2': None, 'tuesday_start_time': '12:00:00', 'tuesday_end_time': '17:00:00',
-        'tuesday_start_time2': None, 'tuesday_end_time2': None, 'wednesday_start_time': '12:00:00',
-        'wednesday_end_time': '17:00:00', 'wednesday_start_time2': None,
-        'wednesday_end_time2': None, 'thursday_start_time': '12:00:00',
-        'thursday_end_time': '17:00:00', 'thursday_start_time2': None, 'thursday_end_time2': None,
-        'friday_start_time': '12:00:00', 'friday_end_time': '17:00:00', 'friday_start_time2': None,
-        'friday_end_time2': None, 'saturday_start_time': None, 'saturday_end_time': None,
-        'saturday_start_time2': None, 'saturday_end_time2': None, 'sunday_start_time': None,
-        'sunday_end_time': None, 'sunday_start_time2': None, 'sunday_end_time2': None,
+        'monday_start_time': '12:00:00', 'monday_end_time': '17:00:00', 'monday_start_time_2': None,
+        'monday_end_time_2': None, 'tuesday_start_time': '12:00:00', 'tuesday_end_time': '17:00:00',
+        'tuesday_start_time_2': None, 'tuesday_end_time_2': None, 'wednesday_start_time': '12:00:00',
+        'wednesday_end_time': '17:00:00', 'wednesday_start_time_2': None,
+        'wednesday_end_time_2': None, 'thursday_start_time': '12:00:00',
+        'thursday_end_time': '17:00:00', 'thursday_start_time_2': None, 'thursday_end_time_2': None,
+        'friday_start_time': '12:00:00', 'friday_end_time': '17:00:00', 'friday_start_time_2': None,
+        'friday_end_time_2': None, 'saturday_start_time': None, 'saturday_end_time': None,
+        'saturday_start_time_2': None, 'saturday_end_time_2': None, 'sunday_start_time': None,
+        'sunday_end_time': None, 'sunday_start_time_2': None, 'sunday_end_time_2': None,
         'hours_exceptions': ''}}]}
     assert page_dictionaries['en']['monday_start_time'] == '00:00:00'
     assert page_dictionaries['en']['monday_end_time'] == '01:00:00'
-    assert page_dictionaries['en']['monday_start_time2'] == '02:00:00'
-    assert page_dictionaries['en']['monday_end_time2'] == '03:00:00'
+    assert page_dictionaries['en']['monday_start_time_2'] == '02:00:00'
+    assert page_dictionaries['en']['monday_end_time_2'] == '03:00:00'
     assert page_dictionaries['en']['tuesday_start_time'] == '04:00:00'
     assert page_dictionaries['en']['tuesday_end_time'] == '05:00:00'
-    assert page_dictionaries['en']['tuesday_start_time2'] == '06:00:00'
-    assert page_dictionaries['en']['tuesday_end_time2'] == '07:00:00'
+    assert page_dictionaries['en']['tuesday_start_time_2'] == '06:00:00'
+    assert page_dictionaries['en']['tuesday_end_time_2'] == '07:00:00'
     assert page_dictionaries['en']['wednesday_start_time'] == '08:00:00'
     assert page_dictionaries['en']['wednesday_end_time'] == '09:00:00'
-    assert page_dictionaries['en']['wednesday_start_time2'] == '10:00:00'
-    assert page_dictionaries['en']['wednesday_end_time2'] == '11:00:00'
+    assert page_dictionaries['en']['wednesday_start_time_2'] == '10:00:00'
+    assert page_dictionaries['en']['wednesday_end_time_2'] == '11:00:00'
     assert page_dictionaries['en']['thursday_start_time'] == '12:00:00'
     assert page_dictionaries['en']['thursday_end_time'] == '13:00:00'
-    assert page_dictionaries['en']['thursday_start_time2'] == '14:00:00'
-    assert page_dictionaries['en']['thursday_end_time2'] == '15:00:00'
+    assert page_dictionaries['en']['thursday_start_time_2'] == '14:00:00'
+    assert page_dictionaries['en']['thursday_end_time_2'] == '15:00:00'
     assert page_dictionaries['en']['friday_start_time'] == '16:00:00'
     assert page_dictionaries['en']['friday_end_time'] == '17:00:00'
-    assert page_dictionaries['en']['friday_start_time2'] == '18:00:00'
-    assert page_dictionaries['en']['friday_end_time2'] == '19:00:00'
+    assert page_dictionaries['en']['friday_start_time_2'] == '18:00:00'
+    assert page_dictionaries['en']['friday_end_time_2'] == '19:00:00'
     assert page_dictionaries['en']['saturday_start_time'] == '20:00:00'
     assert page_dictionaries['en']['saturday_end_time'] == '21:00:00'
-    assert page_dictionaries['en']['saturday_start_time2'] == '22:00:00'
-    assert page_dictionaries['en']['saturday_end_time2'] == '23:00:00'
+    assert page_dictionaries['en']['saturday_start_time_2'] == '22:00:00'
+    assert page_dictionaries['en']['saturday_end_time_2'] == '23:00:00'
     assert page_dictionaries['en']['sunday_start_time'] is None
     assert page_dictionaries['en']['sunday_end_time'] is None
-    assert page_dictionaries['en']['sunday_start_time2'] is None
-    assert page_dictionaries['en']['sunday_end_time2'] is None
+    assert page_dictionaries['en']['sunday_start_time_2'] is None
+    assert page_dictionaries['en']['sunday_end_time_2'] is None
     assert page_dictionaries['en']['hours_exceptions'] == 'exceptions to hours'
 
     assert page_dictionaries['en']['slug'] == 'location-name-en'

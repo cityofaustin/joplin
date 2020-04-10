@@ -3,7 +3,7 @@ from django.db import models
 from wagtail.snippets.models import register_snippet
 from modelcluster.models import ClusterableModel
 
-from .constants import DEFAULT_MAX_LENGTH
+from base.models.constants import DEFAULT_MAX_LENGTH
 
 
 @register_snippet

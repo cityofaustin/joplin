@@ -1,7 +1,7 @@
 from wagtail.core.models import Page
 
 from users.models import User
-from base.models import HomePage
+from pages.home_page.models import HomePage
 from pages.information_page.models import InformationPage
 from pages.topic_page.models import TopicPage
 from pages.topic_collection_page.models import TopicCollectionPage

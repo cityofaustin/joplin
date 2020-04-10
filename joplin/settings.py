@@ -102,6 +102,7 @@ INSTALLED_APPS = [
     'pages.topic_page',
     'pages.home_page',
     'snippets.contact',
+    'snippets.theme'
 
 ]
 
