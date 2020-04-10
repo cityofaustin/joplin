@@ -49,7 +49,5 @@ def test_event_page_with_no_urls(home_page, expected_publish_url_base):
     urls = page.janis_urls()
     janis_publish_url = page.janis_publish_url()
 
-    expected_urls = []
-
-    assert urls == expected_urls
-    assert janis_publish_url == f'{expected_publish_url_base}{expected_urls[0]}'
+    assert urls == []
+    assert janis_publish_url == '#'
