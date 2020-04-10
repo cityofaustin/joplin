@@ -180,7 +180,7 @@ class JanisBasePageNode(DjangoObjectType):
     janis_instances = graphene.List(ContextualNavData)
 
     page_type = graphene.String()
-    short_description = graphene.String()
+    description = graphene.String()
 
     class Meta:
         model = JanisBasePage
@@ -193,9 +193,11 @@ class JanisBasePageNode(DjangoObjectType):
     def resolve_page_type(self, info):
         return self.content_type
 
-    def resolve_short_description(self, info):
+    def resolve_description(self, info):
         if hasattr(self.specific, "short_description"):
             return self.specific.short_description
+        elif hasattr(self.specific, "mission"):
+            return self.specific.mission
 
     def resolve_janis_instances(self, info):
         instances = []
