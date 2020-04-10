@@ -1,7 +1,7 @@
 import pytest
 
 from snippets.theme.models import Theme
-import snippets.contact.fixtures as fixtures
+import snippets.theme.fixtures as fixtures
 
 
 @pytest.mark.django_db

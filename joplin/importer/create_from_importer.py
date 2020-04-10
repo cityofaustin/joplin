@@ -201,7 +201,7 @@ def create_page_from_importer(page_type, page_dictionaries, revision_id=None):
                 revision_id
             )
             topic_collection_pages.append(topic_collection_page)
-        combined_dictionary['add_topic_collections'] = topic_collection_pages
+        combined_dictionary['add_topic_collections'] = {'topic_collections': topic_collection_pages}
         del combined_dictionary['topiccollections']
 
     # set the theme
