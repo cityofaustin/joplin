@@ -7,7 +7,7 @@ import pages.location_page.fixtures.helpers.components as components
 def title():
     page_data = {
         "imported_revision_id": None,
-        "live": False,
+        "live": True,
         "parent": components.home(),
         "coa_global": False,
         "title": "Location page with title",
