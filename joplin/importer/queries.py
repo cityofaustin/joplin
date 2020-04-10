@@ -64,7 +64,6 @@ fragments["contact"] = '''
 
 fragments["owner"] = '''
   owner {
-    id
     firstName
     lastName
     isSuperuser
