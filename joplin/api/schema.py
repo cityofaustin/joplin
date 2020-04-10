@@ -16,7 +16,8 @@ import graphql_jwt
 from graphql_jwt.decorators import superuser_required
 
 from snippets.contact.models import Contact, ContactPhoneNumber
-from base.models import TranslatedImage, Theme
+from snippets.theme.models import Theme
+from base.models import TranslatedImage
 from pages.topic_collection_page.models import TopicCollectionPage, JanisBasePageWithTopicCollections, JanisBasePageTopicCollection
 from pages.topic_page.models import TopicPage, TopicPageTopPage, JanisBasePageWithTopics
 from pages.service_page.models import ServicePage

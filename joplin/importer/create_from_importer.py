@@ -3,7 +3,7 @@ import hashlib
 
 from snippets.contact.models import Contact
 from snippets.contact.factories import ContactFactory
-from base.models import Theme
+from snippets.theme.models import Theme
 from pages.topic_collection_page.factories import ThemeFactory
 from wagtail.documents.models import Document
 from pages.official_documents_page.factories import DocumentFactory

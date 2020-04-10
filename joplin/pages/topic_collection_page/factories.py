@@ -1,7 +1,7 @@
 import factory
 from pages.topic_collection_page.models import TopicCollectionPage, JanisBasePageTopicCollection, JanisBasePageWithTopicCollections
 from pages.base_page.factories import JanisBasePageFactory
-from base.models import Theme
+from snippets.theme.models import Theme
 
 
 class ThemeFactory(factory.django.DjangoModelFactory):
