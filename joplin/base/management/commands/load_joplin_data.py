@@ -114,11 +114,11 @@ class Command(BaseCommand):
             #         and not settings.V3_WIP
             #     )
             # )
-            load_fixture(
-                "set_themes",
-                'db/fixtures/themes.json',
-                (os.getenv("DEPLOYMENT_MODE") == "LOCAL")
-            )
+            # load_fixture(
+            #     "set_themes",
+            #     'db/fixtures/themes.json',
+            #     (os.getenv("DEPLOYMENT_MODE") == "LOCAL")
+            # )
 
         finally:
             stdout.close()
