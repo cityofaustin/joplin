@@ -11,11 +11,11 @@ def create_fixture(page_data, fixture_name):
     except OfficialDocumentPage.DoesNotExist:
         page = None
     if page:
-        print(f"Skipping topic page fixture: {fixture_name}")
+        print(f"Skipping official documents page fixture: {fixture_name}")
         return page
 
     page = OfficialDocumentPageFactory.create(**page_data)
-    print(f"Built topic page fixture: {fixture_name}")
+    print(f"Built official documents page fixture: {fixture_name}")
     return page
 
 
