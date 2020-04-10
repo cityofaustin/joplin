@@ -9,9 +9,9 @@ def create_fixture(page_data, fixture_name):
     except TopicCollectionPage.DoesNotExist:
         page = None
     if page:
-        print(f"Skipping {fixture_name}")
+        print(f"Skipping topic collection page fixture: {fixture_name}")
         return None
 
     page = TopicCollectionPageFactory.create(**page_data)
-    print(f"Built {fixture_name}")
+    print(f"Built topic collection page fixture: {fixture_name}")
     return page

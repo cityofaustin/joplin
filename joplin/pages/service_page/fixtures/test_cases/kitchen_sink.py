@@ -6,6 +6,8 @@ from pages.topic_page.fixtures.test_cases import kitchen_sink as kitchen_sink_to
 
 # A "kitchen sink" service page
 def kitchen_sink():
+    topic = kitchen_sink_topic.kitchen_sink()
+
     page_data = {
         "imported_revision_id": None,
         "live": True,
@@ -15,7 +17,7 @@ def kitchen_sink():
         "title_es": "Kitchen sink service page [es]",
         "slug": "kitchen-sink-service-page",
         "add_topics": {
-            "topics": [kitchen_sink_topic]
+            "topics": [topic]
         },
         "short_description": "Kitchen sink service page short description [en]",
         "dynamic_content": components.dynamic_content,

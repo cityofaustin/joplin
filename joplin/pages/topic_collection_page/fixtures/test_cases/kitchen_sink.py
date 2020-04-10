@@ -3,7 +3,7 @@ from pages.topic_collection_page.fixtures.helpers.create_fixture import create_f
 import pages.topic_collection_page.fixtures.helpers.components as components
 from snippets.theme.fixtures.test_cases import kitchen_sink as kitchen_sink_theme
 
-# A "kitchen sink" topic page
+# A "kitchen sink" topic collection page
 def kitchen_sink():
     theme = kitchen_sink_theme.kitchen_sink()
 
