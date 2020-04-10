@@ -57,19 +57,41 @@ class JanisBasePage(Page):
         # and not at
         # /department_slug/page_slug
         if self.coa_global:
-            return [f'{self.slug}/']
+            return [f'/{self.slug}/']
+
+        # If we're under departments
+        departments = self.departments()
+        if len(departments) > 0:
+            return [f'/{department.slug}/{self.slug}/'
+                    for department in departments
+                    ]
+
+        # make sure we return an empty array if we don't have any urls
+        return []
+
+    def janis_instances(self):
+        """
+        This should handle coa_global and department stuff
+        """
+        # If we're global, even if we have a department, we should only exist at
+        # /page_slug
+        # and not at
+        # /department_slug/page_slug
+        if self.coa_global:
+            return [{'url': f'{self.slug}/', 'parent': None, 'grandparent': None}]
 
         # If we're under departments
         departments = self.departments()
         if len(departments) > 0:
             return [
-                f'{department.slug}/{self.slug}/'
+                {'url': f'/{department.slug}/{self.slug}/',
+                 'parent': department,
+                 'grandparent': None}
                 for department in departments
             ]
 
         # make sure we return an empty array if we don't have any urls
         return []
-
 
     def janis_preview_url_end(self, revision=None):
         """
@@ -110,16 +132,17 @@ class JanisBasePage(Page):
         data = self.preview_url_data(revision)
         return f'{data["janis_preview_url_start"]}/{lang}/{data["janis_preview_url_end"]}'
 
-
-    # Used by page_status_tag.html
-    # Choose the first janis_url path for now.
     def janis_publish_url(self):
+        '''
+        Used by page_status_tag.html
+        :return: the first janis_url path for now
+        '''
         paths = self.janis_urls()
         if len(paths) > 0:
             first_path = paths[0]
             parent_home_page = self.get_parent()
             if parent_home_page:
-                return f'{parent_home_page.specific.publish_url_base()}/{first_path}'
+                return f'{parent_home_page.specific.publish_url_base()}{first_path}'
         # Default to returning same page as url
         return "#"
 
@@ -145,8 +168,12 @@ class JanisBasePage(Page):
             else:
                 return ("Live")
 
-    # This goes through our group page permissions and looks for any related departments
     def departments(self):
+        """
+         This goes through our group page permissions and looks for any related departments
+         If the department does not have a department page associated with it, it will not return
+        :return: list of DepartmentPages
+        """
         department_pages = []
         for group_permission in self.group_permissions.all():
             if (group_permission and

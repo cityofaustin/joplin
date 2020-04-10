@@ -27,7 +27,7 @@ def test_event_page_with_urls(home_page, expected_publish_url_base):
     )
 
     # Set expected urls using janis url page type and Event page year, month, day and slug
-    expected_urls = ['{page_type}/{page_year}/{page_month}/{page_day}/{page_slug}'.format(
+    expected_urls = ['/{page_type}/{page_year}/{page_month}/{page_day}/{page_slug}'.format(
                             page_type=janis_url_page_type,
                             page_year=page.date.year,
                             page_month=page.date.month,
@@ -39,4 +39,4 @@ def test_event_page_with_urls(home_page, expected_publish_url_base):
 
     # we should get a url under every Event
     assert urls == expected_urls
-    assert janis_publish_url == f'{expected_publish_url_base}/{expected_urls[0]}'
+    assert janis_publish_url == f'{expected_publish_url_base}{expected_urls[0]}'

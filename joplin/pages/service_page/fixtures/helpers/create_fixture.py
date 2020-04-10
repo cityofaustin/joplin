@@ -9,9 +9,9 @@ def create_fixture(page_data, fixture_name):
     except ServicePage.DoesNotExist:
         page = None
     if page:
-        print(f"Skipping {fixture_name}")
+        print(f"Skipping service page fixture: {fixture_name}")
         return None
 
     page = ServicePageFactory.create(**page_data)
-    print(f"Built {fixture_name}")
+    print(f"Built service page fixture: {fixture_name}")
     return page

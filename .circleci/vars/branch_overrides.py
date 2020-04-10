@@ -9,11 +9,15 @@
     branch_overrides are not required for every branch.
 '''
 branch_overrides = {
+    "4227-resolve-cn": {
+        "LOAD_DATA": "",
+        "V3_WIP": True,
+    },
     "v3": {
         "LOAD_DATA": "fixtures",
         "V3_WIP": True,
     },
-    "4169-import-department-pages": {
+    "official-docs-fixture": {
         "LOAD_DATA": "fixtures",
         "V3_WIP": True,
     },

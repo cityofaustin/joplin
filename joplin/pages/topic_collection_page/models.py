@@ -11,6 +11,7 @@ from pages.base_page.models import JanisBasePage
 from base.models.translated_image import TranslatedImage
 from base.models.widgets import countMe, countMeTextArea
 from publish_preflight.requirements import FieldPublishRequirement
+from snippets.theme.models import Theme
 
 
 class TopicCollectionPage(JanisBasePage):
@@ -19,8 +20,8 @@ class TopicCollectionPage(JanisBasePage):
     description = models.TextField(blank=True)
 
     theme = models.ForeignKey(
-        'base.Theme',
-        on_delete=models.PROTECT,
+        Theme,
+        on_delete=models.SET_NULL,
         related_name='topic_collection_pages',
         null=True, blank=True,
     )
@@ -46,7 +47,17 @@ class TopicCollectionPage(JanisBasePage):
     def janis_urls(self):
         # should publish at /theme_slug/topic_collection_slug/
         if self.theme.slug:
-            return [f'{self.theme.slug}/{self.slug}/']
+            return [f'/{self.theme.slug}/{self.slug}/']
+
+        return []
+
+    def janis_instances(self):
+        """
+        Topic Collections do not have contextual nav on Janis
+        """
+        # should publish at /theme_slug/topic_collection_slug/
+        if self.theme.slug:
+            return [{'url': f'/{self.theme.slug}/{self.slug}/', 'parent': None, 'grandparent': None}]
 
         return []
 
@@ -62,6 +73,21 @@ class JanisBasePageWithTopicCollections(JanisBasePage):
                 urls.append(f'{topic_collection_url}{self.slug}/')
 
         return urls
+
+    def janis_instances(self):
+        # Add the urls for each topic collection, these pages only
+        # should publish at /theme_slug/topic_collection_slug/topic_page_slug
+        instances = []
+
+        for base_page_topic_collection in self.topic_collections.all():
+            for topic_collection_url in base_page_topic_collection.topic_collection.janis_instances():
+                instances.append({
+                    'url': f'{topic_collection_url["url"]}{self.slug}/',
+                    'parent': base_page_topic_collection.topic_collection,
+                    'grandparent': None,
+                })
+
+        return instances
 
 
 class JanisBasePageTopicCollection(ClusterableModel):

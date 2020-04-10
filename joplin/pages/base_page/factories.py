@@ -1,9 +1,6 @@
 import factory
 from pages.factory import PageFactory
-
 from pages.base_page.models import JanisBasePage
-from pages.topic_page.models import JanisBasePageWithTopics, JanisBasePageTopic
-from groups.factories import GroupPagePermissionFactory
 
 
 class JanisBasePageFactory(PageFactory):
@@ -13,6 +10,9 @@ class JanisBasePageFactory(PageFactory):
 
     @factory.post_generation
     def add_department(self, create, extracted, **kwargs):
+        # Import here to avoid circular dependencies for the DepartmentPage
+        from groups.factories import GroupPagePermissionFactory
+
         # TODO: add option to pass in already created departments
         if extracted:
             # A list of departments were passed in, use them

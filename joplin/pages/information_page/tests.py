@@ -1,11 +1,14 @@
 import pytest
 from pages.information_page.models import InformationPage
-from pages.topic_page.factories import TopicPageFactory, create_topic_page_from_importer_dictionaries
-from pages.information_page.factories import InformationPageFactory, create_information_page_from_importer_dictionaries
+from pages.topic_page.factories import TopicPageFactory
+from pages.information_page.factories import InformationPageFactory
 from humps import decamelize
 from importer.page_importer import PageImporter
 import pages.information_page.fixtures as fixtures
 
+from importer.create_from_importer import create_page_from_importer
+create_topic_page_from_importer_dictionaries = lambda page_dictionaries, revision_id=None: create_page_from_importer('topics', page_dictionaries, revision_id)
+create_information_page_from_importer_dictionaries = lambda page_dictionaries, revision_id=None: create_page_from_importer('information', page_dictionaries, revision_id)
 
 def page_dictionaries():
     return decamelize({
