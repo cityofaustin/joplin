@@ -13,7 +13,7 @@ def kitchen_sink():
         "title_es": "Kitchen sink topic page [es]",
         "slug": "kitchen-sink-topic-page",
         "add_topic_collections": {
-            "topic_collections": [kitchen_sink_topic_collection]
+            "topic_collections": [kitchen_sink_topic_collection.kitchen_sink()]
         },
     }
 
