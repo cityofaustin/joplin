@@ -11,10 +11,10 @@ def kitchen_sink():
 
     # add a document
     file_name = 'filename.txt'
-    file_content = "I am file content"
+    file_content = str("I am file content").encode('utf-8')
     document = create_fixture_document(file_content, file_name)
     official_documents_page_document_node = {
-        'date': "1/1/2021",
+        'date': "2021-01-01",
         'document': document
     }
 
