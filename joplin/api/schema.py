@@ -828,6 +828,7 @@ class PageRevisionNode(DjangoObjectType):
     as_form_container = graphene.NonNull(FormContainerNode)
     as_location_page = graphene.NonNull(LocationPageNode)
     as_event_page = graphene.NonNull(EventPageNode)
+    preview_janis_instance = graphene.NonNull(ContextualNavData)
 
     def resolve_as_service_page(self, resolve_info, *args, **kwargs):
         return self.as_page_object()
@@ -858,6 +859,17 @@ class PageRevisionNode(DjangoObjectType):
 
     def resolve_as_event_page(self, resolve_info, *args, **kwargs):
         return self.as_page_object()
+
+    def resolve_preview_janis_instance(self, resolve_info, *args, **kwargs):
+        preview_instance = None
+
+        # for now just get the first one
+        page = self.as_page_object()
+        instances = page.janis_instances()
+        if instances and instances[0]:
+            preview_instance = instances[0]
+
+        return preview_instance
 
     class Meta:
         model = PageRevision
