@@ -828,6 +828,7 @@ class PageRevisionNode(DjangoObjectType):
     as_form_container = graphene.NonNull(FormContainerNode)
     as_location_page = graphene.NonNull(LocationPageNode)
     as_event_page = graphene.NonNull(EventPageNode)
+    preview_janis_instance = graphene.NonNull(ContextualNavData)
 
     def resolve_as_service_page(self, resolve_info, *args, **kwargs):
         return self.as_page_object()
@@ -859,6 +860,17 @@ class PageRevisionNode(DjangoObjectType):
     def resolve_as_event_page(self, resolve_info, *args, **kwargs):
         return self.as_page_object()
 
+    def resolve_preview_janis_instance(self, resolve_info, *args, **kwargs):
+        preview_instance = None
+
+        # for now just get the first one
+        page = self.as_page_object()
+        instances = page.janis_instances()
+        if instances and instances[0]:
+            preview_instance = instances[0]
+
+        return preview_instance
+
     class Meta:
         model = PageRevision
         filter_fields = ['id']
@@ -870,10 +882,9 @@ class DepartmentPageDirectorNode(DjangoObjectType):
         model = DepartmentPageDirector
         interfaces = [graphene.Node]
 
+
 # Get the original page object from a page chooser node
 # Works for any content_type defined in content_type_map
-
-
 def get_page_from_content_type(self):
     content_type = self.page.content_type.name
     model = content_type_map[content_type]["model"]
@@ -948,28 +959,6 @@ class TopicPageTopPageNode(DjangoObjectType):
     class Meta:
         model = TopicPageTopPage
         interfaces = [graphene.Node]
-
-
-def get_page_with_preview_data(page, session):
-    # Wagtail saves preview data in the session. We want to mimick what they're doing to generate the built-in preview.
-    # https://github.com/wagtail/wagtail/blob/db6d36845f3f2c5d7009a22421c2efab9968aa24/wagtail/admin/views/pages.py#L544
-    # TODO: This should be simpler. Instead of hijacking the wagtail admin, it'd probably be easier to create a new endpoint
-    #       or have a graphql mutation do the work
-    session_key = f'wagtail-preview-{page.pk}'
-    preview_data, timestamp = session.get(session_key, [None, None])
-    if not preview_data:
-        return None
-
-    preview_data = {key: vals[0] for key, vals in preview_data.items()}
-    parent = page.get_parent().specific
-    FormKlass = page.get_edit_handler().get_form_class(page._meta.model)
-
-    form = FormKlass(preview_data, instance=page, parent_page=parent)
-    if not form.is_valid():
-        raise Exception(form.errors.as_json())
-    obj = form.save(commit=False)
-
-    return obj
 
 
 # Allow users to request JWT token for authorization-protected resolvers
