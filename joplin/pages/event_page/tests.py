@@ -14,7 +14,6 @@ def test_create_event_page_with_title():
 
 
 # If Event page has janis url
-# and coa_global=False (top level is not checked)
 @pytest.mark.django_db
 def test_event_page_with_urls(home_page, expected_publish_url_base):
     janis_url_page_type = 'event'
@@ -40,3 +39,15 @@ def test_event_page_with_urls(home_page, expected_publish_url_base):
     # we should get a url under every Event
     assert urls == expected_urls
     assert janis_publish_url == f'{expected_publish_url_base}{expected_urls[0]}'
+
+
+# If Event page has only a title
+# it should have no urls
+@pytest.mark.django_db
+def test_event_page_with_no_urls(home_page, expected_publish_url_base):
+    page = fixtures.title()
+    urls = page.janis_urls()
+    janis_publish_url = page.janis_publish_url()
+
+    assert urls == []
+    assert janis_publish_url == '#'
