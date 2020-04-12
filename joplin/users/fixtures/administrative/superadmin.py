@@ -7,14 +7,14 @@ from users.fixtures.helpers.create_fixture import create_fixture
 # An user for API Testing.
 # Should be loaded on "test" Joplin branch only.
 def superadmin():
-    topic_collection = kitchen_sink_topic_collection.kitchen_sink()
-
     user_data = {
         "email": "admin@austintexas.io",
         "is_superuser": True,
-        "password": os.get_env("SUPERADMIN_USER_PASSWORD"),
+        "password": os.getenv("SUPERADMIN_USER_PASSWORD"),
         "first_name": "City of",
         "last_name": "Austin",
+        "is_active": True,
+        "is_staff": True,
     }
 
     # Extra safety check
