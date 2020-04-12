@@ -14,6 +14,8 @@ from pages.department_page.models import DepartmentPage
 from pages.department_page.factories import DepartmentPageFactory
 from pages.event_page.models import EventPage
 from pages.event_page.factories import EventPageFactory
+from snippets.theme.models import Theme
+from snippets.theme.factories import ThemeFactory
 
 
 # TODO: Perhaps there is a better way to organize this all in one place.
@@ -49,5 +51,10 @@ page_type_map = {
     "event": {
         "model": EventPage,
         "factory": EventPageFactory,
+    },
+    # Theme isn't an importer page_type, but we do create_fixtures for it.
+    "theme": {
+        "model": Theme,
+        "factory": ThemeFactory,
     }
 }
