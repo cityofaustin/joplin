@@ -68,8 +68,14 @@ default_branch_vars = {
 }
 config.update(default_branch_vars)
 
+circle_branch = os.getenv("CIRCLE_BRANCH")
+if circle_branch == "pytest":
+    config.update({
+        'LOAD_DATA': 'test',
+    })
+
 # Set any vars for your branch from branch_overrides
-branch_override = branch_overrides.get(os.getenv("CIRCLE_BRANCH"))
+branch_override = branch_overrides.get(circle_branch)
 if branch_override:
     config.update(branch_override)
 
