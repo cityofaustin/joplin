@@ -39,6 +39,7 @@ class RichTextFieldType(Scalar):
     Serialises RichText content into fully baked HTML
     see https://github.com/wagtail/wagtail/issues/2695#issuecomment-464462575
     """
+
     @staticmethod
     def serialize(value):
         return expand_db_html(value)
@@ -73,7 +74,8 @@ def expand_dict_values(item):
     if isinstance(item, int):
         return item
     try:
-        dict_values = {key: try_expand_db_html(value) for (key, value) in item.items() if item is not isinstance(item, int)}
+        dict_values = {key: try_expand_db_html(value) for (key, value) in item.items() if
+                       item is not isinstance(item, int)}
         return dict_values
     except Exception as e:
         print('dict_comprehension error!', e)
@@ -105,7 +107,7 @@ def try_get_api_representation(StreamChild):
     try:
         if not isinstance(StreamChild, dict):
             block = StreamChild.block.get_api_representation(StreamChild.value) or None
-        # if the block is just a string (no dict at all), just return it expanded
+            # if the block is just a string (no dict at all), just return it expanded
             if isinstance(block, str):
                 parsed_block = try_expand_db_html(block)
                 return parsed_block
@@ -222,6 +224,8 @@ class JanisBasePageWithTopicCollectionsNode(DjangoObjectType):
         model = JanisBasePageWithTopicCollections
         filter_fields = ['id', 'slug', 'live']
         interfaces = [graphene.Node]
+
+
 '''
     Note: we do NOT want to use DjangoObjectType for the User model.
     Otherwise owners and users will be visible on all nodes by default.
@@ -229,6 +233,8 @@ class JanisBasePageWithTopicCollectionsNode(DjangoObjectType):
     and we want those resolvers to be wrapped in a @superuser_required decorator for authorization.
     TODO: handle importing of department groups for non-superusers.
 '''
+
+
 class OwnerNode(graphene.ObjectType):
     id = graphene.ID()
     first_name = graphene.String()
@@ -300,6 +306,7 @@ class DocumentNode(DjangoObjectType):
         model = Document
         interfaces = [graphene.Node]
         exclude_fields = ['tags']
+
     filename = graphene.String()
 
 
@@ -378,9 +385,6 @@ class JanisBasePageWithTopicsNode(DjangoObjectType):
         return self.departments()
 
 
-
-
-
 class LocationPageNode(DjangoObjectType):
     page_type = graphene.String()
     janis_urls = graphene.List(graphene.String)
@@ -416,6 +420,7 @@ class EventFilter(FilterSet):
             ('date'),
         )
     )
+
     # For reference:
     # https://django-filter.readthedocs.io/en/master/ref/filterset.html#declaring-filterable-fields
     # https://docs.djangoproject.com/en/3.0/ref/models/querysets/#lte
@@ -504,6 +509,8 @@ eventPage {
     location
 }
 """
+
+
 # we need to use a custom resolver
 # we could also try to make our streamfield type queryable,
 # but that is a rabbit hole I haven't jumped all the way down yet
@@ -553,7 +560,7 @@ class EventPageNode(DjangoObjectType):
 
     class Meta:
         model = EventPage
-        filter_fields =  ['id', 'slug', 'live', 'date']
+        filter_fields = ['id', 'slug', 'live', 'date']
         interfaces = [graphene.Node, DepartmentResolver]
 
     def resolve_locations(self, info):
@@ -599,6 +606,7 @@ class TranslatedImageNode(DjangoObjectType):
         model = TranslatedImage
         interfaces = [graphene.Node]
         exclude_fields = ['tags']
+
     filename = graphene.String()
 
 
@@ -909,6 +917,7 @@ def get_page_from_content_type(self):
     model = content_type_map[content_type]["model"]
     page = model.objects.get(id=self.page_id)
     return page
+
 
 # Get a page global_id from a page chooser node
 # Works for any content_type defined in content_type_map
