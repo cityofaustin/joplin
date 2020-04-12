@@ -77,7 +77,7 @@ class Command(BaseCommand):
                 official_documents_page_fixtures.load_all()
                 event_page_fixtures.load_all()
                 location_page_fixtures.load_all()
-                DeploymentLog(operation="load_factory_data", value="factory", completed=True).save()
+                # TODO: incorporate logging into DeploymentLog?
             elif not load_data_result:
                 if LOAD_DATA == 'prod':
                     print("Adding prod datadump")
