@@ -12,8 +12,6 @@ import topicsImage from '../../static/images/topics.png';
 import formContainerImage from '../../static/images/info_page.png'; // TODO: get a png for forms from the xd
 import locationImage from '../../static/images/location.png';
 import eventImage from '../../static/images/event.png';
-import singlePageImage from '../../static/images/event.png';
-import fullSiteImage from '../../static/images/event.png';
 
 const PageTypeComponent = ({
   type,
@@ -39,7 +37,6 @@ const ChooseTypeStep = ({
 }) => {
   const content = content_or_topic === 'content';
   const topic = content_or_topic === 'topic';
-  const importer = content_or_topic === 'importer';
 
   const contentPages = [
     {
@@ -113,23 +110,6 @@ const ChooseTypeStep = ({
     },
   ];
 
-  const importerPages = [
-    {
-      type: 'importSinglePage',
-      name: 'Single page',
-      image: singlePageImage,
-      description:
-        'Import a single page',
-    },
-    {
-      type: 'importFullSite',
-      name: 'Full site',
-      image: fullSiteImage,
-      description:
-        'Import a full site',
-    },
-  ];
-
   return (
     <div className="CreateContentModal__step">
       <div>
@@ -149,14 +129,6 @@ const ChooseTypeStep = ({
           ) : (
             <a onClick={() => handleContentOrTopicSelect('topic')}>
               Topic or topic collections
-            </a>
-          )}
-          <p className="CreateContentModal__content_or_topic--padding" />
-          {importer ? (
-            'From existing content'
-          ) : (
-            <a onClick={() => handleContentOrTopicSelect('importer')}>
-              From existing content
             </a>
           )}
         </div>
@@ -183,19 +155,6 @@ const ChooseTypeStep = ({
                   name={topicPage.name}
                   image={topicPage.image}
                   description={topicPage.description}
-                />
-              ))}
-            </React.Fragment>
-          )}
-          {importer && (
-            <React.Fragment>
-              {importerPages.map((importerPage, index) => (
-                <PageTypeComponent
-                  type={importerPage.type}
-                  handleTypeSelect={handleTypeSelect}
-                  name={importerPage.name}
-                  image={importerPage.image}
-                  description={importerPage.description}
                 />
               ))}
             </React.Fragment>

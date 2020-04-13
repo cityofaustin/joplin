@@ -8,5 +8,5 @@ def settings_context(request):
     """
     return {
         'JANIS_URL': settings.JANIS_URL,
-        'IS_PRODUCTION': settings.IS_PRODUCTION
+        'ISPRODUCTION': settings.ISPRODUCTION
     }

@@ -34,9 +34,9 @@ jobs:
             - "/usr/local/bin"
             - "/usr/local/lib/python3.7/site-packages"
           key: deps-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
-#      - run:
-#          name: Run tests
-#          command: pipenv run pytest --reuse-db
+      - run:
+          name: Run tests
+          command: pipenv run pytest --reuse-db
   deploy:
     docker:
       - image: cityofaustin/joplin-ci:072413d

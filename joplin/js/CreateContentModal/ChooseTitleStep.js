@@ -21,8 +21,6 @@ const getPageHeading = pageType => {
       return 'Write the name of this location.';
     case 'event':
       return 'Write the name of this event.';
-    case 'importSinglePage':
-      return 'Paste a preview URL for the page you want to import';
     default:
       return '';
   }
@@ -34,8 +32,6 @@ const getInputLabel = pageType => {
       return 'Location name';
     case 'event':
       return 'Event name';
-    case 'importSinglePage':
-      return 'URL'
     default:
       return 'Page Title';
   }
@@ -45,8 +41,6 @@ const ChooseTitleStep = ({
   pageType,
   title,
   handleTitleInputChange,
-  jwtToken,
-  handleJwtTokenInputChange,
   characterCount,
   maxCharacterCount,
   departmentList,
@@ -77,25 +71,6 @@ const ChooseTitleStep = ({
       autoFocus
       onChange={handleTitleInputChange}
     />
-    {
-      (pageType === 'importSinglePage') &&
-      (
-        <React.Fragment>
-          <label htmlFor="page-title" className="ChooseTitleStep__input-label">
-            <span className="ChooseTitleStep__input-label--left">
-              JWT Token
-            </span>
-          </label>
-          <input
-            value={jwtToken}
-            type="text"
-            id="jwt-token"
-            autoFocus
-            onChange={handleJwtTokenInputChange}
-          />
-        </React.Fragment>
-      )
-    }
     { // We don't get sent a list of departments unless the user is an admin
       // so if we have one, we should show the dropdown
       !!departmentList && !!departmentList.length &&
@@ -107,7 +82,7 @@ const ChooseTitleStep = ({
       </select>
     </label>}
 
-    {(pageType === 'department') && (
+    {pageType === 'department' ? (
       <div>
         <span className="ChooseTitleStep__input-help">
           Example: Public Health
@@ -116,16 +91,7 @@ const ChooseTitleStep = ({
           <li>You don't need to include "Austin" in your department name.</li>
         </ul>
       </div>
-    )}
-    {(pageType === 'importSinglePage') && (
-      <ul className="ChooseTitleStep__bullet-list">
-        <li>Add a Preview URL with the revision that you want to import.</li>
-        <li>For now, only accepts imports from 'janis.austintexas.io' and 'janis-pytest.netlify.com'</li>
-        <li>You must provide your own JWT token for the site you're importing from.</li>
-        <li>Check documentation to learn how to get a JWT token.</li>
-      </ul>
-    )}
-    {((pageType !== 'department') && (pageType !== 'importSinglePage')) && (
+    ) : (
       <div>
         <span className="ChooseTitleStep__input-help">
           {pageType === 'service' &&
@@ -134,6 +100,7 @@ const ChooseTitleStep = ({
             'Example: Guide for starting a community garden'}
           {pageType === 'information' && 'Example: Hepatitis in Austin'}
         </span>
+
         <ul className="ChooseTitleStep__bullet-list">
           {pageType === 'guide' && <li>Use the word "guide" in your title.</li>}
           {pageType === 'information' && (

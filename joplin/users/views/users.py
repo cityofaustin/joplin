@@ -118,8 +118,7 @@ def create(request):
         if hasattr(result, 'status_code'):
             return result
     if request.method == 'POST':
-        form_maker = get_user_creation_form()
-        form = form_maker(request.POST, request.FILES)
+        form = get_user_creation_form()(request.POST, request.FILES)
         if form.is_valid():
             user = form.save()
             messages.success(request, _("User '{0}' created.").format(user), buttons=[

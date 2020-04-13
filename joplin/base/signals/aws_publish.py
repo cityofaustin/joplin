@@ -8,6 +8,8 @@ from heroku3.models.build import Build
 
 import boto3
 
+from base.models import Contact, Location, Map
+
 import logging
 logger = logging.getLogger(__name__)
 

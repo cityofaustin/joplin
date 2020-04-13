@@ -2,7 +2,8 @@ from django.conf import settings
 from django.dispatch import receiver
 from django.db.models.signals import post_save
 from wagtail.core.signals import page_published, page_unpublished
-from pages.home_page.models import HomePage
+from base.models import Contact, Location, Map
+from base.models.site_settings import JanisBranchSettings
 
 import os
 import logging
@@ -14,10 +15,7 @@ logger = logging.getLogger(__name__)
 def netlify_publish():
     logger.debug("netlify_publish() Starting task")
     try:
-        # TODO: we want to extract the publish_janis_branch() for each page_id that we're publishing.
-        # That logic must happen earlier in the collect_pages logic.
-        # Even though this will work for now, it should not be hardcoded to be the first HomePage object.
-        publish_janis_branch = HomePage.objects.first().publish_janis_branch()
+        publish_janis_branch = getattr(JanisBranchSettings.objects.first(), 'publish_janis_branch')
     except:
         publish_janis_branch = None
 

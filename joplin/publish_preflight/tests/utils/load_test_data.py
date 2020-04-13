@@ -1,14 +1,14 @@
 from wagtail.core.models import Page
 
 from users.models import User
-from pages.home_page.models import HomePage
-from pages.information_page.models import InformationPage
-from pages.topic_page.models import TopicPage
-from pages.topic_collection_page.models import TopicCollectionPage
-from pages.department_page.models import DepartmentPage
+from base.models import (
+    HomePage,
+    InformationPage,
+    TopicPage, TopicCollectionPage, TopicPageTopicCollection,
+    DepartmentPage
+)
 
 
-# Todo: replace this with
 def load_test_data():
     home = HomePage.objects.first()
 

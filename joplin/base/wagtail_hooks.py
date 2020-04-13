@@ -19,6 +19,8 @@ from wagtail.contrib.modeladmin.options import ModelAdmin, ModelAdminGroup, mode
 from wagtail.admin.widgets import Button, ButtonWithDropdownFromHook, PageListingButton
 from wagtail.core import hooks
 
+from base.models import HomePage, Location, Contact
+
 from html.parser import HTMLParser
 
 import wagtail.admin.rich_text.editors.draftail.features as draftail_features
@@ -77,8 +79,18 @@ def register_page_list_menu_item():
 
 
 @hooks.register('register_admin_menu_item')
+def register_map_menu_item():
+    return PermissionMenuItem('Maps', "/admin/snippets/base/map/", classnames='material-icons icon-maps', order=20)
+
+
+@hooks.register('register_admin_menu_item')
+def register_locations_menu_item():
+    return PermissionMenuItem('Locations', "/admin/snippets/base/location/", classnames='material-icons icon-locations', order=30)
+
+
+@hooks.register('register_admin_menu_item')
 def register_contacts_menu_item():
-    return PermissionMenuItem('Contacts', "/admin/snippets/contact/contact/", classnames='material-icons icon-contacts', order=40)
+    return PermissionMenuItem('Contacts', "/admin/snippets/base/contact/", classnames='material-icons icon-contacts', order=40)
 
 
 @hooks.register('register_admin_menu_item')
@@ -86,16 +98,24 @@ def register_users_menu_item():
     return MenuItem('Users', "/admin/users/", classnames="material-icons icon-users", order=50)
 
 
-# Add menu item to allow users to easily access HomePage Janis Branch Publish/Preview settings
-# Only reveal on PR branches and Local only
-if settings.IS_LOCAL or settings.IS_REVIEW:
-    class JanisBranchSettingsMenuItem(MenuItem):
+# Allow users to edit JanisBranchSettings on PR branches and Local only
+if settings.ISLOCAL or settings.ISREVIEW:
+    # Need to add custom js webpack bundle
+    class BranchSettingsMenuItem(MenuItem):
+        @property
+        def media(self):
+            super_media = super(BranchSettingsMenuItem, self).media
+            js = super_media._js
+            css = super_media._css
+            js.append(webpack_loader_utils.get_files('janisBranchSettings')[0]['url'])
+            return forms.Media(css=css, js=js)
+
         def is_shown(self, request):
             return request.user.is_superuser
 
     @hooks.register('register_admin_menu_item')
     def register_options_menu_item():
-        return JanisBranchSettingsMenuItem('Options', "/admin/pages/3/edit/", classnames="material-icons icon-settings", order=60)
+        return BranchSettingsMenuItem('Options', "/admin/settings/base/janisbranchsettings/2/", classnames="material-icons icon-settings", order=60)
 
 # example of rendering custom nested menu items
 # class LocationModelAdmin(ModelAdmin):
@@ -135,10 +155,10 @@ def joplin_page_listing_buttons(page, page_perms, is_parent=False):
             )
         except Exception as e:
             raise e
-    if page.live and page.url and hasattr(page, 'janis_publish_url'):
+    if page.live and page.url and hasattr(page, 'janis_url'):
         yield PageListingButton(
             _('View live'),
-            page.janis_publish_url(),
+            page.janis_url(),
             attrs={'target': "_blank", 'title': _("View live version of '{title}'").format(
                 title=page.get_admin_display_title())},
             priority=30
@@ -267,7 +287,7 @@ class InternalLinkHandler(LinkHandler):
     def expand_db_attributes(cls, attrs):
         try:
             page = cls.get_instance(attrs)
-            return '<a href="%s">' % escape(page.janis_publish_url())
+            return '<a href="%s">' % escape(page.janis_url())
         except Page.DoesNotExist:
             return "<a>"
         except Exception as e:
