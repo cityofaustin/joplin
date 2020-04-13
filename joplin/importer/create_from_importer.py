@@ -3,6 +3,7 @@ import hashlib
 from django.core.exceptions import ValidationError
 from distutils.util import strtobool
 
+from pages.base_page.fixtures.helpers.page_type_map import page_type_map
 from snippets.contact.models import Contact
 from snippets.contact.factories import ContactFactory
 from snippets.theme.models import Theme
@@ -13,7 +14,9 @@ from django.core.files.base import ContentFile
 from users.models import User
 from users.factories import UserFactory
 from pages.home_page.models import HomePage
-from pages.base_page.fixtures.helpers.page_type_map import page_type_map
+from pages.location_page.models import LocationPage
+from pages.service_page.models import ServicePage
+from pages.service_page.factories import ServicePageFactory
 
 
 def create_contact_from_importer(contact_data):

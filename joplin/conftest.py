@@ -3,11 +3,10 @@ import pytest
 import inspect
 import os
 from factory.base import FactoryMetaClass
-from pages.information_page import factories as information_page_factories
-from pages.official_documents_page import factories as official_document_page_factories
-from pages.department_page import factories as department_page_factories
 import pages.home_page.fixtures as home_page_fixtures
+import json
 from gql import gql, Client
+from gql.transport.requests import RequestsHTTPTransport
 
 
 # from django.core.management import call_command
@@ -24,6 +23,16 @@ from gql import gql, Client
 #         # this is definitely not working right now
 #         # call_command('loaddata', 'joplin/db/system-generated/prod.datadump.json')
 
+
+# Genius technique from: https://stackoverflow.com/questions/42652228/removing-cached-files-after-a-py-test-run
+@pytest.yield_fixture(autouse=True, scope='session')
+def test_suite_cleanup_thing(request):
+    # setup
+    # Clear test_api_jwt_token at start of running entire test suite.
+    # This will ensure that our test_api_jwt_token is only cached for 1 pytest invocation and won't expire.
+    request.config.cache.set('test_api_jwt_token', None)
+    yield
+    # teardown
 
 def register_factories(factories):
     """
@@ -43,15 +52,19 @@ Fixtures created in conftest.py can be used in any test without importing.
 https://docs.pytest.org/en/latest/fixture.html#conftest-py-sharing-fixture-functions
 '''
 @pytest.fixture()
-def remote_pytest_api():
+def test_api_url():
     return 'https://joplin-pr-pytest.herokuapp.com/api/graphql'
 
 
 @pytest.fixture()
-def remote_pytest_jwt_token(remote_pytest_api):
-    print("~~~ running jwt fixture")
+def test_api_jwt_token(request, test_api_url):
+    # Requesting the jwt_token takes a long time.
+    # So we'll put it in the cache once we've retrieved it once for this session.
+    jwt_token = request.config.cache.get('test_api_jwt_token', None)
+    if jwt_token:
+        return jwt_token
     transport = RequestsHTTPTransport(
-        url=remote_pytest_api,
+        url=test_api_url,
         headers={
             'Accept-Language': 'en',
         },
@@ -62,18 +75,20 @@ def remote_pytest_jwt_token(remote_pytest_api):
         transport=transport,
         fetch_schema_from_transport=True,
     )
-    jwt_token_query = '''
+    jwt_token_query = gql('''
         mutation TokenAuth($email: String!, $password: String!) {
           tokenAuth(email: $email, password: $password) {
             token
           }
         }
-    '''
+    ''')
     result = client.execute(jwt_token_query, variable_values=json.dumps({
-        'email': os.getenv("PYTEST_EMAIL"),
-        'password': os.getenv("PYTEST_PASSWORD"),
+        'email': "apitest@austintexas.io",
+        'password': os.getenv("API_TEST_USER_PASSWORD"),
     }))
-    return result['data']['tokenAuth']['token']
+    jwt_token = result['tokenAuth']['token']
+    request.config.cache.set('test_api_jwt_token', jwt_token)
+    return jwt_token
 
 
 # TODO: Once preview urls work on Janis with v3, then we can use this URL

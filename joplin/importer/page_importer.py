@@ -1,6 +1,6 @@
 from urllib.parse import urlparse, parse_qs
 from pathlib import Path
-from gql import gql, Client
+from gql import Client
 from gql.transport.requests import RequestsHTTPTransport
 import json
 from django.core.exceptions import ValidationError
