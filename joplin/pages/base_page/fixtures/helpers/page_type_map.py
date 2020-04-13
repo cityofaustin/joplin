@@ -16,6 +16,8 @@ from pages.event_page.models import EventPage
 from pages.event_page.factories import EventPageFactory
 from snippets.theme.models import Theme
 from snippets.theme.factories import ThemeFactory
+from pages.form_container.models import FormContainer
+from pages.form_container.factories import FormContainerFactory
 
 
 # TODO: Perhaps there is a better way to organize this all in one place.
@@ -56,5 +58,9 @@ page_type_map = {
     "theme": {
         "model": Theme,
         "factory": ThemeFactory,
+    },
+    "form": {
+        "model": FormContainer,
+        "factory": FormContainerFactory,
     }
 }
