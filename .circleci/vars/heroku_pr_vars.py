@@ -72,6 +72,9 @@ circle_branch = os.getenv("CIRCLE_BRANCH")
 if circle_branch == "pytest":
     config.update({
         'LOAD_DATA': 'test',
+        "DELETION_PROTECTION": 1,
+        "V3_WIP": True,
+        "DEBUG": 0,
     })
 
 # Set any vars for your branch from branch_overrides

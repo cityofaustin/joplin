@@ -20,5 +20,5 @@ branch_overrides = {
     "fixtures-and-previews": {
         "LOAD_DATA": "fixtures",
         "V3_WIP": True,
-    }
+    },
 }

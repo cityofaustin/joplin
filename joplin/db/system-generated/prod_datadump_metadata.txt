@@ -1,0 +1,7 @@
+TIMESTAMP: "2020-03-16--16-04-26"
+TIMESTAMP OF LAST SYNC:
+LATEST_MIGRATION: "0012_replace_migrations_for_wagtail_independence"
+LATEST_BASE_MIGRATION: "0001_squashed_0102_deploymentlog"
+TOTAL_MIGRATIONS: 287
+TOTAL_BASE_MIGRATIONS: 118
+BRANCH: "4116-importer-j2-test-data"
