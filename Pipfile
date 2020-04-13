@@ -46,6 +46,8 @@ coverage = "*"
 django-coverage-plugin = "*"
 pytest-cov = "*"
 snapshottest = "*"
+gql = "*"
+pyhumps = "*"
 django-graphql-jwt = "*"
 
 [requires]
