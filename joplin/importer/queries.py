@@ -273,6 +273,27 @@ fragments["location"] = GraphqlParser('''
     owner=fragments["owner"],
 )
 
+fragments['form'] = GraphqlParser('''
+    title
+    slug
+    coaGlobal
+    description
+    formUrl
+    $$$owner
+    topics {
+      edges {
+        node {
+          topic {
+            $$$topic
+          }
+        }
+      }
+    }
+''').substitute(
+    topic=fragments["topic"],
+    owner=fragments["owner"],
+)
+
 unparsed_query_strings = {
     'topiccollection': '''
         query getTopicCollectionPageRevision($id: ID) {
@@ -359,6 +380,19 @@ unparsed_query_strings = {
               node {
                 asDepartmentPage {
                   $$$department
+                }
+              }
+            }
+          }
+        }
+    ''',
+    'form': '''
+        query getFormContainerRevisionQuery($id: ID) {
+          allPageRevisions(id: $id) {
+            edges {
+              node {
+                asFormContainer {
+                  $$$form
                 }
               }
             }
