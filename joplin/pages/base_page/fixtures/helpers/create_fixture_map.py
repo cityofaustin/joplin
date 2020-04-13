@@ -23,7 +23,7 @@ def build_create_fixture(page_type):
             page = None
         if page:
             print(f"Skipping {fixture_name}")
-            return None
+            return page
 
         page = factory.create(**page_data)
         print(f"Built {fixture_name}")

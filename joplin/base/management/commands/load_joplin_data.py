@@ -66,9 +66,9 @@ class Command(BaseCommand):
                 load_data_result = None
             LOAD_DATA = os.getenv("LOAD_DATA")
             DATABASE_URL = os.getenv("DATABASE_URL")
-            # Allow re-running of 'factory' data
-            if LOAD_DATA == 'factory' or LOAD_DATA == 'test':
-                print("Adding factory fixture data")
+            # Allow re-running of 'fixtures' data
+            if LOAD_DATA == 'fixtures' or LOAD_DATA == 'test':
+                print("Adding fixture data")
                 contact_fixtures.load_all()
                 theme_fixtures.load_all()
                 topic_collection_page_fixtures.load_all()
