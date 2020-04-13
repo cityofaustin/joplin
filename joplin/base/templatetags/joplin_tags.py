@@ -1,11 +1,11 @@
 from django import template
 from django.conf import settings
-from base.models.site_settings import JanisBranchSettings
 import graphene
 import os
 import json
 
-from base.models import TopicPage, Theme
+from snippets.theme.models import Theme
+from pages.topic_page.models import TopicPage
 from groups.models import Department
 from wagtail.core import hooks
 import itertools

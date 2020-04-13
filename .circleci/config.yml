@@ -39,7 +39,7 @@ jobs:
 #          command: pipenv run pytest --reuse-db
   deploy:
     docker:
-      - image: cityofaustin/joplin-ci:e228591
+      - image: cityofaustin/joplin-ci:072413d
     parameters:
       is_master:
         type: boolean

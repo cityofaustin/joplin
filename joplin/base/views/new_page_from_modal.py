@@ -1,19 +1,28 @@
-from django.shortcuts import get_object_or_404, redirect, render
 from django.http import HttpResponse
-from wagtail.core.models import Page, UserPagePermissionsProxy, GroupPagePermission
+from wagtail.core.models import UserPagePermissionsProxy, GroupPagePermission
 from django.core.exceptions import PermissionDenied
-from wagtail.admin.views import pages
-from wagtail.admin import messages
-from django.utils.translation import ugettext as _
-from django.urls import reverse
-from django.conf import settings
-from base.models import ServicePage, ProcessPage, InformationPage, TopicPage, TopicCollectionPage, DepartmentPage, Theme, OfficialDocumentPage, GuidePage, FormContainer
-from locations.models import LocationPage
-from events.models import EventPage
+from snippets.theme.models import Theme
+from pages.service_page.models import ServicePage
+from pages.information_page.models import InformationPage
+from pages.topic_page.models import TopicPage
+from pages.topic_collection_page.models import TopicCollectionPage
+from pages.department_page.models import DepartmentPage
+from pages.official_documents_page.models import OfficialDocumentPage
+from pages.guide_page.models import GuidePage
+from pages.form_container.models import FormContainer
+from pages.location_page.models import LocationPage
+from pages.event_page.models import EventPage
+from pages.home_page.models import HomePage
 from groups.models import Department
-from base.models.site_settings import JanisBranchSettings
-from django.contrib.contenttypes.models import ContentType
+from importer.page_importer import PageImporter
 import json
+
+
+def import_page_from_url(url, jwt_token):
+    page = PageImporter(url, jwt_token).fetch_page_data().create_page()
+
+    return page.id
+
 
 def new_page_from_modal(request):
     user_perms = UserPagePermissionsProxy(request.user)
@@ -24,6 +33,16 @@ def new_page_from_modal(request):
         # Get the page data
         body = json.loads(request.body)
         print(body['type'])
+
+        # if we got an import request, let's go try some importing
+        if body['type'] == 'importSinglePage':
+            if not request.user.is_superuser:
+                raise PermissionDenied
+            # Respond with the id of the new page
+            new_page_id = import_page_from_url(body['title'], body['jwtToken'])
+            response = HttpResponse(json.dumps({'id': new_page_id}), content_type="application/json")
+            return response
+
         data = {}
         data['title'] = body['title']
         data['owner'] = request.user
@@ -31,8 +50,6 @@ def new_page_from_modal(request):
         # Create the page
         if body['type'] == 'service':
             page = ServicePage(**data)
-        elif body['type'] == 'process':
-            page = ProcessPage(**data)
         elif body['type'] == 'information':
             page = InformationPage(**data)
         elif body['type'] == 'topic':
@@ -55,7 +72,7 @@ def new_page_from_modal(request):
             page = EventPage(**data)
 
         # Add it as a child of home
-        home = Page.objects.get(id=3)
+        home = HomePage.objects.first()
         home.add_child(instance=page)
 
         # Save our draft
@@ -66,12 +83,13 @@ def new_page_from_modal(request):
             # If the user's an admin, add the selected department from
             # the create content modal
             department_id = body['department']
-            department_group = Department.objects.get(pk=department_id)
-            GroupPagePermission.objects.create(
-                group=department_group,
-                page=page,
-                permission_type='edit'
-            )
+            if department_id:
+                department_group = Department.objects.get(pk=department_id)
+                GroupPagePermission.objects.create(
+                    group=department_group,
+                    page=page,
+                    permission_type='edit'
+                )
         else:
             # If the user's not an admin, then we want to create a
             # group permission object for each of the user's assigned departments

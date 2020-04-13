@@ -12,7 +12,7 @@ import ButtonBar from './ButtonBar.js';
 
 import './index.scss';
 
-const MAX_TITLE_LENGTH = 58;
+const MAX_TITLE_LENGTH = 9000;
 const DEPARTMENT_LIST = window.departments;
 
 const stepsEnum = {
@@ -26,6 +26,7 @@ class CreateContentModal extends Component {
     this.state = {
       type: null,
       title: '', // React warning said: `value` prop on `input` should not be null. Consider using an empty string...
+      jwtToken: '',
       topic: null,
       theme: null,
       department: '',
@@ -109,6 +110,12 @@ class CreateContentModal extends Component {
     });
   };
 
+  handleJwtTokenInputChange = e => {
+    this.setState({
+      jwtToken: e.target.value,
+    });
+  }
+
   handleDepartmentSelect = e => {
     this.setState({ department: e.target.value });
   };
@@ -123,6 +130,7 @@ class CreateContentModal extends Component {
         '/admin/pages/new_from_modal/',
         {
           type: this.state.type,
+          jwtToken: this.state.jwtToken,
           title: this.state.title,
           topic: this.state.topic,
           department: this.state.department,
@@ -188,7 +196,9 @@ class CreateContentModal extends Component {
                       <ChooseTitleStep
                         pageType={this.state.type}
                         title={this.state.title}
+                        jwtToken={this.state.jwtToken}
                         handleTitleInputChange={this.handleTitleInputChange}
+                        handleJwtTokenInputChange={this.handleJwtTokenInputChange}
                         characterCount={this.state.titleCharacterCount}
                         maxCharacterCount={MAX_TITLE_LENGTH}
                         departmentList={DEPARTMENT_LIST}

@@ -14,11 +14,11 @@
 
 <script>
 // passing the constant from context_processors into a JS variable (boolean)
-const ISPRODUCTION = '{{ISPRODUCTION}}'
-window.ISPRODUCTION = ISPRODUCTION
+const IS_PRODUCTION = '{{IS_PRODUCTION}}'
+window.IS_PRODUCTION = IS_PRODUCTION
 </script>
 {% render_bundle 'admin' %}
-{% if ISPRODUCTION == False %}
+{% if IS_PRODUCTION == False %}
   {% render_bundle 'theme' %}
 {% endif %}
 

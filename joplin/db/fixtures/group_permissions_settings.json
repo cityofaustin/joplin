@@ -21,42 +21,42 @@
         ],
         [
           "view_extra_panels",
-          "base",
+          "department_page",
           "departmentpage"
         ],
         [
           "view_snippets",
-          "base",
+          "department_page",
           "departmentpage"
         ],
         [
           "view_extra_panels",
-          "base",
+          "form_container",
           "formcontainer"
         ],
         [
           "view_snippets",
-          "base",
+          "form_container",
           "formcontainer"
         ],
         [
           "view_extra_panels",
-          "base",
+          "guide_page",
           "guidepage"
         ],
         [
           "view_snippets",
-          "base",
+          "guide_page",
           "guidepage"
         ],
         [
           "view_extra_panels",
-          "base",
+          "information_page",
           "informationpage"
         ],
         [
           "view_snippets",
-          "base",
+          "information_page",
           "informationpage"
         ],
         [
@@ -91,52 +91,42 @@
         ],
         [
           "view_extra_panels",
-          "base",
+          "official_document",
           "officialdocumentpage"
         ],
         [
           "view_snippets",
-          "base",
+          "official_document",
           "officialdocumentpage"
         ],
         [
           "view_extra_panels",
-          "base",
-          "processpage"
-        ],
-        [
-          "view_snippets",
-          "base",
-          "processpage"
-        ],
-        [
-          "view_extra_panels",
-          "base",
+          "service_page",
           "servicepage"
         ],
         [
           "view_snippets",
-          "base",
+          "service_page",
           "servicepage"
         ],
         [
           "view_extra_panels",
-          "base",
+          "topic_collection_page",
           "topiccollectionpage"
         ],
         [
           "view_snippets",
-          "base",
+          "topic_collection_page",
           "topiccollectionpage"
         ],
         [
           "view_extra_panels",
-          "base",
+          "topic_page",
           "topicpage"
         ],
         [
           "view_snippets",
-          "base",
+          "topic_page",
           "topicpage"
         ],
         [

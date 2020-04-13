@@ -1,12 +1,12 @@
-# Joplin - CMS for the City of Austin
+# Joplin 3 - CMS for the City of Austin
 
 Joplin is the Authoring Interface for adding and editing content for alpha.austin.gov.
 
-<img src="/README/authoring_interface.png" align="middle" width="500" >
+<img src="/README/images/authoring_interface.png" align="middle" width="500" >
 
 <br>The public facing frontend (Janis) displays the content that is published in Joplin.
 
-<img src="/README/janis.png" align="middle" width="500" >
+<img src="/README/images/janis.png" align="middle" width="500" >
 
 <br>Joplin is built using Wagtail, a Content Management System (CMS) using Python's django framework.
 
@@ -49,7 +49,7 @@ This will automatically load environment variables into your pipenv environment.
 -   It will automatically run all django migrations.
 -   It will start up 3 docker containers: `joplin_app_1` (for running the CMS web server), `joplin_assets_1` (for managing assets), and `joplin_db_1` (for the postgres database).
 -   Viewing your docker logs, you can tell that your server is running successfully when you see these listeners:
-    <img src="/README/server_success.png" align="middle" height="70" >
+    <img src="/README/images/server_success.png" align="middle" height="70" >
 -   Your Joplin instance will be accessible at http://localhost:8000/admin with the credentials user: `admin@austintexas.io`, pw: `x`
 
 Or if you prefer to run without docker (for speed + ability to integrate with debugging tools):
@@ -382,6 +382,7 @@ The migration process currently consists of 3 commands:
         # Then Rebuild (be sure to have the heroku cli installed in your machine)
         REBUILD=on ./scripts/serve-local.sh
         ```
+- `pipenv run ./joplin/manage.py shell_plus`
 
 ---
 
