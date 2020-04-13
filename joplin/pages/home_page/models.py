@@ -44,7 +44,7 @@ class HomePage(Page):
     # On Local and PR apps, its set by preview_janis_branch_for_pr on HomePage model.
     # preview_url_base() is used for "Preview" links in Joplin UI.
     def preview_url_base(self):
-        if settings.ISSTAGING or settings.ISPRODUCTION:
+        if settings.IS_STAGING or settings.IS_PRODUCTION:
             return settings.JANIS_URL
         else:
             return self.__get_url_for_pr("preview_janis_branch_for_pr")
@@ -54,7 +54,7 @@ class HomePage(Page):
     # On Local and PR apps, its set by publish_janis_branch_for_pr on HomePage model.
     # publish_url_base() is used for "View Live" links in Joplin UI.
     def publish_url_base(self):
-        if settings.ISSTAGING or settings.ISPRODUCTION:
+        if settings.IS_STAGING or settings.IS_PRODUCTION:
             return settings.JANIS_URL
         else:
             return self.__get_url_for_pr("publish_janis_branch_for_pr")
@@ -64,7 +64,7 @@ class HomePage(Page):
     # On Local and PR apps, its set by publish_janis_branch_for_pr on HomePage model.
     # publish_janis_branch() is used for publishing by base/signals/janis_build_triggers.py
     def publish_janis_branch(self):
-        if settings.ISSTAGING or settings.ISPRODUCTION:
+        if settings.IS_STAGING or settings.IS_PRODUCTION:
             return settings.JANIS_URL
         else:
             return getattr(self, publish_janis_branch_for_pr)

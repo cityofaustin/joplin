@@ -28,9 +28,9 @@ def trigger_build(sender, pages_ids, action='saved', instance=None):
     """
     trigger_object = instance
     logger.info(f'{trigger_object} {action}, triggering build')
-    if settings.ISSTAGING or settings.ISPRODUCTION:
+    if settings.IS_STAGING or settings.IS_PRODUCTION:
         create_build_aws(sender, instance, request=get_http_request())
-    elif settings.ISREVIEW:
+    elif settings.IS_REVIEW:
         if flag_enabled('INCREMENTAL BUILDS'):
             publish_v3(pages_ids)
         else:

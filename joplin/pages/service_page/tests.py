@@ -7,16 +7,16 @@ import pages.service_page.fixtures.helpers.components as components
 
 
 @pytest.mark.django_db
-def test_create_service_page_from_api(remote_staging_preview_url, remote_pytest_api):
-    url = f'{remote_staging_preview_url}/services/UGFnZVJldmlzaW9uTm9kZToyMQ==?CMS_API={remote_pytest_api}'
-    page = PageImporter(url).fetch_page_data().create_page()
+def test_create_service_page_from_api(remote_staging_preview_url, test_api_url, test_api_jwt_token):
+    url = f'{remote_staging_preview_url}/services/UGFnZVJldmlzaW9uTm9kZToxNQ==?CMS_API={test_api_url}'
+    page = PageImporter(url, test_api_jwt_token).fetch_page_data().create_page()
     assert isinstance(page, ServicePage)
 
 
 @pytest.mark.django_db
-def test_create_service_page_with_contact_from_api(remote_staging_preview_url, remote_pytest_api):
-    url = f'{remote_staging_preview_url}/services/UGFnZVJldmlzaW9uTm9kZToyOA==?CMS_API={remote_pytest_api}'
-    page = PageImporter(url).fetch_page_data().create_page()
+def test_create_service_page_with_contact_from_api(remote_staging_preview_url, test_api_url, test_api_jwt_token):
+    url = f'{remote_staging_preview_url}/services/UGFnZVJldmlzaW9uTm9kZToyMA==?CMS_API={test_api_url}'
+    page = PageImporter(url, test_api_jwt_token).fetch_page_data().create_page()
     assert isinstance(page, ServicePage)
     assert page.title == 'Service page with contact'
     assert page.contact.name == 'Contact name'

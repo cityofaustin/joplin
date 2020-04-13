@@ -15,6 +15,7 @@ import pages.service_page.fixtures as service_page_fixtures
 import pages.official_documents_page.fixtures as official_documents_page_fixtures
 import pages.location_page.fixtures as location_page_fixtures
 import pages.event_page.fixtures as event_page_fixtures
+import users.fixtures as user_fixtures
 
 
 class Command(BaseCommand):
@@ -63,24 +64,25 @@ class Command(BaseCommand):
                     print(f"Already loaded data from {info.value}")
             except ObjectDoesNotExist:
                 load_data_result = None
-            if not load_data_result:
-                LOAD_DATA = os.getenv("LOAD_DATA")
-                DATABASE_URL = os.getenv("DATABASE_URL")
+            LOAD_DATA = os.getenv("LOAD_DATA")
+            DATABASE_URL = os.getenv("DATABASE_URL")
+            # Allow re-running of 'fixtures' data
+            if LOAD_DATA == 'fixtures' or LOAD_DATA == 'test':
+                print("Adding fixture data")
+                contact_fixtures.load_all()
+                theme_fixtures.load_all()
+                topic_collection_page_fixtures.load_all()
+                topic_page_fixtures.load_all()
+                service_page_fixtures.load_all()
+                official_documents_page_fixtures.load_all()
+                event_page_fixtures.load_all()
+                location_page_fixtures.load_all()
+                # TODO: incorporate logging into DeploymentLog?
+            elif not load_data_result:
                 if LOAD_DATA == 'prod':
                     print("Adding prod datadump")
                     run_load_data_command('db/system-generated/prod.datadump.json')
                     DeploymentLog(operation="load_data", value="prod", completed=True).save()
-                elif LOAD_DATA == 'fixtures':
-                    print("Adding fixture data")
-                    contact_fixtures.load_all()
-                    theme_fixtures.load_all()
-                    topic_collection_page_fixtures.load_all()
-                    topic_page_fixtures.load_all()
-                    service_page_fixtures.load_all()
-                    official_documents_page_fixtures.load_all()
-                    event_page_fixtures.load_all()
-                    location_page_fixtures.load_all()
-                    DeploymentLog(operation="load_data", value="fixtures", completed=True).save()
                 elif (LOAD_DATA == "new_datadump"):
                     print("Adding new migration test datadump")
                     run_load_data_command('db/system-generated/tmp.datadump.json')
@@ -98,22 +100,13 @@ class Command(BaseCommand):
                 else:
                     print("Not adding any datadumps\n")
 
-            load_fixture(
-                "load_test_admin",
-                'db/fixtures/local_admin_user.json',
-                (
-                    os.getenv("DEPLOYMENT_MODE") == "LOCAL"
-                    or settings.V3_WIP # if we don't LOAD_DATA in v3, we still need to add a test admin user
-                )
-            )
-            # load_fixture(
-            #     "load_janis_branch_settings",
-            #     'db/fixtures/janis_branch_settings.json',
-            #     (
-            #         not os.getenv("DEPLOYMENT_MODE") in ("STAGING", "PRODUCTION")
-            #         and not settings.V3_WIP
-            #     )
-            # )
+            if settings.IS_LOCAL or settings.IS_REVIEW or settings.V3_WIP:
+                user_fixtures.superadmin()
+
+            # Add pytest superadmin
+            if LOAD_DATA == 'test':
+                user_fixtures.admin_for_test_env()
+
             # load_fixture(
             #     "set_group_permissions",
             #     'db/fixtures/group_permissions_settings.json',

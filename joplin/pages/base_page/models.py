@@ -110,7 +110,7 @@ class JanisBasePage(Page):
             # TODO: make previews work for test fixture pages that may not have revisions/global_ids
             url_end = f"preview/{url_page_type}/"
 
-        if settings.ISSTAGING or settings.ISPRODUCTION:
+        if settings.IS_STAGING or settings.IS_PRODUCTION:
             return url_end
         else:
             # Pass address of CMS_API if we are not running on Staging or Production

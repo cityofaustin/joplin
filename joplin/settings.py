@@ -153,11 +153,11 @@ WSGI_APPLICATION = 'wsgi.application'
 
 # Detect whether it is a staging or production environment
 DEPLOYMENT_MODE = os.environ.get('DEPLOYMENT_MODE', 'LOCAL')
-ISLOCAL = DEPLOYMENT_MODE == "LOCAL"
-ISPRODUCTION = DEPLOYMENT_MODE == "PRODUCTION"
-ISSTAGING = DEPLOYMENT_MODE == "STAGING"
-ISREVIEW = DEPLOYMENT_MODE == "REVIEW"
-ISTEST = DEPLOYMENT_MODE == "TEST"
+IS_LOCAL = DEPLOYMENT_MODE == "LOCAL"
+IS_PRODUCTION = DEPLOYMENT_MODE == "PRODUCTION"
+IS_STAGING = DEPLOYMENT_MODE == "STAGING"
+IS_REVIEW = DEPLOYMENT_MODE == "REVIEW"
+IS_TEST = DEPLOYMENT_MODE == "TEST"
 
 
 # Database
@@ -192,7 +192,7 @@ bigger_pool = {
     'recycle': 500
 }
 
-if ISSTAGING or ISPRODUCTION:
+if IS_STAGING or IS_PRODUCTION:
     DATABASE_POOL_ARGS = safe_pool
 else:
     DATABASE_POOL_ARGS = safe_pool
@@ -366,7 +366,7 @@ DBBACKUP_CONNECTORS = {
 #
 # Production, Staging & Review Apps
 #
-if(ISPRODUCTION or ISSTAGING or ISREVIEW):
+if(IS_PRODUCTION or IS_STAGING or IS_REVIEW):
     #
     # AWS Buckets only if not local.
     #
@@ -399,11 +399,11 @@ if(ISPRODUCTION or ISSTAGING or ISREVIEW):
     }
 
     # Specifying the location of files
-    if ISPRODUCTION:
+    if IS_PRODUCTION:
         AWS_LOCATION = 'production/static'
         AWS_IS_GZIPPED = True
         MEDIAFILES_LOCATION = 'production/media'
-    elif ISSTAGING:
+    elif IS_STAGING:
         AWS_LOCATION = 'staging/static'
         AWS_IS_GZIPPED = True
         MEDIAFILES_LOCATION = 'staging/media'
@@ -424,10 +424,10 @@ if(ISPRODUCTION or ISSTAGING or ISREVIEW):
 
 JANIS_SLUG_URL = ""
 
-if ISPRODUCTION:
+if IS_PRODUCTION:
     JANIS_SLUG_URL = 'https://api.github.com/repos/cityofaustin/janis/tarball/production'
 
-if ISSTAGING:
+if IS_STAGING:
     JANIS_SLUG_URL = 'https://api.github.com/repos/cityofaustin/janis/tarball/master'
 
 # security logout ward after half of expire value (four hours currently)
@@ -446,7 +446,7 @@ FLAGS = {
 }
 
 # The CMS_API endpoint of the current Django App for published Janis to use
-if ISLOCAL or ISTEST:
+if IS_LOCAL or IS_TEST:
     # $JOPLIN_APP_HOST_PORT is set by scripts/serve-local.sh
     CMS_API = f"http://localhost:{os.getenv('JOPLIN_APP_HOST_PORT')}/api/graphql"
 else:
@@ -474,13 +474,13 @@ if SCOUT_MONITOR:
 
 
 # Set configs for Janis Publisher_v2
-if ISREVIEW:
+if IS_REVIEW:
     PUBLISHER_V2_URL=os.getenv("CI_COA_PUBLISHER_V2_URL_PR")
     PUBLISHER_V2_API_KEY=os.getenv("COA_PUBLISHER_V2_API_KEY_PR")
-elif ISSTAGING:
+elif IS_STAGING:
     PUBLISHER_V2_URL=os.getenv("CI_COA_PUBLISHER_V2_URL_STAGING")
     PUBLISHER_V2_API_KEY=os.getenv("COA_PUBLISHER_V2_API_KEY_STAGING")
-elif ISPRODUCTION:
+elif IS_PRODUCTION:
     PUBLISHER_V2_URL=os.getenv("CI_COA_PUBLISHER_V2_URL_PROD")
     PUBLISHER_V2_API_KEY=os.getenv("COA_PUBLISHER_V2_API_KEY_PROD")
 

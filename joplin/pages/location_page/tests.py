@@ -7,9 +7,9 @@ from pages.location_page.factories import LocationPageFactory
 
 
 @pytest.mark.django_db
-def test_create_location_page_from_api(remote_staging_preview_url, remote_pytest_api):
-    url = f'{remote_staging_preview_url}/location/UGFnZVJldmlzaW9uTm9kZTozMA==?CMS_API={remote_pytest_api}'
-    page = PageImporter(url).fetch_page_data().create_page()
+def test_create_location_page_from_api(remote_staging_preview_url, test_api_url, test_api_jwt_token):
+    url = f'{remote_staging_preview_url}/location/UGFnZVJldmlzaW9uTm9kZToyNA==?CMS_API={test_api_url}'
+    page = PageImporter(url, test_api_jwt_token).fetch_page_data().create_page()
     assert isinstance(page, LocationPage)
 
 
