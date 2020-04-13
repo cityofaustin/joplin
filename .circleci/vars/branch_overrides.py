@@ -18,7 +18,7 @@ branch_overrides = {
     },
     "pytest": {
         "DELETION_PROTECTION": 1,
-        "LOAD_DATA": "",
+        "LOAD_DATA": "dummy",
         "DEBUG": 0,
     }
 }
