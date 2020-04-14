@@ -174,7 +174,7 @@ fragments["services"] = GraphqlParser('''
 )
 
 
-fragments["hours"] = GraphqlParser('''
+fragments["hours"] = '''
     mondayStartTime
     mondayEndTime
     mondayStartTime2
@@ -204,9 +204,8 @@ fragments["hours"] = GraphqlParser('''
     sundayStartTime2
     sundayEndTime2
     hoursExceptions
-''').substitute(
+'''
 
-)
 fragments["official_document"] = GraphqlParser('''
     title
     slug
@@ -238,8 +237,6 @@ fragments["official_document"] = GraphqlParser('''
     departments {
         $$$department
     }
-
-)
 ''').substitute(
     department=fragments["department"],
     topic=fragments["topic"],
