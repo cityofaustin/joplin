@@ -12,11 +12,11 @@ class TopicPageFactory(JanisBasePageWithTopicCollectionsFactory):
 class JanisBasePageTopicFactory(factory.django.DjangoModelFactory):
     page = factory.SubFactory(
         'base_page.factories.JanisBasePageWithTopicsFactory',
-        add_department__dummy=True,
+        add_departments__dummy=True,
     )
     topic = factory.SubFactory(
         TopicPageFactory,
-        add_department__dummy=True,
+        add_departments__dummy=True,
     )
 
     class Meta:

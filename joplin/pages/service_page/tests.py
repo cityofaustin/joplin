@@ -23,6 +23,18 @@ def test_create_service_page_with_contact_from_api(remote_staging_preview_url, t
 
 
 @pytest.mark.django_db
+def test_create_service_page_with_department_from_api(remote_staging_preview_url, test_api_url, test_api_jwt_token):
+    url = f'{remote_staging_preview_url}/services/UGFnZVJldmlzaW9uTm9kZTozNg==?CMS_API={test_api_url}'
+    page = PageImporter(url, test_api_jwt_token).fetch_page_data().create_page()
+    assert isinstance(page, ServicePage)
+    assert page.title == 'Service page with department'
+    group_page_permission = page.group_permissions.all()[0]
+    assert group_page_permission.group.name == 'Pytest department'
+    assert group_page_permission.group.department.department_page.slug == 'pytest-department'
+    assert group_page_permission.page == page
+
+
+@pytest.mark.django_db
 def test_create_service_page_with_title():
     page = fixtures.title()
     assert isinstance(page, ServicePage)
@@ -82,6 +94,7 @@ def test_create_service_page_with_dynamic_content_list():
     expected_dynamic_content_blocks = components.dynamic_content_list
 
     assert isinstance(page, ServicePage)
+    # todo: figure out what we want this to assert
     assert page.title == 'Service Page with dynamic content list'
     for i, dynamic_content_block in enumerate(page.dynamic_content.stream_data):
         assert dynamic_content_block["type"] == expected_dynamic_content_blocks[i]["type"]
