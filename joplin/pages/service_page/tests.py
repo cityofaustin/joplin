@@ -28,6 +28,7 @@ def test_create_service_page_with_department_from_api(remote_staging_preview_url
     page = PageImporter(url, test_api_jwt_token).fetch_page_data().create_page()
     assert isinstance(page, ServicePage)
     assert page.title == 'Service page with department'
+    assert False
 
 
 @pytest.mark.django_db
