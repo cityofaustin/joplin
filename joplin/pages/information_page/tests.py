@@ -168,7 +168,7 @@ def test_get_live_page_from_api(remote_staging_preview_url, test_api_url, test_a
     assert isinstance(page, InformationPage)
     assert page.title == 'Live page'
     assert page.description == 'this page is live'
-    assert False
+    assert page.live
 
 
 @pytest.mark.django_db
@@ -177,7 +177,7 @@ def test_get_draft_page_from_api(remote_staging_preview_url, test_api_url, test_
     page = PageImporter(url, test_api_jwt_token).fetch_page_data().create_page()
     assert isinstance(page, InformationPage)
     assert page.title == 'Draft page'
-    assert False
+    assert not page.live
 
 
 @pytest.mark.django_db
