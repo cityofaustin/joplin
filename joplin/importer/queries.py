@@ -294,6 +294,56 @@ fragments['form'] = GraphqlParser('''
     owner=fragments["owner"],
 )
 
+fragments['event'] = GraphqlParser('''
+    title
+    slug
+    coaGlobal
+    description
+    canceled
+    date
+    startTime
+    endTime
+    $$$owner
+    registrationUrl
+    eventIsFree
+    fees {
+      edges {
+        node {
+          feeLabel
+          fee
+        }
+      }
+    }
+    contacts {
+      edges {
+        node {
+          contact {
+            $$$contact
+          }
+        }
+      }
+    }
+    locations {
+      additionalDetails
+      locationType
+      cityLocation {
+        $$$location
+      }
+      remoteLocation {
+        name
+        street
+        city
+        state
+        zip
+        unit
+      }
+    }
+''').substitute(
+    contact=fragments["contact"],
+    owner=fragments["owner"],
+    location=fragments["location"],
+)
+
 unparsed_query_strings = {
     'topiccollection': '''
         query getTopicCollectionPageRevision($id: ID) {
@@ -398,6 +448,19 @@ unparsed_query_strings = {
             }
           }
         }
+    ''',
+    'event': '''
+          query getEventPageRevision($id: ID) {
+            allPageRevisions(id: $id) {
+              edges {
+                node {
+                  asEventPage {
+                    $$$event
+                  }
+                }
+              }
+            }
+          }
     ''',
 }
 
