@@ -57,13 +57,17 @@ def test_create_service_page_with_appblock_steps():
 @pytest.mark.django_db
 def test_create_service_page_with_step_with_options():
     page = fixtures.step_with_options()
-    expected_steps = components.step_with_options
+
     assert isinstance(page, ServicePage)
     assert page.title == "Service Page with a Step with options"
     assert page.slug == "step-with-yee-or-haw"
-    for i, step in enumerate(page.steps.stream_data):
-        assert step["type"] == expected_steps[i]["type"]
-        assert step["value"] == expected_steps[i]["value"]
+    step_with_options = page.steps.stream_data[0]['value']
+    assert False
+    for i, option in step_with_options['options']:
+        # todo test the options
+        assert False
+        # assert step["type"] == expected_steps[i]["type"]
+        # assert step["value"] == expected_steps[i]["value"]
 
 
 @pytest.mark.django_db
