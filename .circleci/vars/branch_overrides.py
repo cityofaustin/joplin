@@ -28,5 +28,9 @@ branch_overrides = {
     "4274-are-we-live": {
         "LOAD_DATA": "fixtures",
         "V3_WIP": True,
+    },
+    "api-page-type-and-description": {
+        "LOAD_DATA": "fixtures",
+        "V3_WIP": True,
     }
 }
