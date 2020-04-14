@@ -10,6 +10,63 @@ class GraphqlParser(Template):
 
 fragments = {}
 
+fragments["contact"] = '''
+    name
+    phoneNumber {
+      edges {
+        node {
+          id
+          phoneDescription
+          phoneNumber
+        }
+      }
+    }
+    email
+    socialMedia
+    locationPage {
+        slug
+    }
+'''
+
+fragments["owner"] = '''
+  owner {
+    firstName
+    lastName
+    isSuperuser
+    email
+  }
+'''
+
+fragments['department'] = GraphqlParser('''
+    slug
+    title
+    whatWeDo
+    mission
+    $$$owner
+    contacts {
+      edges {
+        node {
+          contact {
+            $$$contact
+          }
+        }
+      }
+    }
+    departmentDirectors {
+      edges {
+        node {
+          name
+          title
+          about
+        }
+      }
+    }
+    jobListings
+''').substitute(
+    contact=fragments["contact"],
+    owner=fragments["owner"],
+)
+
 fragments["topiccollection"] = '''
       title
       slug
@@ -43,33 +100,6 @@ fragments["topic"] = GraphqlParser('''
 ''').substitute(
     topiccollection=fragments["topiccollection"]
 )
-
-fragments["contact"] = '''
-    name
-    phoneNumber {
-      edges {
-        node {
-          id
-          phoneDescription
-          phoneNumber
-        }
-      }
-    }
-    email
-    socialMedia
-    locationPage {
-        slug
-    }
-'''
-
-fragments["owner"] = '''
-  owner {
-    firstName
-    lastName
-    isSuperuser
-    email
-  }
-'''
 
 fragments["information"] = GraphqlParser('''
     title
@@ -129,10 +159,14 @@ fragments["services"] = GraphqlParser('''
         }
       }
     }
+    departments {
+        $$$department
+    }
 ''').substitute(
     topic=fragments["topic"],
     contact=fragments["contact"],
     owner=fragments["owner"],
+    department=fragments["department"]
 )
 
 fragments["official_document"] = GraphqlParser('''
@@ -165,36 +199,6 @@ fragments["official_document"] = GraphqlParser('''
     }
 ''').substitute(
     topic=fragments["topic"],
-    owner=fragments["owner"],
-)
-
-fragments['department'] = GraphqlParser('''
-    slug
-    title
-    whatWeDo
-    mission
-    $$$owner
-    contacts {
-      edges {
-        node {
-          contact {
-            $$$contact
-          }
-        }
-      }
-    }
-    departmentDirectors {
-      edges {
-        node {
-          name
-          title
-          about
-        }
-      }
-    }
-    jobListings
-''').substitute(
-    contact=fragments["contact"],
     owner=fragments["owner"],
 )
 

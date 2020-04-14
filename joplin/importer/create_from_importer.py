@@ -16,7 +16,7 @@ from users.factories import UserFactory
 from pages.home_page.models import HomePage
 from pages.location_page.models import LocationPage
 from pages.service_page.models import ServicePage
-from pages.service_page.factories import ServicePageFactory
+from pages.department_page.factories import DepartmentPageFactory
 from groups.models import Department
 from groups.factories import DepartmentFactory
 
@@ -116,20 +116,21 @@ def create_owner_from_importer(owner_data):
     return user
 
 
-def create_department_group_from_importer(department_group_dictionaries):
+def create_department_group_from_importer(department_page_dictionaries):
+    # see if we already have a department group associated with this department page information
     try:
-        department_group = Department.objects.get(department_page__slug=department_group_dictionaries['en']['slug'])
+        department_group = Department.objects.get(department_page__slug=department_page_dictionaries['en']['slug'])
     except Department.DoesNotExist:
         department_group = None
     if department_group:
         return department_group
 
-    combined_dictionary = department_group_dictionaries['en']
-    for field in DepartmentFactory._meta.model._meta.fields:
-        if field.column.endswith("_es"):
-            combined_dictionary[field.column] = department_group_dictionaries['es'][field.column[:-3]]
+    # we don't have the department group for this page
+    # create or get the department page
+    department_page = create_page_from_importer('department', department_page_dictionaries)
 
-    department_group = DepartmentFactory.create(**combined_dictionary)
+    # and make the group
+    department_group = DepartmentFactory.create(department_page=department_page, name=department_page.title)
     return department_group
 
 
