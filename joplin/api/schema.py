@@ -359,11 +359,16 @@ class TopicNode(DjangoObjectType):
 
 
 class JanisBasePageTopicNode(DjangoObjectType):
+    page_id = graphene.ID()
+
     class Meta:
         model = JanisBasePageTopic
         filter_fields = ['topic']
         fields = '__all__'
         interfaces = [graphene.Node]
+
+    def resolve_page_id(self, info):
+        return get_global_id_from_content_type(self)
 
 
 class JanisBasePageWithTopicsNode(DjangoObjectType):
