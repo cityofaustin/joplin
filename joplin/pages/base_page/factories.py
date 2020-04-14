@@ -16,7 +16,7 @@ class JanisBasePageFactory(PageFactory):
         if extracted:
             # A list of departments were passed in, use them
             for department in extracted['departments']:
-                GroupPagePermissionFactory.create(page=self, group=department)
+                GroupPagePermissionFactory.create(page=self, group=department, permission_type='edit')
             return
 
         # pass "add_department__dummy"=True into Factory() to make dummy departments
