@@ -10,7 +10,12 @@ def home():
     return HomePage.objects.first()
 
 
-dynamic_content = '<h2>Bulk item pickup do’s and don’ts</h2><p>Do not put bulk items in bags, boxes, or other containers. Bags will be treated as extra trash and are subject to extra trash fees.</p><p>Do not place any items under low hanging tree limbs or power lines.</p><p>Do not place items in an alley in any area in front of a vacant lot or in front of a business. Items will not be collected from these areas.</p><p>To prevent damage to your property, keep bulk items 5 feet away from your:</p><ul><li>Trash cart</li><li>Mailbox</li><li>Fences or walls</li><li>Water meter</li><li>Telephone connection box</li><li>Parked cars</li></ul>'
+additional_content = '<h2>Bulk item pickup do’s and don’ts</h2><p>Do not put bulk items in bags, boxes, or other containers. Bags will be treated as extra trash and are subject to extra trash fees.</p><p>Do not place any items under low hanging tree limbs or power lines.</p><p>Do not place items in an alley in any area in front of a vacant lot or in front of a business. Items will not be collected from these areas.</p><p>To prevent damage to your property, keep bulk items 5 feet away from your:</p><ul><li>Trash cart</li><li>Mailbox</li><li>Fences or walls</li><li>Water meter</li><li>Telephone connection box</li><li>Parked cars</li></ul>'
+
+dynamic_content_list = [
+    {'type': 'collection_schedule_block', 'value': None, 'id': '4c02f0f9-5e7a-4ddb-b1b7-c6b3f1da159d'},
+    {'type': 'recollect_block', 'value': None, 'id': '826f0f09-ed6e-4d81-a9eb-cfceef23c82a'}
+]
 
 dynamic_content_list = [
     {'type': 'collection_schedule_block', 'value': None, 'id': '4c02f0f9-5e7a-4ddb-b1b7-c6b3f1da159d'},

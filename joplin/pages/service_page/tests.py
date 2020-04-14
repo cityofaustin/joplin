@@ -91,10 +91,20 @@ def test_create_service_page_with_new_contact():
 @pytest.mark.django_db
 def test_create_service_page_with_dynamic_content_list():
     page = fixtures.dynamic_content_list()
+    expected_dynamic_content_blocks = components.dynamic_content_list
+
     assert isinstance(page, ServicePage)
     # todo: figure out what we want this to assert
     assert page.title == 'Service Page with dynamic content list'
+    for i, dynamic_content_block in enumerate(page.dynamic_content.stream_data):
+        assert dynamic_content_block["type"] == expected_dynamic_content_blocks[i]["type"]
 
+        # somewhere in the json of it all this happens, it doesn't seem to be an issue for wagtail
+        # so for now let's just account for it in this test
+        if dynamic_content_block["value"] == 'None':
+            dynamic_content_block["value"] = None
+
+        assert dynamic_content_block["value"] == expected_dynamic_content_blocks[i]["value"]
 
 
 @pytest.mark.django_db

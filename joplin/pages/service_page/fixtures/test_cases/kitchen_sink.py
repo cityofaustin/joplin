@@ -28,7 +28,8 @@ def kitchen_sink():
             "departments": [department]
         },
         "short_description": "Kitchen sink service page short description [en]",
-        "dynamic_content": components.dynamic_content,
+        "additional_content": components.additional_content,
+        'dynamic_content': components.dynamic_content_list,
         "steps": steps,
     }
 
