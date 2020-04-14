@@ -50,6 +50,7 @@ vars_from_circleci = [
     "COA_PUBLISHER_V2_API_KEY_STAGING",
     "CI_COA_PUBLISHER_V2_URL_PROD",
     "COA_PUBLISHER_V2_API_KEY_PROD",
+    "SUPERADMIN_USER_PASSWORD"
 ]
 for v in vars_from_circleci:
     config[v] = os.getenv(v, "")
@@ -60,16 +61,22 @@ default_branch_vars = {
     "WEB_CONCURRENCY": 2,
     "DEBUG": 0,
     "DEBUG_TOOLBAR": False,
-    "LOAD_DATA": "prod",
     "MONITOR_PERFORMANCE": False,
     "DELETION_PROTECTION": 0,
     "DJANGO_LOG_LEVEL": "INFO",
-    "V3_WIP": False,
+    "LOAD_DATA": "fixtures",
+    "V3_WIP": True,
 }
 config.update(default_branch_vars)
 
+circle_branch = os.getenv("CIRCLE_BRANCH")
+if circle_branch == "pytest":
+    config.update({
+        'LOAD_DATA': 'test',
+    })
+
 # Set any vars for your branch from branch_overrides
-branch_override = branch_overrides.get(os.getenv("CIRCLE_BRANCH"))
+branch_override = branch_overrides.get(circle_branch)
 if branch_override:
     config.update(branch_override)
 

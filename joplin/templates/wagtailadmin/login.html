@@ -3,7 +3,7 @@
 {% load i18n %}
 
 {% block branding_login %}
-{% if ISPRODUCTION == False %}
+{% if IS_PRODUCTION == False %}
   {% render_bundle 'theme' %}
 Welcome to Joplin staging!
 {% else %}

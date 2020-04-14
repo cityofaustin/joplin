@@ -36,7 +36,7 @@ def test_base_page_with_department_coa_global_urls(home_page, expected_publish_u
     page = JanisBasePageFactory.create(
         slug="global_slug",
         coa_global=True,
-        add_department__dummy=True,
+        add_departments__dummy=True,
         parent=home_page
     )
     urls = page.janis_urls()
@@ -56,7 +56,7 @@ def test_base_page_with_department_not_global_urls(home_page, expected_publish_u
     page = JanisBasePageFactory.create(
         slug="page_slug",
         coa_global=False,
-        add_department__dummy=True,
+        add_departments__dummy=True,
         parent=home_page,
     )
 

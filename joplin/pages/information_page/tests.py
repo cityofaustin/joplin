@@ -153,12 +153,31 @@ def test_import_from_page_dictionary_existing_topic():
 
 
 @pytest.mark.django_db
-def test_create_information_page_with_contact_from_api(remote_staging_preview_url, remote_pytest_api):
-    url = f'{remote_staging_preview_url}/information/UGFnZVJldmlzaW9uTm9kZToyNQ==?CMS_API={remote_pytest_api}'
-    page = PageImporter(url).fetch_page_data().create_page()
+def test_create_information_page_with_contact_from_api(remote_staging_preview_url, test_api_url, test_api_jwt_token):
+    url = f'{remote_staging_preview_url}/information/UGFnZVJldmlzaW9uTm9kZToyMg==?CMS_API={test_api_url}'
+    page = PageImporter(url, test_api_jwt_token).fetch_page_data().create_page()
     assert isinstance(page, InformationPage)
     assert page.title == 'Information page with contact'
     assert page.contact.name == 'Contact name'
+
+
+@pytest.mark.django_db
+def test_get_live_page_from_api(remote_staging_preview_url, test_api_url, test_api_jwt_token):
+    url = f'{remote_staging_preview_url}/information/UGFnZVJldmlzaW9uTm9kZTo0Mg==?CMS_API={test_api_url}'
+    page = PageImporter(url, test_api_jwt_token).fetch_page_data().create_page()
+    assert isinstance(page, InformationPage)
+    assert page.title == 'Live page'
+    assert page.description == 'this page is live'
+    assert page.live
+
+
+@pytest.mark.django_db
+def test_get_draft_page_from_api(remote_staging_preview_url, test_api_url, test_api_jwt_token):
+    url = f'{remote_staging_preview_url}/information/UGFnZVJldmlzaW9uTm9kZTo0MA==?CMS_API={test_api_url}'
+    page = PageImporter(url, test_api_jwt_token).fetch_page_data().create_page()
+    assert isinstance(page, InformationPage)
+    assert page.title == 'Draft page'
+    assert not page.live
 
 
 @pytest.mark.django_db

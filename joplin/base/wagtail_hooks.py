@@ -88,7 +88,7 @@ def register_users_menu_item():
 
 # Add menu item to allow users to easily access HomePage Janis Branch Publish/Preview settings
 # Only reveal on PR branches and Local only
-if settings.ISLOCAL or settings.ISREVIEW:
+if settings.IS_LOCAL or settings.IS_REVIEW:
     class JanisBranchSettingsMenuItem(MenuItem):
         def is_shown(self, request):
             return request.user.is_superuser

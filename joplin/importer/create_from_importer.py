@@ -1,6 +1,9 @@
 import requests
 import hashlib
+from django.core.exceptions import ValidationError
+from distutils.util import strtobool
 
+from pages.base_page.fixtures.helpers.page_type_map import page_type_map
 from snippets.contact.models import Contact
 from snippets.contact.factories import ContactFactory
 from snippets.theme.models import Theme
@@ -8,23 +11,15 @@ from pages.topic_collection_page.factories import ThemeFactory
 from wagtail.documents.models import Document
 from pages.official_documents_page.factories import DocumentFactory
 from django.core.files.base import ContentFile
+from users.models import User
+from users.factories import UserFactory
 from pages.home_page.models import HomePage
-from pages.information_page.models import InformationPage
-from pages.information_page.factories import InformationPageFactory
-from pages.topic_page.models import TopicPage
-from pages.topic_page.factories import TopicPageFactory
-from pages.topic_collection_page.models import TopicCollectionPage
-from pages.topic_collection_page.factories import TopicCollectionPageFactory
+from pages.location_page.models import LocationPage
 from pages.service_page.models import ServicePage
 from pages.service_page.factories import ServicePageFactory
-from pages.location_page.models import LocationPage
-from pages.location_page.factories import LocationPageFactory
-from pages.official_documents_page.models import OfficialDocumentPage
-from pages.official_documents_page.factories import OfficialDocumentPageFactory
-from pages.department_page.models import DepartmentPage
-from pages.department_page.factories import DepartmentPageFactory
-from pages.event_page.models import EventPage
-from pages.event_page.factories import EventPageFactory
+from groups.models import Department
+from groups.factories import DepartmentFactory
+
 
 def create_contact_from_importer(contact_data):
     # Check if a contact with the same name has already been imported
@@ -36,10 +31,13 @@ def create_contact_from_importer(contact_data):
         return contact
 
     # Check if we have the associated location page
-    try:
-        location_page_slug = contact_data['location_page']['slug']
-        location_page = LocationPage.objects.get(slug=location_page_slug)
-    except LocationPage.DoesNotExist:
+    if contact_data['location_page']:
+        try:
+            location_page_slug = contact_data['location_page']['slug']
+            location_page = LocationPage.objects.get(slug=location_page_slug)
+        except LocationPage.DoesNotExist:
+            location_page = None
+    else:
         location_page = None
 
     # TODO: handle translation?
@@ -100,53 +98,67 @@ def create_document_from_importer(document_dictionary):
     return document
 
 
+def create_owner_from_importer(owner_data):
+    # Check if we have any owner data
+    # example: the ARR department page doesn't have any
+    if not owner_data:
+        return
+
+    # Check if a user with the same name has already been imported
+    try:
+        user = User.objects.get(email=owner_data['email'])
+    except User.DoesNotExist:
+        user = None
+    if user:
+        return user
+
+    # TODO: add ability to import non-superusers (and handle their departments and specific permissions)
+    owner_data["is_superuser"] = bool(strtobool(owner_data["is_superuser"]))
+    if not owner_data["is_superuser"]:
+        raise ValidationError("Only allowing imports for pages owned by superusers.")
+
+    user = UserFactory.create(**owner_data)
+    return user
+
+
+def create_department_group_from_importer(department_page_dictionaries):
+    # see if we already have a department group associated with this department page information
+    try:
+        department_group = Department.objects.get(department_page__slug=department_page_dictionaries['en']['slug'])
+    except Department.DoesNotExist:
+        department_group = None
+    if department_group:
+        return department_group
+
+    # we don't have the department group for this page
+    # create or get the department page
+    # todo: figure out how to get a revision id for departments that aren't live
+    department_page_revision_id = None
+    if department_page_dictionaries['en']['live_revision']:
+        department_page_revision_id = department_page_dictionaries['en']['live_revision']['id']
+    department_page = create_page_from_importer('department', department_page_dictionaries, department_page_revision_id)
+
+    # and make the group
+    department_group = DepartmentFactory.create(department_page=department_page, name=department_page.title)
+    return department_group
+
+
 def create_page_from_importer(page_type, page_dictionaries, revision_id=None):
-    page_type_map = {
-        "information": {
-            "model": InformationPage,
-            "factory": InformationPageFactory,
-        },
-        "topics" : {
-            "model": TopicPage,
-            "factory": TopicPageFactory,
-        },
-        "topiccollection": {
-            "model": TopicCollectionPage,
-            "factory": TopicCollectionPageFactory,
-        },
-        "services": {
-            "model": ServicePage,
-            "factory": ServicePageFactory,
-        },
-        "location": {
-            "model": LocationPage,
-            "factory": LocationPageFactory,
-        },
-        "official_document": {
-            "model": OfficialDocumentPage,
-            "factory": OfficialDocumentPageFactory,
-        },
-        "department": {
-            "model": DepartmentPage,
-            "factory": DepartmentPageFactory,
-        },
-        "event": {
-            "model": EventPage,
-            "factory": EventPageFactory,
-        }
-    }
     model = page_type_map[page_type]["model"]
     factory = page_type_map[page_type]["factory"]
 
-    # first check to see if we already imported this page
-    # if we did, just go to the edit page for it without changing the db
-    # todo: maybe change this to allow updating pages in the future?
-    try:
-        page = model.objects.get(imported_revision_id=revision_id)
-    except model.DoesNotExist:
-        page = None
-    if page:
-        return page
+    # If we have a revision id, try getting the page using it
+    # if we don't check this, we'll get matches on revision_id=None
+    if revision_id:
+        # first check to see if we already imported this page
+        # if we did, just go to the edit page for it without changing the db
+        # todo: maybe change this to allow updating pages in the future?
+        try:
+            page = model.objects.get(imported_revision_id=revision_id)
+        except model.DoesNotExist:
+            page = None
+        if page:
+            return page
 
     # since we don't have a page matching the revision id, we should look
     # for other matches, for now let's just use english slug
@@ -295,6 +307,23 @@ def create_page_from_importer(page_type, page_dictionaries, revision_id=None):
         combined_dictionary['add_official_documents_page_documents'] = {'official_documents_page_documents': official_documents_page_documents}
         del combined_dictionary['official_documents']
 
+    # associate/create departments
+    if 'departments' in combined_dictionary:
+        department_groups = []
+        for index in range(len(page_dictionaries['en']['departments'])):
+            department_group_dictionaries = {
+                'en': page_dictionaries['en']['departments'][index],
+                'es': page_dictionaries['es']['departments'][index],
+            }
+            department_group = create_department_group_from_importer(department_group_dictionaries)
+            department_groups.append(department_group)
+        combined_dictionary['add_departments'] = {'departments': department_groups}
+
+        # remove departments if we have it because:
+        # * it's in english only
+        # * the factory doesn't know what to do with it
+        del combined_dictionary['departments']
+
     # remove liveRevision if we have it
     if 'live_revision' in combined_dictionary:
         del combined_dictionary['live_revision']
@@ -304,6 +333,10 @@ def create_page_from_importer(page_type, page_dictionaries, revision_id=None):
         if field.column.endswith("_es"):
             if field.column[:-3] in page_dictionaries['es']:
                 combined_dictionary[field.column] = page_dictionaries['es'][field.column[:-3]]
+
+    # set the owner of the page
+    if 'owner' in combined_dictionary:
+        combined_dictionary['owner'] = create_owner_from_importer(combined_dictionary['owner'])
 
     # Set home as parent
     '''
