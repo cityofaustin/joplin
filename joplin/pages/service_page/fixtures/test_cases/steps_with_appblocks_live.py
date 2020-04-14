@@ -16,7 +16,7 @@ def steps_with_appblocks_live():
             "topics": []
         },
         "short_description": "This is a very short description of a LIVE appblock service page",
-        "dynamic_content": components.dynamic_content,
+        "dynamic_content": components.dynamic_content_list,
         "steps": components.steps_with_appblocks,
     }
 

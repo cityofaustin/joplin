@@ -16,7 +16,7 @@ def steps_2_live():
             "topics": []
         },
         "short_description": "This is a very short description of a LIVE texas 2 step...",
-        "dynamic_content": components.dynamic_content,
+        "dynamic_content": components.dynamic_content_list,
         "steps": components.steps_2,
     }
 
