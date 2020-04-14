@@ -15,11 +15,8 @@ import pages.service_page.fixtures as service_page_fixtures
 import pages.official_documents_page.fixtures as official_documents_page_fixtures
 import pages.location_page.fixtures as location_page_fixtures
 import pages.event_page.fixtures as event_page_fixtures
-<<<<<<< HEAD
 import pages.department_page.fixtures as department_page_fixtures
-=======
 import users.fixtures as user_fixtures
->>>>>>> v3
 
 
 class Command(BaseCommand):
