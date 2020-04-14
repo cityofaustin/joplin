@@ -430,8 +430,8 @@ unparsed_query_strings = {
         }
     ''',
     'all_revisions': '''
-    {
-      allPageRevisions(first:100) {
+    query getAllPageRevisions($afterCursor: String) {
+      allPageRevisions(first: 100, after: $afterCursor) {
         edges {
           node {
             id

@@ -3,7 +3,7 @@ from gql import Client
 from importer.queries import queries
 import json
 
-def import_everything():
+def fetch_and_save_revision_ids():
     sample_transport = RequestsHTTPTransport(
         url='http://joplin-pr-latest-revision.herokuapp.com/api/graphql',
         headers={
@@ -22,19 +22,16 @@ def import_everything():
     all_page_revisions = []
     after_cursor = ''
     has_next_page = True
-    r = 0
     while has_next_page:
-        result = client.execute(queries['all_revisions'], variable_values=json.dumps({'after_cursor': after_cursor}))
+        result = client.execute(queries['all_revisions'], variable_values=json.dumps({'afterCursor': after_cursor}))
         after_cursor = result['allPageRevisions']['pageInfo']['endCursor']
         has_next_page = result['allPageRevisions']['pageInfo']['hasNextPage']
         all_page_revisions.extend(result['allPageRevisions']['edges'])
-        r += 1
-        print(u'got {0}'.format(100*r))
-        if r == 20:
-            has_next_page = False
 
     with open('revision_ids_file.json', 'w') as revision_ids_file:
         revision_ids_file.write(json.dumps(all_page_revisions))
 
-    # todo: write this out to a file
-    blarg = 3
+def import_everything():
+    # if we don't have a revision_ids_file then let's make one
+    if True:
+        fetch_and_save_revision_ids()
