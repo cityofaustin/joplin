@@ -10,7 +10,7 @@ def kitchen_sink():
     topic = kitchen_sink_topic.kitchen_sink()
     steps = components.steps_with_appblocks
     steps.extend(components.steps_2)
-	steps.extend(components.step_with_options)
+    steps.extend(components.step_with_options)
     department = kitchen_sink_department.kitchen_sink()
 
     page_data = {

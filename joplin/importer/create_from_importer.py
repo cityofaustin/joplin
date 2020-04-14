@@ -16,7 +16,7 @@ from users.factories import UserFactory
 from pages.home_page.models import HomePage
 from pages.location_page.models import LocationPage
 from pages.service_page.models import ServicePage
-from pages.department_page.factories import DepartmentPageFactory
+from pages.service_page.factories import ServicePageFactory
 from groups.models import Department
 from groups.factories import DepartmentFactory
 
