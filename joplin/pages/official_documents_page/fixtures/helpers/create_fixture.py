@@ -1,22 +1,11 @@
-from pages.official_documents_page.models import OfficialDocumentPage
 from wagtail.documents.models import Document
-from pages.official_documents_page.factories import OfficialDocumentPageFactory, DocumentFactory
+from pages.official_documents_page.factories import DocumentFactory
 import hashlib
 from django.core.files.base import ContentFile
 
-# Skips creating fixture if Page with slug already exists
-def create_fixture(page_data, fixture_name):
-    try:
-        page = OfficialDocumentPage.objects.get(slug=page_data['slug'])
-    except OfficialDocumentPage.DoesNotExist:
-        page = None
-    if page:
-        print(f"Skipping official documents page fixture: {fixture_name}")
-        return page
 
-    page = OfficialDocumentPageFactory.create(**page_data)
-    print(f"Built official documents page fixture: {fixture_name}")
-    return page
+from pages.base_page.fixtures.helpers.create_fixture_map import create_fixture_map
+create_fixture = create_fixture_map["official_document"]
 
 
 def create_fixture_document(file_content, file_name):

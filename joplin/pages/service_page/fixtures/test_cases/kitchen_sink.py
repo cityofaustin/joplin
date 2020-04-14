@@ -7,6 +7,9 @@ from pages.topic_page.fixtures.test_cases import kitchen_sink as kitchen_sink_to
 # A "kitchen sink" service page
 def kitchen_sink():
     topic = kitchen_sink_topic.kitchen_sink()
+    steps = components.steps_with_appblocks
+    steps.extend(components.steps_2)
+    steps.extend(components.step_with_options)
 
     page_data = {
         "imported_revision_id": None,
@@ -20,8 +23,9 @@ def kitchen_sink():
             "topics": [topic]
         },
         "short_description": "Kitchen sink service page short description [en]",
-        "dynamic_content": components.dynamic_content,
-        "steps": components.steps_2,
+        "additional_content": components.additional_content,
+        'dynamic_content': components.dynamic_content_list,
+        "steps": steps,
     }
 
     return create_fixture(page_data, os.path.basename(__file__))

@@ -18,8 +18,8 @@ from importer.page_importer import PageImporter
 import json
 
 
-def import_page_from_url(url):
-    page = PageImporter(url).fetch_page_data().create_page()
+def import_page_from_url(url, jwt_token):
+    page = PageImporter(url, jwt_token).fetch_page_data().create_page()
 
     return page.id
 
@@ -36,8 +36,10 @@ def new_page_from_modal(request):
 
         # if we got an import request, let's go try some importing
         if body['type'] == 'importSinglePage':
+            if not request.user.is_superuser:
+                raise PermissionDenied
             # Respond with the id of the new page
-            new_page_id = import_page_from_url(body['title'])
+            new_page_id = import_page_from_url(body['title'], body['jwtToken'])
             response = HttpResponse(json.dumps({'id': new_page_id}), content_type="application/json")
             return response
 

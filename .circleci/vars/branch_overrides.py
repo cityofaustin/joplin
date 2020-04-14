@@ -17,7 +17,11 @@ branch_overrides = {
         "LOAD_DATA": "fixtures",
         "V3_WIP": True,
     },
-    "official-docs-fixture": {
+    "fixtures-and-previews": {
+        "LOAD_DATA": "fixtures",
+        "V3_WIP": True,
+    },
+    "4266-guide": {
         "LOAD_DATA": "fixtures",
         "V3_WIP": True,
     },
