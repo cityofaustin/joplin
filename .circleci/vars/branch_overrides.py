@@ -24,5 +24,9 @@ branch_overrides = {
     "4266-guide": {
         "LOAD_DATA": "fixtures",
         "V3_WIP": True,
+    },
+    "4274-are-we-live": {
+        "LOAD_DATA": "fixtures",
+        "V3_WIP": True,
     }
 }
