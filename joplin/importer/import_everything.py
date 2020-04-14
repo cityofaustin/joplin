@@ -1,12 +1,14 @@
 from gql.transport.requests import RequestsHTTPTransport
-
+from gql import Client
+from importer.queries import queries
+import json
 
 def import_everything():
     sample_transport = RequestsHTTPTransport(
         url='http://joplin-pr-latest-revision.herokuapp.com/api/graphql',
         headers={
-            'Accept-Language': lang,
-            'Authorization': f'JWT {self.jwt_token}',
+            'Accept-Language': 'en',
+            'Authorization': f'JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImFkbWluQGF1c3RpbnRleGFzLmlvIiwiZXhwIjoxNTg2ODczMjQyLCJvcmlnSWF0IjoxNTg2ODcyOTQyfQ.fDss8txeS0Oe-OWeB3WiayV3vDhs-tCJLqQa0jpDuQM',
         },
         verify=True
     )
@@ -17,6 +19,6 @@ def import_everything():
         fetch_schema_from_transport=True,
     )
 
-    result = client.execute(queries[self.page_type], variable_values=json.dumps({'id': self.revision_id}))
+    result = client.execute(queries['all_revisions'])
 
     blarg = 3
