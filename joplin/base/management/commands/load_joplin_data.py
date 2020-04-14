@@ -17,7 +17,7 @@ import pages.location_page.fixtures as location_page_fixtures
 import pages.event_page.fixtures as event_page_fixtures
 import pages.department_page.fixtures as department_page_fixtures
 import users.fixtures as user_fixtures
-
+from importer.import_everything import import_everything
 
 class Command(BaseCommand):
     help = "Load initial seeding data into your app"
@@ -80,6 +80,9 @@ class Command(BaseCommand):
                 location_page_fixtures.load_all()
                 department_page_fixtures.load_all()
                 # TODO: incorporate logging into DeploymentLog?
+            if LOAD_DATA == 'importer':
+                print("Importing data from {where?}")
+                import_everything()
             elif not load_data_result:
                 if LOAD_DATA == 'prod':
                     print("Adding prod datadump")
