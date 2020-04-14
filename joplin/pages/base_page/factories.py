@@ -19,7 +19,7 @@ class JanisBasePageFactory(PageFactory):
                 GroupPagePermissionFactory.create(page=self, group=department, permission_type='edit')
             return
 
-        # pass "add_department__dummy"=True into Factory() to make dummy departments
+        # pass "add_departments__dummy"=True into Factory() to make dummy departments
         if create:
             if (kwargs.get("dummy", False)):
                 GroupPagePermissionFactory.create(page=self)

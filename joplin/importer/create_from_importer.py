@@ -319,7 +319,7 @@ def create_page_from_importer(page_type, page_dictionaries, revision_id=None):
             department_groups.append(department_group)
         combined_dictionary['add_departments'] = {'departments': department_groups}
 
-        # remove topics if we have it because:
+        # remove departments if we have it because:
         # * it's in english only
         # * the factory doesn't know what to do with it
         del combined_dictionary['departments']
