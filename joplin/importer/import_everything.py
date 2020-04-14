@@ -28,10 +28,19 @@ def fetch_and_save_revision_ids():
         has_next_page = result['allPageRevisions']['pageInfo']['hasNextPage']
         all_page_revisions.extend(result['allPageRevisions']['edges'])
 
-    with open('revision_ids_file.json', 'w') as revision_ids_file:
+    with open('another_revision_ids_file.json', 'w') as revision_ids_file:
         revision_ids_file.write(json.dumps(all_page_revisions))
 
 def import_everything():
     # if we don't have a revision_ids_file then let's make one
-    if True:
+    if False:
         fetch_and_save_revision_ids()
+
+    with open('another_revision_ids_file.json') as revision_ids_file:
+        all_page_revisions = json.load(revision_ids_file)
+        print(len(all_page_revisions))
+        latest_revisions = list(filter(lambda edge: edge['node']['isLatest'], all_page_revisions))
+        blarg = 2
+
+
+
