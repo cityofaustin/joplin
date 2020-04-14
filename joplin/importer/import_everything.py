@@ -33,5 +33,8 @@ def import_everything():
         if r == 20:
             has_next_page = False
 
+    with open('revision_ids_file.json', 'w') as revision_ids_file:
+        revision_ids_file.write(json.dumps(all_page_revisions))
+
     # todo: write this out to a file
     blarg = 3
