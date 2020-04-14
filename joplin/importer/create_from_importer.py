@@ -127,6 +127,7 @@ def create_department_group_from_importer(department_page_dictionaries):
 
     # we don't have the department group for this page
     # create or get the department page
+    # todo: figure out how to get a revision id for departments that aren't live
     department_page = create_page_from_importer('department', department_page_dictionaries)
 
     # and make the group
@@ -138,15 +139,18 @@ def create_page_from_importer(page_type, page_dictionaries, revision_id=None):
     model = page_type_map[page_type]["model"]
     factory = page_type_map[page_type]["factory"]
 
-    # first check to see if we already imported this page
-    # if we did, just go to the edit page for it without changing the db
-    # todo: maybe change this to allow updating pages in the future?
-    try:
-        page = model.objects.get(imported_revision_id=revision_id)
-    except model.DoesNotExist:
-        page = None
-    if page:
-        return page
+    # If we have a revision id, try getting the page using it
+    # if we don't check this, we'll get matches on revision_id=None
+    if revision_id:
+        # first check to see if we already imported this page
+        # if we did, just go to the edit page for it without changing the db
+        # todo: maybe change this to allow updating pages in the future?
+        try:
+            page = model.objects.get(imported_revision_id=revision_id)
+        except model.DoesNotExist:
+            page = None
+        if page:
+            return page
 
     # since we don't have a page matching the revision id, we should look
     # for other matches, for now let's just use english slug
