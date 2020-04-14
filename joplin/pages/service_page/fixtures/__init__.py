@@ -4,6 +4,7 @@ from .test_cases.steps_with_appblocks import steps_with_appblocks
 from .test_cases.step_with_options import step_with_options
 from .test_cases.new_contact import new_contact
 from .test_cases.kitchen_sink import kitchen_sink
+from .test_cases.dynamic_content_list import dynamic_content_list
 
 
 # You can import any test_case fixture individually
@@ -15,3 +16,4 @@ def load_all():
     step_with_options()
     new_contact()
     kitchen_sink()
+    dynamic_content_list()
