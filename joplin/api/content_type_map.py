@@ -41,11 +41,11 @@ content_type_map = {
         "model": EventPage
     },
     "topic page": {
-        "node": "TopicPageNode",
+        "node": "TopicNode",
         "model": TopicPage,
     },
     "topic collection page": {
-        "node": "TopicCollectionPageNode",
+        "node": "TopicCollectionNode",
         "model": TopicCollectionPage,
     },
     "department page": {
