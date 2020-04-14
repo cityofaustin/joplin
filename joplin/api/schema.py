@@ -763,6 +763,7 @@ class PageRevisionNode(DjangoObjectType):
     as_location_page = graphene.NonNull(LocationPageNode)
     as_event_page = graphene.NonNull(EventPageNode)
     is_latest = graphene.Boolean()
+    is_live = graphene.Boolean()
 
     def resolve_as_service_page(self, resolve_info, *args, **kwargs):
         return self.as_page_object()
@@ -796,6 +797,9 @@ class PageRevisionNode(DjangoObjectType):
 
     def resolve_is_latest(self, resolve_info, *args, **kwargs):
         return self.created_at == self.page.latest_revision_created_at
+
+    def resolve_is_live(self, resolve_info, *args, **kwargs):
+        return self == self.page.live_revision
 
     class Meta:
         model = PageRevision
