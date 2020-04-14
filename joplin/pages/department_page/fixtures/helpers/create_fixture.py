@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 from pages.department_page.models import DepartmentPage
 from pages.department_page.factories import DepartmentPageFactory
 
@@ -15,3 +16,7 @@ def create_fixture(page_data, fixture_name):
     page = DepartmentPageFactory.create(**page_data)
     print(f"Built {fixture_name}")
     return page
+=======
+from pages.base_page.fixtures.helpers.create_fixture_map import create_fixture_map
+create_fixture = create_fixture_map["department"]
+>>>>>>> v3

@@ -1,4 +1,3 @@
-
 '''
     components.py contains elements that may be used
     interchangeably with multiple fixtures

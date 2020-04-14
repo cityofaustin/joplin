@@ -19,7 +19,7 @@ from snippets.contact.models import Contact, ContactPhoneNumber
 from snippets.theme.models import Theme
 from base.models import TranslatedImage
 from pages.topic_collection_page.models import TopicCollectionPage, JanisBasePageWithTopicCollections, JanisBasePageTopicCollection
-from pages.topic_page.models import TopicPage, TopicPageTopPage, JanisBasePageWithTopics
+from pages.topic_page.models import TopicPage, TopicPageTopPage, JanisBasePageWithTopics, JanisBasePageTopic
 from pages.service_page.models import ServicePage
 from pages.information_page.models import InformationPage
 from pages.department_page.models import DepartmentPage, DepartmentPageDirector, DepartmentPageTopPage, DepartmentPageRelatedPage
@@ -39,6 +39,7 @@ class RichTextFieldType(Scalar):
     Serialises RichText content into fully baked HTML
     see https://github.com/wagtail/wagtail/issues/2695#issuecomment-464462575
     """
+
     @staticmethod
     def serialize(value):
         return expand_db_html(value)
@@ -73,7 +74,8 @@ def expand_dict_values(item):
     if isinstance(item, int):
         return item
     try:
-        dict_values = {key: try_expand_db_html(value) for (key, value) in item.items() if item is not isinstance(item, int)}
+        dict_values = {key: try_expand_db_html(value) for (key, value) in item.items() if
+                       item is not isinstance(item, int)}
         return dict_values
     except Exception as e:
         print('dict_comprehension error!', e)
@@ -105,7 +107,7 @@ def try_get_api_representation(StreamChild):
     try:
         if not isinstance(StreamChild, dict):
             block = StreamChild.block.get_api_representation(StreamChild.value) or None
-        # if the block is just a string (no dict at all), just return it expanded
+            # if the block is just a string (no dict at all), just return it expanded
             if isinstance(block, str):
                 parsed_block = try_expand_db_html(block)
                 return parsed_block
@@ -208,7 +210,7 @@ class JanisBasePageNode(DjangoObjectType):
                 url = ''
             if i['parent']:
                 node = content_type_map[i['parent'].content_type.name]["node"]
-                global_id = graphene.Node.to_global_id(node, i['parent'].content_type_id)
+                global_id = graphene.Node.to_global_id(node, i['parent'].id)
                 parent = ContextualNavInstance(
                     id=global_id,
                     title=i['parent'].title,
@@ -217,7 +219,7 @@ class JanisBasePageNode(DjangoObjectType):
                 parent = None
             if i['grandparent']:
                 node = content_type_map[i['grandparent'].content_type.name]["node"]
-                global_id = graphene.Node.to_global_id(node, i['grandparent'].content_type_id)
+                global_id = graphene.Node.to_global_id(node, i['grandparent'].id)
                 grandparent = ContextualNavInstance(
                     id=global_id,
                     title=i['grandparent'].title,
@@ -234,6 +236,8 @@ class JanisBasePageWithTopicCollectionsNode(DjangoObjectType):
         model = JanisBasePageWithTopicCollections
         filter_fields = ['id', 'slug', 'live']
         interfaces = [graphene.Node]
+
+
 '''
     Note: we do NOT want to use DjangoObjectType for the User model.
     Otherwise owners and users will be visible on all nodes by default.
@@ -241,6 +245,8 @@ class JanisBasePageWithTopicCollectionsNode(DjangoObjectType):
     and we want those resolvers to be wrapped in a @superuser_required decorator for authorization.
     TODO: handle importing of department groups for non-superusers.
 '''
+
+
 class OwnerNode(graphene.ObjectType):
     id = graphene.ID()
     first_name = graphene.String()
@@ -307,23 +313,12 @@ class DepartmentResolver(graphene.Interface):
         return instance.departments()
 
 
-class JanisBasePageWithTopicsNode(DjangoObjectType):
-    departments = graphene.List(DepartmentPageNode)
-
-    class Meta:
-        model = JanisBasePageWithTopics
-        filter_fields = ['id', 'slug', 'live']
-        interfaces = [graphene.Node]
-
-    def resolve_departments(self, info):
-        return self.departments()
-
-
 class DocumentNode(DjangoObjectType):
     class Meta:
         model = Document
         interfaces = [graphene.Node]
         exclude_fields = ['tags']
+
     filename = graphene.String()
 
 
@@ -346,6 +341,15 @@ class TopicCollectionNode(DjangoObjectType):
     def resolve_owner(self, info):
         return resolve_owner_handler(self, info)
 
+
+class JanisBasePageTopicCollectionNode(DjangoObjectType):
+    class Meta:
+        model = JanisBasePageTopicCollection
+        filter_fields = ['topic_collection']
+        fields = '__all__'
+        interfaces = [graphene.Node]
+
+
 class TopicNode(DjangoObjectType):
     topiccollections = graphene.List(TopicCollectionNode)
     owner = graphene.Field(OwnerNode)
@@ -366,12 +370,36 @@ class TopicNode(DjangoObjectType):
         return resolve_owner_handler(self, info)
 
 
-class JanisBasePageTopicCollectionNode(DjangoObjectType):
+class JanisBasePageTopicNode(DjangoObjectType):
+    page_id = graphene.ID()
+
     class Meta:
-        model = JanisBasePageTopicCollection
-        filter_fields = ['topic_collection']
+        model = JanisBasePageTopic
+        filter_fields = ['topic']
         fields = '__all__'
         interfaces = [graphene.Node]
+
+    def resolve_page_id(self, info):
+        return get_global_id_from_content_type(self)
+
+
+class JanisBasePageWithTopicsNode(DjangoObjectType):
+    departments = graphene.List(DepartmentPageNode)
+    topics = graphene.List(TopicNode)
+
+    class Meta:
+        model = JanisBasePageWithTopics
+        filter_fields = ['id', 'slug', 'live']
+        interfaces = [graphene.Node]
+
+    def resolve_topics(self, info):
+        topics = []
+        for topic in self.topics.values():
+            topics.append(TopicPage.objects.get(id=topic['topic_id']))
+        return topics
+
+    def resolve_departments(self, info):
+        return self.departments()
 
 
 class LocationPageNode(DjangoObjectType):
@@ -409,6 +437,7 @@ class EventFilter(FilterSet):
             ('date'),
         )
     )
+
     # For reference:
     # https://django-filter.readthedocs.io/en/master/ref/filterset.html#declaring-filterable-fields
     # https://docs.djangoproject.com/en/3.0/ref/models/querysets/#lte
@@ -497,6 +526,8 @@ eventPage {
     location
 }
 """
+
+
 # we need to use a custom resolver
 # we could also try to make our streamfield type queryable,
 # but that is a rabbit hole I haven't jumped all the way down yet
@@ -546,7 +577,7 @@ class EventPageNode(DjangoObjectType):
 
     class Meta:
         model = EventPage
-        filter_fields =  ['id', 'slug', 'live', 'date']
+        filter_fields = ['id', 'slug', 'live', 'date']
         interfaces = [graphene.Node, DepartmentResolver]
 
     def resolve_locations(self, info):
@@ -592,6 +623,7 @@ class TranslatedImageNode(DjangoObjectType):
         model = TranslatedImage
         interfaces = [graphene.Node]
         exclude_fields = ['tags']
+
     filename = graphene.String()
 
 
@@ -903,6 +935,7 @@ def get_page_from_content_type(self):
     page = model.objects.get(id=self.page_id)
     return page
 
+
 # Get a page global_id from a page chooser node
 # Works for any content_type defined in content_type_map
 def get_global_id_from_content_type(self):
@@ -1002,6 +1035,7 @@ class Query(graphene.ObjectType):
     all_location_pages = DjangoFilterConnectionField(LocationPageNode)
     all_event_pages = DjangoFilterConnectionField(EventPageNode, filterset_class=EventFilter)
     topic_collection_topics = DjangoFilterConnectionField(JanisBasePageTopicCollectionNode)
+    base_page_topics = DjangoFilterConnectionField(JanisBasePageTopicNode)
 
     def resolve_page_revision(self, resolve_info, id=None):
         revision = graphene.Node.get_node_from_global_id(resolve_info, id)

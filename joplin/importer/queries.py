@@ -10,40 +10,6 @@ class GraphqlParser(Template):
 
 fragments = {}
 
-fragments["topiccollection"] = '''
-      title
-      slug
-      description
-      liveRevision {
-        id
-      }
-      theme {
-        slug
-        text
-        description
-      }
-'''
-
-fragments["topic"] = GraphqlParser('''
-    title
-    slug
-    description
-    liveRevision {
-        id
-     }
-    topiccollections {
-      edges {
-        node {
-          topiccollection {
-              $$$topiccollection
-          }
-        }
-      }
-    }
-''').substitute(
-    topiccollection=fragments["topiccollection"]
-)
-
 fragments["contact"] = '''
     name
     phoneNumber {
@@ -71,6 +37,76 @@ fragments["owner"] = '''
   }
 '''
 
+fragments['department'] = GraphqlParser('''
+    slug
+    title
+    whatWeDo
+    mission
+    $$$owner
+    contacts {
+      edges {
+        node {
+          contact {
+            $$$contact
+          }
+        }
+      }
+    }
+    departmentDirectors {
+      edges {
+        node {
+          name
+          title
+          about
+        }
+      }
+    }
+    jobListings
+    liveRevision {
+        id
+    }
+    live
+''').substitute(
+    contact=fragments["contact"],
+    owner=fragments["owner"],
+)
+
+fragments["topiccollection"] = '''
+      title
+      slug
+      description
+      liveRevision {
+        id
+      }
+      theme {
+        slug
+        text
+        description
+      }
+      live
+'''
+
+fragments["topic"] = GraphqlParser('''
+    title
+    slug
+    description
+    liveRevision {
+        id
+     }
+    topiccollections {
+      edges {
+        node {
+          topiccollection {
+              $$$topiccollection
+          }
+        }
+      }
+    }
+    live
+''').substitute(
+    topiccollection=fragments["topiccollection"]
+)
+
 fragments["information"] = GraphqlParser('''
     title
     slug
@@ -96,10 +132,15 @@ fragments["information"] = GraphqlParser('''
         }
       }
     }
+    departments {
+        $$$department
+    }
+    live
 ''').substitute(
     topic=fragments["topic"],
     contact=fragments["contact"],
     owner=fragments["owner"],
+    department=fragments["department"]
 )
 
 fragments["services"] = GraphqlParser('''
@@ -129,76 +170,19 @@ fragments["services"] = GraphqlParser('''
         }
       }
     }
+    departments {
+        $$$department
+    }
+    live
 ''').substitute(
     topic=fragments["topic"],
     contact=fragments["contact"],
     owner=fragments["owner"],
+    department=fragments["department"]
 )
 
-fragments["official_document"] = GraphqlParser('''
-    title
-    slug
-    description
-    $$$owner
-    topics {
-      edges {
-        node {
-          topic {
-            $$$topic
-          }
-        }
-      }
-    }
-    officialDocuments {
-      edges {
-        node {
-          date
-          title
-          authoringOffice
-          summary
-          name
-          document {
-            filename
-          }
-        }
-      }
-    }
-''').substitute(
-    topic=fragments["topic"],
-    owner=fragments["owner"],
-)
 
-fragments['department'] = GraphqlParser('''
-    slug
-    title
-    whatWeDo
-    mission
-    $$$owner
-    contacts {
-      edges {
-        node {
-          contact {
-            $$$contact
-          }
-        }
-      }
-    }
-    departmentDirectors {
-      edges {
-        node {
-          name
-          title
-          about
-        }
-      }
-    }
-    jobListings
-''').substitute(
-    contact=fragments["contact"],
-    owner=fragments["owner"],
-)
-
-fragments["hours"] = GraphqlParser('''
+fragments["hours"] = '''
     mondayStartTime
     mondayEndTime
     mondayStartTime2
@@ -228,8 +212,44 @@ fragments["hours"] = GraphqlParser('''
     sundayStartTime2
     sundayEndTime2
     hoursExceptions
-''').substitute(
+'''
 
+fragments["official_document"] = GraphqlParser('''
+    title
+    slug
+    description
+    $$$owner
+    topics {
+      edges {
+        node {
+          topic {
+            $$$topic
+          }
+        }
+      }
+    }
+    officialDocuments {
+      edges {
+        node {
+          date
+          title
+          authoringOffice
+          summary
+          name
+          document {
+            filename
+          }
+        }
+      }
+    }
+    departments {
+        $$$department
+    }
+    live
+''').substitute(
+    department=fragments["department"],
+    topic=fragments["topic"],
+    owner=fragments["owner"],
 )
 
 fragments["location"] = GraphqlParser('''
@@ -268,9 +288,14 @@ fragments["location"] = GraphqlParser('''
       }
     }
     $$$hours
+    departments {
+        $$$department
+    }
+    live
 ''').substitute(
     hours=fragments["hours"],
     owner=fragments["owner"],
+    department=fragments["department"]
 )
 
 fragments['form'] = GraphqlParser('''
@@ -289,9 +314,14 @@ fragments['form'] = GraphqlParser('''
         }
       }
     }
+    departments {
+        $$$department
+    }
+    live
 ''').substitute(
     topic=fragments["topic"],
     owner=fragments["owner"],
+    department=fragments["department"]
 )
 
 unparsed_query_strings = {

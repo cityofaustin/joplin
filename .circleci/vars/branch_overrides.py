@@ -9,7 +9,7 @@
     branch_overrides are not required for every branch.
 '''
 branch_overrides = {
-    "4227-resolve-cn": {
+    "4273-correct-ids": {
         "LOAD_DATA": "",
         "V3_WIP": True,
     },
@@ -17,7 +17,7 @@ branch_overrides = {
         "LOAD_DATA": "fixtures",
         "V3_WIP": True,
     },
-    "fixtures-and-previews": {
+    "not-top-pages-topics": {
         "LOAD_DATA": "fixtures",
         "V3_WIP": True,
     },
