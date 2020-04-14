@@ -28,7 +28,10 @@ def test_create_service_page_with_department_from_api(remote_staging_preview_url
     page = PageImporter(url, test_api_jwt_token).fetch_page_data().create_page()
     assert isinstance(page, ServicePage)
     assert page.title == 'Service page with department'
-    assert False
+    group_page_permission = page.group_permissions.all()[0]
+    assert group_page_permission.group.name == 'Pytest department'
+    assert group_page_permission.group.department.department_page.slug == 'pytest-department'
+    assert group_page_permission.page == page
 
 
 @pytest.mark.django_db
