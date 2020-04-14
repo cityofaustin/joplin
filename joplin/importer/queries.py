@@ -62,6 +62,9 @@ fragments['department'] = GraphqlParser('''
       }
     }
     jobListings
+    liveRevision {
+        id
+    }
 ''').substitute(
     contact=fragments["contact"],
     owner=fragments["owner"],

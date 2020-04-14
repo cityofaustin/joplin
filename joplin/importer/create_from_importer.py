@@ -99,6 +99,11 @@ def create_document_from_importer(document_dictionary):
 
 
 def create_owner_from_importer(owner_data):
+    # Check if we have any owner data
+    # example: the ARR department page doesn't have any
+    if not owner_data:
+        return
+
     # Check if a user with the same name has already been imported
     try:
         user = User.objects.get(email=owner_data['email'])
@@ -128,7 +133,10 @@ def create_department_group_from_importer(department_page_dictionaries):
     # we don't have the department group for this page
     # create or get the department page
     # todo: figure out how to get a revision id for departments that aren't live
-    department_page = create_page_from_importer('department', department_page_dictionaries)
+    department_page_revision_id = None
+    if department_page_dictionaries['en']['live_revision']:
+        department_page_revision_id = department_page_dictionaries['en']['live_revision']['id']
+    department_page = create_page_from_importer('department', department_page_dictionaries, department_page_revision_id)
 
     # and make the group
     department_group = DepartmentFactory.create(department_page=department_page, name=department_page.title)
