@@ -17,6 +17,8 @@ from pages.home_page.models import HomePage
 from pages.location_page.models import LocationPage
 from pages.service_page.models import ServicePage
 from pages.service_page.factories import ServicePageFactory
+from groups.models import Department
+from groups.factories import DepartmentFactory
 
 
 def create_contact_from_importer(contact_data):
@@ -112,6 +114,23 @@ def create_owner_from_importer(owner_data):
 
     user = UserFactory.create(**owner_data)
     return user
+
+
+def create_department_group_from_importer(department_group_dictionaries):
+    try:
+        department_group = Department.objects.get(department_page__slug=department_group_dictionaries['en']['slug'])
+    except Department.DoesNotExist:
+        department_group = None
+    if department_group:
+        return department_group
+
+    combined_dictionary = department_group_dictionaries['en']
+    for field in DepartmentFactory._meta.model._meta.fields:
+        if field.column.endswith("_es"):
+            combined_dictionary[field.column] = department_group_dictionaries['es'][field.column[:-3]]
+
+    department_group = DepartmentFactory.create(**combined_dictionary)
+    return department_group
 
 
 def create_page_from_importer(page_type, page_dictionaries, revision_id=None):
@@ -274,6 +293,23 @@ def create_page_from_importer(page_type, page_dictionaries, revision_id=None):
             official_documents_page_documents.append(combined_node)
         combined_dictionary['add_official_documents_page_documents'] = {'official_documents_page_documents': official_documents_page_documents}
         del combined_dictionary['official_documents']
+
+    # associate/create departments
+    if 'departments' in combined_dictionary:
+        department_groups = []
+        for index in range(len(page_dictionaries['en']['departments'])):
+            department_group_dictionaries = {
+                'en': page_dictionaries['en']['departments'][index],
+                'es': page_dictionaries['es']['departments'][index],
+            }
+            department_group = create_department_group_from_importer(department_group_dictionaries)
+            department_groups.append(department_group)
+        combined_dictionary['add_departments'] = {'departments': department_groups}
+
+        # remove topics if we have it because:
+        # * it's in english only
+        # * the factory doesn't know what to do with it
+        del combined_dictionary['departments']
 
     # remove liveRevision if we have it
     if 'live_revision' in combined_dictionary:
