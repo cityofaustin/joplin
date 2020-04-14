@@ -126,10 +126,14 @@ fragments["information"] = GraphqlParser('''
         }
       }
     }
+    departments {
+        $$$department
+    }
 ''').substitute(
     topic=fragments["topic"],
     contact=fragments["contact"],
     owner=fragments["owner"],
+    department=fragments["department"]
 )
 
 fragments["services"] = GraphqlParser('''
@@ -169,38 +173,6 @@ fragments["services"] = GraphqlParser('''
     department=fragments["department"]
 )
 
-fragments["official_document"] = GraphqlParser('''
-    title
-    slug
-    description
-    $$$owner
-    topics {
-      edges {
-        node {
-          topic {
-            $$$topic
-          }
-        }
-      }
-    }
-    officialDocuments {
-      edges {
-        node {
-          date
-          title
-          authoringOffice
-          summary
-          name
-          document {
-            filename
-          }
-        }
-      }
-    }
-''').substitute(
-    topic=fragments["topic"],
-    owner=fragments["owner"],
-)
 
 fragments["hours"] = GraphqlParser('''
     mondayStartTime
@@ -234,6 +206,44 @@ fragments["hours"] = GraphqlParser('''
     hoursExceptions
 ''').substitute(
 
+)
+fragments["official_document"] = GraphqlParser('''
+    title
+    slug
+    description
+    $$$owner
+    topics {
+      edges {
+        node {
+          topic {
+            $$$topic
+          }
+        }
+      }
+    }
+    officialDocuments {
+      edges {
+        node {
+          date
+          title
+          authoringOffice
+          summary
+          name
+          document {
+            filename
+          }
+        }
+      }
+    }
+    departments {
+        $$$department
+    }
+
+)
+''').substitute(
+    department=fragments["department"],
+    topic=fragments["topic"],
+    owner=fragments["owner"],
 )
 
 fragments["location"] = GraphqlParser('''
@@ -272,9 +282,13 @@ fragments["location"] = GraphqlParser('''
       }
     }
     $$$hours
+    departments {
+        $$$department
+    }
 ''').substitute(
     hours=fragments["hours"],
     owner=fragments["owner"],
+    department=fragments["department"]
 )
 
 fragments['form'] = GraphqlParser('''
@@ -293,9 +307,13 @@ fragments['form'] = GraphqlParser('''
         }
       }
     }
+    departments {
+        $$$department
+    }
 ''').substitute(
     topic=fragments["topic"],
     owner=fragments["owner"],
+    department=fragments["department"]
 )
 
 unparsed_query_strings = {
