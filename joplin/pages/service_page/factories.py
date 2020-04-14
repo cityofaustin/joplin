@@ -15,19 +15,15 @@ class ServicePageFactory(JanisBasePageWithTopicsFactory):
             for step in steps:
                 step_to_format = {'type': step['type']}
                 if step['type'] == 'step_with_options_accordian':
-                    blarg = step['value']['options']
-
-                    blargacious = json.dumps([
-                        {
-                            u'option_name': u'{0}'.format(option['option_name']),
-                            u'option_description': u'{0}'.format(option['option_description'])
-                        }
-                        for option in blarg
-                    ])
-
                     step_to_format['value'] = {
                         'options_description': step['value']['options_description'],
-                        'options': blargacious
+                        'options': json.dumps([
+                            {
+                                u'option_name': u'{0}'.format(option['option_name']),
+                                u'option_description': u'{0}'.format(option['option_description'])
+                            }
+                            for option in step['value']['options']
+                        ])
                     }
                 else:
                     step_to_format['value'] = step['value']
