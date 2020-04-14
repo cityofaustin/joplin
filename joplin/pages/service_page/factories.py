@@ -7,7 +7,7 @@ class ServicePageFactory(JanisBasePageWithTopicsFactory):
     @classmethod
     def create(cls, *args, **kwargs):
         # if we don't have a string for dynamic content already
-        if not isinstance(kwargs['dynamic_content'], str):
+        if 'dynamic_content' in kwargs and not isinstance(kwargs['dynamic_content'], str):
             # Convert dynamic content into StreamField-parseable json dump
             formatted_dynamic_content = json.dumps([
                 {
