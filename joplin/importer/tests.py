@@ -133,7 +133,8 @@ def test_get_dummy_topic_page_from_revision(remote_staging_preview_url, test_api
                     },
                     'live_revision': {
                         'id': 'UGFnZVJldmlzaW9uTm9kZToz'
-                    }
+                    },
+                    'live': True
                 }
             }
         }]
@@ -173,14 +174,16 @@ def test_get_dummy_information_page_from_revision(remote_staging_preview_url, te
                                     },
                                     'live_revision': {
                                         'id': 'UGFnZVJldmlzaW9uTm9kZToz'
-                                    }
+                                    },
+                                    'live': True
                                 }
                             }
                         }]
                     },
                     'live_revision': {
                         'id': 'UGFnZVJldmlzaW9uTm9kZToxMg=='
-                    }
+                    },
+                    'live': True
                 }
             }
         }]
