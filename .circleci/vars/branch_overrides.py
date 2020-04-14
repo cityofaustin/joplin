@@ -17,7 +17,7 @@ branch_overrides = {
         "LOAD_DATA": "fixtures",
         "V3_WIP": True,
     },
-    "4169-import-departments": {
+    "not-top-pages-topics": {
         "LOAD_DATA": "fixtures",
         "V3_WIP": True,
     },
