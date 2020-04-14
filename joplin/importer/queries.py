@@ -65,6 +65,7 @@ fragments['department'] = GraphqlParser('''
     liveRevision {
         id
     }
+    live
 ''').substitute(
     contact=fragments["contact"],
     owner=fragments["owner"],
@@ -82,6 +83,7 @@ fragments["topiccollection"] = '''
         text
         description
       }
+      live
 '''
 
 fragments["topic"] = GraphqlParser('''
@@ -100,6 +102,7 @@ fragments["topic"] = GraphqlParser('''
         }
       }
     }
+    live
 ''').substitute(
     topiccollection=fragments["topiccollection"]
 )
@@ -132,6 +135,7 @@ fragments["information"] = GraphqlParser('''
     departments {
         $$$department
     }
+    live
 ''').substitute(
     topic=fragments["topic"],
     contact=fragments["contact"],
@@ -169,6 +173,7 @@ fragments["services"] = GraphqlParser('''
     departments {
         $$$department
     }
+    live
 ''').substitute(
     topic=fragments["topic"],
     contact=fragments["contact"],
@@ -240,6 +245,7 @@ fragments["official_document"] = GraphqlParser('''
     departments {
         $$$department
     }
+    live
 ''').substitute(
     department=fragments["department"],
     topic=fragments["topic"],
@@ -285,6 +291,7 @@ fragments["location"] = GraphqlParser('''
     departments {
         $$$department
     }
+    live
 ''').substitute(
     hours=fragments["hours"],
     owner=fragments["owner"],
@@ -310,6 +317,7 @@ fragments['form'] = GraphqlParser('''
     departments {
         $$$department
     }
+    live
 ''').substitute(
     topic=fragments["topic"],
     owner=fragments["owner"],
