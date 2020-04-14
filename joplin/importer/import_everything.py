@@ -19,6 +19,19 @@ def import_everything():
         fetch_schema_from_transport=True,
     )
 
-    result = client.execute(queries['all_revisions'])
+    all_page_revisions = []
+    after_cursor = ''
+    has_next_page = True
+    r = 0
+    while has_next_page:
+        result = client.execute(queries['all_revisions'], variable_values=json.dumps({'after_cursor': after_cursor}))
+        after_cursor = result['allPageRevisions']['pageInfo']['endCursor']
+        has_next_page = result['allPageRevisions']['pageInfo']['hasNextPage']
+        all_page_revisions.extend(result['allPageRevisions']['edges'])
+        r += 1
+        print(u'got {0}'.format(100*r))
+        if r == 20:
+            has_next_page = False
 
+    # todo: write this out to a file
     blarg = 3

@@ -431,7 +431,7 @@ unparsed_query_strings = {
     ''',
     'all_revisions': '''
     {
-      allPageRevisions(first:20) {
+      allPageRevisions(first:100) {
         edges {
           node {
             id
