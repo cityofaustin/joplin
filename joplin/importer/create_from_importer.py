@@ -17,6 +17,8 @@ from pages.home_page.models import HomePage
 from pages.location_page.models import LocationPage
 from pages.service_page.models import ServicePage
 from pages.service_page.factories import ServicePageFactory
+from groups.models import Department
+from groups.factories import DepartmentFactory
 
 
 def create_contact_from_importer(contact_data):
@@ -97,6 +99,11 @@ def create_document_from_importer(document_dictionary):
 
 
 def create_owner_from_importer(owner_data):
+    # Check if we have any owner data
+    # example: the ARR department page doesn't have any
+    if not owner_data:
+        return
+
     # Check if a user with the same name has already been imported
     try:
         user = User.objects.get(email=owner_data['email'])
@@ -114,19 +121,44 @@ def create_owner_from_importer(owner_data):
     return user
 
 
+def create_department_group_from_importer(department_page_dictionaries):
+    # see if we already have a department group associated with this department page information
+    try:
+        department_group = Department.objects.get(department_page__slug=department_page_dictionaries['en']['slug'])
+    except Department.DoesNotExist:
+        department_group = None
+    if department_group:
+        return department_group
+
+    # we don't have the department group for this page
+    # create or get the department page
+    # todo: figure out how to get a revision id for departments that aren't live
+    department_page_revision_id = None
+    if department_page_dictionaries['en']['live_revision']:
+        department_page_revision_id = department_page_dictionaries['en']['live_revision']['id']
+    department_page = create_page_from_importer('department', department_page_dictionaries, department_page_revision_id)
+
+    # and make the group
+    department_group = DepartmentFactory.create(department_page=department_page, name=department_page.title)
+    return department_group
+
+
 def create_page_from_importer(page_type, page_dictionaries, revision_id=None):
     model = page_type_map[page_type]["model"]
     factory = page_type_map[page_type]["factory"]
 
-    # first check to see if we already imported this page
-    # if we did, just go to the edit page for it without changing the db
-    # todo: maybe change this to allow updating pages in the future?
-    try:
-        page = model.objects.get(imported_revision_id=revision_id)
-    except model.DoesNotExist:
-        page = None
-    if page:
-        return page
+    # If we have a revision id, try getting the page using it
+    # if we don't check this, we'll get matches on revision_id=None
+    if revision_id:
+        # first check to see if we already imported this page
+        # if we did, just go to the edit page for it without changing the db
+        # todo: maybe change this to allow updating pages in the future?
+        try:
+            page = model.objects.get(imported_revision_id=revision_id)
+        except model.DoesNotExist:
+            page = None
+        if page:
+            return page
 
     # since we don't have a page matching the revision id, we should look
     # for other matches, for now let's just use english slug
@@ -274,6 +306,23 @@ def create_page_from_importer(page_type, page_dictionaries, revision_id=None):
             official_documents_page_documents.append(combined_node)
         combined_dictionary['add_official_documents_page_documents'] = {'official_documents_page_documents': official_documents_page_documents}
         del combined_dictionary['official_documents']
+
+    # associate/create departments
+    if 'departments' in combined_dictionary:
+        department_groups = []
+        for index in range(len(page_dictionaries['en']['departments'])):
+            department_group_dictionaries = {
+                'en': page_dictionaries['en']['departments'][index],
+                'es': page_dictionaries['es']['departments'][index],
+            }
+            department_group = create_department_group_from_importer(department_group_dictionaries)
+            department_groups.append(department_group)
+        combined_dictionary['add_departments'] = {'departments': department_groups}
+
+        # remove departments if we have it because:
+        # * it's in english only
+        # * the factory doesn't know what to do with it
+        del combined_dictionary['departments']
 
     # remove liveRevision if we have it
     if 'live_revision' in combined_dictionary:

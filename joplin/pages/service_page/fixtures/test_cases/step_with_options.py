@@ -16,7 +16,7 @@ def step_with_options():
             "topics": []
         },
         "short_description": "This is a very short description",
-        "dynamic_content": components.dynamic_content,
+        "additional_content": components.additional_content,
         "steps": components.step_with_options,
     }
 

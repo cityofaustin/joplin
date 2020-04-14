@@ -2,6 +2,7 @@ import os
 from pages.service_page.fixtures.helpers.create_fixture import create_fixture
 import pages.service_page.fixtures.helpers.components as components
 from pages.topic_page.fixtures.test_cases import kitchen_sink as kitchen_sink_topic
+from groups.fixtures.test_cases import kitchen_sink as kitchen_sink_department
 
 
 # A "kitchen sink" service page
@@ -10,6 +11,7 @@ def kitchen_sink():
     steps = components.steps_with_appblocks
     steps.extend(components.steps_2)
     steps.extend(components.step_with_options)
+    department = kitchen_sink_department.kitchen_sink()
 
     page_data = {
         "imported_revision_id": None,
@@ -22,8 +24,12 @@ def kitchen_sink():
         "add_topics": {
             "topics": [topic]
         },
+        "add_departments": {
+            "departments": [department]
+        },
         "short_description": "Kitchen sink service page short description [en]",
-        "dynamic_content": components.dynamic_content,
+        "additional_content": components.additional_content,
+        'dynamic_content': components.dynamic_content_list,
         "steps": steps,
     }
 

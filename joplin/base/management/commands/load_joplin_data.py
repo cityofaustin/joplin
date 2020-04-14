@@ -15,6 +15,7 @@ import pages.service_page.fixtures as service_page_fixtures
 import pages.official_documents_page.fixtures as official_documents_page_fixtures
 import pages.location_page.fixtures as location_page_fixtures
 import pages.event_page.fixtures as event_page_fixtures
+import pages.department_page.fixtures as department_page_fixtures
 import users.fixtures as user_fixtures
 
 
@@ -77,6 +78,7 @@ class Command(BaseCommand):
                 official_documents_page_fixtures.load_all()
                 event_page_fixtures.load_all()
                 location_page_fixtures.load_all()
+                department_page_fixtures.load_all()
                 # TODO: incorporate logging into DeploymentLog?
             elif not load_data_result:
                 if LOAD_DATA == 'prod':
