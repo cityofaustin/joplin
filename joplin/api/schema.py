@@ -198,7 +198,7 @@ class JanisBasePageNode(DjangoObjectType):
                 url = ''
             if i['parent']:
                 node = content_type_map[i['parent'].content_type.name]["node"]
-                global_id = graphene.Node.to_global_id(node, i['parent'].content_type_id)
+                global_id = graphene.Node.to_global_id(node, i['parent'].id)
                 parent = ContextualNavInstance(
                     id=global_id,
                     title=i['parent'].title,
@@ -207,7 +207,7 @@ class JanisBasePageNode(DjangoObjectType):
                 parent = None
             if i['grandparent']:
                 node = content_type_map[i['grandparent'].content_type.name]["node"]
-                global_id = graphene.Node.to_global_id(node, i['grandparent'].content_type_id)
+                global_id = graphene.Node.to_global_id(node, i['grandparent'].id)
                 grandparent = ContextualNavInstance(
                     id=global_id,
                     title=i['grandparent'].title,
