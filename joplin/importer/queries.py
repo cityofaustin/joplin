@@ -429,6 +429,23 @@ unparsed_query_strings = {
           }
         }
     ''',
+    'all_revisions': '''
+    {
+      allPageRevisions(first:20) {
+        edges {
+          node {
+            id
+            isLatest
+            isLive
+          }
+        }
+        pageInfo {
+          endCursor
+          hasNextPage
+        }
+      }
+    }
+    '''
 }
 
 query_strings = {
