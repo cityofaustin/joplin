@@ -16,7 +16,7 @@ def steps_with_appblocks():
             "topics": []
         },
         "short_description": "This is a very short description",
-        "dynamic_content": components.dynamic_content,
+        "additional_content": components.additional_content,
         "steps": components.steps_with_appblocks,
     }
 

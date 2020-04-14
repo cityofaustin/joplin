@@ -6,6 +6,18 @@ from pages.topic_page.factories import JanisBasePageWithTopicsFactory
 class ServicePageFactory(JanisBasePageWithTopicsFactory):
     @classmethod
     def create(cls, *args, **kwargs):
+        # if we have dynamic content
+        if 'dynamic_content' in kwargs:
+            # convert it into a StreamField-parseable json dump
+            formatted_dynamic_content = json.dumps([
+                {
+                    u'type': u'{0}'.format(dynamic_content_block['type']),
+                    u'value': u'{0}'.format(dynamic_content_block['value'])
+                }
+                for dynamic_content_block in kwargs['dynamic_content']
+            ])
+            kwargs['dynamic_content'] = formatted_dynamic_content
+
         # Convert steps into StreamField-parseable json dump
         step_keywords = ['steps', 'steps_es']
         for step_keyword in step_keywords:
