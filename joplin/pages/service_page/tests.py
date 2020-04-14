@@ -77,6 +77,15 @@ def test_create_service_page_with_new_contact():
 
 
 @pytest.mark.django_db
+def test_create_service_page_with_dynamic_content_list():
+    page = fixtures.dynamic_content_list()
+    assert isinstance(page, ServicePage)
+    # todo: figure out what we want this to assert
+    assert page.title == 'Service Page with dynamic content list'
+
+
+
+@pytest.mark.django_db
 def test_kitchen_sink():
     page = fixtures.kitchen_sink()
     assert isinstance(page, ServicePage)
