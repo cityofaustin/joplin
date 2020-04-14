@@ -22,12 +22,16 @@ class JanisBasePageFactory(PageFactory):
                 try:
                     # todo: create department groups
                     # slug we want to make is kitchen-sink-department
+                    depts = Department.objects.all()
+                    for dept in depts:
+                        blarg = 4
                     department_group = Department.objects.get(department_page__slug=department.slug)
-                    document = Document.objects.get(file_hash=file_hash)
-                except Document.DoesNotExist:
-                    document = None
-                if document:
-                    return document
+                    # document = Document.objects.get(file_hash=file_hash)
+                except Department.DoesNotExist:
+                    pass
+                    # document = None
+                # if document:
+                    # return document
 
                 # It has not been imported, let's do it!
                 document = DocumentFactory.create(file=ContentFile(response.content, name=file_name), title=file_name)

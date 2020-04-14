@@ -2,7 +2,7 @@ import os
 from pages.service_page.fixtures.helpers.create_fixture import create_fixture
 import pages.service_page.fixtures.helpers.components as components
 from pages.topic_page.fixtures.test_cases import kitchen_sink as kitchen_sink_topic
-from pages.department_page.fixtures.test_cases import kitchen_sink as kitchen_sink_department
+from groups.fixtures.test_cases import kitchen_sink as kitchen_sink_department
 
 
 # A "kitchen sink" service page
