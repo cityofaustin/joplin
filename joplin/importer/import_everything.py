@@ -2,13 +2,17 @@ from gql.transport.requests import RequestsHTTPTransport
 from gql import Client
 from importer.queries import queries
 import json
+from importer.page_importer import PageImporter
+
+jwt_token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImFkbWluQGF1c3RpbnRleGFzLmlvIiwiZXhwIjoxNTg2ODczMjQyLCJvcmlnSWF0IjoxNTg2ODcyOTQyfQ.fDss8txeS0Oe-OWeB3WiayV3vDhs-tCJLqQa0jpDuQM'
+api_url = 'http://joplin-pr-latest-revision.herokuapp.com/api/graphql'
 
 def fetch_and_save_revision_ids():
     sample_transport = RequestsHTTPTransport(
-        url='http://joplin-pr-latest-revision.herokuapp.com/api/graphql',
+        url=api_url,
         headers={
             'Accept-Language': 'en',
-            'Authorization': f'JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImFkbWluQGF1c3RpbnRleGFzLmlvIiwiZXhwIjoxNTg2ODczMjQyLCJvcmlnSWF0IjoxNTg2ODcyOTQyfQ.fDss8txeS0Oe-OWeB3WiayV3vDhs-tCJLqQa0jpDuQM',
+            'Authorization': u'JWT {0}'.format(jwt_token),
         },
         verify=True
     )
@@ -36,11 +40,21 @@ def import_everything():
     if False:
         fetch_and_save_revision_ids()
 
+    latest_revisions = []
     with open('another_revision_ids_file.json') as revision_ids_file:
         all_page_revisions = json.load(revision_ids_file)
         print(len(all_page_revisions))
         latest_revisions = list(filter(lambda edge: edge['node']['isLatest'], all_page_revisions))
-        blarg = 2
+
+    for revision in latest_revisions:
+        page_importer = PageImporter(u'?CMS_API={0}'.format(api_url), 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImFkbWluQGF1c3RpbnRleGFzLmlvIiwiZXhwIjoxNTg2ODczMjQyLCJvcmlnSWF0IjoxNTg2ODcyOTQyfQ.fDss8txeS0Oe-OWeB3WiayV3vDhs-tCJLqQa0jpDuQM')
+
+        # todo: figure out if we need language
+        # self.language = path.parts[1]
+
+        # todo: figure out page type
+        page_importer.page_type = None
+        page_importer.revision_id = revision_id
 
 
 

@@ -50,6 +50,28 @@ class PageImporter:
 
         return cleaned_page_dictionary
 
+    def fetch_page_type(self):
+        if self.page_type:
+            return self.page_type
+
+        sample_transport = RequestsHTTPTransport(
+            url=self.joplin_api_endpoint,
+            headers={
+                'Accept-Language': 'en',
+                'Authorization': f'JWT {self.jwt_token}',
+            },
+            verify=True
+        )
+
+        client = Client(
+            retries=3,
+            transport=sample_transport,
+            fetch_schema_from_transport=True,
+        )
+
+        result = client.execute(queries[self.page_type], variable_values=json.dumps({'id': self.revision_id}))
+
+
 
     def fetch_page_data(self):
         # todo: don't just hardcode lang here
@@ -79,7 +101,6 @@ class PageImporter:
 
         # return ourselves for method chaining
         return self
-
 
     def __init__(self, url, jwt_token):
         # get a urllib.parse result to play with
