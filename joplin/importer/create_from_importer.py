@@ -324,6 +324,36 @@ def create_page_from_importer(page_type, page_dictionaries, revision_id=None):
         # * the factory doesn't know what to do with it
         del combined_dictionary['departments']
 
+    # Associate locations to event pages
+    # Only applies to 'event' page_type
+    if (page_type is 'event') and ('locations' in combined_dictionary):
+        location_blocks = []
+        for index, location in enumerate(page_dictionaries['en']['locations']):
+            is_city_location = location['location_type'] == 'city_location'
+            if is_city_location:
+                location_page_dictionaries = {
+                    'en': page_dictionaries['en']['locations'][index]["city_location"],
+                    'es': page_dictionaries['es']['locations'][index]["city_location"],
+                }
+                revision_id = location["city_location"]['live_revision']['id']
+                location_page = create_page_from_importer(
+                    'location',
+                    location_page_dictionaries,
+                    revision_id,
+                )
+                # Steamfield only wants the Primary Key of the city_location.
+                # Overwrite with the pk of your newly created/retrieved location_page.
+                location["value"]["location_page"] = location_page.pk
+                location_block = {
+                    "type": "city_location",
+                    "value": location["value"],
+                }
+            else:
+                print("TODO: handle remote loccation")
+            location_blocks.append(location_block)
+        combined_dictionary['location_blocks'] = location_blocks
+        del combined_dictionary['locations']
+
     # remove liveRevision if we have it
     if 'live_revision' in combined_dictionary:
         del combined_dictionary['live_revision']
@@ -346,9 +376,6 @@ def create_page_from_importer(page_type, page_dictionaries, revision_id=None):
         If our 'parent' is an instance of an outdated HomePage, then there will be wagtail path conflicts for your page.
     '''
     combined_dictionary['parent'] = HomePage.objects.first()
-
-    # todo: actually get departments here
-    # combined_dictionary['add_department'] = ['just a string']
 
     page = factory.create(**combined_dictionary)
     return page

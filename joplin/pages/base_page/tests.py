@@ -133,7 +133,6 @@ def test_base_page_with_topics_with_department_not_global_urls(home_page, expect
     assert janis_publish_url == f'{expected_publish_url_base}{expected_urls[0]}'
 
 
-# todo: figure out how to get department permissions working in a test db setting so we don't get random failures
 # If we have associated departments,
 # and we have associated topic pages
 # and coa_global=True (top level is checked)

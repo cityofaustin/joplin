@@ -256,6 +256,9 @@ fragments["location"] = GraphqlParser('''
     title
     slug
     coaGlobal
+    liveRevision {
+        id
+    }
     physicalStreet
     physicalUnit
     physicalCity
@@ -344,18 +347,13 @@ fragments['event'] = GraphqlParser('''
         }
       }
     }
-    contacts {
-      edges {
-        node {
-          contact {
-            $$$contact
-          }
-        }
-      }
+    contact {
+        $$$contact
     }
     locations {
       additionalDetails
       locationType
+      value
       cityLocation {
         $$$location
       }
