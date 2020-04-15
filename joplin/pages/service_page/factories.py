@@ -37,6 +37,17 @@ class ServicePageFactory(JanisBasePageWithTopicsFactory):
                         ],
                         u'options_description': u'{0}'.format(step['value']['options_description']),
                     }
+                elif step['type'] == 'step_with_locations':
+                    formatted_step['value'] = {
+                        'locations': [
+                            {
+                                u'location_page': u'{0}'.format(location['location_page']),
+                            }
+                            for location in step['value']['locations']
+                        ],
+                        u'locations_description': u'{0}'.format(step['value']['locations_description']),
+                    }
+                    pass
                 else:
                     formatted_step['value'] = u'{0}'.format(step['value'])
                 formatted_steps.append(formatted_step)

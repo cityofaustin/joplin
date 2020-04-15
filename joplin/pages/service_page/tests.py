@@ -85,8 +85,8 @@ def test_create_service_page_with_step_with_location():
     expected_steps = components.steps_with_location
 
     assert isinstance(page, ServicePage)
-    assert page.title == "Service Page with a step with location"
-    assert page.slug == "step-with-yee-or-haw"
+    assert page.title == "Service Page with location step"
+    assert page.slug == "service-page-with-location-step"
     for i, step in enumerate(page.steps.stream_data):
         assert step["type"] == expected_steps[i]["type"]
         assert step["value"] == expected_steps[i]["value"]
