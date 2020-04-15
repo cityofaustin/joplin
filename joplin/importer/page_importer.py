@@ -37,7 +37,6 @@ class PageImporter:
     def create_page(self):
         return create_page_from_importer(self.page_type, self.page_dictionaries, self.revision_id)
 
-
     def __clean_page_data(self, page_dictionary_from_revision):
         # set the deCamelCased page dictionary
         cleaned_page_dictionary = decamelize(page_dictionary_from_revision)
@@ -49,29 +48,6 @@ class PageImporter:
             cleaned_page_dictionary = change_keys(cleaned_page_dictionary, fix_nums)
 
         return cleaned_page_dictionary
-
-    def fetch_page_type(self):
-        if self.page_type:
-            return self.page_type
-
-        sample_transport = RequestsHTTPTransport(
-            url=self.joplin_api_endpoint,
-            headers={
-                'Accept-Language': 'en',
-                'Authorization': f'JWT {self.jwt_token}',
-            },
-            verify=True
-        )
-
-        client = Client(
-            retries=3,
-            transport=sample_transport,
-            fetch_schema_from_transport=True,
-        )
-
-        result = client.execute(queries[self.page_type], variable_values=json.dumps({'id': self.revision_id}))
-
-
 
     def fetch_page_data(self):
         # todo: don't just hardcode lang here

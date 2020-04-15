@@ -437,6 +437,7 @@ unparsed_query_strings = {
             id
             isLatest
             isLive
+            pageType
           }
         }
         pageInfo {
@@ -446,19 +447,6 @@ unparsed_query_strings = {
       }
     }
     ''',
-    'revision_page_type': '''
-    query getRevisionPageTypeQuery($id: ID) {
-      allPageRevisions(id: $id) {
-        edges {
-          node {
-            asFormContainer {
-
-            }
-          }
-        }
-      }
-    }
-''',
 }
 
 query_strings = {

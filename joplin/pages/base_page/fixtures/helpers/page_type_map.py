@@ -26,7 +26,11 @@ page_type_map = {
         "model": InformationPage,
         "factory": InformationPageFactory,
     },
-    "topics" : {
+    "topic": {
+        "model": TopicPage,
+        "factory": TopicPageFactory,
+    },
+    "topics": {
         "model": TopicPage,
         "factory": TopicPageFactory,
     },
