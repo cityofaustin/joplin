@@ -3,7 +3,7 @@
     interchangeably with multiple fixtures
 '''
 from pages.home_page.models import HomePage
-import pages.locations.fixtures as location_page_fixtures
+import pages.location_page.fixtures as location_page_fixtures
 
 
 def home():
@@ -13,31 +13,16 @@ def home():
 def city_location_block():
     location_page = location_page_fixtures.title()
     return [
-      {
-        "type": "city_location",
-        "value": [
-          {
-            "type": "location_page",
-            "value": location_page.pk,
-          },
-          {
-            "type": "additional_details_en",
-            "value": "room 567"
-          },
-          {
-            "type": "additional_details_es",
-            "value": ""
-          },
-          {
-            "type": "additional_details_ar",
-            "value": ""
-          },
-          {
-            "type": "additional_details_vi",
-            "value": ""
-          }
-        ]
-      }
+        {
+            "type": "city_location",
+            "value": {
+                "location_page": location_page.pk,
+                "additional_details_en": "room 567",
+                "additional_details_es": "",
+                "additional_details_ar": "",
+                "additional_details_vi": "",
+            }
+        }
     ]
 
 
