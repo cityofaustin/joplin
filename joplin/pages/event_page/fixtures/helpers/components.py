@@ -26,6 +26,63 @@ def city_location_block():
     ]
 
 
-# TODO
 def remote_location_block():
-    return []
+    return [
+        {
+            "type": "remote_location",
+            "value": [
+                {
+                    "type": "name_en",
+                    "value": "Faulk"
+                },
+                {
+                    "type": "name_es",
+                    "value": ''
+                },
+                {
+                    "type": "name_ar",
+                    "value": ''
+                },
+                {
+                    "type": "name_vi",
+                    "value": ''
+                },
+                {
+                    "type": "street",
+                    "value": "123 Fake St."
+                },
+                {
+                    "type": "unit",
+                    "value": ''
+                },
+                {
+                    "type": "city",
+                    "value": "Dallas"
+                },
+                {
+                    "type": "state",
+                    "value": "TX"
+                },
+                {
+                    "type": "zip",
+                    "value": "80389"
+                },
+                {
+                    "type": "additional_details_en",
+                    "value": "No."
+                },
+                {
+                    "type": "additional_details_es",
+                    "value": ''
+                },
+                {
+                    "type": "additional_details_ar",
+                    "value": ''
+                },
+                {
+                    "type": "additional_details_vi",
+                    "value": ''
+                }
+            ]
+        }
+    ]

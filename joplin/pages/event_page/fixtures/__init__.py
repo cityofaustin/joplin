@@ -1,5 +1,6 @@
 from .test_cases.title import title
 from .test_cases.city_location import city_location
+from .test_cases.remote_location import remote_location
 
 
 # You can import any test_case fixture individually
@@ -7,3 +8,4 @@ from .test_cases.city_location import city_location
 def load_all():
     title()
     city_location()
+    remote_location()

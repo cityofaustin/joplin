@@ -349,7 +349,10 @@ def create_page_from_importer(page_type, page_dictionaries, revision_id=None):
                     "value": location["value"],
                 }
             else:
-                print("TODO: handle remote loccation")
+                location_block = {
+                    "type": "remote_location",
+                    "value": location["value"],
+                }
             location_blocks.append(location_block)
         combined_dictionary['location_blocks'] = location_blocks
         del combined_dictionary['locations']
