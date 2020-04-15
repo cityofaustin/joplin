@@ -3,7 +3,7 @@
     interchangeably with multiple fixtures
 '''
 from pages.home_page.models import HomePage
-from location_page.fixtures import kitchen_sink_location_page
+from pages.location_page.fixtures import kitchen_sink_page_data as kitchen_sink_location_page_data
 import os
 
 
@@ -117,7 +117,7 @@ step_with_options = [
     },
 ]
 
-location_page_data = kitchen_sink_location_page.kitchen_sink_page_data()
+location_page_data = kitchen_sink_location_page_data()
 steps_with_location = [{'type': 'basic_step',
                         'value': '<p>Use this tool to find out what items are accepted. Residents can drop off up to 30-gallons of hazardous waste for free each year.</p><p><code>APPBLOCK: What do I do with</code></p>',
                         'id': 'a69f4e15-3613-4d69-9c3f-0575db4ac1fc'}, {'type': 'basic_step',
