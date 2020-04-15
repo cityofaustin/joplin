@@ -114,3 +114,18 @@ step_with_options = [
         }
     },
 ]
+
+steps_with_location = [{'type': 'basic_step',
+                        'value': '<p>Use this tool to find out what items are accepted. Residents can drop off up to 30-gallons of hazardous waste for free each year.</p><p><code>APPBLOCK: What do I do with</code></p>',
+                        'id': 'a69f4e15-3613-4d69-9c3f-0575db4ac1fc'}, {'type': 'basic_step',
+                                                                        'value': '<p>Review the household hazardous waste do&#x27;s and don’ts below.</p>',
+                                                                        'id': '893cb981-9258-4cad-a597-5e5ec3d09613'},
+                       {'type': 'step_with_locations', 'value': {
+                           'locations_description': '<p>Drop off your items at the Recycle and ReUse Center.</p>',
+                           'locations': [{'location_page': {'id': 'TG9jYXRpb25QYWdlTm9kZTozMjc=',
+                                                            'slug': 'recycle-reuse-drop-off-center',
+                                                            'title': 'Recycle & Reuse Drop-off Center',
+                                                            'physical_street': '2514 Business Center Drive',
+                                                            'physical_unit': '', 'physical_city': 'Austin',
+                                                            'physical_state': 'TX', 'physical_zip': '78744'}}]},
+                        'id': '71210fba-4714-4e68-b131-cc9251bc992f'}]

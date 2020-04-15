@@ -80,6 +80,26 @@ def test_create_service_page_with_step_with_options():
 
 
 @pytest.mark.django_db
+def test_create_service_page_with_step_with_location():
+    page = fixtures.steps_with_location()
+    # the logic is to not import the step with locations, so we expect the other steps only
+    # todo: don't skip steps with locations
+    expected_steps = [{'type': 'basic_step',
+                        'value': '<p>Use this tool to find out what items are accepted. Residents can drop off up to 30-gallons of hazardous waste for free each year.</p><p><code>APPBLOCK: What do I do with</code></p>',
+                        'id': 'a69f4e15-3613-4d69-9c3f-0575db4ac1fc'},
+                      {'type': 'basic_step',
+                        'value': '<p>Review the household hazardous waste do&#x27;s and don’ts below.</p>',
+                        'id': '893cb981-9258-4cad-a597-5e5ec3d09613'}]
+
+    assert isinstance(page, ServicePage)
+    assert page.title == 'Service Page with location step'
+    assert page.slug == 'service-page-with-location-step'
+    for i, step in enumerate(page.steps.stream_data):
+        assert step["type"] == expected_steps[i]["type"]
+        assert step["value"] == expected_steps[i]["value"]
+
+
+@pytest.mark.django_db
 def test_create_service_page_with_new_contact():
     page = fixtures.new_contact()
     assert isinstance(page, ServicePage)

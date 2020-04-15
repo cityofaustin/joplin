@@ -11,6 +11,7 @@ def kitchen_sink():
     steps = components.steps_with_appblocks
     steps.extend(components.steps_2)
     steps.extend(components.step_with_options)
+    steps.extend(components.steps_with_location)
     department = kitchen_sink_department.kitchen_sink()
 
     page_data = {
