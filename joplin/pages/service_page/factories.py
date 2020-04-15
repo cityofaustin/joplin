@@ -25,6 +25,10 @@ class ServicePageFactory(JanisBasePageWithTopicsFactory):
 
             formatted_steps = []
             for step in steps:
+                # todo: don't skip these
+                if step['type'] == 'step_with_locations':
+                    continue
+
                 formatted_step = {'type': u'{0}'.format(step['type'])}
                 if step['type'] == 'step_with_options_accordian':
                     formatted_step['value'] = {
