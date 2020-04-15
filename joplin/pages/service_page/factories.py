@@ -41,9 +41,26 @@ class ServicePageFactory(JanisBasePageWithTopicsFactory):
                     formatted_step['value'] = {
                         'locations': [
                             {
-                                'location_page': location['location_page'],
+                                'location_page': {
+                                # #
+                                #     {'location_page': {'id': 'TG9jYXRpb25QYWdlTm9kZTozMjc=',
+                                #                        'slug': 'recycle-reuse-drop-off-center',
+                                #                        'title': 'Recycle & Reuse Drop-off Center',
+                                #                        'physical_street': '2514 Business Center Drive',
+                                #                        'physical_unit': '', 'physical_city': 'Austin',
+                                #                        'physical_state': 'TX', 'physical_zip': '78744'}}]},
+                                # #
+                                    u'id': u'{0}'.format(location['location_page']['id']),
+                                    u'slug': u'{0}'.format(location['location_page']['slug']),
+                                    u'title': u'{0}'.format(location['location_page']['title']),
+                                    u'physical_street': u'{0}'.format(location['location_page']['physical_street']),
+                                    u'physical_unit': u'{0}'.format(location['location_page']['physical_unit']),
+                                    u'physical_city': u'{0}'.format(location['location_page']['physical_city']),
+                                    u'physical_state': u'{0}'.format(location['location_page']['physical_state']),
+                                    u'physical_zip': u'{0}'.format(location['location_page']['physical_zip']),
+                                }
+                                for location in step['value']['locations']
                             }
-                            for location in step['value']['locations']
                         ],
                         u'locations_description': u'{0}'.format(step['value']['locations_description']),
                     }
