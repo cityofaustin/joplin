@@ -41,7 +41,7 @@ class ServicePageFactory(JanisBasePageWithTopicsFactory):
                     formatted_step['value'] = {
                         'locations': [
                             {
-                                u'location_page': u'{0}'.format(location['location_page']),
+                                'location_page': location['location_page'],
                             }
                             for location in step['value']['locations']
                         ],
