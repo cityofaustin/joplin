@@ -40,9 +40,10 @@ def get_jwt_token():
           }
         }
     ''')
+
     result = client.execute(jwt_token_query, variable_values=json.dumps({
         'email': "admin@austintexas.io",
-        'password': os.getenv("IMPORTER_USER_PASSWORD"),
+        'password': u'{0}'.format(os.getenv("IMPORTER_USER_PASSWORD")),
     }))
     jwt_token = result['tokenAuth']['token']
     return jwt_token
