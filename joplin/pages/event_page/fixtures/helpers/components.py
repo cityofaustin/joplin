@@ -86,3 +86,18 @@ def remote_location_block():
             ]
         }
     ]
+
+three_fees = [
+    {
+        "fee": 0,
+        "fee_label": "Kids"
+    },
+    {
+        "fee": 5,
+        "fee_label": "Adults"
+    },
+    {
+        "fee": 20,
+        "fee_label": "VIP"
+    }
+]

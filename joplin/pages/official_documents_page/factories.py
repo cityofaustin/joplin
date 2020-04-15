@@ -11,8 +11,9 @@ class OfficialDocumentPageFactory(JanisBasePageWithTopicsFactory):
     @factory.post_generation
     def add_official_documents_page_documents(self, create, extracted, **kwargs):
         if extracted:
-            # A list of topics were passed in, use them
-            for official_documents_page_document in extracted['official_documents_page_documents']:
+            # A list of documents were passed in, use them
+            # reversed() to preserve insert order.
+            for official_documents_page_document in reversed(extracted['official_documents_page_documents']):
                 OfficialDocumentPageDocumentFactory.create(page=self, **official_documents_page_document)
             return
 
