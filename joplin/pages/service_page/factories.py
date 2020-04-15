@@ -59,8 +59,8 @@ class ServicePageFactory(JanisBasePageWithTopicsFactory):
                                     u'physical_state': u'{0}'.format(location['location_page']['physical_state']),
                                     u'physical_zip': u'{0}'.format(location['location_page']['physical_zip']),
                                 }
-                                for location in step['value']['locations']
                             }
+                            for location in step['value']['locations']
                         ],
                         u'locations_description': u'{0}'.format(step['value']['locations_description']),
                     }

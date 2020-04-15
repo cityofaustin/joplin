@@ -3,6 +3,7 @@
     interchangeably with multiple fixtures
 '''
 from pages.home_page.models import HomePage
+from location_page.fixtures import kitchen_sink_location_page
 import os
 
 
@@ -116,6 +117,7 @@ step_with_options = [
     },
 ]
 
+location_page_data = kitchen_sink_location_page.kitchen_sink_page_data()
 steps_with_location = [{'type': 'basic_step',
                         'value': '<p>Use this tool to find out what items are accepted. Residents can drop off up to 30-gallons of hazardous waste for free each year.</p><p><code>APPBLOCK: What do I do with</code></p>',
                         'id': 'a69f4e15-3613-4d69-9c3f-0575db4ac1fc'}, {'type': 'basic_step',
@@ -124,9 +126,11 @@ steps_with_location = [{'type': 'basic_step',
                        {'type': 'step_with_locations', 'value': {
                            'locations_description': '<p>Drop off your items at the Recycle and ReUse Center.</p>',
                            'locations': [{'location_page': {'id': 'TG9jYXRpb25QYWdlTm9kZTozMjc=',
-                                                            'slug': 'recycle-reuse-drop-off-center',
-                                                            'title': 'Recycle & Reuse Drop-off Center',
-                                                            'physical_street': '2514 Business Center Drive',
-                                                            'physical_unit': '', 'physical_city': 'Austin',
-                                                            'physical_state': 'TX', 'physical_zip': '78744'}}]},
+                                                            'slug': location_page_data['slug'],
+                                                            'title': location_page_data['title'],
+                                                            'physical_street': location_page_data['physical_street'],
+                                                            'physical_unit': location_page_data['physical_unit'],
+                                                            'physical_city': location_page_data['physical_city'],
+                                                            'physical_state': location_page_data['physical_state'],
+                                                            'physical_zip': location_page_data['physical_zip']}}]},
                         'id': '71210fba-4714-4e68-b131-cc9251bc992f'}]
