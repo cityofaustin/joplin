@@ -562,6 +562,7 @@ class EventPageNode(DjangoObjectType):
     page_type = graphene.String()
     janis_urls = graphene.List(graphene.String)
     owner = graphene.Field(OwnerNode)
+    janis_instances = graphene.List(ContextualNavData)
 
     class Meta:
         model = EventPage
@@ -586,6 +587,18 @@ class EventPageNode(DjangoObjectType):
 
     def resolve_janis_urls(self, info):
         return self.janis_urls()
+
+    def resolve_janis_instances(self, info):
+        instances = []
+        event_urls = self.janis_urls()
+        for i in self.specific.janis_instances():
+            if i['url']:
+                url = event_urls[0]
+            else:
+                url = ''
+            instance = ContextualNavData(parent=None, grandparent=None, url=url)
+            instances.append(instance)
+        return instances
 
 
 class EventPageFeeNode(DjangoObjectType):
