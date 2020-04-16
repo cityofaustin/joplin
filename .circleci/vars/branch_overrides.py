@@ -24,5 +24,9 @@ branch_overrides = {
     "import-everything": {
         "LOAD_DATA": "importer",
         "V3_WIP": True,
+    },
+    "everything-includes-events": {
+        "LOAD_DATA": "importer",
+        "V3_WIP": True,
     }
 }
