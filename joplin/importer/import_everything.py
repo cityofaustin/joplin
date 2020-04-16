@@ -94,13 +94,14 @@ def import_everything():
         try:
             # If we have already imported this revision, skip it
             page = JanisBasePage.objects.get(imported_revision_id=revision['node']['id'])
-            print(u'Page with revision id {{0}} already imported'.format(page.imported_revision_id))
+            print(u'Page revision {0} already imported, skipping...'.format(page.imported_revision_id))
         except JanisBasePage.DoesNotExist:
             # If we haven't already imported this revision, import it
             page_importer = PageImporter(u'?CMS_API={0}'.format(api_url), jwt_token)
             page_importer.revision_id = revision['node']['id']
             page_importer.page_type = page_type_map[revision['node']['pageType']]
             if page_importer.page_type:
+                print(u'Found {0} revision {1}, importing...'.format(revision['node']['pageType'], page_importer.revision_id))
                 try:
                     page = page_importer.fetch_page_data().create_page()
                     print(u'Imported page: {0}'.format(page.title))
