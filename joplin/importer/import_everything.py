@@ -16,7 +16,7 @@ page_type_map = {
     'form container': 'form',
     'topic page': 'topic',
     'official document page': 'official_document',
-    'event page': None,
+    'event page': 'event',
     'location page': 'location'
 }
 
