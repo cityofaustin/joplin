@@ -15,15 +15,18 @@ class ServicePageFactory(JanisBasePageWithTopicsFactory):
         # Convert steps into StreamField-parseable json dump
         step_keywords = ['steps', 'steps_es']
         for step_keyword in step_keywords:
+            # if step_keyword in kwargs:
+            #     kwargs[step_keyword] = streamfieldify(kwargs[step_keyword])
             steps = kwargs.pop(step_keyword, [])
 
             formatted_steps = []
             for step in steps:
                 # todo: don't skip these
-                if step['type'] == 'step_with_locations':
-                    continue
-
                 formatted_step = {'type': u'{0}'.format(step['type'])}
+
+                if step['type'] == 'step_with_locations':
+                    formatted_step = streamfieldify(step)
+
                 if step['type'] == 'step_with_options_accordian':
                     formatted_step['value'] = {
                         'options': [

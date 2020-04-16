@@ -17,7 +17,7 @@ def steps_with_location():
         },
         "short_description": "This is a very short description",
         "additional_content": components.additional_content,
-        "steps": components.steps_with_location,
+        "steps": components.steps_with_location(),
     }
 
     return create_fixture(page_data, os.path.basename(__file__))
