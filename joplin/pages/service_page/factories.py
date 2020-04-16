@@ -1,6 +1,7 @@
 import json
 from pages.service_page.models import ServicePage
 from pages.topic_page.factories import JanisBasePageWithTopicsFactory
+from pages.base_page.fixtures.helpers.streamfieldify import streamfieldify
 
 
 class ServicePageFactory(JanisBasePageWithTopicsFactory):
@@ -9,14 +10,7 @@ class ServicePageFactory(JanisBasePageWithTopicsFactory):
         # if we have dynamic content
         if 'dynamic_content' in kwargs:
             # convert it into a StreamField-parseable json dump
-            formatted_dynamic_content = json.dumps([
-                {
-                    u'type': u'{0}'.format(dynamic_content_block['type']),
-                    u'value': u'{0}'.format(dynamic_content_block['value'])
-                }
-                for dynamic_content_block in kwargs['dynamic_content']
-            ])
-            kwargs['dynamic_content'] = formatted_dynamic_content
+            kwargs['dynamic_content'] = streamfieldify(kwargs['dynamic_content'])
 
         # Convert steps into StreamField-parseable json dump
         step_keywords = ['steps', 'steps_es']
