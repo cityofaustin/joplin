@@ -58,7 +58,7 @@ def test_event_page_with_no_urls():
 
 @pytest.mark.django_db
 def test_create_event_page_with_city_location():
-    page = fixtures.city_location()
+    page = fixtures.at_city_location()
     assert isinstance(page, EventPage)
     assert page.title == "Event at city location"
     assert page.slug == "event-at-city-location"
@@ -78,7 +78,7 @@ def test_import_event_page_with_city_location(remote_staging_preview_url, test_a
 
 @pytest.mark.django_db
 def test_create_event_page_with_remote_location():
-    page = fixtures.remote_location()
+    page = fixtures.at_remote_location()
     assert isinstance(page, EventPage)
     assert page.title == "Event at remote location"
     assert page.slug == "event-at-remote-location"
