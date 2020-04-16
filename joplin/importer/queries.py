@@ -256,6 +256,9 @@ fragments["location"] = GraphqlParser('''
     title
     slug
     coaGlobal
+    liveRevision {
+        id
+    }
     physicalStreet
     physicalUnit
     physicalCity
@@ -322,6 +325,51 @@ fragments['form'] = GraphqlParser('''
     topic=fragments["topic"],
     owner=fragments["owner"],
     department=fragments["department"]
+)
+
+fragments['event'] = GraphqlParser('''
+    title
+    slug
+    coaGlobal
+    description
+    canceled
+    date
+    startTime
+    endTime
+    $$$owner
+    registrationUrl
+    eventIsFree
+    fees {
+      edges {
+        node {
+          feeLabel
+          fee
+        }
+      }
+    }
+    contact {
+        $$$contact
+    }
+    locations {
+      additionalDetails
+      locationType
+      value
+      cityLocation {
+        $$$location
+      }
+      remoteLocation {
+        name
+        street
+        city
+        state
+        zip
+        unit
+      }
+    }
+''').substitute(
+    contact=fragments["contact"],
+    owner=fragments["owner"],
+    location=fragments["location"],
 )
 
 unparsed_query_strings = {
@@ -428,6 +476,19 @@ unparsed_query_strings = {
             }
           }
         }
+    ''',
+    'event': '''
+          query getEventPageRevision($id: ID) {
+            allPageRevisions(id: $id) {
+              edges {
+                node {
+                  asEventPage {
+                    $$$event
+                  }
+                }
+              }
+            }
+          }
     ''',
 }
 
