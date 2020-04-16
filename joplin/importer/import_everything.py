@@ -5,6 +5,7 @@ from gql import gql
 from importer.queries import queries
 import json
 from importer.page_importer import PageImporter
+from pages.base_page.models import JanisBasePage
 
 api_url = 'http://joplin-pr-latest-revision.herokuapp.com/api/graphql'
 page_type_map = {
@@ -90,18 +91,22 @@ def import_everything():
     #     latest_revisions = list(filter(lambda edge: edge['node']['isLatest'], all_page_revisions))
 
     for revision in latest_revisions:
-        page_importer = PageImporter(u'?CMS_API={0}'.format(api_url), jwt_token)
-        page_importer.revision_id = revision['node']['id']
-        page_importer.page_type = page_type_map[revision['node']['pageType']]
-        if page_importer.page_type:
-            try:
-                # if page_importer.revision_id == 'UGFnZVJldmlzaW9uTm9kZToxODY1':
-                #     blarg = 3
-                page = page_importer.fetch_page_data().create_page()
-                print(u'Imported page: {0}'.format(page.title))
-            except Exception as ex:
-                print(u'FAILED to import page: {0}'.format(page.title))
-                print(ex)
+        try:
+            # If we have already imported this revision, skip it
+            page = JanisBasePage.objects.get(imported_revision_id=revision['node']['id'])
+            print(u'Page with revision id {{0}} already imported'.format(page.imported_revision_id))
+        except JanisBasePage.DoesNotExist:
+            # If we haven't already imported this revision, import it
+            page_importer = PageImporter(u'?CMS_API={0}'.format(api_url), jwt_token)
+            page_importer.revision_id = revision['node']['id']
+            page_importer.page_type = page_type_map[revision['node']['pageType']]
+            if page_importer.page_type:
+                try:
+                    page = page_importer.fetch_page_data().create_page()
+                    print(u'Imported page: {0}'.format(page.title))
+                except Exception as ex:
+                    print(u'FAILED to import page: {0}'.format(page.title))
+                    print(ex)
 
 
 

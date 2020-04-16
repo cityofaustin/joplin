@@ -174,6 +174,8 @@ def create_page_from_importer(page_type, page_dictionaries, revision_id=None):
     # make the combined page dictionary
     combined_dictionary = page_dictionaries['en']
 
+    combined_dictionary['imported_revision_id'] = revision_id
+
     # associate/create topic pages
     # Only would apply for page_types from JanisBasePageWithTopics
     if 'topics' in combined_dictionary:
