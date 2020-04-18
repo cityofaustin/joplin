@@ -11,4 +11,4 @@ class Command(BaseCommand):
     help = "Loads test data for manual exploration of test service_pages"
 
     def handle(self, *args, **options):
-        service_page_fixtures.step_with_1_location()
+        service_page_fixtures.load_all()
