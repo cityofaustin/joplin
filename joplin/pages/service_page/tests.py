@@ -4,6 +4,7 @@ from importer.page_importer import PageImporter
 from pages.service_page.models import ServicePage
 import pages.service_page.fixtures as fixtures
 import pages.service_page.fixtures.helpers.components as components
+import pages.location_page.fixtures as location_page_fixtures
 
 
 @pytest.mark.django_db
@@ -80,26 +81,6 @@ def test_create_service_page_with_step_with_options():
 
 
 @pytest.mark.django_db
-def test_create_service_page_with_step_with_location():
-    page = fixtures.steps_with_location()
-    # the logic is to not import the step with locations, so we expect the other steps only
-    # todo: don't skip steps with locations
-    expected_steps = [{'type': 'basic_step',
-                        'value': '<p>Use this tool to find out what items are accepted. Residents can drop off up to 30-gallons of hazardous waste for free each year.</p><p><code>APPBLOCK: What do I do with</code></p>',
-                        'id': 'a69f4e15-3613-4d69-9c3f-0575db4ac1fc'},
-                      {'type': 'basic_step',
-                        'value': '<p>Review the household hazardous waste do&#x27;s and don’ts below.</p>',
-                        'id': '893cb981-9258-4cad-a597-5e5ec3d09613'}]
-
-    assert isinstance(page, ServicePage)
-    assert page.title == 'Service Page with location step'
-    assert page.slug == 'service-page-with-location-step'
-    for i, step in enumerate(page.steps.stream_data):
-        assert step["type"] == expected_steps[i]["type"]
-        assert step["value"] == expected_steps[i]["value"]
-
-
-@pytest.mark.django_db
 def test_create_service_page_with_new_contact():
     page = fixtures.new_contact()
     assert isinstance(page, ServicePage)
@@ -131,3 +112,74 @@ def test_create_service_page_with_dynamic_content_list():
 def test_kitchen_sink():
     page = fixtures.kitchen_sink()
     assert isinstance(page, ServicePage)
+
+
+@pytest.mark.django_db
+def test_create_service_page_with_step_with_1_location():
+    page = fixtures.step_with_1_location()
+    expected_steps = components.step_with_1_location()
+
+    assert isinstance(page, ServicePage)
+    assert page.title == "Service Page with 1 location step"
+    assert page.slug == "service-page-with-1-location-step"
+    for i, step in enumerate(page.steps.stream_data):
+        assert step["type"] == expected_steps[i]["type"]
+        assert step["value"] == expected_steps[i]["value"]
+
+
+@pytest.mark.django_db
+def test_create_service_page_with_step_with_2_locations():
+    page = fixtures.step_with_2_locations()
+    expected_steps = components.step_with_2_locations()
+
+    assert isinstance(page, ServicePage)
+    assert page.title == "Service Page with 2 locations step"
+    assert page.slug == "service-page-with-2-locations-step"
+    for i, step in enumerate(page.steps.stream_data):
+        assert step["type"] == expected_steps[i]["type"]
+        assert step["value"] == expected_steps[i]["value"]
+
+
+@pytest.mark.django_db
+def test_import_step_with_1_already_existing_location(remote_staging_preview_url, test_api_url, test_api_jwt_token):
+    location_page = location_page_fixtures.title()
+    url = f'{remote_staging_preview_url}/services/UGFnZVJldmlzaW9uTm9kZTo1OA==?CMS_API={test_api_url}'
+    page = PageImporter(url, test_api_jwt_token).fetch_page_data().create_page()
+    assert isinstance(page, ServicePage)
+    assert page.live
+    # The importer should assign the step's location to our matching location_page.
+    assert page.steps.stream_data[0]["value"]["locations"][0] == location_page.pk
+
+
+@pytest.mark.django_db
+def test_import_step_with_1_new_location(remote_staging_preview_url, test_api_url, test_api_jwt_token):
+    url = f'{remote_staging_preview_url}/services/UGFnZVJldmlzaW9uTm9kZTo1OA==?CMS_API={test_api_url}'
+    page = PageImporter(url, test_api_jwt_token).fetch_page_data().create_page()
+    assert isinstance(page, ServicePage)
+    assert not page.live
+    # The importer should delete the location because it hasn't been imported yet.
+    # TODO: update API to allow creation of location_page from step data
+    assert not page.steps
+
+
+@pytest.mark.django_db
+def test_import_step_with_1_already_existing_location_1_new_location(remote_staging_preview_url, test_api_url, test_api_jwt_token):
+    location_page = location_page_fixtures.title()
+    url = f'{remote_staging_preview_url}/services/UGFnZVJldmlzaW9uTm9kZTo2Mg==?CMS_API={test_api_url}'
+    page = PageImporter(url, test_api_jwt_token).fetch_page_data().create_page()
+    assert isinstance(page, ServicePage)
+    assert not page.live
+    assert len(page.steps.stream_data[0]["value"]["locations"]) == 1
+    assert page.steps.stream_data[0]["value"]["locations"][0] == location_page.pk
+
+
+@pytest.mark.django_db
+def test_import_step_with_2_already_existing_locations(remote_staging_preview_url, test_api_url, test_api_jwt_token):
+    location_page_1 = location_page_fixtures.title()
+    location_page_2 = location_page_fixtures.live_library()
+    url = f'{remote_staging_preview_url}/services/UGFnZVJldmlzaW9uTm9kZTo2Mg==?CMS_API={test_api_url}'
+    page = PageImporter(url, test_api_jwt_token).fetch_page_data().create_page()
+    assert isinstance(page, ServicePage)
+    assert page.live
+    assert page.steps.stream_data[0]["value"]["locations"][0] == location_page_1.pk
+    assert page.steps.stream_data[0]["value"]["locations"][1] == location_page_2.pk
