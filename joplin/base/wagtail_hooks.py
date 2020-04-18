@@ -287,7 +287,7 @@ class InternalLinkHandler(LinkHandler):
     def expand_db_attributes(cls, attrs):
         try:
             page = cls.get_instance(attrs)
-            return '<a href="%s">' % escape(page.janis_url())
+            return f'<a revision_id="{page.id}" href="{page.janis_url()}">'
         except Page.DoesNotExist:
             return "<a>"
         except Exception as e:
