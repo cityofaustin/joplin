@@ -81,6 +81,26 @@ def fetch_revision_ids(jwt_token):
     # with open('third_revision_ids_file.json', 'w') as revision_ids_file:
     #     revision_ids_file.write(json.dumps(all_page_revisions))
 
+def import_page_from_revision(revision, jwt_token):
+    try:
+        # If we have already imported this revision, skip it
+        page = JanisBasePage.objects.get(imported_revision_id=revision['node']['id'])
+        print(u'Page revision {0} already imported, skipping...'.format(page.imported_revision_id))
+    except JanisBasePage.DoesNotExist:
+        # If we haven't already imported this revision, import it
+        page_importer = PageImporter(u'?CMS_API={0}'.format(api_url), jwt_token)
+        page_importer.revision_id = revision['node']['id']
+        page_importer.page_type = page_type_map[revision['node']['pageType']]
+        if page_importer.page_type:
+            print(
+                u'Found {0} revision {1}, importing...'.format(revision['node']['pageType'], page_importer.revision_id))
+            try:
+                page = page_importer.fetch_page_data().create_page()
+                print(u'Imported page: {0}'.format(page.title))
+            except Exception as ex:
+                print(u'FAILED to import page: {0}'.format(page.title))
+                print(ex)
+
 def import_everything():
     jwt_token = get_jwt_token()
     all_page_revisions = fetch_revision_ids(jwt_token)
@@ -90,24 +110,14 @@ def import_everything():
     #     all_page_revisions = json.load(revision_ids_file)
     #     latest_revisions = list(filter(lambda edge: edge['node']['isLatest'], all_page_revisions))
 
+    # as per the logic in https://github.com/cityofaustin/joplin/pull/693
+    # "For an ideal full site import, just make sure we import all location_pages before importing all service_pages."
+    location_page_revisions = list(filter(lambda edge: edge['node']['pageType'] == 'location page', latest_revisions))
+    for location_page_revision in location_page_revisions:
+        import_page_from_revision(location_page_revision, jwt_token)
+
     for revision in latest_revisions:
-        try:
-            # If we have already imported this revision, skip it
-            page = JanisBasePage.objects.get(imported_revision_id=revision['node']['id'])
-            print(u'Page revision {0} already imported, skipping...'.format(page.imported_revision_id))
-        except JanisBasePage.DoesNotExist:
-            # If we haven't already imported this revision, import it
-            page_importer = PageImporter(u'?CMS_API={0}'.format(api_url), jwt_token)
-            page_importer.revision_id = revision['node']['id']
-            page_importer.page_type = page_type_map[revision['node']['pageType']]
-            if page_importer.page_type:
-                print(u'Found {0} revision {1}, importing...'.format(revision['node']['pageType'], page_importer.revision_id))
-                try:
-                    page = page_importer.fetch_page_data().create_page()
-                    print(u'Imported page: {0}'.format(page.title))
-                except Exception as ex:
-                    print(u'FAILED to import page: {0}'.format(page.title))
-                    print(ex)
+        import_page_from_revision(revision, jwt_token)
 
 
 
