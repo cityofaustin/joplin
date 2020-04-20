@@ -9,7 +9,9 @@ from bs4 import BeautifulSoup
 
 from importer.queries import queries
 from importer.create_from_importer import create_page_from_importer
+from pages.home_page.models import HomePage
 from pages.base_page.models import JanisBasePage
+from pages.service_page.factories import ServicePageFactory
 
 # TODO: this could be retrieved programmatically from the netlify API for PR apps
 ENDPOINTS = {
@@ -40,18 +42,31 @@ def change_keys(obj, convert):
                 # we're dealing with an internal link, let's get the slug
                 slug = Path(parse_result.path).parts[-1]
 
+                # first try to get a previously imported page by slug
                 try:
-                    # get the page with that slug
                     page = JanisBasePage.objects.get(slug=slug)
+                except JanisBasePage.DoesNotExist:
+                    page = None
 
-                    # the wagtail editor looks for page ids and linktypes when parsing rich text html for internal links
-                    del link['href']
-                    link['id'] = page.id
-                    link['linktype'] = 'page'
-                except:
-                    # todo: figure out what we want to to with links to unimported internal pages
-                    # for now we're letting it stay an external link to a janis url
-                    pass
+                # if we didn't get a page, use a placeholder
+                try:
+                    page = JanisBasePage.objects.get(slug='placeholder_service_page_for_internal_links')
+                except JanisBasePage.DoesNotExist:
+                    page = None
+
+                # If we didn't get a placeholder page, make it
+                if not page:
+                    placeholder_page_dictionary = {
+                        'parent': HomePage.objects.first(),
+                        'title': 'placeholder service page for internal links',
+                        'slug': 'placeholder_service_page_for_internal_links'
+                    }
+                    page = ServicePageFactory.create(**placeholder_page_dictionary)
+
+                # the wagtail editor looks for page ids and linktypes when parsing rich text html for internal links
+                del link['href']
+                link['id'] = page.id
+                link['linktype'] = 'page'
 
             # return our cleaned soup
             return str(soup)
