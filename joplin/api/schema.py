@@ -871,7 +871,7 @@ class PageRevisionNode(DjangoObjectType):
     as_form_container = graphene.NonNull(FormContainerNode)
     as_location_page = graphene.NonNull(LocationPageNode)
     as_event_page = graphene.NonNull(EventPageNode)
-	preview_janis_instance = graphene.NonNull(ContextualNavData)
+    preview_janis_instance = graphene.NonNull(ContextualNavData)
     is_latest = graphene.Boolean()
     is_live = graphene.Boolean()
     page_type = graphene.String()
