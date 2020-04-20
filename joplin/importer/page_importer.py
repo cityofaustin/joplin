@@ -20,7 +20,7 @@ ENDPOINTS = {
 }
 
 
-def change_keys(obj, convert):
+def change_keys(obj, convert, page_dictionary):
     """
     Recursively goes through the dictionary obj and replaces keys with the convert function.
     """
@@ -28,8 +28,8 @@ def change_keys(obj, convert):
         return obj
     if isinstance(obj, str):
         # if our string is html and has links, check for/recreate internal links
-        if bool(BeautifulSoup(obj, "html.parser").find('a')):
-            soup = BeautifulSoup(obj, 'html.parser')
+        soup = BeautifulSoup(obj, 'html.parser')
+        if soup and soup.find('a'):
             # get all the links
             for link in soup.find_all('a'):
                 # get a urllib.parse result to play with
@@ -48,9 +48,13 @@ def change_keys(obj, convert):
                 except JanisBasePage.DoesNotExist:
                     page = None
 
-                # if we didn't get a page, use a placeholder
+                # if we didn't get a page from the link's slug
                 if not page:
                     try:
+                        # make sure the page doesn't go live
+                        page_dictionary['live'] = False
+
+                        # use a placeholder
                         page = JanisBasePage.objects.get(slug='placeholder_service_page_for_internal_links')
                     except JanisBasePage.DoesNotExist:
                         placeholder_page_dictionary = {
@@ -72,9 +76,9 @@ def change_keys(obj, convert):
     if isinstance(obj, dict):
         new = obj.__class__()
         for k, v in obj.items():
-            new[convert(k)] = change_keys(v, convert)
+            new[convert(k)] = change_keys(v, convert, page_dictionary)
     elif isinstance(obj, (list, set, tuple)):
-        new = obj.__class__(change_keys(v, convert) for v in obj)
+        new = obj.__class__(change_keys(v, convert, page_dictionary) for v in obj)
     else:
         return obj
     return new
@@ -91,7 +95,7 @@ class PageImporter:
         # Undo some of the changes caused by decamelize
         # time2 and bus2 needs to be bus_2 and time_2
         def fix_nums(k): return k.translate(str.maketrans({'1': '_1', '2': '_2', '3': '_3'}))
-        cleaned_page_dictionary = change_keys(cleaned_page_dictionary, fix_nums)
+        cleaned_page_dictionary = change_keys(cleaned_page_dictionary, fix_nums, cleaned_page_dictionary)
 
         return cleaned_page_dictionary
 
