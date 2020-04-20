@@ -49,19 +49,16 @@ def change_keys(obj, convert):
                     page = None
 
                 # if we didn't get a page, use a placeholder
-                try:
-                    page = JanisBasePage.objects.get(slug='placeholder_service_page_for_internal_links')
-                except JanisBasePage.DoesNotExist:
-                    page = None
-
-                # If we didn't get a placeholder page, make it
                 if not page:
-                    placeholder_page_dictionary = {
-                        'parent': HomePage.objects.first(),
-                        'title': 'placeholder service page for internal links',
-                        'slug': 'placeholder_service_page_for_internal_links'
-                    }
-                    page = ServicePageFactory.create(**placeholder_page_dictionary)
+                    try:
+                        page = JanisBasePage.objects.get(slug='placeholder_service_page_for_internal_links')
+                    except JanisBasePage.DoesNotExist:
+                        placeholder_page_dictionary = {
+                            'parent': HomePage.objects.first(),
+                            'title': 'Placeholder service page for internal links',
+                            'slug': 'placeholder_service_page_for_internal_links'
+                        }
+                        page = ServicePageFactory.create(**placeholder_page_dictionary)
 
                 # the wagtail editor looks for page ids and linktypes when parsing rich text html for internal links
                 del link['href']

@@ -8,6 +8,7 @@ from .test_cases.dynamic_content_list import dynamic_content_list
 from .test_cases.step_with_1_location import step_with_1_location
 from .test_cases.step_with_2_locations import step_with_2_locations
 from .test_cases.step_with_internal_links import step_with_internal_links
+from .test_cases.placeholder_for_internal_links import placeholder_for_internal_links
 
 
 # You can import any test_case fixture individually
@@ -23,3 +24,4 @@ def load_all():
     step_with_1_location()
     step_with_2_locations()
     step_with_internal_links()
+    placeholder_for_internal_links()
