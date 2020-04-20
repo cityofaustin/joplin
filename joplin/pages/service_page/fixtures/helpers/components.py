@@ -150,5 +150,11 @@ def step_with_one_imported_and_some_unimported_internal_links():
     return [{
         'type': 'basic_step',
         'value': f'<p><a id="{linked_topic_page.id}" linktype="page">topic title [en]</a> <a id="{placeholder_service_page.id}" linktype="page">Service page with contact</a> <a id="{placeholder_service_page.id}" linktype="page">Pytest department</a></p>',
-        'id': '4f8605e3-39d1-4ab9-b5c5-b494569061e3'
+    }]
+
+def step_with_one_imported_internal_link():
+    linked_topic_page = topic_page_fixtures.title()
+    return [{
+        'type': 'basic_step',
+        'value': f'<p><a id="{linked_topic_page.id}" linktype="page">topic title [en]</a></p>',
     }]
