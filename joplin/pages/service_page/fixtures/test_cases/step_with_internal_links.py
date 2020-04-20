@@ -5,7 +5,7 @@ import pages.service_page.fixtures.helpers.components as components
 
 # A Service Page that has a step with internal links
 def step_with_internal_links():
-    steps = components.step_with_internal_links()
+    steps = components.step_with_one_imported_and_some_unimported_internal_links()
     home = components.home()
     page_data = {
         "imported_revision_id": None,
