@@ -871,7 +871,10 @@ class PageRevisionNode(DjangoObjectType):
     as_form_container = graphene.NonNull(FormContainerNode)
     as_location_page = graphene.NonNull(LocationPageNode)
     as_event_page = graphene.NonNull(EventPageNode)
-    preview_janis_instance = graphene.NonNull(ContextualNavData)
+	preview_janis_instance = graphene.NonNull(ContextualNavData)
+    is_latest = graphene.Boolean()
+    is_live = graphene.Boolean()
+    page_type = graphene.String()
 
     def resolve_as_service_page(self, resolve_info, *args, **kwargs):
         return self.as_page_object()
@@ -902,6 +905,15 @@ class PageRevisionNode(DjangoObjectType):
 
     def resolve_as_event_page(self, resolve_info, *args, **kwargs):
         return self.as_page_object()
+
+    def resolve_is_latest(self, resolve_info, *args, **kwargs):
+        return self.created_at == self.page.latest_revision_created_at
+
+    def resolve_is_live(self, resolve_info, *args, **kwargs):
+        return self == self.page.live_revision
+
+    def resolve_page_type(self, resolve_info, *args, **kwargs):
+        return self.page.content_type.name
 
     def resolve_preview_janis_instance(self, resolve_info, *args, **kwargs):
         preview_instance = None
