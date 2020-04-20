@@ -143,6 +143,6 @@ def step_with_2_locations():
 
 step_with_internal_links = [{
     'type': 'basic_step',
-    'value': '<p><a href="http://janis-austin-gov-staging.s3-website-us-east-1.amazonaws.com/en/theme-slug-en/topic-collection-title-en/topic-title-en">topic title [en]</a> <a href="http://janis-austin-gov-staging.s3-website-us-east-1.amazonaws.com/en/theme-slug-en/topic-collection-title-en/topic-title-en/service-page-with-contact">Service page with contact</a> <a href="http://janis-austin-gov-staging.s3-website-us-east-1.amazonaws.com/en/pytest-department">Pytest department</a></p>',
+    'value': '<p><a href="http://janis-pytest.netlify.com/en/theme-slug-en/topic-collection-title-en/topic-title-en">topic title [en]</a> <a href="http://janis-pytest.netlify.com/en/theme-slug-en/topic-collection-title-en/topic-title-en/service-page-with-contact">Service page with contact</a> <a href="http://janis-pytest.netlify.com/en/pytest-department">Pytest department</a></p>',
     'id': '4f8605e3-39d1-4ab9-b5c5-b494569061e3'
 }]
