@@ -371,8 +371,6 @@ def create_page_from_importer(page_type, page_dictionaries, revision_id=None):
     # Handle 'steps_with_locations' in services
     if page_type is 'services':
         if 'steps' in combined_dictionary:
-            # Only import step with location if we have that location already.
-            removed_locations = False
             '''
             Important note!
             We are iterating through copies of each list.
@@ -383,7 +381,9 @@ def create_page_from_importer(page_type, page_dictionaries, revision_id=None):
             you're iterating through.
             '''
             for i, step in enumerate(combined_dictionary["steps"][:]):
+                # Only import step with location if we have that location already.
                 if step['type'] == 'step_with_locations':
+                    removed_locations = False
                     for j, location in enumerate(step["value"]["locations"][:]):
                         # Add location_page data only if location was already imported.
                         # Right now, a "step_with_location" does not provide enough location_page

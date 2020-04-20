@@ -170,6 +170,7 @@ def test_import_step_with_1_already_existing_location_1_new_location(remote_stag
     page = PageImporter(url, test_api_jwt_token).fetch_page_data().create_page()
     assert isinstance(page, ServicePage)
     assert not page.live
+    # The importer should delete one of the two locations because it hasn't been imported yet.
     assert len(page.steps.stream_data[0]["value"]["locations"]) == 1
     assert page.steps.stream_data[0]["value"]["locations"][0] == location_page.pk
 
