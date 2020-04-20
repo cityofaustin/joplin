@@ -5,14 +5,17 @@ from gql.transport.requests import RequestsHTTPTransport
 import json
 from django.core.exceptions import ValidationError
 from humps import decamelize
+from bs4 import BeautifulSoup
 
 from importer.queries import queries
 from importer.create_from_importer import create_page_from_importer
+from pages.base_page.models import JanisBasePage
 
 # TODO: this could be retrieved programmatically from the netlify API for PR apps
 ENDPOINTS = {
     'janis.austintexas.io': 'https://joplin-staging.herokuapp.com/api/graphql',
     'janis-pytest.netlify.com': 'https://joplin-pr-pytest.herokuapp.com/api/graphql',
+
 }
 
 
@@ -20,8 +23,32 @@ def change_keys(obj, convert):
     """
     Recursively goes through the dictionary obj and replaces keys with the convert function.
     """
-    if isinstance(obj, (str, int, float)):
+    if isinstance(obj, (int, float)):
         return obj
+    if isinstance(obj, str):
+        # if our string is html and has links, check for/recreate internal links
+        if bool(BeautifulSoup(obj, "html.parser").find('a')):
+            soup = BeautifulSoup(obj, 'html.parser')
+            # get all the links
+            for link in soup.find_all('a'):
+                # get a urllib.parse result to play with
+                parse_result = urlparse(link.get('href'))
+
+                # check by hostname to see if this isn't an internal link
+                if parse_result.hostname not in ENDPOINTS:
+                    continue
+
+                # we're dealing with an internal link, let's get the slug
+                slug = Path(parse_result.path).parts[-1]
+
+                # see if we have a page with that slug
+                try:
+                    blarg = JanisBasePage.objects.get(slug=slug)
+                except:
+                    # todo: figure out what we want to to with links to unimported internal pages
+                    x = 3
+        else:
+            return obj
     if isinstance(obj, dict):
         new = obj.__class__()
         for k, v in obj.items():
@@ -37,7 +64,6 @@ class PageImporter:
     def create_page(self):
         return create_page_from_importer(self.page_type, self.page_dictionaries, self.revision_id)
 
-
     def __clean_page_data(self, page_dictionary_from_revision):
         # set the deCamelCased page dictionary
         cleaned_page_dictionary = decamelize(page_dictionary_from_revision)
@@ -48,7 +74,6 @@ class PageImporter:
         cleaned_page_dictionary = change_keys(cleaned_page_dictionary, fix_nums)
 
         return cleaned_page_dictionary
-
 
     def fetch_page_data(self):
         # todo: don't just hardcode lang here
