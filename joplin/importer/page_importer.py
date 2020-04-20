@@ -15,7 +15,6 @@ from pages.base_page.models import JanisBasePage
 ENDPOINTS = {
     'janis.austintexas.io': 'https://joplin-staging.herokuapp.com/api/graphql',
     'janis-pytest.netlify.com': 'https://joplin-pr-pytest.herokuapp.com/api/graphql',
-
 }
 
 
@@ -51,7 +50,7 @@ def change_keys(obj, convert):
                     link['linktype'] = 'page'
                 except:
                     # todo: figure out what we want to to with links to unimported internal pages
-                    # for now we're just not changing it
+                    # for now we're letting it stay an external link to a janis url
                     pass
 
             # return our cleaned soup
@@ -80,7 +79,6 @@ class PageImporter:
         # Undo some of the changes caused by decamelize
         # time2 and bus2 needs to be bus_2 and time_2
         def fix_nums(k): return k.translate(str.maketrans({'1': '_1', '2': '_2', '3': '_3'}))
-
         cleaned_page_dictionary = change_keys(cleaned_page_dictionary, fix_nums)
 
         return cleaned_page_dictionary
