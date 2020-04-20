@@ -44,9 +44,11 @@ def change_keys(obj, convert):
                 # see if we have a page with that slug
                 try:
                     blarg = JanisBasePage.objects.get(slug=slug)
+                    # todo: make the link internal
                 except:
                     # todo: figure out what we want to to with links to unimported internal pages
-                    x = 3
+                    # for now we're just not changing it
+                    pass
         else:
             return obj
     if isinstance(obj, dict):

@@ -5,6 +5,7 @@ from pages.service_page.models import ServicePage
 import pages.service_page.fixtures as fixtures
 import pages.service_page.fixtures.helpers.components as components
 import pages.location_page.fixtures as location_page_fixtures
+import pages.topic_page.fixtures as topic_page_fixtures
 
 
 @pytest.mark.django_db
@@ -37,6 +38,7 @@ def test_create_service_page_with_department_from_api(remote_staging_preview_url
 
 @pytest.mark.django_db
 def test_create_service_page_with_internal_links_from_api(remote_staging_preview_url, test_api_url, test_api_jwt_token):
+    linked_topic_page = topic_page_fixtures.title()
     url = f'{remote_staging_preview_url}/services/UGFnZVJldmlzaW9uTm9kZTo1MQ==?CMS_API={test_api_url}'
     page = PageImporter(url, test_api_jwt_token).fetch_page_data().create_page()
     assert isinstance(page, ServicePage)
