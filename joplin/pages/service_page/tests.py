@@ -38,11 +38,14 @@ def test_create_service_page_with_department_from_api(remote_staging_preview_url
 
 @pytest.mark.django_db
 def test_create_service_page_with_internal_links_from_api(remote_staging_preview_url, test_api_url, test_api_jwt_token):
-    linked_topic_page = topic_page_fixtures.title()
+    topic_page_fixtures.title()
+    expected_steps = components.step_with_internal_links()
     url = f'{remote_staging_preview_url}/services/UGFnZVJldmlzaW9uTm9kZTo1MQ==?CMS_API={test_api_url}'
     page = PageImporter(url, test_api_jwt_token).fetch_page_data().create_page()
     assert isinstance(page, ServicePage)
-    assert False
+    for i, step in enumerate(page.steps.stream_data):
+        assert step["type"] == expected_steps[i]["type"]
+        assert step["value"] == expected_steps[i]["value"]
 
 
 @pytest.mark.django_db

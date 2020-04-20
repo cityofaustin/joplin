@@ -7,6 +7,7 @@ from .test_cases.kitchen_sink import kitchen_sink
 from .test_cases.dynamic_content_list import dynamic_content_list
 from .test_cases.step_with_1_location import step_with_1_location
 from .test_cases.step_with_2_locations import step_with_2_locations
+from .test_cases.step_with_internal_links import step_with_internal_links
 
 
 # You can import any test_case fixture individually
@@ -21,3 +22,4 @@ def load_all():
     dynamic_content_list()
     step_with_1_location()
     step_with_2_locations()
+    step_with_internal_links()

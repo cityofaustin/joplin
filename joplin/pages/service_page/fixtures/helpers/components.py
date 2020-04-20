@@ -4,6 +4,7 @@
 '''
 from pages.home_page.models import HomePage
 import pages.location_page.fixtures as location_page_fixtures
+import pages.topic_page.fixtures as topic_page_fixtures
 
 
 def home():
@@ -141,8 +142,11 @@ def step_with_2_locations():
         }
     ]
 
-step_with_internal_links = [{
-    'type': 'basic_step',
-    'value': '<p><a href="http://janis-pytest.netlify.com/en/theme-slug-en/topic-collection-title-en/topic-title-en">topic title [en]</a> <a href="http://janis-pytest.netlify.com/en/theme-slug-en/topic-collection-title-en/topic-title-en/service-page-with-contact">Service page with contact</a> <a href="http://janis-pytest.netlify.com/en/pytest-department">Pytest department</a></p>',
-    'id': '4f8605e3-39d1-4ab9-b5c5-b494569061e3'
-}]
+def step_with_internal_links():
+    linked_topic_page = topic_page_fixtures.title()
+
+    return [{
+        'type': 'basic_step',
+        'value': f'<p><a id="{linked_topic_page.id}" linktype="page">topic title [en]</a> <a href="http://janis-pytest.netlify.com/en/theme-slug-en/topic-collection-title-en/topic-title-en/service-page-with-contact">Service page with contact</a> <a href="http://janis-pytest.netlify.com/en/pytest-department">Pytest department</a></p>',
+        'id': '4f8605e3-39d1-4ab9-b5c5-b494569061e3'
+    }]

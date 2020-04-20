@@ -41,14 +41,21 @@ def change_keys(obj, convert):
                 # we're dealing with an internal link, let's get the slug
                 slug = Path(parse_result.path).parts[-1]
 
-                # see if we have a page with that slug
                 try:
-                    blarg = JanisBasePage.objects.get(slug=slug)
-                    # todo: make the link internal
+                    # get the page with that slug
+                    page = JanisBasePage.objects.get(slug=slug)
+
+                    # the wagtail editor looks for page ids and linktypes when parsing rich text html for internal links
+                    del link['href']
+                    link['id'] = page.id
+                    link['linktype'] = 'page'
                 except:
                     # todo: figure out what we want to to with links to unimported internal pages
                     # for now we're just not changing it
                     pass
+
+            # return our cleaned soup
+            return str(soup)
         else:
             return obj
     if isinstance(obj, dict):
@@ -73,6 +80,7 @@ class PageImporter:
         # Undo some of the changes caused by decamelize
         # time2 and bus2 needs to be bus_2 and time_2
         def fix_nums(k): return k.translate(str.maketrans({'1': '_1', '2': '_2', '3': '_3'}))
+
         cleaned_page_dictionary = change_keys(cleaned_page_dictionary, fix_nums)
 
         return cleaned_page_dictionary
@@ -105,7 +113,6 @@ class PageImporter:
 
         # return ourselves for method chaining
         return self
-
 
     def __init__(self, url, jwt_token):
         # get a urllib.parse result to play with
