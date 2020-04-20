@@ -37,16 +37,20 @@ def test_create_service_page_with_department_from_api(remote_staging_preview_url
 
 
 @pytest.mark.django_db
-def test_create_service_page_with_internal_links_from_api(remote_staging_preview_url, test_api_url, test_api_jwt_token):
+def test_create_service_page_with_one_imported_and_some_unimported_internal_links_from_api(remote_staging_preview_url, test_api_url, test_api_jwt_token):
+    # this fixture has the same slug as the first link of the page we're importing,
+    # let's create it so the importer can link to it
     topic_page_fixtures.title()
-    expected_steps = components.step_with_internal_links()
+
+    expected_steps = components.step_with_one_imported_and_some_unimported_internal_links()
     url = f'{remote_staging_preview_url}/services/UGFnZVJldmlzaW9uTm9kZTo1MQ==?CMS_API={test_api_url}'
     page = PageImporter(url, test_api_jwt_token).fetch_page_data().create_page()
     assert isinstance(page, ServicePage)
-    assert not page.live
     for i, step in enumerate(page.steps.stream_data):
         assert step["type"] == expected_steps[i]["type"]
         assert step["value"] == expected_steps[i]["value"]
+    # since some of the imported links are using placeholder pages, we shouldn't be live yet
+    assert not page.live
 
 
 @pytest.mark.django_db

@@ -143,7 +143,7 @@ def step_with_2_locations():
         }
     ]
 
-def step_with_internal_links():
+def step_with_one_imported_and_some_unimported_internal_links():
     linked_topic_page = topic_page_fixtures.title()
     placeholder_service_page = service_page_fixtures.placeholder_for_internal_links()
 
