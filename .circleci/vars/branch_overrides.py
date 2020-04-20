@@ -32,5 +32,9 @@ branch_overrides = {
     "api-page-type-and-description": {
         "LOAD_DATA": "fixtures",
         "V3_WIP": True,
+    },
+    "4288-internal-links": {
+        "LOAD_DATA": "fixtures",
+        "V3_WIP": True,
     }
 }
