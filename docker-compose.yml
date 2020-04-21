@@ -26,4 +26,3 @@ services:
     stdin_open: true
     tty: true
   # "assets" service is used in docker-compose.local_override.yml
-
