@@ -33,7 +33,7 @@ branch_overrides = {
         "LOAD_DATA": "fixtures",
         "V3_WIP": True,
     },
-    "4288-internal-links": {
+    "4281-spanish": {
         "LOAD_DATA": "fixtures",
         "V3_WIP": True,
     }

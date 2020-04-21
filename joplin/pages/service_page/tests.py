@@ -217,3 +217,16 @@ def test_import_step_with_1_imported_internal_link(remote_staging_preview_url, t
     for i, step in enumerate(page.steps.stream_data):
         assert step["type"] == expected_steps[i]["type"]
         assert step["value"] == expected_steps[i]["value"]
+
+
+@pytest.mark.django_db
+def test_do_not_import_english_as_spanish(remote_staging_preview_url, test_api_url, test_api_jwt_token):
+    url = f'{remote_staging_preview_url}/services/UGFnZVJldmlzaW9uTm9kZTo3MA==?CMS_API={test_api_url}'
+    page = PageImporter(url, test_api_jwt_token).fetch_page_data().create_page()
+    assert isinstance(page, ServicePage)
+    assert page.title_en == 'Service page in english only'
+    assert page.title_es is None
+    assert page.short_description_en == 'a description of this service'
+    assert page.short_description_es is None
+    assert page.slug_en == 'service-page-in-english-only'
+    assert page.slug_es is None
