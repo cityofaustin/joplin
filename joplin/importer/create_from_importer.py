@@ -52,6 +52,11 @@ def create_contact_from_importer(contact_data):
 def create_theme_from_importer(theme_dictionaries):
     # todo: use something other than slug here
     # todo: add imported id to themes
+
+    # if we don't have a theme, don't try
+    if theme_dictionaries['en'] is None:
+        return None
+
     try:
         theme = Theme.objects.get(slug=theme_dictionaries['en']['slug'])
     except Theme.DoesNotExist:

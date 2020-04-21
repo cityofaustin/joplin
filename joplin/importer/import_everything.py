@@ -85,6 +85,12 @@ def import_page_from_revision(revision, jwt_token):
     try:
         # If we have already imported this revision, skip it
         page = JanisBasePage.objects.get(imported_revision_id=revision['node']['id'])
+
+        # if we have already imported this live revision and the page hasn't gone live
+        if not page.live and revision['node']['isLive']:
+            # make a note of it todo: figure out updating
+            print(u'Page to manually check: {0}'.format(page.title))
+
         print(u'Page revision {0} already imported, skipping...'.format(page.imported_revision_id))
     except JanisBasePage.DoesNotExist:
         # If we haven't already imported this revision, import it
@@ -98,7 +104,7 @@ def import_page_from_revision(revision, jwt_token):
                 page = page_importer.fetch_page_data().create_page()
                 print(u'Imported page: {0}'.format(page.title))
             except Exception as ex:
-                print(u'FAILED to import page: {0}'.format(page.title))
+                print(u'FAILED to import {0} revision: {1}'.format(page_importer.page_type, page_importer.revision_id))
                 print(ex)
 
 def import_everything():
