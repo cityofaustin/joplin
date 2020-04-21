@@ -28,13 +28,13 @@ import base.fixtures.administrative.mandatory_fixtures as mandatory_fixtures
 # Genius technique from: https://stackoverflow.com/questions/42652228/removing-cached-files-after-a-py-test-run
 @pytest.yield_fixture(autouse=True, scope='session')
 def test_suite_cleanup_thing(request):
-    # setup
+    # Setup: Everything before yield will happen at the beginning of your pytest session
+
     # Clear test_api_jwt_token at start of running entire test suite.
     # This will ensure that our test_api_jwt_token is only cached for 1 pytest invocation and won't expire.
     request.config.cache.set('test_api_jwt_token', None)
-    mandatory_fixtures.load_all()
     yield
-    # teardown
+    # Teardown: Everything after yield will happen at the end of your pytest session
 
 def register_factories(factories):
     """
