@@ -67,6 +67,3 @@ class HomePage(Page):
             return settings.JANIS_URL
         else:
             return getattr(self, "publish_janis_branch_for_pr")
-
-    def full_clean(self, *args, **kwargs):
-        super().full_clean(exclude=['title', 'title_en'])
