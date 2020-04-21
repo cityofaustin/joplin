@@ -4,6 +4,8 @@
 '''
 from pages.home_page.models import HomePage
 import pages.location_page.fixtures as location_page_fixtures
+import pages.topic_page.fixtures as topic_page_fixtures
+import pages.service_page.fixtures as service_page_fixtures
 
 
 def home():
@@ -140,3 +142,19 @@ def step_with_2_locations():
             }
         }
     ]
+
+def step_with_one_imported_and_some_unimported_internal_links():
+    linked_topic_page = topic_page_fixtures.title()
+    placeholder_service_page = service_page_fixtures.placeholder_for_internal_links()
+
+    return [{
+        'type': 'basic_step',
+        'value': f'<p><a id="{linked_topic_page.id}" linktype="page">topic title [en]</a> <a id="{placeholder_service_page.id}" linktype="page">Service page with contact</a> <a id="{placeholder_service_page.id}" linktype="page">Pytest department</a></p>',
+    }]
+
+def step_with_one_imported_internal_link():
+    linked_topic_page = topic_page_fixtures.title()
+    return [{
+        'type': 'basic_step',
+        'value': f'<p><a id="{linked_topic_page.id}" linktype="page">topic title [en]</a></p>',
+    }]

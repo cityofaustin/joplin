@@ -5,6 +5,7 @@ from pages.service_page.models import ServicePage
 import pages.service_page.fixtures as fixtures
 import pages.service_page.fixtures.helpers.components as components
 import pages.location_page.fixtures as location_page_fixtures
+import pages.topic_page.fixtures as topic_page_fixtures
 
 
 @pytest.mark.django_db
@@ -184,3 +185,35 @@ def test_import_step_with_2_already_existing_locations(remote_staging_preview_ur
     assert page.live
     assert page.steps.stream_data[0]["value"]["locations"][0] == location_page_1.pk
     assert page.steps.stream_data[0]["value"]["locations"][1] == location_page_2.pk
+
+
+@pytest.mark.django_db
+def test_import_step_with_1_imported_and_some_unimported_internal_links(remote_staging_preview_url, test_api_url, test_api_jwt_token):
+    # this fixture has the same slug as the first link of the page we're importing,
+    # let's create it so the importer can link to it
+    topic_page_fixtures.title()
+
+    expected_steps = components.step_with_one_imported_and_some_unimported_internal_links()
+    url = f'{remote_staging_preview_url}/services/UGFnZVJldmlzaW9uTm9kZTo1MQ==?CMS_API={test_api_url}'
+    page = PageImporter(url, test_api_jwt_token).fetch_page_data().create_page()
+    assert isinstance(page, ServicePage)
+    for i, step in enumerate(page.steps.stream_data):
+        assert step["type"] == expected_steps[i]["type"]
+        assert step["value"] == expected_steps[i]["value"]
+    # since some of the imported links are using placeholder pages, we shouldn't be live yet
+    assert not page.live
+
+
+@pytest.mark.django_db
+def test_import_step_with_1_imported_internal_link(remote_staging_preview_url, test_api_url, test_api_jwt_token):
+    topic_page_fixtures.title()
+    expected_steps = components.step_with_one_imported_internal_link()
+    url = f'{remote_staging_preview_url}/services/UGFnZVJldmlzaW9uTm9kZTo2Ng==?CMS_API={test_api_url}'
+    page = PageImporter(url, test_api_jwt_token).fetch_page_data().create_page()
+    assert isinstance(page, ServicePage)
+
+    # since we didn't need to use a placeholder, we should be live!
+    assert page.live
+    for i, step in enumerate(page.steps.stream_data):
+        assert step["type"] == expected_steps[i]["type"]
+        assert step["value"] == expected_steps[i]["value"]
