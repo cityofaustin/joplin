@@ -413,7 +413,10 @@ def create_page_from_importer(page_type, page_dictionaries, revision_id=None):
     for field in factory._meta.model._meta.fields:
         if field.column.endswith("_es"):
             if field.column[:-3] in page_dictionaries['es']:
-                combined_dictionary[field.column] = page_dictionaries['es'][field.column[:-3]]
+                # make sure we aren't just getting the english fallback value
+                # https://wagtail-modeltranslation-docs.readthedocs.io/en/latest/Advanced%20Settings.html#fallback-languages
+                if page_dictionaries['es'][field.column[:-3]] != page_dictionaries['en'][field.column[:-3]]:
+                    combined_dictionary[field.column] = page_dictionaries['es'][field.column[:-3]]
 
     # set the owner of the page
     if 'owner' in combined_dictionary:

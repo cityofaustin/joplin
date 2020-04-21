@@ -224,9 +224,9 @@ def test_do_not_import_english_as_spanish(remote_staging_preview_url, test_api_u
     url = f'{remote_staging_preview_url}/services/UGFnZVJldmlzaW9uTm9kZTo3MA==?CMS_API={test_api_url}'
     page = PageImporter(url, test_api_jwt_token).fetch_page_data().create_page()
     assert isinstance(page, ServicePage)
-    assert page['title_en'] == 'Service page in english only'
-    assert page['title_es'] is None
-    assert page['short_description_en'] == 'a description of this service'
-    assert page['short_description_es'] is None
-    assert page['slug_en'] == 'service-page-in-english-only'
-    assert page['slug_es'] is None
+    assert page.title_en == 'Service page in english only'
+    assert page.title_es is None
+    assert page.short_description_en == 'a description of this service'
+    assert page.short_description_es is None
+    assert page.slug_en == 'service-page-in-english-only'
+    assert page.slug_es is None
