@@ -509,3 +509,11 @@ V3_WIP = bool(strtobool(os.environ.get('V3_WIP', str(False))))
 AUTH_USER_MODEL = 'users.User'
 WAGTAIL_USER_EDIT_FORM = 'users.forms.CustomUserEditForm'
 WAGTAIL_USER_CREATION_FORM = 'users.forms.CustomUserCreationForm'
+
+if IS_LOCAL:
+    # Allow non HTTPS requests when running a local Janis build from localhost.
+    SECURE_SSL_REDIRECT = False
+    SERVER_PROTOCOL = 'HTTP/0.9'
+else:
+    # Redirect to HTTPS
+    SECURE_SSL_REDIRECT = True
