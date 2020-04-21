@@ -107,6 +107,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -115,7 +116,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django.middleware.security.SecurityMiddleware',
     'wagtail.core.middleware.SiteMiddleware',
     'wagtail.contrib.redirects.middleware.RedirectMiddleware',
     'session_security.middleware.SessionSecurityMiddleware',
@@ -260,7 +260,7 @@ MONITOR_PERFORMANCE = bool(strtobool(os.environ.get('MONITOR_PERFORMANCE', str(F
 WAGTAILEMBEDS_RESPONSIVE_HTML = True
 
 if MONITOR_PERFORMANCE:
-    MIDDLEWARE = ['silk.middleware.SilkyMiddleware'] + MIDDLEWARE
+    MIDDLEWARE.insert(1, 'silk.middleware.SilkyMiddleware')
 
     SILKY_PYTHON_PROFILER = False
     SILKY_PYTHON_PROFILER_BINARY = False
@@ -284,9 +284,7 @@ if DEBUG_TOOLBAR:
         'pympler'
     ]
 
-    MIDDLEWARE = [
-        'debug_toolbar.middleware.DebugToolbarMiddleware'
-    ] + MIDDLEWARE
+    MIDDLEWARE.insert(1, 'debug_toolbar.middleware.DebugToolbarMiddleware')
 
     DEBUG_TOOLBAR_PANELS = [
         'debug_toolbar.panels.profiling.ProfilingPanel',
@@ -516,4 +514,5 @@ if IS_LOCAL:
     SERVER_PROTOCOL = 'HTTP/0.9'
 else:
     # Redirect to HTTPS
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
     SECURE_SSL_REDIRECT = True
