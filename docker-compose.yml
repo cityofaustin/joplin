@@ -20,6 +20,7 @@ services:
       STYLEGUIDE_URL: https://cityofaustin.github.io/digital-services-style-guide
       DATABASE_URL: $DATABASE_URL
       DJANGO_SECRET_KEY: "fake_key"
+      IMPORTER_USER_PASSWORD: $IMPORTER_USER_PASSWORD
     depends_on:
       - "db"
     stdin_open: true
