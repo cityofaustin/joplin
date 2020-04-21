@@ -25,10 +25,6 @@ branch_overrides = {
         "LOAD_DATA": "importer",
         "V3_WIP": True,
     },
-    "everything-includes-events": {
-        "LOAD_DATA": "importer",
-        "V3_WIP": True,
-    },
     "4281-spanish": {
         "LOAD_DATA": "fixtures",
         "V3_WIP": True,
