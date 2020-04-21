@@ -7,7 +7,7 @@ import json
 from importer.page_importer import PageImporter
 from pages.base_page.models import JanisBasePage
 
-api_url = 'http://joplin-pr-latest-revision.herokuapp.com/api/graphql'
+api_url = 'http://joplin-staging.herokuapp.com/api/graphql'
 page_type_map = {
     'service page': 'services',
     'guide page': None,
