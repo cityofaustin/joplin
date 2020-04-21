@@ -3,6 +3,9 @@
     interchangeably with multiple fixtures
 '''
 from pages.home_page.models import HomePage
+import pages.location_page.fixtures as location_page_fixtures
+import pages.topic_page.fixtures as topic_page_fixtures
+import pages.service_page.fixtures as service_page_fixtures
 
 
 def home():
@@ -115,17 +118,43 @@ step_with_options = [
     },
 ]
 
-steps_with_location = [{'type': 'basic_step',
-                        'value': '<p>Use this tool to find out what items are accepted. Residents can drop off up to 30-gallons of hazardous waste for free each year.</p><p><code>APPBLOCK: What do I do with</code></p>',
-                        'id': 'a69f4e15-3613-4d69-9c3f-0575db4ac1fc'}, {'type': 'basic_step',
-                                                                        'value': '<p>Review the household hazardous waste do&#x27;s and don’ts below.</p>',
-                                                                        'id': '893cb981-9258-4cad-a597-5e5ec3d09613'},
-                       {'type': 'step_with_locations', 'value': {
-                           'locations_description': '<p>Drop off your items at the Recycle and ReUse Center.</p>',
-                           'locations': [{'location_page': {'id': 'TG9jYXRpb25QYWdlTm9kZTozMjc=',
-                                                            'slug': 'recycle-reuse-drop-off-center',
-                                                            'title': 'Recycle & Reuse Drop-off Center',
-                                                            'physical_street': '2514 Business Center Drive',
-                                                            'physical_unit': '', 'physical_city': 'Austin',
-                                                            'physical_state': 'TX', 'physical_zip': '78744'}}]},
-                        'id': '71210fba-4714-4e68-b131-cc9251bc992f'}]
+def step_with_1_location():
+    library_location = location_page_fixtures.live_library()
+    return [
+        {
+            "type": "step_with_locations",
+            "value": {
+                "locations_description": "<p>You should go here.</p>",
+                "locations": [library_location.pk]
+            }
+        }
+    ]
+
+def step_with_2_locations():
+    library_location = location_page_fixtures.live_library()
+    city_hall_location = location_page_fixtures.live_city_hall()
+    return [
+        {
+            "type": "step_with_locations",
+            "value": {
+                "locations_description": "<p>Go to one of these two places.</p>",
+                "locations": [library_location.pk, city_hall_location.pk]
+            }
+        }
+    ]
+
+def step_with_one_imported_and_some_unimported_internal_links():
+    linked_topic_page = topic_page_fixtures.title()
+    placeholder_service_page = service_page_fixtures.placeholder_for_internal_links()
+
+    return [{
+        'type': 'basic_step',
+        'value': f'<p><a id="{linked_topic_page.id}" linktype="page">topic title [en]</a> <a id="{placeholder_service_page.id}" linktype="page">Service page with contact</a> <a id="{placeholder_service_page.id}" linktype="page">Pytest department</a></p>',
+    }]
+
+def step_with_one_imported_internal_link():
+    linked_topic_page = topic_page_fixtures.title()
+    return [{
+        'type': 'basic_step',
+        'value': f'<p><a id="{linked_topic_page.id}" linktype="page">topic title [en]</a></p>',
+    }]

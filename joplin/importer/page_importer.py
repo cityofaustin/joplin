@@ -5,9 +5,13 @@ from gql.transport.requests import RequestsHTTPTransport
 import json
 from django.core.exceptions import ValidationError
 from humps import decamelize
+from bs4 import BeautifulSoup
 
 from importer.queries import queries
 from importer.create_from_importer import create_page_from_importer
+from pages.home_page.models import HomePage
+from pages.base_page.models import JanisBasePage
+from pages.service_page.factories import ServicePageFactory
 
 # TODO: this could be retrieved programmatically from the netlify API for PR apps
 ENDPOINTS = {
@@ -16,18 +20,65 @@ ENDPOINTS = {
 }
 
 
-def change_keys(obj, convert):
+def change_keys(obj, convert, page_dictionary):
     """
     Recursively goes through the dictionary obj and replaces keys with the convert function.
     """
-    if isinstance(obj, (str, int, float)):
+    if isinstance(obj, (int, float)):
         return obj
+    if isinstance(obj, str):
+        # if our string is html and has links, check for/recreate internal links
+        soup = BeautifulSoup(obj, 'html.parser')
+        if soup and soup.find('a'):
+            # get all the links
+            for link in soup.find_all('a'):
+                # get a urllib.parse result to play with
+                parse_result = urlparse(link.get('href'))
+
+                # check by hostname to see if this isn't an internal link
+                if parse_result.hostname not in ENDPOINTS:
+                    continue
+
+                # we're dealing with an internal link, let's get the slug
+                slug = Path(parse_result.path).parts[-1]
+
+                # first try to get a previously imported page by slug
+                try:
+                    page = JanisBasePage.objects.get(slug=slug)
+                except JanisBasePage.DoesNotExist:
+                    page = None
+
+                # if we didn't get a page from the link's slug
+                if not page:
+                    try:
+                        # make sure the page doesn't go live
+                        page_dictionary['live'] = False
+
+                        # use a placeholder
+                        page = JanisBasePage.objects.get(slug='placeholder_service_page_for_internal_links')
+                    except JanisBasePage.DoesNotExist:
+                        placeholder_page_dictionary = {
+                            'parent': HomePage.objects.first(),
+                            'title': 'Placeholder service page for internal links',
+                            'slug': 'placeholder_service_page_for_internal_links'
+                        }
+                        page = ServicePageFactory.create(**placeholder_page_dictionary)
+
+                # the wagtail editor looks for page ids and linktypes when parsing rich text html for internal links
+                del link['href']
+                link['id'] = page.id
+                link['linktype'] = 'page'
+
+            # return our cleaned soup
+            return str(soup)
+        else:
+            return obj
     if isinstance(obj, dict):
         new = obj.__class__()
         for k, v in obj.items():
-            new[convert(k)] = change_keys(v, convert)
+            new[convert(k)] = change_keys(v, convert, page_dictionary)
     elif isinstance(obj, (list, set, tuple)):
-        new = obj.__class__(change_keys(v, convert) for v in obj)
+        new = obj.__class__(change_keys(v, convert, page_dictionary) for v in obj)
     else:
         return obj
     return new
@@ -44,7 +95,7 @@ class PageImporter:
         # Undo some of the changes caused by decamelize
         # time2 and bus2 needs to be bus_2 and time_2
         def fix_nums(k): return k.translate(str.maketrans({'1': '_1', '2': '_2', '3': '_3'}))
-        cleaned_page_dictionary = change_keys(cleaned_page_dictionary, fix_nums)
+        cleaned_page_dictionary = change_keys(cleaned_page_dictionary, fix_nums, cleaned_page_dictionary)
 
         return cleaned_page_dictionary
 

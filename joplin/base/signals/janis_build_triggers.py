@@ -31,10 +31,7 @@ def trigger_build(sender, pages_ids, action='saved', instance=None):
     if settings.IS_STAGING or settings.IS_PRODUCTION:
         create_build_aws(sender, instance, request=get_http_request())
     elif settings.IS_REVIEW:
-        if flag_enabled('INCREMENTAL BUILDS'):
-            publish_v3(pages_ids)
-        else:
-            netlify_publish()
+        publish_v3(pages_ids)
 
 
 def collect_pages(instance):

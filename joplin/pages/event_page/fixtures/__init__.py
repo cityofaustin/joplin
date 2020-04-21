@@ -1,6 +1,6 @@
 from .test_cases.title import title
-from .test_cases.city_location import city_location
-from .test_cases.remote_location import remote_location
+from .test_cases.at_city_location import at_city_location
+from .test_cases.at_remote_location import at_remote_location
 from .test_cases.three_fees import three_fees
 
 
@@ -8,6 +8,6 @@ from .test_cases.three_fees import three_fees
 # Or you can load them all with this function
 def load_all():
     title()
-    city_location()
-    remote_location()
+    at_city_location()
+    at_remote_location()
     three_fees()
