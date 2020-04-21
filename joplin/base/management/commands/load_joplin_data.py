@@ -81,7 +81,7 @@ class Command(BaseCommand):
                 department_page_fixtures.load_all()
                 # TODO: incorporate logging into DeploymentLog?
             if LOAD_DATA == 'importer':
-                print("Importing data from {where?}")
+                print("Importing data from http://joplin-staging.herokuapp.com/api/graphql")
                 import_everything()
             elif not load_data_result:
                 if LOAD_DATA == 'prod':
