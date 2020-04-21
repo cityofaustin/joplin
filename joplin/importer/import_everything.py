@@ -21,6 +21,7 @@ page_type_map = {
     'location page': 'location'
 }
 
+
 def get_jwt_token():
     transport = RequestsHTTPTransport(
         url=api_url,
@@ -49,6 +50,7 @@ def get_jwt_token():
     jwt_token = result['tokenAuth']['token']
     return jwt_token
 
+
 def fetch_revision_ids(jwt_token):
     sample_transport = RequestsHTTPTransport(
         url=api_url,
@@ -76,8 +78,6 @@ def fetch_revision_ids(jwt_token):
 
     return all_page_revisions
 
-    # with open('third_revision_ids_file.json', 'w') as revision_ids_file:
-    #     revision_ids_file.write(json.dumps(all_page_revisions))
 
 def import_page_from_revision(revision, jwt_token):
     try:
@@ -105,14 +105,12 @@ def import_page_from_revision(revision, jwt_token):
                 print(u'FAILED to import {0} revision: {1}'.format(page_importer.page_type, page_importer.revision_id))
                 print(ex)
 
+
 def import_everything():
     jwt_token = get_jwt_token()
     all_page_revisions = fetch_revision_ids(jwt_token)
 
     latest_revisions = list(filter(lambda edge: edge['node']['isLatest'], all_page_revisions))
-    # with open('third_revision_ids_file.json') as revision_ids_file:
-    #     all_page_revisions = json.load(revision_ids_file)
-    #     latest_revisions = list(filter(lambda edge: edge['node']['isLatest'], all_page_revisions))
 
     # as per the logic in https://github.com/cityofaustin/joplin/pull/693
     # "For an ideal full site import, just make sure we import all location_pages before importing all service_pages."
