@@ -20,6 +20,8 @@ esac
 # Run schema Migrations Only (Static files can remain local)
 echo "Running schema Migrations"
 python ./joplin/manage.py migrate --noinput
+# Load mandatory initial data required for any instance
+python joplin/manage.py load_mandatory_fixtures
 
 case "${DEPLOYMENT_MODE}" in
   LOCAL|REVIEW|TEST)
