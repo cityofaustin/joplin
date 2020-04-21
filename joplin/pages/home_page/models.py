@@ -7,7 +7,6 @@ from wagtail.admin.edit_handlers import FieldPanel
 
 class HomePage(Page):
     parent_page_types = []
-    subpage_types = []
 
     preview_janis_branch_for_pr = models.TextField(
         verbose_name='Preview Janis Branch Name',
@@ -68,6 +67,3 @@ class HomePage(Page):
             return settings.JANIS_URL
         else:
             return getattr(self, "publish_janis_branch_for_pr")
-
-    def full_clean(self, *args, **kwargs):
-        super().full_clean(exclude=['title', 'title_en'])

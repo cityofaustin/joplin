@@ -3,11 +3,12 @@ import pytest
 import inspect
 import os
 from factory.base import FactoryMetaClass
-import pages.home_page.fixtures as home_page_fixtures
 import json
 from gql import gql, Client
 from gql.transport.requests import RequestsHTTPTransport
 
+import pages.home_page.fixtures as home_page_fixtures
+import base.fixtures.administrative.mandatory_fixtures as mandatory_fixtures
 
 # from django.core.management import call_command
 # @pytest.fixture(scope='session')
@@ -27,12 +28,13 @@ from gql.transport.requests import RequestsHTTPTransport
 # Genius technique from: https://stackoverflow.com/questions/42652228/removing-cached-files-after-a-py-test-run
 @pytest.yield_fixture(autouse=True, scope='session')
 def test_suite_cleanup_thing(request):
-    # setup
+    # Setup: Everything before yield will happen at the beginning of your pytest session
+
     # Clear test_api_jwt_token at start of running entire test suite.
     # This will ensure that our test_api_jwt_token is only cached for 1 pytest invocation and won't expire.
     request.config.cache.set('test_api_jwt_token', None)
     yield
-    # teardown
+    # Teardown: Everything after yield will happen at the end of your pytest session
 
 def register_factories(factories):
     """
