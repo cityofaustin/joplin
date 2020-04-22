@@ -6,14 +6,35 @@
     Whatever you set in that object will not contaminate the environment vars of any other branch.
     You're allowed to override any environment var (even ones in vars_from_circleci),
     though you probably don't want to.
-    branch_overrides are not requried for every branch.
+    branch_overrides are not required for every branch.
 '''
 branch_overrides = {
-    "3218-go-fast": {
-        # "DEBUG_TOOLBAR": True,
-        # "DEBUG": 1,
-    },
-    "3503-concurrency": {
+    "4282-homepage": {
         "LOAD_DATA": "",
+        "V3_WIP": True,
     },
+    "v3": {
+        "LOAD_DATA": "fixtures",
+        "V3_WIP": True,
+    },
+    "not-top-pages-topics": {
+        "LOAD_DATA": "fixtures",
+        "V3_WIP": True,
+    },
+    "4266-guide": {
+        "LOAD_DATA": "fixtures",
+        "V3_WIP": True,
+    },
+    "4274-are-we-live": {
+        "LOAD_DATA": "fixtures",
+        "V3_WIP": True,
+    },
+    "api-page-type-and-description": {
+        "LOAD_DATA": "fixtures",
+        "V3_WIP": True,
+    },
+    "4311-stream-block-error": {
+        "LOAD_DATA": "fixtures",
+        "V3_WIP": True,
+    }
 }

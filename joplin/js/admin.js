@@ -4,7 +4,7 @@
   ONLY USED FOR JOPLIN_UI TRANSTION PERIOD
   - revert to simply `import '../joplin_UI/admin.scss'` ☝️ after Joplin_UI is updated to prod
 👇 */
-if (window.ISPRODUCTION !== "False") {
+if (window.IS_PRODUCTION !== "False") {
   require('../css/admin.scss');
 } else if (localStorage.joplinUI !== "on") {
   require('../css/admin.scss');

@@ -6,15 +6,17 @@ from graphene import Node
 from wagtail.core.models import Page
 from wagtail.admin.models import get_object_usage
 
-from base.models import Contact, Location, Map, GuidePage
+from snippets.contact.models import Contact
+from pages.guide_page.models import GuidePage
 from groups.models import Department
 from wagtail.documents.models import Document
 from base.signals.aws_publish import get_http_request, create_build_aws
 from base.signals.netlify_publish import netlify_publish
+from base.signals.publish_v3 import publish_v3
 from flags.state import flag_enabled
 
 import logging
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('joplin')
 
 JANIS_SLUG_URL = settings.JANIS_SLUG_URL
 
@@ -25,11 +27,11 @@ def trigger_build(sender, pages_ids, action='saved', instance=None):
     source = name of snippet or object triggering build
     """
     trigger_object = instance
-    logger.debug(f'{trigger_object} {action}, triggering build')
-    if settings.ISSTAGING or settings.ISPRODUCTION:
+    logger.info(f'{trigger_object} {action}, triggering build')
+    if settings.IS_STAGING or settings.IS_PRODUCTION:
         create_build_aws(sender, instance, request=get_http_request())
-    elif settings.ISREVIEW:
-        netlify_publish()
+    elif settings.IS_REVIEW:
+        publish_v3(pages_ids)
 
 
 def collect_pages(instance):
@@ -48,7 +50,7 @@ def collect_pages(instance):
     global_page_id = Node.to_global_id(instance.get_verbose_name(), instance.id)
     global_ids.append(global_page_id)
 
-    if instance.get_verbose_name() is 'Service Page' or 'Information Page':
+    if instance.get_verbose_name() is 'Service Page' or instance.get_verbose_name() is 'Information Page':
         guide_ids = find_pages_in_guides(instance.id)
         global_ids.extend(guide_ids)
 
@@ -96,8 +98,6 @@ def find_pages_in_guides(changed_id):
 # we might want to log but not trigger a build? need some sort of queue
 @receiver(post_save, sender=Document)
 @receiver(post_save, sender=Contact)
-@receiver(post_save, sender=Location)
-@receiver(post_save, sender=Map)
 @receiver(post_save, sender=Department)
 def handle_post_save_signal(sender, **kwargs):
     pages_global_ids = []
@@ -127,8 +127,6 @@ def page_unpublished_signal(sender, **kwargs):
 
 @receiver(post_delete, sender=Document)
 @receiver(post_delete, sender=Contact)
-@receiver(post_delete, sender=Location)
-@receiver(post_delete, sender=Map)
 def handle_post_delete_signal(sender, **kwargs):
     pages_global_ids = []
     if flag_enabled('INCREMENTAL BUILDS'):

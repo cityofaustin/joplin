@@ -6,29 +6,31 @@ from graphene_django.converter import convert_django_field
 from graphene_django.debug import DjangoDebug
 from graphene_django.filter import DjangoFilterConnectionField
 from graphene.types import Scalar
-from graphene.types.json import JSONString
 from graphene.types.generic import GenericScalar
 from wagtail.core.fields import StreamField, RichTextField
 from wagtail.core.models import PageRevision
 from django_filters import FilterSet, OrderingFilter
-from wagtail.core.blocks import *
 from wagtail.documents.models import Document
 from wagtail.core.rich_text import expand_db_html
 import graphql_jwt
 from graphql_jwt.decorators import superuser_required
 
-from base.models import (
-    TranslatedImage, ServicePage, ServicePageContact, ServicePageTopic, InformationPage, InformationPageContact,
-    InformationPageTopic, DepartmentPage, DepartmentPageContact, DepartmentPageDirector, DepartmentPageTopPage,
-    DepartmentPageRelatedPage, Theme, TopicCollectionPage, TopicPage, TopicPageTopicCollection, TopicPageTopPage,
-    Contact, Location, PhoneNumber, ContactDayAndDuration, OfficialDocumentPage, OfficialDocumentPageTopic,
-    OfficialDocumentPageOfficialDocument, GuidePage, GuidePageTopic, GuidePageContact,
-    FormContainer, FormContainerTopic,
-)
+from snippets.contact.models import Contact, ContactPhoneNumber
+from snippets.theme.models import Theme
+from base.models import TranslatedImage
+from pages.topic_collection_page.models import TopicCollectionPage, JanisBasePageWithTopicCollections, JanisBasePageTopicCollection
+from pages.topic_page.models import TopicPage, TopicPageTopPage, JanisBasePageWithTopics, JanisBasePageTopic
+from pages.service_page.models import ServicePage
+from pages.information_page.models import InformationPage
+from pages.department_page.models import DepartmentPage, DepartmentPageDirector, DepartmentPageTopPage, DepartmentPageRelatedPage
+from pages.official_documents_page.models import OfficialDocumentPage, OfficialDocumentPageDocument
+from pages.guide_page.models import GuidePage
+from pages.form_container.models import FormContainer
+from pages.base_page.models import JanisBasePage
 from .content_type_map import content_type_map
 import traceback
-from locations.models import LocationPage, LocationPageRelatedServices
-from events.models import EventPage, EventPageFee
+from pages.location_page.models import LocationPage, LocationPageRelatedServices
+from pages.event_page.models import EventPage, EventPageFee
 from graphql_relay import to_global_id
 
 
@@ -37,6 +39,7 @@ class RichTextFieldType(Scalar):
     Serialises RichText content into fully baked HTML
     see https://github.com/wagtail/wagtail/issues/2695#issuecomment-464462575
     """
+
     @staticmethod
     def serialize(value):
         return expand_db_html(value)
@@ -71,7 +74,8 @@ def expand_dict_values(item):
     if isinstance(item, int):
         return item
     try:
-        dict_values = {key: try_expand_db_html(value) for (key, value) in item.items() if item is not isinstance(item, int)}
+        dict_values = {key: try_expand_db_html(value) for (key, value) in item.items() if
+                       item is not isinstance(item, int)}
         return dict_values
     except Exception as e:
         print('dict_comprehension error!', e)
@@ -98,7 +102,7 @@ def try_get_api_representation(StreamChild):
     try:
         if not isinstance(StreamChild, dict):
             block = StreamChild.block.get_api_representation(StreamChild.value) or None
-        # if the block is just a string (no dict at all), just return it expanded
+            # if the block is just a string (no dict at all), just return it expanded
             if isinstance(block, str):
                 parsed_block = try_expand_db_html(block)
                 return parsed_block
@@ -154,6 +158,80 @@ def convert_stream_field(field, registry=None):
     return StreamFieldType(description=field.help_text, required=not field.null)
 
 
+class ContextualNavInstance(graphene.ObjectType):
+    id = graphene.String()
+    url = graphene.String()
+    title = graphene.String()
+
+
+class ContextualNavData(graphene.ObjectType):
+    url = graphene.String()
+    parent = graphene.Field(ContextualNavInstance)
+    grandparent = graphene.Field(ContextualNavInstance)
+    # TODO: determine if this is possible in a later issue
+    # related_to = graphene.List(JanisBasePageTopicCollectionNode)
+
+
+class JanisBasePageNode(DjangoObjectType):
+    janis_urls = graphene.List(graphene.String)
+    janis_instances = graphene.List(ContextualNavData)
+    page_type = graphene.String()
+    summery = graphene.String()
+
+    class Meta:
+        model = JanisBasePage
+        filter_fields = ['id', 'slug', 'live']
+        interfaces = [graphene.Node]
+
+    def resolve_janis_urls(self, info):
+        return self.specific.janis_urls()
+
+    def resolve_page_type(self, info):
+        return self.content_type
+
+    def resolve_summery(self, info):
+        if hasattr(self.specific, "short_description"):
+            return self.specific.short_description
+        elif hasattr(self.specific, "mission"):
+            return self.specific.mission
+
+    def resolve_janis_instances(self, info):
+        instances = []
+        for i in self.specific.janis_instances():
+            if i['url']:
+                url = i['url']
+            else:
+                url = ''
+            if i['parent']:
+                node = content_type_map[i['parent'].content_type.name]["node"]
+                global_id = graphene.Node.to_global_id(node, i['parent'].id)
+                parent = ContextualNavInstance(
+                    id=global_id,
+                    title=i['parent'].title,
+                    url=i['parent'].specific.janis_urls()[0])
+            else:
+                parent = None
+            if i['grandparent']:
+                node = content_type_map[i['grandparent'].content_type.name]["node"]
+                global_id = graphene.Node.to_global_id(node, i['grandparent'].id)
+                grandparent = ContextualNavInstance(
+                    id=global_id,
+                    title=i['grandparent'].title,
+                    url=i['grandparent'].specific.janis_urls()[0])
+            else:
+                grandparent = None
+            instance = ContextualNavData(parent=parent, grandparent=grandparent, url=url)
+            instances.append(instance)
+        return instances
+
+
+class JanisBasePageWithTopicCollectionsNode(DjangoObjectType):
+    class Meta:
+        model = JanisBasePageWithTopicCollections
+        filter_fields = ['id', 'slug', 'live']
+        interfaces = [graphene.Node]
+
+
 '''
     Note: we do NOT want to use DjangoObjectType for the User model.
     Otherwise owners and users will be visible on all nodes by default.
@@ -161,6 +239,8 @@ def convert_stream_field(field, registry=None):
     and we want those resolvers to be wrapped in a @superuser_required decorator for authorization.
     TODO: handle importing of department groups for non-superusers.
 '''
+
+
 class OwnerNode(graphene.ObjectType):
     id = graphene.ID()
     first_name = graphene.String()
@@ -232,6 +312,7 @@ class DocumentNode(DjangoObjectType):
         model = Document
         interfaces = [graphene.Node]
         exclude_fields = ['tags']
+
     filename = graphene.String()
 
 
@@ -254,14 +335,17 @@ class TopicCollectionNode(DjangoObjectType):
     def resolve_owner(self, info):
         return resolve_owner_handler(self, info)
 
-class TopicPageTopicCollectionNode(DjangoObjectType):
+
+class JanisBasePageTopicCollectionNode(DjangoObjectType):
     class Meta:
-        model = TopicPageTopicCollection
+        model = JanisBasePageTopicCollection
+        filter_fields = ['topic_collection']
+        fields = '__all__'
         interfaces = [graphene.Node]
-        filter_fields = ['topiccollection']
 
 
 class TopicNode(DjangoObjectType):
+    topiccollections = graphene.List(TopicCollectionNode)
     owner = graphene.Field(OwnerNode)
 
     class Meta:
@@ -269,20 +353,52 @@ class TopicNode(DjangoObjectType):
         filter_fields = ['id', 'slug', 'live']
         interfaces = [graphene.Node]
 
+    def resolve_topiccollections(self, info):
+        tc = []
+        for t in self.topic_collections.values():
+            tc.append(TopicCollectionPage.objects.get(id=t['topic_collection_id']))
+        return tc
+
     @superuser_required
     def resolve_owner(self, info):
         return resolve_owner_handler(self, info)
 
 
-class LocationNode(DjangoObjectType):
+class JanisBasePageTopicNode(DjangoObjectType):
+    page_id = graphene.ID()
+
     class Meta:
-        model = Location
-        filter_fields = ['id']
+        model = JanisBasePageTopic
+        filter_fields = ['topic']
         fields = '__all__'
         interfaces = [graphene.Node]
 
+    def resolve_page_id(self, info):
+        return get_global_id_from_content_type(self)
+
+
+class JanisBasePageWithTopicsNode(DjangoObjectType):
+    departments = graphene.List(DepartmentPageNode)
+    topics = graphene.List(TopicNode)
+
+    class Meta:
+        model = JanisBasePageWithTopics
+        filter_fields = ['id', 'slug', 'live']
+        interfaces = [graphene.Node]
+
+    def resolve_topics(self, info):
+        topics = []
+        for topic in self.topics.values():
+            topics.append(TopicPage.objects.get(id=topic['topic_id']))
+        return topics
+
+    def resolve_departments(self, info):
+        return self.departments()
+
 
 class LocationPageNode(DjangoObjectType):
+    page_type = graphene.String()
+    janis_urls = graphene.List(graphene.String)
     owner = graphene.Field(OwnerNode)
 
     class Meta:
@@ -294,6 +410,12 @@ class LocationPageNode(DjangoObjectType):
     @superuser_required
     def resolve_owner(self, info):
         return resolve_owner_handler(self, info)
+
+    def resolve_page_type(self, info):
+        return LocationPage.get_verbose_name().lower()
+
+    def resolve_janis_urls(self, info):
+        return self.janis_urls()
 
 
 class LocationPageRelatedServices(DjangoObjectType):
@@ -309,6 +431,7 @@ class EventFilter(FilterSet):
             ('date'),
         )
     )
+
     # For reference:
     # https://django-filter.readthedocs.io/en/master/ref/filterset.html#declaring-filterable-fields
     # https://docs.djangoproject.com/en/3.0/ref/models/querysets/#lte
@@ -397,6 +520,8 @@ eventPage {
     location
 }
 """
+
+
 # we need to use a custom resolver
 # we could also try to make our streamfield type queryable,
 # but that is a rabbit hole I haven't jumped all the way down yet
@@ -440,11 +565,13 @@ class EventPageLocation(graphene.ObjectType):
 
 class EventPageNode(DjangoObjectType):
     locations = graphene.List(EventPageLocation)
+    page_type = graphene.String()
+    janis_urls = graphene.List(graphene.String)
     owner = graphene.Field(OwnerNode)
 
     class Meta:
         model = EventPage
-        filter_fields =  ['id', 'slug', 'live', 'date']
+        filter_fields = ['id', 'slug', 'live', 'date']
         interfaces = [graphene.Node, DepartmentResolver]
 
     def resolve_locations(self, info):
@@ -460,6 +587,12 @@ class EventPageNode(DjangoObjectType):
     def resolve_owner(self, info):
         return resolve_owner_handler(self, info)
 
+    def resolve_page_type(self, info):
+        return EventPage.get_verbose_name().lower()
+
+    def resolve_janis_urls(self, info):
+        return self.janis_urls()
+
 
 class EventPageFeeNode(DjangoObjectType):
     class Meta:
@@ -473,35 +606,10 @@ class ContactNode(DjangoObjectType):
         interfaces = [graphene.Node]
 
 
-class ContactPhoneNumbers(DjangoObjectType):
+class ContactPhoneNumberNode(DjangoObjectType):
     class Meta:
-        model = PhoneNumber
+        model = ContactPhoneNumber
         interfaces = [graphene.Node]
-
-
-class ContactDayAndDurationNode(DjangoObjectType):
-    class Meta:
-        model = ContactDayAndDuration
-        interfaces = [graphene.Node]
-
-
-class ServicePageContactNode(DjangoObjectType):
-    class Meta:
-        model = ServicePageContact
-        interfaces = [graphene.Node]
-
-
-class GuidePageContactNode(DjangoObjectType):
-    class Meta:
-        model = GuidePageContact
-        interfaces = [graphene.Node]
-
-
-class ServicePageTopicNode(DjangoObjectType):
-    class Meta:
-        model = ServicePageTopic
-        interfaces = [graphene.Node]
-        filter_fields = ['topic']
 
 
 class TranslatedImageNode(DjangoObjectType):
@@ -509,6 +617,7 @@ class TranslatedImageNode(DjangoObjectType):
         model = TranslatedImage
         interfaces = [graphene.Node]
         exclude_fields = ['tags']
+
     filename = graphene.String()
 
 
@@ -526,7 +635,7 @@ class Language(graphene.Enum):
 
 class ServicePageNode(DjangoObjectType):
     page_type = graphene.String()
-    janis_url = graphene.String()
+    janis_url = graphene.List(graphene.String)
     owner = graphene.Field(OwnerNode)
 
     class Meta:
@@ -538,7 +647,7 @@ class ServicePageNode(DjangoObjectType):
         return ServicePage.get_verbose_name().lower()
 
     def resolve_janis_url(self, info):
-        return self.janis_url()
+        return self.janis_urls()
 
     @superuser_required
     def resolve_owner(self, info):
@@ -587,31 +696,31 @@ class OfficialDocumentFilter(FilterSet):
     )
 
     class Meta:
-        model = OfficialDocumentPageOfficialDocument
+        model = OfficialDocumentPageDocument
         fields = ['date']
 
 
-class OfficialDocumentNodeDocument(graphene.ObjectType):
+class DocumentNodeDocument(graphene.ObjectType):
     filename = graphene.String()
     fileSize = graphene.String()
 
 
-class OfficialDocumentPageOfficialDocumentNode(DjangoObjectType):
-    document = graphene.Field(OfficialDocumentNodeDocument)
+class OfficialDocumentPageDocumentNode(DjangoObjectType):
+    document = graphene.Field(DocumentNodeDocument)
 
     class Meta:
-        model = OfficialDocumentPageOfficialDocument
+        model = OfficialDocumentPageDocument
         filter_fields = ['date']
         interfaces = [graphene.Node]
 
     def resolve_document(self, info):
-        english_doc = OfficialDocumentNodeDocument(
+        english_doc = DocumentNodeDocument(
             filename=self.document.filename,
             fileSize=self.document.file_size,
         )
         if django.utils.translation.get_language() == 'es':
             if self.document_es:
-                return OfficialDocumentNodeDocument(
+                return DocumentNodeDocument(
                     filename=self.document_es.filename,
                     fileSize=self.document_es.file_size,
                 )
@@ -624,7 +733,7 @@ class OfficialDocumentPageOfficialDocumentNode(DjangoObjectType):
 class OfficialDocumentPageNode(DjangoObjectType):
     page_type = graphene.String()
     official_documents = DjangoFilterConnectionField(
-        OfficialDocumentPageOfficialDocumentNode, filterset_class=OfficialDocumentFilter)
+        OfficialDocumentPageDocumentNode, filterset_class=OfficialDocumentFilter)
     owner = graphene.Field(OwnerNode)
 
     class Meta:
@@ -678,7 +787,7 @@ class GuidePageSectionPageBlock(graphene.ObjectType):
             if page:
                 break
         if page:
-            return page.janis_url()
+            return page.janis_publish_url()
         else:
             return '#'
 
@@ -757,6 +866,7 @@ class PageRevisionNode(DjangoObjectType):
     as_form_container = graphene.NonNull(FormContainerNode)
     as_location_page = graphene.NonNull(LocationPageNode)
     as_event_page = graphene.NonNull(EventPageNode)
+    preview_janis_instance = graphene.NonNull(ContextualNavData)
     is_latest = graphene.Boolean()
     is_live = graphene.Boolean()
     page_type = graphene.String()
@@ -800,128 +910,20 @@ class PageRevisionNode(DjangoObjectType):
     def resolve_page_type(self, resolve_info, *args, **kwargs):
         return self.page.content_type.name
 
+    def resolve_preview_janis_instance(self, resolve_info, *args, **kwargs):
+        preview_instance = None
+
+        # for now just get the first one
+        page = self.as_page_object()
+        instances = page.janis_instances()
+        if instances and instances[0]:
+            preview_instance = instances[0]
+
+        return preview_instance
+
     class Meta:
         model = PageRevision
         filter_fields = ['id']
-        interfaces = [graphene.Node]
-
-
-def get_structure_for_content_type(content_type):
-    site_structure = []
-    content_type_data = content_type_map.get(content_type, None)
-    if not content_type_data:
-        raise Exception(f'content_type [{content_type}] is not included in content_type_map')
-
-    pages = content_type_data["model"].objects.filter(live=True)
-    for page in pages:
-        page_global_id = graphene.Node.to_global_id(content_type_data["node"], page.id)
-
-        # Only publish event pages at the date based url
-        if content_type == 'event page':
-            if page.date:
-                site_structure.append({'url': f'/event/{page.date.year}/{page.date.month}/{page.date.day}/{page.slug}/', 'type': content_type, 'id': page_global_id})
-            continue
-
-        if page.coa_global:
-            site_structure.append({'url': f'/{page.slug}/', 'type': content_type, 'id': page_global_id})
-
-        # To get offered by from departments, look at our page permissions
-        group_page_permissions = page.group_permissions.all()
-        for group_page_permission in group_page_permissions:
-            # Department groups have this
-            if hasattr(group_page_permission.group, "department"):
-                department_page = group_page_permission.group.department.department_page
-                if department_page:
-                    department_global_id = graphene.Node.to_global_id('DepartmentNode', department_page.id)
-                    site_structure.append({'url': f'/{department_page.slug}/{page.slug}/', 'type': content_type, 'id': page_global_id, 'parent_department': department_global_id})
-
-        # For content_type models that have topics
-        if hasattr(page, "topics"):
-            page_topics = page.topics.all()
-            for page_topic in page_topics:
-                page_topic_global_id = graphene.Node.to_global_id('TopicNode', page_topic.topic.id)
-                page_topic_tcs = page_topic.topic.topiccollections.all()
-                for tc in page_topic_tcs:
-                    if not tc.topiccollection.theme:
-                        continue
-
-                    page_topic_tc_global_id = graphene.Node.to_global_id('TopicCollectionNode', tc.topiccollection.id)
-                    site_structure.append({'url': f'/{tc.topiccollection.theme.slug}/{tc.topiccollection.slug}/{page_topic.topic.slug}/{page.slug}/', 'type': content_type, 'id': page_global_id, 'parent_topic': page_topic_global_id, 'grandparent_topic_collection': page_topic_tc_global_id})
-
-        # Location pages need urls
-        if content_type == 'location page':
-            site_structure.append({'url': f'/location/{page.slug}/', 'type': content_type, 'id': page_global_id})
-
-    return site_structure
-
-
-class SiteStructure(graphene.ObjectType):
-    value = GenericScalar()
-    structure_json = JSONString()
-
-    # json isn't a great way to do this, we should
-    # figure out how to make it queryable
-    def resolve_structure_json(self, resolve_info, *args, **kwargs):
-        # our structure here can be id: page dict
-        site_structure = []
-        topic_collections = TopicCollectionPage.objects.filter(live=True)
-        for topic_collection in topic_collections:
-            if not topic_collection.theme:
-                continue
-
-            topic_collection_global_id = graphene.Node.to_global_id('TopicCollectionNode', topic_collection.id)
-            site_structure.append({'url': f'/{topic_collection.theme.slug}/{topic_collection.slug}/', 'type': 'topic collection', 'id': topic_collection_global_id})
-
-        topics = TopicPage.objects.filter(live=True)
-        for topic in topics:
-            topic_global_id = graphene.Node.to_global_id('TopicNode', topic.id)
-            topic_tcs = topic.topiccollections.all()
-            for tc in topic_tcs:
-                if not tc.topiccollection.theme:
-                    continue
-
-                topic_tc_global_id = graphene.Node.to_global_id('TopicCollectionNode', tc.topiccollection.id)
-                site_structure.append({'url': f'/{tc.topiccollection.theme.slug}/{tc.topiccollection.slug}/{topic.slug}/', 'type': 'topic', 'id': topic_global_id, 'parent_topic_collection': topic_tc_global_id})
-
-        departments = DepartmentPage.objects.filter(live=True)
-        for department in departments:
-            department_global_id = graphene.Node.to_global_id('DepartmentNode', department.id)
-            site_structure.append({'url': f'/{department.slug}/', 'type': 'department', 'id': department_global_id})
-
-        site_structure.extend(get_structure_for_content_type('service page'))
-        site_structure.extend(get_structure_for_content_type('information page'))
-        site_structure.extend(get_structure_for_content_type('official document page'))
-        site_structure.extend(get_structure_for_content_type('guide page'))
-        site_structure.extend(get_structure_for_content_type('form container'))
-        site_structure.extend(get_structure_for_content_type('location page'))
-        site_structure.extend(get_structure_for_content_type('event page'))
-
-        return site_structure
-
-
-class InformationPageContactNode(DjangoObjectType):
-    class Meta:
-        model = InformationPageContact
-        interfaces = [graphene.Node]
-
-
-class InformationPageTopicNode(DjangoObjectType):
-    class Meta:
-        model = InformationPageTopic
-        interfaces = [graphene.Node]
-        filter_fields = ['topic']
-
-
-class FormContainerTopicNode(DjangoObjectType):
-    class Meta:
-        model = FormContainerTopic
-        interfaces = [graphene.Node]
-        filter_fields = ['topic']
-
-
-class DepartmentPageContactNode(DjangoObjectType):
-    class Meta:
-        model = DepartmentPageContact
         interfaces = [graphene.Node]
 
 
@@ -930,20 +932,18 @@ class DepartmentPageDirectorNode(DjangoObjectType):
         model = DepartmentPageDirector
         interfaces = [graphene.Node]
 
+
 # Get the original page object from a page chooser node
 # Works for any content_type defined in content_type_map
-
-
 def get_page_from_content_type(self):
     content_type = self.page.content_type.name
     model = content_type_map[content_type]["model"]
     page = model.objects.get(id=self.page_id)
     return page
 
+
 # Get a page global_id from a page chooser node
 # Works for any content_type defined in content_type_map
-
-
 def get_global_id_from_content_type(self):
     content_type = self.page.content_type.name
     node = content_type_map[content_type]["node"]
@@ -994,7 +994,6 @@ class TopicPageTopPageNode(DjangoObjectType):
     slug = graphene.String()
     page_id = graphene.ID()
     page_type = graphene.String()
-    live = graphene.Boolean()
 
     def resolve_page_id(self, info):
         return get_global_id_from_content_type(self)
@@ -1008,48 +1007,9 @@ class TopicPageTopPageNode(DjangoObjectType):
     def resolve_page_type(self, info):
         return self.page.content_type.name
 
-    def resolve_live(self, info):
-        return get_page_from_content_type(self).live
-
     class Meta:
         model = TopicPageTopPage
         interfaces = [graphene.Node]
-
-
-class OfficialDocumentPageTopicNode(DjangoObjectType):
-    class Meta:
-        model = OfficialDocumentPageTopic
-        interfaces = [graphene.Node]
-        filter_fields = ['topic']
-
-
-class GuidePageTopicNode(DjangoObjectType):
-    class Meta:
-        model = GuidePageTopic
-        interfaces = [graphene.Node]
-        filter_fields = ['topic']
-
-
-def get_page_with_preview_data(page, session):
-    # Wagtail saves preview data in the session. We want to mimick what they're doing to generate the built-in preview.
-    # https://github.com/wagtail/wagtail/blob/db6d36845f3f2c5d7009a22421c2efab9968aa24/wagtail/admin/views/pages.py#L544
-    # TODO: This should be simpler. Instead of hijacking the wagtail admin, it'd probably be easier to create a new endpoint
-    #       or have a graphql mutation do the work
-    session_key = f'wagtail-preview-{page.pk}'
-    preview_data, timestamp = session.get(session_key, [None, None])
-    if not preview_data:
-        return None
-
-    preview_data = {key: vals[0] for key, vals in preview_data.items()}
-    parent = page.get_parent().specific
-    FormKlass = page.get_edit_handler().get_form_class(page._meta.model)
-
-    form = FormKlass(preview_data, instance=page, parent_page=parent)
-    if not form.is_valid():
-        raise Exception(form.errors.as_json())
-    obj = form.save(commit=False)
-
-    return obj
 
 
 # Allow users to request JWT token for authorization-protected resolvers
@@ -1063,10 +1023,11 @@ class Mutation(graphene.ObjectType):
 class Query(graphene.ObjectType):
     debug = graphene.Field(DjangoDebug, name='__debug')
 
+    all_pages = DjangoFilterConnectionField(JanisBasePageNode)
+
     department_page = graphene.Node.Field(DepartmentPageNode)
     all_service_pages = DjangoFilterConnectionField(ServicePageNode)
     page_revision = graphene.Field(PageRevisionNode, id=graphene.ID())
-    site_structure = graphene.Field(SiteStructure)
     all_page_revisions = DjangoFilterConnectionField(PageRevisionNode)
     all_information_pages = DjangoFilterConnectionField(InformationPageNode)
     all_department_pages = DjangoFilterConnectionField(DepartmentPageNode)
@@ -1077,18 +1038,10 @@ class Query(graphene.ObjectType):
         OfficialDocumentPageNode)
     all_guide_pages = DjangoFilterConnectionField(GuidePageNode)
     all_form_containers = DjangoFilterConnectionField(FormContainerNode)
-    all_topic_page_topic_collections = DjangoFilterConnectionField(TopicPageTopicCollectionNode)
-    all_service_page_topics = DjangoFilterConnectionField(ServicePageTopicNode)
-    all_information_page_topics = DjangoFilterConnectionField(InformationPageTopicNode)
-    all_official_document_page_topics = DjangoFilterConnectionField(OfficialDocumentPageTopicNode)
-    all_guide_page_topics = DjangoFilterConnectionField(GuidePageTopicNode)
     all_location_pages = DjangoFilterConnectionField(LocationPageNode)
-    all_form_container_topics = DjangoFilterConnectionField(FormContainerTopicNode)
     all_event_pages = DjangoFilterConnectionField(EventPageNode, filterset_class=EventFilter)
-
-    def resolve_site_structure(self, resolve_info):
-        site_structure = SiteStructure()
-        return site_structure
+    topic_collection_topics = DjangoFilterConnectionField(JanisBasePageTopicCollectionNode)
+    base_page_topics = DjangoFilterConnectionField(JanisBasePageTopicNode)
 
     def resolve_page_revision(self, resolve_info, id=None):
         revision = graphene.Node.get_node_from_global_id(resolve_info, id)

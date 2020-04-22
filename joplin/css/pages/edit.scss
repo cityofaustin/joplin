@@ -165,6 +165,12 @@
   font-weight: bold;
 }
 
+// Error message for creating and editing Users
+.coa-user-form-error {
+  @extend .coa-publish-error;
+  padding-bottom: 1rem;
+}
+
 .object>.title-wrapper {
   position: inherit;
 }
