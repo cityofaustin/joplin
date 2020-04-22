@@ -95,11 +95,6 @@ def expand_by_type(key, value):
 
 
 def try_get_api_representation(StreamChild):
-    if StreamChild.block_type == "map_block":
-        # this has its own representation definition in blocks.py
-        block = StreamChild.block.get_api_representation(StreamChild.value)
-        return block
-
     try:
         if not isinstance(StreamChild, dict):
             block = StreamChild.block.get_api_representation(StreamChild.value) or None
@@ -762,6 +757,9 @@ class PageRevisionNode(DjangoObjectType):
     as_form_container = graphene.NonNull(FormContainerNode)
     as_location_page = graphene.NonNull(LocationPageNode)
     as_event_page = graphene.NonNull(EventPageNode)
+    is_latest = graphene.Boolean()
+    is_live = graphene.Boolean()
+    page_type = graphene.String()
 
     def resolve_as_service_page(self, resolve_info, *args, **kwargs):
         return self.as_page_object()
@@ -792,6 +790,15 @@ class PageRevisionNode(DjangoObjectType):
 
     def resolve_as_event_page(self, resolve_info, *args, **kwargs):
         return self.as_page_object()
+
+    def resolve_is_latest(self, resolve_info, *args, **kwargs):
+        return self.created_at == self.page.latest_revision_created_at
+
+    def resolve_is_live(self, resolve_info, *args, **kwargs):
+        return self == self.page.live_revision
+
+    def resolve_page_type(self, resolve_info, *args, **kwargs):
+        return self.page.content_type.name
 
     class Meta:
         model = PageRevision
