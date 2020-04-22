@@ -9,6 +9,7 @@ from .test_cases.step_with_1_location import step_with_1_location
 from .test_cases.step_with_2_locations import step_with_2_locations
 from .test_cases.step_with_internal_links import step_with_internal_links
 from .test_cases.placeholder_for_internal_links import placeholder_for_internal_links
+from .test_cases.step_with_location_first_then_basic_step import step_with_location_first_then_basic_step
 
 
 # You can import any test_case fixture individually
@@ -25,3 +26,4 @@ def load_all():
     step_with_2_locations()
     step_with_internal_links()
     placeholder_for_internal_links()
+    step_with_location_first_then_basic_step()
