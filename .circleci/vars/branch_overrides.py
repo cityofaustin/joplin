@@ -13,7 +13,7 @@ branch_overrides = {
         "LOAD_DATA": "",
         "V3_WIP": True,
     },
-    "v3": {
+    "master": {
         "LOAD_DATA": "fixtures",
         "V3_WIP": True,
     },
