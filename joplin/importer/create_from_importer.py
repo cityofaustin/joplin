@@ -367,9 +367,20 @@ def create_page_from_importer(page_type, page_dictionaries, revision_id=None):
             combined_dictionary['add_fees'] = {'fees': fees}
             del combined_dictionary['fees']
 
+    # set the translated fields
+    # by doing this before thee steps logic, we can make sure to not import english steps into spanish step fields
+    for field in factory._meta.model._meta.fields:
+        if field.column.endswith("_es"):
+            if field.column[:-3] in page_dictionaries['es']:
+                # make sure we aren't just getting the english fallback value
+                # https://wagtail-modeltranslation-docs.readthedocs.io/en/latest/Advanced%20Settings.html#fallback-languages
+                if page_dictionaries['es'][field.column[:-3]] != page_dictionaries['en'][field.column[:-3]]:
+                    combined_dictionary[field.column] = page_dictionaries['es'][field.column[:-3]]
 
     # Handle 'steps_with_locations' in services
     if page_type is 'services':
+        
+
         if 'steps' in combined_dictionary:
             '''
             Important note!
@@ -405,18 +416,36 @@ def create_page_from_importer(page_type, page_dictionaries, revision_id=None):
                         combined_dictionary["live"] = False
 
 
+            # todo: this but not copypasta
+            if 'steps_es' in combined_dictionary:
+                for i, step in enumerate(combined_dictionary["steps_es"][:]):
+                    # Only import step with location if we have that location already.
+                    if step['type'] == 'step_with_locations':
+                        removed_locations = False
+                        for j, location in enumerate(step["value"]["locations"][:]):
+                            # Add location_page data only if location was already imported.
+                            # Right now, a "step_with_location" does not provide enough location_page
+                            # data required to import a new location_page.
+                            try:
+                                location_page = LocationPage.objects.get(slug=location["location_page"]['slug'])
+                            except LocationPage.DoesNotExist:
+                                location_page = None
+                            if location_page:
+                                combined_dictionary["steps_es"][i]["value"]["locations"][j] = location_page.pk
+                            else:
+                                removed_locations = True
+                                del combined_dictionary["steps_es"][i]["value"]["locations"][j]
+                        if removed_locations:
+                            # If all locations were removed from step, then delete the step
+                            if not len(step["value"]["locations"]):
+                                del combined_dictionary["steps_es"][i]
+                            # If any locations were removed, then make sure the Service_Page is not published
+                            combined_dictionary["live"] = False
+
+
     # remove liveRevision if we have it
     if 'live_revision' in combined_dictionary:
         del combined_dictionary['live_revision']
-
-    # set the translated fields
-    for field in factory._meta.model._meta.fields:
-        if field.column.endswith("_es"):
-            if field.column[:-3] in page_dictionaries['es']:
-                # make sure we aren't just getting the english fallback value
-                # https://wagtail-modeltranslation-docs.readthedocs.io/en/latest/Advanced%20Settings.html#fallback-languages
-                if page_dictionaries['es'][field.column[:-3]] != page_dictionaries['en'][field.column[:-3]]:
-                    combined_dictionary[field.column] = page_dictionaries['es'][field.column[:-3]]
 
     # set the owner of the page
     if 'owner' in combined_dictionary:
