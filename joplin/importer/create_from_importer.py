@@ -375,7 +375,7 @@ def create_page_from_importer(page_type, page_dictionaries, revision_id=None):
             del combined_dictionary['fees']
 
     # set the translated fields
-    # by doing this before thee steps logic, we can make sure to not import english steps into spanish step fields
+    # by doing this before the steps logic, we can make sure to not import english steps into spanish step fields
     for field in factory._meta.model._meta.fields:
         if field.column.endswith("_es"):
             if field.column[:-3] in page_dictionaries['es']:
