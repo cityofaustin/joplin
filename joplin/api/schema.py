@@ -95,11 +95,6 @@ def expand_by_type(key, value):
 
 
 def try_get_api_representation(StreamChild):
-    # if StreamChild.block_type == "map_block":
-    #     # this has its own representation definition in blocks.py
-    #     block = StreamChild.block.get_api_representation(StreamChild.value)
-    #     return block
-
     try:
         if not isinstance(StreamChild, dict):
             block = StreamChild.block.get_api_representation(StreamChild.value) or None
