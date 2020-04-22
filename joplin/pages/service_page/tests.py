@@ -230,3 +230,14 @@ def test_do_not_import_english_as_spanish(remote_staging_preview_url, test_api_u
     assert page.short_description_es is None
     assert page.slug_en == 'service-page-in-english-only'
     assert page.slug_es is None
+
+
+@pytest.mark.django_db
+def test_import_page_with_step_with_location_followed_by_basic_step(remote_staging_preview_url, test_api_url, test_api_jwt_token):
+    url = f'{remote_staging_preview_url}/services/UGFnZVJldmlzaW9uTm9kZTo3Ng==?CMS_API={test_api_url}'
+    page = PageImporter(url, test_api_jwt_token).fetch_page_data().create_page()
+    assert isinstance(page, ServicePage)
+    # we should only have 1 step, as we haven't imported the associated location page
+    assert len(page.steps) == 1
+    # we should not have any spanish steps
+    assert len(page.steps_es) == 0

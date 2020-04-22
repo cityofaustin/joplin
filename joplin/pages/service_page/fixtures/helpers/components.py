@@ -158,3 +158,11 @@ def step_with_one_imported_internal_link():
         'type': 'basic_step',
         'value': f'<p><a id="{linked_topic_page.id}" linktype="page">topic title [en]</a></p>',
     }]
+
+def step_with_location_first_then_basic_step():
+    steps = step_with_1_location()
+    steps.append({
+        'type': 'basic_step',
+        'value': '<p>just a basic step</p>'
+    })
+    return steps
