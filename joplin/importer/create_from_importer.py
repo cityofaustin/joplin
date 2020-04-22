@@ -379,46 +379,18 @@ def create_page_from_importer(page_type, page_dictionaries, revision_id=None):
 
     # Handle 'steps_with_locations' in services
     if page_type is 'services':
-        
-
-        if 'steps' in combined_dictionary:
-            '''
-            Important note!
-            We are iterating through copies of each list.
-            Note the slice [:] on combined_dictionary["steps"][:].
-            We need to iterate through copies of these lists, because some pieces of logic
-            will require us to delete the indexes that we're iterating on.
-            Make sure that you're modifying/deleting the original list, not the copy[:] that
-            you're iterating through.
-            '''
-            for i, step in enumerate(combined_dictionary["steps"][:]):
-                # Only import step with location if we have that location already.
-                if step['type'] == 'step_with_locations':
-                    removed_locations = False
-                    for j, location in enumerate(step["value"]["locations"][:]):
-                        # Add location_page data only if location was already imported.
-                        # Right now, a "step_with_location" does not provide enough location_page
-                        # data required to import a new location_page.
-                        try:
-                            location_page = LocationPage.objects.get(slug=location["location_page"]['slug'])
-                        except LocationPage.DoesNotExist:
-                            location_page = None
-                        if location_page:
-                            combined_dictionary["steps"][i]["value"]["locations"][j] = location_page.pk
-                        else:
-                            removed_locations = True
-                            del combined_dictionary["steps"][i]["value"]["locations"][j]
-                    if removed_locations:
-                        # If all locations were removed from step, then delete the step
-                        if not len(step["value"]["locations"]):
-                            del combined_dictionary["steps"][i]
-                        # If any locations were removed, then make sure the Service_Page is not published
-                        combined_dictionary["live"] = False
-
-
-            # todo: this but not copypasta
-            if 'steps_es' in combined_dictionary:
-                for i, step in enumerate(combined_dictionary["steps_es"][:]):
+        for lang in ['', '_es']:
+            if f'steps{lang}' in combined_dictionary:
+                '''
+                Important note!
+                We are iterating through copies of each list.
+                Note the slice [:] on combined_dictionary["steps"][:].
+                We need to iterate through copies of these lists, because some pieces of logic
+                will require us to delete the indexes that we're iterating on.
+                Make sure that you're modifying/deleting the original list, not the copy[:] that
+                you're iterating through.
+                '''
+                for i, step in enumerate(combined_dictionary[f'steps{lang}'][:]):
                     # Only import step with location if we have that location already.
                     if step['type'] == 'step_with_locations':
                         removed_locations = False
@@ -431,17 +403,16 @@ def create_page_from_importer(page_type, page_dictionaries, revision_id=None):
                             except LocationPage.DoesNotExist:
                                 location_page = None
                             if location_page:
-                                combined_dictionary["steps_es"][i]["value"]["locations"][j] = location_page.pk
+                                combined_dictionary[f'steps{lang}'][i]["value"]["locations"][j] = location_page.pk
                             else:
                                 removed_locations = True
-                                del combined_dictionary["steps_es"][i]["value"]["locations"][j]
+                                del combined_dictionary[f'steps{lang}'][i]["value"]["locations"][j]
                         if removed_locations:
                             # If all locations were removed from step, then delete the step
                             if not len(step["value"]["locations"]):
-                                del combined_dictionary["steps_es"][i]
+                                del combined_dictionary[f'steps{lang}'][i]
                             # If any locations were removed, then make sure the Service_Page is not published
                             combined_dictionary["live"] = False
-
 
     # remove liveRevision if we have it
     if 'live_revision' in combined_dictionary:
