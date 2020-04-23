@@ -291,6 +291,10 @@ def create_page_from_importer(page_type, page_dictionaries, revision_id=None):
             combined_dictionary['add_related_services'].append(location_page_related_service_to_add)
         del combined_dictionary['related_services']
 
+    # remove physical location photo from location pages until we support importing images
+    if 'physical_location_photo' in combined_dictionary:
+        del combined_dictionary['physical_location_photo']
+
     # associate/create documents
     # Only applies to OfficialDocumentPages
     if 'official_documents' in combined_dictionary:
