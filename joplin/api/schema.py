@@ -916,7 +916,7 @@ class PageRevisionNode(DjangoObjectType):
         return self.page.content_type.name
 
     def resolve_preview_janis_instance(self, resolve_info, *args, **kwargs):
-        preview_instance = None
+        preview_instance = {}
 
         # for now just get the first one
         page = self.as_page_object()
