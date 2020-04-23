@@ -9,11 +9,11 @@
     branch_overrides are not required for every branch.
 '''
 branch_overrides = {
-    "4282-homepage": {
-        "LOAD_DATA": "",
+    "4302-janis-preview": {
+        "LOAD_DATA": "fixtures",
         "V3_WIP": True,
     },
-    "v3": {
+    "master": {
         "LOAD_DATA": "fixtures",
         "V3_WIP": True,
     },

@@ -99,11 +99,6 @@ def expand_by_type(key, value):
 
 
 def try_get_api_representation(StreamChild):
-    if StreamChild.block_type == "map_block":
-        # this has its own representation definition in blocks.py
-        block = StreamChild.block.get_api_representation(StreamChild.value)
-        return block
-
     try:
         if not isinstance(StreamChild, dict):
             block = StreamChild.block.get_api_representation(StreamChild.value) or None
@@ -916,7 +911,7 @@ class PageRevisionNode(DjangoObjectType):
         return self.page.content_type.name
 
     def resolve_preview_janis_instance(self, resolve_info, *args, **kwargs):
-        preview_instance = None
+        preview_instance = {}
 
         # for now just get the first one
         page = self.as_page_object()
