@@ -182,7 +182,11 @@ def create_page_from_importer(page_type, page_dictionaries, revision_id=None):
                 'en': page_dictionaries['en']['topics']['edges'][index]['node']['topic'],
                 'es': page_dictionaries['es']['topics']['edges'][index]['node']['topic'],
             }
-            revision_id = page_dictionaries['en']['topics']['edges'][index]['node']['topic']['live_revision']['id']
+
+            live_revision = page_dictionaries['en']['topics']['edges'][index]['node']['topic']['live_revision']
+            if live_revision:
+                revision_id = live_revision['id']
+
             topic_page = create_page_from_importer(
                 'topics',
                 topic_page_dictionaries,
