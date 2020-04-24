@@ -9,6 +9,8 @@ from wagtail.admin.edit_handlers import (
 )
 
 from pages.location_page.models import LocationPage
+from pages.information_page.models import InformationPage
+from pages.service_page.models import ServicePage
 from snippets.contact.models import Contact
 from wagtail.core.fields import RichTextField, StreamField
 from wagtail.core.blocks import StreamBlock
@@ -17,7 +19,6 @@ from wagtail.admin.edit_handlers import FieldPanel, PageChooserPanel, HelpPanel
 from base.forms import EventPageForm
 from pages.base_page.models import JanisBasePage
 from base.models.widgets import countMe, AUTHOR_LIMITS
-from modelcluster.models import ClusterableModel
 from base.models.constants import DEFAULT_MAX_LENGTH, WYSIWYG_GENERAL
 from wagtail.snippets.edit_handlers import SnippetChooserPanel
 from publish_preflight.requirements import FieldPublishRequirement, StreamFieldPublishRequirement
@@ -130,6 +131,9 @@ class EventPage(JanisBasePage):
             heading=registration_url.verbose_name,
             classname='coa-multiField-nopadding'
         ),
+        InlinePanel('related_page', heading='Select the page(s) where this event should display', label='Page',
+                    help_text='Add links to Service or Information Pages',
+                    min_num=None),
         SnippetChooserPanel('contact'),
         MultiFieldPanel(
             [
@@ -162,3 +166,16 @@ class EventPageFee(Orderable):
             ],
         ),
     ]
+
+
+class EventPageRelatedPage(Orderable):
+    event = ParentalKey(EventPage, related_name='related_page', default=None)
+    page = models.ForeignKey('wagtailcore.Page', verbose_name='Page where event is displayed',
+                             related_name='+', on_delete=models.CASCADE)
+
+    panels = [
+        PageChooserPanel('page', page_type=[InformationPage, ServicePage]),
+    ]
+
+    def __str__(self):
+        return self.page.title
