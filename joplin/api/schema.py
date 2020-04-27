@@ -30,7 +30,7 @@ from pages.base_page.models import JanisBasePage
 from .content_type_map import content_type_map
 import traceback
 from pages.location_page.models import LocationPage, LocationPageRelatedServices
-from pages.event_page.models import EventPage, EventPageFee
+from pages.event_page.models import EventPage, EventPageFee, EventPageRelatedPage
 from graphql_relay import to_global_id
 
 
@@ -597,6 +597,25 @@ class EventPageNode(DjangoObjectType):
 class EventPageFeeNode(DjangoObjectType):
     class Meta:
         model = EventPageFee
+        interfaces = [graphene.Node]
+
+
+class EventPageRelatedPageNode(DjangoObjectType):
+    title = graphene.String()
+    slug = graphene.String()
+    page_id = graphene.ID()
+
+    def resolve_page_id(self, info):
+        return get_global_id_from_content_type(self)
+
+    def resolve_title(self, resolve_info, *args, **kwargs):
+        return get_page_from_content_type(self).title
+
+    def resolve_slug(self, resolve_info, *args, **kwargs):
+        return get_page_from_content_type(self).slug
+
+    class Meta:
+        model = EventPageRelatedPage
         interfaces = [graphene.Node]
 
 
