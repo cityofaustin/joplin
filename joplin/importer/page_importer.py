@@ -15,7 +15,7 @@ from pages.service_page.factories import ServicePageFactory
 
 # TODO: this could be retrieved programmatically from the netlify API for PR apps
 ENDPOINTS = {
-    'janis.austintexas.io': 'https://joplin-staging.herokuapp.com/api/graphql',
+    'alpha.austin.gov': 'https://joplin.herokuapp.com/api/graphql',
     'janis-pytest.netlify.com': 'https://joplin-pr-pytest.herokuapp.com/api/graphql',
 }
 

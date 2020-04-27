@@ -182,7 +182,11 @@ def create_page_from_importer(page_type, page_dictionaries, revision_id=None):
                 'en': page_dictionaries['en']['topics']['edges'][index]['node']['topic'],
                 'es': page_dictionaries['es']['topics']['edges'][index]['node']['topic'],
             }
-            revision_id = page_dictionaries['en']['topics']['edges'][index]['node']['topic']['live_revision']['id']
+
+            live_revision = page_dictionaries['en']['topics']['edges'][index]['node']['topic']['live_revision']
+            if live_revision:
+                revision_id = live_revision['id']
+
             topic_page = create_page_from_importer(
                 'topics',
                 topic_page_dictionaries,
@@ -279,6 +283,10 @@ def create_page_from_importer(page_type, page_dictionaries, revision_id=None):
             location_page_related_service_to_add['related_service'] = related_service
             combined_dictionary['add_related_services'].append(location_page_related_service_to_add)
         del combined_dictionary['related_services']
+
+    # remove physical location photo from location pages until we support importing images
+    if 'physical_location_photo' in combined_dictionary:
+        del combined_dictionary['physical_location_photo']
 
     # associate/create documents
     # Only applies to OfficialDocumentPages
