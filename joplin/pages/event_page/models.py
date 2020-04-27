@@ -174,7 +174,7 @@ class EventPageRelatedPage(Orderable):
                              related_name='+', on_delete=models.CASCADE)
 
     panels = [
-        PageChooserPanel('page', page_type=[InformationPage, ServicePage]),
+        PageChooserPanel('page', page_type=[InformationPage, ServicePage, LocationPage]),
     ]
 
     def __str__(self):
