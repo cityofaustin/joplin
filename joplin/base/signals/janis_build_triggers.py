@@ -28,7 +28,8 @@ def trigger_build(sender, pages_ids, action='saved', instance=None):
     """
     trigger_object = instance
     logger.info(f'{trigger_object} {action}, triggering build')
-    publish_v3(pages_ids)
+    if settings.IS_STAGING or settings.IS_PRODUCTION or settings.IS_REVIEW:
+        publish_v3(pages_ids)
 
 def collect_pages(instance):
     # does this work on page deletion? pages arent deleted right, just unpublished?
