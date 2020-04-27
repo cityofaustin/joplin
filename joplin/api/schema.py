@@ -656,6 +656,7 @@ class ServicePageNode(DjangoObjectType):
     page_type = graphene.String()
     janis_url = graphene.List(graphene.String)
     owner = graphene.Field(OwnerNode)
+    events = graphene.List(EventPageNode)
 
     class Meta:
         model = ServicePage
@@ -667,6 +668,13 @@ class ServicePageNode(DjangoObjectType):
 
     def resolve_janis_url(self, info):
         return self.janis_urls()
+
+    def resolve_events(self, info):
+        events = []
+        event_relationships = EventPageRelatedPage.objects.filter(page__id=self.pk)
+        for page in event_relationships:
+            events.append(page.event)
+        return events
 
     @superuser_required
     def resolve_owner(self, info):
