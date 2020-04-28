@@ -27,7 +27,7 @@ def publish_v3(page_ids=[]):
         "env_vars": {
             "REACT_STATIC_PREFETCH_RATE": "5",
         },
-        "build_type": "all_pages",
+        "build_type": "rebuild",
     }
     publisher_res = requests.post(url, data=json.dumps(data), headers=headers)
     logger.info("publish_v3() Starting task")
