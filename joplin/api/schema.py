@@ -400,6 +400,7 @@ class LocationPageNode(DjangoObjectType):
     page_type = graphene.String()
     janis_urls = graphene.List(graphene.String)
     owner = graphene.Field(OwnerNode)
+    events = graphene.List(lambda: EventPageNode)
 
     class Meta:
         model = LocationPage
@@ -416,6 +417,13 @@ class LocationPageNode(DjangoObjectType):
 
     def resolve_janis_urls(self, info):
         return self.janis_urls()
+
+    def resolve_events(self, info):
+        events = []
+        event_relationships = EventPageRelatedPage.objects.filter(page__id=self.pk)
+        for page in event_relationships:
+            events.append(page.event)
+        return events
 
 
 class LocationPageRelatedServices(DjangoObjectType):
@@ -684,6 +692,7 @@ class ServicePageNode(DjangoObjectType):
 class InformationPageNode(DjangoObjectType):
     page_type = graphene.String()
     owner = graphene.Field(OwnerNode)
+    events = graphene.List(EventPageNode)
 
     class Meta:
         model = InformationPage
@@ -692,6 +701,13 @@ class InformationPageNode(DjangoObjectType):
 
     def resolve_page_type(self, info):
         return InformationPage.get_verbose_name().lower()
+
+    def resolve_events(self, info):
+        events = []
+        event_relationships = EventPageRelatedPage.objects.filter(page__id=self.pk)
+        for page in event_relationships:
+            events.append(page.event)
+        return events
 
     @superuser_required
     def resolve_owner(self, info):
