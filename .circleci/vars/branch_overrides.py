@@ -28,5 +28,9 @@ branch_overrides = {
     "4311-stream-block-error": {
         "LOAD_DATA": "fixtures",
         "V3_WIP": True,
+    },
+    "import-search": {
+        "LOAD_DATA": "importer",
+        "V3_WIP": True,
     }
 }
