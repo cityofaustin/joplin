@@ -46,8 +46,8 @@ class TopicCollectionPage(JanisBasePage):
 
     def janis_urls(self):
         # should publish at /theme_slug/topic_collection_slug/
-        if self.theme and self.theme.slug:
-            return [f'/{self.theme.slug}/{self.slug}/']
+        if self.theme and self.theme.slug_en:
+            return [f'/{self.theme.slug_en}/{self.slug_en}/']
 
         return []
 
@@ -56,8 +56,8 @@ class TopicCollectionPage(JanisBasePage):
         Topic Collections do not have contextual nav on Janis
         """
         # should publish at /theme_slug/topic_collection_slug/
-        if self.theme and self.theme.slug:
-            return [{'url': f'/{self.theme.slug}/{self.slug}/', 'parent': None, 'grandparent': None}]
+        if self.theme and self.theme.slug_en:
+            return [{'url': f'/{self.theme.slug_en}/{self.slug_en}/', 'parent': None, 'grandparent': None}]
 
         return []
 
@@ -70,7 +70,7 @@ class JanisBasePageWithTopicCollections(JanisBasePage):
 
         for base_page_topic_collection in self.topic_collections.all():
             for topic_collection_url in base_page_topic_collection.topic_collection.janis_urls():
-                urls.append(f'{topic_collection_url}{self.slug}/')
+                urls.append(f'{topic_collection_url}{self.slug_en}/')
 
         return urls
 
@@ -82,7 +82,7 @@ class JanisBasePageWithTopicCollections(JanisBasePage):
         for base_page_topic_collection in self.topic_collections.all():
             for topic_collection_url in base_page_topic_collection.topic_collection.janis_instances():
                 instances.append({
-                    'url': f'{topic_collection_url["url"]}{self.slug}/',
+                    'url': f'{topic_collection_url["url"]}{self.slug_en}/',
                     'parent': base_page_topic_collection.topic_collection,
                     'grandparent': None,
                 })
