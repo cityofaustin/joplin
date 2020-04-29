@@ -74,7 +74,9 @@ def create_document_from_importer(document_dictionary):
 
     for url in [
         f'https://joplin3-austin-gov-static.s3.amazonaws.com/production/media/documents/{file_name}',
-        f'https://joplin3-austin-gov-static.s3.amazonaws.com/staging/media/documents/{file_name}'
+        f'https://joplin3-austin-gov-static.s3.amazonaws.com/staging/media/documents/{file_name}',
+        f'https://joplin-austin-gov-static.s3.amazonaws.com/production/media/documents/{file_name}',
+        f'https://joplin-austin-gov-static.s3.amazonaws.com/staging/media/documents/{file_name}',
     ]:
         response = requests.get(url)
         if response.status_code == 200:
