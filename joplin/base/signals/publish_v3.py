@@ -25,7 +25,7 @@ def publish_v3(page_ids=[]):
         "page_ids": page_ids,
         "joplin_appname": settings.APPNAME,
         "env_vars": {
-            "REACT_STATIC_PREFETCH_RATE": "5",
+            "REACT_STATIC_PREFETCH_RATE": "0",
         },
         "build_type": "rebuild",
     }

@@ -9,7 +9,7 @@
     branch_overrides are not required for every branch.
 '''
 branch_overrides = {
-    "4302-janis-preview": {
+    "4340-official-documents": {
         "LOAD_DATA": "fixtures",
         "V3_WIP": True,
     },
