@@ -172,7 +172,7 @@ class LocationPage(JanisBasePage):
         # Should publish at location/<location-page-slug>/"
         # Example: location/the-place-to-be
         if self.slug:
-            return [f'/{self.janis_url_page_type}/{self.slug}']
+            return [f'/{self.janis_url_page_type}/{self.slug_en}']
         return []
 
 
