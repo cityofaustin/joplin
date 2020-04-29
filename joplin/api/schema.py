@@ -775,7 +775,7 @@ class OfficialDocumentPageDocumentNode(DjangoObjectType):
 
 class OfficialDocumentPageNode(DjangoObjectType):
     page_type = graphene.String()
-    official_documents = DjangoFilterConnectionField(
+    documents = DjangoFilterConnectionField(
         OfficialDocumentPageDocumentNode, filterset_class=OfficialDocumentFilter)
     owner = graphene.Field(OwnerNode)
 

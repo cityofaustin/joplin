@@ -9,6 +9,7 @@
     branch_overrides are not required for every branch.
 '''
 branch_overrides = {
+<<<<<<< HEAD
     "4214-add-to-events": {
         "LOAD_DATA": "fixtures",
         "V3_WIP": True,

@@ -25,9 +25,9 @@ def publish_v3(page_ids=[]):
         "page_ids": page_ids,
         "joplin_appname": settings.APPNAME,
         "env_vars": {
-            "REACT_STATIC_PREFETCH_RATE": "5",
+            "REACT_STATIC_PREFETCH_RATE": "0",
         },
-        "build_type": "all_pages",
+        "build_type": "rebuild",
     }
     publisher_res = requests.post(url, data=json.dumps(data), headers=headers)
     logger.info("publish_v3() Starting task")
