@@ -63,7 +63,9 @@ class HomePage(Page):
     # On Local and PR apps, its set by publish_janis_branch_for_pr on HomePage model.
     # publish_janis_branch() is used for publishing by base/signals/janis_build_triggers.py
     def publish_janis_branch(self):
-        if settings.IS_STAGING or settings.IS_PRODUCTION:
-            return settings.JANIS_URL
+        if settings.IS_STAGING:
+            return "master"
+        elif settings.IS_PRODUCTION:
+            return "production"
         else:
             return getattr(self, "publish_janis_branch_for_pr")
