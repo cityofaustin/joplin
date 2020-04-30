@@ -73,8 +73,8 @@ def create_document_from_importer(document_dictionary):
     file_name = document_dictionary['filename']
 
     for url in [
-        f'https://joplin3-austin-gov-static.s3.amazonaws.com/production/media/documents/{file_name}',
-        f'https://joplin3-austin-gov-static.s3.amazonaws.com/staging/media/documents/{file_name}',
+        f'https://joplin3-austin-gov-static.s3.us-east-1.amazonaws.com/production/media/documents/{file_name}',
+        f'https://joplin3-austin-gov-static.s3.us-east-1.amazonaws.com/staging/media/documents/{file_name}',
         f'https://joplin-austin-gov-static.s3.amazonaws.com/production/media/documents/{file_name}',
         f'https://joplin-austin-gov-static.s3.amazonaws.com/staging/media/documents/{file_name}',
     ]:
