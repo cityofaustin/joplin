@@ -62,7 +62,7 @@ class JanisBasePage(Page):
         # If we're under departments
         departments = self.departments()
         if len(departments) > 0:
-            return [f'/{department.slug}/{self.slug}/'
+            return [f'/{department.slug_en}/{self.slug_en}/'
                     for department in departments
                     ]
 
@@ -84,7 +84,7 @@ class JanisBasePage(Page):
         departments = self.departments()
         if len(departments) > 0:
             return [
-                {'url': f'/{department.slug}/{self.slug}/',
+                {'url': f'/{department.slug_en}/{self.slug_en}/',
                  'parent': department,
                  'grandparent': None}
                 for department in departments

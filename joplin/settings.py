@@ -397,6 +397,7 @@ if(IS_PRODUCTION or IS_STAGING or IS_REVIEW):
     }
 
     # Specifying the location of files
+    # The Janis CMS_MEDIA = AWS_STORAGE_BUCKET_NAME + AWS_LOCATION
     if IS_PRODUCTION:
         AWS_LOCATION = 'production/static'
         AWS_IS_GZIPPED = True
@@ -406,7 +407,6 @@ if(IS_PRODUCTION or IS_STAGING or IS_REVIEW):
         AWS_IS_GZIPPED = True
         MEDIAFILES_LOCATION = 'staging/media'
     else:
-        # All non-production apps share a staging/media folder
         AWS_LOCATION = f"review/{os.getenv('CIRCLE_BRANCH')}/static"
         AWS_IS_GZIPPED = True
         MEDIAFILES_LOCATION = f"review/{os.getenv('CIRCLE_BRANCH')}/media"
