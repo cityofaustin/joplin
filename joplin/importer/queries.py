@@ -237,6 +237,7 @@ fragments["official_document"] = GraphqlParser('''
           name
           document {
             filename
+            fileSize
           }
         }
       }
