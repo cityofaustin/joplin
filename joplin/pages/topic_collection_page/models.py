@@ -56,8 +56,8 @@ class TopicCollectionPage(JanisBasePage):
         Topic Collections do not have contextual nav on Janis
         """
         # should publish at /theme_slug/topic_collection_slug/
-        if self.theme and self.theme.slug_en:
-            return [{'url': f'/{self.theme.slug_en}/{self.slug_en}/', 'parent': None, 'grandparent': None}]
+        if self.theme and self.theme.slug:
+            return [{'url': f'/{self.theme.slug}/{self.slug_en}/', 'parent': None, 'grandparent': None}]
 
         return []
 
