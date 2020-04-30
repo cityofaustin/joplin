@@ -69,7 +69,7 @@ class JanisBasePageWithTopics(JanisBasePage):
             return urls
 
         for base_page_topic in self.topics.all():
-            urls.extend(['{topic_page_url}{page_slug}/'.format(topic_page_url=topic_page_url, page_slug=self.slug) for
+            urls.extend(['{topic_page_url}{page_slug}/'.format(topic_page_url=topic_page_url, page_slug=self.slug_en) for
                          topic_page_url in base_page_topic.topic.janis_urls()])
 
         return urls
@@ -86,7 +86,7 @@ class JanisBasePageWithTopics(JanisBasePage):
         for base_page_topic in self.topics.all():
             for topic_page_url in base_page_topic.topic.janis_instances():
                 instances.extend([{
-                    'url': "{topic_page_url}{page_slug}".format(topic_page_url=topic_page_url['url'], page_slug=self.slug),
+                    'url': "{topic_page_url}{page_slug}".format(topic_page_url=topic_page_url['url'], page_slug=self.slug_en),
                     'parent': base_page_topic.topic,
                     'grandparent': topic_page_url['parent']}])
         return instances
