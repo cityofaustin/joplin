@@ -6,7 +6,7 @@ from gql import gql
 
 # Allows us to use '$$$' as a delimiter for string substitution
 class GraphqlParser(Template):
-    delimiter="$$$"
+    delimiter = "$$$"
 
 fragments = {}
 
@@ -180,7 +180,6 @@ fragments["services"] = GraphqlParser('''
     owner=fragments["owner"],
     department=fragments["department"]
 )
-
 
 fragments["hours"] = '''
     mondayStartTime
@@ -479,30 +478,47 @@ unparsed_query_strings = {
         }
     ''',
     'event': '''
-          query getEventPageRevision($id: ID) {
-            allPageRevisions(id: $id) {
-              edges {
-                node {
-                  asEventPage {
-                    $$$event
-                  }
+        query getEventPageRevision($id: ID) {
+          allPageRevisions(id: $id) {
+            edges {
+              node {
+                asEventPage {
+                  $$$event
                 }
               }
             }
           }
+        }
+    ''',
+    'all_revisions': '''
+    query getAllPageRevisions($afterCursor: String) {
+      allPageRevisions(first: 100, after: $afterCursor) {
+        edges {
+          node {
+            id
+            isLatest
+            isLive
+            pageType
+          }
+        }
+        pageInfo {
+          endCursor
+          hasNextPage
+        }
+      }
+    }
     ''',
 }
 
 query_strings = {
     k: GraphqlParser(v).substitute(**fragments)
-    for (k,v) in unparsed_query_strings.items()
+    for (k, v) in unparsed_query_strings.items()
 }
 
 queries = {
     k: gql(v)
-    for (k,v) in query_strings.items()
+    for (k, v) in query_strings.items()
 }
-
 
 '''
 Helper for devs who want to see what each complete query looks like.
