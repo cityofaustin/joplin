@@ -17,20 +17,12 @@ branch_overrides = {
         "LOAD_DATA": "fixtures",
         "V3_WIP": True,
     },
-    "not-top-pages-topics": {
-        "LOAD_DATA": "fixtures",
-        "V3_WIP": True,
-    },
     "4266-guide": {
         "LOAD_DATA": "fixtures",
         "V3_WIP": True,
     },
-    "4274-are-we-live": {
-        "LOAD_DATA": "fixtures",
-        "V3_WIP": True,
-    },
-    "api-page-type-and-description": {
-        "LOAD_DATA": "fixtures",
+    "import-everything": {
+        "LOAD_DATA": "importer",
         "V3_WIP": True,
     },
     "4311-stream-block-error": {

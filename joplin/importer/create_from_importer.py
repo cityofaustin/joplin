@@ -52,6 +52,11 @@ def create_contact_from_importer(contact_data):
 def create_theme_from_importer(theme_dictionaries):
     # todo: use something other than slug here
     # todo: add imported id to themes
+
+    # if we don't have a theme, don't try
+    if theme_dictionaries['en'] is None:
+        return None
+
     try:
         theme = Theme.objects.get(slug=theme_dictionaries['en']['slug'])
     except Theme.DoesNotExist:
@@ -71,6 +76,7 @@ def create_document_from_importer(document_dictionary):
     # right now we're just going off filename, so first let's see if we can download the file
     # let's try to get it from both the staging and prod s3 buckets (since that's what janis does)
     file_name = document_dictionary['filename']
+    file_size = document_dictionary['file_size']
 
     for url in [
         f'https://joplin3-austin-gov-static.s3.amazonaws.com/production/media/documents/{file_name}',
@@ -95,7 +101,7 @@ def create_document_from_importer(document_dictionary):
         return document
 
     # It has not been imported, let's do it!
-    document = DocumentFactory.create(file=ContentFile(response.content, name=file_name), title=file_name)
+    document = DocumentFactory.create(file=ContentFile(response.content, name=file_name), title=file_name, file_size=file_size)
     return document
 
 
@@ -174,6 +180,8 @@ def create_page_from_importer(page_type, page_dictionaries, revision_id=None):
     # since we don't have a page matching the revision id or the slug
     # make the combined page dictionary
     combined_dictionary = page_dictionaries['en']
+
+    combined_dictionary['imported_revision_id'] = revision_id
 
     # associate/create topic pages
     # Only would apply for page_types from JanisBasePageWithTopics

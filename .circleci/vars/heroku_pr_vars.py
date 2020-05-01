@@ -50,7 +50,8 @@ vars_from_circleci = [
     "COA_PUBLISHER_V2_API_KEY_STAGING",
     "CI_COA_PUBLISHER_V2_URL_PROD",
     "COA_PUBLISHER_V2_API_KEY_PROD",
-    "SUPERADMIN_USER_PASSWORD"
+    "SUPERADMIN_USER_PASSWORD",
+    "IMPORTER_USER_PASSWORD"
 ]
 for v in vars_from_circleci:
     config[v] = os.getenv(v, "")
