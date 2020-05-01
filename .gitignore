@@ -9,10 +9,9 @@ venv
 *node_modules
 *webpack_bundles
 *webpack-stats.json
-local
-media/*/*.jpg
-media/*/*.png
-media/*/*.jpeg
+media/documents/*
+media/images/*
+media/original_images/*
 *.log
 joplin/db/smuggler/*
 env.sh
@@ -24,9 +23,12 @@ yarn.lock
 joplin/db/system-generated/tmp.datadump.json
 
 # test & coverage stuff
-
 htmlcov/
 .coverage
 .coverage.*
 coverage.xml
 *.cover
+
+# Local dev tools
+local
+joplin/base/management/commands/sandbox.py

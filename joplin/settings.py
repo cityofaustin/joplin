@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
 import os
+import logging
 from distutils.util import strtobool
 from urllib.parse import urlparse
 
@@ -83,14 +84,30 @@ INSTALLED_APPS = [
     'countable_field',
     'flags',
     'silk',
+    'gql',
 
     'groups',
     'publish_preflight',
-    'locations',
-    'events',
+    'pages',
+    'pages.base_page',
+    'pages.department_page',
+    'pages.event_page',
+    'pages.form_container',
+    'pages.guide_page',
+    'pages.information_page',
+    'pages.location_page',
+    'pages.official_documents_page',
+    'pages.service_page',
+    'pages.topic_collection_page',
+    'pages.topic_page',
+    'pages.home_page',
+    'snippets.contact',
+    'snippets.theme'
+
 ]
 
 MIDDLEWARE = [
+    'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -99,7 +116,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django.middleware.security.SecurityMiddleware',
     'wagtail.core.middleware.SiteMiddleware',
     'wagtail.contrib.redirects.middleware.RedirectMiddleware',
     'session_security.middleware.SessionSecurityMiddleware',
@@ -137,11 +153,11 @@ WSGI_APPLICATION = 'wsgi.application'
 
 # Detect whether it is a staging or production environment
 DEPLOYMENT_MODE = os.environ.get('DEPLOYMENT_MODE', 'LOCAL')
-ISLOCAL = DEPLOYMENT_MODE == "LOCAL"
-ISPRODUCTION = DEPLOYMENT_MODE == "PRODUCTION"
-ISSTAGING = DEPLOYMENT_MODE == "STAGING"
-ISREVIEW = DEPLOYMENT_MODE == "REVIEW"
-ISTEST = DEPLOYMENT_MODE == "TEST"
+IS_LOCAL = DEPLOYMENT_MODE == "LOCAL"
+IS_PRODUCTION = DEPLOYMENT_MODE == "PRODUCTION"
+IS_STAGING = DEPLOYMENT_MODE == "STAGING"
+IS_REVIEW = DEPLOYMENT_MODE == "REVIEW"
+IS_TEST = DEPLOYMENT_MODE == "TEST"
 
 
 # Database
@@ -176,7 +192,7 @@ bigger_pool = {
     'recycle': 500
 }
 
-if ISSTAGING or ISPRODUCTION:
+if IS_STAGING or IS_PRODUCTION:
     DATABASE_POOL_ARGS = safe_pool
 else:
     DATABASE_POOL_ARGS = safe_pool
@@ -232,8 +248,6 @@ WAGTAILDOCS_SERVE_METHOD = 'direct'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
-AUTH_USER_MODEL = 'users.User'
-
 CORS_ORIGIN_ALLOW_ALL = True
 ALLOWED_HOSTS = [
     'localhost',
@@ -246,7 +260,7 @@ MONITOR_PERFORMANCE = bool(strtobool(os.environ.get('MONITOR_PERFORMANCE', str(F
 WAGTAILEMBEDS_RESPONSIVE_HTML = True
 
 if MONITOR_PERFORMANCE:
-    MIDDLEWARE = ['silk.middleware.SilkyMiddleware'] + MIDDLEWARE
+    MIDDLEWARE.insert(1, 'silk.middleware.SilkyMiddleware')
 
     SILKY_PYTHON_PROFILER = False
     SILKY_PYTHON_PROFILER_BINARY = False
@@ -270,9 +284,7 @@ if DEBUG_TOOLBAR:
         'pympler'
     ]
 
-    MIDDLEWARE = [
-        'debug_toolbar.middleware.DebugToolbarMiddleware'
-    ] + MIDDLEWARE
+    MIDDLEWARE.insert(1, 'debug_toolbar.middleware.DebugToolbarMiddleware')
 
     DEBUG_TOOLBAR_PANELS = [
         'debug_toolbar.panels.profiling.ProfilingPanel',
@@ -352,7 +364,7 @@ DBBACKUP_CONNECTORS = {
 #
 # Production, Staging & Review Apps
 #
-if(ISPRODUCTION or ISSTAGING or ISREVIEW):
+if(IS_PRODUCTION or IS_STAGING or IS_REVIEW):
     #
     # AWS Buckets only if not local.
     #
@@ -385,19 +397,19 @@ if(ISPRODUCTION or ISSTAGING or ISREVIEW):
     }
 
     # Specifying the location of files
-    if ISPRODUCTION:
+    # The Janis CMS_MEDIA = AWS_STORAGE_BUCKET_NAME + AWS_LOCATION
+    if IS_PRODUCTION:
         AWS_LOCATION = 'production/static'
         AWS_IS_GZIPPED = True
         MEDIAFILES_LOCATION = 'production/media'
-    elif ISSTAGING:
+    elif IS_STAGING:
         AWS_LOCATION = 'staging/static'
         AWS_IS_GZIPPED = True
         MEDIAFILES_LOCATION = 'staging/media'
     else:
-        # All non-production apps share a staging/media folder
         AWS_LOCATION = f"review/{os.getenv('CIRCLE_BRANCH')}/static"
         AWS_IS_GZIPPED = True
-        MEDIAFILES_LOCATION = 'staging/media'
+        MEDIAFILES_LOCATION = f"review/{os.getenv('CIRCLE_BRANCH')}/media"
 
     # We now change the storage mode to S3 via Boto for default, static and dbbackup
     STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
@@ -410,10 +422,10 @@ if(ISPRODUCTION or ISSTAGING or ISREVIEW):
 
 JANIS_SLUG_URL = ""
 
-if ISPRODUCTION:
+if IS_PRODUCTION:
     JANIS_SLUG_URL = 'https://api.github.com/repos/cityofaustin/janis/tarball/production'
 
-if ISSTAGING:
+if IS_STAGING:
     JANIS_SLUG_URL = 'https://api.github.com/repos/cityofaustin/janis/tarball/master'
 
 # security logout ward after half of expire value (four hours currently)
@@ -432,7 +444,7 @@ FLAGS = {
 }
 
 # The CMS_API endpoint of the current Django App for published Janis to use
-if ISLOCAL or ISTEST:
+if IS_LOCAL or IS_TEST:
     # $JOPLIN_APP_HOST_PORT is set by scripts/serve-local.sh
     CMS_API = f"http://localhost:{os.getenv('JOPLIN_APP_HOST_PORT')}/api/graphql"
 else:
@@ -457,3 +469,50 @@ if SCOUT_MONITOR:
     ] + INSTALLED_APPS
 
     SCOUT_NAME = os.environ.get('APPNAME')
+
+
+# Set configs for Janis Publisher_v2
+if IS_REVIEW:
+    PUBLISHER_V2_URL=os.getenv("CI_COA_PUBLISHER_V2_URL_PR")
+    PUBLISHER_V2_API_KEY=os.getenv("COA_PUBLISHER_V2_API_KEY_PR")
+elif IS_STAGING:
+    PUBLISHER_V2_URL=os.getenv("CI_COA_PUBLISHER_V2_URL_STAGING")
+    PUBLISHER_V2_API_KEY=os.getenv("COA_PUBLISHER_V2_API_KEY_STAGING")
+elif IS_PRODUCTION:
+    PUBLISHER_V2_URL=os.getenv("CI_COA_PUBLISHER_V2_URL_PROD")
+    PUBLISHER_V2_API_KEY=os.getenv("COA_PUBLISHER_V2_API_KEY_PROD")
+
+
+# Set logger level
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'joplin': {
+            'handlers': ['console'],
+            'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
+        },
+    },
+}
+
+# Temporary variables to toggle features for v3 while its still in development
+V3_WIP = bool(strtobool(os.environ.get('V3_WIP', str(False))))
+
+# Custom User Form Settings
+AUTH_USER_MODEL = 'users.User'
+WAGTAIL_USER_EDIT_FORM = 'users.forms.CustomUserEditForm'
+WAGTAIL_USER_CREATION_FORM = 'users.forms.CustomUserCreationForm'
+
+if IS_LOCAL:
+    # Allow non HTTPS requests when running a local Janis build from localhost.
+    SECURE_SSL_REDIRECT = False
+    SERVER_PROTOCOL = 'HTTP/0.9'
+else:
+    # Redirect to HTTPS
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    SECURE_SSL_REDIRECT = True

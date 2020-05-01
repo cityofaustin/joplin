@@ -7,6 +7,17 @@ from base.models import DeploymentLog
 from django.db import connection
 from django.conf import settings
 
+import snippets.contact.fixtures as contact_fixtures
+import snippets.theme.fixtures as theme_fixtures
+import pages.topic_collection_page.fixtures as topic_collection_page_fixtures
+import pages.topic_page.fixtures as topic_page_fixtures
+import pages.service_page.fixtures as service_page_fixtures
+import pages.official_documents_page.fixtures as official_documents_page_fixtures
+import pages.location_page.fixtures as location_page_fixtures
+import pages.event_page.fixtures as event_page_fixtures
+import pages.department_page.fixtures as department_page_fixtures
+import users.fixtures as user_fixtures
+from importer.import_everything import import_everything
 
 class Command(BaseCommand):
     help = "Load initial seeding data into your app"
@@ -54,21 +65,29 @@ class Command(BaseCommand):
                     print(f"Already loaded data from {info.value}")
             except ObjectDoesNotExist:
                 load_data_result = None
-            if not load_data_result:
-                LOAD_DATA = os.getenv("LOAD_DATA")
-                DATABASE_URL = os.getenv("DATABASE_URL")
-                if (LOAD_DATA == "prod"):
+            LOAD_DATA = os.getenv("LOAD_DATA")
+            DATABASE_URL = os.getenv("DATABASE_URL")
+            # Allow re-running of 'fixtures' data
+            if LOAD_DATA == 'fixtures' or LOAD_DATA == 'test':
+                print("Adding fixture data")
+                contact_fixtures.load_all()
+                theme_fixtures.load_all()
+                topic_collection_page_fixtures.load_all()
+                topic_page_fixtures.load_all()
+                service_page_fixtures.load_all()
+                official_documents_page_fixtures.load_all()
+                event_page_fixtures.load_all()
+                location_page_fixtures.load_all()
+                department_page_fixtures.load_all()
+                # TODO: incorporate logging into DeploymentLog?
+            if LOAD_DATA == 'importer':
+                print("Importing data from http://joplin-staging.herokuapp.com/api/graphql")
+                import_everything()
+            elif not load_data_result:
+                if LOAD_DATA == 'prod':
                     print("Adding prod datadump")
                     run_load_data_command('db/system-generated/prod.datadump.json')
                     DeploymentLog(operation="load_data", value="prod", completed=True).save()
-                elif (LOAD_DATA == "staging"):
-                    print("Adding staging datadump")
-                    run_load_data_command('db/system-generated/staging.datadump.json')
-                    DeploymentLog(operation="load_data", value="staging", completed=True).save()
-                elif (LOAD_DATA == "dummy"):
-                    print("Adding dummy datadump")
-                    run_load_data_command('db/system-generated/dummy.datadump.json')
-                    DeploymentLog(operation="load_data", value="dummy", completed=True).save()
                 elif (LOAD_DATA == "new_datadump"):
                     print("Adding new migration test datadump")
                     run_load_data_command('db/system-generated/tmp.datadump.json')
@@ -86,26 +105,26 @@ class Command(BaseCommand):
                 else:
                     print("Not adding any datadumps\n")
 
-            load_fixture(
-                "load_test_admin",
-                'db/fixtures/local_admin_user.json',
-                (os.getenv("DEPLOYMENT_MODE") == "LOCAL")
-            )
-            load_fixture(
-                "load_janis_branch_settings",
-                'db/fixtures/janis_branch_settings.json',
-                (not os.getenv("DEPLOYMENT_MODE") in ("STAGING", "PRODUCTION"))
-            )
-            load_fixture(
-                "set_group_permissions",
-                'db/fixtures/group_permissions_settings.json',
-                (not os.getenv("DEPLOYMENT_MODE") in ("STAGING", "PRODUCTION"))
-            )
-            load_fixture(
-                "set_themes",
-                'db/fixtures/themes.json',
-                (os.getenv("DEPLOYMENT_MODE") == "LOCAL")
-            )
+            if settings.IS_LOCAL or settings.IS_REVIEW or settings.V3_WIP:
+                user_fixtures.superadmin()
+
+            # Add pytest superadmin
+            if LOAD_DATA == 'test':
+                user_fixtures.admin_for_test_env()
+
+            # load_fixture(
+            #     "set_group_permissions",
+            #     'db/fixtures/group_permissions_settings.json',
+            #     (
+            #         not os.getenv("DEPLOYMENT_MODE") in ("STAGING", "PRODUCTION")
+            #         and not settings.V3_WIP
+            #     )
+            # )
+            # load_fixture(
+            #     "set_themes",
+            #     'db/fixtures/themes.json',
+            #     (os.getenv("DEPLOYMENT_MODE") == "LOCAL")
+            # )
 
         finally:
             stdout.close()

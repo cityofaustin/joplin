@@ -1,5 +1,5 @@
 {% if page.live %}
-    <a href="{{ page.janis_url }}" target="_blank" class="underlined">{{ page.status_string|capfirst }}</a>
+    <a href="{{ page.janis_publish_url }}" target="_blank" class="underlined">{{ page.status_string|capfirst }}</a>
 {% else %}
     <a href="{{ page.janis_preview_url }}" class="underlined">{{ page.status_string|capfirst  }}</a>
 {% endif %}

@@ -8,7 +8,6 @@ log() { log_base "backup_database" "$1" "$2"; }
 APP_DB_EXISTS=$(app_database_attached $APPNAME)
 
 if [ $APP_DB_EXISTS == "true" ]; then
-
   print_header "Creating Database Backup in S3"
 
   # Create a new backup
