@@ -608,25 +608,6 @@ class EventPageFeeNode(DjangoObjectType):
         interfaces = [graphene.Node]
 
 
-class EventPageRelatedPageNode(DjangoObjectType):
-    title = graphene.String()
-    slug = graphene.String()
-    page_id = graphene.ID()
-
-    def resolve_page_id(self, info):
-        return get_global_id_from_content_type(self)
-
-    def resolve_title(self, resolve_info, *args, **kwargs):
-        return get_page_from_content_type(self).title
-
-    def resolve_slug(self, resolve_info, *args, **kwargs):
-        return get_page_from_content_type(self).slug
-
-    class Meta:
-        model = EventPageRelatedPage
-        interfaces = [graphene.Node]
-
-
 class ContactNode(DjangoObjectType):
     class Meta:
         model = Contact
