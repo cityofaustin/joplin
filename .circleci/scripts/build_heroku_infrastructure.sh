@@ -11,6 +11,12 @@ function attach_heroku_database {
     heroku addons:create heroku-postgresql:hobby-dev --version=10 --app $APPNAME
 }
 
+# Attaches redis cache to heroku application
+function attach_heroku_redis {
+#    todo
+#    heroku addons:create heroku-postgresql:hobby-dev --version=10 --app $APPNAME
+}
+
 # If the review app exists, then check if database exists
 APP_EXISTS=$(app_exists)
 if [ "$APP_EXISTS" = "true" ]; then
