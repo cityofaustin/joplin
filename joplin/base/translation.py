@@ -147,6 +147,7 @@ class EventPageFeeTranslationOptions(TranslationOptions):
         'fee_label',
     )
 
+
 @register(LocationPageRelatedServices)
 class LocationPageRelatedServicesTranslationOptions(TranslationOptions):
     fields = (
