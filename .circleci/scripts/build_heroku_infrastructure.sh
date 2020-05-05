@@ -13,6 +13,7 @@ function attach_heroku_database {
 
 # Attaches redis cache to heroku application
 function attach_heroku_redis {
+    echo "todo"
 #    todo
 #    heroku addons:create heroku-postgresql:hobby-dev --version=10 --app $APPNAME
 }
