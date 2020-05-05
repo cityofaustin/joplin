@@ -49,6 +49,7 @@ snapshottest = "*"
 gql = "*"
 pyhumps = "*"
 django-graphql-jwt = "*"
+django-redis-cache = "~=2.1.1"
 
 [requires]
 python_version = "3.7"
