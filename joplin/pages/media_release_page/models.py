@@ -1,5 +1,5 @@
 from django.db import models
-from wagtail_modeltranslation.translation import register, TranslationOptions
+# from wagtail_modeltranslation.translation import register, TranslationOptions
 
 from wagtail.core.fields import RichTextField
 from wagtail.admin.edit_handlers import FieldPanel, PageChooserPanel
@@ -47,18 +47,18 @@ class MediaReleasePage(JanisBasePage):
 
     content_panels = [
         # todo: we want these to say headline, not title
-        FieldPanel('title_en', widget=countMe),
-        FieldPanel('title_es', widget=countMe),
-        FieldPanel('title_ar'),
-        FieldPanel('title_vi'),
+        # FieldPanel('title_en', widget=countMe),
+        # FieldPanel('title_es', widget=countMe),
+        # FieldPanel('title_ar'),
+        # FieldPanel('title_vi'),
         FieldPanel('body'),
         SnippetChooserPanel('contact'),
         PageChooserPanel('written_for_department', page_type=DepartmentPage)
     ]
 
 
-@register(MediaReleasePage)
-class MediaReleasePageTranslationOptions(TranslationOptions):
-    fields = (
-        'body',
-    )
+# @register(MediaReleasePage)
+# class MediaReleasePageTranslationOptions(TranslationOptions):
+#     fields = (
+#         'body',
+#     )
