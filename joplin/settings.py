@@ -23,6 +23,15 @@ PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
 BASE_DIR = os.path.dirname(PROJECT_DIR)
 
 
+# Detect whether it is a staging or production environment
+DEPLOYMENT_MODE = os.environ.get('DEPLOYMENT_MODE', 'LOCAL')
+IS_LOCAL = DEPLOYMENT_MODE == "LOCAL"
+IS_PRODUCTION = DEPLOYMENT_MODE == "PRODUCTION"
+IS_STAGING = DEPLOYMENT_MODE == "STAGING"
+IS_REVIEW = DEPLOYMENT_MODE == "REVIEW"
+IS_TEST = DEPLOYMENT_MODE == "TEST"
+
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
@@ -144,20 +153,24 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
+            'loaders': [
+                ('django.template.loaders.cached.Loader', [
+                    'django.template.loaders.filesystem.Loader',
+                    'django.template.loaders.app_directories.Loader',
+                ]),
+            ],
         },
     },
 ]
 
+# Changes to a template file will not be picked up once it is cached.
+# This means that this loader should not be enabled during development.
+# https://docs.wagtail.io/en/v2.0/advanced_topics/performance.html#templates
+if IS_LOCAL:
+    del TEMPLATES['OPTIONS']['loaders']
+
+
 WSGI_APPLICATION = 'wsgi.application'
-
-
-# Detect whether it is a staging or production environment
-DEPLOYMENT_MODE = os.environ.get('DEPLOYMENT_MODE', 'LOCAL')
-IS_LOCAL = DEPLOYMENT_MODE == "LOCAL"
-IS_PRODUCTION = DEPLOYMENT_MODE == "PRODUCTION"
-IS_STAGING = DEPLOYMENT_MODE == "STAGING"
-IS_REVIEW = DEPLOYMENT_MODE == "REVIEW"
-IS_TEST = DEPLOYMENT_MODE == "TEST"
 
 
 # Database
