@@ -141,7 +141,6 @@ TEMPLATES = [
         'DIRS': [
             os.path.join(PROJECT_DIR, 'templates'),
         ],
-        'APP_DIRS': True,
         'OPTIONS': {
             'builtins': [
                 'base.templatetags.joplin_tags',
@@ -167,7 +166,7 @@ TEMPLATES = [
 # This means that this loader should not be enabled during development.
 # https://docs.wagtail.io/en/v2.0/advanced_topics/performance.html#templates
 if IS_LOCAL:
-    del TEMPLATES['OPTIONS']['loaders']
+    del TEMPLATES[0]['OPTIONS']['loaders']
 
 
 WSGI_APPLICATION = 'wsgi.application'
