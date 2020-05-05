@@ -47,10 +47,10 @@ class MediaReleasePage(JanisBasePage):
 
     content_panels = [
         # todo: we want these to say headline, not title
-        # FieldPanel('title_en', widget=countMe),
-        # FieldPanel('title_es', widget=countMe),
-        # FieldPanel('title_ar'),
-        # FieldPanel('title_vi'),
+        FieldPanel('title_en', widget=countMe),
+        FieldPanel('title_es', widget=countMe),
+        FieldPanel('title_ar'),
+        FieldPanel('title_vi'),
         FieldPanel('body'),
         SnippetChooserPanel('contact'),
         PageChooserPanel('written_for_department', page_type=DepartmentPage)
