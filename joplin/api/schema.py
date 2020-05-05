@@ -307,6 +307,18 @@ class DepartmentResolver(graphene.Interface):
         return instance.departments()
 
 
+class RelatedEventPageResolver(graphene.Interface):
+    events = graphene.List(lambda: EventPageNode)
+
+    @classmethod
+    def resolve_events(cls, instance, info):
+        events = []
+        event_relationships = EventPageRelatedPage.objects.filter(page__id=instance.pk)
+        for page in event_relationships:
+            events.append(page.event)
+        return events
+
+
 class DocumentNode(DjangoObjectType):
     class Meta:
         model = Document
@@ -400,13 +412,13 @@ class LocationPageNode(DjangoObjectType):
     page_type = graphene.String()
     janis_urls = graphene.List(graphene.String)
     owner = graphene.Field(OwnerNode)
-    events = graphene.List(lambda: EventPageNode)
+    # events = graphene.List(lambda: EventPageNode)
 
     class Meta:
         model = LocationPage
         filter_fields = ['id', 'slug', 'live']
         fields = '__all__'
-        interfaces = [graphene.Node, DepartmentResolver]
+        interfaces = [graphene.Node, DepartmentResolver, RelatedEventPageResolver]
 
     @superuser_required
     def resolve_owner(self, info):
@@ -418,12 +430,12 @@ class LocationPageNode(DjangoObjectType):
     def resolve_janis_urls(self, info):
         return self.janis_urls()
 
-    def resolve_events(self, info):
-        events = []
-        event_relationships = EventPageRelatedPage.objects.filter(page__id=self.pk)
-        for page in event_relationships:
-            events.append(page.event)
-        return events
+    # def resolve_events(self, info):
+    #     events = []
+    #     event_relationships = EventPageRelatedPage.objects.filter(page__id=self.pk)
+    #     for page in event_relationships:
+    #         events.append(page.event)
+    #     return events
 
 
 class LocationPageRelatedServices(DjangoObjectType):
@@ -645,12 +657,12 @@ class ServicePageNode(DjangoObjectType):
     page_type = graphene.String()
     janis_url = graphene.List(graphene.String)
     owner = graphene.Field(OwnerNode)
-    events = graphene.List(EventPageNode)
+    # events = graphene.List(EventPageNode)
 
     class Meta:
         model = ServicePage
         filter_fields = ['id', 'slug', 'live', 'coa_global']
-        interfaces = [graphene.Node, DepartmentResolver]
+        interfaces = [graphene.Node, DepartmentResolver, RelatedEventPageResolver]
 
     def resolve_page_type(self, info):
         return ServicePage.get_verbose_name().lower()
@@ -658,12 +670,12 @@ class ServicePageNode(DjangoObjectType):
     def resolve_janis_url(self, info):
         return self.janis_urls()
 
-    def resolve_events(self, info):
-        events = []
-        event_relationships = EventPageRelatedPage.objects.filter(page__id=self.pk)
-        for page in event_relationships:
-            events.append(page.event)
-        return events
+    # def resolve_events(self, info):
+    #     events = []
+    #     event_relationships = EventPageRelatedPage.objects.filter(page__id=self.pk)
+    #     for page in event_relationships:
+    #         events.append(page.event)
+    #     return events
 
     @superuser_required
     def resolve_owner(self, info):
@@ -673,22 +685,22 @@ class ServicePageNode(DjangoObjectType):
 class InformationPageNode(DjangoObjectType):
     page_type = graphene.String()
     owner = graphene.Field(OwnerNode)
-    events = graphene.List(EventPageNode)
+    # events = graphene.List(EventPageNode)
 
     class Meta:
         model = InformationPage
         filter_fields = ['id', 'slug', 'live', 'coa_global']
-        interfaces = [graphene.Node, DepartmentResolver]
+        interfaces = [graphene.Node, DepartmentResolver, RelatedEventPageResolver]
 
     def resolve_page_type(self, info):
         return InformationPage.get_verbose_name().lower()
 
-    def resolve_events(self, info):
-        events = []
-        event_relationships = EventPageRelatedPage.objects.filter(page__id=self.pk)
-        for page in event_relationships:
-            events.append(page.event)
-        return events
+    # def resolve_events(self, info):
+    #     events = []
+    #     event_relationships = EventPageRelatedPage.objects.filter(page__id=self.pk)
+    #     for page in event_relationships:
+    #         events.append(page.event)
+    #     return events
 
     @superuser_required
     def resolve_owner(self, info):
