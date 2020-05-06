@@ -2,6 +2,8 @@ import os
 from pages.media_release_page.fixtures.helpers.create_fixture import create_fixture
 import pages.media_release_page.fixtures.helpers.components as components
 import snippets.contact.fixtures.helpers.components as contact_components
+import pages.department_page.fixtures.helpers.components as department_page_components
+from groups.fixtures.test_cases.mvp_media_release_cpio import mvp_media_release_cpio
 
 
 # A media release page with data that matches MVP dev handoff test data
@@ -18,8 +20,11 @@ def mvp_stay_home():
         "title": "Health Authorities Continue to Stress the Importance of Stay at Home & Social Distancing",
         "slug": "abstract-mvp-stay-home",
         "body": components.abstract_mvp_stay_home_body,
-        # todo: another department
-        "contact": contact_components.new_contact()
+        "written_for_department": department_page_components.mvp_media_release_aph(),
+        "contact": contact_components.mvp_media_release_contact(),
+        "add_departments": {
+            "departments": [mvp_media_release_cpio()]
+        },
     }
 
     return create_fixture(page_data, os.path.basename(__file__))

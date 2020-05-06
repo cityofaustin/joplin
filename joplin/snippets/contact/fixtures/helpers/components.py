@@ -16,9 +16,8 @@ def new_contact():
 
 def mvp_media_release_contact():
     contact_data = {
-        "name": "New contact",
-        # Email.Address @ austintexas.gov
-        # Office: (512) 974 - 2220
+        "name": "",
+        "add_phone_numbers": [{"phone_description": "Office", "phone_number": "+15129742220"}]
     }
 
     return create_fixture(contact_data, os.path.basename(__file__))
