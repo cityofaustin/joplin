@@ -16,7 +16,7 @@ import pages.official_documents_page.fixtures as official_documents_page_fixture
 import pages.location_page.fixtures as location_page_fixtures
 import pages.event_page.fixtures as event_page_fixtures
 import pages.department_page.fixtures as department_page_fixtures
-import pages.media_release_page.fixtures as media_release_page_fixtures
+import pages.news_page.fixtures as media_release_page_fixtures
 import users.fixtures as user_fixtures
 from importer.import_everything import import_everything
 

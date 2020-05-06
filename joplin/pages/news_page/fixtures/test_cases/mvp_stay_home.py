@@ -1,6 +1,6 @@
 import os
-from pages.media_release_page.fixtures.helpers.create_fixture import create_fixture
-import pages.media_release_page.fixtures.helpers.components as components
+from pages.news_page.fixtures.helpers.create_fixture import create_fixture
+import pages.news_page.fixtures.helpers.components as components
 import snippets.contact.fixtures.helpers.components as contact_components
 import pages.department_page.fixtures.helpers.components as department_page_components
 from groups.fixtures.test_cases.mvp_media_release_cpio import mvp_media_release_cpio
@@ -19,8 +19,8 @@ def mvp_stay_home():
         "coa_global": False,
         "title": "Health Authorities Continue to Stress the Importance of Stay at Home & Social Distancing",
         "slug": "abstract-mvp-stay-home",
-        "body": components.abstract_mvp_stay_home_body,
-        "written_for_department": department_page_components.mvp_media_release_aph(),
+        "body": components.mvp_stay_home_body,
+        "written_for_department": department_page_components.mvp_news_aph(),
         "contact": contact_components.mvp_media_release_contact(),
         "add_departments": {
             "departments": [mvp_media_release_cpio()]

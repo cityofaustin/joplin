@@ -18,7 +18,7 @@ from snippets.theme.models import Theme
 from snippets.theme.factories import ThemeFactory
 from pages.form_container.models import FormContainer
 from pages.form_container.factories import FormContainerFactory
-from pages.media_release_page.factories import MediaReleasePage, MediaReleasePageFactory
+from pages.news_page.factories import NewsPage, NewsPageFactory
 
 
 # TODO: Perhaps there is a better way to organize this all in one place.
@@ -59,9 +59,9 @@ page_type_map = {
         "model": EventPage,
         "factory": EventPageFactory,
     },
-    "media_release": {
-        "model": MediaReleasePage,
-        "factory": MediaReleasePageFactory,
+    "news": {
+        "model": NewsPage,
+        "factory": NewsPageFactory,
     },
     # Theme isn't an importer page_type, but we do create_fixtures for it.
     "theme": {

@@ -27,7 +27,7 @@ from pages.official_documents_page.models import OfficialDocumentPage, OfficialD
 from pages.guide_page.models import GuidePage
 from pages.form_container.models import FormContainer
 from pages.base_page.models import JanisBasePage
-from pages.media_release_page.models import MediaReleasePage
+from pages.news_page.models import NewsPage
 from .content_type_map import content_type_map
 import traceback
 from pages.location_page.models import LocationPage, LocationPageRelatedServices
@@ -674,7 +674,7 @@ class InformationPageNode(DjangoObjectType):
 
 class MediaReleasePageNode(DjangoObjectType):
     class Meta:
-        model = MediaReleasePage
+        model = NewsPage
         filter_fields = ['id', 'slug', 'live', 'coa_global']
         interfaces = [graphene.Node]
 

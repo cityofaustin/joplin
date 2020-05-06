@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand, CommandError
-import pages.media_release_page.fixtures as media_release_page_fixtures
+import pages.news_page.fixtures as media_release_page_fixtures
 
 '''
     Loads media_release_page fixtures into your joplin environment.

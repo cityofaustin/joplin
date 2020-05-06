@@ -11,28 +11,28 @@ def home():
     return HomePage.objects.first()
 
 
-# A department page to represent APH for our MVP media release test data
+# A department page to represent APH for our MVP news test data
 # https://share.goabstract.com/ac28fbf0-0ef7-448c-98d7-b652d936a2f8
-def mvp_media_release_aph():
+def mvp_news_aph():
     page_data = {
         "imported_revision_id": None,
         "live": True,
         "parent": home(),
         "title": "Austin Public Health",
-        "slug": "mvp-media-release-aph",
+        "slug": "mvp-news-aph",
     }
 
     return create_fixture(page_data, os.path.basename(__file__))
 
 
 # same thing as aph above but for CPIO
-def mvp_media_release_cpio():
+def mvp_news_cpio():
     page_data = {
         "imported_revision_id": None,
         "live": True,
         "parent": home(),
         "title": "Communications and Public Information Office",
-        "slug": "mvp-media-release-cpio",
+        "slug": "mvp-news-cpio",
     }
 
     return create_fixture(page_data, os.path.basename(__file__))

@@ -16,7 +16,7 @@ from pages.form_container.models import FormContainer
 from pages.home_page.models import HomePage
 from pages.location_page.models import LocationPage, LocationPageRelatedServices
 from pages.event_page.models import EventPage, EventPageFee
-from pages.media_release_page.models import MediaReleasePage
+from pages.news_page.models import NewsPage
 
 
 @register(Image)
@@ -155,7 +155,7 @@ class LocationPageRelatedServicesTranslationOptions(TranslationOptions):
         'hours_exceptions',
     )
 
-@register(MediaReleasePage)
+@register(NewsPage)
 class MediaReleasePageTranslationOptions(TranslationOptions):
     fields = (
         'body',

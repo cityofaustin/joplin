@@ -12,7 +12,7 @@ from pages.guide_page.models import GuidePage
 from pages.form_container.models import FormContainer
 from pages.location_page.models import LocationPage
 from pages.event_page.models import EventPage
-from pages.media_release_page.models import MediaReleasePage
+from pages.news_page.models import NewsPage
 from pages.home_page.models import HomePage
 from groups.models import Department
 from importer.page_importer import PageImporter
@@ -72,7 +72,7 @@ def new_page_from_modal(request):
         elif body['type'] == 'event':
             page = EventPage(**data)
         elif body['type'] == 'media_release':
-            page = MediaReleasePage(**data)
+            page = NewsPage(**data)
 
         # Add it as a child of home
         home = HomePage.objects.first()
