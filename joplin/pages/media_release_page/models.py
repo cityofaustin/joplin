@@ -42,7 +42,7 @@ class MediaReleasePage(JanisBasePage):
 
     publish_requirements = (
         FieldPublishRequirement("body", message="🤠 can't publish without a body 🌵", langs=["en"]),
-        RelationPublishRequirement("contact", message="🤠 can't publish without a contact 🌵"),
+        FieldPublishRequirement("contact", message="🤠 can't publish without a contact 🌵"),
     )
 
     content_panels = [

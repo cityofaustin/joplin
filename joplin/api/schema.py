@@ -27,6 +27,7 @@ from pages.official_documents_page.models import OfficialDocumentPage, OfficialD
 from pages.guide_page.models import GuidePage
 from pages.form_container.models import FormContainer
 from pages.base_page.models import JanisBasePage
+from pages.media_release_page.models import MediaReleasePage
 from .content_type_map import content_type_map
 import traceback
 from pages.location_page.models import LocationPage, LocationPageRelatedServices
@@ -669,6 +670,13 @@ class InformationPageNode(DjangoObjectType):
     @superuser_required
     def resolve_owner(self, info):
         return resolve_owner_handler(self, info)
+
+
+class MediaReleasePageNode(DjangoObjectType):
+    class Meta:
+        model = MediaReleasePage
+        filter_fields = ['id', 'slug', 'live', 'coa_global']
+        interfaces = [graphene.Node]
 
 
 class FormContainerNode(DjangoObjectType):

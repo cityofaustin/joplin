@@ -16,7 +16,7 @@ def abstract_mvp_stay_home():
         "coa_global": False,
         "title": "Health Authorities Continue to Stress the Importance of Stay at Home & Social Distancing",
         # "slug": "service-page-with-title",
-        "body": "blarg todo",
+        "body": components.abstract_mvp_stay_home_body,
         # todo: another department
         # todo: contact
     }
