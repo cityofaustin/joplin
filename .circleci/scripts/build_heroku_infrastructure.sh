@@ -8,7 +8,7 @@ log() { log_base "build_heroku_app" "$1" "$2"; }
 
 # Attaches postgresql database to heroku application
 function attach_heroku_database {
-    heroku addons:create heroku-postgresql:hobby-dev --version=12.2 --app $APPNAME
+    heroku addons:create heroku-postgresql:hobby-dev --version=12 --app $APPNAME
 }
 
 # Attaches redis cache to heroku application
