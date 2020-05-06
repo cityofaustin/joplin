@@ -17,7 +17,7 @@ from publish_preflight.requirements import FieldPublishRequirement, RelationPubl
 
 from publish_preflight.forms import PublishPreflightForm
 
-WYSIWYG_MEDIA_RELEASE_BODY = ['ul', 'ol' 'link']
+WYSIWYG_MEDIA_RELEASE_BODY = ['ul', 'ol', 'link']
 
 
 class MediaReleasePageForm(PublishPreflightForm):
