@@ -17,6 +17,7 @@ def new_contact():
 def mvp_media_release_contact():
     contact_data = {
         "name": "",
+        "email": "Email.Address@austintexas.gov",
         "add_phone_numbers": [{"phone_description": "Office", "phone_number": "+15129742220"}]
     }
 
