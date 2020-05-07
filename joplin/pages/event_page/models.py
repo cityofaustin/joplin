@@ -132,7 +132,7 @@ class EventPage(JanisBasePage):
             classname='coa-multiField-nopadding'
         ),
         InlinePanel('related_page', heading='Select the page(s) where this event should display', label='Page',
-                    help_text='Add links to Service or Information Pages',
+                    help_text='Add links to Service, Information, or Location Pages',
                     min_num=None),
         SnippetChooserPanel('contact'),
         MultiFieldPanel(
