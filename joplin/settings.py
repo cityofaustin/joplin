@@ -101,7 +101,7 @@ INSTALLED_APPS = [
     'pages.topic_collection_page',
     'pages.topic_page',
     'pages.home_page',
-    'pages.media_release_page',
+    'pages.news_page',
     'snippets.contact',
     'snippets.theme'
 
