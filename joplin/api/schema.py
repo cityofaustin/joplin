@@ -313,7 +313,7 @@ class RelatedEventPageResolver(graphene.Interface):
     @classmethod
     def resolve_events(cls, instance, info):
         events = []
-        event_relationships = EventPageRelatedPage.objects.filter(page__id=instance.pk)
+        event_relationships = EventPageRelatedPage.objects.filter(page__id=instance.pk).order_by('date')
         for page in event_relationships:
             events.append(page.event)
         return events
