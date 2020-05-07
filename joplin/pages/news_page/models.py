@@ -16,7 +16,7 @@ from publish_preflight.requirements import FieldPublishRequirement, RelationPubl
 
 from publish_preflight.forms import PublishPreflightForm
 
-WYSIWYG_MEDIA_RELEASE_BODY = ['ul', 'ol', 'link']
+WYSIWYG_NEWS_BODY = ['ul', 'ol', 'link']
 
 
 class MediaReleasePageForm(PublishPreflightForm):
@@ -28,7 +28,7 @@ class NewsPage(JanisBasePage):
     janis_url_page_type = "blargy"
 
     body = RichTextField(
-        features=WYSIWYG_MEDIA_RELEASE_BODY,
+        features=WYSIWYG_NEWS_BODY,
         verbose_name='Body',
         blank=True
     )

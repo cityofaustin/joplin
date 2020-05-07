@@ -16,7 +16,7 @@ import pages.official_documents_page.fixtures as official_documents_page_fixture
 import pages.location_page.fixtures as location_page_fixtures
 import pages.event_page.fixtures as event_page_fixtures
 import pages.department_page.fixtures as department_page_fixtures
-import pages.news_page.fixtures as media_release_page_fixtures
+import pages.news_page.fixtures as news_page_fixtures
 import users.fixtures as user_fixtures
 from importer.import_everything import import_everything
 
@@ -80,7 +80,7 @@ class Command(BaseCommand):
                 event_page_fixtures.load_all()
                 location_page_fixtures.load_all()
                 department_page_fixtures.load_all()
-                media_release_page_fixtures.load_all()
+                news_page_fixtures.load_all()
 
                 # TODO: incorporate logging into DeploymentLog?
             if LOAD_DATA == 'importer':

@@ -71,7 +71,7 @@ def new_page_from_modal(request):
             page = LocationPage(**data)
         elif body['type'] == 'event':
             page = EventPage(**data)
-        elif body['type'] == 'media_release':
+        elif body['type'] == 'news':
             page = NewsPage(**data)
 
         # Add it as a child of home

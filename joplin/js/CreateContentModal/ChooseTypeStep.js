@@ -14,7 +14,7 @@ import locationImage from '../../static/images/location.png';
 import eventImage from '../../static/images/event.png';
 import singlePageImage from '../../static/images/event.png';
 import fullSiteImage from '../../static/images/event.png';
-import mediaReleaseImage from '../../static/images/event.png';
+import newsImage from '../../static/images/event.png';
 
 const PageTypeComponent = ({
   type,
@@ -96,11 +96,11 @@ const ChooseTypeStep = ({
         'An activity that occurs at a particular time and place and is not a service.',
     },
     {
-      type: 'media_release',
-      name: 'Media release',
-      image: mediaReleaseImage,
+      type: 'news',
+      name: 'News',
+      image: newsImage,
       description:
-        '🤠 media release description 🌵',
+        '🤠 news description 🌵',
     },
   ];
 

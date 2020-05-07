@@ -14,7 +14,7 @@ def new_contact():
     return create_fixture(contact_data, os.path.basename(__file__))
 
 
-def mvp_media_release_contact():
+def mvp_news_contact():
     contact_data = {
         "name": "",
         "email": "Email.Address@austintexas.gov",

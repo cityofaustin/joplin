@@ -3,10 +3,10 @@ from pages.news_page.fixtures.helpers.create_fixture import create_fixture
 import pages.news_page.fixtures.helpers.components as components
 import snippets.contact.fixtures.helpers.components as contact_components
 import pages.department_page.fixtures.helpers.components as department_page_components
-from groups.fixtures.test_cases.mvp_media_release_cpio import mvp_media_release_cpio
+from groups.fixtures.test_cases.mvp_news_cpio import mvp_news_cpio
 
 
-# A media release page with data that matches MVP dev handoff test data
+# A news page with data that matches MVP dev handoff test data
 # Janis:
 # https://app.abstract.com/projects/065fcabf-a46a-4688-a858-83ce2117b16c/branches/6b5fab74-d723-4f52-a22d-4d4260faf803/collections/e5d5024b-7a3e-4f30-8179-aa88db70d29f
 # Joplin:
@@ -21,9 +21,9 @@ def mvp_stay_home():
         "slug": "abstract-mvp-stay-home",
         "body": components.mvp_stay_home_body,
         "written_for_department": department_page_components.mvp_news_aph(),
-        "contact": contact_components.mvp_media_release_contact(),
+        "contact": contact_components.mvp_news_contact(),
         "add_departments": {
-            "departments": [mvp_media_release_cpio()]
+            "departments": [mvp_news_cpio()]
         },
     }
 
