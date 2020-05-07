@@ -65,7 +65,8 @@ class NewsPage(JanisBasePage):
         # if hasattr(self, 'department'):
         #     return [f'/{self.slug_en}/']
         if self.written_for_department:
-        x = 3
+            x = 3
+        y = x
         return []
 
     def janis_instances(self):
