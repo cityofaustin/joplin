@@ -315,7 +315,8 @@ class RelatedEventPageResolver(graphene.Interface):
         events = []
         event_relationships = EventPageRelatedPage.objects.filter(page__id=instance.pk).order_by('event__date')
         for page in event_relationships:
-            events.append(page.event)
+            if not page.event.canceled:
+                events.append(page.event)
         return events
 
 
