@@ -60,10 +60,7 @@ class NewsPage(JanisBasePage):
         Department pages should have at most one url
         """
 
-        # check the one to one relationship of pages to department groups
-        # it's the only time we should have a url for a department page
-        # if hasattr(self, 'department'):
-        #     return [f'/{self.slug_en}/']
+        # If we're
         if self.written_for_department:
             x = 3
         y = x

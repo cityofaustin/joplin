@@ -1,7 +1,11 @@
-from .test_cases.mvp_stay_home import mvp_stay_home
+from .test_cases.written_by_CPIO_written_for_APH import written_by_CPIO_written_for_APH
+from .test_cases.written_by_APH import written_by_APH
+from .test_cases.written_by_APH_written_for_APH import written_by_APH_written_for_APH
 
 
 # You can import any test_case fixture individually
 # Or you can load them all with this function
 def load_all():
-    mvp_stay_home()
+    written_by_APH()
+    written_by_APH_written_for_APH()
+    written_by_CPIO_written_for_APH()
