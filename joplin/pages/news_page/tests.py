@@ -64,7 +64,7 @@ def test_written_by_APH_written_for_APH():
 @pytest.mark.django_db
 def test_written_by_CPIO_written_for_APH():
     # APH makes a page for APH, doesn’t assign a different department:
-    page = fixtures.written_by_APH_written_for_APH()
+    page = fixtures.written_by_CPIO_written_for_APH()
 
     # Make sure we made a news page
     assert isinstance(page, NewsPage)
@@ -85,4 +85,4 @@ def test_written_by_CPIO_written_for_APH():
     assert janis_instance['from'].title == 'Austin Public Health'
 
     # Make sure written by is CPIO
-    assert not janis_instance['by'].title == 'Communications and Public Information Office'
+    assert janis_instance['by'].title == 'Communications and Public Information Office'

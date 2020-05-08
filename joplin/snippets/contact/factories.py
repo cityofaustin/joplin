@@ -20,7 +20,6 @@ class ContactFactory(DjangoModelFactory):
         if extracted:
             # A list of phone numbers were passed in, use them
             for phone_number in extracted:
-                print("blarg we're at the phones!")
                 ContactPhoneNumberFactory.create(contact=self, phone_description=phone_number['phone_description'], phone_number=phone_number['phone_number'])
             return
 
