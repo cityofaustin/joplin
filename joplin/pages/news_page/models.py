@@ -37,7 +37,9 @@ class NewsPage(JanisBasePage):
 
     contact = models.ForeignKey(Contact, blank=True, null=True, on_delete=models.SET_NULL)
 
-    written_for_department = models.ForeignKey(DepartmentPage, blank=True, null=True, on_delete=models.SET_NULL)
+    written_for_department = models.ForeignKey(DepartmentPage, blank=True, null=True, on_delete=models.SET_NULL,
+                                               verbose_name="Assign a different department",
+                                               help_text="If this news is written for another department, select that department below. This ensures that this news is associated with that department's news content")
 
     publish_requirements = (
         FieldPublishRequirement("body", message="🤠 can't publish without a body 🌵", langs=["en"]),
@@ -51,8 +53,8 @@ class NewsPage(JanisBasePage):
         FieldPanel('title_ar'),
         FieldPanel('title_vi'),
         FieldPanel('body'),
-        SnippetChooserPanel('contact'),
-        PageChooserPanel('written_for_department', page_type=DepartmentPage)
+        PageChooserPanel('written_for_department', page_type=DepartmentPage),
+        SnippetChooserPanel('contact')
     ]
 
     def janis_urls(self):
