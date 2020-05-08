@@ -24,8 +24,8 @@ def test_written_by_APH():
     janis_url = page.janis_urls()[0]
 
     # Make sure the URL is APH
-    assert janis_instance['url'] == '/mvp-news-aph/mvp-news/'
-    assert janis_url == '/mvp-news-aph/mvp-news/'
+    assert janis_instance['url'] == '/mvp-news-aph/mvp-news-by-aph/'
+    assert janis_url == '/mvp-news-aph/mvp-news-by-aph/'
 
     # Make sure "From" is APH
     assert janis_instance['from_department'].title == 'Austin Public Health'
@@ -78,8 +78,8 @@ def test_written_by_CPIO_written_for_APH():
     janis_url = page.janis_urls()[0]
 
     # Make sure the URL is APH
-    assert janis_instance['url'] == '/mvp-news-aph/mvp-news/'
-    assert janis_url == '/mvp-news-aph/mvp-news/'
+    assert janis_instance['url'] == '/mvp-news-aph/mvp-news-by-cpio-for-aph/'
+    assert janis_url == '/mvp-news-aph/mvp-news-by-cpio-for-aph/'
 
     # Make sure "From" is APH
     assert janis_instance['from_department'].title == 'Austin Public Health'
