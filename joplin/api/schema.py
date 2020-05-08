@@ -229,19 +229,31 @@ class JanisBasePageNode(DjangoObjectType):
             if 'from_department' in i and i['from_department']:
                 node = content_type_map[i['from_department'].content_type.name]["node"]
                 global_id = graphene.Node.to_global_id(node, i['from_department'].id)
-                from_department = ContextualNavInstance(
-                    id=global_id,
-                    title=i['from_department'].title,
-                    url=i['from_department'].specific.janis_urls()[0])
+                if django.utils.translation.get_language() == 'es':
+                    from_department = ContextualNavInstance(
+                        id=global_id,
+                        title=i['from_department'].title_es,
+                        url=i['from_department'].specific.janis_urls()[0])
+                else:
+                    from_department = ContextualNavInstance(
+                        id=global_id,
+                        title=i['from_department'].title,
+                        url=i['from_department'].specific.janis_urls()[0])
             else:
                 from_department = None
             if 'by_department' in i and i['by_department']:
                 node = content_type_map[i['by_department'].content_type.name]["node"]
                 global_id = graphene.Node.to_global_id(node, i['by_department'].id)
-                by_department = ContextualNavInstance(
-                    id=global_id,
-                    title=i['by_department'].title,
-                    url=i['by_department'].specific.janis_urls()[0])
+                if django.utils.translation.get_language() == 'es':
+                    by_department = ContextualNavInstance(
+                        id=global_id,
+                        title=i['by_department'].title_es,
+                        url=i['by_department'].specific.janis_urls()[0])
+                else:
+                    by_department = ContextualNavInstance(
+                        id=global_id,
+                        title=i['by_department'].title,
+                        url=i['by_department'].specific.janis_urls()[0])
             else:
                 by_department = None
 
