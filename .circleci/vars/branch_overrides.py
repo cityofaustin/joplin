@@ -29,8 +29,7 @@ branch_overrides = {
         "LOAD_DATA": "fixtures",
         "V3_WIP": True,
     },
-    "joplin-pr-news-migration-test": {
+    "news-migration-test": {
         "LOAD_DATA": "",
-        "V3_WIP": True,
     },
 }
