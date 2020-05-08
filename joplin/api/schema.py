@@ -705,7 +705,7 @@ class InformationPageNode(DjangoObjectType):
 class NewsPageNode(DjangoObjectType):
     class Meta:
         model = NewsPage
-        filter_fields = ['id', 'slug', 'live', 'coa_global']
+        filter_fields = ['id', 'slug', 'live']
         interfaces = [graphene.Node]
 
 
