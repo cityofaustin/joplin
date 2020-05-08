@@ -226,7 +226,7 @@ class JanisBasePageNode(DjangoObjectType):
                     url=i['grandparent'].specific.janis_urls()[0])
             else:
                 grandparent = None
-            if i['from_department']:
+            if 'from_department' in i and i['from_department']:
                 node = content_type_map[i['from_department'].content_type.name]["node"]
                 global_id = graphene.Node.to_global_id(node, i['from_department'].id)
                 from_department = ContextualNavInstance(
@@ -235,7 +235,7 @@ class JanisBasePageNode(DjangoObjectType):
                     url=i['from_department'].specific.janis_urls()[0])
             else:
                 from_department = None
-            if i['by_department']:
+            if 'by_department' in i and i['by_department']:
                 node = content_type_map[i['by_department'].content_type.name]["node"]
                 global_id = graphene.Node.to_global_id(node, i['by_department'].id)
                 by_department = ContextualNavInstance(
