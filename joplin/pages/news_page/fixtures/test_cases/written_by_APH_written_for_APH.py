@@ -17,6 +17,8 @@ def written_by_APH_written_for_APH():
         "body": components.mvp_news_body,
         "written_for_department": department_page_components.mvp_news_aph(),
         "contact": contact_components.mvp_news_contact(),
+        "title_es": components.google_translated_mvp_news_title,
+        "body_es": components.google_translated_mvp_news_body,
         "add_departments": {
             "departments": [mvp_news_aph()]
         },
