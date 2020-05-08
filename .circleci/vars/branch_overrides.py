@@ -28,5 +28,8 @@ branch_overrides = {
     "4311-stream-block-error": {
         "LOAD_DATA": "fixtures",
         "V3_WIP": True,
-    }
+    },
+    "joplin-pr-news-migration-test": {
+        "LOAD_DATA": "",
+    },
 }
