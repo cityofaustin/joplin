@@ -25,7 +25,7 @@ class NewsPageForm(PublishPreflightForm):
 
 
 class NewsPage(JanisBasePage):
-    janis_url_page_type = "blargy"
+    janis_url_page_type = "news"
 
     body = RichTextField(
         features=WYSIWYG_NEWS_BODY,

@@ -898,6 +898,7 @@ class PageRevisionNode(DjangoObjectType):
     as_form_container = graphene.NonNull(FormContainerNode)
     as_location_page = graphene.NonNull(LocationPageNode)
     as_event_page = graphene.NonNull(EventPageNode)
+    as_news_page = graphene.NonNull(NewsPageNode)
     preview_janis_instance = graphene.NonNull(ContextualNavData)
     is_latest = graphene.Boolean()
     is_live = graphene.Boolean()
@@ -931,6 +932,9 @@ class PageRevisionNode(DjangoObjectType):
         return self.as_page_object()
 
     def resolve_as_event_page(self, resolve_info, *args, **kwargs):
+        return self.as_page_object()
+
+    def resolve_as_news_page(self, resolve_info, *args, **kwargs):
         return self.as_page_object()
 
     def resolve_is_latest(self, resolve_info, *args, **kwargs):

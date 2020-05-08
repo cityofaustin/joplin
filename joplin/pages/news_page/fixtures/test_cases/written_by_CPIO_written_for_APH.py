@@ -21,7 +21,7 @@ def written_by_CPIO_written_for_APH():
         "slug": "mvp-news-by-cpio-for-aph",
         "body": components.mvp_news_body,
         "written_for_department": department_page_components.mvp_news_aph(),
-        "contact": contact_components.mvp_news_contact(),
+        "contact": contact_components.mvp_news_contact_extended(),
         "add_departments": {
             "departments": [mvp_news_cpio()]
         },
