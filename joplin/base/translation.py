@@ -155,6 +155,7 @@ class LocationPageRelatedServicesTranslationOptions(TranslationOptions):
         'hours_exceptions',
     )
 
+
 @register(NewsPage)
 class NewsPageTranslationOptions(TranslationOptions):
     fields = (
