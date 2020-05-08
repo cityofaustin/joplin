@@ -18,7 +18,7 @@ def written_by_CPIO_written_for_APH():
         "parent": components.home(),
         "coa_global": False,
         "title": components.mvp_news_title,
-        "slug": "mvp-news",
+        "slug": "mvp-news-by-cpio-for-aph",
         "body": components.mvp_news_body,
         "written_for_department": department_page_components.mvp_news_aph(),
         "contact": contact_components.mvp_news_contact(),

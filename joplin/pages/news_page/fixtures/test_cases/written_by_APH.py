@@ -12,7 +12,7 @@ def written_by_APH():
         "parent": components.home(),
         "coa_global": False,
         "title": components.mvp_news_title,
-        "slug": "mvp-news",
+        "slug": "mvp-news-by-aph",
         "body": components.mvp_news_body,
         "contact": contact_components.mvp_news_contact(),
         "add_departments": {
