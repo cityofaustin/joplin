@@ -56,26 +56,30 @@ class NewsPage(JanisBasePage):
     ]
 
     def janis_urls(self):
-        """
-        Department pages should have at most one url
-        """
-
-        # If we're
-        if self.written_for_department:
-            x = 3
-        y = x
-        return []
+        return [instance['url'] for instance in self.janis_instances()]
 
     def janis_instances(self):
         """
-        Department pages should have at most one url
-        They don't have contextual nav, do i even need this?
+        News pages have logic around the written_for_department field
+        if it is filled in, we want to publish there instead of under out normal department
         """
 
-        # check the one to one relationship of pages to department groups
-        # it's the only time we should have a url for a department page
-        # if hasattr(self, 'department'):
-        #     return [{'url': f'/{self.slug_en}/', 'parent': None, 'grandparent': None}]
+        # If we have a "different" department, publish under that department only
+        if self.written_for_department:
+            by_department = self.departments()[0]
+            blarg = 0
 
-        x = 3
-        return []
+            return [
+                {'url': f'/{self.written_for_department}/{self.slug_en}/',
+                 'parent': self.written_for_department, 'grandparent': None,
+                 'from': self.written_for_department,
+                 'by': by_department}]
+
+        bllll = self.departments()
+        # If we don't have a "different" department, publish under the default departments
+        return [{'url': f'/{department.slug_en}/{self.slug_en}/',
+                 'parent': department,
+                 'grandparent': None,
+                 'from': department,
+                 'by': None}
+                for department in self.departments()]
