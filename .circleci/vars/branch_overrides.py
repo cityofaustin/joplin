@@ -31,5 +31,6 @@ branch_overrides = {
     },
     "joplin-pr-news-migration-test": {
         "LOAD_DATA": "",
+        "V3_WIP": True,
     },
 }
