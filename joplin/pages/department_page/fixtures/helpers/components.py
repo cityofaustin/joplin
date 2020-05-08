@@ -19,6 +19,7 @@ def mvp_news_aph():
         "live": True,
         "parent": home(),
         "title": "Austin Public Health",
+        "title_es": "Salud Pública de Austin",
         "slug": "mvp-news-aph",
     }
 
