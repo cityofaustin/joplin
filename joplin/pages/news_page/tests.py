@@ -28,10 +28,10 @@ def test_written_by_APH():
     assert janis_url == '/mvp-news-aph/mvp-news/'
 
     # Make sure "From" is APH
-    assert janis_instance['from'].title == 'Austin Public Health'
+    assert janis_instance['from_department'].title == 'Austin Public Health'
 
     # Make sure written by is not shown
-    assert not janis_instance['by']
+    assert not janis_instance['by_department']
 
 
 @pytest.mark.django_db
@@ -55,10 +55,10 @@ def test_written_by_APH_written_for_APH():
     assert janis_url == '/mvp-news-aph/mvp-news/'
 
     # Make sure "From" is APH
-    assert janis_instance['from'].title == 'Austin Public Health'
+    assert janis_instance['from_department'].title == 'Austin Public Health'
 
     # Make sure written by is not shown
-    assert not janis_instance['by']
+    assert not janis_instance['by_department']
 
 
 @pytest.mark.django_db
@@ -82,7 +82,7 @@ def test_written_by_CPIO_written_for_APH():
     assert janis_url == '/mvp-news-aph/mvp-news/'
 
     # Make sure "From" is APH
-    assert janis_instance['from'].title == 'Austin Public Health'
+    assert janis_instance['from_department'].title == 'Austin Public Health'
 
     # Make sure written by is CPIO
-    assert janis_instance['by'].title == 'Communications and Public Information Office'
+    assert janis_instance['by_department'].title == 'Communications and Public Information Office'

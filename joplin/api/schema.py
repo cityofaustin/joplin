@@ -169,6 +169,11 @@ class ContextualNavData(graphene.ObjectType):
     url = graphene.String()
     parent = graphene.Field(ContextualNavInstance)
     grandparent = graphene.Field(ContextualNavInstance)
+
+    # These are used for the department bylines on News pages
+    from_department = graphene.Field(ContextualNavInstance)
+    by_department = graphene.Field(ContextualNavInstance)
+
     # TODO: determine if this is possible in a later issue
     # related_to = graphene.List(JanisBasePageTopicCollectionNode)
 
@@ -221,7 +226,26 @@ class JanisBasePageNode(DjangoObjectType):
                     url=i['grandparent'].specific.janis_urls()[0])
             else:
                 grandparent = None
-            instance = ContextualNavData(parent=parent, grandparent=grandparent, url=url)
+            if i['from_department']:
+                node = content_type_map[i['from_department'].content_type.name]["node"]
+                global_id = graphene.Node.to_global_id(node, i['from_department'].id)
+                from_department = ContextualNavInstance(
+                    id=global_id,
+                    title=i['from_department'].title,
+                    url=i['from_department'].specific.janis_urls()[0])
+            else:
+                from_department = None
+            if i['by_department']:
+                node = content_type_map[i['by_department'].content_type.name]["node"]
+                global_id = graphene.Node.to_global_id(node, i['by_department'].id)
+                by_department = ContextualNavInstance(
+                    id=global_id,
+                    title=i['by_department'].title,
+                    url=i['by_department'].specific.janis_urls()[0])
+            else:
+                by_department = None
+
+            instance = ContextualNavData(parent=parent, grandparent=grandparent, url=url, from_department=from_department, by_department=by_department)
             instances.append(instance)
         return instances
 

@@ -66,13 +66,13 @@ class NewsPage(JanisBasePage):
             return [
                 {'url': f'/{self.written_for_department.slug_en}/{self.slug_en}/',
                  'parent': self.written_for_department, 'grandparent': None,
-                 'from': self.written_for_department,
-                 'by': by_department}]
+                 'from_department': self.written_for_department,
+                 'by_department': by_department}]
 
         # If we don't have a written_for department, publish under the default departments
         return [{'url': f'/{department.slug_en}/{self.slug_en}/',
                  'parent': department,
                  'grandparent': None,
-                 'from': department,
-                 'by': None}
+                 'from_department': department,
+                 'by_department': None}
                 for department in self.departments()]
