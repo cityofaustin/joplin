@@ -156,7 +156,7 @@ class LocationPageRelatedServicesTranslationOptions(TranslationOptions):
     )
 
 @register(NewsPage)
-class MediaReleasePageTranslationOptions(TranslationOptions):
+class NewsPageTranslationOptions(TranslationOptions):
     fields = (
         'body',
     )

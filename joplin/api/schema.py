@@ -696,7 +696,7 @@ class InformationPageNode(DjangoObjectType):
         return resolve_owner_handler(self, info)
 
 
-class MediaReleasePageNode(DjangoObjectType):
+class NewsPageNode(DjangoObjectType):
     class Meta:
         model = NewsPage
         filter_fields = ['id', 'slug', 'live', 'coa_global']

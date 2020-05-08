@@ -19,7 +19,7 @@ from publish_preflight.forms import PublishPreflightForm
 WYSIWYG_NEWS_BODY = ['ul', 'ol', 'link']
 
 
-class MediaReleasePageForm(PublishPreflightForm):
+class NewsPageForm(PublishPreflightForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
