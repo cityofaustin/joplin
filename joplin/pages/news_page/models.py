@@ -12,7 +12,7 @@ from snippets.contact.models import Contact
 
 from base.models.widgets import countMe
 
-from publish_preflight.requirements import FieldPublishRequirement, RelationPublishRequirement
+from publish_preflight.requirements import FieldPublishRequirement, DepartmentPublishRequirement
 
 from publish_preflight.forms import PublishPreflightForm
 
@@ -44,6 +44,7 @@ class NewsPage(JanisBasePage):
     publish_requirements = (
         FieldPublishRequirement("body", message="🤠 can't publish without a body 🌵", langs=["en"]),
         FieldPublishRequirement("contact", message="🤠 can't publish without a contact 🌵"),
+        DepartmentPublishRequirement(message="🤠 can't publish without a department, this should only happen to admins that forgot to pick a department in the modal, or users that aren't in a department group 🌵"),
     )
 
     content_panels = [
