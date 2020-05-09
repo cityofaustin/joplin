@@ -30,7 +30,7 @@ from pages.base_page.models import JanisBasePage
 from .content_type_map import content_type_map
 import traceback
 from pages.location_page.models import LocationPage, LocationPageRelatedServices
-from pages.event_page.models import EventPage, EventPageFee
+from pages.event_page.models import EventPage, EventPageFee, EventPageRelatedPage
 from graphql_relay import to_global_id
 
 
@@ -307,6 +307,19 @@ class DepartmentResolver(graphene.Interface):
         return instance.departments()
 
 
+class RelatedEventPageResolver(graphene.Interface):
+    events = graphene.List(lambda: EventPageNode)
+
+    @classmethod
+    def resolve_events(cls, instance, info):
+        events = []
+        event_relationships = EventPageRelatedPage.objects.filter(page__id=instance.pk).order_by('event__date')
+        for page in event_relationships:
+            if not page.event.canceled:
+                events.append(page.event)
+        return events
+
+
 class DocumentNode(DjangoObjectType):
     class Meta:
         model = Document
@@ -405,7 +418,7 @@ class LocationPageNode(DjangoObjectType):
         model = LocationPage
         filter_fields = ['id', 'slug', 'live']
         fields = '__all__'
-        interfaces = [graphene.Node, DepartmentResolver]
+        interfaces = [graphene.Node, DepartmentResolver, RelatedEventPageResolver]
 
     @superuser_required
     def resolve_owner(self, info):
@@ -641,7 +654,7 @@ class ServicePageNode(DjangoObjectType):
     class Meta:
         model = ServicePage
         filter_fields = ['id', 'slug', 'live', 'coa_global']
-        interfaces = [graphene.Node, DepartmentResolver]
+        interfaces = [graphene.Node, DepartmentResolver, RelatedEventPageResolver]
 
     def resolve_page_type(self, info):
         return ServicePage.get_verbose_name().lower()
@@ -661,7 +674,7 @@ class InformationPageNode(DjangoObjectType):
     class Meta:
         model = InformationPage
         filter_fields = ['id', 'slug', 'live', 'coa_global']
-        interfaces = [graphene.Node, DepartmentResolver]
+        interfaces = [graphene.Node, DepartmentResolver, RelatedEventPageResolver]
 
     def resolve_page_type(self, info):
         return InformationPage.get_verbose_name().lower()
