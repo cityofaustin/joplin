@@ -230,7 +230,8 @@ class JanisBasePageNode(DjangoObjectType):
                 node = content_type_map[i['from_department'].content_type.name]["node"]
                 global_id = graphene.Node.to_global_id(node, i['from_department'].id)
                 title = i['from_department'].title
-                if django.utils.translation.get_language() == 'es':
+                # We use english as a fallback, so don't override the title if we don't have one
+                if django.utils.translation.get_language() == 'es' and i['from_department'].title_es:
                     title = i['from_department'].title_es
                 from_department = ContextualNavInstance(
                     id=global_id,
@@ -242,7 +243,8 @@ class JanisBasePageNode(DjangoObjectType):
                 node = content_type_map[i['by_department'].content_type.name]["node"]
                 global_id = graphene.Node.to_global_id(node, i['by_department'].id)
                 title = i['by_department'].title
-                if django.utils.translation.get_language() == 'es':
+                # We use english as a fallback, so don't override the title if we don't have one
+                if django.utils.translation.get_language() == 'es' and i['by_department'].title_es:
                     title = i['by_department'].title_es
                 by_department = ContextualNavInstance(
                     id=global_id,
