@@ -41,6 +41,8 @@ def before_edit_page(request, page):
     assert request.user.is_authenticated
     print(
         f'BeforeEditHook {request.user.email} is in groups {[group.name for group in request.user.groups.all()]}')
+    print(
+        f'BeforeEditHook {page} is in permission groups {page.view_restrictions.model.groups}')
 
 
 @hooks.register('construct_main_menu')

@@ -66,7 +66,6 @@ class Command(BaseCommand):
             except ObjectDoesNotExist:
                 load_data_result = None
             LOAD_DATA = os.getenv("LOAD_DATA")
-            DATABASE_URL = os.getenv("DATABASE_URL")
             # Allow re-running of 'fixtures' data
             if LOAD_DATA == 'fixtures' or LOAD_DATA == 'test':
                 print("Adding fixture data")

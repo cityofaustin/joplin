@@ -23,6 +23,7 @@ from django.views.decorators.vary import vary_on_headers
  - excluding certain pages from the pages to query
 """
 
+
 @vary_on_headers('X-Requested-With')
 @user_passes_test(user_has_any_page_permission)
 def search(request):
@@ -35,7 +36,8 @@ def search(request):
     ordering = None
 
     if 'ordering' in request.GET:
-        if request.GET['ordering'] in ['content_type', '-content_type', 'owner', '-owner', 'title', '-title', 'latest_revision_created_at', '-latest_revision_created_at', 'live', '-live']:
+        if request.GET['ordering'] in ['content_type', '-content_type', 'owner', '-owner', 'title', '-title',
+                                       'latest_revision_created_at', '-latest_revision_created_at', 'live', '-live']:
             ordering = request.GET['ordering']
             pages = pages.order_by(ordering)
     else:
@@ -43,7 +45,6 @@ def search(request):
         # https://github.com/cityofaustin/techstack/issues/3974
         ordering = '-latest_revision_created_at'
         pages = pages.order_by(ordering)
-
 
     if 'content_type' in request.GET:
         pagination_query_params['content_type'] = request.GET['content_type']
@@ -63,8 +64,8 @@ def search(request):
 
     """
      JOPLIN NOTE:
-      - Some of this the original state of the query condition has been modified
-      because we needed data from the query condition for in our inital display
+      - Some of the original state of the query condition has been modified
+      because we needed data from the query condition for in our initial display
       on the main content page.
       - For Original code See:
       https://github.com/wagtail/wagtail/blob/a459e91692659aba04e662978857d14061aecaee/wagtail/admin/views/pages.py#L917
