@@ -260,10 +260,9 @@ class PermissionObjectList(ObjectList):
             self.hide_panel = False
         return super().on_form_bound()
 
-    def render(self):
-        # this only hides the content of the tab, not the tab/heading itself
-        print(self.request.user.get_all_permissions())
-        if not self.request.user.has_perm('base_page.view_extra_panels'):
-            return ""
-
-        return super().render()
+    # def render(self):
+    #     # this only hides the content of the tab, not the tab/heading itself
+    #     if not self.request.user.has_perm('base_page.view_extra_panels'):
+    #         return ""
+    #
+    #     return super().render()
