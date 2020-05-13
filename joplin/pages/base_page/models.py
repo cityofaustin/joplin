@@ -179,7 +179,7 @@ class JanisBasePage(Page):
             if (group_permission and
                 group_permission.group and
                 group_permission.group.department and
-                group_permission.group.department.department_page):
+                    group_permission.group.department.department_page):
                 department_pages.append(group_permission.group.department.department_page)
         return department_pages
 
@@ -254,7 +254,7 @@ class PermissionObjectList(ObjectList):
         self.children = children
 
     def on_form_bound(self):
-        if self.request.user.has_perm('base.view_extra_panels'):
+        if self.request.user.has_perm('base_page.view_extra_panels'):
             # tabbed_interface.html checks to see if the panel should be hid
             # and if so prevents the tab from being added
             self.hide_panel = False
@@ -262,7 +262,8 @@ class PermissionObjectList(ObjectList):
 
     def render(self):
         # this only hides the content of the tab, not the tab/heading itself
-        if not self.request.user.has_perm('base.view_extra_panels'):
+        print(self.request.user.get_all_permissions())
+        if not self.request.user.has_perm('base_page.view_extra_panels'):
             return ""
 
         return super().render()
