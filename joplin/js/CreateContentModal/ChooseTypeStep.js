@@ -100,7 +100,7 @@ const ChooseTypeStep = ({
       name: 'News',
       image: newsImage,
       description:
-        '🤠 news description 🌵',
+        'Provides a time-sensitive report about an announcement or occurrence',
     },
   ];
 
@@ -126,15 +126,13 @@ const ChooseTypeStep = ({
       type: 'importSinglePage',
       name: 'Single page',
       image: singlePageImage,
-      description:
-        'Import a single page',
+      description: 'Import a single page',
     },
     {
       type: 'importFullSite',
       name: 'Full site',
       image: fullSiteImage,
-      description:
-        'Import a full site',
+      description: 'Import a full site',
     },
   ];
 

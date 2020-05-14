@@ -42,8 +42,8 @@ class NewsPage(JanisBasePage):
                                                help_text="If this news is written for another department, select that department below. This ensures that this news is associated with that department's news content")
 
     publish_requirements = (
-        FieldPublishRequirement("body", message="🤠 can't publish without a body 🌵", langs=["en"]),
-        FieldPublishRequirement("contact", message="🤠 can't publish without a contact 🌵"),
+        FieldPublishRequirement("body", message="Body text is required to publish", langs=["en"]),
+        FieldPublishRequirement("contact", message="A contact is required to publish"),
         DepartmentPublishRequirement(message="🤠 can't publish without a department, this should only happen to admins that forgot to pick a department in the modal, or users that aren't in a department group. This requirement will not be satisfied by the 'different department' field 🌵"),
     )
 
