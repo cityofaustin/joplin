@@ -58,8 +58,8 @@ jobs:
           name: "Test that CLI utilities work"
           command: bash ./.circleci/scripts/cli_test.sh
       - when:
-          # Only backup Staging and Production databases
-          condition: << parameters.is_master_or_production >>
+          # Only backup Production database
+          condition: << parameters.is_production >>
           steps:
             - checkout
             - run:
