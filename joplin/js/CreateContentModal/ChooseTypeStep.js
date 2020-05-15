@@ -14,6 +14,7 @@ import locationImage from '../../static/images/location.png';
 import eventImage from '../../static/images/event.png';
 import singlePageImage from '../../static/images/event.png';
 import fullSiteImage from '../../static/images/event.png';
+import newsImage from '../../static/images/event.png';
 
 const PageTypeComponent = ({
   type,
@@ -94,6 +95,13 @@ const ChooseTypeStep = ({
       description:
         'An activity that occurs at a particular time and place and is not a service.',
     },
+    {
+      type: 'news',
+      name: 'News',
+      image: newsImage,
+      description:
+        'Provides a time-sensitive report about an announcement or occurrence',
+    },
   ];
 
   const topicPages = [
@@ -118,15 +126,13 @@ const ChooseTypeStep = ({
       type: 'importSinglePage',
       name: 'Single page',
       image: singlePageImage,
-      description:
-        'Import a single page',
+      description: 'Import a single page',
     },
     {
       type: 'importFullSite',
       name: 'Full site',
       image: fullSiteImage,
-      description:
-        'Import a full site',
+      description: 'Import a full site',
     },
   ];
 
