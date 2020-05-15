@@ -133,3 +133,32 @@ def test_make_superuser_with_roles_and_department(department):
     form = make_user_form(user_data)
     is_valid = form.is_valid()
     assert is_valid is True
+
+
+@pytest.mark.django_db
+def test_editor_makes_page_under_department(department):
+    user_data = {
+      "email": "faker@austintexas.io",
+      "first_name": "Fake",
+      "last_name": "User",
+      "password1": "123",
+      "password2": "123",
+      "roles": "2",
+      "department": department.pk,
+    }
+    pass
+
+
+@pytest.mark.django_db
+def test_editor_cannot_make_departmentless_page():
+    pass
+
+
+@pytest.mark.django_db
+def test_admin_can_make_departmentless_page():
+    pass
+
+
+@pytest.mark.django_db
+def test_editor_can_make_any_department_page():
+    pass
