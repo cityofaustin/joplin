@@ -14,10 +14,11 @@ def is_not_empty(field_value):
 # And that there is at least 1 entry that is not set for deletion.
 # Default criteria for RelationPublishRequirement
 def has_at_least_one(relation_value):
-    return (
-        (len(relation_value) > 0) and
-        any(not i["DELETE"] for i in relation_value)
-    )
+    # relation_value could be a list with an empty dictionary
+    if len(relation_value) > 0 and bool(relation_value[0]):
+        return any(not i["DELETE"] for i in relation_value)
+    else:
+        return False
 
 
 def streamfield_has_length(stream_value):
@@ -110,7 +111,8 @@ class RelationPublishRequirement(BasePublishRequirement):
         if field_name in formsets:
             formset_errors = formsets.get(field_name).errors
             # formset_errors is a list of dictionary of errors
-            if not bool(formset_errors[0]):
+            # if there are no errors, the list = [{}] (still has length)
+            if len(formset_errors) == 0 or not bool(formset_errors[0]):
                 data = formsets.get(field_name).cleaned_data
                 return self.evaluate(field_name, data)
             else:
