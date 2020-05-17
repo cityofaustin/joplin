@@ -108,8 +108,17 @@ class RelationPublishRequirement(BasePublishRequirement):
         field_name = self.field_name
         formsets = form.formsets
         if field_name in formsets:
-            data = formsets.get(field_name).cleaned_data
-            return self.evaluate(field_name, data)
+            formset_errors = formsets.get(field_name).errors
+            # formset_errors is a list of dictionary of errors
+            if not bool(formset_errors[0]):
+                data = formsets.get(field_name).cleaned_data
+                return self.evaluate(field_name, data)
+            else:
+                return publish_error_factory(
+                    field_name,
+                    self.field_type,
+                    self.message,
+                )
         else:
             raise KeyError(f"Field required for publish '{field_name}' does not exist.")
 
