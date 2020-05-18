@@ -27,10 +27,11 @@ from pages.official_documents_page.models import OfficialDocumentPage, OfficialD
 from pages.guide_page.models import GuidePage
 from pages.form_container.models import FormContainer
 from pages.base_page.models import JanisBasePage
+from pages.news_page.models import NewsPage
 from .content_type_map import content_type_map
 import traceback
 from pages.location_page.models import LocationPage, LocationPageRelatedServices
-from pages.event_page.models import EventPage, EventPageFee
+from pages.event_page.models import EventPage, EventPageFee, EventPageRelatedPage
 from graphql_relay import to_global_id
 
 
@@ -168,6 +169,11 @@ class ContextualNavData(graphene.ObjectType):
     url = graphene.String()
     parent = graphene.Field(ContextualNavInstance)
     grandparent = graphene.Field(ContextualNavInstance)
+
+    # These are used for the department bylines on News pages
+    from_department = graphene.Field(ContextualNavInstance)
+    by_department = graphene.Field(ContextualNavInstance)
+
     # TODO: determine if this is possible in a later issue
     # related_to = graphene.List(JanisBasePageTopicCollectionNode)
 
@@ -220,7 +226,34 @@ class JanisBasePageNode(DjangoObjectType):
                     url=i['grandparent'].specific.janis_urls()[0])
             else:
                 grandparent = None
-            instance = ContextualNavData(parent=parent, grandparent=grandparent, url=url)
+            if 'from_department' in i and i['from_department']:
+                node = content_type_map[i['from_department'].content_type.name]["node"]
+                global_id = graphene.Node.to_global_id(node, i['from_department'].id)
+                title = i['from_department'].title
+                # We use english as a fallback, so don't override the title if we don't have one
+                if django.utils.translation.get_language() == 'es' and i['from_department'].title_es:
+                    title = i['from_department'].title_es
+                from_department = ContextualNavInstance(
+                    id=global_id,
+                    title=title,
+                    url=i['from_department'].specific.janis_urls()[0])
+            else:
+                from_department = None
+            if 'by_department' in i and i['by_department']:
+                node = content_type_map[i['by_department'].content_type.name]["node"]
+                global_id = graphene.Node.to_global_id(node, i['by_department'].id)
+                title = i['by_department'].title
+                # We use english as a fallback, so don't override the title if we don't have one
+                if django.utils.translation.get_language() == 'es' and i['by_department'].title_es:
+                    title = i['by_department'].title_es
+                by_department = ContextualNavInstance(
+                    id=global_id,
+                    title=title,
+                    url=i['by_department'].specific.janis_urls()[0])
+            else:
+                by_department = None
+
+            instance = ContextualNavData(parent=parent, grandparent=grandparent, url=url, from_department=from_department, by_department=by_department)
             instances.append(instance)
         return instances
 
@@ -305,6 +338,19 @@ class DepartmentResolver(graphene.Interface):
     @classmethod
     def resolve_departments(cls, instance, info):
         return instance.departments()
+
+
+class RelatedEventPageResolver(graphene.Interface):
+    events = graphene.List(lambda: EventPageNode)
+
+    @classmethod
+    def resolve_events(cls, instance, info):
+        events = []
+        event_relationships = EventPageRelatedPage.objects.filter(page__id=instance.pk).order_by('event__date')
+        for page in event_relationships:
+            if not page.event.canceled:
+                events.append(page.event)
+        return events
 
 
 class DocumentNode(DjangoObjectType):
@@ -405,7 +451,7 @@ class LocationPageNode(DjangoObjectType):
         model = LocationPage
         filter_fields = ['id', 'slug', 'live']
         fields = '__all__'
-        interfaces = [graphene.Node, DepartmentResolver]
+        interfaces = [graphene.Node, DepartmentResolver, RelatedEventPageResolver]
 
     @superuser_required
     def resolve_owner(self, info):
@@ -641,7 +687,7 @@ class ServicePageNode(DjangoObjectType):
     class Meta:
         model = ServicePage
         filter_fields = ['id', 'slug', 'live', 'coa_global']
-        interfaces = [graphene.Node, DepartmentResolver]
+        interfaces = [graphene.Node, DepartmentResolver, RelatedEventPageResolver]
 
     def resolve_page_type(self, info):
         return ServicePage.get_verbose_name().lower()
@@ -661,7 +707,7 @@ class InformationPageNode(DjangoObjectType):
     class Meta:
         model = InformationPage
         filter_fields = ['id', 'slug', 'live', 'coa_global']
-        interfaces = [graphene.Node, DepartmentResolver]
+        interfaces = [graphene.Node, DepartmentResolver, RelatedEventPageResolver]
 
     def resolve_page_type(self, info):
         return InformationPage.get_verbose_name().lower()
@@ -669,6 +715,13 @@ class InformationPageNode(DjangoObjectType):
     @superuser_required
     def resolve_owner(self, info):
         return resolve_owner_handler(self, info)
+
+
+class NewsPageNode(DjangoObjectType):
+    class Meta:
+        model = NewsPage
+        filter_fields = ['id', 'slug', 'live']
+        interfaces = [graphene.Node]
 
 
 class FormContainerNode(DjangoObjectType):
@@ -866,6 +919,7 @@ class PageRevisionNode(DjangoObjectType):
     as_form_container = graphene.NonNull(FormContainerNode)
     as_location_page = graphene.NonNull(LocationPageNode)
     as_event_page = graphene.NonNull(EventPageNode)
+    as_news_page = graphene.NonNull(NewsPageNode)
     preview_janis_instance = graphene.NonNull(ContextualNavData)
     is_latest = graphene.Boolean()
     is_live = graphene.Boolean()
@@ -899,6 +953,9 @@ class PageRevisionNode(DjangoObjectType):
         return self.as_page_object()
 
     def resolve_as_event_page(self, resolve_info, *args, **kwargs):
+        return self.as_page_object()
+
+    def resolve_as_news_page(self, resolve_info, *args, **kwargs):
         return self.as_page_object()
 
     def resolve_is_latest(self, resolve_info, *args, **kwargs):

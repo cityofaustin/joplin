@@ -1,13 +1,36 @@
 import factory
-from snippets.contact.models import Contact
+
+from pages.base_page.fixtures.helpers.streamfieldify import streamfieldify
+from snippets.contact.models import Contact, ContactPhoneNumber
 from pages.location_page.models import LocationPage
 from factory import DjangoModelFactory
+
+
+class ContactPhoneNumberFactory(DjangoModelFactory):
+
+    class Meta:
+        model = ContactPhoneNumber
 
 
 class ContactFactory(DjangoModelFactory):
 
     class Meta:
         model = Contact
+
+    @classmethod
+    def create(cls, *args, **kwargs):
+        if 'social_media' in kwargs:
+            kwargs['social_media'] = streamfieldify(kwargs['social_media'])
+
+        return super(ContactFactory, cls).create(*args, **kwargs)
+
+    @factory.post_generation
+    def add_phone_numbers(self, create, extracted, **kwargs):
+        if extracted:
+            # A list of phone numbers were passed in, use them
+            for phone_number in extracted:
+                ContactPhoneNumberFactory.create(contact=self, phone_description=phone_number['phone_description'], phone_number=phone_number['phone_number'])
+            return
 
 
 def create_contact_from_importer_dictionaries(page_dictionaries):
