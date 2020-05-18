@@ -112,7 +112,7 @@ class RelationPublishRequirement(BasePublishRequirement):
             formset_errors = formsets.get(field_name).errors
             # formset_errors is a list of dictionary of errors
             # if there are no errors, the list = [{}] (still has length)
-            if len(formset_errors) == 0 or not bool(formset_errors[0]):
+            if len(formset_errors) == 0 or all(not bool(error) for error in formset_errors):
                 data = formsets.get(field_name).cleaned_data
                 return self.evaluate(field_name, data)
             else:
