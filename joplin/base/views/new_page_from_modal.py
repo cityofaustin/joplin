@@ -27,7 +27,6 @@ def import_page_from_url(url, jwt_token):
 
 def new_page_from_modal(request):
     user_perms = UserPagePermissionsProxy(request.user)
-    print('***', user_perms)
     if not user_perms.can_edit_pages():
         raise PermissionDenied
 
@@ -108,5 +107,4 @@ def new_page_from_modal(request):
 
         # Respond with the id of the new page
         response = HttpResponse(json.dumps({'id': page.id}), content_type="application/json")
-        print(response)
         return response

@@ -1,8 +1,10 @@
 import pytest
 from django.core.exceptions import ValidationError
 from users.tests.utils.make_user_form import make_user_form
-from pages.information_page.models import InformationPage
 from base.views.new_page_from_modal import new_page_from_modal
+from pages.information_page.models import InformationPage
+from pages.home_page.factories import HomePageFactory
+import json
 
 
 @pytest.mark.django_db
@@ -139,6 +141,14 @@ def test_make_superuser_with_roles_and_department(department):
 
 @pytest.mark.django_db
 def test_editor_makes_page_under_department(editor, rf):
+    # HomePage.objects.create()
+    page_data = {
+        "publish_janis_branch_for_pr": "pytest",
+        "preview_janis_branch_for_pr": "pytest",
+        "slug": "pytest",
+        "title": "pytest",
+    }
+    HomePageFactory.create(**page_data)
     # editor creates page
     body = {
             "type": "information",
@@ -151,21 +161,29 @@ def test_editor_makes_page_under_department(editor, rf):
     request.user = editor
 
     response = new_page_from_modal(request)
+    response_json = json.loads(response.content.decode('utf-8'))
     assert response.status_code is 200
-    page_pk = response.content["id"]
-    print(page_pk)
-    # assert page has a department
+    # assert page has a department that matches editor department
+    page_pk = response_json['id']
     created_page = InformationPage.objects.get(id=page_pk)
-   # assert created_page.departments()[0].department is editor.groups
+    editor_department = editor.groups.get(name="Kitchen sink department")
+    assert created_page.departments()[0].department.pk is editor_department.department.pk
 
 
-@pytest.mark.django_db
-def test_editor_cannot_make_departmentless_page():
-    pass
+# @pytest.mark.django_db
+# def test_editor_cannot_make_departmentless_page():
+#     pass
 
 
 @pytest.mark.django_db
 def test_admin_can_make_departmentless_page(superadmin, rf):
+    page_data = {
+        "publish_janis_branch_for_pr": "pytest",
+        "preview_janis_branch_for_pr": "pytest",
+        "slug": "pytest",
+        "title": "pytest",
+    }
+    HomePageFactory.create(**page_data)
     body = {
         "type": "information",
         "jwtToken": "",
@@ -177,12 +195,12 @@ def test_admin_can_make_departmentless_page(superadmin, rf):
     request.user = superadmin
 
     response = new_page_from_modal(request)
+    response_json = json.loads(response.content.decode('utf-8'))
     assert response.status_code is 200
-    page_pk = response.content["id"]
-    print(page_pk)
-    # assert page has no department
+    # assert page has a department that matches editor department
+    page_pk = response_json['id']
     created_page = InformationPage.objects.get(id=page_pk)
-    # assert created_page.departments()[0].department is editor.groups
+    assert len(created_page.departments()) is 0
 
 
 @pytest.mark.django_db
