@@ -30,6 +30,9 @@ def new_page_from_modal(request):
     if not user_perms.can_edit_pages():
         raise PermissionDenied
 
+    print(request.body)
+    print(request.user)
+
     if request.method == 'POST':
         # Get the page data
         body = json.loads(request.body)
@@ -107,4 +110,5 @@ def new_page_from_modal(request):
 
         # Respond with the id of the new page
         response = HttpResponse(json.dumps({'id': page.id}), content_type="application/json")
+        print(response)
         return response
