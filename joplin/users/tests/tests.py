@@ -141,16 +141,14 @@ def test_make_superuser_with_roles_and_department(department):
 def test_editor_makes_page_under_department(editor, rf):
     # editor creates page
     # assert page has a department
-    request = rf.post('admin/pages/new_from_modal', {
-        "body": {
+    body = {
             "type": "information",
             "jwtToken": "",
             "title": "Test Page",
-            "topic": None,
+            "topic": "",
             "department": "",
-            "theme": None
-        },
-    })
+    }
+    request = rf.post('admin/pages/new_from_modal', body, content_type='application/json')
     request.user = editor
 
     response = new_page_from_modal(request)

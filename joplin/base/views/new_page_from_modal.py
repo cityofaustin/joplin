@@ -27,11 +27,9 @@ def import_page_from_url(url, jwt_token):
 
 def new_page_from_modal(request):
     user_perms = UserPagePermissionsProxy(request.user)
+    print('***', user_perms)
     if not user_perms.can_edit_pages():
         raise PermissionDenied
-
-    print(request.body)
-    print(request.user)
 
     if request.method == 'POST':
         # Get the page data
