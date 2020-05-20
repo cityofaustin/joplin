@@ -140,7 +140,6 @@ def test_make_superuser_with_roles_and_department(department):
 @pytest.mark.django_db
 def test_editor_makes_page_under_department(editor, rf):
     # editor creates page
-    # assert page has a department
     body = {
             "type": "information",
             "jwtToken": "",
@@ -155,13 +154,9 @@ def test_editor_makes_page_under_department(editor, rf):
     assert response.status_code is 200
     page_pk = response.content["id"]
     print(page_pk)
+    # assert page has a department
     created_page = InformationPage.objects.get(id=page_pk)
    # assert created_page.departments()[0].department is editor.groups
-
-    # send the data and the user
-    # save the response, see the page id
-    # check that the page has a dept
-    # p.departments()[0] equals the dept of the editor
 
 
 @pytest.mark.django_db
@@ -170,8 +165,24 @@ def test_editor_cannot_make_departmentless_page():
 
 
 @pytest.mark.django_db
-def test_admin_can_make_departmentless_page():
-    pass
+def test_admin_can_make_departmentless_page(superadmin, rf):
+    body = {
+        "type": "information",
+        "jwtToken": "",
+        "title": "Test Page",
+        "topic": "",
+        "department": "",
+    }
+    request = rf.post('admin/pages/new_from_modal', body, content_type='application/json')
+    request.user = superadmin
+
+    response = new_page_from_modal(request)
+    assert response.status_code is 200
+    page_pk = response.content["id"]
+    print(page_pk)
+    # assert page has no department
+    created_page = InformationPage.objects.get(id=page_pk)
+    # assert created_page.departments()[0].department is editor.groups
 
 
 @pytest.mark.django_db
