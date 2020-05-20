@@ -48,6 +48,17 @@ class JanisBasePage(Page):
     coa_global = models.BooleanField(default=False, verbose_name='Make this a top level page')
     imported_revision_id = models.TextField(blank=True, null=True)
 
+    # Fields used for handling Publishing status
+    # pk for our publish request in Publisher dynamodb
+    publish_request_pk = models.TextField(blank=True, null=True)
+    # sk for our publish request in Publisher dynamodb
+    publish_request_sk = models.TextField(blank=True, null=True)
+    # Indicated whether a publish_request for this page been submitted to the Publisher, and we are waiting for it to finish being processed.
+    publish_request_enqueued = models.BooleanField(default=False)
+    # Has this page been published by Publisher? A "live" page may not necessarily be published to our frontend yet.
+    published = models.BooleanField(default=False, blank=True, null=True)
+
+
     def janis_urls(self):
         """
         This should handle coa_global and department stuff

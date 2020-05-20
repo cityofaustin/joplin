@@ -8,8 +8,10 @@ from graphene_django.views import GraphQLView
 from wagtail.admin import urls as wagtailadmin_urls
 from wagtail.core import urls as wagtail_urls
 from wagtail.documents import urls as wagtaildocs_urls
-from base.views import new_page_from_modal
-from base.views import joplin_search_views
+from base.views import \
+    new_page_from_modal, \
+    joplin_search_views, \
+    publish_webhook
 from users.urls import users as user_urls
 from snippets import urls as snippet_urls
 from django.urls import reverse
@@ -59,6 +61,7 @@ urlpatterns = [
     url(r'^api/graphiql', csrf_exempt(GraphQLView.as_view(graphiql=True, pretty=True))),
     url(r'session_security/', include('session_security.urls')),
     url(r'^performance/', include('silk.urls', namespace='silk')),
+    url('publish_webhook', publish_webhook.publish_webhook),
 
 
     # For anything not caught by a more specific rule above, hand over to
