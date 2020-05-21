@@ -141,7 +141,6 @@ def test_make_superuser_with_roles_and_department(department):
 
 @pytest.mark.django_db
 def test_editor_makes_page_under_department(editor, rf):
-    # HomePage.objects.create()
     page_data = {
         "publish_janis_branch_for_pr": "pytest",
         "preview_janis_branch_for_pr": "pytest",
