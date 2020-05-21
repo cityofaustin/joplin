@@ -9,7 +9,7 @@
     branch_overrides are not required for every branch.
 '''
 branch_overrides = {
-    "4340-official-documents": {
+    "4215-events-api": {
         "LOAD_DATA": "fixtures",
         "V3_WIP": True,
     },
