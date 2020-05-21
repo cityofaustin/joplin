@@ -1,4 +1,5 @@
 from django.db import models
+from django.apps import apps
 
 from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
@@ -111,6 +112,17 @@ class DepartmentPage(JanisBasePage):
 
         return []
 
+    def news(self):
+        # Since news imports department, get news this way instead
+        # https://docs.djangoproject.com/en/3.0/ref/applications/#django.apps.AppConfig.get_model
+        NewsPage = apps.get_model('news_page', 'NewsPage')
+
+        news_pages = []
+        for news_page in NewsPage.objects.all():
+            if self == news_page.published_under_department_page():
+                news_pages.append(news_page)
+
+        return news_pages
 
 class DepartmentPageDirector(Orderable):
     page = ParentalKey(DepartmentPage, related_name='department_directors')
