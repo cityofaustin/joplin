@@ -325,7 +325,7 @@ class NewsPageNode(DjangoObjectType):
 class DepartmentPageNode(DjangoObjectType):
     page_type = graphene.String()
     owner = graphene.Field(OwnerNode)
-    news = graphene.List(NewsPageNode)
+    news = graphene.List(NewsPageNode, first=graphene.Int())
 
     class Meta:
         model = DepartmentPage
@@ -339,8 +339,9 @@ class DepartmentPageNode(DjangoObjectType):
     def resolve_owner(self, info):
         return resolve_owner_handler(self, info)
 
-    def resolve_news(self, info):
-        return self.news()
+    def resolve_news(self, info, **kwargs):
+        first = kwargs.get('first')
+        return self.news()[:first]
 
 
 class DepartmentResolver(graphene.Interface):
