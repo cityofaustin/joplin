@@ -315,9 +315,17 @@ def resolve_owner_handler(self, info):
         )
 
 
+class NewsPageNode(DjangoObjectType):
+    class Meta:
+        model = NewsPage
+        filter_fields = ['id', 'slug', 'live']
+        interfaces = [graphene.Node]
+
+
 class DepartmentPageNode(DjangoObjectType):
     page_type = graphene.String()
     owner = graphene.Field(OwnerNode)
+    news = graphene.List(NewsPageNode)
 
     class Meta:
         model = DepartmentPage
@@ -330,6 +338,9 @@ class DepartmentPageNode(DjangoObjectType):
     @superuser_required
     def resolve_owner(self, info):
         return resolve_owner_handler(self, info)
+
+    def resolve_news(self, info):
+        return self.news()
 
 
 class DepartmentResolver(graphene.Interface):
@@ -715,13 +726,6 @@ class InformationPageNode(DjangoObjectType):
     @superuser_required
     def resolve_owner(self, info):
         return resolve_owner_handler(self, info)
-
-
-class NewsPageNode(DjangoObjectType):
-    class Meta:
-        model = NewsPage
-        filter_fields = ['id', 'slug', 'live']
-        interfaces = [graphene.Node]
 
 
 class FormContainerNode(DjangoObjectType):

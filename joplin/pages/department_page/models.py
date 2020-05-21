@@ -1,4 +1,5 @@
 from django.db import models
+from django.apps import apps
 
 from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
@@ -112,20 +113,16 @@ class DepartmentPage(JanisBasePage):
         return []
 
     def news(self):
-        """
-         This goes through our news pages and checks to see if they're:
-         * Written by this department and don't have a "written for" department picked
-         * Written by this department or a different department and have this department picked as "written for"
-        :return: list of NewsPages
-        """
+        # Since news imports department, get news this way instead
+        # https://docs.djangoproject.com/en/3.0/ref/applications/#django.apps.AppConfig.get_model
+        NewsPage = apps.get_model('news_page', 'NewsPage')
+
         news_pages = []
-        for group_permission in self.group_permissions.all():
-            if (group_permission and
-                group_permission.group and
-                group_permission.group.department and
-                group_permission.group.department.department_page):
-                department_pages.append(group_permission.group.department.department_page)
-        return department_pages
+        for news_page in NewsPage.objects.all():
+            if self == news_page.published_under_department_page():
+                news_pages.append(news_page)
+
+        return news_pages
 
 
 class DepartmentPageDirector(Orderable):
