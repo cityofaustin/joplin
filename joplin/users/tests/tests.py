@@ -200,8 +200,3 @@ def test_admin_can_make_departmentless_page(superadmin, rf):
     page_pk = response_json['id']
     created_page = InformationPage.objects.get(id=page_pk)
     assert len(created_page.departments()) is 0
-
-
-@pytest.mark.django_db
-def test_editor_can_make_any_department_page():
-    pass
