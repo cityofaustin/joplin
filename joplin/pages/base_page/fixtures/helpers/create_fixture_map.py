@@ -26,6 +26,15 @@ def build_create_fixture(page_type):
             return page
 
         page = factory.create(**page_data)
+
+        # We're using the date from first_published_at to sort news on department pages
+        # if we don't do this our test data has None for that even if the page is live
+        if hasattr(page, 'save_revision'):
+            if page.live:
+                page.save_revision().publish()
+            else:
+                page.save_revision()
+
         print(f"Built {fixture_name}")
         return page
 
