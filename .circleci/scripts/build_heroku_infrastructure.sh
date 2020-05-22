@@ -11,10 +11,10 @@ function attach_heroku_database {
     heroku addons:create heroku-postgresql:hobby-dev --version=12 --app $APPNAME
 }
 
-# Attaches redis cache to heroku application
-function attach_heroku_redis {
-    heroku addons:create heroku-redis:hobby-dev --app $APPNAME
-}
+# # Attaches redis cache to heroku application
+# function attach_heroku_redis {
+#     heroku addons:create heroku-redis:hobby-dev --app $APPNAME
+# }
 
 # If the review app exists, then check if database exists
 APP_EXISTS=$(app_exists)
@@ -42,8 +42,8 @@ else
   # Add postgresql to the new app
   attach_heroku_database
 
-  # Add the redis cache add on
-  attach_heroku_redis
+  # # Add the redis cache add on
+  # attach_heroku_redis
 
   # Attach new app to pipeline (assign review (PR) stage):
   heroku pipelines:add $PIPELINE_NAME --app $APPNAME --stage review
