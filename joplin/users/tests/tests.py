@@ -159,19 +159,15 @@ def test_editor_makes_page_under_department(editor, rf):
     request = rf.post('admin/pages/new_from_modal', body, content_type='application/json')
     request.user = editor
 
+    # assert page is created
     response = new_page_from_modal(request)
-    response_json = json.loads(response.content.decode('utf-8'))
     assert response.status_code is 200
     # assert page has a department that matches editor department
+    response_json = json.loads(response.content.decode('utf-8'))
     page_pk = response_json['id']
     created_page = InformationPage.objects.get(id=page_pk)
     editor_department = editor.groups.get(name="Kitchen sink department")
     assert created_page.departments()[0].department.pk is editor_department.department.pk
-
-
-# @pytest.mark.django_db
-# def test_editor_cannot_make_departmentless_page():
-#     pass
 
 
 @pytest.mark.django_db
@@ -193,10 +189,11 @@ def test_admin_can_make_departmentless_page(superadmin, rf):
     request = rf.post('admin/pages/new_from_modal', body, content_type='application/json')
     request.user = superadmin
 
+    # assert page is created
     response = new_page_from_modal(request)
-    response_json = json.loads(response.content.decode('utf-8'))
     assert response.status_code is 200
     # assert page has a department that matches editor department
+    response_json = json.loads(response.content.decode('utf-8'))
     page_pk = response_json['id']
     created_page = InformationPage.objects.get(id=page_pk)
     assert len(created_page.departments()) is 0
