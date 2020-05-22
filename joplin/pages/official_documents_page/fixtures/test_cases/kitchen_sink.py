@@ -14,23 +14,25 @@ def kitchen_sink():
     file_name_es = 'kitchen-sink-file-es.txt'
     file_content = str("I am file content [en]").encode('utf-8')
     file_content_es = str("I am file content [es]").encode('utf-8')
-    document = create_fixture_document(file_content, file_name)
-    document_es = create_fixture_document(file_content_es, file_name_es)
+    document_nodes = []
+    for i in range(100):
+        document = create_fixture_document(file_content, file_name)
+        document_es = create_fixture_document(file_content_es, file_name_es)
 
-
-    official_documents_page_document_node = {
-        'date': "2021-01-01",
-        'document': document,
-        'document_es': document_es,
-        'title': 'Kitchen sink document title [en]',
-        'title_es': 'Kitchen sink document title [es]',
-        'authoring_office': 'Kitchen sink document authoring office [en]',
-        'authoring_office_es': 'Kitchen sink document authoring office [es]',
-        'summary': 'Kitchen sink document summary [en]',
-        'summary_es': 'Kitchen sink document summary [es]',
-        'name': 'Kitchen sink document name [en]',
-        'name_es': 'Kitchen sink document name [es]',
-    }
+        official_documents_page_document_node = {
+            'date': "2021-01-01",
+            'document': document,
+            'document_es': document_es,
+            'title': 'Kitchen sink document title [en]',
+            'title_es': 'Kitchen sink document title [es]',
+            'authoring_office': 'Kitchen sink document authoring office [en]',
+            'authoring_office_es': 'Kitchen sink document authoring office [es]',
+            'summary': 'Kitchen sink document summary [en]',
+            'summary_es': 'Kitchen sink document summary [es]',
+            'name': 'Kitchen sink document name [en]',
+            'name_es': 'Kitchen sink document name [es]',
+        }
+        document_nodes.append(official_documents_page_document_node)
 
     page_data = {
         "imported_revision_id": None,
@@ -45,7 +47,7 @@ def kitchen_sink():
         },
         "description": "Kitchen sink official documents page description [en]",
         "description_es": "Kitchen sink official documents page description [es]",
-        'add_official_documents_page_documents': {'official_documents_page_documents': [official_documents_page_document_node]}
+        'add_official_documents_page_documents': {'official_documents_page_documents': document_nodes}
     }
 
     return create_fixture(page_data, os.path.basename(__file__))
