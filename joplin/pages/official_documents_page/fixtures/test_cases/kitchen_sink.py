@@ -15,7 +15,7 @@ def kitchen_sink():
     file_content = str("I am file content [en]").encode('utf-8')
     file_content_es = str("I am file content [es]").encode('utf-8')
     document_nodes = []
-    for i in range(100):
+    for i in range(1000):
         document = create_fixture_document(file_content, file_name)
         document_es = create_fixture_document(file_content_es, file_name_es)
 
