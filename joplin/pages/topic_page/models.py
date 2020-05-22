@@ -107,4 +107,4 @@ class JanisBasePageTopic(ClusterableModel):
     ]
 
     def __str__(self):
-        return self.topic.text
+        return self.topic.title
