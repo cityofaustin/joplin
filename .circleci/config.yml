@@ -57,14 +57,14 @@ jobs:
       - run:
           name: "Test that CLI utilities work"
           command: bash ./.circleci/scripts/cli_test.sh
-      # - when:
-      #     # Only backup Staging and Production databases
-      #     condition: << parameters.is_master_or_production >>
-      #     steps:
-      #       - checkout
-      #       - run:
-      #           name: "Backup Database and Store in S3"
-      #           command: bash ./.circleci/scripts/backup_database.sh
+      - when:
+          # Only backup Production database
+          condition: << parameters.is_production >>
+          steps:
+            - checkout
+            - run:
+                name: "Backup Database and Store in S3"
+                command: bash ./.circleci/scripts/backup_database.sh
       - unless:
           # Production will not need to have any infrastructure built or rebuilt.
           condition: << parameters.is_production >>
