@@ -347,7 +347,6 @@ GRAPHENE = {"SCHEMA": "grapple.schema.schema"}
 GRAPPLE_APPS = {
     'groups': "",
     'publish_preflight': "",
-    'pages': "",
     'base_page': "",
     'department_page': "",
     'event_page': "",

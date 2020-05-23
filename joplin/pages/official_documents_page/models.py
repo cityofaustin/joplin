@@ -10,6 +10,8 @@ from wagtail.core.models import Orderable
 from wagtail.documents.models import Document
 from wagtail.documents.edit_handlers import DocumentChooserPanel
 
+from grapple.models import GraphQLString, GraphQLCollection, GraphQLForeignKey, GraphQLDocument
+
 from pages.base_page.models import JanisBasePage
 
 from base.models.constants import DEFAULT_MAX_LENGTH
@@ -53,11 +55,63 @@ class OfficialDocumentPage(JanisBasePageWithTopics):
                     heading="Entries will be listed by document date (newest first)."),
     ]
 
+    graphql_fields = [
+        GraphQLString("description"),
+        # Basic reference to Orderable model
+        GraphQLCollection(
+            GraphQLForeignKey,
+            "documents",
+            "official_documents_page.OfficialDocumentPageDocument"
+        ),
+
+        # Will return an array of just the url from each link
+        # GraphQLCollection(
+        #     GraphQLString,
+        #     "related_urls",
+        #     source="related_links.url"
+        # ),
+    ]
+
 
 """
 An OfficialDocumentPageDocument is a Document belonging to a single OfficialDocumentPage.
 One OfficialDocumentPage can have many OfficialDocumentPageDocuments.
 """
+
+
+
+'''
+so this works with 1000 documents on the page now
+
+{
+  pages {
+    ...on OfficialDocumentPage {
+      documents {
+        id
+        name
+        date
+        title
+        authoringOffice
+        summary
+        name
+        document {
+          file
+          fileSize
+          fileHash
+        }
+      }
+    }
+  } 
+}
+
+'''
+
+
+
+
+
+
+
 
 
 class OfficialDocumentPageDocument(Orderable):
@@ -84,6 +138,30 @@ class OfficialDocumentPageDocument(Orderable):
         FieldPanel('name', widget=countMe),
         DocumentChooserPanel('document'),
         DocumentChooserPanel('document_es')
+    ]
+
+    graphql_fields = [
+        GraphQLString("name"),
+        GraphQLString("date"),
+        GraphQLString("title"),
+        GraphQLString("authoring_office"),
+        GraphQLString("summary"),
+        GraphQLDocument("document"),
+        GraphQLDocument("document_es"),
+
+        # # Basic reference to Orderable model
+        # GraphQLCollection(
+        #     GraphQLForeignKey,
+        #     "documents",
+        #     "official_documents_page.OfficialDocumentPageDocument"
+        # ),
+
+        # Will return an array of just the url from each link
+        # GraphQLCollection(
+        #     GraphQLString,
+        #     "related_urls",
+        #     source="related_links.url"
+        # ),
     ]
 
     class Meta:

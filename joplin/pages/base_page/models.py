@@ -10,6 +10,7 @@ from wagtail.admin.edit_handlers import FieldPanel, ObjectList, TabbedInterface,
 from wagtail.core.models import Page
 from wagtail.core.fields import RichTextField
 from flags.state import flag_enabled
+from grapple.models import GraphQLString
 
 
 class JanisBasePage(Page):
@@ -209,6 +210,10 @@ class JanisBasePage(Page):
         edit_handler = TabbedInterface(editor_panels)
 
         return edit_handler.bind_to(model=cls)
+
+    graphql_fields = [
+        GraphQLString("janis_url"),
+    ]
 
     class Meta:
         # https://docs.djangoproject.com/en/2.2/topics/auth/customizing/#custom-permissions
