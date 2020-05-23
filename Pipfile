@@ -14,7 +14,8 @@ django-filter = "==2.1.0"
 django-modeltranslation = "==0.13.1"
 coa-wagtail-modeltranslation = "==0.10.6"
 dj-database-url = "==0.5.0"
-gunicorn = {extras = ["gevent"],version = "*"}
+gevent = "==20.5.0"
+gunicorn = "==20.0.4"
 heroku3 = "==3.3.0"
 django-webpack-loader = "==0.6.0"
 boto3 = "==1.9.94"
@@ -44,12 +45,13 @@ coverage = "*"
 django-coverage-plugin = "*"
 pytest-cov = "*"
 snapshottest = "*"
-gql = ">=2.0, <3"
+gql = "==2.0.0"
 pyhumps = "*"
 django-redis-cache = "~=2.1.1"
+graphene-django = "==2.10.1" 
 
 [requires]
 python_version = "3.7"
 
 [pipenv]
-allow_prereleases = true
+allow_prereleases = false
