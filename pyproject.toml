@@ -48,6 +48,7 @@ pytest-pythonpath = "^0.7.3"
 psycogreen = "^1.0.2"
 dj-database-url = "~0.5.0"
 wagtail-grapple = {git = "https://github.com/briaguya/wagtail-grapple.git"}
+django-graphql-jwt = "^0.3.1"
 
 
 [build-system]
