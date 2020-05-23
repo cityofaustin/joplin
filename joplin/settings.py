@@ -363,6 +363,7 @@ GRAPPLE_APPS = {
     'contact': "",
     'theme': "",
 }
+GRAPPLE_EXPOSE_GRAPHIQL = True
 
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
