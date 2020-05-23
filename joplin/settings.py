@@ -65,7 +65,10 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'modeltranslation',
-    'graphene_django',
+    "grapple",
+    "graphene_django",
+    "channels",
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -332,12 +335,34 @@ JANIS_CMS_API = os.getenv('JANIS_CMS_API', 'http://localhost:8000/api/graphql')
 JANIS_CMS_MEDIA = os.getenv('JANIS_CMS_MEDIA')
 JANIS_CMS_DOCS = os.getenv('JANIS_CMS_DOCS')
 
-GRAPHENE = {
-    'SCHEMA': 'api.schema.schema',
-    'MIDDLEWARE': [
-        'graphene_django.debug.DjangoDebugMiddleware',
-        'graphql_jwt.middleware.JSONWebTokenMiddleware',
-    ]
+# GRAPHENE = {
+#     'SCHEMA': 'api.schema.schema',
+#     'MIDDLEWARE': [
+#         'graphene_django.debug.DjangoDebugMiddleware',
+#         'graphql_jwt.middleware.JSONWebTokenMiddleware',
+#     ]
+# }
+
+GRAPHENE = {"SCHEMA": "grapple.schema.schema"}
+GRAPPLE_APPS = {
+    'groups': "",
+    'publish_preflight': "",
+    'pages': "",
+    'base_page': "",
+    'department_page': "",
+    'event_page': "",
+    'form_container': "",
+    'guide_page': "",
+    'information_page': "",
+    'location_page': "",
+    'official_documents_page': "",
+    'service_page': "",
+    'topic_collection_page': "",
+    'topic_page': "",
+    'home_page': "",
+    'news_page': "",
+    'contact': "",
+    'theme': "",
 }
 
 AUTHENTICATION_BACKENDS = [

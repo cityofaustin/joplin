@@ -14,6 +14,7 @@ from users.urls import users as user_urls
 from snippets import urls as snippet_urls
 from django.urls import reverse
 import debug_toolbar
+from grapple import urls as grapple_urls
 
 
 def home(request):
@@ -55,8 +56,9 @@ urlpatterns = [
     url(r'^admin/', include(wagtailadmin_urls)),
     url(r'^documents/', include(wagtaildocs_urls)),
     path('__debug__/', include(debug_toolbar.urls)),
-    url(r'^api/graphql', csrf_exempt(GraphQLView.as_view())),
-    url(r'^api/graphiql', csrf_exempt(GraphQLView.as_view(graphiql=True, pretty=True))),
+    # url(r'^api/graphql', csrf_exempt(GraphQLView.as_view())),
+    # url(r'^api/graphiql', csrf_exempt(GraphQLView.as_view(graphiql=True, pretty=True))),
+    url(r"", include(grapple_urls)),
     url(r'session_security/', include('session_security.urls')),
     url(r'^performance/', include('silk.urls', namespace='silk')),
 
