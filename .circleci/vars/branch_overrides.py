@@ -31,5 +31,8 @@ branch_overrides = {
     },
     "try-grapple-again": {
         "DELETION_PROTECTION": "1",
+    },
+    "try-grapple-no-redis": {
+        "DELETION_PROTECTION": "1",
     }
 }
