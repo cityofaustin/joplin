@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http.request import QueryDict
 from django.contrib.contenttypes.models import ContentType
 from django.core.paginator import Paginator
-from wagtail.core.models import Page
+from wagtail.core.models import Page, UserPagePermissionsProxy
 from wagtail.search.query import MATCH_ALL
 from wagtail.admin.forms.search import SearchForm
 from wagtail.admin.auth import user_has_any_page_permission
@@ -29,7 +29,9 @@ from django.views.decorators.vary import vary_on_headers
 def search(request):
     # excluding wagtail 'page' pages and 'HomePages' from search (like home/root)
     homepage_content_type_id = ContentType.objects.get(app_label="home_page", model="homepage").id
+    user_perms = UserPagePermissionsProxy(request.user)
     pages = all_pages = Page.objects.all().exclude(content_type_id__in=[1, homepage_content_type_id]).prefetch_related('content_type').specific()
+    exp_pages = (pages & user_perms.explorable_pages())
     q = MATCH_ALL
     content_types = []
     pagination_query_params = QueryDict({}, mutable=True)

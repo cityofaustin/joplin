@@ -95,7 +95,8 @@ def new_page_from_modal(request):
                 )
                 pvr = PageViewRestriction.objects.create(
                     page=page,
-                    )
+                    restriction_type=PageViewRestriction.GROUPS,
+                )
                 pvr.groups.set(department_group)
 
         else:
@@ -111,6 +112,7 @@ def new_page_from_modal(request):
                     )
                     pvr = PageViewRestriction.objects.create(
                         page=page,
+                        restriction_type=PageViewRestriction.GROUPS,
                     )
                     pvr.groups.add(user_group)
 

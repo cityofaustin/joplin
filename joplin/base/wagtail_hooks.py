@@ -42,7 +42,12 @@ def before_edit_page(request, page):
     print(
         f'BeforeEditHook {request.user.email} is in groups {[group.name for group in request.user.groups.all()]}')
     print(
-        f'BeforeEditHook {page} is in permission groups {page.view_restrictions.model.groups}')
+        f'BeforeEditHook {page} is in permission groups {page.view_restrictions.all()}')
+    print(f'{request.user.groups.all()} and {page.view_restrictions.all()[0].groups.all()}')
+    try:
+        assert request.user.groups.all() & page.view_restrictions.all()[0].groups.all()
+    except AssertionError:
+        print('404')
 
 
 @hooks.register('construct_main_menu')
