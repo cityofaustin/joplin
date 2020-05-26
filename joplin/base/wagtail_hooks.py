@@ -1,17 +1,10 @@
-from django.db import models
-from django import forms
-from wagtail.contrib.settings.models import BaseSetting, register_setting
+from django.http import Http404
 from django.utils.html import escape
 from wagtail.core.models import Page
 from wagtail.core.rich_text import LinkHandler
-from wagtail.core.rich_text.pages import PageLinkHandler
 from django.conf import settings
-from django.contrib.staticfiles.templatetags.staticfiles import static
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
-from django.utils.html import format_html_join
-from webpack_loader import utils as webpack_loader_utils
-from wagtail.admin.auth import permission_required
 import traceback
 
 from wagtail.admin.menu import MenuItem
@@ -48,6 +41,7 @@ def before_edit_page(request, page):
         assert request.user.groups.all() & page.view_restrictions.all()[0].groups.all()
     except AssertionError:
         print('404')
+        raise Http404
 
 
 @hooks.register('construct_main_menu')
