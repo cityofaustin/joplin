@@ -1,7 +1,9 @@
+from django.http import Http404
 from django.shortcuts import render
 from django.http.request import QueryDict
 from django.contrib.contenttypes.models import ContentType
 from django.core.paginator import Paginator
+from django.db.models import Q
 from wagtail.core.models import Page, UserPagePermissionsProxy
 from wagtail.search.query import MATCH_ALL
 from wagtail.admin.forms.search import SearchForm
@@ -24,14 +26,33 @@ from django.views.decorators.vary import vary_on_headers
 """
 
 
+def dept_explorable_pages(user):
+    # Deal with the trivial cases first...
+    if not user.is_active:
+        return Page.objects.none()
+    if user.is_superuser:
+        return Page.objects.all()  # todo: check this, we dont want the home page returned
+
+    user_perms = UserPagePermissionsProxy(user)
+    explorable_pages = Page.objects.none()
+
+    # exclude the moderator and editor groups
+    for perm in user_perms.permissions.filter(~Q(group_id=1) & ~Q(group_id=2)):
+        explorable_pages |= Page.objects.descendant_of(
+            perm.page, inclusive=True
+        )
+
+    return explorable_pages
+
+
 @vary_on_headers('X-Requested-With')
 @user_passes_test(user_has_any_page_permission)
 def search(request):
     # excluding wagtail 'page' pages and 'HomePages' from search (like home/root)
     homepage_content_type_id = ContentType.objects.get(app_label="home_page", model="homepage").id
-    user_perms = UserPagePermissionsProxy(request.user)
     pages = all_pages = Page.objects.all().exclude(content_type_id__in=[1, homepage_content_type_id]).prefetch_related('content_type').specific()
-    exp_pages = (pages & user_perms.explorable_pages())
+    ep = dept_explorable_pages(request.user)
+    print(ep)
     q = MATCH_ALL
     content_types = []
     pagination_query_params = QueryDict({}, mutable=True)
