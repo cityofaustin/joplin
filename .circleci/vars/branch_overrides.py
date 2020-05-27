@@ -28,5 +28,8 @@ branch_overrides = {
     "4311-stream-block-error": {
         "LOAD_DATA": "fixtures",
         "V3_WIP": True,
+    },
+    "4404-more-news-test-data": {
+        "DELETION_PROTECTION": 1,
     }
 }
