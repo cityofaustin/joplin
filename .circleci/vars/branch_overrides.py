@@ -29,7 +29,7 @@ branch_overrides = {
         "LOAD_DATA": "fixtures",
         "V3_WIP": True,
     },
-    "4404-more-news-test-data": {
+    "4404-news": {
         "DELETION_PROTECTION": 1,
     }
 }
