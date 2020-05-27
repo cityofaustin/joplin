@@ -10,6 +10,7 @@ from groups.fixtures.test_cases.mvp_news_aph import mvp_news_aph
 
 def fifty_written_by_APH():
     departments = [mvp_news_aph()]
+    contact = contact_components.mvp_news_contact()
     news_titles = []
 
     # let's have some fun with this test data 🤠
@@ -38,7 +39,7 @@ def fifty_written_by_APH():
             "slug": f'mvp-news-by-aph-{counter}',
             "body": components.mvp_news_body,
             "body_es": components.google_translated_mvp_news_body,
-            "contact": contact_components.mvp_news_contact(),
+            "contact": contact,
             "add_departments": {
                 "departments": departments
             },
