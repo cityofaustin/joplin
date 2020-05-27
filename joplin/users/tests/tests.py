@@ -4,6 +4,8 @@ from users.tests.utils.make_user_form import make_user_form
 from base.views.new_page_from_modal import new_page_from_modal
 from pages.information_page.models import InformationPage
 from pages.home_page.factories import HomePageFactory
+from base.views.joplin_search_views import dept_explorable_pages
+import pages.service_page.fixtures as fixtures
 import json
 
 
@@ -197,3 +199,37 @@ def test_admin_can_make_departmentless_page(superadmin, rf):
     page_pk = response_json['id']
     created_page = InformationPage.objects.get(id=page_pk)
     assert len(created_page.departments()) is 0
+
+
+@pytest.mark.django_db
+def test_editor_cannot_explore_other_dept_pages(editor):
+    kitchen_sink_service_page = fixtures.kitchen_sink()
+    departmentless_page = fixtures.step_with_1_location()
+    explorable_pages = dept_explorable_pages(editor)
+    print('exp ', explorable_pages)
+    assert False
+
+    # from wagtail's test explorable pages
+    # event_editor = get_user_model().objects.get(username='eventeditor')
+    # christmas_page = EventPage.objects.get(url_path='/home/events/christmas/')
+    # unpublished_event_page = EventPage.objects.get(url_path='/home/events/tentative-unpublished-event/')
+    # someone_elses_event_page = EventPage.objects.get(url_path='/home/events/someone-elses-event/')
+    # about_us_page = Page.objects.get(url_path='/home/about-us/')
+    #
+    # user_perms = UserPagePermissionsProxy(event_editor)
+    # explorable_pages = user_perms.explorable_pages()
+    #
+    # # Verify all pages below /home/events/ are explorable
+    # self.assertTrue(explorable_pages.filter(id=christmas_page.id).exists())
+    # self.assertTrue(explorable_pages.filter(id=unpublished_event_page.id).exists())
+    # self.assertTrue(explorable_pages.filter(id=someone_elses_event_page.id).exists())
+    #
+    # # Verify page outside /events/ tree are not explorable
+    # self.assertFalse(explorable_pages.filter(id=about_us_page.id).exists())
+
+
+@pytest.mark.django_db
+def test_superadmin_explores_all_pages(superadmin):
+    explorable_pages = dept_explorable_pages(superadmin)
+    # check that the explorable pages length is the same as all pages?
+
