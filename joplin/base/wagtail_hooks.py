@@ -34,14 +34,13 @@ def before_edit_page(request, page):
     assert request.user.is_authenticated
     print(
         f'BeforeEditHook {request.user.email} is in groups {[group.name for group in request.user.groups.all()]}')
-    print(
-        f'BeforeEditHook {page} is in permission groups {page.view_restrictions.all()}')
-    if page.view_restrictions.all():
-        print(f'{request.user.groups.all()} and {page.view_restrictions.all()[0].groups.all()}')
-        try:
-            assert request.user.groups.all() & page.view_restrictions.all()[0].groups.all()
-        except AssertionError:
-            raise Http404
+    # this is for restricting viewing the edit page, will be in issue 4099
+    # if page.view_restrictions.all():
+    #     print(f'{request.user.groups.all()} and {page.view_restrictions.all()[0].groups.all()}')
+    #     try:
+    #         assert request.user.groups.all() & page.view_restrictions.all()[0].groups.all()
+    #     except AssertionError:
+    #         raise Http404
 
 
 @hooks.register('construct_main_menu')
