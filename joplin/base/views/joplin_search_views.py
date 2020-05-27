@@ -27,11 +27,18 @@ from django.views.decorators.vary import vary_on_headers
 
 
 def dept_explorable_pages(user):
+    '''
+    In the spirit of UserPagePermissionsProxy's explorable_pages, check a user's permissions, excluding editor or
+    moderator permissions since those cast a wide net
+    https://github.com/wagtail/wagtail/blob/982b1d60a4b3d5b4e841f2b39e2244bcb421b091/wagtail/core/models.py#L1853
+    :param user: user making request
+    :return: Queryset of explorable pages
+    '''
     # Deal with the trivial cases first...
     if not user.is_active:
         return Page.objects.none()
     if user.is_superuser:
-        return Page.objects.all()  # todo: check this, we dont want the home page returned
+        return Page.objects.all()  # todo: check this, we don't want the home page returned
 
     user_perms = UserPagePermissionsProxy(user)
     explorable_pages = Page.objects.none()
@@ -50,9 +57,9 @@ def dept_explorable_pages(user):
 def search(request):
     # excluding wagtail 'page' pages and 'HomePages' from search (like home/root)
     homepage_content_type_id = ContentType.objects.get(app_label="home_page", model="homepage").id
-    pages = all_pages = Page.objects.all().exclude(content_type_id__in=[1, homepage_content_type_id]).prefetch_related('content_type').specific()
-    ep = dept_explorable_pages(request.user)
-    print(ep)
+    pages = all_pages = (
+        Page.objects.all().exclude(content_type_id__in=[1, homepage_content_type_id]).prefetch_related('content_type').specific()
+        & dept_explorable_pages(request.user))
     q = MATCH_ALL
     content_types = []
     pagination_query_params = QueryDict({}, mutable=True)
