@@ -206,8 +206,8 @@ def test_editor_cannot_explore_other_dept_pages(editor):
     kitchen_sink_service_page = fixtures.kitchen_sink()
     departmentless_page = fixtures.step_with_1_location()
     explorable_pages = dept_explorable_pages(editor)
-    print('exp ', explorable_pages)
-    assert False
+    # print('exp ', explorable_pages)
+    # assert False
 
     # from wagtail's test explorable pages
     # event_editor = get_user_model().objects.get(username='eventeditor')
