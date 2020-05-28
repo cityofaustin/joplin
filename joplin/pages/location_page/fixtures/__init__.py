@@ -9,3 +9,5 @@ def load_all():
     title()
     live_library()
     live_city_hall()
+
+# ⛳️
