@@ -118,11 +118,13 @@ class DepartmentPage(JanisBasePage):
         NewsPage = apps.get_model('news_page', 'NewsPage')
 
         news_pages = []
-        for news_page in NewsPage.objects.all():
+        for news_page in NewsPage.objects.filter(live=True).order_by('first_published_at'):
+            # todo: get this logic working in filter instead (maybe a bidirectional relationship bonus issue?)
             if self == news_page.published_under_department_page():
                 news_pages.append(news_page)
 
         return news_pages
+
 
 class DepartmentPageDirector(Orderable):
     page = ParentalKey(DepartmentPage, related_name='department_directors')
