@@ -2,7 +2,6 @@
 from __future__ import unicode_literals
 
 from django.db import migrations
-from pages.base_page.models import
 
 
 def add_pageviewpermissions(apps, schema_editor):
@@ -33,5 +32,5 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RunPython(add_pageviewpermissions()),
+        migrations.RunPython(add_pageviewpermissions),
     ]
