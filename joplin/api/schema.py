@@ -117,7 +117,7 @@ def try_get_api_representation(StreamChild):
                     parsed_location = {
                         "locationPage": {
                             "id": to_global_id(lp._meta.name, location_page.id),
-                            "slug": location_page.slug,
+                            "slug": location_page.slug_en,
                             "title": location_page.title,
                             "physicalStreet": location_page.physical_street,
                             "physicalUnit": location_page.physical_unit,
@@ -1020,7 +1020,7 @@ class DepartmentPageTopPageNode(DjangoObjectType):
         return get_page_from_content_type(self).title
 
     def resolve_slug(self, resolve_info, *args, **kwargs):
-        return get_page_from_content_type(self).slug
+        return get_page_from_content_type(self).slug_en
 
     class Meta:
         model = DepartmentPageTopPage
@@ -1039,7 +1039,7 @@ class DepartmentPageRelatedPageNode(DjangoObjectType):
         return get_page_from_content_type(self).title
 
     def resolve_slug(self, resolve_info, *args, **kwargs):
-        return get_page_from_content_type(self).slug
+        return get_page_from_content_type(self).slug_en
 
     class Meta:
         model = DepartmentPageRelatedPage
@@ -1059,7 +1059,7 @@ class TopicPageTopPageNode(DjangoObjectType):
         return get_page_from_content_type(self).title
 
     def resolve_slug(self, resolve_info, *args, **kwargs):
-        return get_page_from_content_type(self).slug
+        return get_page_from_content_type(self).slug_en
 
     def resolve_page_type(self, info):
         return self.page.content_type.name
