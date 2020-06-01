@@ -15,14 +15,14 @@ def add_pageviewpermissions(apps, schema_editor):
     for page in all_pages.iterator():
         pvr = PageViewRestriction.objects.create(
             page=page,
-            restriction_type=PageViewRestriction.GROUPS,
+            restriction_type='groups',
         )
         for group_permission in page.group_permissions.all():
             if (group_permission and
                 group_permission.group and
-                group_permission.group.department):
-                   # and group_permission.group.department.department_page): #actually do we need the page here?
-                pvr.groups.set(group_permission.group.department)
+                group_permission.group.department): #and
+                    #group_permission.group.department.department_page): #actually do we need the page here?
+                pvr.groups.set([group_permission.group.department])
 
 
 class Migration(migrations.Migration):
