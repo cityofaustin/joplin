@@ -201,3 +201,8 @@ def test_admin_can_make_departmentless_page(superadmin, rf):
     assert len(created_page.departments()) is 0
 
 
+
+
+# test that someone from the other department cant view the departmentless page
+# that it doesnt return 200?
+#https://github.com/wagtail/wagtail/blob/882f8f3cf8ddd79c30e611a48882b309e90dad0c/wagtail/admin/tests/test_privacy.py
