@@ -10,7 +10,7 @@ def create_fixture(group_data, fixture_name):
         group = None
     if group:
         print(f"Skipping {fixture_name}")
-        return None
+        return group
 
     group = DepartmentFactory.create(**group_data)
     print(f"Built {fixture_name}")

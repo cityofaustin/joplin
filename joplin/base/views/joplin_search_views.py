@@ -1,8 +1,10 @@
+from django.http import Http404
 from django.shortcuts import render
 from django.http.request import QueryDict
 from django.contrib.contenttypes.models import ContentType
 from django.core.paginator import Paginator
-from wagtail.core.models import Page
+from django.db.models import Q
+from wagtail.core.models import Page, UserPagePermissionsProxy
 from wagtail.search.query import MATCH_ALL
 from wagtail.admin.forms.search import SearchForm
 from wagtail.admin.auth import user_has_any_page_permission
@@ -23,19 +25,49 @@ from django.views.decorators.vary import vary_on_headers
  - excluding certain pages from the pages to query
 """
 
+
+def dept_explorable_pages(user):
+    '''
+    In the spirit of UserPagePermissionsProxy's explorable_pages, check a user's permissions, excluding editor or
+    moderator permissions since those cast a wide net
+    https://github.com/wagtail/wagtail/blob/982b1d60a4b3d5b4e841f2b39e2244bcb421b091/wagtail/core/models.py#L1853
+    :param user: user making request
+    :return: Queryset of explorable pages
+    '''
+    # Deal with the trivial cases first...
+    if not user.is_active:
+        return Page.objects.none()
+    if user.is_superuser:
+        return Page.objects.all()  # todo: check this, we don't want the home page returned
+
+    user_perms = UserPagePermissionsProxy(user)
+    explorable_pages = Page.objects.none()
+
+    # exclude the moderator and editor groups
+    for perm in user_perms.permissions.filter(~Q(group_id=1) & ~Q(group_id=2)):
+        explorable_pages |= Page.objects.descendant_of(
+            perm.page, inclusive=True
+        )
+
+    return explorable_pages
+
+
 @vary_on_headers('X-Requested-With')
 @user_passes_test(user_has_any_page_permission)
 def search(request):
     # excluding wagtail 'page' pages and 'HomePages' from search (like home/root)
     homepage_content_type_id = ContentType.objects.get(app_label="home_page", model="homepage").id
-    pages = all_pages = Page.objects.all().exclude(content_type_id__in=[1, homepage_content_type_id]).prefetch_related('content_type').specific()
+    pages = all_pages = (
+        Page.objects.all().exclude(content_type_id__in=[1, homepage_content_type_id]).prefetch_related('content_type').specific()
+        & dept_explorable_pages(request.user))
     q = MATCH_ALL
     content_types = []
     pagination_query_params = QueryDict({}, mutable=True)
     ordering = None
 
     if 'ordering' in request.GET:
-        if request.GET['ordering'] in ['content_type', '-content_type', 'owner', '-owner', 'title', '-title', 'latest_revision_created_at', '-latest_revision_created_at', 'live', '-live']:
+        if request.GET['ordering'] in ['content_type', '-content_type', 'owner', '-owner', 'title', '-title',
+                                       'latest_revision_created_at', '-latest_revision_created_at', 'live', '-live']:
             ordering = request.GET['ordering']
             pages = pages.order_by(ordering)
     else:
@@ -43,7 +75,6 @@ def search(request):
         # https://github.com/cityofaustin/techstack/issues/3974
         ordering = '-latest_revision_created_at'
         pages = pages.order_by(ordering)
-
 
     if 'content_type' in request.GET:
         pagination_query_params['content_type'] = request.GET['content_type']
@@ -63,8 +94,8 @@ def search(request):
 
     """
      JOPLIN NOTE:
-      - Some of this the original state of the query condition has been modified
-      because we needed data from the query condition for in our inital display
+      - Some of the original state of the query condition has been modified
+      because we needed data from the query condition for in our initial display
       on the main content page.
       - For Original code See:
       https://github.com/wagtail/wagtail/blob/a459e91692659aba04e662978857d14061aecaee/wagtail/admin/views/pages.py#L917
