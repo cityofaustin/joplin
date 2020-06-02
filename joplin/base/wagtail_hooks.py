@@ -35,7 +35,7 @@ def before_edit_page(request, page):
     print(
         f'BeforeEditHook {request.user.email} is in groups {[group.name for group in request.user.groups.all()]}')
     # this is for restricting viewing the edit page, will be in issue 4099
-    if page.view_restrictions.all():
+    if page.view_restrictions.all() and not request.user.is_superuser:
         print(f'{request.user.groups.all()} and {page.view_restrictions.all()[0].groups.all()}')
         try:
             assert request.user.groups.all() & page.view_restrictions.all()[0].groups.all()

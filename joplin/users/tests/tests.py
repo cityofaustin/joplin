@@ -1,5 +1,9 @@
 import pytest
+import os
 from django.core.exceptions import ValidationError
+from django.test import Client
+from django.urls import reverse
+from django.contrib import auth
 from users.tests.utils.make_user_form import make_user_form
 from base.views.new_page_from_modal import new_page_from_modal
 from pages.information_page.models import InformationPage
@@ -221,6 +225,23 @@ def test_superadmin_explores_all_pages(superadmin):
     assert explorable_pages.filter(id=kitchen_service.id).exists()
     assert explorable_pages.filter(id=departmentless_service.id).exists()
 
+
+@pytest.mark.django_db
+def test_editor_cant_view_page_without_permission(editor):
+    kitchen_service = service_fixtures.kitchen_sink()
+    departmentless_service = service_fixtures.step_with_1_location()
+    c = Client()
+    k_url = reverse('wagtailadmin_pages:edit', args=[kitchen_service.pk])
+    print(k_url)
+    c.login(username=editor.email, password=os.getenv("API_TEST_USER_PASSWORD"))
+    user = auth.get_user(c)
+    print(user.get_all_permissions())
+    response_allowed = c.get(f'/admin/pages/{kitchen_service.id}/edit/#tab-content')
+    print(response_allowed)
+    response_forbidden = c.get(f'/admin/pages/{departmentless_service.id}/edit/')
+    print(response_forbidden)
+    assert False
+    #admin/pages/12/edit/#tab-content
 # test that someone from the other department cant view the departmentless page
 # that it doesnt return 200?
 #https://github.com/wagtail/wagtail/blob/882f8f3cf8ddd79c30e611a48882b309e90dad0c/wagtail/admin/tests/test_privacy.py
