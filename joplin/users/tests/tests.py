@@ -247,10 +247,10 @@ def test_editor_cant_view_page_without_permission(editor):
     # assert user is logged in and can access search view
     assert c.get('/admin/pages/search/').status_code == 200
     # request pages to edit
-    response_allowed = c.get(reverse('wagtailadmin_pages:edit', args=[kitchen_service.pk]))
-    assert response_allowed.status_code == 200
-    response_forbidden = c.get(reverse('wagtailadmin_pages:edit', args=[departmentless_service.pk]))
-    assert response_forbidden.status_code == 404
+    response_department = c.get(reverse('wagtailadmin_pages:edit', args=[kitchen_service.pk]))
+    assert response_department.status_code == 200
+    response_no_department = c.get(reverse('wagtailadmin_pages:edit', args=[departmentless_service.pk]))
+    assert response_no_department.status_code == 404
 
 @pytest.mark.django_db
 def test_admin_can_view_page_without_permission(superadmin):
@@ -267,11 +267,11 @@ def test_admin_can_view_page_without_permission(superadmin):
     PageViewRestriction.objects.create(page=departmentless_service, restriction_type='groups')
     # initialize client
     c = Client()
-    c.login(username=superadmin.email, password=os.getenv("API_TEST_USER_PASSWORD"))
+    c.login(username=superadmin.email, password=os.getenv("SUPERADMIN_USER_PASSWORD"))
     # assert user is logged in and can access search view
     assert c.get('/admin/pages/search/').status_code == 200
     # request pages to edit
-    response_allowed = c.get(reverse('wagtailadmin_pages:edit', args=[kitchen_service.pk]))
-    assert response_allowed.status_code == 200
-    response_forbidden = c.get(reverse('wagtailadmin_pages:edit', args=[departmentless_service.pk]))
-    assert response_forbidden.status_code == 200
+    response_department = c.get(reverse('wagtailadmin_pages:edit', args=[kitchen_service.pk]))
+    assert response_department.status_code == 200
+    response_no_department = c.get(reverse('wagtailadmin_pages:edit', args=[departmentless_service.pk]))
+    assert response_no_department.status_code == 200
