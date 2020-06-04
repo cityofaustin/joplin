@@ -251,3 +251,27 @@ def test_editor_cant_view_page_without_permission(editor):
     assert response_allowed.status_code == 200
     response_forbidden = c.get(reverse('wagtailadmin_pages:edit', args=[departmentless_service.pk]))
     assert response_forbidden.status_code == 404
+
+@pytest.mark.django_db
+def test_admin_can_view_page_without_permission(superadmin):
+    # set up pages, add the permissions
+    kitchen_service = service_fixtures.kitchen_sink()
+    departmentless_service = service_fixtures.step_with_1_location()
+    GroupPagePermission.objects.create(group=Group.objects.get(id=2), page=kitchen_service,
+                                       permission_type='edit')
+    kpvr = PageViewRestriction.objects.create(page=kitchen_service, restriction_type='groups')
+    kpvr.groups.add(kitchen_sink_department.kitchen_sink())
+    GroupPagePermission.objects.create(group=Group.objects.get(id=2), page=departmentless_service,
+                                       permission_type='edit')
+    # the departmentless page has no group to assign to the page view restriction
+    PageViewRestriction.objects.create(page=departmentless_service, restriction_type='groups')
+    # initialize client
+    c = Client()
+    c.login(username=superadmin.email, password=os.getenv("API_TEST_USER_PASSWORD"))
+    # assert user is logged in and can access search view
+    assert c.get('/admin/pages/search/').status_code == 200
+    # request pages to edit
+    response_allowed = c.get(reverse('wagtailadmin_pages:edit', args=[kitchen_service.pk]))
+    assert response_allowed.status_code == 200
+    response_forbidden = c.get(reverse('wagtailadmin_pages:edit', args=[departmentless_service.pk]))
+    assert response_forbidden.status_code == 200
