@@ -98,7 +98,7 @@ def new_page_from_modal(request):
                     page=page,
                     restriction_type=PageViewRestriction.GROUPS,
                 )
-                pvr.groups.set(department_group)
+                pvr.groups.add(department_group)
 
         else:
             # If the user's not an admin, then we want to create a

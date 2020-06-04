@@ -8,7 +8,6 @@ from django.utils.translation import ugettext_lazy as _
 import traceback
 
 from wagtail.admin.menu import MenuItem
-from wagtail.contrib.modeladmin.options import ModelAdmin, ModelAdminGroup, modeladmin_register
 from wagtail.admin.widgets import Button, ButtonWithDropdownFromHook, PageListingButton
 from wagtail.core import hooks
 
@@ -34,7 +33,7 @@ def before_edit_page(request, page):
     assert request.user.is_authenticated
     print(
         f'BeforeEditHook {request.user.email} is in groups {[group.name for group in request.user.groups.all()]}')
-    # this is for restricting viewing the edit page, will be in issue 4099
+    # restricts viewing the edit page
     if page.view_restrictions.all() and not request.user.is_superuser:
         print(f'{request.user.groups.all()} and {page.view_restrictions.all()[0].groups.all()}')
         try:

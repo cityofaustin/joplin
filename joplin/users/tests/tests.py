@@ -1,17 +1,16 @@
 import pytest
 import os
 from django.core.exceptions import ValidationError
-from django.contrib.auth.models import Group, Permission
-import pages.service_page.fixtures.helpers.components as components
+from django.contrib.auth.models import Group
 from django.test import Client
 from django.urls import reverse
-from django.contrib import auth
-from wagtail.core.models import GroupPagePermission
+from wagtail.core.models import GroupPagePermission, PageViewRestriction
 from users.tests.utils.make_user_form import make_user_form
 from base.views.new_page_from_modal import new_page_from_modal
 from pages.information_page.models import InformationPage
 from pages.home_page.factories import HomePageFactory
 from base.views.joplin_search_views import dept_explorable_pages
+from groups.fixtures.test_cases import kitchen_sink as kitchen_sink_department
 import pages.service_page.fixtures as service_fixtures
 import json
 
@@ -231,25 +230,24 @@ def test_superadmin_explores_all_pages(superadmin):
 
 @pytest.mark.django_db
 def test_editor_cant_view_page_without_permission(editor):
-    # set up pages
+    # set up pages, add the permissions
     kitchen_service = service_fixtures.kitchen_sink()
     departmentless_service = service_fixtures.step_with_1_location()
-    # maybe adding GroupPagePermissions is what we need
-    GroupPagePermission.objects.create(group=Group.objects.get(id=2), page=kitchen_service, permission_type='edit')
-    GroupPagePermission.objects.create(group=Group.objects.get(id=2), page=departmentless_service, permission_type='edit')
-    page_perms = kitchen_service.permissions_for_user(editor)
-    print('can edit ', page_perms.can_edit())
-    permissions = GroupPagePermission.objects.filter(group__user=editor).select_related('page')
-    print(permissions)
+    GroupPagePermission.objects.create(group=Group.objects.get(id=2), page=kitchen_service,
+                                       permission_type='edit')
+    kpvr = PageViewRestriction.objects.create(page=kitchen_service, restriction_type='groups')
+    kpvr.groups.add(kitchen_sink_department.kitchen_sink())
+    GroupPagePermission.objects.create(group=Group.objects.get(id=2), page=departmentless_service,
+                                       permission_type='edit')
+    # the departmentless page has no group to assign to the page view restriction
+    PageViewRestriction.objects.create(page=departmentless_service, restriction_type='groups')
     # initialize client
     c = Client()
     c.login(username=editor.email, password=os.getenv("API_TEST_USER_PASSWORD"))
-    user = auth.get_user(c)
-    print(user.get_all_permissions())
+    # assert user is logged in and can access search view
+    assert c.get('/admin/pages/search/').status_code == 200
+    # request pages to edit
     response_allowed = c.get(reverse('wagtailadmin_pages:edit', args=[kitchen_service.pk]))
-    print(response_allowed)
-    # response_forbidden = c.get(f'/admin/pages/{departmentless_service.id}/edit/')
-    # print(response_forbidden)
     assert response_allowed.status_code == 200
-
-#https://github.com/wagtail/wagtail/blob/882f8f3cf8ddd79c30e611a48882b309e90dad0c/wagtail/admin/tests/test_privacy.py
+    response_forbidden = c.get(reverse('wagtailadmin_pages:edit', args=[departmentless_service.pk]))
+    assert response_forbidden.status_code == 404

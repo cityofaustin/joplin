@@ -7,6 +7,7 @@ import pages.service_page.fixtures.helpers.components as components
 def step_with_1_location():
     steps = components.step_with_1_location()
     home = components.home()
+    print(home)
     page_data = {
         "imported_revision_id": None,
         "live": False,
