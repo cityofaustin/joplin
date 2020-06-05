@@ -36,10 +36,10 @@ jobs:
           key: deps-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
       - run:
           name: Install js dependencies
-          command: sudo yarn --cwd ./project/joplin install
+          command: sudo yarn --cwd ./joplin install
       - run:
           name: Build webpack files
-          command: sudo yarn --cwd ./project/joplin build
+          command: sudo yarn --cwd ./joplin build
       - run:
           name: Run tests
           command: pipenv run pytest --reuse-db
