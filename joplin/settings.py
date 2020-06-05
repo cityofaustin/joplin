@@ -509,7 +509,7 @@ AUTH_USER_MODEL = 'users.User'
 WAGTAIL_USER_EDIT_FORM = 'users.forms.CustomUserEditForm'
 WAGTAIL_USER_CREATION_FORM = 'users.forms.CustomUserCreationForm'
 
-if IS_LOCAL:
+if IS_LOCAL or IS_TEST:
     # Allow non HTTPS requests when running a local Janis build from localhost.
     SECURE_SSL_REDIRECT = False
     SERVER_PROTOCOL = 'HTTP/0.9'
