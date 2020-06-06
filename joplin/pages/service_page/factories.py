@@ -1,4 +1,3 @@
-import json
 from pages.service_page.models import ServicePage
 from pages.topic_page.factories import JanisBasePageWithTopicsFactory
 from pages.base_page.fixtures.helpers.streamfieldify import streamfieldify
@@ -16,7 +15,6 @@ class ServicePageFactory(JanisBasePageWithTopicsFactory):
                 kwargs[step_keyword] = streamfieldify(kwargs[step_keyword])
 
         return super(ServicePageFactory, cls).create(*args, **kwargs)
-
 
     class Meta:
         model = ServicePage

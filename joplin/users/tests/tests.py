@@ -4,6 +4,8 @@ from users.tests.utils.make_user_form import make_user_form
 from base.views.new_page_from_modal import new_page_from_modal
 from pages.information_page.models import InformationPage
 from pages.home_page.factories import HomePageFactory
+from base.views.joplin_search_views import dept_explorable_pages
+import pages.service_page.fixtures as service_fixtures
 import json
 
 
@@ -197,3 +199,25 @@ def test_admin_can_make_departmentless_page(superadmin, rf):
     page_pk = response_json['id']
     created_page = InformationPage.objects.get(id=page_pk)
     assert len(created_page.departments()) is 0
+
+
+@pytest.mark.django_db
+def test_editor_cannot_explore_other_dept_pages(editor):
+    kitchen_service = service_fixtures.kitchen_sink()
+    departmentless_service = service_fixtures.step_with_1_location()
+    explorable_pages = dept_explorable_pages(editor)
+    # assert that the service page under kitchen sink department is in the results of the kitchen sink editor
+    assert explorable_pages.filter(id=kitchen_service.id).exists()
+    # assert the page with no department does not show up in the results
+    assert not explorable_pages.filter(id=departmentless_service.id).exists()
+
+
+@pytest.mark.django_db
+def test_superadmin_explores_all_pages(superadmin):
+    kitchen_service = service_fixtures.kitchen_sink()
+    departmentless_service = service_fixtures.step_with_1_location()
+    explorable_pages = dept_explorable_pages(superadmin)
+    # assert superadmins can explore all pages, regardless of department
+    assert explorable_pages.filter(id=kitchen_service.id).exists()
+    assert explorable_pages.filter(id=departmentless_service.id).exists()
+

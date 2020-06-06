@@ -1,5 +1,5 @@
 from django.http import HttpResponse
-from wagtail.core.models import UserPagePermissionsProxy, GroupPagePermission
+from wagtail.core.models import UserPagePermissionsProxy, GroupPagePermission, PageViewRestriction
 from django.core.exceptions import PermissionDenied
 from snippets.theme.models import Theme
 from pages.service_page.models import ServicePage
@@ -93,6 +93,13 @@ def new_page_from_modal(request):
                     page=page,
                     permission_type='edit'
                 )
+                # this restricts the edit view, will be uncommented in #4099
+                # pvr = PageViewRestriction.objects.create(
+                #     page=page,
+                #     restriction_type=PageViewRestriction.GROUPS,
+                # )
+                # pvr.groups.set(department_group)
+
         else:
             # If the user's not an admin, then we want to create a
             # group permission object for each of the user's assigned departments
@@ -104,6 +111,12 @@ def new_page_from_modal(request):
                         page=page,
                         permission_type='edit'
                     )
+                    # this restricts the edit view, will be uncommented in #4099
+                    # pvr = PageViewRestriction.objects.create(
+                    #     page=page,
+                    #     restriction_type=PageViewRestriction.GROUPS,
+                    # )
+                    # pvr.groups.add(user_group)
 
         # Respond with the id of the new page
         response = HttpResponse(json.dumps({'id': page.id}), content_type="application/json")
