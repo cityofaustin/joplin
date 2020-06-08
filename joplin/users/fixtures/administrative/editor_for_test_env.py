@@ -4,6 +4,7 @@ from django.core.exceptions import ValidationError
 from users.fixtures.helpers.create_fixture import create_fixture
 from groups.fixtures.test_cases.kitchen_sink import kitchen_sink
 from django.contrib.auth.models import Group
+from groups.fixtures.helpers.group_permissions import add_editor_permissions
 
 
 # An user for API Testing.
@@ -20,6 +21,7 @@ def editor_for_test_env():
     }
 
     editor_group = Group.objects.get(name="Editors")
+    add_editor_permissions(editor_group)
     # Extra safety check
     if settings.IS_STAGING or settings.IS_PRODUCTION:
         raise ValidationError("Do not load test user onto staging or production")
