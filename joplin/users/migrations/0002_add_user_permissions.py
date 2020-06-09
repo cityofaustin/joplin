@@ -2,7 +2,6 @@
 from __future__ import unicode_literals
 
 from django.db import migrations
-from groups.fixtures.helpers import group_permissions
 
 
 def add_user_permissions(apps, schema_editor):
@@ -16,6 +15,8 @@ def add_user_permissions(apps, schema_editor):
     wagtail_admin_content_type, created = ContentType.objects.get_or_create(model='admin')
     document_content_type, created = ContentType.objects.get_or_create(model='document')
     image_content_type, created = ContentType.objects.get_or_create(model='image')
+    janis_base_content_type, created = ContentType.objects.get_or_create(model='janisbasepage')
+    contact_content_type, created = ContentType.objects.get_or_create(model='contact')
     # retrieve groups
     editor_group = Group.objects.get(name="Editors")
     moderator_group = Group.objects.get(name="Moderators")
@@ -23,22 +24,40 @@ def add_user_permissions(apps, schema_editor):
     # https://stackoverflow.com/questions/31539690/django-migration-fails-with-fake-doesnotexist-permission-matching-query-do
     permission, created = Permission.objects.get_or_create(codename="view_user", content_type=user_content_type)
     editor_group.permissions.add(permission.id)
+    moderator_group.permissions.add(permission.id)
+    print(permission)
     permission, created = Permission.objects.get_or_create(codename="access_admin", content_type=wagtail_admin_content_type)
     editor_group.permissions.add(permission.id)
+    moderator_group.permissions.add(permission.id)
     permission, created = Permission.objects.get_or_create(codename="add_document", content_type=document_content_type)
     editor_group.permissions.add(permission.id)
+    moderator_group.permissions.add(permission.id)
     permission, created = Permission.objects.get_or_create(codename="change_document", content_type=document_content_type)
     editor_group.permissions.add(permission.id)
+    moderator_group.permissions.add(permission.id)
     permission, created = Permission.objects.get_or_create(codename="delete_document", content_type=document_content_type)
     editor_group.permissions.add(permission.id)
+    moderator_group.permissions.add(permission.id)
     permission, created = Permission.objects.get_or_create(codename="add_image", content_type=image_content_type)
     editor_group.permissions.add(permission.id)
+    moderator_group.permissions.add(permission.id)
     permission, created = Permission.objects.get_or_create(codename="change_image", content_type=image_content_type)
     editor_group.permissions.add(permission.id)
+    moderator_group.permissions.add(permission.id)
     permission, created = Permission.objects.get_or_create(codename="delete_image", content_type=image_content_type)
     editor_group.permissions.add(permission.id)
-
-    # group_permissions.add_moderator_permissions(moderator_group)
+    moderator_group.permissions.add(permission.id)
+    # moderator only permissions
+    permission, created = Permission.objects.get_or_create(codename="view_extra_panels", content_type=janis_base_content_type)
+    moderator_group.permissions.add(permission.id)
+    permission, created = Permission.objects.get_or_create(codename="view_snippets", content_type=janis_base_content_type)
+    moderator_group.permissions.add(permission.id)
+    permission, created = Permission.objects.get_or_create(codename="add_contact", content_type=contact_content_type)
+    moderator_group.permissions.add(permission.id)
+    permission, created = Permission.objects.get_or_create(codename="change_contact", content_type=contact_content_type)
+    moderator_group.permissions.add(permission.id)
+    permission, created = Permission.objects.get_or_create(codename="view_contact", content_type=contact_content_type)
+    moderator_group.permissions.add(permission.id)
 
 
 class Migration(migrations.Migration):
