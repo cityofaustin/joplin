@@ -25,7 +25,6 @@ def add_user_permissions(apps, schema_editor):
     permission, created = Permission.objects.get_or_create(codename="view_user", content_type=user_content_type)
     editor_group.permissions.add(permission.id)
     moderator_group.permissions.add(permission.id)
-    print(permission)
     permission, created = Permission.objects.get_or_create(codename="access_admin", content_type=wagtail_admin_content_type)
     editor_group.permissions.add(permission.id)
     moderator_group.permissions.add(permission.id)
