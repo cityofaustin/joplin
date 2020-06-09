@@ -8,11 +8,37 @@ from groups.fixtures.helpers import group_permissions
 def add_user_permissions(apps, schema_editor):
     # Get model
     Group = apps.get_model('auth.Group')
+    ContentType = apps.get_model('contenttypes', 'ContentType')
+    Permission = apps.get_model('auth.Permission')
 
+    # retrieve content types
+    user_content_type, created = ContentType.objects.get_or_create(model='user')
+    wagtail_admin_content_type, created = ContentType.objects.get_or_create(model='admin')
+    document_content_type, created = ContentType.objects.get_or_create(model='document')
+    image_content_type, created = ContentType.objects.get_or_create(model='image')
+    # retrieve groups
     editor_group = Group.objects.get(name="Editors")
-    group_permissions.add_editor_permissions(editor_group)
     moderator_group = Group.objects.get(name="Moderators")
-    group_permissions.add_moderator_permissions(moderator_group)
+    # get or create Permissions: on a new test database, the permissions do not exist, so they must be created.
+    # https://stackoverflow.com/questions/31539690/django-migration-fails-with-fake-doesnotexist-permission-matching-query-do
+    permission, created = Permission.objects.get_or_create(codename="view_user", content_type=user_content_type)
+    editor_group.permissions.add(permission.id)
+    permission, created = Permission.objects.get_or_create(codename="access_admin", content_type=wagtail_admin_content_type)
+    editor_group.permissions.add(permission.id)
+    permission, created = Permission.objects.get_or_create(codename="add_document", content_type=document_content_type)
+    editor_group.permissions.add(permission.id)
+    permission, created = Permission.objects.get_or_create(codename="change_document", content_type=document_content_type)
+    editor_group.permissions.add(permission.id)
+    permission, created = Permission.objects.get_or_create(codename="delete_document", content_type=document_content_type)
+    editor_group.permissions.add(permission.id)
+    permission, created = Permission.objects.get_or_create(codename="add_image", content_type=image_content_type)
+    editor_group.permissions.add(permission.id)
+    permission, created = Permission.objects.get_or_create(codename="change_image", content_type=image_content_type)
+    editor_group.permissions.add(permission.id)
+    permission, created = Permission.objects.get_or_create(codename="delete_image", content_type=image_content_type)
+    editor_group.permissions.add(permission.id)
+
+    # group_permissions.add_moderator_permissions(moderator_group)
 
 
 class Migration(migrations.Migration):
