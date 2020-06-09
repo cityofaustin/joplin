@@ -8,7 +8,6 @@ from groups.fixtures.helpers import group_permissions
 def add_user_permissions(apps, schema_editor):
     # Get model
     Group = apps.get_model('auth.Group')
-    Permission = apps.get_model
 
     editor_group = Group.objects.get(name="Editors")
     group_permissions.add_editor_permissions(editor_group)
