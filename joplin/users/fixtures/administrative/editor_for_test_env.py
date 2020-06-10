@@ -21,7 +21,7 @@ def editor_for_test_env():
     }
 
     editor_group = Group.objects.get(name="Editors")
-    # add_editor_permissions(editor_group)
+    add_editor_permissions()
     # Extra safety check
     if settings.IS_STAGING or settings.IS_PRODUCTION:
         raise ValidationError("Do not load test user onto staging or production")
