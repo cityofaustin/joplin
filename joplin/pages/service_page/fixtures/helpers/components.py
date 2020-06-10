@@ -28,11 +28,6 @@ dynamic_content_list = [
     {'type': 'recollect_block', 'value': None, 'id': '826f0f09-ed6e-4d81-a9eb-cfceef23c82a'}
 ]
 
-dynamic_content_list = [
-    {'type': 'collection_schedule_block', 'value': None, 'id': '4c02f0f9-5e7a-4ddb-b1b7-c6b3f1da159d'},
-    {'type': 'recollect_block', 'value': None, 'id': '826f0f09-ed6e-4d81-a9eb-cfceef23c82a'}
-]
-
 steps_with_appblocks = [
     {
         'type': 'basic_step',

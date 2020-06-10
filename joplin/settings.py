@@ -444,10 +444,11 @@ FLAGS = {
     'INCREMENTAL BUILDS': [{'condition': 'boolean', 'value': False}]
 }
 
+# $JOPLIN_APP_HOST_PORT is set by scripts/serve-local.sh
+JOPLIN_APP_HOST_PORT = os.getenv('JOPLIN_APP_HOST_PORT', 8000)
 # The CMS_API endpoint of the current Django App for published Janis to use
 if IS_LOCAL or IS_TEST:
-    # $JOPLIN_APP_HOST_PORT is set by scripts/serve-local.sh
-    CMS_API = f"http://localhost:{os.getenv('JOPLIN_APP_HOST_PORT')}/api/graphql"
+    CMS_API = f"http://localhost:{JOPLIN_APP_HOST_PORT}/api/graphql"
 else:
     CMS_API = f"https://{os.getenv('APPNAME','')}.herokuapp.com/api/graphql"
 

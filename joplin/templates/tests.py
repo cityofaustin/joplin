@@ -14,14 +14,14 @@ def render_page_status_tag_template(page):
 
 
 @pytest.mark.django_db
-def test_page_status_tag_live():
+def test_page_status_tag_live(expected_publish_url_base):
     page = information_page_fixtures.kitchen_sink()
     rendered_template = render_page_status_tag_template(page)
-    assert '<a href="#" target="_blank" class="underlined">Live</a>' == rendered_template
+    assert f'<a href="{expected_publish_url_base}/kitchen-sink-department/kitchen-sink-service-page/" target="_blank" class="underlined">Live</a>' == rendered_template
 
 
 @pytest.mark.django_db
-def test_page_status_tag_draft():
+def test_page_status_tag_draft(expected_preview_url_missing_revision):
     page = information_page_fixtures.new_contact()
     rendered_template = render_page_status_tag_template(page)
-    assert '<a href="#" target="_blank" class="underlined">Draft</a>' == rendered_template
+    assert f'<a href="{expected_preview_url_missing_revision}" class="underlined">Draft</a>' == rendered_template
