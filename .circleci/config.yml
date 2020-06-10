@@ -3,7 +3,7 @@ version: 2.1
 jobs:
   test:
     docker:
-      - image: circleci/python:3.7.5-stretch
+      - image: cityofaustin/joplin-ci-test:5c638d3
         environment:
           PIPENV_VENV_IN_PROJECT: true
           DATABASE_URL: postgresql://root@localhost/circle_test?sslmode=disable
@@ -35,6 +35,12 @@ jobs:
             - "/usr/local/lib/python3.7/site-packages"
           key: deps-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
       - run:
+          name: Install js dependencies
+          command: sudo yarn --cwd ./joplin install
+      - run:
+          name: Build webpack files
+          command: sudo yarn --cwd ./joplin build
+      - run:
           name: Run tests
           command: pipenv run pytest --reuse-db
   deploy:
@@ -57,14 +63,14 @@ jobs:
       - run:
           name: "Test that CLI utilities work"
           command: bash ./.circleci/scripts/cli_test.sh
-      # - when:
-      #     # Only backup Staging and Production databases
-      #     condition: << parameters.is_master_or_production >>
-      #     steps:
-      #       - checkout
-      #       - run:
-      #           name: "Backup Database and Store in S3"
-      #           command: bash ./.circleci/scripts/backup_database.sh
+      - when:
+          # Only backup Production database
+          condition: << parameters.is_production >>
+          steps:
+            - checkout
+            - run:
+                name: "Backup Database and Store in S3"
+                command: bash ./.circleci/scripts/backup_database.sh
       - unless:
           # Production will not need to have any infrastructure built or rebuilt.
           condition: << parameters.is_production >>

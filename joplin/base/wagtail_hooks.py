@@ -1,21 +1,13 @@
-from django.db import models
-from django import forms
-from wagtail.contrib.settings.models import BaseSetting, register_setting
+from django.http import Http404
 from django.utils.html import escape
 from wagtail.core.models import Page
 from wagtail.core.rich_text import LinkHandler
-from wagtail.core.rich_text.pages import PageLinkHandler
 from django.conf import settings
-from django.contrib.staticfiles.templatetags.staticfiles import static
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
-from django.utils.html import format_html_join
-from webpack_loader import utils as webpack_loader_utils
-from wagtail.admin.auth import permission_required
 import traceback
 
 from wagtail.admin.menu import MenuItem
-from wagtail.contrib.modeladmin.options import ModelAdmin, ModelAdminGroup, modeladmin_register
 from wagtail.admin.widgets import Button, ButtonWithDropdownFromHook, PageListingButton
 from wagtail.core import hooks
 
@@ -41,6 +33,13 @@ def before_edit_page(request, page):
     assert request.user.is_authenticated
     print(
         f'BeforeEditHook {request.user.email} is in groups {[group.name for group in request.user.groups.all()]}')
+    # restricts viewing the edit page
+    if page.view_restrictions.all() and not request.user.is_superuser:
+        print(f'{request.user.groups.all()} and {page.view_restrictions.all()[0].groups.all()}')
+        try:
+            assert request.user.groups.all() & page.view_restrictions.all()[0].groups.all()
+        except AssertionError:
+            raise Http404
 
 
 @hooks.register('construct_main_menu')

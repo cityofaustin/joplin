@@ -16,6 +16,7 @@ import pages.official_documents_page.fixtures as official_documents_page_fixture
 import pages.location_page.fixtures as location_page_fixtures
 import pages.event_page.fixtures as event_page_fixtures
 import pages.department_page.fixtures as department_page_fixtures
+import pages.news_page.fixtures as news_page_fixtures
 import users.fixtures as user_fixtures
 from importer.import_everything import import_everything
 
@@ -66,7 +67,6 @@ class Command(BaseCommand):
             except ObjectDoesNotExist:
                 load_data_result = None
             LOAD_DATA = os.getenv("LOAD_DATA")
-            DATABASE_URL = os.getenv("DATABASE_URL")
             # Allow re-running of 'fixtures' data
             if LOAD_DATA == 'fixtures' or LOAD_DATA == 'test':
                 print("Adding fixture data")
@@ -79,6 +79,8 @@ class Command(BaseCommand):
                 event_page_fixtures.load_all()
                 location_page_fixtures.load_all()
                 department_page_fixtures.load_all()
+                news_page_fixtures.load_all()
+
                 # TODO: incorporate logging into DeploymentLog?
             if LOAD_DATA == 'importer':
                 print("Importing data from http://joplin-staging.herokuapp.com/api/graphql")

@@ -1,11 +1,8 @@
 from django import template
-from django.conf import settings
-import graphene
 import os
 import json
 
 from snippets.theme.models import Theme
-from pages.topic_page.models import TopicPage
 from groups.models import Department
 from wagtail.core import hooks
 import itertools
@@ -46,7 +43,6 @@ def get_style_guide_url(*args, **kwargs):
 @register.inclusion_tag('wagtailadmin/themes_topics_tree.html', takes_context=True)
 def themes_topics_tree(context):
     themes = {}
-    topics = []
 
     for theme in Theme.objects.all():
         themes[theme.pk] = {

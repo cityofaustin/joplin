@@ -1,16 +1,11 @@
 from django.db import models
 
-from modelcluster.fields import ParentalKey
-from modelcluster.models import ClusterableModel
-
-from wagtail.core.fields import RichTextField, StreamField
-from wagtail.core.blocks import RichTextBlock
-from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, PageChooserPanel, StreamFieldPanel
+from wagtail.core.fields import RichTextField
+from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, StreamFieldPanel
 from wagtail.snippets.edit_handlers import SnippetChooserPanel
 
 from base.forms import InformationPageForm
 
-from pages.base_page.models import JanisBasePage
 from snippets.contact.models import Contact
 
 from base.models.constants import WYSIWYG_GENERAL
@@ -24,7 +19,7 @@ from pages.topic_page.models import JanisBasePageWithTopics
 
 class InformationPage(JanisBasePageWithTopics):
     """
-    Basic page model primarly for providing informational content
+    Basic page model primarily for providing informational content
     """
     janis_url_page_type = "information"
 

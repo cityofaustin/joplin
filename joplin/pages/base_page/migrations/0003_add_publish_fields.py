@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('base_page', '0001_initial'),
+        ('base_page', '0002_add_pageviewpermissions'),
     ]
 
     operations = [
