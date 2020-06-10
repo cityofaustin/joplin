@@ -6,11 +6,20 @@ from pages.home_page.models import HomePage
 import pages.location_page.fixtures as location_page_fixtures
 import pages.topic_page.fixtures as topic_page_fixtures
 import pages.service_page.fixtures as service_page_fixtures
+from pages.home_page.factories import HomePageFactory
 
 
 def home():
-    return HomePage.objects.first()
-
+    home_page = HomePage.objects.first()
+    if home_page:
+        return home_page
+    page_data = {
+        "publish_janis_branch_for_pr": "pytest",
+        "preview_janis_branch_for_pr": "pytest",
+        "slug": "pytest",
+        "title": "pytest",
+    }
+    return HomePageFactory.create(**page_data)
 
 additional_content = '<h2>Bulk item pickup do’s and don’ts</h2><p>Do not put bulk items in bags, boxes, or other containers. Bags will be treated as extra trash and are subject to extra trash fees.</p><p>Do not place any items under low hanging tree limbs or power lines.</p><p>Do not place items in an alley in any area in front of a vacant lot or in front of a business. Items will not be collected from these areas.</p><p>To prevent damage to your property, keep bulk items 5 feet away from your:</p><ul><li>Trash cart</li><li>Mailbox</li><li>Fences or walls</li><li>Water meter</li><li>Telephone connection box</li><li>Parked cars</li></ul>'
 
