@@ -9,6 +9,23 @@ We now have automated tests! They get run on every circleci build during the "te
 
 Any file that matches the pattern specified in `pytest.ini`.
 
+## Shortcuts
+
+Run all tests:
+`pipenv run pytest`
+
+Run one test file:
+`pipenv run pytest pages/information_page/tests.py`
+
+Run one test case:
+`pipenv run pytest pages/information_page/tests.py::test_import_from_page_dictionary_twice_different_revisions`
+
+Reuse database:
+`--reuse-db`
+
+Log print statements:
+`-s`
+
 ## How do I make test data?
 
 Test data can be created with factories or by directly creating new instances of your model. Either way works, as long as you can test the thing you want to test.

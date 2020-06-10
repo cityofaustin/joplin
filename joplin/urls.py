@@ -11,7 +11,7 @@ from wagtail.documents import urls as wagtaildocs_urls
 from base.views import \
     new_page_from_modal, \
     joplin_search_views, \
-    publish_webhook
+    publish_succeeded
 from users.urls import users as user_urls
 from snippets import urls as snippet_urls
 from django.urls import reverse
@@ -61,7 +61,7 @@ urlpatterns = [
     url(r'^api/graphiql', csrf_exempt(GraphQLView.as_view(graphiql=True, pretty=True))),
     url(r'session_security/', include('session_security.urls')),
     url(r'^performance/', include('silk.urls', namespace='silk')),
-    url('publish_webhook', publish_webhook.publish_webhook),
+    url('publish_succeeded/', publish_succeeded.publish_succeeded),
 
 
     # For anything not caught by a more specific rule above, hand over to

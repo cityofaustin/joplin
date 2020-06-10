@@ -63,6 +63,7 @@ INSTALLED_APPS = [
     'modelcluster',
     'taggit',
     'rest_framework',
+    'rest_framework_api_key',
     'corsheaders',
     'modeltranslation',
     'graphene_django',
@@ -102,8 +103,7 @@ INSTALLED_APPS = [
     'pages.topic_page',
     'pages.home_page',
     'snippets.contact',
-    'snippets.theme'
-
+    'snippets.theme',
 ]
 
 MIDDLEWARE = [
@@ -472,15 +472,24 @@ if SCOUT_MONITOR:
 
 
 # Set configs for Janis Publisher_v2
+PUBLISH_ENABLED = False # Don't try to publish on local dev environments
 if IS_REVIEW:
     PUBLISHER_V2_URL=os.getenv("CI_COA_PUBLISHER_V2_URL_PR")
     PUBLISHER_V2_API_KEY=os.getenv("COA_PUBLISHER_V2_API_KEY_PR")
+    PUBLISH_ENABLED = True
 elif IS_STAGING:
     PUBLISHER_V2_URL=os.getenv("CI_COA_PUBLISHER_V2_URL_STAGING")
     PUBLISHER_V2_API_KEY=os.getenv("COA_PUBLISHER_V2_API_KEY_STAGING")
+    PUBLISH_ENABLED = True
 elif IS_PRODUCTION:
     PUBLISHER_V2_URL=os.getenv("CI_COA_PUBLISHER_V2_URL_PROD")
     PUBLISHER_V2_API_KEY=os.getenv("COA_PUBLISHER_V2_API_KEY_PROD")
+    PUBLISH_ENABLED = True
+# For use with rest_framework_api_key
+# Sets the name of the header required for Publisher to access publish_succeeded endpoint
+# "Joplin-Api-Key": "********"
+# https://florimondmanca.github.io/djangorestframework-api-key/guide/#custom-header
+API_KEY_CUSTOM_HEADER = "HTTP_JOPLIN_API_KEY"
 
 
 # Set logger level

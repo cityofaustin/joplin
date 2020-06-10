@@ -1,3 +1,7 @@
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework_api_key.permissions import HasAPIKey
+from rest_framework_api_key.models import APIKey
+from rest_framework.response import Response
 import json
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
@@ -5,18 +9,26 @@ from django.http.response import Http404
 from django.shortcuts import get_object_or_404
 from wagtail.core.models import Page
 
+
 import logging
 logger = logging.getLogger('joplin')
 
 
 '''
-    Update "publish*" fields for pages that triggered publish requests.
+    Updates "publish_*" fields in base_model for pages that triggered publish requests.
 '''
-@require_POST
-@csrf_exempt
-def publish_webhook(request):
+@api_view(['POST'])
+@permission_classes([HasAPIKey])
+def publish_succeeded(request):
     body = json.loads(request.body)
     pages = body["pages"]
+
+    # Clean up publish_request api_keys when we're done using them
+    try:
+        for api_key in body["api_keys"]:
+            APIKey.objects.get_from_key(api_key).delete()
+    except APIKey.DoesNotExist:
+        logger.error(f"Couldn't find jwtToken with prefix {api_key[:8]}")
 
     # Update pages in order, in case subsequent publish/unpublish requests overwrote each other.
     sort(pages, key=lambda page: page["timestamp"])
@@ -35,4 +47,4 @@ def publish_webhook(request):
                 page.save()
             except Http404:
                 logger.error(f"Couldn't find a page with id={id}")
-    return 200
+    return Response(200)

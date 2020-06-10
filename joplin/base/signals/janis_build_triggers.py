@@ -146,7 +146,6 @@ def page_unpublished_signal(sender, **kwargs):
 # we might want to log but not trigger a build? need some sort of queue
 @receiver(post_save, sender=Document)
 @receiver(post_save, sender=Contact)
-@receiver(post_save, sender=Department)
 def handle_post_save_signal(sender, **kwargs):
     action = "saved"
     pages = collect_pages_snippet(kwargs['instance'], action)
