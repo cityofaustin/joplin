@@ -96,6 +96,13 @@ def new_page_from_modal(request):
                 page=page,
                 permission_type='edit'
             )
+            # restricts the edit view
+            pvr = PageViewRestriction.objects.create(
+                page=page,
+                restriction_type=PageViewRestriction.GROUPS,
+            )
+            pvr.groups.add(department_group)
+
     else:
         # If the user's not an admin, then we want to create a
         # group permission object for each of the user's assigned departments
@@ -107,29 +114,11 @@ def new_page_from_modal(request):
                     page=page,
                     permission_type='edit'
                 )
-                # restricts the edit view
                 pvr = PageViewRestriction.objects.create(
                     page=page,
                     restriction_type=PageViewRestriction.GROUPS,
                 )
-                pvr.groups.add(department_group)
-
-        else:
-            # If the user's not an admin, then we want to create a
-            # group permission object for each of the user's assigned departments
-            for user_group in request.user.groups.all():
-                # If we did this with non department groups it might cause issues
-                if user_group and hasattr(user_group, 'department'):
-                    GroupPagePermission.objects.create(
-                        group=user_group,
-                        page=page,
-                        permission_type='edit'
-                    )
-                    pvr = PageViewRestriction.objects.create(
-                        page=page,
-                        restriction_type=PageViewRestriction.GROUPS,
-                    )
-                    pvr.groups.add(user_group)
+                pvr.groups.add(user_group)
 
     # Respond with the id of the new page
     response = HttpResponse(json.dumps({'id': page.id}), content_type="application/json")
