@@ -113,8 +113,3 @@ def home_page():
 @pytest.fixture()
 def expected_publish_url_base():
     return "https://janis-v3-pytest.netlify.com"
-
-
-@pytest.fixture()
-def expected_preview_url_missing_revision():
-    return "https://janis-v3-pytest.netlify.com/en/preview/services/?CMS_API=http://localhost:8000/api/graphql"

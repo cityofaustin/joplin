@@ -1,5 +1,27 @@
 {% if page.live %}
-    <a href="{{ page.janis_publish_url }}" target="_blank" class="underlined">{{ page.status_string|capfirst }}</a>
+    {% if page.published %}
+        {% if page.publish_request_enqueued %}
+            <!-- A page is live, already published, and now publishing an update -->
+            <div><a href="{{ page.janis_publish_url }}" target="_blank" class="underlined">Live</a> + Publishing</div>
+        {% else %}
+            {% if page.has_unpublished_changes %}
+                <!-- A page is live and published, with a new draft revision in progress -->
+                <div><a href="{{ page.janis_publish_url }}" target="_blank" class="underlined">Live</a> + <a href="{{ page.janis_preview_url }}" class="underlined">Draft</a></div>
+            {% else %}
+                <!-- A page is live and published -->
+                <a href="{{ page.janis_publish_url }}" target="_blank" class="underlined">Live</a>
+            {% endif %}
+        {% endif %}
+    {% else %}
+        <!-- A page is live and about to be published for the first time -->
+        <div><a href="{{ page.janis_publish_url }}" target="_blank" class="underlined">Live</a> + Publishing</div>
+    {% endif %}
 {% else %}
-    <a href="{{ page.janis_preview_url }}" class="underlined">{{ page.status_string|capfirst  }}</a>
+    {% if page.published %}
+        <!-- A page is still up, but is now unpublishing -->
+        <div><a href="{{ page.janis_publish_url }}" target="_blank" class="underlined">Live</a> + Unpublishing</div>
+    {% else %}
+        <!-- A page is not live and not published -->
+        <a href="{{ page.janis_preview_url }}" class="underlined">Draft</a>
+    {% endif %}
 {% endif %}

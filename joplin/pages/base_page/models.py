@@ -157,28 +157,6 @@ class JanisBasePage(Page):
         # Default to returning same page as url
         return "#"
 
-
-    @property
-    def status_string(self):
-        """
-        override wagtail default
-        see https://github.com/wagtail/wagtail/blob/f44d27642b4a6932de73273d8320bbcb76330c21/wagtail/core/models.py#L1010
-        """
-        if not self.live:
-            if self.expired:
-                return ("Expired")
-            elif self.approved_schedule:
-                return ("Scheduled")
-            else:
-                return ("Draft")
-        else:
-            if self.approved_schedule:
-                return ("Live + Scheduled")
-            elif self.has_unpublished_changes:
-                return ("Live + Draft")
-            else:
-                return ("Live")
-
     def departments(self):
         """
          This goes through our group page permissions and looks for any related departments
