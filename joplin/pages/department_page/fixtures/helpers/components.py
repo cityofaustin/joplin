@@ -17,6 +17,7 @@ def mvp_news_aph():
     page_data = {
         "imported_revision_id": None,
         "live": True,
+        "published": True,
         "parent": home(),
         "title": "Austin Public Health",
         "title_es": "Salud Pública de Austin",
@@ -31,10 +32,10 @@ def mvp_news_cpio():
     page_data = {
         "imported_revision_id": None,
         "live": True,
+        "published": True,
         "parent": home(),
         "title": "Communications and Public Information Office",
         "slug": "mvp-news-cpio",
     }
 
     return create_fixture(page_data, os.path.basename(__file__))
-

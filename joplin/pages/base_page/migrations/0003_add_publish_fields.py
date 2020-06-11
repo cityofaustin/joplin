@@ -3,6 +3,15 @@
 from django.db import migrations, models
 
 
+def add_publish_fields(apps, schema_editor):
+    JanisBasePage = apps.get_model('base_page.JanisBasePage')
+    all_pages = JanisBasePage.objects.all()
+    for page in all_pages.iterator():
+        if page.live:
+            page.published = True
+        page.save()
+
+
 class Migration(migrations.Migration):
 
     dependencies = [
@@ -30,4 +39,5 @@ class Migration(migrations.Migration):
             name='published',
             field=models.BooleanField(blank=True, default=False, null=True),
         ),
+        migrations.RunPython(add_publish_fields),
     ]

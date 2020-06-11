@@ -29,6 +29,7 @@ def test_page_status_live():
 def test_page_status_draft():
     page = service_page_fixtures.kitchen_sink()
     page.live = False
+    page.published = False
     rendered_template = render_page_status_tag_template(page)
     assert f'<a href="{page.janis_preview_url()}" class="underlined">Draft</a>' == rendered_template
 
