@@ -510,6 +510,10 @@ LOGGING = {
         },
     },
 }
+# Send email notifications of errors for PR build
+# TODO: this can be managed in a cleaner way
+if os.getenv("CIRCLE_BRANCH") == "4356-queue"
+    ADMINS = [('Nick', 'nick.ivons@austintexas.gov')]
 
 # Temporary variables to toggle features for v3 while its still in development
 V3_WIP = bool(strtobool(os.environ.get('V3_WIP', str(False))))
