@@ -1,3 +1,6 @@
+import requests, json
+from datetime import datetime
+from pytz import timezone
 from django.conf import settings
 from django.dispatch import receiver
 from django.db.models.signals import post_save, post_delete
@@ -5,14 +8,13 @@ from wagtail.core.signals import page_published, page_unpublished
 from graphene import Node
 from wagtail.core.models import Page
 from wagtail.admin.models import get_object_usage
+from rest_framework_api_key.models import APIKey
 
 from snippets.contact.models import Contact
 from pages.guide_page.models import GuidePage
-from groups.models import Department
 from wagtail.documents.models import Document
-from base.signals.aws_publish import get_http_request, create_build_aws
-from base.signals.publish import publish
-from flags.state import flag_enabled
+from pages.home_page.models import HomePage
+
 
 import logging
 logger = logging.getLogger('joplin')
@@ -56,7 +58,7 @@ def get_page_data(page, triggered_build, action):
     }
 
 
-def collect_pages(sender, primary_page, action):
+def collect_pages(primary_page, action):
     # does this work on page deletion? pages arent deleted right, just unpublished?
     """
     :param primary_page: the page that triggered the publish/unpublish
@@ -72,14 +74,14 @@ def collect_pages(sender, primary_page, action):
     for page in page_set:
         # Primary page is also included in page_set. Don't re-add primary_page data.
         if not (page.id == primary_id):
-            pages.append(get_page_data(page, triggered_build, action))
+            pages.append(get_page_data(page, False, action))
     if primary_page.get_verbose_name() is 'Service Page' or primary_page.get_verbose_name() is 'Information Page':
         guide_page_data = get_page_data_from_guides(primary_id, action)
         pages.extend(guide_page_data)
     return pages
 
 
-def collect_pages_snippet(instance, action):
+def collect_pages_from_snippet(instance, action):
     """
     :param instance: the snippet that has been altered
     :return: an array of global page ids
@@ -91,7 +93,7 @@ def collect_pages_snippet(instance, action):
         "action": action,
         "is_page": False,
         "content_type": instance.__class__.__name__,
-        "author": None, # TODO: is there a way to get the last editor of a snippet?
+        "author": None,  # TODO: is there a way to get the last editor of a snippet?
     }
     pages = [snippet_data]
     page_set = instance.get_usage()
@@ -129,7 +131,7 @@ def page_published_signal(sender, **kwargs):
     # because if the title didnt change, pages that contain links to the published page don't need to be updated
     action = "published"
     primary_page = Page.objects.get(id=kwargs['instance'].id)
-    pages = collect_pages(sender, primary_page, action)
+    pages = collect_pages(primary_page, action)
     publish(pages, primary_page)
 
 
@@ -137,7 +139,7 @@ def page_published_signal(sender, **kwargs):
 def page_unpublished_signal(sender, **kwargs):
     action = "unpublished"
     primary_page = Page.objects.get(id=kwargs['instance'].id)
-    pages = collect_pages(sender, primary_page, action)
+    pages = collect_pages(primary_page, action)
     publish(pages, primary_page)
 
 
@@ -148,7 +150,7 @@ def page_unpublished_signal(sender, **kwargs):
 @receiver(post_save, sender=Contact)
 def handle_post_save_signal(sender, **kwargs):
     action = "saved"
-    pages = collect_pages_snippet(kwargs['instance'], action)
+    pages = collect_pages_from_snippet(kwargs['instance'], action)
     publish(pages)
 
 
@@ -156,5 +158,52 @@ def handle_post_save_signal(sender, **kwargs):
 @receiver(post_delete, sender=Contact)
 def handle_post_delete_signal(sender, **kwargs):
     action = "deleted"
-    pages = collect_pages_snippet(kwargs['instance'], action)
+    pages = collect_pages_from_snippet(kwargs['instance'], action)
     publish(pages)
+
+
+def publish(pages, primary_page=None):
+    if not settings.PUBLISH_ENABLED:
+        return
+
+    # TODO: we want to extract the publish_janis_branch() for each page_id that we're publishing (for example, if we start publishing to different sites).
+    # That logic must happen earlier in the collect_pages logic.
+    # Even though this will work for now, it should not be hardcoded to be the first HomePage object.
+    publish_janis_branch = HomePage.objects.first().publish_janis_branch()
+
+    if not publish_janis_branch:
+        logger.info("publish_janis_branch must be set in order to publish.")
+        return None
+
+    api_key = APIKey.objects.create_key(
+        name=f"publisher-{datetime.now(timezone('US/Central')).isoformat()}"
+    )[1]
+
+    headers = {
+        "x-api-key": settings.PUBLISHER_V2_API_KEY,
+        "content-type": "application/json",
+    }
+    url = settings.PUBLISHER_V2_URL
+    data = {
+        "janis_branch": publish_janis_branch,
+        "pages": pages,
+        "joplin_appname": settings.APPNAME,
+        "api_key": api_key,
+        "env_vars": {
+            "REACT_STATIC_PREFETCH_RATE": "0",
+        },
+        "build_type": "rebuild",
+    }
+    res = requests.post(url, data=json.dumps(data), headers=headers)
+    if res.status_code != 200:
+        logger.error(f"publish_request failed with status {res.status_code}")
+        logger.error(f"message: {res.json()['message']}")
+    elif primary_page:
+        res_data = res.json()
+        publish_request_pk = res_data['pk']
+        publish_request_sk = res_data['sk']
+        primary_page.publish_request_pk = publish_request_pk
+        primary_page.publish_request_sk = publish_request_sk
+        primary_page.publish_request_enqueued = True
+        logger.info(f"published() pk={publish_request_pk}, sk={publish_request_sk}")
+        primary_page.save()
