@@ -2,7 +2,7 @@ import os
 import sys
 import requests
 
-from .branch_overrides import branch_overrides
+from branch_overrides import branch_overrides
 
 '''
     This is how environment variables get set in our Heroku PR joplin applications.
