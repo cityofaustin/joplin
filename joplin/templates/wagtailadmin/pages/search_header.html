@@ -1,4 +1,5 @@
 {% load i18n %}
+{% load joplin_tags %}
 
 <div class="header secondary coa-search-header ">
 
@@ -22,7 +23,8 @@
     <div class="actions">
       <!-- <div> -->
         <!-- Button trigger modal -->
-        <button type="button" class="button" data-toggle="modal" data-target="#createNewContentModal" id="createNewContentButton" data-create-topics=false>
+        {% is_editor as editor%}
+        <button type="button" class="button" data-toggle="modal" data-target="#createNewContentModal" id="createNewContentButton" data-is-editor={{editor}}>
           Create New Content
         </button>
       <!-- </div> -->

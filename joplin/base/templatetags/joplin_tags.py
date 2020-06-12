@@ -84,3 +84,11 @@ def joplin_page_listing_buttons(context, page, page_perms, is_parent=False):
         hook(buttons, page, page_perms, is_parent, context)
 
     return {'page': page, 'buttons': buttons}
+
+
+@register.simple_tag(takes_context=True)
+def is_editor(context):
+    if context.request.user.groups.filter(id=2):
+        return "true"
+
+    return "false"

@@ -35,7 +35,7 @@ class CreateContentModal extends Component {
       creatingContent: false,
       content_or_topic: 'content',
       missingTitle: false,
-      can_set_topics: (document.getElementById("createNewContentButton").dataset.createTopics === 'true')
+      can_set_topics: (document.getElementById("createNewContentButton").dataset.isEditor === 'false')
     };
   }
 
