@@ -2,6 +2,8 @@
 {% load joplin_tags %}
 
 <div class="header secondary coa-search-header ">
+    {% can_create_topics as topics %}
+    {{topics|json_script:"can-create-topics"}}
 
     <div>
         <h1 class="coa-search-results-h1">
@@ -23,8 +25,7 @@
     <div class="actions">
       <!-- <div> -->
         <!-- Button trigger modal -->
-        {% is_editor as editor%}
-        <button type="button" class="button" data-toggle="modal" data-target="#createNewContentModal" id="createNewContentButton" data-is-editor={{editor}}>
+        <button type="button" class="button" data-toggle="modal" data-target="#createNewContentModal" id="createNewContentButton">
           Create New Content
         </button>
       <!-- </div> -->
