@@ -37,6 +37,7 @@ def publish_succeeded(request):
             id = page_data["id"]
             try:
                 page = get_object_or_404(Page, id=id)
+                # "published" and "unpublished" are the only possible actions for a page that triggered_build
                 if page_data["action"] == "published":
                     page.published = True
                 elif page_data["action"] == "unpublished":

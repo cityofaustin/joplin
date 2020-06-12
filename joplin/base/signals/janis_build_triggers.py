@@ -24,9 +24,6 @@ Gets data from a page that is required to send to the Publisher.
 returns {
     id: Int, the page_id used by wagtail.
     global_id: String, a hashed id used to query against graphql api
-    is_page: Boolean, is it a page as opposed to a snippet?
-    content_type: String, which specific content_type (this is more for logging)
-    author: Int, the id of the author of the latest revision
     triggered_build: Boolean, was this the page that triggered the publish request?
     action:
         "published" - publish action for itself and other pages
@@ -34,6 +31,9 @@ returns {
         "updated_by_snippet" - this page was updated by a snippet being saved or deleted
         "saved" - a snippet is being saved, has no impact on Janis itself, but it could result in pages getting "secondary_publish_by_snippet"
         "deleted" - a snippet is being deleted, has no impact on Janis itself, but it could result in pages getting "secondary_publish_by_snippet"
+    is_page: Boolean, is it a page as opposed to a snippet?
+    content_type: String, which specific content_type (this is more for logging)
+    author: Int, the id of the author of the latest revision
 }
 TODO: Figure out what format global_id should be in order to run queries with it.
 The current global_id is basically a placeholder.
@@ -48,11 +48,11 @@ def get_page_data(page, triggered_build, action):
     return {
         "id": page.id,
         "global_id": Node.to_global_id(page.content_type.name, page.id),
+        "triggered_build": triggered_build,
+        "action": action,
         "is_page": True,
         "content_type": page.get_verbose_name(),
         "author": author,
-        "triggered_build": triggered_build,
-        "action": action,
     }
 
 
@@ -87,11 +87,11 @@ def collect_pages_snippet(instance, action):
     snippet_data = {
         "id": instance.id,
         "global_id": None,
+        "triggered_build": True,
+        "action": action,
         "is_page": False,
         "content_type": instance.__class__.__name__,
         "author": None, # TODO: is there a way to get the last editor of a snippet?
-        "triggered_build": True,
-        "action": action,
     }
     pages = [snippet_data]
     page_set = instance.get_usage()
