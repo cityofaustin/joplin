@@ -53,7 +53,7 @@ def get_page_data(page, triggered_build, action):
         "triggered_build": triggered_build,
         "action": action,
         "is_page": True,
-        "content_type": page.get_verbose_name(),
+        "content_type": page.specific_class.get_verbose_name(),
         "author": author,
     }
 
@@ -68,6 +68,7 @@ def collect_pages(primary_page, action):
         get_page_data(primary_page, True, action)
     ]
     primary_id = primary_page.id
+    primary_content_type = primary_page.specific_class.get_verbose_name()
     page_set = get_object_usage(primary_page)
     # https://github.com/wagtail/wagtail/blob/master/wagtail/admin/models.py#L15
     # get_object_usage will also return the wagtail_page itself
@@ -75,7 +76,8 @@ def collect_pages(primary_page, action):
         # Primary page is also included in page_set. Don't re-add primary_page data.
         if not (page.id == primary_id):
             pages.append(get_page_data(page, False, action))
-    if primary_page.get_verbose_name() is 'Service Page' or primary_page.get_verbose_name() is 'Information Page':
+
+    if primary_content_type == 'Service Page' or primary_content_type == 'Information Page':
         guide_page_data = get_page_data_from_guides(primary_id, action)
         pages.extend(guide_page_data)
     return pages
