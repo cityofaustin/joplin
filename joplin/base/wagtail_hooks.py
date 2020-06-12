@@ -15,6 +15,7 @@ from html.parser import HTMLParser
 
 import wagtail.admin.rich_text.editors.draftail.features as draftail_features
 from wagtail.admin.rich_text.converters.html_to_contentstate import BlockElementHandler
+from base.views.joplin_search_views import dept_explorable_pages
 
 
 # Following this: https://docs.python.org/3/library/html.parser.html#examples
@@ -282,8 +283,10 @@ def register_link_handler(features):
 
 @hooks.register("construct_page_chooser_queryset")
 def filter_department_pages(pages, request):
-    print(request.user)
-    pages = pages.filter
+    if request.user.is_superuser:
+        return pages
+
+    pages = (pages & dept_explorable_pages(request.user))
     return pages
 
 
