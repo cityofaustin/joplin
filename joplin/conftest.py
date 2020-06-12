@@ -70,10 +70,10 @@ def test_api_jwt_token(request, test_api_url):
         headers={
             'Accept-Language': 'en',
         },
-        verify=True
+        verify=False,
+        retries=3,
     )
     client = Client(
-        retries=3,
         transport=transport,
         fetch_schema_from_transport=True,
     )
