@@ -61,7 +61,7 @@ urlpatterns = [
     url(r'^api/graphiql', csrf_exempt(GraphQLView.as_view(graphiql=True, pretty=True))),
     url(r'session_security/', include('session_security.urls')),
     url(r'^performance/', include('silk.urls', namespace='silk')),
-    url('publish_succeeded/', publish_succeeded.publish_succeeded),
+    url('publish_succeeded', publish_succeeded.publish_succeeded),
 
 
     # For anything not caught by a more specific rule above, hand over to

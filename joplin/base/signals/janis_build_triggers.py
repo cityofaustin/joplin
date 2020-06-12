@@ -201,6 +201,7 @@ def publish(pages, primary_page=None):
         logger.error(f"publish_request failed with status {res.status_code}")
         logger.error(f"message: {res.json()['message']}")
     elif primary_page:
+        primary_page = primary_page.specific
         res_data = res.json()
         publish_request_pk = res_data['pk']
         publish_request_sk = res_data['sk']
