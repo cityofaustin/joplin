@@ -89,6 +89,6 @@ def joplin_page_listing_buttons(context, page, page_perms, is_parent=False):
 @register.simple_tag(takes_context=True)
 def can_create_topics(context):
     if context.request.user.is_superuser or context.request.user.groups.filter(id=1):
-        return {"topics": True}
+        return True
 
-    return {"topics": False}
+    return False

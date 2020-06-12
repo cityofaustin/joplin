@@ -35,7 +35,7 @@ class CreateContentModal extends Component {
       creatingContent: false,
       content_or_topic: 'content',
       missingTitle: false,
-      canSetTopics: JSON.parse(document.getElementById('can-create-topics').textContent).topics,
+      canSetTopics: JSON.parse(document.getElementById('can-create-topics').textContent),
     };
   }
 
