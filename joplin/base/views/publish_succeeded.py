@@ -3,8 +3,6 @@ from rest_framework_api_key.permissions import HasAPIKey
 from rest_framework_api_key.models import APIKey
 from rest_framework.response import Response
 import json
-from django.views.decorators.csrf import csrf_exempt
-from django.views.decorators.http import require_POST
 from django.http.response import Http404
 from django.shortcuts import get_object_or_404
 from wagtail.core.models import Page
@@ -31,7 +29,7 @@ def publish_succeeded(request):
         logger.error(f"Couldn't find jwtToken with prefix {api_key[:8]}")
 
     # Update pages in order, in case subsequent publish/unpublish requests overwrote each other.
-    sort(pages, key=lambda page: page["timestamp"])
+    pages.sort(key=lambda page: page["timestamp"])
     for page_data in pages:
         if page_data["triggered_build"] and page_data["is_page"]:
             id = page_data["id"]

@@ -30,6 +30,7 @@ branch_overrides = {
         "V3_WIP": True,
     },
     "4356-queue": {
+        "LOAD_DATA": "fixtures",
         "CI_COA_PUBLISHER_V2_URL_PR": "https://oar72z1wgf.execute-api.us-east-1.amazonaws.com/4356-queue/publish-request",
         "COA_PUBLISHER_V2_API_KEY_PR": "changeme",
     }
