@@ -280,6 +280,13 @@ def register_link_handler(features):
     features.register_link_type(InternalLinkHandler)
 
 
+@hooks.register("construct_page_chooser_queryset")
+def filter_department_pages(pages, request):
+    print(request.user)
+    pages = pages.filter
+    return pages
+
+
 # By default all menu items are shown all the time.
 # This checks for permission and returns True if the item should be shown
 class PermissionMenuItem(MenuItem):
