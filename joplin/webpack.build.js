@@ -5,15 +5,11 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = merge(baseConfig, {
   mode: "production",
-  plugins: [
-    // minify js
-    new UglifyJsPlugin({
-      sourceMap: true,
-      compress: true,
-    }),
-    // minify css
-    new webpack.LoaderOptionsPlugin({
-      minimize: true,
-    }),
-  ]
+  optimization: {
+    minimizer: [
+      new UglifyJsPlugin({
+        sourceMap: true,
+      }),
+    ]
+  }
 });
