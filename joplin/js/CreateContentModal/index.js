@@ -35,6 +35,7 @@ class CreateContentModal extends Component {
       creatingContent: false,
       content_or_topic: 'content',
       missingTitle: false,
+      canSetTopics: JSON.parse(document.getElementById('can-create-topics').textContent),
     };
   }
 
@@ -190,6 +191,7 @@ class CreateContentModal extends Component {
                           this.handleContentOrTopicSelect
                         }
                         content_or_topic={this.state.content_or_topic}
+                        canSetTopics={this.state.canSetTopics}
                       />
                     )}
                     {this.state.activeStep === stepsEnum.CHOOSE_TITLE && (
