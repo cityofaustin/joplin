@@ -1,6 +1,7 @@
 const path = require("path");
 const fs = require("fs");
 const BundleTracker = require("webpack-bundle-tracker");
+const WebpackOnBuildPlugin = require('on-build-webpack');
 
 // Using this example to save some config copy pasta
 // https://simonsmith.io/organising-webpack-config-environments/
@@ -56,6 +57,17 @@ module.exports = {
     new BundleTracker({
       path: path.resolve(__dirname, "./static/"),
       filename: "webpack-stats.json"
+    }),
+    new WebpackOnBuildPlugin(function(stats) {
+      // Deletes old bundles once new ones are created
+      const hashtest = new RegExp(`${stats.hash}.js$`)
+      fs.readdir(buildDir, (err, files) => {
+        files.forEach(file => {
+          if (!file.match(hashtest)) {
+            fs.unlinkSync(path.resolve(buildDir, file))
+          }
+        })
+      })
     }),
   ]
 };
