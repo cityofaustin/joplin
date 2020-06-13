@@ -7,7 +7,7 @@ module.exports = merge(baseConfig, {
   mode: "production",
   plugins: [
     // minify js
-    UglifyJsPlugin({
+    new UglifyJsPlugin({
       sourceMap: true,
       compress: true,
     }),
