@@ -23,8 +23,7 @@ def test_page_status_template():
     page.live = True
     page.published = True
     rendered_template = render_page_status_tag_template(page)
-    assert f'<a href="{page.janis_publish_url()}" target="_blank" class="underlined">Live</a>' == rendered_template
-
+    assert f'<div class="coa-page-status__value-container"><a href="{page.janis_publish_url()}" target="_blank" class="coa-page-status__live-badge">Live</a></div>' == rendered_template
 
 @pytest.mark.django_db
 def test_page_status_live():
