@@ -157,6 +157,37 @@ class JanisBasePage(Page):
         # Default to returning same page as url
         return "#"
 
+
+    @property
+    def status_string(self):
+        """
+        override wagtail default
+        see https://github.com/wagtail/wagtail/blob/f44d27642b4a6932de73273d8320bbcb76330c21/wagtail/core/models.py#L1010
+        """
+        if self.live:
+            if self.published:
+                if self.publish_request_enqueued:
+                    # A page is live, already published, and now publishing an update
+                    return "Live + Publishing"
+                else:
+                    if self.has_unpublished_changes:
+                        # A page is live and published, with a new draft revision in progress
+                        return "Live + Draft"
+                    else:
+                        # A page is live and published
+                        return "Live"
+            else:
+                # A page is live and about to be published for the first time
+                return "Publishing"
+        else:
+            if self.published:
+                # A page is still up, but is now unpublishing
+                return "Live + Unpublishing"
+            else:
+                # A page is not live and not published
+                return "Draft"
+
+
     def departments(self):
         """
          This goes through our group page permissions and looks for any related departments

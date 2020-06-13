@@ -1,27 +1,13 @@
-{% if page.live %}
-    {% if page.published %}
-        {% if page.publish_request_enqueued %}
-            <!-- A page is live, already published, and now publishing an update -->
-            <div class="coa-header__page-status-value"><a href="{{ page.janis_publish_url }}" target="_blank" class="underlined">Live</a> + Publishing</div>
-        {% else %}
-            {% if page.has_unpublished_changes %}
-                <!-- A page is live and published, with a new draft revision in progress -->
-                <div class="coa-header__page-status-value"><a href="{{ page.janis_publish_url }}" target="_blank" class="underlined">Live</a> + <a href="{{ page.janis_preview_url }}" class="underlined">Draft</a></div>
-            {% else %}
-                <!-- A page is live and published -->
-                <a href="{{ page.janis_publish_url }}" target="_blank" class="underlined">Live</a>
-            {% endif %}
-        {% endif %}
-    {% else %}
-        <!-- A page is live and about to be published for the first time -->
-        <div class="coa-header__page-status-value"><a href="{{ page.janis_publish_url }}" target="_blank" class="underlined">Live</a> + Publishing</div>
-    {% endif %}
-{% else %}
-    {% if page.published %}
-        <!-- A page is still up, but is now unpublishing -->
-        <div class="coa-header__page-status-value"><a href="{{ page.janis_publish_url }}" target="_blank" class="underlined">Live</a> + Unpublishing</div>
-    {% else %}
-        <!-- A page is not live and not published -->
-        <a href="{{ page.janis_preview_url }}" class="underlined">Draft</a>
-    {% endif %}
+{% if page.status_string == "Live" %}
+    <a href="{{ page.janis_publish_url }}" target="_blank" class="underlined">Live</a>
+{% elif page.status_string == "Draft" %}
+    <a href="{{ page.janis_preview_url }}" class="underlined">Draft</a>
+{% elif page.status_string == "Live + Publishing" %}
+    <div class="coa-header__page-status-value"><a href="{{ page.janis_publish_url }}" target="_blank" class="underlined">Live</a> + Publishing</div>
+{% elif page.status_string == "Live + Draft" %}
+    <div class="coa-header__page-status-value"><a href="{{ page.janis_publish_url }}" target="_blank" class="underlined">Live</a> + <a href="{{ page.janis_preview_url }}" class="underlined">Draft</a></div>
+{% elif page.status_string == "Publishing" %}
+    <div class="coa-header__page-status-value">Publishing</div>
+{% elif page.status_string == "Live + Unpublishing" %}
+    <div class="coa-header__page-status-value"><a href="{{ page.janis_publish_url }}" target="_blank" class="underlined">Live</a> + Unpublishing</div>
 {% endif %}
