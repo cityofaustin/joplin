@@ -1,13 +1,13 @@
 {% if page.status_string == "Live" %}
-    <a href="{{ page.janis_publish_url }}" target="_blank" class="underlined">Live</a>
+    <div class="coa-page-status__value-container"><a href="{{ page.janis_publish_url }}" target="_blank" class="coa-page-status__live-badge">Live</a></div>
 {% elif page.status_string == "Draft" %}
-    <a href="{{ page.janis_preview_url }}" class="underlined">Draft</a>
+    <div class="coa-page-status__value-container"><a href="{{ page.janis_preview_url }}" class="coa-page-status__draft-badge">Draft</a></div>
 {% elif page.status_string == "Live + Publishing" %}
-    <div class="coa-header__page-status-value"><a href="{{ page.janis_publish_url }}" target="_blank" class="underlined">Live</a> + Publishing</div>
+    <div class="coa-page-status__value-container"><a href="{{ page.janis_publish_url }}" target="_blank" class="coa-page-status__live-badge">Live</a> + <div class="coa-page-status__open-modal coa-page-status__publishing-badge">Publishing</div></div>
 {% elif page.status_string == "Live + Draft" %}
-    <div class="coa-header__page-status-value"><a href="{{ page.janis_publish_url }}" target="_blank" class="underlined">Live</a> + <a href="{{ page.janis_preview_url }}" class="underlined">Draft</a></div>
+    <div class="coa-page-status__value-container"><a href="{{ page.janis_publish_url }}" target="_blank" class="coa-page-status__live-badge">Live</a> + <a href="{{ page.janis_preview_url }}" class="coa-page-status__draft-badge">Draft</a></div>
 {% elif page.status_string == "Publishing" %}
-    <div class="coa-header__page-status-value">Publishing</div>
+    <div class="coa-page-status__value-container"><div class="coa-page-status__open-modal coa-page-status__publishing-badge">Publishing</div></div>
 {% elif page.status_string == "Live + Unpublishing" %}
-    <div class="coa-header__page-status-value"><a href="{{ page.janis_publish_url }}" target="_blank" class="underlined">Live</a> + Unpublishing</div>
+    <div class="coa-page-status__value-container"><a href="{{ page.janis_publish_url }}" target="_blank" class="coa-page-status__live-badge">Live</a> + <div <div class="coa-page-status__open-modal coa-page-status__unpublishing-badge">Unpublishing</div></div>
 {% endif %}

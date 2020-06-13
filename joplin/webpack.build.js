@@ -1,6 +1,19 @@
-var merge = require('webpack-merge');
-var baseConfig = require("./webpack.base.js");
+const webpack = require('webpack');
+const merge = require('webpack-merge');
+const baseConfig = require("./webpack.base.js");
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = merge(baseConfig, {
-  mode: "production"
+  mode: "production",
+  plugins: [
+    // minify js
+    UglifyJsPlugin({
+      sourceMap: true,
+      compress: true,
+    }),
+    // minify css
+    new webpack.LoaderOptionsPlugin({
+      minimize: true,
+    }),
+  ]
 });

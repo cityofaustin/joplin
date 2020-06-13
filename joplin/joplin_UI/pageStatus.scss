@@ -1,0 +1,87 @@
+@import './css/variables';
+
+/************
+  Page Status
+************/
+// The actual value for a page status
+// Used on listing page and edit page
+.coa-page-status__value-container {
+    display: inline-block;
+}
+
+.coa-page-status__badge {
+  display: inline-block;
+  border-radius: 41px;
+  padding: .3em 1em;
+}
+
+.coa-page-status__live-badge,
+.coa-page-status__draft-badge {
+    @extend .coa-page-status__badge;
+    background-color: $coa-color-light-gray;
+    color: $coa-color-black;
+    &:hover {
+      color: $coa-color-black;
+    }
+}
+
+.coa-page-status__publishing-badge,
+.coa-page-status__unpublishing-badge {
+    @extend .coa-page-status__badge;
+    background-color: $coa-color-pale-orange;
+    color: $coa-color-yellow-metal;
+    &:hover {
+      color: $coa-color-yellow-metal;
+    }
+}
+
+.coa-page-status__open-modal {
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+/************
+  Page Status Modal
+************/
+.coa-page-status-modal__container {
+  display: none;
+  position: fixed;
+  align-content: center;
+  justify-content: center;
+  z-index: 500;
+  background-color: $coa-color-white;
+
+  width: 30rem;
+  left: 50%;
+  margin-left: -15rem;
+  top: 50%;
+  margin-top: -10rem;
+
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 8px;
+  border-color: $coa-color-dark-gray2;
+  box-shadow: 0px 5px 5px $coa-color-dark-gray2;
+
+  padding: 2rem;
+  font-size: 1.4rem;
+}
+
+.coa-page-status-modal__heading {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 1rem;
+}
+
+.coa-page-status-modal__close {
+  font-size: 2rem;
+  color: $coa-color-primary-blue;
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.coa-page-status-modal__content {
+  line-height: normal;
+}

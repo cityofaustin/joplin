@@ -50,6 +50,10 @@
     }
 }
 
+.coa-header__page-revisions {
+    margin: auto;
+}
+
 .coa-header__page-info {
     position: absolute;
     right: 0px;
@@ -60,12 +64,9 @@
     margin-right: 37px;
 }
 
+// Page status section on header of edit page
 .coa-header__page-status {
     margin-left: 33px;
-}
-
-.coa-header__page-status-value {
-    display: inline-block;
 }
 
 .coa-select {

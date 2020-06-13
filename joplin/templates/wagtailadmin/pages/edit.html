@@ -127,16 +127,15 @@
 
     </div>
     <div class="secondary-actions">
-
-    <section class="coa-header__page-info">
-    <div class="coa-header__page-revisions">
-        <a href="{% url 'wagtailadmin_pages:revisions_index' page.id %}" class="underlined">Revisions</a>
-    </div>
-    <div class="coa-header__page-status">
-    {% trans "Status:" %}
-    {% include "wagtailadmin/shared/page_status_tag.html" with page=page_for_status %}
-    </div>
-    </section>
+      <section class="coa-header__page-info">
+        <div class="coa-header__page-revisions">
+          <a href="{% url 'wagtailadmin_pages:revisions_index' page.id %}" class="underlined">Revisions</a>
+        </div>
+        <div class="coa-header__page-status">
+          {% trans "Status:" %}
+          {% include "wagtailadmin/shared/page_status_tag.html" with page=page_for_status %}
+        </div>
+      </section>
     </div>
 
     <div class="flex-container">

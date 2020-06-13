@@ -19,6 +19,7 @@
     "on-build-webpack": "^0.1.0",
     "sass-loader": "^7.1.0",
     "style-loader": "^0.22.0",
+    "uglifyjs-webpack-plugin": "^2.2.0",
     "webpack": "^4.16.5",
     "webpack-bundle-tracker": "^0.3.0",
     "webpack-cli": "^3.1.0",
