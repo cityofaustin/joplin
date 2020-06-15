@@ -286,7 +286,12 @@ def filter_department_pages(pages, request):
     if request.user.is_superuser:
         return pages
 
-    pages = (pages & dept_explorable_pages(request.user))
+    # include all location pages, since should be accessible regardless of user's department
+    location_pages = pages.filter(content_type_id=47)
+    # We need the home_page in the pages for the richtext link.
+    # It needs to be a queryset in order to include it with the other querysets (i.e. can't be just the page)
+    home_page = pages.filter(id=3)
+    pages = ((pages & dept_explorable_pages(request.user)) | location_pages | home_page)
     return pages
 
 
