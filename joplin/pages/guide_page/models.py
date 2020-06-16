@@ -1,8 +1,5 @@
 from django.db import models
 
-from modelcluster.fields import ParentalKey
-from modelcluster.models import ClusterableModel
-
 from wagtail.core.fields import StreamField
 from wagtail.core.blocks import StructBlock, PageChooserBlock, TextBlock, ListBlock
 from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, PageChooserPanel, StreamFieldPanel
@@ -11,7 +8,6 @@ from wagtail.images.edit_handlers import ImageChooserPanel
 
 from base.forms import GuidePageForm
 
-from pages.base_page.models import JanisBasePage
 from pages.information_page.models import InformationPage
 from pages.service_page.models import ServicePage
 from snippets.contact.models import Contact

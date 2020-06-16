@@ -15,6 +15,7 @@ from html.parser import HTMLParser
 
 import wagtail.admin.rich_text.editors.draftail.features as draftail_features
 from wagtail.admin.rich_text.converters.html_to_contentstate import BlockElementHandler
+from base.views.joplin_search_views import dept_explorable_pages
 
 
 # Following this: https://docs.python.org/3/library/html.parser.html#examples
@@ -278,6 +279,25 @@ class InternalLinkHandler(LinkHandler):
 @hooks.register('register_rich_text_features', order=1)
 def register_link_handler(features):
     features.register_link_type(InternalLinkHandler)
+
+
+@hooks.register("construct_page_chooser_queryset")
+def filter_department_pages(pages, request):
+    # superusers / admins are not restricted by department
+    if request.user.is_superuser:
+        return pages
+    # if a user is allowed to add topics, they can select from any topic regardless of department
+    if request.GET['page_type'] == 'topic_page.topicpage':
+        return pages
+    print(request.GET)
+
+    # include all location pages, since they should be accessible regardless of user's department
+    location_pages = pages.filter(content_type_id=47)
+    # We need the home_page in the pages for the richtext links
+    # It needs to be a queryset in order to include it with the other querysets (i.e. can't be just the page)
+    home_page = pages.filter(id=3)
+    pages = ((pages & dept_explorable_pages(request.user)) | location_pages | home_page)
+    return pages
 
 
 # By default all menu items are shown all the time.
