@@ -285,6 +285,9 @@ def register_link_handler(features):
 def filter_department_pages(pages, request):
     if request.user.is_superuser:
         return pages
+    # if a user is allowed to add topics, they can select from any topic regardless of department
+    if request.GET['page_type'] == 'topic_page.topicpage':
+        return pages
 
     # include all location pages, since should be accessible regardless of user's department
     location_pages = pages.filter(content_type_id=47)
