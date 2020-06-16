@@ -199,7 +199,6 @@ class LocationPageRelatedServices(Orderable):
     panels = [
         PageChooserPanel("related_service"),
         FieldPanel("hours_same_as_location"),
-
     ]
 
 
