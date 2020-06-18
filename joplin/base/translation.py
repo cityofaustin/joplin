@@ -1,5 +1,4 @@
 from wagtail_modeltranslation.translation import register, TranslationOptions
-from wagtail.core.models import Page
 from wagtail.images.models import Image
 
 from base.models import TranslatedImage
@@ -10,6 +9,7 @@ from pages.topic_page.models import TopicPage, TopicPageTopPage
 from pages.service_page.models import ServicePage
 from pages.information_page.models import InformationPage
 from pages.department_page.models import DepartmentPage, DepartmentPageDirector, DepartmentPageTopPage, DepartmentPageRelatedPage
+from pages.official_documents_list.models import OfficialDocumentList
 from pages.official_documents_page.models import OfficialDocumentPage, OfficialDocumentPageDocument
 from pages.guide_page.models import GuidePage
 from pages.form_container.models import FormContainer
@@ -93,6 +93,13 @@ class InformationPageTranslationOptions(TranslationOptions):
     fields = (
         'description',
         'additional_content',
+    )
+
+
+@register(OfficialDocumentList)
+class OfficialDocumentListTranslationOptions(TranslationOptions):
+    fields = (
+        'description',
     )
 
 
