@@ -29,8 +29,8 @@ Eventually the OfficialDocumentPageOfficialDocument should be replaced by a mode
 class OfficialDocumentPage(JanisBasePage):
     base_form_class = OfficialDocumentPageForm
     date = models.DateField(verbose_name="Document date", null=True)
-    document_title = models.CharField(verbose_name="Document title", null=True, max_length=DEFAULT_MAX_LENGTH) #todo check null true
-    authoring_office = models.CharField(verbose_name="Authoring office of document", null=True, max_length=DEFAULT_MAX_LENGTH) #todo check null true
+    document_title = models.CharField(verbose_name="Document title", max_length=DEFAULT_MAX_LENGTH)
+    authoring_office = models.CharField(verbose_name="Authoring office of document", max_length=DEFAULT_MAX_LENGTH)
     summary = models.TextField(verbose_name="Document summary")
     name = models.CharField(verbose_name="Name of Document", max_length=DEFAULT_MAX_LENGTH)
     document = models.ForeignKey(Document, null=True, blank=False, on_delete=models.SET_NULL, related_name='+',
