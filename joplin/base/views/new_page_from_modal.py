@@ -33,7 +33,6 @@ def new_page_from_modal(request):
     if request.method == 'POST':
         # Get the page data
         body = json.loads(request.body)
-        print(body['type'])
 
         # if we got an import request, let's go try some importing
         if body['type'] == 'importSinglePage':
