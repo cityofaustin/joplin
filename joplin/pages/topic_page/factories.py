@@ -39,5 +39,5 @@ class JanisBasePageWithTopicsFactory(JanisBasePageFactory):
 
         # pass "add_topics__dummy"=True into Factory() to make dummy topics
         if create:
-            if (kwargs.get("dummy", False)):
+            if kwargs.get("dummy", False):
                 JanisBasePageTopicFactory.create_batch(2, page=self)
