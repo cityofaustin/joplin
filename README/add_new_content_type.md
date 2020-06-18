@@ -2,6 +2,12 @@
 
 TODO.
 
+add app to settings
+Register for translations
+Check publish requirements
+add form to base/forms.py
+update schema.py
+
 ## Importer
 
 Importer imports from preview urls, so we use the model's `janis_url_page_type` as the key within `importer/queries.py` and `pages/base_page/fixtures/helpers/page_type_map.py`.

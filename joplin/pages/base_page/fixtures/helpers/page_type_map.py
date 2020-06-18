@@ -9,7 +9,7 @@ from pages.service_page.factories import ServicePageFactory
 from pages.location_page.models import LocationPage
 from pages.location_page.factories import LocationPageFactory
 from pages.official_documents_page.models import OfficialDocumentPage
-from pages.official_documents_page.factories import OfficialDocumentPageFactory
+# from pages.official_documents_page.factories import OfficialDocumentPageFactory
 from pages.department_page.models import DepartmentPage
 from pages.department_page.factories import DepartmentPageFactory
 from pages.event_page.models import EventPage
@@ -47,10 +47,10 @@ page_type_map = {
         "model": LocationPage,
         "factory": LocationPageFactory,
     },
-    "official_document": {
-        "model": OfficialDocumentPage,
-        "factory": OfficialDocumentPageFactory,
-    },
+    # "official_document": {
+    #     "model": OfficialDocumentPage,
+    #     "factory": OfficialDocumentPageFactory,
+    # },
     "department": {
         "model": DepartmentPage,
         "factory": DepartmentPageFactory,
