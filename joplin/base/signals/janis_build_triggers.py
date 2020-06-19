@@ -43,7 +43,7 @@ The current global_id is basically a placeholder.
 def get_page_data(page, triggered_build, action):
     latest_revision = page.get_latest_revision()
     # imported pages may not have a latest_revision yet.
-    if latest_revision:
+    if latest_revision and latest_revision.user:
         author = latest_revision.user.id
     else:
         author = None
