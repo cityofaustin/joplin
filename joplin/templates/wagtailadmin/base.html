@@ -23,9 +23,9 @@ window.IS_PRODUCTION = IS_PRODUCTION
 {% endif %}
 
 <!-- Add "Publishing" and "Unpublishing" page_status modals -->
-{% render_bundle 'pageStatusModals' %}
-{% include 'joplin_UI/pageStatusModals/publishing.html' %}
-{% include 'joplin_UI/pageStatusModals/unpublishing.html' %}
+{% render_bundle 'pageStatus' %}
+{% include 'joplin_UI/pageStatus/publishing_modal.html' %}
+{% include 'joplin_UI/pageStatus/unpublishing_modal.html' %}
 
 {% include 'session_security/all.html' %}
 

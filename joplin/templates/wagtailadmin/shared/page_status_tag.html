@@ -3,11 +3,11 @@
 {% elif page.status_string == "Draft" %}
     <div class="coa-page-status__value-container"><a href="{{ page.janis_preview_url }}" class="coa-page-status__draft-badge">Draft</a></div>
 {% elif page.status_string == "Live + Publishing" %}
-    <div class="coa-page-status__value-container"><a href="{{ page.janis_publish_url }}" target="_blank" class="coa-page-status__live-badge">Live</a> + <div class="coa-page-status__open-modal coa-page-status__publishing-badge">Publishing</div></div>
+    <div class="coa-page-status__value-container"><a href="{{ page.janis_publish_url }}" target="_blank" class="coa-page-status__live-badge">Live</a> + <div class="coa-page-status__open-modal-publishing coa-page-status__publishing-badge">Publishing</div></div>
 {% elif page.status_string == "Live + Draft" %}
     <div class="coa-page-status__value-container"><a href="{{ page.janis_publish_url }}" target="_blank" class="coa-page-status__live-badge">Live</a> + <a href="{{ page.janis_preview_url }}" class="coa-page-status__draft-badge">Draft</a></div>
 {% elif page.status_string == "Publishing" %}
-    <div class="coa-page-status__value-container"><div class="coa-page-status__open-modal coa-page-status__publishing-badge">Publishing</div></div>
+    <div class="coa-page-status__value-container"><div class="coa-page-status__open-modal-publishing coa-page-status__publishing-badge">Publishing</div></div>
 {% elif page.status_string == "Live + Unpublishing" %}
-    <div class="coa-page-status__value-container"><a href="{{ page.janis_publish_url }}" target="_blank" class="coa-page-status__live-badge">Live</a> + <div <div class="coa-page-status__open-modal coa-page-status__unpublishing-badge">Unpublishing</div></div>
+    <div class="coa-page-status__value-container"><a href="{{ page.janis_publish_url }}" target="_blank" class="coa-page-status__live-badge">Live</a> + <div <div class="coa-page-status__open-modal-unpublishing coa-page-status__unpublishing-badge">Unpublishing</div></div>
 {% endif %}

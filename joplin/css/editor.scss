@@ -113,7 +113,6 @@ New Containers for .coa-edit-page
 }
 
 .coa-edit-page__header-row-messages {
-
 }
 
 .coa-edit-page__header-row-middle {
@@ -129,4 +128,26 @@ New Containers for .coa-edit-page
     display: flex;
     flex-direction: row;
     margin-top: 150px;
+}
+
+.coa-message__wrapper {
+    background: $coa-color-bold-yellow;
+    padding: 1rem;
+    font-size: 1rem;
+    margin-left: -1.5rem;
+    margin-right: 1rem;
+    margin-top: -1rem;
+    display: flex;
+    justify-content: space-between;
+}
+
+.coa-message__link {
+    text-decoration: underline;
+    color: $coa-color-primary-blue;
+}
+
+.coa-message__close-button {
+    &:hover {
+      cursor: pointer;
+    }
 }

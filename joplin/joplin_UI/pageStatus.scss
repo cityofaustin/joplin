@@ -35,7 +35,9 @@
     }
 }
 
-.coa-page-status__open-modal {
+// These classes are used for javascript logic in js/pageStatus/index.js
+.coa-page-status__open-modal-publishing,
+.coa-page-status__open-modal-unpublishing {
   &:hover {
     cursor: pointer;
   }
