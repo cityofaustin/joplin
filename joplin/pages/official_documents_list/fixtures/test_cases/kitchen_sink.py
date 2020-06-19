@@ -1,6 +1,6 @@
 import os
-from pages.official_documents_page.fixtures.helpers.create_fixture import create_fixture
-import pages.official_documents_page.fixtures.helpers.components as components
+from pages.official_documents_list.fixtures.helpers.create_fixture import create_fixture
+import pages.official_documents_list.fixtures.helpers.components as components
 from pages.topic_page.fixtures.test_cases import kitchen_sink as kitchen_sink_topic
 
 
@@ -15,7 +15,7 @@ def kitchen_sink():
         "coa_global": False,
         "title": "Kitchen sink official documents page [en]",
         "title_es": "Kitchen sink official documents page [es]",
-        "slug": "kitchen-sink-official-documents-page",
+        "slug": "kitchen-sink-official-documents-list",
         "add_topics": {
             "topics": [topic]
         },

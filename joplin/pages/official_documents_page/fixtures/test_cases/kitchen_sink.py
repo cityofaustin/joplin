@@ -6,7 +6,7 @@ from pages.official_documents_list.fixtures.test_cases import kitchen_sink as ki
 
 # A "kitchen sink" official documents page
 def kitchen_sink():
-    official_documents_list = kitchen_sink_official_documents_list.kitchen_sink()
+    # official_documents_list = kitchen_sink_official_documents_list.kitchen_sink()
 
     # add a document
     file_name = 'kitchen-sink-file-en.txt'
@@ -23,7 +23,7 @@ def kitchen_sink():
         "coa_global": False,
         "title": "Kitchen sink official documents page [en]",
         "title_es": "Kitchen sink official documents page [es]",
-        "slug": "kitchen-sink-official-documents-page",
+        "slug": "kitchen-official-documents-page",
         'date': "2021-01-01",
         'document': document,
         'document_es': document_es,
@@ -35,7 +35,8 @@ def kitchen_sink():
         'summary_es': 'Kitchen sink document summary [es]',
         'name': 'Kitchen sink document name [en]',
         'name_es': 'Kitchen sink document name [es]',
-        'add_official_documents_list': {'official_documents_list': [official_documents_list]}
+        # todo: what should below be called?
+        # 'add_official_documents_list': {'official_documents_list': [official_documents_list]}
     }
 
     return create_fixture(page_data, os.path.basename(__file__))
