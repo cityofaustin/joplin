@@ -24,127 +24,131 @@
       }
     </style>
     {% render_bundle 'editor' %}
-    <div class="header secondary">
-        <div>
-            <h1 class="edit_page_header">
-                <span class="coa-page-action">Edit {{ page.content_type}}</span>
-                <span class="page_title">{{ page.draft_title }}</span><br>
-            </h1>
-        </div>
+    <div class="coa-edit-page__wrapper">
+        <div class="coa-edit-page__header-wrapper header secondary">
+            <div class="coa-edit-page__header-row-messages">
+                {% if page.status_string == "Live + Publishing" or page.status_string == "Publishing" %}
+                    {% include "joplin_UI/messages/publishing.html" %}
+                {% elif page.status_string == "Live + Unpublishing" %}
+                    {% include "joplin_UI/messages/unpublishing.html" %}
+                {% endif %}
+            </div>
+            <div class="coa-edit-page__header-row-middle">
+                <div>
+                    <h1 class="edit_page_header">
+                        <span class="coa-page-action">Edit {{ page.content_type}}</span>
+                        <span class="page_title">{{ page.draft_title }}</span><br>
+                    </h1>
+                </div>
 
-        <div class="actions">
+                <div class="actions">
+                    <!-- SHARE -->
+                    <div class="coa-button--margin">
+                        <button id="page-share-preview-button" type="submit" form="page-edit-form"
+                          class="coa-secondary-button button action-save button-longrunning icon coa-icon-share {% if is_revision %}warning{% endif %}"
+                          data-clicked-text="{% trans 'Saving…' %}"
+                          {% if page.locked %}disabled {% endif %}
+                        >
+                          <span class="icon icon-spinner"></span>
+                          <em>
+                            {% if page.locked %}
+                              {% trans 'Page locked' %}
+                            {% else %}
+                              {% if is_revision %}
+                                {% trans 'Share current draft' %}
+                              {% else %}
+                                {% trans 'Share' %}
+                              {% endif %}
+                            {% endif %}
+                          </em>
+                        </button>
+                        <div id="page-share-url-copied" class="hidden" >
+                          <div> <span class="icon icon-success"></span> Draft preview URL copied to clipboard</div>
+                          <div id="share-preview-url">{{ page.janis_preview_url }}</div>
+                        </div>
+                    </div>
 
-            <!-- SHARE -->
-            <div class="coa-button--margin">
-                <button id="page-share-preview-button" type="submit" form="page-edit-form"
-                  class="coa-secondary-button button action-save button-longrunning icon coa-icon-share {% if is_revision %}warning{% endif %}"
-                  data-clicked-text="{% trans 'Saving…' %}"
-                  {% if page.locked %}disabled {% endif %}
-                >
-                  <span class="icon icon-spinner"></span>
-                  <em>
-                    {% if page.locked %}
-                      {% trans 'Page locked' %}
-                    {% else %}
-                      {% if is_revision %}
-                        {% trans 'Share current draft' %}
-                      {% else %}
-                        {% trans 'Share' %}
+                    <!-- PREVIEW -->
+                    <div class="coa-button--margin">
+                        <button id="page-preview-button" type="submit" form="page-edit-form"
+                          class="coa-secondary-button button action-save button-longrunning icon icon-view {% if is_revision %}warning{% endif %}"
+                          data-clicked-text="{% trans 'Saving…' %}"
+                          {% if page.locked %}disabled {% endif %}
+                        >
+                          <span class="icon icon-spinner"></span>
+                          <em>
+                            {% if page.locked %}
+                              {% trans 'Page locked' %}
+                            {% else %}
+                              {% if is_revision %}
+                                {% trans 'Preview current draft' %}
+                              {% else %}
+                                {% trans 'Preview' %}
+                              {% endif %}
+                            {% endif %}
+                          </em>
+                        </button>
+                    </div>
+
+
+                    <!-- SAVE DRAFT -->
+                    <div class="dropdown dropdown-button {% if is_revision %}warning{% endif %} coa-button--margin">
+                      <div class="editor__save-button">
+                        {# Publish/Update should be primary action if page is live #}
+                        {% if page.live and page_perms.can_publish and not page.locked %}
+                          {% include "wagtailadmin/pages/edit/publish_button.html" %}
+                        {% else %}
+                          {% include "wagtailadmin/pages/edit/save_draft_button.html" %}
+                        {% endif %}
+                      </div>
+
+                      {% if not page.locked %}
+                        <div class="dropdown-toggle icon icon-arrow-down coa-dropdown--no-height"></div>
+                        <ul role="menu">
+                          {# Save Draft should be secondary action if page is live #}
+                          {% if page.live %}
+                            <li>
+                                {% include "wagtailadmin/pages/edit/save_draft_button.html" %}
+                            </li>
+                          {% else %}
+                            {% if page_perms.can_publish %}
+                              <li>
+                                {% include "wagtailadmin/pages/edit/publish_button.html" %}
+                              </li>
+                            {% endif %}
+                          {% endif %}
+                          {% if not is_revision and page_perms.can_unpublish %}
+                            <li>
+                              <a href="{% url 'wagtailadmin_pages:unpublish' page.id %}">{% trans 'Unpublish' %}</a>
+                            </li>
+                          {% endif %}
+                          {% if not is_revision and page_perms.can_delete %}
+                            <li>
+                              <a href="{% url 'wagtailadmin_pages:delete' page.id %}" class="shortcut">{% trans 'Delete' %}</a>
+                            </li>
+                          {% endif %}
+                        </ul>
                       {% endif %}
-                    {% endif %}
-                  </em>
-                </button>
-                <div id="page-share-url-copied" class="hidden" >
-                  <div> <span class="icon icon-success"></span> Draft preview URL copied to clipboard</div>
-                  <div id="share-preview-url">{{ page.janis_preview_url }}</div>
+                    </div>
                 </div>
             </div>
-
-            <!-- PREVIEW -->
-            <div class="coa-button--margin">
-                <button id="page-preview-button" type="submit" form="page-edit-form"
-                  class="coa-secondary-button button action-save button-longrunning icon icon-view {% if is_revision %}warning{% endif %}"
-                  data-clicked-text="{% trans 'Saving…' %}"
-                  {% if page.locked %}disabled {% endif %}
-                >
-                  <span class="icon icon-spinner"></span>
-                  <em>
-                    {% if page.locked %}
-                      {% trans 'Page locked' %}
-                    {% else %}
-                      {% if is_revision %}
-                        {% trans 'Preview current draft' %}
-                      {% else %}
-                        {% trans 'Preview' %}
-                      {% endif %}
-                    {% endif %}
-                  </em>
-                </button>
+            <div class="coa-edit-page__header-row-secondary-actions secondary-actions">
+              <section class="coa-header__page-info">
+                <div class="coa-header__page-revisions">
+                  <a href="{% url 'wagtailadmin_pages:revisions_index' page.id %}" class="underlined">Revisions</a>
+                </div>
+                <div class="coa-header__page-status">
+                  {% trans "Status:" %}
+                  {% include "wagtailadmin/shared/page_status_tag.html" with page=page_for_status %}
+                </div>
+              </section>
             </div>
-
-
-            <!-- SAVE DRAFT -->
-            <div class="dropdown dropdown-button {% if is_revision %}warning{% endif %} coa-button--margin">
-              <div class="editor__save-button">
-                {# Publish/Update should be primary action if page is live #}
-                {% if page.live and page_perms.can_publish and not page.locked %}
-                  {% include "wagtailadmin/pages/edit/publish_button.html" %}
-                {% else %}
-                  {% include "wagtailadmin/pages/edit/save_draft_button.html" %}
-                {% endif %}
-              </div>
-
-              {% if not page.locked %}
-                <div class="dropdown-toggle icon icon-arrow-down coa-dropdown--no-height"></div>
-                <ul role="menu">
-                  {# Save Draft should be secondary action if page is live #}
-                  {% if page.live %}
-                    <li>
-                        {% include "wagtailadmin/pages/edit/save_draft_button.html" %}
-                    </li>
-                  {% else %}
-                    {% if page_perms.can_publish %}
-                      <li>
-                        {% include "wagtailadmin/pages/edit/publish_button.html" %}
-                      </li>
-                    {% endif %}
-                  {% endif %}
-                  {% if not is_revision and page_perms.can_unpublish %}
-                    <li>
-                      <a href="{% url 'wagtailadmin_pages:unpublish' page.id %}">{% trans 'Unpublish' %}</a>
-                    </li>
-                  {% endif %}
-                  {% if not is_revision and page_perms.can_delete %}
-                    <li>
-                      <a href="{% url 'wagtailadmin_pages:delete' page.id %}" class="shortcut">{% trans 'Delete' %}</a>
-                    </li>
-                  {% endif %}
-                </ul>
-              {% endif %}
-            </div>
-
         </div>
-
-    </div>
-    <div class="secondary-actions">
-      <section class="coa-header__page-info">
-        <div class="coa-header__page-revisions">
-          <a href="{% url 'wagtailadmin_pages:revisions_index' page.id %}" class="underlined">Revisions</a>
+        <div class="coa-edit-page__form-wrapper">
+          <div class="edit-page-form-container">
+            {{ block.super }}
+          </div>
+          {% include "wagtailadmin/pages/edit/sidebar-preview.html" %}
         </div>
-        <div class="coa-header__page-status">
-          {% trans "Status:" %}
-          {% include "wagtailadmin/shared/page_status_tag.html" with page=page_for_status %}
-        </div>
-      </section>
-    </div>
-
-    <div class="flex-container">
-
-      <div class="edit-page-form-container">
-        {{ block.super }}
-      </div>
-
-      {% include "wagtailadmin/pages/edit/sidebar-preview.html" %}
-
     </div>
 {% endblock %}
