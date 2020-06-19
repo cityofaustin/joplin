@@ -31,7 +31,7 @@ class OfficialDocumentPage(JanisBasePage):
 
     base_form_class = OfficialDocumentPageForm
     date = models.DateField(verbose_name="Document date", null=True, blank=True)
-    document_title = models.CharField(verbose_name="Document title", max_length=DEFAULT_MAX_LENGTH, blank=True)
+    # document_title = models.CharField(verbose_name="Document title", max_length=DEFAULT_MAX_LENGTH, blank=True)
     authoring_office = models.CharField(verbose_name="Authoring office of document", max_length=DEFAULT_MAX_LENGTH, blank=True)
     summary = models.TextField(verbose_name="Document summary", blank=True)
     name = models.CharField(verbose_name="Name of Document", max_length=DEFAULT_MAX_LENGTH, blank=True)
@@ -43,8 +43,12 @@ class OfficialDocumentPage(JanisBasePage):
     publish_requirements = ()  # todo: what is required? document, document list? everything?
 
     content_panels = [
+        FieldPanel('title_en', widget=countMe),
+        FieldPanel('title_es', widget=countMe),
+        FieldPanel('title_ar'),
+        FieldPanel('title_vi'),
         FieldPanel('date'),
-        FieldPanel('document_title', widget=countMe),
+        # FieldPanel('document_title', widget=countMe),
         FieldPanel('authoring_office', widget=countMe),
         FieldPanel('summary', widget=widgets.CountableWidget(attrs={
             'data-count': 'characters',

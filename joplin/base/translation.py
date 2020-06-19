@@ -106,7 +106,6 @@ class OfficialDocumentListTranslationOptions(TranslationOptions):
 @register(OfficialDocumentPage)
 class OfficialDocumentPageTranslationOptions(TranslationOptions):
     fields = (
-        'document_title',
         'summary',
         'name',
         'authoring_office'
