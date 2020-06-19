@@ -26,6 +26,7 @@ def build_create_fixture(page_type):
             return page
 
         page = factory.create(**page_data)
+        page.save_revision()
         print(f"Built {fixture_name}")
         return page
 
