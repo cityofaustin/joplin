@@ -28,7 +28,7 @@ Eventually the OfficialDocumentPageOfficialDocument should be replaced by a mode
 
 class OfficialDocumentPage(JanisBasePage):
     janis_url_page_type = "official_document_page"
-    
+
     base_form_class = OfficialDocumentPageForm
     date = models.DateField(verbose_name="Document date", null=True, blank=True)
     document_title = models.CharField(verbose_name="Document title", max_length=DEFAULT_MAX_LENGTH, blank=True)
@@ -40,7 +40,7 @@ class OfficialDocumentPage(JanisBasePage):
     document_es = models.ForeignKey(Document, blank=True, null=True, on_delete=models.SET_NULL, related_name='+',
                                     verbose_name="Document [es]")
 
-    publish_requirements = ()
+    publish_requirements = ()  # todo: what is required? document, document list? everything?
 
     content_panels = [
         FieldPanel('date'),
@@ -54,7 +54,7 @@ class OfficialDocumentPage(JanisBasePage):
         FieldPanel('name', widget=countMe),
         DocumentChooserPanel('document'),
         DocumentChooserPanel('document_es'),
-        # InlinePanel('official_document_list', label="Official Document Lists this Document belongs to")
+        InlinePanel('official_document_list', label="Official Document Lists this Document belongs to")
     ]
 
     # class Meta:
@@ -71,12 +71,12 @@ class OfficialDocumentPage(JanisBasePage):
     #         message="You must have at least 1 topic or 1 department selected.",
     #     )
 
-#
-# class OfficialDocumentPageDocumentList(ClusterableModel):
-#     page = ParentalKey(OfficialDocumentPage, related_name="official_document_list")
-#     official_document_list = models.ForeignKey('official_document_list.OfficialDocumentList',
-#                                                verbose_name='Select an Official Document List',
-#                                                related_name='+', on_delete=models.CASCADE)
-#     panels = [
-#         PageChooserPanel('official_document_list')
-#     ]
+
+class OfficialDocumentListDocument(ClusterableModel):
+    page = ParentalKey(OfficialDocumentPage, related_name="official_document_list")
+    official_document_list = models.ForeignKey('official_documents_list.OfficialDocumentList',
+                                               verbose_name='Select an Official Document List',
+                                               related_name='+', on_delete=models.CASCADE)
+    panels = [
+        PageChooserPanel('official_document_list')
+    ]
