@@ -785,11 +785,16 @@ class OfficialDocumentPageNode(DjangoObjectType):
 
 
 class OfficialDocumentListDocumentNode(DjangoObjectType):
+    document_pages = DjangoFilterConnectionField(OfficialDocumentPageNode, filterset_class=OfficialDocumentFilter)
+
     class Meta:
         model = OfficialDocumentListDocument
         filter_fields = ['official_document_list']
         fields = '__all__'
         interfaces = [graphene.Node]
+
+    def resolve_document_pages(self, info, **kwargs):
+        return OfficialDocumentFilter(kwargs).qs
 
 
 class OfficialDocumentListNode(DjangoObjectType):
