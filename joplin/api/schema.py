@@ -745,7 +745,7 @@ class FormContainerNode(DjangoObjectType):
 class OfficialDocumentFilter(FilterSet):
     order_by = OrderingFilter(
         fields=(
-            ('date'),
+            'date',
         )
     )
 
@@ -794,8 +794,6 @@ class OfficialDocumentListDocumentNode(DjangoObjectType):
 
 class OfficialDocumentListNode(DjangoObjectType):
     page_type = graphene.String()
-    # documents = DjangoFilterConnectionField(
-    #     OfficialDocumentPageNode, filterset_class=OfficialDocumentFilter)
     owner = graphene.Field(OwnerNode)
 
     class Meta:
