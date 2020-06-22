@@ -474,7 +474,12 @@ if SCOUT_MONITOR:
 
 
 # Set configs for Janis Publisher_v2
-PUBLISH_ENABLED = False # Don't try to publish on local dev environments
+if IS_LOCAL:
+    # Add mock "Publishing" status notifications when running locally.
+    # Publishing does not work locally, the page will not actually be published.
+    MOCK_PUBLISH = True
+else:
+    MOCK_PUBLISH = False
 if IS_REVIEW:
     PUBLISHER_V2_URL=os.getenv("CI_COA_PUBLISHER_V2_URL_PR")
     PUBLISHER_V2_API_KEY=os.getenv("COA_PUBLISHER_V2_API_KEY_PR")

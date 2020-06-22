@@ -165,6 +165,9 @@ def handle_post_delete_signal(sender, **kwargs):
 
 
 def publish(pages, primary_page=None):
+    if settings.MOCK_PUBLISH and primary_page:
+        update_primary_page(primary_page, "mock_pk", "mock_sk")
+        return
     if not settings.PUBLISH_ENABLED:
         return
 
@@ -201,10 +204,14 @@ def publish(pages, primary_page=None):
         logger.error(f"publish_request failed with status {res.status_code}")
         logger.error(f"message: {res.json()['message']}")
     elif primary_page:
-        primary_page = primary_page.specific
         res_data = res.json()
         publish_request_pk = res_data['pk']
         publish_request_sk = res_data['sk']
+        update_primary_page(primary_page, publish_request_pk, publish_request_sk)
+
+
+def update_primary_page(primary_page, publish_request_pk, publish_request_sk):
+        primary_page = primary_page.specific
         primary_page.publish_request_pk = publish_request_pk
         primary_page.publish_request_sk = publish_request_sk
         primary_page.publish_request_enqueued = True
