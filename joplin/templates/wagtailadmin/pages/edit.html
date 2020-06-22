@@ -17,12 +17,6 @@
     {{ page.preview_url_data|json_script:"preview-url-data" }}
     {{ style_guide_url|json_script:"style-guide-url" }}
     <script src="https://cdn.jsdelivr.net/npm/places.js@1.17.0"></script>
-    <!-- Not a good pattern, not trying to keep it around -->
-    <style>
-      footer {
-          display: none;
-      }
-    </style>
     {% render_bundle 'editor' %}
     <div class="coa-edit-page__wrapper">
         <div class="coa-edit-page__header-wrapper header secondary">
@@ -133,7 +127,6 @@
                 </div>
             </div>
             <div class="coa-edit-page__header-row-secondary-actions secondary-actions">
-                {% include "wagtailadmin/edit_handlers/tabbed_interface.html" with instance=page form=form %}
                 <section class="coa-header__page-info">
                     <div class="coa-header__page-revisions">
                       <a href="{% url 'wagtailadmin_pages:revisions_index' page.id %}" class="underlined">Revisions</a>
@@ -147,7 +140,17 @@
         </div>
         <div class="coa-edit-page__form-wrapper">
           <div class="edit-page-form-container">
-            {{ block.super }}
+              {% page_permissions page as page_perms %}
+              <form id="page-edit-form" action="{% url 'wagtailadmin_pages:edit' page.id %}" method="POST" novalidate{% if form.is_multipart %} enctype="multipart/form-data"{% endif %}>
+                  {% csrf_token %}
+                  <!-- Added a custom value for "next". We redirect back to the same edit page after publishing. -->
+                  <input type="hidden" name="next" value="{% url 'wagtailadmin_pages:edit' page.id %}">
+                  {{ edit_handler.render_form_content }}
+
+                  {% if is_revision %}
+                      <input type="hidden" name="revision" value="{{ revision.id|unlocalize }}" />
+                  {% endif %}
+              </form>
           </div>
           {% include "wagtailadmin/pages/edit/sidebar-preview.html" %}
         </div>
