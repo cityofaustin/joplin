@@ -10,6 +10,7 @@ def kitchen_sink():
     page_data = {
         "imported_revision_id": None,
         "live": True,
+        "published": True,
         "parent": components.home(),
         "title": "Kitchen sink topic collection page [en]",
         "title_es": "Kitchen sink topic collection page [es]",

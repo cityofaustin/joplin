@@ -8,6 +8,7 @@ def live_library():
     page_data = {
         "imported_revision_id": None,
         "live": True,
+        "published": True,
         "parent": components.home(),
         "coa_global": False,
         "title": "Faulk Library",

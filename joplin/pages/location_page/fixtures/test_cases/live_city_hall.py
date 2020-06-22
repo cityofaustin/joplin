@@ -8,6 +8,7 @@ def live_city_hall():
     page_data = {
         "imported_revision_id": None,
         "live": True,
+        "published": True,
         "parent": components.home(),
         "coa_global": False,
         "title": "City Hall",

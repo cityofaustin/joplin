@@ -49,6 +49,8 @@ snapshottest = "*"
 gql = "*"
 pyhumps = "*"
 django-graphql-jwt = "*"
+djangorestframework = "*"
+djangorestframework-api-key = "*"
 
 [requires]
 python_version = "3.7"

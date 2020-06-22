@@ -358,6 +358,10 @@ The migration process currently consists of 3 commands:
 
 -   ssh into a container that's deployed on Heroku
     -   `heroku run bash -a $APPNAME`
+-   Copy data from one app into another
+    -   `heroku pg:copy source-app::DATABASE_URL DATABASE_URL -a destination-app`
+    - Plug in the actual names of your "source-app" and "destination-app".
+    - Literally use "DATABASE_URL" in your command.
 -   Shut down all joplin containers:
     -   `source scripts/docker-helpers.sh; stop_project_containers joplin`
 -   Delete all joplin containers:
@@ -482,4 +486,3 @@ HEROKU_JANIS_APP_NAME=janis-staging ./scripts/serve-local.sh
 1. ```heroku pg:copy joplin::DATABASE_URL DATABASE_URL -a joplin-staging```
 
 [Changelog](https://github.com/cityofaustin/techstack/blob/master/changelogs/joplin.md)
-

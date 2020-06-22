@@ -9,6 +9,7 @@ def written_by_APH():
     page_data = {
         "imported_revision_id": None,
         "live": True,
+        "published": True,
         "parent": components.home(),
         "coa_global": False,
         "title": components.mvp_news_title,

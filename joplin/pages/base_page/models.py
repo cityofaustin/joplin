@@ -48,6 +48,17 @@ class JanisBasePage(Page):
     coa_global = models.BooleanField(default=False, verbose_name='Make this a top level page')
     imported_revision_id = models.TextField(blank=True, null=True)
 
+    # Fields used for handling Publishing status
+    # pk for our publish request in Publisher dynamodb
+    publish_request_pk = models.TextField(blank=True, null=True)
+    # sk for our publish request in Publisher dynamodb
+    publish_request_sk = models.TextField(blank=True, null=True)
+    # Indicated whether a publish_request for this page been submitted to the Publisher, and we are waiting for it to finish being processed.
+    publish_request_enqueued = models.BooleanField(default=False)
+    # Has this page been published by Publisher? A "live" page may not necessarily be published to our frontend yet.
+    published = models.BooleanField(default=False, blank=True, null=True)
+
+
     def janis_urls(self):
         """
         This should handle coa_global and department stuff
@@ -153,20 +164,29 @@ class JanisBasePage(Page):
         override wagtail default
         see https://github.com/wagtail/wagtail/blob/f44d27642b4a6932de73273d8320bbcb76330c21/wagtail/core/models.py#L1010
         """
-        if not self.live:
-            if self.expired:
-                return ("Expired")
-            elif self.approved_schedule:
-                return ("Scheduled")
+        if self.live:
+            if self.published:
+                if self.publish_request_enqueued:
+                    # A page is live, already published, and now publishing an update
+                    return "Live + Publishing"
+                else:
+                    if self.has_unpublished_changes:
+                        # A page is live and published, with a new draft revision in progress
+                        return "Live + Draft"
+                    else:
+                        # A page is live and published
+                        return "Live"
             else:
-                return ("Draft")
+                # A page is live and about to be published for the first time
+                return "Publishing"
         else:
-            if self.approved_schedule:
-                return ("Live + Scheduled")
-            elif self.has_unpublished_changes:
-                return ("Live + Draft")
+            if self.published:
+                # A page is still up, but is now unpublishing
+                return "Live + Unpublishing"
             else:
-                return ("Live")
+                # A page is not live and not published
+                return "Draft"
+
 
     def departments(self):
         """
