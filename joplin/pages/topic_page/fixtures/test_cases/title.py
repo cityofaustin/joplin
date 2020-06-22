@@ -11,6 +11,7 @@ def title():
     page_data = {
         "imported_revision_id": None,
         "live": True,
+        "published": True,
         "parent": components.home(),
         "title": "Topic title [en]",
         "title_es": "Topic title [es]",

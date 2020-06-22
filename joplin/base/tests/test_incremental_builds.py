@@ -18,7 +18,7 @@ from pages.home_page.factories import HomePageFactory
 
 from wagtail.documents.models import Document
 
-from base.signals.janis_build_triggers import collect_pages, collect_pages_snippet
+from base.signals.janis_build_triggers import collect_pages, collect_pages_from_snippet
 import pytest
 
 
@@ -99,7 +99,7 @@ class TestCollectPages(TestCase):
     # def test_contact_update(self):
     #     changed_snippet = Contact.objects.get(id=10)
     #     # First Workers Day Labor Center
-    #     global_ids = collect_pages_snippet(changed_snippet)
+    #     global_ids = collect_pages_from_snippet(changed_snippet)
     #     find_work = ServicePage.objects.get(id=116)
     #     find_workers = ServicePage.objects.get(id=115)
     #     global_page_id1 = Node.to_global_id(find_work.get_verbose_name().lower(), find_work.id)
@@ -114,7 +114,7 @@ class TestCollectPages(TestCase):
     #     SnippetChooserBlockWithAPIGoodness, no ForeignKey relationship
     #     """
     #     changed_snippet = Map.objects.get(id=1)
-    #     global_ids = collect_pages_snippet(changed_snippet)
+    #     global_ids = collect_pages_from_snippet(changed_snippet)
     #     pick_up_paint = ServicePage.objects.get(id=12)
     #     global_page_id = Node.to_global_id(pick_up_paint.get_verbose_name().lower(), pick_up_paint.id)
     #     self.assertTrue(global_page_id in global_ids)
@@ -122,7 +122,7 @@ class TestCollectPages(TestCase):
     # def test_document_update(self):
     #     changed_snippet = Document.objects.get(id=3)
     #     # One of the OPO documents
-    #     global_ids = collect_pages_snippet(changed_snippet)
+    #     global_ids = collect_pages_from_snippet(changed_snippet)
     #     page = OfficialDocumentPage.objects.get(id=128)
     #     # complaint and discipline documents page
     #     global_page_id = Node.to_global_id(page.get_verbose_name().lower(), page.id)

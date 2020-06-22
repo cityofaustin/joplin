@@ -63,6 +63,7 @@ INSTALLED_APPS = [
     'modelcluster',
     'taggit',
     'rest_framework',
+    'rest_framework_api_key',
     'corsheaders',
     'modeltranslation',
     'graphene_django',
@@ -103,8 +104,7 @@ INSTALLED_APPS = [
     'pages.home_page',
     'pages.news_page',
     'snippets.contact',
-    'snippets.theme'
-
+    'snippets.theme',
 ]
 
 MIDDLEWARE = [
@@ -444,10 +444,11 @@ FLAGS = {
     'INCREMENTAL BUILDS': [{'condition': 'boolean', 'value': False}]
 }
 
+# $JOPLIN_APP_HOST_PORT is set by scripts/serve-local.sh
+JOPLIN_APP_HOST_PORT = os.getenv('JOPLIN_APP_HOST_PORT', 8000)
 # The CMS_API endpoint of the current Django App for published Janis to use
 if IS_LOCAL or IS_TEST:
-    # $JOPLIN_APP_HOST_PORT is set by scripts/serve-local.sh
-    CMS_API = f"http://localhost:{os.getenv('JOPLIN_APP_HOST_PORT')}/api/graphql"
+    CMS_API = f"http://localhost:{JOPLIN_APP_HOST_PORT}/api/graphql"
 else:
     CMS_API = f"https://{os.getenv('APPNAME','')}.herokuapp.com/api/graphql"
 
@@ -473,15 +474,29 @@ if SCOUT_MONITOR:
 
 
 # Set configs for Janis Publisher_v2
+PUBLISH_ENABLED = False
+MOCK_PUBLISH = False
+if IS_LOCAL:
+    # Add mock "Publishing" status notifications when running locally.
+    # Publishing does not work locally, the page will not actually be published.
+    MOCK_PUBLISH = True
 if IS_REVIEW:
     PUBLISHER_V2_URL=os.getenv("CI_COA_PUBLISHER_V2_URL_PR")
     PUBLISHER_V2_API_KEY=os.getenv("COA_PUBLISHER_V2_API_KEY_PR")
+    PUBLISH_ENABLED = True
 elif IS_STAGING:
     PUBLISHER_V2_URL=os.getenv("CI_COA_PUBLISHER_V2_URL_STAGING")
     PUBLISHER_V2_API_KEY=os.getenv("COA_PUBLISHER_V2_API_KEY_STAGING")
+    PUBLISH_ENABLED = True
 elif IS_PRODUCTION:
     PUBLISHER_V2_URL=os.getenv("CI_COA_PUBLISHER_V2_URL_PROD")
     PUBLISHER_V2_API_KEY=os.getenv("COA_PUBLISHER_V2_API_KEY_PROD")
+    PUBLISH_ENABLED = True
+# For use with rest_framework_api_key
+# Sets the name of the header required for Publisher to access publish_succeeded endpoint
+# "Joplin-Api-Key": "********"
+# https://florimondmanca.github.io/djangorestframework-api-key/guide/#custom-header
+API_KEY_CUSTOM_HEADER = "HTTP_JOPLIN_API_KEY"
 
 
 # Set logger level
@@ -500,6 +515,10 @@ LOGGING = {
         },
     },
 }
+# Send email notifications of errors for PR build
+# TODO: this can be managed in a cleaner way
+if os.getenv("CIRCLE_BRANCH") == "4356-queue":
+    ADMINS = [('Nick', 'nick.ivons@austintexas.gov')]
 
 # Temporary variables to toggle features for v3 while its still in development
 V3_WIP = bool(strtobool(os.environ.get('V3_WIP', str(False))))

@@ -50,11 +50,6 @@ label {
     width: 75%;
 }
 
-// This is because the drafttail editor goes to 30 when in focus
-.header.secondary {
-    z-index: 34 !important;
-}
-
 .header.coa-header {
     z-index: 35 !important;
 }
@@ -96,4 +91,63 @@ label {
     content: 'If you would like multiple buttons, please style each one as a button separately.';
     color: #555;
     font-size: 12px;
+}
+
+/*******
+New Containers for .coa-edit-page
+********/
+
+// Top-level wrapper around all edit page content
+.coa-edit-page__wrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+// Top-level wrapper around edit page headers
+.coa-edit-page__header-wrapper {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    background: #EDEDED;
+}
+
+.coa-edit-page__header-row-messages {
+}
+
+.coa-edit-page__header-row-middle {
+    display: flex;
+    flex-direction: row;
+}
+
+.coa-edit-page__header-row-secondary-actions {
+}
+
+// Wrapper around form and sidebar-preview
+.coa-edit-page__form-wrapper {
+    display: flex;
+    flex-direction: row;
+    margin-top: 150px;
+}
+
+.coa-message__wrapper {
+    background: $coa-color-bold-yellow;
+    padding: 1rem;
+    font-size: 1rem;
+    margin-left: -1.5rem;
+    margin-right: 1rem;
+    margin-top: -1rem;
+    display: flex;
+    justify-content: space-between;
+}
+
+.coa-message__link {
+    text-decoration: underline;
+    color: $coa-color-primary-blue;
+}
+
+.coa-message__close-button {
+    &:hover {
+      cursor: pointer;
+    }
 }

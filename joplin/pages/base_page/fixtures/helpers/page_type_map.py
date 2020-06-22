@@ -14,8 +14,6 @@ from pages.department_page.models import DepartmentPage
 from pages.department_page.factories import DepartmentPageFactory
 from pages.event_page.models import EventPage
 from pages.event_page.factories import EventPageFactory
-from snippets.theme.models import Theme
-from snippets.theme.factories import ThemeFactory
 from pages.form_container.models import FormContainer
 from pages.form_container.factories import FormContainerFactory
 from pages.news_page.factories import NewsPage, NewsPageFactory
@@ -62,11 +60,6 @@ page_type_map = {
     "news": {
         "model": NewsPage,
         "factory": NewsPageFactory,
-    },
-    # Theme isn't an importer page_type, but we do create_fixtures for it.
-    "theme": {
-        "model": Theme,
-        "factory": ThemeFactory,
     },
     "form": {
         "model": FormContainer,

@@ -34,9 +34,9 @@ STYLEGUIDE_PAGES = {
 def get_style_guide_url(*args, **kwargs):
     content_type = kwargs['content_type'].name
     try:
-        get_style_guide_url = os.environ['STYLEGUIDE_URL'] + STYLEGUIDE_PAGES[content_type]
+        get_style_guide_url = os.getenv('STYLEGUIDE_URL') + STYLEGUIDE_PAGES[content_type]
     except Exception as e:
-        get_style_guide_url = os.environ['STYLEGUIDE_URL']
+        get_style_guide_url = os.getenv('STYLEGUIDE_URL')
     return get_style_guide_url
 
 
