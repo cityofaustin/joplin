@@ -133,7 +133,6 @@
                 </div>
             </div>
             <div class="coa-edit-page__header-row-secondary-actions secondary-actions">
-                {% include "wagtailadmin/edit_handlers/tabbed_interface.html" with instance=page form=form %}
                 <section class="coa-header__page-info">
                     <div class="coa-header__page-revisions">
                       <a href="{% url 'wagtailadmin_pages:revisions_index' page.id %}" class="underlined">Revisions</a>
