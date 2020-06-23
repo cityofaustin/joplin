@@ -17,8 +17,8 @@ The Documents will be displayed in date descending order (newest first by the "d
 """
 
 
-class OfficialDocumentList(JanisBasePageWithTopics):
-    janis_url_page_type = "official_document_list"
+class OfficialDocumentCollection(JanisBasePageWithTopics):
+    janis_url_page_type = "official_document_collection"
     base_form_class = OfficialDocumentListForm
 
     description = models.TextField(blank=True)

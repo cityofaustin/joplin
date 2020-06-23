@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand
-import pages.official_documents_page.fixtures as official_documents_page_fixtures
+import pages.official_documents_collection.fixtures as official_documents_collection_fixtures
 
 
 class Command(BaseCommand):
@@ -12,4 +12,4 @@ class Command(BaseCommand):
     help = "Loads test data for manual exploration of test topic pages"
 
     def handle(self, *args, **options):
-        official_documents_page_fixtures.load_all()
+        official_documents_collection_fixtures.load_all()

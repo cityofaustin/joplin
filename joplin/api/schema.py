@@ -23,8 +23,8 @@ from pages.topic_page.models import TopicPage, TopicPageTopPage, JanisBasePageWi
 from pages.service_page.models import ServicePage
 from pages.information_page.models import InformationPage
 from pages.department_page.models import DepartmentPage, DepartmentPageDirector, DepartmentPageTopPage, DepartmentPageRelatedPage
-from pages.official_documents_list.models import OfficialDocumentList
-from pages.official_documents_page.models import OfficialDocumentPage, OfficialDocumentListDocument
+from pages.official_documents_collection.models import OfficialDocumentCollection
+from pages.official_documents_page.models import OfficialDocumentPage, OfficialDocumentCollectionDocument
 from pages.guide_page.models import GuidePage
 from pages.form_container.models import FormContainer
 from pages.base_page.models import JanisBasePage
@@ -786,12 +786,12 @@ class OfficialDocumentPageNode(DjangoObjectType):
         return None
 
 
-class OfficialDocumentListDocumentNode(DjangoObjectType):
+class OfficialDocumentCollectionDocumentNode(DjangoObjectType):
     document_pages = DjangoFilterConnectionField(OfficialDocumentPageNode, filterset_class=OfficialDocumentFilter)
 
     class Meta:
-        model = OfficialDocumentListDocument
-        filter_fields = ['official_document_list']
+        model = OfficialDocumentCollectionDocument
+        filter_fields = ['official_document_collection']
         fields = '__all__'
         interfaces = [graphene.Node]
 
@@ -799,17 +799,17 @@ class OfficialDocumentListDocumentNode(DjangoObjectType):
         return OfficialDocumentFilter(kwargs).qs
 
 
-class OfficialDocumentListNode(DjangoObjectType):
+class OfficialDocumentCollectionNode(DjangoObjectType):
     page_type = graphene.String()
     owner = graphene.Field(OwnerNode)
 
     class Meta:
-        model = OfficialDocumentList
+        model = OfficialDocumentCollection
         filter_fields = ['id', 'slug', 'live', 'coa_global']
         interfaces = [graphene.Node, DepartmentResolver]
 
     def resolve_page_type(self, info):
-        return OfficialDocumentList.get_verbose_name().lower()
+        return OfficialDocumentCollection.get_verbose_name().lower()
 
     @superuser_required
     def resolve_owner(self, info):
@@ -928,7 +928,7 @@ class PageRevisionNode(DjangoObjectType):
     as_department_page = graphene.NonNull(DepartmentPageNode)
     as_topic_page = graphene.NonNull(TopicNode)
     as_topic_collection_page = graphene.NonNull(TopicCollectionNode)
-    as_official_document_list = graphene.NonNull(OfficialDocumentListNode)
+    as_official_document_list = graphene.NonNull(OfficialDocumentCollectionNode)
     as_guide_page = graphene.NonNull(GuidePageNode)
     as_form_container = graphene.NonNull(FormContainerNode)
     as_location_page = graphene.NonNull(LocationPageNode)
@@ -1105,14 +1105,14 @@ class Query(graphene.ObjectType):
     all_themes = DjangoFilterConnectionField(ThemeNode)
     all_topics = DjangoFilterConnectionField(TopicNode)
     all_topic_collections = DjangoFilterConnectionField(TopicCollectionNode)
-    all_official_document_lists = DjangoFilterConnectionField(
-        OfficialDocumentListNode)
+    all_official_document_collections = DjangoFilterConnectionField(
+        OfficialDocumentCollectionNode)
     all_guide_pages = DjangoFilterConnectionField(GuidePageNode)
     all_form_containers = DjangoFilterConnectionField(FormContainerNode)
     all_location_pages = DjangoFilterConnectionField(LocationPageNode)
     all_event_pages = DjangoFilterConnectionField(EventPageNode, filterset_class=EventFilter)
     topic_collection_topics = DjangoFilterConnectionField(JanisBasePageTopicCollectionNode)
-    official_document_list_documents = DjangoFilterConnectionField(OfficialDocumentListDocumentNode)
+    official_document_list_documents = DjangoFilterConnectionField(OfficialDocumentCollectionDocumentNode)
     base_page_topics = DjangoFilterConnectionField(JanisBasePageTopicNode)
 
     def resolve_page_revision(self, resolve_info, id=None):

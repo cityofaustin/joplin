@@ -56,7 +56,7 @@ class OfficialDocumentPage(JanisBasePage):
         FieldPanel('name', widget=countMe),
         DocumentChooserPanel('document'),
         DocumentChooserPanel('document_es'),
-        InlinePanel('official_document_list', label="Official Document Lists this Document belongs to")
+        InlinePanel('official_document_collection', label="Official Document Collections this Document belongs to")
     ]
 
     # class Meta:
@@ -74,11 +74,11 @@ class OfficialDocumentPage(JanisBasePage):
     #     )
 
 
-class OfficialDocumentListDocument(ClusterableModel):
-    page = ParentalKey(OfficialDocumentPage, related_name="official_document_list")
-    official_document_list = models.ForeignKey('official_documents_list.OfficialDocumentList',
-                                               verbose_name='Select an Official Document List',
+class OfficialDocumentCollectionDocument(ClusterableModel):
+    page = ParentalKey(OfficialDocumentPage, related_name="official_document_collection")
+    official_document_collection = models.ForeignKey('official_documents_collection.OfficialDocumentCollection',
+                                               verbose_name='Select an Official Document Collection',
                                                related_name='+', on_delete=models.CASCADE)
     panels = [
-        PageChooserPanel('official_document_list')
+        PageChooserPanel('official_document_collection')
     ]

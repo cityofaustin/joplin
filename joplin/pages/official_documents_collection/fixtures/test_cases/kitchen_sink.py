@@ -4,7 +4,7 @@ import pages.official_documents_list.fixtures.helpers.components as components
 from pages.topic_page.fixtures.test_cases import kitchen_sink as kitchen_sink_topic
 
 
-# A "kitchen sink" official documents list
+# A "kitchen sink" official documents collection
 def kitchen_sink():
     topic = kitchen_sink_topic.kitchen_sink()
 
@@ -15,7 +15,7 @@ def kitchen_sink():
         "coa_global": False,
         "title": "Kitchen sink official documents page [en]",
         "title_es": "Kitchen sink official documents page [es]",
-        "slug": "kitchen-sink-official-documents-list",
+        "slug": "kitchen-sink-official-documents-collection",
         "add_topics": {
             "topics": [topic]
         },

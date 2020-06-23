@@ -97,7 +97,7 @@ INSTALLED_APPS = [
     'pages.guide_page',
     'pages.information_page',
     'pages.location_page',
-    'pages.official_documents_list',
+    'pages.official_documents_collection',
     'pages.official_documents_page',
     'pages.service_page',
     'pages.topic_collection_page',
