@@ -10,13 +10,12 @@ from wagtail.documents.models import Document
 from wagtail.documents.edit_handlers import DocumentChooserPanel
 
 from base.models.constants import DEFAULT_MAX_LENGTH
-from base.models.widgets import countMe, countMeTextArea, AUTHOR_LIMITS
+from base.models.widgets import countMe, AUTHOR_LIMITS
 from countable_field import widgets
 from publish_preflight.requirements import FieldPublishRequirement, RelationPublishRequirement, \
     ConditionalPublishRequirement, DepartmentPublishRequirement
 
 from pages.base_page.models import JanisBasePage
-from pages.official_documents_list.models import OfficialDocumentList
 
 """
 This is a page that displays a list of Official Documents (model: DocumentPageOfficialDocument).
@@ -31,7 +30,6 @@ class OfficialDocumentPage(JanisBasePage):
 
     base_form_class = OfficialDocumentPageForm
     date = models.DateField(verbose_name="Document date", null=True, blank=True)
-    # document_title = models.CharField(verbose_name="Document title", max_length=DEFAULT_MAX_LENGTH, blank=True)
     authoring_office = models.CharField(verbose_name="Authoring office of document", max_length=DEFAULT_MAX_LENGTH, blank=True)
     summary = models.TextField(verbose_name="Document summary", blank=True)
     name = models.CharField(verbose_name="Name of Document", max_length=DEFAULT_MAX_LENGTH, blank=True)
