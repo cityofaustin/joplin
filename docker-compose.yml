@@ -1,17 +1,18 @@
 version: '3.7'
 services:
   db:
-    image: postgres:10
+    image: postgres:12
     ports:
-      - "${JOPLIN_DB_HOST_PORT}:${JOPLIN_DB_CONTAINER_PORT}" # previously 5432:5432
+      - '${JOPLIN_DB_HOST_PORT}:${JOPLIN_DB_CONTAINER_PORT}' # previously 5432:5432
     environment:
       POSTGRES_DB: 'joplin'
       POSTGRES_USER: 'joplin'
+      POSTGRES_PASSWORD: ${JOPLIN_POSTGRES_PASSWORD}
     command: -p ${JOPLIN_DB_CONTAINER_PORT}
   app:
     image: $DOCKER_TAG_APP
     ports:
-      - "${JOPLIN_APP_HOST_PORT}:${JOPLIN_APP_CONTAINER_PORT}" # previously 8000:80
+      - '${JOPLIN_APP_HOST_PORT}:${JOPLIN_APP_CONTAINER_PORT}' # previously 8000:80
     environment:
       LOAD_DATA: $LOAD_DATA
       DEBUG: 1
@@ -19,9 +20,9 @@ services:
       JANIS_URL: $JANIS_URL
       STYLEGUIDE_URL: https://cityofaustin.github.io/digital-services-style-guide
       DATABASE_URL: $DATABASE_URL
-      DJANGO_SECRET_KEY: "fake_key"
+      DJANGO_SECRET_KEY: 'fake_key'
     depends_on:
-      - "db"
+      - 'db'
     stdin_open: true
     tty: true
   # "assets" service is used in docker-compose.local_override.yml
