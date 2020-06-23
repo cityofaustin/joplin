@@ -768,20 +768,22 @@ class OfficialDocumentPageNode(DjangoObjectType):
         interfaces = [graphene.Node]
 
     def resolve_document(self, info):
-        english_doc = DocumentNodeDocument(
-            filename=self.document.filename,
-            fileSize=self.document.file_size,
-        )
-        if django.utils.translation.get_language() == 'es':
-            if self.document_es:
-                return DocumentNodeDocument(
-                    filename=self.document_es.filename,
-                    fileSize=self.document_es.file_size,
-                )
+        if self.document:
+            english_doc = DocumentNodeDocument(
+                filename=self.document.filename,
+                fileSize=self.document.file_size,
+            )
+            if django.utils.translation.get_language() == 'es':
+                if self.document_es:
+                    return DocumentNodeDocument(
+                        filename=self.document_es.filename,
+                        fileSize=self.document_es.file_size,
+                    )
+                else:
+                    return english_doc
             else:
                 return english_doc
-        else:
-            return english_doc
+        return None
 
 
 class OfficialDocumentListDocumentNode(DjangoObjectType):
