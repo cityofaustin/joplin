@@ -66,7 +66,6 @@ default_branch_vars = {
     "DELETION_PROTECTION": 0,
     "DJANGO_LOG_LEVEL": "INFO",
     "LOAD_DATA": "fixtures",
-    "V3_WIP": True,
 }
 config.update(default_branch_vars)
 

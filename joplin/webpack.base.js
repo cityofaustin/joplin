@@ -16,6 +16,7 @@ module.exports = {
     theme: path.resolve(__dirname, "./js/theme.js"),
     publishPreflight: path.resolve(__dirname, "./js/PublishPreflight/index.js"),
     user: path.resolve(__dirname, "./users/js/index.js"),
+    pageStatus: path.resolve(__dirname, "./js/pageStatus/index.js"),
   },
   module: {
     rules: [
@@ -67,6 +68,6 @@ module.exports = {
           }
         })
       })
-    })
+    }),
   ]
 };

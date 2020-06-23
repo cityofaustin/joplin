@@ -108,7 +108,7 @@ class Command(BaseCommand):
                 else:
                     print("Not adding any datadumps\n")
 
-            if settings.IS_LOCAL or settings.IS_REVIEW or settings.V3_WIP:
+            if settings.IS_LOCAL or settings.IS_REVIEW:
                 user_fixtures.superadmin()
 
             # Add pytest superadmin
