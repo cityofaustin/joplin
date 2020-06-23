@@ -5,11 +5,11 @@ from base.models import TranslatedImage
 from snippets.theme.models import Theme
 from pages.base_page.models import JanisBasePage
 from pages.topic_collection_page.models import TopicCollectionPage
-from pages.topic_page.models import TopicPage, TopicPageTopPage
+from pages.topic_page.models import TopicPage
 from pages.service_page.models import ServicePage
 from pages.information_page.models import InformationPage
 from pages.department_page.models import DepartmentPage, DepartmentPageDirector
-from pages.official_documents_list.models import OfficialDocumentList
+from pages.official_documents_collection.models import OfficialDocumentCollection
 from pages.official_documents_page.models import OfficialDocumentPage
 from pages.guide_page.models import GuidePage
 from pages.form_container.models import FormContainer
@@ -96,8 +96,8 @@ class InformationPageTranslationOptions(TranslationOptions):
     )
 
 
-@register(OfficialDocumentList)
-class OfficialDocumentListTranslationOptions(TranslationOptions):
+@register(OfficialDocumentCollection)
+class OfficialDocumentCollectionTranslationOptions(TranslationOptions):
     fields = (
         'description',
     )

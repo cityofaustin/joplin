@@ -3,7 +3,7 @@ from django.db import models
 from wagtail.admin.edit_handlers import FieldPanel, InlinePanel
 
 from pages.topic_page.models import JanisBasePageWithTopics
-from base.forms import OfficialDocumentListForm
+from base.forms import OfficialDocumentCollectionForm
 from base.models.widgets import countMeTextArea
 from publish_preflight.requirements import FieldPublishRequirement, RelationPublishRequirement, \
      ConditionalPublishRequirement, DepartmentPublishRequirement
@@ -19,7 +19,7 @@ The Documents will be displayed in date descending order (newest first by the "d
 
 class OfficialDocumentCollection(JanisBasePageWithTopics):
     janis_url_page_type = "official_document_collection"
-    base_form_class = OfficialDocumentListForm
+    base_form_class = OfficialDocumentCollectionForm
 
     description = models.TextField(blank=True)
 

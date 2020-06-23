@@ -2,6 +2,6 @@ from pages.official_documents_collection.models import OfficialDocumentCollectio
 from pages.topic_page.factories import JanisBasePageWithTopicsFactory
 
 
-class OfficialDocumentListFactory(JanisBasePageWithTopicsFactory):
+class OfficialDocumentCollectionFactory(JanisBasePageWithTopicsFactory):
     class Meta:
         model = OfficialDocumentCollection

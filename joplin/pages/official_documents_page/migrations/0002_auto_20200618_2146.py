@@ -8,7 +8,7 @@ import modelcluster.fields
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('official_documents_list', '0001_initial'),
+        ('official_documents_collection', '0001_initial'),
         ('official_documents_page', '0001_initial'),
     ]
 
@@ -126,11 +126,11 @@ class Migration(migrations.Migration):
             field=models.TextField(blank=True, null=True, verbose_name='Document summary'),
         ),
         migrations.CreateModel(
-            name='OfficialDocumentListDocument',
+            name='OfficialDocumentCollectionDocument',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('official_document_list', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='+', to='official_documents_list.OfficialDocumentList', verbose_name='Select an Official Document List')),
-                ('page', modelcluster.fields.ParentalKey(on_delete=django.db.models.deletion.CASCADE, related_name='official_document_list', to='official_documents_page.OfficialDocumentPage')),
+                ('official_document_collection', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='+', to='official_documents_collection.OfficialDocumentCollection', verbose_name='Select an Official Document Collection')),
+                ('page', modelcluster.fields.ParentalKey(on_delete=django.db.models.deletion.CASCADE, related_name='official_document_collection', to='official_documents_page.OfficialDocumentPage')),
             ],
             options={
                 'abstract': False,
