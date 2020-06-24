@@ -218,7 +218,7 @@ TIME_ZONE = 'UTC'
 USE_TZ = True
 
 MODELTRANSLATION_DEFAULT_LANGUAGE = 'en'
-
+WAGTAILMODELTRANSLATION_TRANSLATE_SLUGS = False
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
