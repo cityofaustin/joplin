@@ -38,7 +38,17 @@ class OfficialDocumentPage(JanisBasePage):
     document_es = models.ForeignKey(Document, blank=True, null=True, on_delete=models.SET_NULL, related_name='+',
                                     verbose_name="Document [es]")
 
-    publish_requirements = ()  # todo: what is required? document, document list? everything?
+    publish_requirements = (
+        FieldPublishRequirement("date",
+                                message="You need to include a date before publishing"),
+        FieldPublishRequirement("authoring_office", message="You need to include the authoring office before publishing"),
+        FieldPublishRequirement("summary",
+                                message="You need to include a summary before publishing"),
+        FieldPublishRequirement("name",
+                                message="You need to include a name before publishing"),
+        FieldPublishRequirement('document'),
+        RelationPublishRequirement('official_document_collection'),
+    )  # todo: what is required? document, document list? everything?
 
     content_panels = [
         FieldPanel('title_en', widget=countMe),
@@ -46,7 +56,6 @@ class OfficialDocumentPage(JanisBasePage):
         FieldPanel('title_ar'),
         FieldPanel('title_vi'),
         FieldPanel('date'),
-        # FieldPanel('document_title', widget=countMe),
         FieldPanel('authoring_office', widget=countMe),
         FieldPanel('summary', widget=widgets.CountableWidget(attrs={
             'data-count': 'characters',
