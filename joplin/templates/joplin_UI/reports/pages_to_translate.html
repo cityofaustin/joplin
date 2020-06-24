@@ -24,7 +24,7 @@
         {% elif updated_count == 1 %}
             <div>There was 1 updated page:</div>
         {% else %}
-            <div>There were {{updated_count}} new pages:</div>
+            <div>There were {{updated_count}} updated pages:</div>
         {% endif %}
         {% for page_id, data in updated_pages.items %}
             <div>

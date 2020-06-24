@@ -49,9 +49,9 @@ class Command(BaseCommand):
 
         for r in revisions:
             page_id = r.page_id
-            page = Page.objects.get(id=page_id)
+            page = r.page
             title = page.title
-            if not pages_to_translate.get(page_id):
+            if page.live and not pages_to_translate.get(page_id):
                 # Get the last revision for this page, right before the queried time interval
                 prior_revision = PageRevision.objects.filter(created_at__lt=lower_bound, page_id=page_id).order_by('-created_at').first()
                 if not prior_revision:
@@ -70,7 +70,7 @@ class Command(BaseCommand):
                         "new_revision": new_revision,
                     }
 
-        authors = "Gaby and Inara"
+        authors = "Gabi and Inara"
         start_date = lower_bound.strftime("%b %d %Y")
         end_date = upper_bound.strftime("%b %d %Y")
         new_pages = {page_id:data for page_id,data in pages_to_translate.items() if data["type"] == "new"}
