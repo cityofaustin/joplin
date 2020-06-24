@@ -1,4 +1,5 @@
 from os import path
+import json
 from pytz import timezone
 from datetime import datetime, timedelta
 from django.conf import settings
@@ -36,56 +37,43 @@ class Command(BaseCommand):
             last_monday = now - timedelta(days=2)
             lower_bound = make_date(last_monday)
         else:
-            print("You don't get to make a report today, silly goose.")
-            # return
-            two_days_ago = now - timedelta(days=2)
-            lower_bound = make_date(two_days_ago)
-            upper_bound = make_date(now + timedelta(days=2))
+            print("It's not Monday or Wednesday. You don't get to make a report today.")
+            return
 
-        pages_to_translate = {}
-
-        # Get revisions for time interval in ascending order
-        revisions = PageRevision.objects.filter(created_at__gte=lower_bound, created_at__lt=upper_bound).order_by('created_at')
-
+        published_pages = {}
+        # Get all revisions for time interval in descending order
+        revisions = PageRevision.objects.filter(created_at__gte=lower_bound, created_at__lt=upper_bound).order_by('-created_at')
+        # Find all pages that were published during time interval
         for r in revisions:
             page_id = r.page_id
             page = r.page
-            title = page.title
-            if page.live and not pages_to_translate.get(page_id):
-                # Get the last revision for this page, right before the queried time interval
-                prior_revision = PageRevision.objects.filter(created_at__lt=lower_bound, page_id=page_id).order_by('-created_at').first()
-                if not prior_revision:
-                    # If there isn't a version before the time interval, then it must be a new page
-                    pages_to_translate[page_id] = {
+            if page.live and not published_pages.get(page_id):
+                # Find the last revision when this page was published, right before the queried time interval
+                page_revisions = PageRevision.objects.filter(created_at__lt=lower_bound, page_id=page_id).order_by('-created_at')
+                published_before = False
+                for pr in page_revisions:
+                    pr_live = json.loads(pr.content_json)["live"]
+                    if pr_live:
+                        published_before = True
+                        published_pages[page_id] = {
+                            "type": "updated",
+                            "page": page,
+                            "old_revision": pr,
+                            "new_revision": page.get_latest_revision(),
+                        }
+                        break
+                # If this is the first time the page was published, then there is no last published revision to compare with
+                if not published_before:
+                    published_pages[page_id] = {
                         "type": "new",
-                        "title": title,
+                        "page": page,
+                        "new_revision": page.get_latest_revision(),
                     }
-                else:
-                    old_revision = prior_revision.id
-                    new_revision = page.get_latest_revision().id
-                    pages_to_translate[page_id] = {
-                        "type": "update",
-                        "title": title,
-                        "old_revision": old_revision,
-                        "new_revision": new_revision,
-                    }
-
-        authors = "Gabi and Inara"
-        start_date = lower_bound.strftime("%b %d %Y")
-        end_date = upper_bound.strftime("%b %d %Y")
-        new_pages = {page_id:data for page_id,data in pages_to_translate.items() if data["type"] == "new"}
-        new_count = len(new_pages)
-        updated_pages = {page_id:data for page_id,data in pages_to_translate.items() if data["type"] == "update"}
-        updated_count = len(updated_pages)
 
         context = Context({
-            'authors': authors,
-            'start_date': start_date,
-            'end_date': end_date,
-            'new_pages': new_pages,
-            'new_count': new_count,
-            'updated_pages': updated_pages,
-            'updated_count': updated_count,
+            'start_date': lower_bound.strftime("%b %d %Y"),
+            'end_date': upper_bound.strftime("%b %d %Y"),
+            'published_pages': published_pages,
         })
 
         template_file = open(path.join(path.dirname(__file__), f'{settings.BASE_DIR}/joplin/templates/joplin_UI/reports/pages_to_translate.html'), "r")
