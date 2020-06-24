@@ -228,8 +228,7 @@ def test_do_not_import_english_as_spanish(remote_staging_preview_url, test_api_u
     assert page.title_es is None
     assert page.short_description_en == 'a description of this service'
     assert page.short_description_es is None
-    assert page.slug_en == 'service-page-in-english-only'
-    assert page.slug_es is None
+    assert page.slug == 'service-page-in-english-only'
 
 
 @pytest.mark.django_db

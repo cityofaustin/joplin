@@ -47,7 +47,7 @@ class TopicCollectionPage(JanisBasePage):
     def janis_urls(self):
         # should publish at /theme_slug/topic_collection_slug/
         if self.theme and self.theme.slug:
-            return [f'/{self.theme.slug}/{self.slug_en}/']
+            return [f'/{self.theme.slug}/{self.slug}/']
 
         return []
 
@@ -57,7 +57,7 @@ class TopicCollectionPage(JanisBasePage):
         """
         # should publish at /theme_slug/topic_collection_slug/
         if self.theme and self.theme.slug:
-            return [{'url': f'/{self.theme.slug}/{self.slug_en}/', 'parent': None, 'grandparent': None}]
+            return [{'url': f'/{self.theme.slug}/{self.slug}/', 'parent': None, 'grandparent': None}]
 
         return []
 
@@ -70,7 +70,7 @@ class JanisBasePageWithTopicCollections(JanisBasePage):
 
         for base_page_topic_collection in self.topic_collections.all():
             for topic_collection_url in base_page_topic_collection.topic_collection.janis_urls():
-                urls.append(f'{topic_collection_url}{self.slug_en}/')
+                urls.append(f'{topic_collection_url}{self.slug}/')
 
         return urls
 
@@ -82,7 +82,7 @@ class JanisBasePageWithTopicCollections(JanisBasePage):
         for base_page_topic_collection in self.topic_collections.all():
             for topic_collection_url in base_page_topic_collection.topic_collection.janis_instances():
                 instances.append({
-                    'url': f'{topic_collection_url["url"]}{self.slug_en}/',
+                    'url': f'{topic_collection_url["url"]}{self.slug}/',
                     'parent': base_page_topic_collection.topic_collection,
                     'grandparent': None,
                 })
