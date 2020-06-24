@@ -10,7 +10,6 @@ from wagtail.core.models import Orderable
 from wagtail.documents.models import Document
 from wagtail.documents.edit_handlers import DocumentChooserPanel
 
-from pages.base_page.models import JanisBasePage
 
 from base.models.constants import DEFAULT_MAX_LENGTH
 from base.models.widgets import countMe, countMeTextArea, AUTHOR_LIMITS
