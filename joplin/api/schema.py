@@ -1112,7 +1112,7 @@ class Query(graphene.ObjectType):
     all_location_pages = DjangoFilterConnectionField(LocationPageNode)
     all_event_pages = DjangoFilterConnectionField(EventPageNode, filterset_class=EventFilter)
     topic_collection_topics = DjangoFilterConnectionField(JanisBasePageTopicCollectionNode)
-    official_document_list_documents = DjangoFilterConnectionField(OfficialDocumentCollectionDocumentNode)
+    official_document_collection_documents = DjangoFilterConnectionField(OfficialDocumentCollectionDocumentNode)
     base_page_topics = DjangoFilterConnectionField(JanisBasePageTopicNode)
 
     def resolve_page_revision(self, resolve_info, id=None):

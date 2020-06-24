@@ -4,7 +4,7 @@ from wagtail.admin.edit_handlers import FieldPanel, InlinePanel
 
 from pages.topic_page.models import JanisBasePageWithTopics
 from base.forms import OfficialDocumentCollectionForm
-from base.models.widgets import countMeTextArea
+from base.models.widgets import countMeTextArea, countMe
 from publish_preflight.requirements import FieldPublishRequirement, RelationPublishRequirement, \
      ConditionalPublishRequirement, DepartmentPublishRequirement
 
@@ -35,6 +35,10 @@ class OfficialDocumentCollection(JanisBasePageWithTopics):
     )
 
     content_panels = [
+        FieldPanel('title_en', widget=countMe),
+        FieldPanel('title_es', widget=countMe),
+        FieldPanel('title_ar'),
+        FieldPanel('title_vi'),
         FieldPanel('description', widget=countMeTextArea),
         InlinePanel('topics', label='Topics'),
     ]
