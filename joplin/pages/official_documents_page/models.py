@@ -41,10 +41,10 @@ class OfficialDocumentPage(JanisBasePage):
     publish_requirements = (
         FieldPublishRequirement("date",
                                 message="You need to include a date before publishing"),
-        FieldPublishRequirement("authoring_office", message="You need to include the authoring office before publishing"),
-        FieldPublishRequirement("summary",
+        FieldPublishRequirement("authoring_office", langs=["en"], message="You need to include the authoring office before publishing"),
+        FieldPublishRequirement("summary", langs=["en"],
                                 message="You need to include a summary before publishing"),
-        FieldPublishRequirement("name",
+        FieldPublishRequirement("name", langs=["en"],
                                 message="You need to include a name before publishing"),
         FieldPublishRequirement('document'),
         RelationPublishRequirement('official_document_collection'),
