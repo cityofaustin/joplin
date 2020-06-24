@@ -1,0 +1,37 @@
+<html>
+    <body>
+        Good morning, {{ authors|safe|escape }}! Here is your list of all the changes that happened in Joplin between <br/>
+        {{ start_date }} <br/>
+        and <br/>
+        {{ end_date }} <br/>
+        <br/>
+
+        {% if new_count == 0 %}
+            <div>There were no new pages.</div>
+        {% elif new_count == 1 %}
+            <div>There was 1 new page:</div>
+        {% else %}
+            <div>There were {{new_count}} new pages:</div>
+        {% endif %}
+        {% for page_id, data in new_pages.items %}
+            <div>
+                {{ data.title|safe|escape }} : https://joplin.herokuapp.com/admin/pages/{{page_id}}/edit/
+            </div>
+        {% endfor %}
+
+        {% if updated_count == 0 %}
+            <div>There were no updated pages.</div>
+        {% elif updated_count == 1 %}
+            <div>There was 1 updated page:</div>
+        {% else %}
+            <div>There were {{updated_count}} new pages:</div>
+        {% endif %}
+        {% for page_id, data in updated_pages.items %}
+            <div>
+                {{ data.title|safe|escape }} : https://joplin.herokuapp.com/admin/pages/{{page_id}}/revisions/compare/{{data.old_revision}}...{{data.new_revision}}/
+            </div>
+        {% endfor %}
+        <br/>
+        Have a nice day!
+    </body>
+</html>

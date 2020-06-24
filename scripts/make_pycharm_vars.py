@@ -10,9 +10,7 @@ for line in env.readlines():
     if not line.startswith("#"):
         line = line.strip()
         if line:
-            print(line)
             var_name = re.match(r'(.*)\=', line)[1]
-            print("it worked")
             pycharm_vars = pycharm_vars + var_name + "=" + os.getenv(var_name) + ";"
 
 print(pycharm_vars)
