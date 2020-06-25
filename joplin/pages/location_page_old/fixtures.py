@@ -1,7 +1,6 @@
 from base.models import HomePage
 from pathlib import Path
 from django.core.management import call_command
-from django.conf import settings
 from locations import factories
 from wagtail.core.models import Page
 
