@@ -1,0 +1,23 @@
+<html>
+    <body>
+        Here is the list of all pages that were published in Joplin between <br/>
+        {{ start_date }} <br/>
+        and <br/>
+        {{ end_date }} <br/>
+        <br/>
+        {% for page_id, data in published_pages.items %}
+            {{ data.page.title|safe|escape }}
+            Published on {{ data.new_revision.created_at|date:"M d, Y" }}.
+            {% if data.type == "updated" %}
+                The last time it was published was on {{ data.old_revision.created_at|date:"M d, Y" }}.
+                Old published revision: https://joplin.herokuapp.com/admin/pages/{{data.page.id}}/revisions/{{data.old_revision.id}}/revert/
+                Compare the two revisions: https://joplin.herokuapp.com/admin/pages/{{data.page.id}}/revisions/compare/{{data.old_revision.id}}...{{data.new_revision.id}}/
+            {% elif data.type == "new" %}
+                This is the first time this page has been published.
+            {% endif %}
+                Edit here: https://joplin.herokuapp.com/admin/pages/{{data.page.id}}/edit/
+        {% endfor %}
+        <br/>
+        Have a nice day!
+    </body>
+</html>
