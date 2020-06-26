@@ -6,12 +6,18 @@ from pages.official_documents_collection.fixtures.helpers.create_fixture import 
 
 
 def copy_official_page_data(apps, schema_editor):
+    """
+    Official document pages have been split out into Official Document Collections and Official Document Pages
+    This function copies the information
+    """
     OfficialDocumentPageOld = apps.get_model('official_documents_page.OfficialDocumentPage')
 
     all_official_document_pages = OfficialDocumentPageOld.objects.all()
 
     for page in all_official_document_pages.iterator():
-        page_data = json.loads(page.to_json())
+        old_page_data = json.loads(page.to_json())
+        # we don't need all the page data now that I think of it. do we need the rest besides this?
+        page_data = old_page_data.pop("documents", None)
         create_fixture(page_data)
 
 
