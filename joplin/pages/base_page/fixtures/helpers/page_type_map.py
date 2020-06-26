@@ -47,7 +47,7 @@ page_type_map = {
         "model": LocationPage,
         "factory": LocationPageFactory,
     },
-    "official_document_list": {
+    "official_document_collection": {
         "model": OfficialDocumentCollection,
         "factory": OfficialDocumentCollectionFactory,
     },
