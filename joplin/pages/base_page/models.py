@@ -230,6 +230,18 @@ class JanisBasePage(Page):
 
         return edit_handler.bind_to(model=cls)
 
+    def with_content_json(self, content_json):
+        obj = super().with_content_json(content_json)
+        # Ensure other values that are meaningful for the page as a whole (rather than
+        # to a specific revision) are preserved
+        obj.publish_request_pk = self.publish_request_pk
+        obj.publish_request_sk = self.publish_request_sk
+        obj.publish_request_enqueued = self.publish_request_enqueued
+        obj.published = self.published
+
+        return obj
+
+
     class Meta:
         # https://docs.djangoproject.com/en/2.2/topics/auth/customizing/#custom-permissions
         permissions = [

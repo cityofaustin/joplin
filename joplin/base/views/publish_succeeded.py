@@ -35,15 +35,19 @@ def publish_succeeded(request):
             id = page_data["id"]
             try:
                 page = get_object_or_404(Page, id=id).specific
-                # "published" and "unpublished" are the only possible actions for a page that triggered_build
-                if page_data["action"] == "published":
-                    page.published = True
-                elif page_data["action"] == "unpublished":
-                    page.published = False
-                page.publish_request_pk = None
-                page.publish_request_sk = None
-                page.publish_request_enqueued = False
-                page.save()
+                update_page_after_publish_success(page, page_data["action"])
             except Http404:
                 logger.error(f"Couldn't find a page with id={id}")
     return Response(200)
+
+
+def update_page_after_publish_success(page, action):
+    # "published" and "unpublished" are the only possible actions for a page that triggered_build
+    if action == "published":
+        page.published = True
+    elif action == "unpublished":
+        page.published = False
+    page.publish_request_pk = None
+    page.publish_request_sk = None
+    page.publish_request_enqueued = False
+    page.save()
