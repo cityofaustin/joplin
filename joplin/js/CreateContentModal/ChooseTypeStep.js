@@ -76,12 +76,18 @@ const ChooseTypeStep = ({
       image: locationImage,
       description:
         'Provides service, travel, and contact details for a location.',
+     },
+     {
+      type: 'documentscollection',
+      name: 'Official document collection',
+      image: documentsImage,
+      description: 'Summaries and links to official documents',
     },
     {
       type: 'documents',
-      name: 'Official document list',
+      name: 'Official document page',
       image: documentsImage,
-      description: 'Summaries and links to official documents',
+      description: 'A specific document',
     },
     {
       type: 'form',

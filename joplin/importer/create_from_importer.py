@@ -9,7 +9,7 @@ from snippets.contact.factories import ContactFactory
 from snippets.theme.models import Theme
 from pages.topic_collection_page.factories import ThemeFactory
 from wagtail.documents.models import Document
-from pages.official_documents_page.factories import DocumentFactory
+# from pages.official_documents_page.factories import DocumentFactory
 from django.core.files.base import ContentFile
 from users.models import User
 from users.factories import UserFactory

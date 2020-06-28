@@ -1,4 +1,3 @@
-import os
 import graphene
 import traceback
 

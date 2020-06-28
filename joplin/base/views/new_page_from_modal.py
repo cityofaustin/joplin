@@ -7,6 +7,7 @@ from pages.service_page.models import ServicePage
 from pages.information_page.models import InformationPage
 from pages.topic_page.models import TopicPage
 from pages.topic_collection_page.models import TopicCollectionPage
+from pages.official_documents_collection.models import OfficialDocumentCollection
 from pages.department_page.models import DepartmentPage
 from pages.official_documents_page.models import OfficialDocumentPage
 from pages.guide_page.models import GuidePage
@@ -67,6 +68,8 @@ def new_page_from_modal(request):
         page = DepartmentPage(**data)
     elif body['type'] == 'documents':
         page = OfficialDocumentPage(**data)
+    elif body['type'] == 'documentscollection':
+        page = OfficialDocumentCollection(**data)
     elif body['type'] == 'guide':
         page = GuidePage(**data)
     elif body['type'] == 'form':
