@@ -259,8 +259,6 @@ class JanisBasePageNode(DjangoObjectType):
 
 
 class JanisBasePageWithTopicCollectionsNode(DjangoObjectType):
-
-
     class Meta:
         model = JanisBasePageWithTopicCollections
         filter_fields = ['id', 'slug', 'live']
