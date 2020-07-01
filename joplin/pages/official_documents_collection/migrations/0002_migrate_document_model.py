@@ -3,6 +3,7 @@
 from django.db import migrations
 import json
 from importlib import import_module
+from pages.official_documents_collection.fixtures.helpers.create_fixture import create_fixture
 
 
 def copy_official_page_data(apps, schema_editor):
@@ -25,15 +26,18 @@ def copy_official_page_data(apps, schema_editor):
         page_data.pop("path", None)
         page_data.pop("owner", None)  # we might need this.....
         page_data.pop("live_revision", None)  # and this?
-        page_data.pop("topics", None) # I definitely need this, but lets see]
+        page_data.pop("topics", None) # I definitely need this, but lets see. also now its somehow showing up in the migration
         slug = page_data.pop("slug", None)
         slug = slug + '-copy'
         page_data['slug'] = slug
         page_data.pop("slug_en", None)
         page_data['slug_en'] = slug
+        # where did I get this path number? here: http://www.agilosoftware.com/blog/django-treebard-and-wagtail-page-creation/
         page_data['path'] = '%s00%02d' % (home.path, home.numchild + 1)
         print('******* ', page_data)
         new_page = OfficialDocumentCollection(**page_data)
+        # create_fixture(page_data)
+
         # Add it as a child of home
         # home.add_child(instance=new_page)
 
