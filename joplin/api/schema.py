@@ -259,6 +259,8 @@ class JanisBasePageNode(DjangoObjectType):
 
 
 class JanisBasePageWithTopicCollectionsNode(DjangoObjectType):
+
+
     class Meta:
         model = JanisBasePageWithTopicCollections
         filter_fields = ['id', 'slug', 'live']
@@ -272,8 +274,6 @@ class JanisBasePageWithTopicCollectionsNode(DjangoObjectType):
     and we want those resolvers to be wrapped in a @superuser_required decorator for authorization.
     TODO: handle importing of department groups for non-superusers.
 '''
-
-
 class OwnerNode(graphene.ObjectType):
     id = graphene.ID()
     first_name = graphene.String()
@@ -398,6 +398,10 @@ class TopicNode(DjangoObjectType):
         model = TopicPage
         filter_fields = ['id', 'slug', 'live']
         interfaces = [graphene.Node]
+
+    # While Spanish slugs are unsupported, only return slug_en
+    def resolve_slug(self, info):
+        return self.slug_en
 
     def resolve_topiccollections(self, info):
         tc = []
