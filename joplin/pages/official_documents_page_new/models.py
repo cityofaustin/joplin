@@ -17,7 +17,6 @@ from countable_field import widgets
 from publish_preflight.requirements import FieldPublishRequirement, RelationPublishRequirement
 
 
-
 class OfficialDocumentPageNew(JanisBasePage):
     janis_url_page_type = "official_document_page_new"
     base_form_class = OfficialDocumentPageForm

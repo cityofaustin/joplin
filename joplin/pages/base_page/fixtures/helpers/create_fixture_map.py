@@ -31,9 +31,9 @@ def build_create_fixture(page_type):
         if page.live:
             # Publish fixtures if they are live.
             latest_revision.publish()
-            page.refresh_from_db() # refresh so "page" knows that the revision was published
+            page.refresh_from_db()  # refresh so "page" knows that the revision was published
             update_page_after_publish_success(page, "published")
-        page.refresh_from_db() # refresh so "page" knows about latest_revision draft or updated publish_* fields
+        page.refresh_from_db()  # refresh so "page" knows about latest_revision draft or updated publish_* fields
         print(f"Built {fixture_name}")
         return page
 

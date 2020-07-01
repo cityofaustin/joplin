@@ -12,43 +12,48 @@ def copy_official_page_data(apps, schema_editor):
     This function copies the information
     """
 
-    OfficialDocumentPageOld = import_module('pages.official_documents_page.models').OfficialDocumentPage
-    OfficialDocumentCollection = import_module('pages.official_documents_collection.models').OfficialDocumentCollection
-    home = import_module('pages.home_page.models').HomePage.objects.first()
+    OfficialDocumentPageOld = apps.get_model('official_documents_page.OfficialDocumentPage')
+
+    # OfficialDocumentPage = import_module('pages.official_documents_page.models').OfficialDocumentPage
+    # HomePage = import_module('pages.home_page.models').HomePage
+    HomePage = apps.get_model('home_page.HomePage')
+    home = HomePage.objects.first()
 
     all_official_document_pages = OfficialDocumentPageOld.objects.all()
 
     for page in all_official_document_pages.iterator():
-        page_data = json.loads(page.to_json())
+        # old_page_data = json.loads(page.to_json())
         # we don't need all the page data now that I think of it. do we need the rest besides this?
-        page_data.pop("documents", None)
-        page_data.pop("content_type", None)
-        page_data.pop("path", None)
-        page_data.pop("owner", None)  # we might need this.....
-        page_data.pop("live_revision", None)  # and this?
-        page_data.pop("topics", None) # I definitely need this, but lets see. also now its somehow showing up in the migration
-        slug = page_data.pop("slug", None)
-        slug = slug + '-copy'
-        page_data['slug'] = slug
-        page_data.pop("slug_en", None)
-        page_data['slug_en'] = slug
-        # where did I get this path number? here: http://www.agilosoftware.com/blog/django-treebard-and-wagtail-page-creation/
-        page_data['path'] = '%s00%02d' % (home.path, home.numchild + 1)
+        # old_page_data.pop("documents", None)
+        # print(old_page_data)
+
+        page_data = {
+            "imported_revision_id": None,
+            "live": True,
+            "published": True,
+            "parent": home,
+            "coa_global": False,
+            "title": page.title,
+            "title_es": page.title_es,
+            "slug": page.slug +'copy',
+            # "add_topics": {
+            #     "topics": old_page_data['topics']
+            # },
+            "description": page.description,
+            "description_es": page.description_es
+        }
+
         print('******* ', page_data)
-        new_page = OfficialDocumentCollection(**page_data)
-        # create_fixture(page_data)
-
-        # Add it as a child of home
-        # home.add_child(instance=new_page)
-
-        # Save our draft
-        new_page.save()
+        # new_page = OfficialDocumentCollection(**page_data)
+        create_fixture(page_data)
 
 
 class Migration(migrations.Migration):
 
     dependencies = [
         ('official_documents_collection', '0001_initial'),
+        ('official_documents_page', '0001_initial'),
+        ('home_page', '0002_remove_default_homepage'),
     ]
 
     operations = [
