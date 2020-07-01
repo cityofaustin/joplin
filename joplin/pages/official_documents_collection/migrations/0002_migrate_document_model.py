@@ -44,7 +44,7 @@ def copy_official_page_data(apps, schema_editor):
 
         print('******* ', page_data)
         # new_page = OfficialDocumentCollection(**page_data)
-        create_fixture(page_data)
+        create_fixture(page_data, 'official collection copy')
 
 
 class Migration(migrations.Migration):
