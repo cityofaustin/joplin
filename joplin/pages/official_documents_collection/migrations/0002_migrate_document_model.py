@@ -34,7 +34,6 @@ def copy_official_page_data(apps, schema_editor):
             "parent": home,
             "coa_global": False,
             "title": page.title,
-            "title_es": page.title_es,
             "slug": page.slug +'copy',
             # "add_topics": {
             #     "topics": old_page_data['topics']
