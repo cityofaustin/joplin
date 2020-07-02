@@ -11,6 +11,7 @@ from pages.information_page.models import InformationPage
 from pages.department_page.models import DepartmentPage, DepartmentPageDirector
 from pages.official_documents_collection.models import OfficialDocumentCollection
 from pages.official_documents_page.models import OfficialDocumentPage, OfficialDocumentPageDocument
+from pages.official_documents_page_new.models import OfficialDocumentPageNew
 from pages.guide_page.models import GuidePage
 from pages.form_container.models import FormContainer
 from pages.home_page.models import HomePage
@@ -107,6 +108,15 @@ class OfficialDocumentCollectionTranslationOptions(TranslationOptions):
 class OfficialDocumentPageTranslationOptions(TranslationOptions):
     fields = (
         'description',
+    )
+
+
+@register(OfficialDocumentPageNew)
+class OfficialDocumentPageNewTranslationsOptions(TranslationOptions):
+    fields = (
+        'summary',
+        'name',
+        'authoring_office'
     )
 
 
