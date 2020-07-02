@@ -17,7 +17,7 @@ def copy_official_document_page_documents():
     all_document_page_documents = OfficialDocumentPageDocument.objects.all()
 
     for page in all_document_page_documents:
-        parent_page = OfficialDocumentCollection.objects.get(slug=page.page.slug+'-copy')
+        parent_page = OfficialDocumentCollection.objects.get(slug=page.slug+'-copy')
         page_data = {
             "imported_revision_id": None,
             "live": True,
