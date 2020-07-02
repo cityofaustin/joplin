@@ -1,6 +1,6 @@
 import json
 from django.core.management.base import BaseCommand, CommandError
-from pages.official_documents_collection.fixtures.helpers.create_fixture import create_fixture
+from pages.official_documents_collection.fixtures.helpers.create_fixture import create_fixture as create_collection_fixture
 from pages.official_documents_page.models import OfficialDocumentPage
 from pages.home_page.models import HomePage
 from pages.topic_page.models import TopicPage
@@ -44,12 +44,11 @@ def copy_official_page_data():
             "description_es": old_page_data['description_es'],
         }
 
-        print('******* ', page_data)
-        create_fixture(page_data, 'official collection copy')
+        create_collection_fixture(page_data, 'official collection copy')
 
 
 class Command(BaseCommand):
-    help = "Loads test data for manual exploration of test topic pages"
+    help = "Copies data from Official Document Pages to Official Document Collections "
 
     def handle(self, *args, **options):
         copy_official_page_data()

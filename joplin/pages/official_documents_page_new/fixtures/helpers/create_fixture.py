@@ -1,11 +1,11 @@
 from wagtail.documents.models import Document
-from pages.official_documents_page.factories import DocumentFactory
+from pages.official_documents_page_new.factories import DocumentFactory
 import hashlib
 from django.core.files.base import ContentFile
+from pages.base_page.fixtures.helpers.create_fixture_map import create_fixture_map
 
-# todo: put back when official document page model is deleted
-# from pages.base_page.fixtures.helpers.create_fixture_map import create_fixture_map
-# create_fixture = create_fixture_map["official_document"]
+# todo: rename when old official document page model is deleted
+create_fixture = create_fixture_map["official_document_new"]
 
 
 def create_fixture_document(file_content, file_name):

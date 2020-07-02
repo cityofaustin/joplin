@@ -12,6 +12,8 @@ from pages.official_documents_collection.models import OfficialDocumentCollectio
 from pages.official_documents_collection.factories import OfficialDocumentCollectionFactory
 from pages.official_documents_page.models import OfficialDocumentPage
 from pages.official_documents_page.factories import OfficialDocumentPageFactory
+from pages.official_documents_page_new.models import OfficialDocumentPageNew
+from pages.official_documents_page_new.factories import OfficialDocumentPageNewFactory
 from pages.department_page.models import DepartmentPage
 from pages.department_page.factories import DepartmentPageFactory
 from pages.event_page.models import EventPage
@@ -54,6 +56,10 @@ page_type_map = {
     "official_document": {
         "model": OfficialDocumentPage,
         "factory": OfficialDocumentPageFactory,
+    },
+    "official_document_new": {
+        "model": OfficialDocumentPageNew,
+        "factory": OfficialDocumentPageNewFactory,
     },
     "department": {
         "model": DepartmentPage,
