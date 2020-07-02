@@ -9,26 +9,34 @@ from pages.topic_page.models import TopicPage
 def copy_official_page_data():
     """
     Official document pages have been split out into Official Document Collections and Official Document Pages
-    This function copies the information
+    This function copies the information, creating OfficialDocumentCollections with the same information as
+    Official Document Pages except the list of documents, which will be copied in <insert func name>
     """
     home = HomePage.objects.first()
     all_official_document_pages = OfficialDocumentPage.objects.all()
 
     for page in all_official_document_pages.iterator():
         old_page_data = json.loads(page.to_json())
-        print(old_page_data)
         topics = []
         for t in old_page_data['topics']:
             topics.append(TopicPage.objects.get(id=t['topic']))
+        # the departments the factory wants aren't DepartmentPages, but rather the Department model itself.
+        # page.departments returns a list of Department pages
+        departments = []
+        for d in page.departments():
+            departments.append(d.department)
 
         page_data = {
             "imported_revision_id": None,
-            "live": True,
+            "live": old_page_data['live'],
             "published": old_page_data['published'],
             "parent": home,
-            "coa_global": False,
+            "coa_global": old_page_data['coa_global'],
             "title": old_page_data['title'],
             "slug": old_page_data['slug'] + '-copy',
+            "add_departments": {
+                "departments": departments,
+            },
             "add_topics": {
                  "topics": topics,
             },

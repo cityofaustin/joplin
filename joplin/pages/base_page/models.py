@@ -186,7 +186,6 @@ class JanisBasePage(Page):
                 # A page is not live and not published
                 return "Draft"
 
-
     def departments(self):
         """
          This goes through our group page permissions and looks for any related departments
