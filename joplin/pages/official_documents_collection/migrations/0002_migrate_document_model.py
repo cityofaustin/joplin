@@ -15,8 +15,8 @@ def copy_official_page_data(apps, schema_editor):
     OfficialDocumentPageOld = apps.get_model('official_documents_page.OfficialDocumentPage')
 
     # OfficialDocumentPage = import_module('pages.official_documents_page.models').OfficialDocumentPage
-    # HomePage = import_module('pages.home_page.models').HomePage
-    HomePage = apps.get_model('home_page.HomePage')
+    HomePage = import_module('pages.home_page.models').HomePage
+    # HomePage = apps.get_model('home_page.HomePage')
     home = HomePage.objects.first()
 
     all_official_document_pages = OfficialDocumentPageOld.objects.all()
