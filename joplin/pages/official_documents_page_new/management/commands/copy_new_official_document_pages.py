@@ -1,4 +1,5 @@
 from django.core.management.base import BaseCommand, CommandError
+from django.utils.text import slugify
 from pages.official_documents_page_new.fixtures.helpers.create_fixture import create_fixture as create_document_fixture
 from groups.models import Department
 from pages.official_documents_page.models import OfficialDocumentPageDocument
@@ -24,9 +25,9 @@ def copy_official_document_page_documents():
             "coa_global": False,
             "title": page.title,
             "title_es": page.title_es,
-            # "slug": old_page_data['slug'] + '-copy', what is the slug going to be
+            "slug": slugify(page.title, allow_unicode=True),
             "add_departments": {
-                "departments": [Department.objects.get(name='Office of Police Oversight')], # OPO
+                "departments": [Department.objects.get(name='Office of Police Oversight')], # hard coding this
             },
             "description": page.description,
             "description_es": page.description_es,
