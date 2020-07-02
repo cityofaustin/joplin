@@ -17,6 +17,7 @@ def copy_official_document_page_documents():
     all_document_page_documents = OfficialDocumentPageDocument.objects.all()
 
     for page in all_document_page_documents:
+        parent_page = OfficialDocumentCollection.objects.get(slug=page.page.slug+'-copy')
         page_data = {
             "imported_revision_id": None,
             "live": True,
@@ -26,9 +27,9 @@ def copy_official_document_page_documents():
             "title": page.title,
             "title_es": page.title_es,
             "slug": slugify(page.title, allow_unicode=True),
-            # "add_departments": {
-            #     "departments": [Department.objects.get(name='Office of Police Oversight')], # hard coding this
-            # },
+            "add_departments": {
+                "departments": [Department.objects.get(name='Office of Police Oversight')], # hard coding this
+            },
             "summary": page.summary,
             "summary_es": page.summary_es,
             "name": page.name,
@@ -39,9 +40,9 @@ def copy_official_document_page_documents():
             "document": page.document,
             "document_es": page.document_es,
             "add_official_document_collection": {
-                "official_document_collection": [OfficialDocumentCollection.objects.get(slug=page.page.slug+'-copy')],
+                "official_document_collection": [parent_page],
             },
-            "owner": OfficialDocumentCollection.objects.get(slug=page.page.slug+'-copy').owner,
+            "owner": parent_page.owner,
         }
         print('******  ', page_data)
         create_document_fixture(page_data, 'new official document page')
