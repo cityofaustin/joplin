@@ -42,6 +42,7 @@ def copy_official_page_data():
             },
             "description": old_page_data['description'],
             "description_es": old_page_data['description_es'],
+            # "owner": page.owner,
         }
 
         create_collection_fixture(page_data, 'official collection copy')

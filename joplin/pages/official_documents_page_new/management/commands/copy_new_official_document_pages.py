@@ -26,18 +26,24 @@ def copy_official_document_page_documents():
             "title": page.title,
             "title_es": page.title_es,
             "slug": slugify(page.title, allow_unicode=True),
-            "add_departments": {
-                "departments": [Department.objects.get(name='Office of Police Oversight')], # hard coding this
-            },
-            "description": page.description,
-            "description_es": page.description_es,
+            # "add_departments": {
+            #     "departments": [Department.objects.get(name='Office of Police Oversight')], # hard coding this
+            # },
+            "summary": page.summary,
+            "summary_es": page.summary_es,
+            "name": page.name,
+            "name_es": page.name_es,
             "authoring_office": page.authoring_office,
             "authoring_office_es": page.authoring_office_es,
             "date": page.date,
+            "document": page.document,
+            "document_es": page.document_es,
             "add_official_document_collection": {
-                "official_document_collection": OfficialDocumentCollection.objects.get(slug=page.page.slug+'-copy'),
+                "official_document_collection": [OfficialDocumentCollection.objects.get(slug=page.page.slug+'-copy')],
             },
+            "owner": OfficialDocumentCollection.objects.get(slug=page.page.slug+'-copy').owner,
         }
+        print('******  ', page_data)
         create_document_fixture(page_data, 'new official document page')
 
 
