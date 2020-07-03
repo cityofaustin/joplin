@@ -1,5 +1,6 @@
 import json
 from django.core.management.base import BaseCommand, CommandError
+from django.db.utils import ProgrammingError
 from pages.official_documents_collection.fixtures.helpers.create_fixture import create_fixture as create_collection_fixture
 from pages.official_documents_page.models import OfficialDocumentPage
 from pages.home_page.models import HomePage
@@ -52,7 +53,9 @@ class Command(BaseCommand):
     help = "Copies data from Official Document Pages to Official Document Collections "
 
     def handle(self, *args, **options):
-        copy_official_page_data()
-
+        try:
+            copy_official_page_data()
+        except ProgrammingError:
+            raise CommandError('Error. Check to see that all migrations have been run.')
 
 

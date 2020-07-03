@@ -28,7 +28,7 @@ def copy_official_document_page_documents():
             "title_es": page.title_es,
             "slug": slugify(page.title, allow_unicode=True),
             "add_departments": {
-                "departments": [Department.objects.get(name='Office of Police Oversight')], # hard coding this
+                "departments": [Department.objects.get(name='Office of Police Oversight')], # hard coding this for now
             },
             "summary": page.summary,
             "summary_es": page.summary_es,
@@ -44,7 +44,6 @@ def copy_official_document_page_documents():
             },
             "owner": parent_page.owner,
         }
-        print('******  ', page_data)
         create_document_fixture(page_data, 'new official document page')
 
 
