@@ -4,6 +4,7 @@ from pages.official_documents_page_new.fixtures.helpers.create_fixture import cr
 from groups.models import Department
 from pages.official_documents_page.models import OfficialDocumentPageDocument
 from pages.official_documents_collection.models import OfficialDocumentCollection
+from pages.official_documents_page_new.models import OfficialDocumentPageNew
 from pages.home_page.models import HomePage
 
 
@@ -18,6 +19,16 @@ def copy_official_document_page_documents():
 
     for page in all_document_page_documents:
         parent_page = OfficialDocumentCollection.objects.get(slug=page.page.slug+'-copy')
+        candidate_slug = slugify(page.title, allow_unicode=True)
+        suffix = 1
+
+        while OfficialDocumentPageNew.objects.filter(slug=candidate_slug).exists():
+            # try with incrementing suffix until we find a slug which is available
+            suffix += 1
+            candidate_slug = "%s-%d" % (base_slug, suffix)
+
+        return candidate_slug
+
         page_data = {
             "imported_revision_id": None,
             "live": True,
