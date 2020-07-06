@@ -796,6 +796,7 @@ class OfficialDocumentCollectionDocumentNode(DjangoObjectType):
         fields = '__all__'
         interfaces = [graphene.Node]
 
+    # https://docs.graphene-python.org/projects/django/en/latest/filtering/#ordering
     def resolve_document_pages(self, info, **kwargs):
         return OfficialDocumentFilter(kwargs).qs
 

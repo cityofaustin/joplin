@@ -19,20 +19,19 @@ def copy_official_document_page_documents():
 
     for page in all_document_page_documents:
         parent_page = OfficialDocumentCollection.objects.get(slug=page.page.slug+'-copy')
-        candidate_slug = slugify(page.title, allow_unicode=True)
+        candidate_slug = base_slug = slugify(page.title, allow_unicode=True)
         suffix = 1
 
+        # adapted from: https://github.com/wagtail/wagtail/blob/eb9cff7bf388735e988bfd9f084d7a5d34f0ba42/wagtail/core/models.py#L440
         while OfficialDocumentPageNew.objects.filter(slug=candidate_slug).exists():
             # try with incrementing suffix until we find a slug which is available
             suffix += 1
             candidate_slug = "%s-%d" % (base_slug, suffix)
 
-        return candidate_slug
-
         page_data = {
             "imported_revision_id": None,
             "live": True,
-            "published": True,  # check with nick about this
+            "published": True,
             "parent": home,
             "coa_global": False,
             "title": page.title,
@@ -56,6 +55,8 @@ def copy_official_document_page_documents():
             "owner": parent_page.owner,
         }
         create_document_fixture(page_data, 'new official document page')
+
+        print(OfficialDocumentPageNew.objects.count() == OfficialDocumentPageDocument.objects.count())
 
 
 class Command(BaseCommand):
