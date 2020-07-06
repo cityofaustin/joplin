@@ -36,7 +36,7 @@ def copy_official_document_page_documents():
             "coa_global": False,
             "title": page.title,
             "title_es": page.title_es,
-            "slug": slugify(page.title, allow_unicode=True),
+            "slug": candidate_slug,
             "add_departments": {
                 "departments": [Department.objects.get(name='Office of Police Oversight')], # hard coding this for now
             },
