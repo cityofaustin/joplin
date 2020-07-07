@@ -56,7 +56,7 @@ def copy_official_document_page_documents():
         }
         create_document_fixture(page_data, 'new official document page')
 
-        print(OfficialDocumentPageNew.objects.count() == OfficialDocumentPageDocument.objects.count())
+    print(OfficialDocumentPageNew.objects.count() == OfficialDocumentPageDocument.objects.count())
 
 
 class Command(BaseCommand):
