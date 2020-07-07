@@ -28,7 +28,7 @@ Eventually the OfficialDocumentPageOfficialDocument should be replaced by a mode
 """
 
 
-class OfficialDocumentPage(JanisBasePageWithTopics):
+class OfficialDocumentPageOld(JanisBasePageWithTopics):
     janis_url_page_type = "official_document"
     base_form_class = OfficialDocumentPageForm
 
@@ -61,7 +61,7 @@ One OfficialDocumentPage can have many OfficialDocumentPageDocuments.
 
 
 class OfficialDocumentPageDocument(Orderable):
-    page = ParentalKey(OfficialDocumentPage, related_name='documents')
+    page = ParentalKey(OfficialDocumentPageOld, related_name='documents')
     date = models.DateField(verbose_name="Document date", null=True)
     title = models.CharField(verbose_name="Document title", max_length=DEFAULT_MAX_LENGTH)
     authoring_office = models.CharField(verbose_name="Authoring office of document", max_length=DEFAULT_MAX_LENGTH)

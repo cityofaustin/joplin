@@ -1,6 +1,6 @@
 from pages.service_page.models import ServicePage
 from pages.information_page.models import InformationPage
-from pages.official_documents_page.models import OfficialDocumentPage
+from pages.official_documents_page.models import OfficialDocumentPageOld
 from pages.guide_page.models import GuidePage
 from pages.form_container.models import FormContainer
 from pages.location_page.models import LocationPage
@@ -22,7 +22,7 @@ content_type_map = {
     },
     "official document page": {
         "node": "OfficialDocumentPageNode",
-        "model": OfficialDocumentPage,
+        "model": OfficialDocumentPageOld,
     },
     "guide page": {
         "node": "GuidePageNode",

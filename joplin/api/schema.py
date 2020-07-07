@@ -23,7 +23,7 @@ from pages.topic_page.models import TopicPage, TopicPageTopPage, JanisBasePageWi
 from pages.service_page.models import ServicePage
 from pages.information_page.models import InformationPage
 from pages.department_page.models import DepartmentPage, DepartmentPageDirector, DepartmentPageTopPage, DepartmentPageRelatedPage
-from pages.official_documents_page.models import OfficialDocumentPage, OfficialDocumentPageDocument
+from pages.official_documents_page.models import OfficialDocumentPageOld, OfficialDocumentPageDocument
 from pages.guide_page.models import GuidePage
 from pages.form_container.models import FormContainer
 from pages.base_page.models import JanisBasePage
@@ -792,12 +792,12 @@ class OfficialDocumentPageNode(DjangoObjectType):
     owner = graphene.Field(OwnerNode)
 
     class Meta:
-        model = OfficialDocumentPage
+        model = OfficialDocumentPageOld
         filter_fields = ['id', 'slug', 'live', 'coa_global']
         interfaces = [graphene.Node, DepartmentResolver]
 
     def resolve_page_type(self, info):
-        return OfficialDocumentPage.get_verbose_name().lower()
+        return OfficialDocumentPageOld.get_verbose_name().lower()
 
     @superuser_required
     def resolve_owner(self, info):
