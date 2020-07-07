@@ -20,7 +20,7 @@ content_type_map = {
         "node": "InformationPageNode",
         "model": InformationPage,
     },
-    "official document page": {
+    "official document page old": {
         "node": "OfficialDocumentPageNode",
         "model": OfficialDocumentPageOld,
     },
