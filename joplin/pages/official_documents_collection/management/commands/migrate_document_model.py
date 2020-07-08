@@ -2,7 +2,7 @@ import json
 from django.core.management.base import BaseCommand, CommandError
 from django.db.utils import ProgrammingError
 from pages.official_documents_collection.fixtures.helpers.create_fixture import create_fixture as create_collection_fixture
-from pages.official_documents_page.models import OfficialDocumentPage
+from pages.official_documents_page.models import OfficialDocumentPageOld
 from pages.home_page.models import HomePage
 from pages.topic_page.models import TopicPage
 
@@ -17,7 +17,7 @@ def copy_official_page_data():
     Run the update_document_collection_slugs command to remove -copy, after the old pages have been deleted/removed
     """
     home = HomePage.objects.first()
-    all_official_document_pages = OfficialDocumentPage.objects.all()
+    all_official_document_pages = OfficialDocumentPageOld.objects.all()
 
     for page in all_official_document_pages.iterator():
         old_page_data = json.loads(page.to_json())
