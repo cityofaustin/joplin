@@ -1,6 +1,6 @@
 from pages.service_page.models import ServicePage
 from pages.information_page.models import InformationPage
-from pages.official_documents_page.models import OfficialDocumentPageOld
+from pages.official_documents_page.models import OfficialDocumentPage
 from pages.guide_page.models import GuidePage
 from pages.form_container.models import FormContainer
 from pages.location_page.models import LocationPage
@@ -21,9 +21,9 @@ content_type_map = {
         "node": "InformationPageNode",
         "model": InformationPage,
     },
-    "official document page old": { # todo : chia check this is updated before its all done
+    "official document page": {
         "node": "OfficialDocumentPageNode",
-        "model": OfficialDocumentPageOld,
+        "model": OfficialDocumentPage,
     },
     "guide page": {
         "node": "GuidePageNode",
