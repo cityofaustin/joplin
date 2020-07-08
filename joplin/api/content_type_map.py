@@ -12,6 +12,7 @@ from pages.official_documents_collection.models import OfficialDocumentCollectio
 
 # Gain access to a content_type's node and model if you have it's name.
 # Helps reduce copypasta in api.schema.py
+# used in get_from_content_type and get_global_id_from_content_type
 content_type_map = {
     "service page": {
         "node": "ServicePageNode",

@@ -10,7 +10,7 @@ from pages.location_page.models import LocationPage
 from pages.location_page.factories import LocationPageFactory
 from pages.official_documents_collection.models import OfficialDocumentCollection
 from pages.official_documents_collection.factories import OfficialDocumentCollectionFactory
-from pages.official_documents_page.models import OfficialDocumentPageOld, OfficialDocumentPage
+from pages.official_documents_page.models import OfficialDocumentPage
 from pages.official_documents_page.factories import OfficialDocumentPageFactory
 from pages.department_page.models import DepartmentPage
 from pages.department_page.factories import DepartmentPageFactory
@@ -46,10 +46,6 @@ page_type_map = {
     "location": {
         "model": LocationPage,
         "factory": LocationPageFactory,
-    },
-    "official_document_old": {
-        "model": OfficialDocumentPageOld,
-        "factory": OfficialDocumentPageFactory,
     },
     "official_document_page": {
         "model": OfficialDocumentPage,
