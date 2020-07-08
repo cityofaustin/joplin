@@ -55,6 +55,10 @@ page_type_map = {
         "model": OfficialDocumentPage,
         "factory": OfficialDocumentPageFactory,
     },
+    "official_document_collection": {
+        "model": OfficialDocumentCollection,
+        "factory": OfficialDocumentCollectionFactory,
+    },
     "department": {
         "model": DepartmentPage,
         "factory": DepartmentPageFactory,
