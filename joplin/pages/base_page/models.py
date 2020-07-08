@@ -1,4 +1,3 @@
-import os
 import graphene
 import traceback
 
@@ -6,7 +5,7 @@ from django.db import models, ProgrammingError
 from django.conf import settings
 from wagtail.search import index
 from wagtail.utils.decorators import cached_classmethod
-from wagtail.admin.edit_handlers import FieldPanel, ObjectList, TabbedInterface, PageChooserPanel
+from wagtail.admin.edit_handlers import FieldPanel, ObjectList, TabbedInterface
 from wagtail.core.models import Page
 from wagtail.core.fields import RichTextField
 from flags.state import flag_enabled
@@ -57,7 +56,6 @@ class JanisBasePage(Page):
     publish_request_enqueued = models.BooleanField(default=False)
     # Has this page been published by Publisher? A "live" page may not necessarily be published to our frontend yet.
     published = models.BooleanField(default=False, blank=True, null=True)
-
 
     def janis_urls(self):
         """
@@ -187,7 +185,6 @@ class JanisBasePage(Page):
                 # A page is not live and not published
                 return "Draft"
 
-
     def departments(self):
         """
          This goes through our group page permissions and looks for any related departments
@@ -240,7 +237,6 @@ class JanisBasePage(Page):
         obj.published = self.published
 
         return obj
-
 
     class Meta:
         # https://docs.djangoproject.com/en/2.2/topics/auth/customizing/#custom-permissions

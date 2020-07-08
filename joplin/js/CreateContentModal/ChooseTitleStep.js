@@ -14,7 +14,9 @@ const getPageHeading = pageType => {
     case 'guide':
       return 'Write a name for your guide.';
     case 'documents':
-      return 'Write the name for this list of documents';
+      return 'Write the name for document';
+    case 'documentscollection':
+      return 'Write the name for this collection of documents';
     case 'form':
       return 'Write the name for this form';
     case 'location':

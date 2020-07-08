@@ -20,6 +20,7 @@ import pages.news_page.fixtures as news_page_fixtures
 import users.fixtures as user_fixtures
 from importer.import_everything import import_everything
 
+
 class Command(BaseCommand):
     help = "Load initial seeding data into your app"
 
@@ -75,7 +76,8 @@ class Command(BaseCommand):
                 topic_collection_page_fixtures.load_all()
                 topic_page_fixtures.load_all()
                 service_page_fixtures.load_all()
-                official_documents_page_fixtures.load_all()
+                # todo: fixtures for official documents and official document collections
+                # official_documents_page_fixtures.load_all()
                 event_page_fixtures.load_all()
                 location_page_fixtures.load_all()
                 department_page_fixtures.load_all()
@@ -90,7 +92,7 @@ class Command(BaseCommand):
                     print("Adding prod datadump")
                     run_load_data_command('db/system-generated/prod.datadump.json')
                     DeploymentLog(operation="load_data", value="prod", completed=True).save()
-                elif (LOAD_DATA == "new_datadump"):
+                elif LOAD_DATA == "new_datadump":
                     print("Adding new migration test datadump")
                     run_load_data_command('db/system-generated/tmp.datadump.json')
 
@@ -113,20 +115,6 @@ class Command(BaseCommand):
             # Add pytest superadmin
             if LOAD_DATA == 'test':
                 user_fixtures.admin_for_test_env()
-
-            # load_fixture(
-            #     "set_group_permissions",
-            #     'db/fixtures/group_permissions_settings.json',
-            #     (
-            #         not os.getenv("DEPLOYMENT_MODE") in ("STAGING", "PRODUCTION")
-            #         and not settings.V3_WIP
-            #     )
-            # )
-            # load_fixture(
-            #     "set_themes",
-            #     'db/fixtures/themes.json',
-            #     (os.getenv("DEPLOYMENT_MODE") == "LOCAL")
-            # )
 
         finally:
             stdout.close()

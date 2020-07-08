@@ -8,6 +8,7 @@ from pages.event_page.models import EventPage
 from pages.topic_page.models import TopicPage
 from pages.topic_collection_page.models import TopicCollectionPage
 from pages.department_page.models import DepartmentPage
+# from pages.official_documents_collection.models import OfficialDocumentCollection
 
 # Gain access to a content_type's node and model if you have it's name.
 # Helps reduce copypasta in api.schema.py
@@ -20,7 +21,7 @@ content_type_map = {
         "node": "InformationPageNode",
         "model": InformationPage,
     },
-    "official document page old": {
+    "official document page old": { # todo : chia check this is updated before its all done
         "node": "OfficialDocumentPageNode",
         "model": OfficialDocumentPageOld,
     },
@@ -51,5 +52,9 @@ content_type_map = {
     "department page": {
         "node": "DepartmentPageNode",
         "model": DepartmentPage,
-    }
+    },
+    # "official document collection" :{
+    #     "node": "OfficialDocumentCollectionNode",
+    #     "model": OfficialDocumentCollection
+    # }
 }
