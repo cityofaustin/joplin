@@ -26,7 +26,7 @@ STYLEGUIDE_PAGES = {
     'topic collection page': '',
     'official document page': '/publish-content-on-austin.gov/pick-the-perfect-content-type/official-documents-page',
     'guide page': '',
-    'form container': '/publish-content-on-austin.gov/pick-the-perfect-content-type/form-container-page.md',
+    'form container': '/publish-content-on-austin.gov/pick-the-perfect-content-type/form-container-page',
 }
 
 
