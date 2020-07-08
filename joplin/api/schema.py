@@ -744,16 +744,16 @@ class FormContainerNode(DjangoObjectType):
         return resolve_owner_handler(self, info)
 
 
-class OfficialDocumentFilter(FilterSet):
+class OfficialDocumentCollectionDocumentFilter(FilterSet):
     order_by = OrderingFilter(
         fields=(
-            'date',
+            'page__date',
         )
     )
 
     class Meta:
-        model = OfficialDocumentPage
-        fields = ['date']
+        model = OfficialDocumentCollectionDocument
+        fields = ['official_document_collection', 'page__date']
 
 
 class DocumentNodeDocument(graphene.ObjectType):
@@ -791,18 +791,11 @@ class OfficialDocumentPageNode(DjangoObjectType):
 
 
 class OfficialDocumentCollectionDocumentNode(DjangoObjectType):
-    document_pages = DjangoFilterConnectionField(OfficialDocumentPageNode, filterset_class=OfficialDocumentFilter)
-
     class Meta:
         model = OfficialDocumentCollectionDocument
-        filter_fields = ['official_document_collection']
+        filter_fields = ['official_document_collection', 'page__date']
         fields = '__all__'
         interfaces = [graphene.Node]
-
-    # Syntax to include filterset_class in resolve
-    # https://docs.graphene-python.org/projects/django/en/latest/filtering/#ordering
-    def resolve_document_pages(self, info, **kwargs):
-        return OfficialDocumentFilter(kwargs).qs
 
 
 class OfficialDocumentCollectionNode(DjangoObjectType):
@@ -1111,14 +1104,16 @@ class Query(graphene.ObjectType):
     all_themes = DjangoFilterConnectionField(ThemeNode)
     all_topics = DjangoFilterConnectionField(TopicNode)
     all_topic_collections = DjangoFilterConnectionField(TopicCollectionNode)
-    all_official_document_collections = DjangoFilterConnectionField(
-        OfficialDocumentCollectionNode)
+    all_official_document_collections = DjangoFilterConnectionField(OfficialDocumentCollectionNode)
     all_guide_pages = DjangoFilterConnectionField(GuidePageNode)
     all_form_containers = DjangoFilterConnectionField(FormContainerNode)
     all_location_pages = DjangoFilterConnectionField(LocationPageNode)
     all_event_pages = DjangoFilterConnectionField(EventPageNode, filterset_class=EventFilter)
     topic_collection_topics = DjangoFilterConnectionField(JanisBasePageTopicCollectionNode)
-    official_document_collection_documents = DjangoFilterConnectionField(OfficialDocumentCollectionDocumentNode)
+    official_document_collection_documents = DjangoFilterConnectionField(
+        OfficialDocumentCollectionDocumentNode,
+        filterset_class=OfficialDocumentCollectionDocumentFilter
+    )
     base_page_topics = DjangoFilterConnectionField(JanisBasePageTopicNode)
 
     def resolve_page_revision(self, resolve_info, id=None):
