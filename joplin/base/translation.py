@@ -103,7 +103,6 @@ class OfficialDocumentCollectionTranslationOptions(TranslationOptions):
     )
 
 
-
 @register(OfficialDocumentPageOld)
 class OfficialDocumentPageOldTranslationOptions(TranslationOptions):
     fields = (

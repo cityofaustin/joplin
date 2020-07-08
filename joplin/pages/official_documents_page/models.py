@@ -1,6 +1,7 @@
 from django.db import models
 
 from modelcluster.fields import ParentalKey
+from modelcluster.models import ClusterableModel
 
 from base.forms import OfficialDocumentPageForm, OfficialDocumentPageOldForm
 
@@ -131,5 +132,15 @@ class OfficialDocumentPage(JanisBasePage):
         FieldPanel('name', widget=countMe),
         DocumentChooserPanel('document'),
         DocumentChooserPanel('document_es'),
-        # InlinePanel('official_document_collection', label="Official Document Collections this Document belongs to")
+        InlinePanel('official_document_collection', label="Official Document Collections this Document belongs to")
+    ]
+
+
+class OfficialDocumentCollectionDocument(ClusterableModel):
+    page = ParentalKey(OfficialDocumentPage, related_name="official_document_collection")
+    official_document_collection = models.ForeignKey('official_documents_collection.OfficialDocumentCollection',
+                                                     verbose_name='Select an Official Document Collection',
+                                                     related_name='+', on_delete=models.CASCADE)
+    panels = [
+        PageChooserPanel('official_document_collection')
     ]
