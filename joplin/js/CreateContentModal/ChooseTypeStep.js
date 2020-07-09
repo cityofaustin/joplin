@@ -87,7 +87,7 @@ const ChooseTypeStep = ({
       type: 'documents',
       name: 'Official document page',
       image: documentsImage,
-      description: 'A specific document',
+      description: 'A single official document',
     },
     {
       type: 'form',
