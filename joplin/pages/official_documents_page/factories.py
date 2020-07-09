@@ -1,5 +1,5 @@
 import factory
-from pages.official_documents_page.models import OfficialDocumentPage, OfficialDocumentCollectionDocument
+from pages.official_documents_page.models import OfficialDocumentPage, OfficialDocumentCollectionOfficialDocumentPage
 from pages.base_page.factories import JanisBasePageFactory
 from pages.official_documents_collection.factories import OfficialDocumentCollectionFactory
 from wagtail.documents.models import Document
@@ -25,7 +25,7 @@ class OfficialDocumentCollectionDocumentFactory(factory.django.DjangoModelFactor
     )
 
     class Meta:
-        model = OfficialDocumentCollectionDocument
+        model = OfficialDocumentCollectionOfficialDocumentPage
 
 
 class OfficialDocumentPageFactory(JanisBasePageFactory):

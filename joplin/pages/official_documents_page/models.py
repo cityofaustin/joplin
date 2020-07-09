@@ -136,7 +136,7 @@ class OfficialDocumentPage(JanisBasePage):
     ]
 
 
-class OfficialDocumentCollectionDocument(ClusterableModel):
+class OfficialDocumentCollectionOfficialDocumentPage(ClusterableModel):
     page = ParentalKey(OfficialDocumentPage, related_name="official_document_collection")
     official_document_collection = models.ForeignKey('official_documents_collection.OfficialDocumentCollection',
                                                      verbose_name='Select an official document collection',

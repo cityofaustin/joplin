@@ -23,7 +23,7 @@ from pages.topic_page.models import TopicPage, TopicPageTopPage, JanisBasePageWi
 from pages.service_page.models import ServicePage
 from pages.information_page.models import InformationPage
 from pages.department_page.models import DepartmentPage, DepartmentPageDirector, DepartmentPageTopPage, DepartmentPageRelatedPage
-from pages.official_documents_page.models import OfficialDocumentPageOld, OfficialDocumentPageDocument, OfficialDocumentPage, OfficialDocumentCollectionDocument
+from pages.official_documents_page.models import OfficialDocumentPage, OfficialDocumentCollectionOfficialDocumentPage
 from pages.official_documents_collection.models import OfficialDocumentCollection
 from pages.guide_page.models import GuidePage
 from pages.form_container.models import FormContainer
@@ -752,7 +752,7 @@ class OfficialDocumentCollectionDocumentFilter(FilterSet):
     )
 
     class Meta:
-        model = OfficialDocumentCollectionDocument
+        model = OfficialDocumentCollectionOfficialDocumentPage
         fields = ['official_document_collection', 'page__date']
 
 
@@ -790,9 +790,9 @@ class OfficialDocumentPageNode(DjangoObjectType):
         return None
 
 
-class OfficialDocumentCollectionDocumentNode(DjangoObjectType):
+class OfficialDocumentCollectionOfficialDocumentPageNode(DjangoObjectType):
     class Meta:
-        model = OfficialDocumentCollectionDocument
+        model = OfficialDocumentCollectionOfficialDocumentPage
         filter_fields = ['official_document_collection', 'page__date']
         fields = '__all__'
         interfaces = [graphene.Node]
@@ -1111,7 +1111,7 @@ class Query(graphene.ObjectType):
     all_event_pages = DjangoFilterConnectionField(EventPageNode, filterset_class=EventFilter)
     topic_collection_topics = DjangoFilterConnectionField(JanisBasePageTopicCollectionNode)
     official_document_collection_documents = DjangoFilterConnectionField(
-        OfficialDocumentCollectionDocumentNode,
+        OfficialDocumentCollectionOfficialDocumentPageNode,
         filterset_class=OfficialDocumentCollectionDocumentFilter
     )
     base_page_topics = DjangoFilterConnectionField(JanisBasePageTopicNode)
