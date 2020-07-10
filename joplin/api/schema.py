@@ -971,6 +971,9 @@ class PageRevisionNode(DjangoObjectType):
     def resolve_as_news_page(self, resolve_info, *args, **kwargs):
         return self.as_page_object()
 
+    def resolve_as_official_document_collection(self, resolve_info, *args, **kwargs):
+        return self.as_page_object()
+
     def resolve_is_latest(self, resolve_info, *args, **kwargs):
         return self.created_at == self.page.latest_revision_created_at
 
