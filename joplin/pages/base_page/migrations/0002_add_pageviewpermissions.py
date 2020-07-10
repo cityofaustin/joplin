@@ -6,7 +6,7 @@ from django.db import migrations
 
 def add_pageviewpermissions(apps, schema_editor):
     # Get model
-    JanisBasePage = apps.get_model('base_page.JanisBasePage') #todo: check this
+    JanisBasePage = apps.get_model('base_page.JanisBasePage')
     PageViewRestriction = apps.get_model('wagtailcore.PageViewRestriction')
 
     all_pages = JanisBasePage.objects.all()

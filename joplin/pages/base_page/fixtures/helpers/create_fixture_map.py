@@ -1,6 +1,7 @@
 from pages.base_page.fixtures.helpers.page_type_map import page_type_map
 from base.views.publish_succeeded import update_page_after_publish_success
 
+
 def build_create_fixture(page_type):
     model = page_type_map[page_type]["model"]
     factory = page_type_map[page_type]["factory"]

@@ -26,7 +26,18 @@ class TopicCollectionPageForm(PublishPreflightForm):
         super().__init__(*args, **kwargs)
 
 
+class OfficialDocumentCollectionForm(PublishPreflightForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+
 class OfficialDocumentPageForm(PublishPreflightForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+
+# todo: chia don't forget to remove
+class OfficialDocumentPageOldForm(PublishPreflightForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 

@@ -1,17 +1,13 @@
 from django.db import models
 
-from modelcluster.models import ClusterableModel
-from modelcluster.fields import ParentalKey
-
 from wagtail.core.fields import RichTextField, StreamField
 from wagtail.core.blocks import ListBlock, RichTextBlock, StructBlock, TextBlock, PageChooserBlock
-from wagtail.admin.edit_handlers import FieldPanel, HelpPanel, InlinePanel, MultiFieldPanel, PageChooserPanel, StreamFieldPanel
+from wagtail.admin.edit_handlers import FieldPanel, HelpPanel, InlinePanel, MultiFieldPanel, StreamFieldPanel
 from wagtail.snippets.edit_handlers import SnippetChooserPanel
 
-from base.blocks import SnippetChooserBlockWithAPIGoodness, WhatDoIDoWithBlock, CollectionScheduleBlock, RecollectBlock
+from base.blocks import WhatDoIDoWithBlock, CollectionScheduleBlock, RecollectBlock
 from base.forms import ServicePageForm
 
-from pages.base_page.models import JanisBasePage
 from pages.location_page.models import LocationPage
 from snippets.contact.models import Contact
 

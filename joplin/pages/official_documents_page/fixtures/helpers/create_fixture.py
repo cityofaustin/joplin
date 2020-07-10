@@ -2,13 +2,18 @@ from wagtail.documents.models import Document
 from pages.official_documents_page.factories import DocumentFactory
 import hashlib
 from django.core.files.base import ContentFile
-
-
 from pages.base_page.fixtures.helpers.create_fixture_map import create_fixture_map
-create_fixture = create_fixture_map["official_document"]
+
+create_fixture = create_fixture_map["official_document_page"]
 
 
 def create_fixture_document(file_content, file_name):
+    """
+    A way to create fixture documents. The Wagtail pdf documents.
+    :param file_content: string, the content of the document being created
+    :param file_name: string, name of document fixture
+    :return: adds a wagtail document fixture.
+    """
     # add a document
     file_hash = hashlib.sha1(file_content).hexdigest()
     # Check if a document with the same hash has already been imported
