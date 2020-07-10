@@ -17,16 +17,16 @@ def get_revision_preview_url(*args, **kwargs):
 
 
 STYLEGUIDE_PAGES = {
-    'service page': '/pick-the-perfect-content-type/service-page',
-    'process page': '/pick-the-perfect-content-type/process-page',
-    'information page': '/pick-the-perfect-content-type/information-page',
-    'department page': '/pick-the-perfect-content-type/department-page',
-    'location page': '/pick-the-perfect-content-type/location-page',
+    'service page': '/publish-content-on-austin.gov/pick-the-perfect-content-type/service-page',
+    'process page': '/publish-content-on-austin.gov/pick-the-perfect-content-type/process-page',
+    'information page': '/publish-content-on-austin.gov/pick-the-perfect-content-type/information-page',
+    'department page': '/publish-content-on-austin.gov/pick-the-perfect-content-type/department-page',
+    'location page': '/publish-content-on-austin.gov/pick-the-perfect-content-type/location-page',
     'topic page': '',
     'topic collection page': '',
-    'official document page': '/pick-the-perfect-content-type/official-documents-page',
+    'official document page': '/publish-content-on-austin.gov/pick-the-perfect-content-type/official-documents-page',
     'guide page': '',
-    'form container': '',
+    'form container': '/publish-content-on-austin.gov/pick-the-perfect-content-type/form-container-page',
 }
 
 
