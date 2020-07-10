@@ -927,7 +927,7 @@ class PageRevisionNode(DjangoObjectType):
     as_department_page = graphene.NonNull(DepartmentPageNode)
     as_topic_page = graphene.NonNull(TopicNode)
     as_topic_collection_page = graphene.NonNull(TopicCollectionNode)
-    as_official_document_list = graphene.NonNull(OfficialDocumentCollectionNode)
+    as_official_document_collection = graphene.NonNull(OfficialDocumentCollectionNode)
     as_guide_page = graphene.NonNull(GuidePageNode)
     as_form_container = graphene.NonNull(FormContainerNode)
     as_location_page = graphene.NonNull(LocationPageNode)
