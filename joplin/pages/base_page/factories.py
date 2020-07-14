@@ -1,5 +1,4 @@
 import factory
-from groups.models import Department
 from pages.factory import PageFactory
 from pages.base_page.models import JanisBasePage
 
@@ -21,5 +20,5 @@ class JanisBasePageFactory(PageFactory):
 
         # pass "add_departments__dummy"=True into Factory() to make dummy departments
         if create:
-            if (kwargs.get("dummy", False)):
+            if kwargs.get("dummy", False):
                 GroupPagePermissionFactory.create(page=self)

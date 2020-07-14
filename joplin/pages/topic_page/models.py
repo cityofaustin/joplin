@@ -51,7 +51,7 @@ class TopicPageTopPage(Orderable):
 
     panels = [
         PageChooserPanel('page', page_type=['information_page.InformationPage', 'service_page.ServicePage',
-                                            'guide_page.GuidePage', 'official_documents_page.OfficialDocumentPage']),
+                                            'guide_page.GuidePage', 'official_documents_collection.OfficialDocumentCollection']),
     ]
 
     def __str__(self):
