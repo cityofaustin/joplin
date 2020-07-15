@@ -29,8 +29,12 @@ if [ "$GET_DOCUMENTS" == "-d" ]; then
     DOC_SOURCE="joplin3-austin-gov-static/staging/media/documents"
   else
     # Get Review App documents location
-    BRANCH=$(heroku config:get CIRCLE_BRANCH -a $APP_SOURCE)
-    DOC_SOURCE="joplin3-austin-gov-static/review/$BRANCH/media/documents"
+    SOURCE_BRANCH=$(heroku config:get CIRCLE_BRANCH -a $APP_SOURCE)
+    if [ -z "$SOURCE_BRANCH" ]; then
+      echo "No CIRCLE_BRANCH found for $APP_SOURCE"
+      exit 1
+    fi
+    DOC_SOURCE="joplin3-austin-gov-static/review/$SOURCE_BRANCH/media/documents"
   fi
 
   if [ "$APP_DEST" == "joplin-staging" ]; then
@@ -38,8 +42,12 @@ if [ "$GET_DOCUMENTS" == "-d" ]; then
     DOC_DEST="joplin3-austin-gov-static/staging/media/documents"
   else
     # Get Review App documents location
-    BRANCH=$(heroku config:get CIRCLE_BRANCH -a $APP_SOURCE)
-    DOC_DEST="joplin3-austin-gov-static/review/$BRANCH/media/documents"
+    DEST_BRANCH=$(heroku config:get CIRCLE_BRANCH -a $APP_DEST)
+    if [ -z "$DEST_BRANCH" ]; then
+      echo "No CIRCLE_BRANCH found for $APP_DEST"
+      exit 1
+    fi
+    DOC_DEST="joplin3-austin-gov-static/review/$DEST_BRANCH/media/documents"
   fi
 
   aws s3 sync s3://$DOC_SOURCE s3://$DOC_DEST --only-show-errors --delete
