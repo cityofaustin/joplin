@@ -322,16 +322,17 @@ BASE_URL = 'https://austintexas.io'
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'fake_key')
 
+# Email Settings
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', None)
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', None)
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-HEROKU_KEY = os.getenv('HEROKU_KEY')
-HEROKU_JANIS_APP_NAME = os.getenv('HEROKU_JANIS_APP_NAME')
 JANIS_URL = os.getenv('JANIS_URL', 'http://localhost:3000')
 
-JANIS_CMS_API = os.getenv('JANIS_CMS_API', 'http://localhost:8000/api/graphql')
-JANIS_CMS_MEDIA = os.getenv('JANIS_CMS_MEDIA')
-JANIS_CMS_DOCS = os.getenv('JANIS_CMS_DOCS')
 
 GRAPHENE = {
     'SCHEMA': 'api.schema.schema',
@@ -516,10 +517,6 @@ LOGGING = {
         },
     },
 }
-# Send email notifications of errors for PR build
-# TODO: this can be managed in a cleaner way
-if os.getenv("CIRCLE_BRANCH") == "4356-queue":
-    ADMINS = [('Nick', 'nick.ivons@austintexas.gov')]
 
 # Custom User Form Settings
 AUTH_USER_MODEL = 'users.User'
