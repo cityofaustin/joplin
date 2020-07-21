@@ -311,13 +311,8 @@ if DEBUG:
 
 
 # Wagtail settings
-
 WAGTAIL_SITE_NAME = 'joplin'
 WAGTAIL_AUTO_UPDATE_PREVIEW = True
-
-# Base URL to use when referring to full URLs within the Wagtail admin backend -
-# e.g. in notification emails. Don't include '/admin' or a trailing slash
-BASE_URL = 'https://austintexas.io'
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'fake_key')
@@ -450,9 +445,13 @@ FLAGS = {
 JOPLIN_APP_HOST_PORT = os.getenv('JOPLIN_APP_HOST_PORT', 8000)
 # The CMS_API endpoint of the current Django App for published Janis to use
 if IS_LOCAL or IS_TEST:
-    CMS_API = f"http://localhost:{JOPLIN_APP_HOST_PORT}/api/graphql"
+    # Base URL to use when referring to full URLs within the Wagtail admin backend -
+    # e.g. in notification emails. Don't include '/admin' or a trailing slash
+    BASE_URL = f'https://localhost:{JOPLIN_APP_HOST_PORT}'
+    CMS_API = f"{BASE_URL}/api/graphql"
 else:
-    CMS_API = f"https://{os.getenv('APPNAME','')}.herokuapp.com/api/graphql"
+    BASE_URL = f'https://{os.getenv('APPNAME')}.herokuapp.com'
+    CMS_API = f"{BASE_URL}/api/graphql"
 
 
 # Sets the login_url redirect for "from django.contrib.auth.decorators import user_passes_test"
