@@ -44,6 +44,8 @@ vars_from_circleci = [
     "DJANGO_SECRET_KEY",  # CircleCI
     "ALGOLIA_APP_ID",  # CircleCI
     "ALGOLIA_API_KEY",  # CircleCI
+    "EMAIL_HOST_USER",  # CircleCI
+    "EMAIL_HOST_PASSWORD",  # CircleCI
     "CI_COA_PUBLISHER_V2_URL_PR",
     "COA_PUBLISHER_V2_API_KEY_PR",
     "CI_COA_PUBLISHER_V2_URL_STAGING",
