@@ -450,7 +450,7 @@ if IS_LOCAL or IS_TEST:
     BASE_URL = f'https://localhost:{JOPLIN_APP_HOST_PORT}'
     CMS_API = f"{BASE_URL}/api/graphql"
 else:
-    BASE_URL = f'https://{os.getenv('APPNAME','')}.herokuapp.com'
+    BASE_URL = f"https://{os.getenv('APPNAME','')}.herokuapp.com"
     CMS_API = f"{BASE_URL}/api/graphql"
 
 
