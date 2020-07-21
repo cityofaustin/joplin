@@ -1,5 +1,4 @@
 from django.db import models
-from django.core.exceptions import ValidationError
 from wagtail.admin.edit_handlers import FieldPanel, PageChooserPanel, HelpPanel
 from wagtail.images.edit_handlers import ImageChooserPanel
 from phonenumber_field.modelfields import PhoneNumberField
@@ -112,7 +111,10 @@ class LocationPage(JanisBasePage):
         FieldPanel('title_es', widget=countMe),
         FieldPanel('title_ar'),
         FieldPanel('title_vi'),
-
+        FieldPanel('slug_en'),
+        FieldPanel('slug_es'),
+        FieldPanel('slug_ar'),
+        FieldPanel('slug_vi'),
         MultiFieldPanel(children=[
             FieldPanel('physical_street'),
             FieldPanel('physical_unit', classname='col2'),
@@ -169,8 +171,12 @@ class LocationPage(JanisBasePage):
     ]
 
     def janis_urls(self):
-        # Should publish at location/<location-page-slug>/"
-        # Example: location/the-place-to-be
+        """
+        overrides method in JanisBasePage
+        Should publish at location/<location-page-slug>/"
+        Example: location/the-place-to-be
+        :return: list with formatted url (string)
+        """
         if self.slug:
             return [f'/{self.janis_url_page_type}/{self.slug_en}']
         return []

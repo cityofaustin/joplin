@@ -1,17 +1,13 @@
 from django.db import models
 
-from modelcluster.fields import ParentalKey
-from modelcluster.models import ClusterableModel
-
 from wagtail.core.fields import StreamField
 from wagtail.core.blocks import StructBlock, PageChooserBlock, TextBlock, ListBlock
-from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, PageChooserPanel, StreamFieldPanel
+from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, StreamFieldPanel
 from wagtail.snippets.edit_handlers import SnippetChooserPanel
 from wagtail.images.edit_handlers import ImageChooserPanel
 
 from base.forms import GuidePageForm
 
-from pages.base_page.models import JanisBasePage
 from pages.information_page.models import InformationPage
 from pages.service_page.models import ServicePage
 from snippets.contact.models import Contact
@@ -26,8 +22,8 @@ from pages.topic_page.models import JanisBasePageWithTopics
 
 def streamfield_has_pages(stream_value):
     """
-    Confirms the stream_value has data, and
-    the data contains both pages and an english section_heading
+    Confirms the stream_value has data and the data contains both pages and an english section_heading
+    Used in publishing requirement
     :return: boolean
     """
     if stream_value:
@@ -93,6 +89,10 @@ class GuidePage(JanisBasePageWithTopics):
         FieldPanel('title_en', widget=countMe),
         FieldPanel('title_es', widget=countMe),
         FieldPanel('title_ar'),
+        FieldPanel('slug_en'),
+        FieldPanel('slug_es'),
+        FieldPanel('slug_ar'),
+        FieldPanel('slug_vi'),
         FieldPanel('title_vi'),
         FieldPanel('description', widget=countMeTextArea),
         InlinePanel('topics', label='Topics'),
