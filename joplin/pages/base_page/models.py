@@ -52,14 +52,17 @@ class JanisBasePage(Page):
     publish_request_pk = models.TextField(blank=True, null=True)
     # sk for our publish request in Publisher dynamodb
     publish_request_sk = models.TextField(blank=True, null=True)
-    # Indicated whether a publish_request for this page been submitted to the Publisher, and we are waiting for it to finish being processed.
+    # Indicated whether a publish_request for this page been submitted to the Publisher, and we are
+    # waiting for it to finish being processed.
     publish_request_enqueued = models.BooleanField(default=False)
     # Has this page been published by Publisher? A "live" page may not necessarily be published to our frontend yet.
     published = models.BooleanField(default=False, blank=True, null=True)
 
     def janis_urls(self):
         """
-        This should handle coa_global and department stuff
+        Returns list of page urls (strings)
+        If page is global, returns slug
+        Otherwise returns a list of department/slug for each department
         """
         # If we're global, even if we have a department, we should only exist at
         # /page_slug
@@ -80,7 +83,9 @@ class JanisBasePage(Page):
 
     def janis_instances(self):
         """
-        This should handle coa_global and department stuff
+        Returns list of page urls
+        If page is global, returns slug
+        Otherwise returns department/slug for each department
         """
         # If we're global, even if we have a department, we should only exist at
         # /page_slug
@@ -126,12 +131,14 @@ class JanisBasePage(Page):
             # Janis will query from its default CMS_API if a param is not provided
             return url_end + f"?CMS_API={settings.CMS_API}"
 
-
-    # Returns data needed to construct preview URLs for any language.
-    # This is used both in base_page/models.py and on the frontend edit page django template.
-    # [janis_preview_url_start]/[lang]/[janis_preview_url_end]
-    # ex: http://localhost:3000/es/preview/information/UGFnZVJldmlzaW9uTm9kZToyMjg=
     def preview_url_data(self, revision=None):
+        """
+        :param revision: optional
+        :return: Returns data needed to construct preview URLs for any language.
+        This is used both in base_page/models.py and on the frontend edit page django template.
+        [janis_preview_url_start]/[lang]/[janis_preview_url_end]
+        ex: http://localhost:3000/es/preview/information/UGFnZVJldmlzaW9uTm9kZToyMjg=
+        """
         return {
             "janis_preview_url_start": self.get_parent().specific.preview_url_base(),
             "janis_preview_url_end": self.janis_preview_url_end(revision=revision),
@@ -142,10 +149,10 @@ class JanisBasePage(Page):
         return f'{data["janis_preview_url_start"]}/{lang}/{data["janis_preview_url_end"]}'
 
     def janis_publish_url(self):
-        '''
+        """
         Used by page_status_tag.html
         :return: the first janis_url path for now
-        '''
+        """
         paths = self.janis_urls()
         if len(paths) > 0:
             first_path = paths[0]
@@ -154,7 +161,6 @@ class JanisBasePage(Page):
                 return f'{parent_home_page.specific.publish_url_base()}{first_path}'
         # Default to returning same page as url
         return "#"
-
 
     @property
     def status_string(self):

@@ -67,6 +67,7 @@ class DepartmentPage(JanisBasePage):
         FieldPanel('title_es', widget=countMe),
         FieldPanel('title_ar'),
         FieldPanel('title_vi'),
+        FieldPanel('slug'),
         FieldPanel('what_we_do'),
         ImageChooserPanel('image'),
         FieldPanel('mission', widget=widgets.CountableWidget(attrs={
