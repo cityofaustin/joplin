@@ -20,10 +20,10 @@ class Command(BaseCommand):
     help = "Sends a report to alert translators about pages requiring translation."
 
     def handle(self, *args, **options):
+        CT = timezone('US/Central')
         def make_date(datetime_instance):
             return datetime(datetime_instance.year, datetime_instance.month, datetime_instance.day, 0, 0, 0, 0, CT)
 
-        CT = timezone('US/Central')
         now = datetime.now(CT)
         weekday = now.weekday()
         upper_bound = make_date(now)

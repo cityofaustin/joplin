@@ -400,7 +400,7 @@ if(IS_PRODUCTION or IS_STAGING or IS_REVIEW):
     }
 
     # Specifying the location of files
-    # The Janis CMS_MEDIA = AWS_STORAGE_BUCKET_NAME + AWS_LOCATION
+    # The Janis CMS_MEDIA = 'https://' + AWS_S3_CUSTOM_DOMAIN + '/' + AWS_LOCATION
     if IS_PRODUCTION:
         AWS_LOCATION = 'production/static'
         AWS_IS_GZIPPED = True
