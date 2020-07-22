@@ -759,6 +759,7 @@ class OfficialDocumentCollectionDocumentFilter(FilterSet):
 class DocumentNodeDocument(graphene.ObjectType):
     filename = graphene.String()
     fileSize = graphene.String()
+    url = graphene.String()
 
 
 class OfficialDocumentPageNode(DjangoObjectType):
@@ -776,12 +777,14 @@ class OfficialDocumentPageNode(DjangoObjectType):
             english_doc = DocumentNodeDocument(
                 filename=self.document.filename,
                 fileSize=self.document.file_size,
+                url=self.document.url,
             )
             if django.utils.translation.get_language() == 'es':
                 if self.document_es:
                     return DocumentNodeDocument(
                         filename=self.document_es.filename,
                         fileSize=self.document_es.file_size,
+                        url=self.document_es.url,
                     )
                 else:
                     return english_doc
