@@ -218,16 +218,18 @@ class JanisBasePage(Page):
 
         ]
 
-        # try:
-        #     if flag_enabled('SHOW_EXTRA_PANELS'):
-        #         editor_panels += (PermissionObjectList(cls.promote_panels,
-        #                                                heading='SEO'),
-        #                           PermissionObjectList(cls.settings_panels,
-        #                                                heading='Settings'))
-        # except ProgrammingError as e:
-        #     print("some problem, maybe with flags")
-        #     print(traceback.format_exc())
-        #     pass
+        try:
+            if flag_enabled('SHOW_EXTRA_PANELS'):
+                editor_panels += [PermissionObjectList(cls.settings_panels,
+                                                       heading='Settings')]
+                # editor_panels += (PermissionObjectList(cls.promote_panels,
+                #                                        heading='SEO'),
+                #                   PermissionObjectList(cls.settings_panels,
+                #                                        heading='Settings'))
+        except ProgrammingError as e:
+            print("some problem, maybe with flags")
+            print(traceback.format_exc())
+            pass
 
         edit_handler = TabbedInterface(editor_panels)
 
