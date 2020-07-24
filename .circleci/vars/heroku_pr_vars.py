@@ -45,7 +45,8 @@ vars_from_circleci = [
     "ALGOLIA_APP_ID",  # CircleCI
     "ALGOLIA_API_KEY",  # CircleCI
     "EMAIL_HOST_USER",  # CircleCI
-    "EMAIL_HOST_PASSWORD",  # CircleCI
+    "AWS_SES_ACCESS_KEY_ID", # CircleCI
+    "AWS_SES_SECRET_ACCESS_KEY", # CircleCI
     "CI_COA_PUBLISHER_V2_URL_PR",
     "COA_PUBLISHER_V2_API_KEY_PR",
     "CI_COA_PUBLISHER_V2_URL_STAGING",
