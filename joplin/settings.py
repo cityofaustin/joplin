@@ -318,16 +318,16 @@ WAGTAIL_AUTO_UPDATE_PREVIEW = True
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'fake_key')
 
 # Email Settings
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_USE_TLS = True
-EMAIL_PORT = 587
-EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', None)
-EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', None)
-WAGTAILADMIN_NOTIFICATION_FROM_EMAIL = EMAIL_HOST_USER
+EMAIL_BACKEND = 'django_ses.SESBackend'
+AWS_SES_REGION_NAME = 'us-east-1'
+AWS_SES_REGION_ENDPOINT = 'email.us-east-1.amazonaws.com'
+AWS_SES_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID', None)
+AWS_SES_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY', None)
+DEFAULT_FROM_EMAIL = os.getenv('EMAIL_HOST_USER', None)
+WAGTAILADMIN_NOTIFICATION_FROM_EMAIL = os.getenv('EMAIL_HOST_USER', None)
+
 
 JANIS_URL = os.getenv('JANIS_URL', 'http://localhost:3000')
-
 
 GRAPHENE = {
     'SCHEMA': 'api.schema.schema',
@@ -367,8 +367,8 @@ if(IS_PRODUCTION or IS_STAGING or IS_REVIEW):
     # AWS Buckets only if not local.
     #
     APPNAME = os.getenv('APPNAME')
-    AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
-    AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
+    AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID', None)
+    AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY', None)
     AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_S3_BUCKET_STATIC')
     AWS_ARCHIVE_BUCKET_NAME = os.getenv('AWS_S3_BUCKET_ARCHIVE')
     AWS_BACKUPS_LOCATION = os.getenv('AWS_S3_BUCKET_ARCHIVE_LOCATION')
