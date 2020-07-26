@@ -9,7 +9,7 @@ from pages.topic_page.models import TopicPage
 from pages.service_page.models import ServicePage
 from pages.information_page.models import InformationPage
 from pages.department_page.models import DepartmentPage, DepartmentPageDirector
-from pages.official_documents_page.models import OfficialDocumentPageOld, OfficialDocumentPageDocument, OfficialDocumentPage
+from pages.official_documents_page.models import OfficialDocumentPage
 from pages.official_documents_collection.models import OfficialDocumentCollection
 from pages.guide_page.models import GuidePage
 from pages.form_container.models import FormContainer
@@ -103,26 +103,9 @@ class OfficialDocumentCollectionTranslationOptions(TranslationOptions):
     )
 
 
-@register(OfficialDocumentPageOld)
-class OfficialDocumentPageOldTranslationOptions(TranslationOptions):
-    fields = (
-        'description',
-    )
-
-
 @register(OfficialDocumentPage)
 class OfficialDocumentPageTranslationOptions(TranslationOptions):
     fields = (
-        'summary',
-        'name',
-        'authoring_office'
-    )
-
-
-@register(OfficialDocumentPageDocument)
-class OfficialDocumentPageDocumentTranslationOptions(TranslationOptions):
-    fields = (
-        'title',
         'summary',
         'name',
         'authoring_office'
