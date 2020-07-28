@@ -39,6 +39,10 @@ class OfficialDocumentCollection(JanisBasePageWithTopics):
         FieldPanel('title_es', widget=countMe),
         FieldPanel('title_ar'),
         FieldPanel('title_vi'),
+        FieldPanel('slug_en'),
+        FieldPanel('slug_es'),
+        FieldPanel('slug_ar'),
+        FieldPanel('slug_vi'),
         FieldPanel('description', widget=countMeTextArea),
         InlinePanel('topics', label='Topics'),
     ]
