@@ -23,7 +23,8 @@ from pages.topic_page.models import TopicPage, TopicPageTopPage, JanisBasePageWi
 from pages.service_page.models import ServicePage
 from pages.information_page.models import InformationPage
 from pages.department_page.models import DepartmentPage, DepartmentPageDirector, DepartmentPageTopPage, DepartmentPageRelatedPage
-from pages.official_documents_page.models import OfficialDocumentPage, OfficialDocumentPageDocument
+from pages.official_documents_page.models import OfficialDocumentPage, OfficialDocumentCollectionOfficialDocumentPage
+from pages.official_documents_collection.models import OfficialDocumentCollection
 from pages.guide_page.models import GuidePage
 from pages.form_container.models import FormContainer
 from pages.base_page.models import JanisBasePage
@@ -272,8 +273,6 @@ class JanisBasePageWithTopicCollectionsNode(DjangoObjectType):
     and we want those resolvers to be wrapped in a @superuser_required decorator for authorization.
     TODO: handle importing of department groups for non-superusers.
 '''
-
-
 class OwnerNode(graphene.ObjectType):
     id = graphene.ID()
     first_name = graphene.String()
@@ -398,6 +397,10 @@ class TopicNode(DjangoObjectType):
         model = TopicPage
         filter_fields = ['id', 'slug', 'live']
         interfaces = [graphene.Node]
+
+    # While Spanish slugs are unsupported, only return slug_en
+    def resolve_slug(self, info):
+        return self.slug_en
 
     def resolve_topiccollections(self, info):
         tc = []
@@ -741,61 +744,74 @@ class FormContainerNode(DjangoObjectType):
         return resolve_owner_handler(self, info)
 
 
-class OfficialDocumentFilter(FilterSet):
+class OfficialDocumentCollectionDocumentFilter(FilterSet):
     order_by = OrderingFilter(
         fields=(
-            ('date'),
+            'page__date',
         )
     )
 
     class Meta:
-        model = OfficialDocumentPageDocument
-        fields = ['date']
+        model = OfficialDocumentCollectionOfficialDocumentPage
+        fields = ['official_document_collection', 'page__date']
 
 
 class DocumentNodeDocument(graphene.ObjectType):
     filename = graphene.String()
     fileSize = graphene.String()
+    url = graphene.String()
 
 
-class OfficialDocumentPageDocumentNode(DjangoObjectType):
+class OfficialDocumentPageNode(DjangoObjectType):
     document = graphene.Field(DocumentNodeDocument)
 
     class Meta:
-        model = OfficialDocumentPageDocument
+        model = OfficialDocumentPage
         filter_fields = ['date']
         interfaces = [graphene.Node]
 
     def resolve_document(self, info):
-        english_doc = DocumentNodeDocument(
-            filename=self.document.filename,
-            fileSize=self.document.file_size,
-        )
-        if django.utils.translation.get_language() == 'es':
-            if self.document_es:
-                return DocumentNodeDocument(
-                    filename=self.document_es.filename,
-                    fileSize=self.document_es.file_size,
-                )
+        # although documents are required for publishing, one can save a page without a document
+        # and since the filtering on live pages is done on Janis, it could cause an error
+        if self.document:
+            english_doc = DocumentNodeDocument(
+                filename=self.document.filename,
+                fileSize=self.document.file_size,
+                url=self.document.url,
+            )
+            if django.utils.translation.get_language() == 'es':
+                if self.document_es:
+                    return DocumentNodeDocument(
+                        filename=self.document_es.filename,
+                        fileSize=self.document_es.file_size,
+                        url=self.document_es.url,
+                    )
+                else:
+                    return english_doc
             else:
                 return english_doc
-        else:
-            return english_doc
+        return None
 
 
-class OfficialDocumentPageNode(DjangoObjectType):
+class OfficialDocumentCollectionOfficialDocumentPageNode(DjangoObjectType):
+    class Meta:
+        model = OfficialDocumentCollectionOfficialDocumentPage
+        filter_fields = ['official_document_collection', 'page__date']
+        fields = '__all__'
+        interfaces = [graphene.Node]
+
+
+class OfficialDocumentCollectionNode(DjangoObjectType):
     page_type = graphene.String()
-    documents = DjangoFilterConnectionField(
-        OfficialDocumentPageDocumentNode, filterset_class=OfficialDocumentFilter)
     owner = graphene.Field(OwnerNode)
 
     class Meta:
-        model = OfficialDocumentPage
+        model = OfficialDocumentCollection
         filter_fields = ['id', 'slug', 'live', 'coa_global']
         interfaces = [graphene.Node, DepartmentResolver]
 
     def resolve_page_type(self, info):
-        return OfficialDocumentPage.get_verbose_name().lower()
+        return OfficialDocumentCollection.get_verbose_name().lower()
 
     @superuser_required
     def resolve_owner(self, info):
@@ -914,7 +930,7 @@ class PageRevisionNode(DjangoObjectType):
     as_department_page = graphene.NonNull(DepartmentPageNode)
     as_topic_page = graphene.NonNull(TopicNode)
     as_topic_collection_page = graphene.NonNull(TopicCollectionNode)
-    as_official_document_page = graphene.NonNull(OfficialDocumentPageNode)
+    as_official_document_collection = graphene.NonNull(OfficialDocumentCollectionNode)
     as_guide_page = graphene.NonNull(GuidePageNode)
     as_form_container = graphene.NonNull(FormContainerNode)
     as_location_page = graphene.NonNull(LocationPageNode)
@@ -956,6 +972,9 @@ class PageRevisionNode(DjangoObjectType):
         return self.as_page_object()
 
     def resolve_as_news_page(self, resolve_info, *args, **kwargs):
+        return self.as_page_object()
+
+    def resolve_as_official_document_collection(self, resolve_info, *args, **kwargs):
         return self.as_page_object()
 
     def resolve_is_latest(self, resolve_info, *args, **kwargs):
@@ -1091,13 +1110,16 @@ class Query(graphene.ObjectType):
     all_themes = DjangoFilterConnectionField(ThemeNode)
     all_topics = DjangoFilterConnectionField(TopicNode)
     all_topic_collections = DjangoFilterConnectionField(TopicCollectionNode)
-    all_official_document_pages = DjangoFilterConnectionField(
-        OfficialDocumentPageNode)
+    all_official_document_collections = DjangoFilterConnectionField(OfficialDocumentCollectionNode)
     all_guide_pages = DjangoFilterConnectionField(GuidePageNode)
     all_form_containers = DjangoFilterConnectionField(FormContainerNode)
     all_location_pages = DjangoFilterConnectionField(LocationPageNode)
     all_event_pages = DjangoFilterConnectionField(EventPageNode, filterset_class=EventFilter)
     topic_collection_topics = DjangoFilterConnectionField(JanisBasePageTopicCollectionNode)
+    official_document_collection_documents = DjangoFilterConnectionField(
+        OfficialDocumentCollectionOfficialDocumentPageNode,
+        filterset_class=OfficialDocumentCollectionDocumentFilter
+    )
     base_page_topics = DjangoFilterConnectionField(JanisBasePageTopicNode)
 
     def resolve_page_revision(self, resolve_info, id=None):

@@ -14,6 +14,8 @@ const getPageHeading = pageType => {
     case 'guide':
       return 'Write a name for your guide.';
     case 'documents':
+      return 'Write the name for this document';
+    case 'documentscollection':
       return 'Write the name for this list of documents';
     case 'form':
       return 'Write the name for this form';
@@ -35,7 +37,11 @@ const getInputLabel = pageType => {
     case 'event':
       return 'Event name';
     case 'importSinglePage':
-      return 'URL'
+      return 'URL';
+    case 'documentscollection':
+      return 'List Title';
+    case 'documents':
+      return 'Document Title'
     default:
       return 'Page Title';
   }

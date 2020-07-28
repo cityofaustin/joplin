@@ -98,6 +98,7 @@ INSTALLED_APPS = [
     'pages.information_page',
     'pages.location_page',
     'pages.official_documents_page',
+    'pages.official_documents_collection',
     'pages.service_page',
     'pages.topic_collection_page',
     'pages.topic_page',
@@ -310,27 +311,23 @@ if DEBUG:
 
 
 # Wagtail settings
-
 WAGTAIL_SITE_NAME = 'joplin'
 WAGTAIL_AUTO_UPDATE_PREVIEW = True
-
-# Base URL to use when referring to full URLs within the Wagtail admin backend -
-# e.g. in notification emails. Don't include '/admin' or a trailing slash
-BASE_URL = 'https://austintexas.io'
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'fake_key')
 
+# Email Settings
+EMAIL_BACKEND = 'django_ses.SESBackend'
+AWS_SES_REGION_NAME = 'us-east-1'
+AWS_SES_REGION_ENDPOINT = 'email.us-east-1.amazonaws.com'
+AWS_SES_ACCESS_KEY_ID = os.getenv('AWS_SES_ACCESS_KEY_ID', None)
+AWS_SES_SECRET_ACCESS_KEY = os.getenv('AWS_SES_SECRET_ACCESS_KEY', None)
+DEFAULT_FROM_EMAIL = os.getenv('EMAIL_HOST_USER', None)
+WAGTAILADMIN_NOTIFICATION_FROM_EMAIL = os.getenv('EMAIL_HOST_USER', None)
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-HEROKU_KEY = os.getenv('HEROKU_KEY')
-HEROKU_JANIS_APP_NAME = os.getenv('HEROKU_JANIS_APP_NAME')
 JANIS_URL = os.getenv('JANIS_URL', 'http://localhost:3000')
-
-JANIS_CMS_API = os.getenv('JANIS_CMS_API', 'http://localhost:8000/api/graphql')
-JANIS_CMS_MEDIA = os.getenv('JANIS_CMS_MEDIA')
-JANIS_CMS_DOCS = os.getenv('JANIS_CMS_DOCS')
 
 GRAPHENE = {
     'SCHEMA': 'api.schema.schema',
@@ -370,8 +367,8 @@ if(IS_PRODUCTION or IS_STAGING or IS_REVIEW):
     # AWS Buckets only if not local.
     #
     APPNAME = os.getenv('APPNAME')
-    AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
-    AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
+    AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID', None)
+    AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY', None)
     AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_S3_BUCKET_STATIC')
     AWS_ARCHIVE_BUCKET_NAME = os.getenv('AWS_S3_BUCKET_ARCHIVE')
     AWS_BACKUPS_LOCATION = os.getenv('AWS_S3_BUCKET_ARCHIVE_LOCATION')
@@ -398,7 +395,7 @@ if(IS_PRODUCTION or IS_STAGING or IS_REVIEW):
     }
 
     # Specifying the location of files
-    # The Janis CMS_MEDIA = AWS_STORAGE_BUCKET_NAME + AWS_LOCATION
+    # The Janis CMS_MEDIA = 'https://' + AWS_S3_CUSTOM_DOMAIN + '/' + AWS_LOCATION
     if IS_PRODUCTION:
         AWS_LOCATION = 'production/static'
         AWS_IS_GZIPPED = True
@@ -448,9 +445,13 @@ FLAGS = {
 JOPLIN_APP_HOST_PORT = os.getenv('JOPLIN_APP_HOST_PORT', 8000)
 # The CMS_API endpoint of the current Django App for published Janis to use
 if IS_LOCAL or IS_TEST:
-    CMS_API = f"http://localhost:{JOPLIN_APP_HOST_PORT}/api/graphql"
+    # Base URL to use when referring to full URLs within the Wagtail admin backend -
+    # e.g. in notification emails. Don't include '/admin' or a trailing slash
+    BASE_URL = f'https://localhost:{JOPLIN_APP_HOST_PORT}'
+    CMS_API = f"{BASE_URL}/api/graphql"
 else:
-    CMS_API = f"https://{os.getenv('APPNAME','')}.herokuapp.com/api/graphql"
+    BASE_URL = f"https://{os.getenv('APPNAME','')}.herokuapp.com"
+    CMS_API = f"{BASE_URL}/api/graphql"
 
 
 # Sets the login_url redirect for "from django.contrib.auth.decorators import user_passes_test"
@@ -515,10 +516,6 @@ LOGGING = {
         },
     },
 }
-# Send email notifications of errors for PR build
-# TODO: this can be managed in a cleaner way
-if os.getenv("CIRCLE_BRANCH") == "4356-queue":
-    ADMINS = [('Nick', 'nick.ivons@austintexas.gov')]
 
 # Custom User Form Settings
 AUTH_USER_MODEL = 'users.User'
