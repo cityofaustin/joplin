@@ -35,6 +35,10 @@ class TopicPage(JanisBasePageWithTopicCollections):
         FieldPanel('title_es', widget=countMe),
         FieldPanel('title_ar'),
         FieldPanel('title_vi'),
+        FieldPanel('slug_en'),
+        FieldPanel('slug_es'),
+        FieldPanel('slug_ar'),
+        FieldPanel('slug_vi'),
         FieldPanel('description', widget=countMeTextArea),
         ImageChooserPanel('image'),
         InlinePanel('topic_collections', label='Topic Collections this page belongs to'),
@@ -51,7 +55,7 @@ class TopicPageTopPage(Orderable):
 
     panels = [
         PageChooserPanel('page', page_type=['information_page.InformationPage', 'service_page.ServicePage',
-                                            'guide_page.GuidePage', 'official_documents_page.OfficialDocumentPage']),
+                                            'guide_page.GuidePage', 'official_documents_collection.OfficialDocumentCollection']),
     ]
 
     def __str__(self):

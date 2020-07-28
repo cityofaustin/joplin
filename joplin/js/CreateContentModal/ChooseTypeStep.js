@@ -37,6 +37,7 @@ const ChooseTypeStep = ({
   handleTypeSelect,
   handleContentOrTopicSelect,
   content_or_topic,
+  canSetTopics,
 }) => {
   const content = content_or_topic === 'content';
   const topic = content_or_topic === 'topic';
@@ -75,12 +76,18 @@ const ChooseTypeStep = ({
       image: locationImage,
       description:
         'Provides service, travel, and contact details for a location.',
+     },
+     {
+      type: 'documentscollection',
+      name: 'Official document collection',
+      image: documentsImage,
+      description: 'Summaries and links to official documents',
     },
     {
       type: 'documents',
-      name: 'Official document list',
+      name: 'Official document page',
       image: documentsImage,
-      description: 'Summaries and links to official documents',
+      description: 'A single official document',
     },
     {
       type: 'form',
@@ -140,6 +147,7 @@ const ChooseTypeStep = ({
     <div className="CreateContentModal__step">
       <div>
         <h2 className="CreateContentModal__header">Select a content type</h2>
+        {canSetTopics &&
         <div className="CreateContentModal__content_or_topic">
           {/* whichever type is selected, show as text, otherwise a link to select*/}
           {content ? (
@@ -166,6 +174,7 @@ const ChooseTypeStep = ({
             </a>
           )}
         </div>
+        }
         <div className="ChooseTypeStep__options-wrapper">
           {content && (
             <React.Fragment>

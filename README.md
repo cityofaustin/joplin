@@ -358,6 +358,10 @@ The migration process currently consists of 3 commands:
 
 -   ssh into a container that's deployed on Heroku
     -   `heroku run bash -a $APPNAME`
+-   Copy data from one app into another
+    -   `heroku pg:copy source-app::DATABASE_URL DATABASE_URL -a destination-app`
+    - Plug in the actual names of your "source-app" and "destination-app".
+    - Literally use "DATABASE_URL" in your command.
 -   Shut down all joplin containers:
     -   `source scripts/docker-helpers.sh; stop_project_containers joplin`
 -   Delete all joplin containers:
@@ -469,17 +473,8 @@ A webhook used to delete heroku PR builds after a PR has been closed or merged. 
 
 The master branch (staging app, joplin-staging.herokuapp.com) and production branch (production app, joplin.herokuapp.com) upload static files to an S3 bucket (both share the same bucket), but have separate databases.
 
-#### Rebuilding Janis on Heroku when new pages are published
-
-You can set environment variables to get Heroku to rebuild Janis when pages are published. For example, to rebuild `janis-staging` on heroku when a page is published locally, run things like this:
-
-```
-HEROKU_JANIS_APP_NAME=janis-staging ./scripts/serve-local.sh
-```
-
 #### Syncing prod data to staging
 
 1. ```heroku pg:copy joplin::DATABASE_URL DATABASE_URL -a joplin-staging```
 
 [Changelog](https://github.com/cityofaustin/techstack/blob/master/changelogs/joplin.md)
-

@@ -1,4 +1,3 @@
-import os
 import graphene
 import traceback
 
@@ -6,7 +5,7 @@ from django.db import models, ProgrammingError
 from django.conf import settings
 from wagtail.search import index
 from wagtail.utils.decorators import cached_classmethod
-from wagtail.admin.edit_handlers import FieldPanel, ObjectList, TabbedInterface, PageChooserPanel
+from wagtail.admin.edit_handlers import FieldPanel, ObjectList, TabbedInterface
 from wagtail.core.models import Page
 from wagtail.core.fields import RichTextField
 from flags.state import flag_enabled
@@ -48,9 +47,22 @@ class JanisBasePage(Page):
     coa_global = models.BooleanField(default=False, verbose_name='Make this a top level page')
     imported_revision_id = models.TextField(blank=True, null=True)
 
+    # Fields used for handling Publishing status
+    # pk for our publish request in Publisher dynamodb
+    publish_request_pk = models.TextField(blank=True, null=True)
+    # sk for our publish request in Publisher dynamodb
+    publish_request_sk = models.TextField(blank=True, null=True)
+    # Indicated whether a publish_request for this page been submitted to the Publisher, and we are
+    # waiting for it to finish being processed.
+    publish_request_enqueued = models.BooleanField(default=False)
+    # Has this page been published by Publisher? A "live" page may not necessarily be published to our frontend yet.
+    published = models.BooleanField(default=False, blank=True, null=True)
+
     def janis_urls(self):
         """
-        This should handle coa_global and department stuff
+        Returns list of page urls (strings)
+        If page is global, returns slug
+        Otherwise returns a list of department/slug for each department
         """
         # If we're global, even if we have a department, we should only exist at
         # /page_slug
@@ -71,7 +83,9 @@ class JanisBasePage(Page):
 
     def janis_instances(self):
         """
-        This should handle coa_global and department stuff
+        Returns list of page urls
+        If page is global, returns slug
+        Otherwise returns department/slug for each department
         """
         # If we're global, even if we have a department, we should only exist at
         # /page_slug
@@ -117,12 +131,14 @@ class JanisBasePage(Page):
             # Janis will query from its default CMS_API if a param is not provided
             return url_end + f"?CMS_API={settings.CMS_API}"
 
-
-    # Returns data needed to construct preview URLs for any language.
-    # This is used both in base_page/models.py and on the frontend edit page django template.
-    # [janis_preview_url_start]/[lang]/[janis_preview_url_end]
-    # ex: http://localhost:3000/es/preview/information/UGFnZVJldmlzaW9uTm9kZToyMjg=
     def preview_url_data(self, revision=None):
+        """
+        :param revision: optional
+        :return: Returns data needed to construct preview URLs for any language.
+        This is used both in base_page/models.py and on the frontend edit page django template.
+        [janis_preview_url_start]/[lang]/[janis_preview_url_end]
+        ex: http://localhost:3000/es/preview/information/UGFnZVJldmlzaW9uTm9kZToyMjg=
+        """
         return {
             "janis_preview_url_start": self.get_parent().specific.preview_url_base(),
             "janis_preview_url_end": self.janis_preview_url_end(revision=revision),
@@ -133,10 +149,10 @@ class JanisBasePage(Page):
         return f'{data["janis_preview_url_start"]}/{lang}/{data["janis_preview_url_end"]}'
 
     def janis_publish_url(self):
-        '''
+        """
         Used by page_status_tag.html
         :return: the first janis_url path for now
-        '''
+        """
         paths = self.janis_urls()
         if len(paths) > 0:
             first_path = paths[0]
@@ -146,27 +162,34 @@ class JanisBasePage(Page):
         # Default to returning same page as url
         return "#"
 
-
     @property
     def status_string(self):
         """
         override wagtail default
         see https://github.com/wagtail/wagtail/blob/f44d27642b4a6932de73273d8320bbcb76330c21/wagtail/core/models.py#L1010
         """
-        if not self.live:
-            if self.expired:
-                return ("Expired")
-            elif self.approved_schedule:
-                return ("Scheduled")
+        if self.live:
+            if self.published:
+                if self.publish_request_enqueued:
+                    # A page is live, already published, and now publishing an update
+                    return "Live + Publishing"
+                else:
+                    if self.has_unpublished_changes:
+                        # A page is live and published, with a new draft revision in progress
+                        return "Live + Draft"
+                    else:
+                        # A page is live and published
+                        return "Live"
             else:
-                return ("Draft")
+                # A page is live and about to be published for the first time
+                return "Publishing"
         else:
-            if self.approved_schedule:
-                return ("Live + Scheduled")
-            elif self.has_unpublished_changes:
-                return ("Live + Draft")
+            if self.published:
+                # A page is still up, but is now unpublishing
+                return "Live + Unpublishing"
             else:
-                return ("Live")
+                # A page is not live and not published
+                return "Draft"
 
     def departments(self):
         """
@@ -197,10 +220,12 @@ class JanisBasePage(Page):
 
         try:
             if flag_enabled('SHOW_EXTRA_PANELS'):
-                editor_panels += (PermissionObjectList(cls.promote_panels,
-                                                       heading='SEO'),
-                                  PermissionObjectList(cls.settings_panels,
-                                                       heading='Settings'))
+                editor_panels += [PermissionObjectList(cls.settings_panels,
+                                                       heading='Settings')]
+                # editor_panels += (PermissionObjectList(cls.promote_panels,
+                #                                        heading='SEO'),
+                #                   PermissionObjectList(cls.settings_panels,
+                #                                        heading='Settings'))
         except ProgrammingError as e:
             print("some problem, maybe with flags")
             print(traceback.format_exc())
@@ -209,6 +234,17 @@ class JanisBasePage(Page):
         edit_handler = TabbedInterface(editor_panels)
 
         return edit_handler.bind_to(model=cls)
+
+    def with_content_json(self, content_json):
+        obj = super().with_content_json(content_json)
+        # Ensure other values that are meaningful for the page as a whole (rather than
+        # to a specific revision) are preserved
+        obj.publish_request_pk = self.publish_request_pk
+        obj.publish_request_sk = self.publish_request_sk
+        obj.publish_request_enqueued = self.publish_request_enqueued
+        obj.published = self.published
+
+        return obj
 
     class Meta:
         # https://docs.djangoproject.com/en/2.2/topics/auth/customizing/#custom-permissions

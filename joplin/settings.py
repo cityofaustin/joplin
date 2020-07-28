@@ -63,6 +63,7 @@ INSTALLED_APPS = [
     'modelcluster',
     'taggit',
     'rest_framework',
+    'rest_framework_api_key',
     'corsheaders',
     'modeltranslation',
     'graphene_django',
@@ -97,14 +98,14 @@ INSTALLED_APPS = [
     'pages.information_page',
     'pages.location_page',
     'pages.official_documents_page',
+    'pages.official_documents_collection',
     'pages.service_page',
     'pages.topic_collection_page',
     'pages.topic_page',
     'pages.home_page',
     'pages.news_page',
     'snippets.contact',
-    'snippets.theme'
-
+    'snippets.theme',
 ]
 
 MIDDLEWARE = [
@@ -310,27 +311,23 @@ if DEBUG:
 
 
 # Wagtail settings
-
 WAGTAIL_SITE_NAME = 'joplin'
 WAGTAIL_AUTO_UPDATE_PREVIEW = True
-
-# Base URL to use when referring to full URLs within the Wagtail admin backend -
-# e.g. in notification emails. Don't include '/admin' or a trailing slash
-BASE_URL = 'https://austintexas.io'
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'fake_key')
 
+# Email Settings
+EMAIL_BACKEND = 'django_ses.SESBackend'
+AWS_SES_REGION_NAME = 'us-east-1'
+AWS_SES_REGION_ENDPOINT = 'email.us-east-1.amazonaws.com'
+AWS_SES_ACCESS_KEY_ID = os.getenv('AWS_SES_ACCESS_KEY_ID', None)
+AWS_SES_SECRET_ACCESS_KEY = os.getenv('AWS_SES_SECRET_ACCESS_KEY', None)
+DEFAULT_FROM_EMAIL = os.getenv('EMAIL_HOST_USER', None)
+WAGTAILADMIN_NOTIFICATION_FROM_EMAIL = os.getenv('EMAIL_HOST_USER', None)
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-HEROKU_KEY = os.getenv('HEROKU_KEY')
-HEROKU_JANIS_APP_NAME = os.getenv('HEROKU_JANIS_APP_NAME')
 JANIS_URL = os.getenv('JANIS_URL', 'http://localhost:3000')
-
-JANIS_CMS_API = os.getenv('JANIS_CMS_API', 'http://localhost:8000/api/graphql')
-JANIS_CMS_MEDIA = os.getenv('JANIS_CMS_MEDIA')
-JANIS_CMS_DOCS = os.getenv('JANIS_CMS_DOCS')
 
 GRAPHENE = {
     'SCHEMA': 'api.schema.schema',
@@ -370,8 +367,8 @@ if(IS_PRODUCTION or IS_STAGING or IS_REVIEW):
     # AWS Buckets only if not local.
     #
     APPNAME = os.getenv('APPNAME')
-    AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
-    AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
+    AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID', None)
+    AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY', None)
     AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_S3_BUCKET_STATIC')
     AWS_ARCHIVE_BUCKET_NAME = os.getenv('AWS_S3_BUCKET_ARCHIVE')
     AWS_BACKUPS_LOCATION = os.getenv('AWS_S3_BUCKET_ARCHIVE_LOCATION')
@@ -398,7 +395,7 @@ if(IS_PRODUCTION or IS_STAGING or IS_REVIEW):
     }
 
     # Specifying the location of files
-    # The Janis CMS_MEDIA = AWS_STORAGE_BUCKET_NAME + AWS_LOCATION
+    # The Janis CMS_MEDIA = 'https://' + AWS_S3_CUSTOM_DOMAIN + '/' + AWS_LOCATION
     if IS_PRODUCTION:
         AWS_LOCATION = 'production/static'
         AWS_IS_GZIPPED = True
@@ -444,12 +441,17 @@ FLAGS = {
     'INCREMENTAL BUILDS': [{'condition': 'boolean', 'value': False}]
 }
 
+# $JOPLIN_APP_HOST_PORT is set by scripts/serve-local.sh
+JOPLIN_APP_HOST_PORT = os.getenv('JOPLIN_APP_HOST_PORT', 8000)
 # The CMS_API endpoint of the current Django App for published Janis to use
 if IS_LOCAL or IS_TEST:
-    # $JOPLIN_APP_HOST_PORT is set by scripts/serve-local.sh
-    CMS_API = f"http://localhost:{os.getenv('JOPLIN_APP_HOST_PORT')}/api/graphql"
+    # Base URL to use when referring to full URLs within the Wagtail admin backend -
+    # e.g. in notification emails. Don't include '/admin' or a trailing slash
+    BASE_URL = f'https://localhost:{JOPLIN_APP_HOST_PORT}'
+    CMS_API = f"{BASE_URL}/api/graphql"
 else:
-    CMS_API = f"https://{os.getenv('APPNAME','')}.herokuapp.com/api/graphql"
+    BASE_URL = f"https://{os.getenv('APPNAME','')}.herokuapp.com"
+    CMS_API = f"{BASE_URL}/api/graphql"
 
 
 # Sets the login_url redirect for "from django.contrib.auth.decorators import user_passes_test"
@@ -473,15 +475,29 @@ if SCOUT_MONITOR:
 
 
 # Set configs for Janis Publisher_v2
+PUBLISH_ENABLED = False
+MOCK_PUBLISH = False
+if IS_LOCAL:
+    # Add mock "Publishing" status notifications when running locally.
+    # Publishing does not work locally, the page will not actually be published.
+    MOCK_PUBLISH = True
 if IS_REVIEW:
     PUBLISHER_V2_URL=os.getenv("CI_COA_PUBLISHER_V2_URL_PR")
     PUBLISHER_V2_API_KEY=os.getenv("COA_PUBLISHER_V2_API_KEY_PR")
+    PUBLISH_ENABLED = True
 elif IS_STAGING:
     PUBLISHER_V2_URL=os.getenv("CI_COA_PUBLISHER_V2_URL_STAGING")
     PUBLISHER_V2_API_KEY=os.getenv("COA_PUBLISHER_V2_API_KEY_STAGING")
+    PUBLISH_ENABLED = True
 elif IS_PRODUCTION:
     PUBLISHER_V2_URL=os.getenv("CI_COA_PUBLISHER_V2_URL_PROD")
     PUBLISHER_V2_API_KEY=os.getenv("COA_PUBLISHER_V2_API_KEY_PROD")
+    PUBLISH_ENABLED = True
+# For use with rest_framework_api_key
+# Sets the name of the header required for Publisher to access publish_succeeded endpoint
+# "Joplin-Api-Key": "********"
+# https://florimondmanca.github.io/djangorestframework-api-key/guide/#custom-header
+API_KEY_CUSTOM_HEADER = "HTTP_JOPLIN_API_KEY"
 
 
 # Set logger level
@@ -501,15 +517,12 @@ LOGGING = {
     },
 }
 
-# Temporary variables to toggle features for v3 while its still in development
-V3_WIP = bool(strtobool(os.environ.get('V3_WIP', str(False))))
-
 # Custom User Form Settings
 AUTH_USER_MODEL = 'users.User'
 WAGTAIL_USER_EDIT_FORM = 'users.forms.CustomUserEditForm'
 WAGTAIL_USER_CREATION_FORM = 'users.forms.CustomUserCreationForm'
 
-if IS_LOCAL:
+if IS_LOCAL or IS_TEST:
     # Allow non HTTPS requests when running a local Janis build from localhost.
     SECURE_SSL_REDIRECT = False
     SERVER_PROTOCOL = 'HTTP/0.9'

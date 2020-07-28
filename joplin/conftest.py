@@ -9,6 +9,7 @@ from gql.transport.requests import RequestsHTTPTransport
 
 import pages.home_page.fixtures as home_page_fixtures
 import base.fixtures.administrative.mandatory_fixtures as mandatory_fixtures
+from api.schema import schema
 
 # from django.core.management import call_command
 # @pytest.fixture(scope='session')
@@ -70,10 +71,10 @@ def test_api_jwt_token(request, test_api_url):
         headers={
             'Accept-Language': 'en',
         },
-        verify=True
+        verify=False,
+        retries=3,
     )
     client = Client(
-        retries=3,
         transport=transport,
         fetch_schema_from_transport=True,
     )
@@ -92,6 +93,13 @@ def test_api_jwt_token(request, test_api_url):
     request.config.cache.set('test_api_jwt_token', jwt_token)
     return jwt_token
 
+
+@pytest.fixture()
+def run_graphql():
+    def execute(query, context=None):
+        client = Client(schema)
+        return client.execute(gql(query), context=context)
+    return execute
 
 # TODO: Once preview urls work on Janis with v3, then we can use this URL
 @pytest.fixture()

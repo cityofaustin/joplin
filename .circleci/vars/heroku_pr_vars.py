@@ -44,6 +44,9 @@ vars_from_circleci = [
     "DJANGO_SECRET_KEY",  # CircleCI
     "ALGOLIA_APP_ID",  # CircleCI
     "ALGOLIA_API_KEY",  # CircleCI
+    "EMAIL_HOST_USER",  # CircleCI
+    "AWS_SES_ACCESS_KEY_ID", # CircleCI
+    "AWS_SES_SECRET_ACCESS_KEY", # CircleCI
     "CI_COA_PUBLISHER_V2_URL_PR",
     "COA_PUBLISHER_V2_API_KEY_PR",
     "CI_COA_PUBLISHER_V2_URL_STAGING",
@@ -66,7 +69,6 @@ default_branch_vars = {
     "DELETION_PROTECTION": 0,
     "DJANGO_LOG_LEVEL": "INFO",
     "LOAD_DATA": "fixtures",
-    "V3_WIP": True,
 }
 config.update(default_branch_vars)
 

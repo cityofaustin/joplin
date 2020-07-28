@@ -53,6 +53,10 @@ class NewsPage(JanisBasePage):
         FieldPanel('title_es', widget=countMe),
         FieldPanel('title_ar'),
         FieldPanel('title_vi'),
+        FieldPanel('slug_en'),
+        FieldPanel('slug_es'),
+        FieldPanel('slug_ar'),
+        FieldPanel('slug_vi'),
         FieldPanel('body'),
         PageChooserPanel('written_for_department', page_type=DepartmentPage),
         SnippetChooserPanel('contact')

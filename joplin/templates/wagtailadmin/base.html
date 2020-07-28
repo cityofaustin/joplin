@@ -22,6 +22,11 @@ window.IS_PRODUCTION = IS_PRODUCTION
   {% render_bundle 'theme' %}
 {% endif %}
 
+<!-- Add "Publishing" and "Unpublishing" page_status modals -->
+{% render_bundle 'pageStatus' %}
+{% include 'joplin_UI/pageStatus/publishing_modal.html' %}
+{% include 'joplin_UI/pageStatus/unpublishing_modal.html' %}
+
 {% include 'session_security/all.html' %}
 
 <div class="header coa-header" id="coa-old_application_banner">

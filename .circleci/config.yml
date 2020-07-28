@@ -3,7 +3,7 @@ version: 2.1
 jobs:
   test:
     docker:
-      - image: circleci/python:3.7.5-stretch
+      - image: cityofaustin/joplin-ci-test:5c638d3
         environment:
           PIPENV_VENV_IN_PROJECT: true
           DATABASE_URL: postgresql://root@localhost/circle_test?sslmode=disable
@@ -34,6 +34,12 @@ jobs:
             - "/usr/local/bin"
             - "/usr/local/lib/python3.7/site-packages"
           key: deps-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
+      - run:
+          name: Install js dependencies
+          command: sudo yarn --cwd ./joplin install
+      - run:
+          name: Build webpack files
+          command: sudo yarn --cwd ./joplin build
       - run:
           name: Run tests
           command: pipenv run pytest --reuse-db

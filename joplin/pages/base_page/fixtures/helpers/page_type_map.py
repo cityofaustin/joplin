@@ -8,14 +8,14 @@ from pages.service_page.models import ServicePage
 from pages.service_page.factories import ServicePageFactory
 from pages.location_page.models import LocationPage
 from pages.location_page.factories import LocationPageFactory
+from pages.official_documents_collection.models import OfficialDocumentCollection
+from pages.official_documents_collection.factories import OfficialDocumentCollectionFactory
 from pages.official_documents_page.models import OfficialDocumentPage
 from pages.official_documents_page.factories import OfficialDocumentPageFactory
 from pages.department_page.models import DepartmentPage
 from pages.department_page.factories import DepartmentPageFactory
 from pages.event_page.models import EventPage
 from pages.event_page.factories import EventPageFactory
-from snippets.theme.models import Theme
-from snippets.theme.factories import ThemeFactory
 from pages.form_container.models import FormContainer
 from pages.form_container.factories import FormContainerFactory
 from pages.news_page.factories import NewsPage, NewsPageFactory
@@ -47,9 +47,13 @@ page_type_map = {
         "model": LocationPage,
         "factory": LocationPageFactory,
     },
-    "official_document": {
+    "official_document_page": {
         "model": OfficialDocumentPage,
         "factory": OfficialDocumentPageFactory,
+    },
+    "official_document_collection": {
+        "model": OfficialDocumentCollection,
+        "factory": OfficialDocumentCollectionFactory,
     },
     "department": {
         "model": DepartmentPage,
@@ -62,11 +66,6 @@ page_type_map = {
     "news": {
         "model": NewsPage,
         "factory": NewsPageFactory,
-    },
-    # Theme isn't an importer page_type, but we do create_fixtures for it.
-    "theme": {
-        "model": Theme,
-        "factory": ThemeFactory,
     },
     "form": {
         "model": FormContainer,

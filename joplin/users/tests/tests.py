@@ -1,9 +1,17 @@
 import pytest
+import os
 from django.core.exceptions import ValidationError
+from django.contrib.auth.models import Group
+from django.test import Client
+from django.urls import reverse
+from wagtail.core.models import GroupPagePermission, PageViewRestriction
 from users.tests.utils.make_user_form import make_user_form
 from base.views.new_page_from_modal import new_page_from_modal
 from pages.information_page.models import InformationPage
 from pages.home_page.factories import HomePageFactory
+from base.views.joplin_search_views import dept_explorable_pages
+from groups.fixtures.test_cases import kitchen_sink as kitchen_sink_department
+import pages.service_page.fixtures as service_fixtures
 import json
 
 
@@ -197,3 +205,73 @@ def test_admin_can_make_departmentless_page(superadmin, rf):
     page_pk = response_json['id']
     created_page = InformationPage.objects.get(id=page_pk)
     assert len(created_page.departments()) is 0
+
+
+@pytest.mark.django_db
+def test_editor_cannot_explore_other_dept_pages(editor):
+    kitchen_service = service_fixtures.kitchen_sink()
+    departmentless_service = service_fixtures.step_with_1_location()
+    explorable_pages = dept_explorable_pages(editor)
+    # assert that the service page under kitchen sink department is in the results of the kitchen sink editor
+    assert explorable_pages.filter(id=kitchen_service.id).exists()
+    # assert the page with no department does not show up in the results
+    assert not explorable_pages.filter(id=departmentless_service.id).exists()
+
+
+@pytest.mark.django_db
+def test_superadmin_explores_all_pages(superadmin):
+    kitchen_service = service_fixtures.kitchen_sink()
+    departmentless_service = service_fixtures.step_with_1_location()
+    explorable_pages = dept_explorable_pages(superadmin)
+    # assert superadmins can explore all pages, regardless of department
+    assert explorable_pages.filter(id=kitchen_service.id).exists()
+    assert explorable_pages.filter(id=departmentless_service.id).exists()
+
+
+@pytest.mark.django_db
+def test_editor_cant_view_page_without_permission(editor):
+    # set up pages, add the permissions
+    kitchen_service = service_fixtures.kitchen_sink()
+    departmentless_service = service_fixtures.step_with_1_location()
+    GroupPagePermission.objects.create(group=Group.objects.get(id=2), page=kitchen_service,
+                                       permission_type='edit')
+    kpvr = PageViewRestriction.objects.create(page=kitchen_service, restriction_type='groups')
+    kpvr.groups.add(kitchen_sink_department.kitchen_sink())
+    GroupPagePermission.objects.create(group=Group.objects.get(id=2), page=departmentless_service,
+                                       permission_type='edit')
+    # the departmentless page has no group to assign to the page view restriction
+    PageViewRestriction.objects.create(page=departmentless_service, restriction_type='groups')
+    # initialize client
+    c = Client()
+    c.login(username=editor.email, password=os.getenv("API_TEST_USER_PASSWORD"))
+    # assert user is logged in and can access search view
+    assert c.get('/admin/pages/search/').status_code == 200
+    # request pages to edit
+    response_department = c.get(reverse('wagtailadmin_pages:edit', args=[kitchen_service.pk]))
+    assert response_department.status_code == 200
+    response_no_department = c.get(reverse('wagtailadmin_pages:edit', args=[departmentless_service.pk]))
+    assert response_no_department.status_code == 404
+
+@pytest.mark.django_db
+def test_admin_can_view_page_without_permission(superadmin):
+    # set up pages, add the permissions
+    kitchen_service = service_fixtures.kitchen_sink()
+    departmentless_service = service_fixtures.step_with_1_location()
+    GroupPagePermission.objects.create(group=Group.objects.get(id=2), page=kitchen_service,
+                                       permission_type='edit')
+    kpvr = PageViewRestriction.objects.create(page=kitchen_service, restriction_type='groups')
+    kpvr.groups.add(kitchen_sink_department.kitchen_sink())
+    GroupPagePermission.objects.create(group=Group.objects.get(id=2), page=departmentless_service,
+                                       permission_type='edit')
+    # the departmentless page has no group to assign to the page view restriction
+    PageViewRestriction.objects.create(page=departmentless_service, restriction_type='groups')
+    # initialize client
+    c = Client()
+    c.login(username=superadmin.email, password=os.getenv("SUPERADMIN_USER_PASSWORD"))
+    # assert user is logged in and can access search view
+    assert c.get('/admin/pages/search/').status_code == 200
+    # request pages to edit
+    response_department = c.get(reverse('wagtailadmin_pages:edit', args=[kitchen_service.pk]))
+    assert response_department.status_code == 200
+    response_no_department = c.get(reverse('wagtailadmin_pages:edit', args=[departmentless_service.pk]))
+    assert response_no_department.status_code == 200

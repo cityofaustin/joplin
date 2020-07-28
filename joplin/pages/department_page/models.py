@@ -2,10 +2,9 @@ from django.db import models
 from django.apps import apps
 
 from modelcluster.fields import ParentalKey
-from modelcluster.models import ClusterableModel
 
-from wagtail.core.fields import RichTextField, StreamField
-from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, StreamFieldPanel, PageChooserPanel
+from wagtail.core.fields import RichTextField
+from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, PageChooserPanel
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.core.models import Orderable
 from wagtail.snippets.edit_handlers import SnippetChooserPanel
@@ -16,7 +15,7 @@ from pages.base_page.models import JanisBasePage
 from pages.information_page.models import InformationPage
 from pages.service_page.models import ServicePage
 from pages.guide_page.models import GuidePage
-from pages.official_documents_page.models import OfficialDocumentPage
+from pages.official_documents_collection.models import OfficialDocumentCollection
 from base.models.translated_image import TranslatedImage
 from snippets.contact.models import Contact
 
@@ -69,6 +68,10 @@ class DepartmentPage(JanisBasePage):
         FieldPanel('title_es', widget=countMe),
         FieldPanel('title_ar'),
         FieldPanel('title_vi'),
+        FieldPanel('slug_en'),
+        FieldPanel('slug_es'),
+        FieldPanel('slug_ar'),
+        FieldPanel('slug_vi'),
         FieldPanel('what_we_do'),
         ImageChooserPanel('image'),
         FieldPanel('mission', widget=widgets.CountableWidget(attrs={
@@ -150,7 +153,7 @@ class DepartmentPageTopPage(Orderable):
     page = models.ForeignKey('wagtailcore.Page', verbose_name='Select a page', related_name='+', on_delete=models.CASCADE)
 
     panels = [
-        PageChooserPanel('page', page_type=[InformationPage, ServicePage, GuidePage, OfficialDocumentPage]),
+        PageChooserPanel('page', page_type=[InformationPage, ServicePage, GuidePage, OfficialDocumentCollection]),
     ]
 
     def __str__(self):
@@ -162,7 +165,7 @@ class DepartmentPageRelatedPage(Orderable):
     page = models.ForeignKey('wagtailcore.Page', verbose_name='Select a page', related_name='+', on_delete=models.CASCADE)
 
     panels = [
-        PageChooserPanel('page', page_type=[InformationPage, ServicePage, GuidePage, OfficialDocumentPage]),
+        PageChooserPanel('page', page_type=[InformationPage, ServicePage, GuidePage, OfficialDocumentCollection]),
     ]
 
     def __str__(self):
