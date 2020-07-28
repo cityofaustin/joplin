@@ -49,6 +49,10 @@ class OfficialDocumentPage(JanisBasePage):
         FieldPanel('title_es', widget=countMe),
         FieldPanel('title_ar'),
         FieldPanel('title_vi'),
+        FieldPanel('slug_en'),
+        FieldPanel('slug_es'),
+        FieldPanel('slug_ar'),
+        FieldPanel('slug_vi'),
         FieldPanel('date'),
         FieldPanel('authoring_office', widget=countMe),
         FieldPanel('summary', widget=widgets.CountableWidget(attrs={

@@ -1,7 +1,7 @@
 from django.db import models
 
 from wagtail.core.fields import RichTextField
-from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, StreamFieldPanel
+from wagtail.admin.edit_handlers import FieldPanel, InlinePanel
 from wagtail.snippets.edit_handlers import SnippetChooserPanel
 
 from base.forms import InformationPageForm
@@ -10,7 +10,6 @@ from snippets.contact.models import Contact
 
 from base.models.constants import WYSIWYG_GENERAL
 from base.models.widgets import countMe, countMeTextArea
-from countable_field import widgets
 
 from publish_preflight.requirements import FieldPublishRequirement, RelationPublishRequirement, ConditionalPublishRequirement, DepartmentPublishRequirement
 
@@ -55,6 +54,10 @@ class InformationPage(JanisBasePageWithTopics):
         FieldPanel('title_es', widget=countMe),
         FieldPanel('title_ar'),
         FieldPanel('title_vi'),
+        FieldPanel('slug_en'),
+        FieldPanel('slug_es'),
+        FieldPanel('slug_ar'),
+        FieldPanel('slug_vi'),
         InlinePanel('topics', label='Topics'),
         FieldPanel('description', widget=countMeTextArea),
         # hidden for now, see: https://austininnovation.slack.com/archives/C8T4YD23T/p1570659780017500?thread_ts=1570659723.017100&cid=C8T4YD23T
