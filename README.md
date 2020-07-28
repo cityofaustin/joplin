@@ -473,14 +473,6 @@ A webhook used to delete heroku PR builds after a PR has been closed or merged. 
 
 The master branch (staging app, joplin-staging.herokuapp.com) and production branch (production app, joplin.herokuapp.com) upload static files to an S3 bucket (both share the same bucket), but have separate databases.
 
-#### Rebuilding Janis on Heroku when new pages are published
-
-You can set environment variables to get Heroku to rebuild Janis when pages are published. For example, to rebuild `janis-staging` on heroku when a page is published locally, run things like this:
-
-```
-HEROKU_JANIS_APP_NAME=janis-staging ./scripts/serve-local.sh
-```
-
 #### Syncing prod data to staging
 
 1. ```heroku pg:copy joplin::DATABASE_URL DATABASE_URL -a joplin-staging```
