@@ -254,7 +254,8 @@ class JanisBasePageNode(DjangoObjectType):
             else:
                 by_department = None
 
-            instance = ContextualNavData(parent=parent, grandparent=grandparent, url=url, from_department=from_department, by_department=by_department)
+            instance = ContextualNavData(parent=parent, grandparent=grandparent, url=url,
+                                         from_department=from_department, by_department=by_department)
             instances.append(instance)
         return instances
 
