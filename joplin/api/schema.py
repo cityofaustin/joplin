@@ -13,7 +13,7 @@ from django_filters import FilterSet, OrderingFilter
 from wagtail.documents.models import Document
 from wagtail.core.rich_text import expand_db_html
 import graphql_jwt
-from graphql_jwt.decorators import superuser_required
+from graphql_jwt.decorators import superuser_required, login_required
 
 from snippets.contact.models import Contact, ContactPhoneNumber
 from snippets.theme.models import Theme
@@ -190,9 +190,12 @@ class JanisBasePageNode(DjangoObjectType):
         filter_fields = ['id', 'slug', 'live']
         interfaces = [graphene.Node]
 
+    @login_required
     def resolve_janis_urls(self, info):
+        #print(info.context.user)
         return self.specific.janis_urls()
 
+    # @login_required
     def resolve_page_type(self, info):
         return self.content_type
 

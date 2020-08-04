@@ -17,6 +17,7 @@ from snippets import urls as snippet_urls
 from django.urls import reverse
 import debug_toolbar
 from api.views import PrivateGraphQLView
+from graphql_jwt.decorators import jwt_cookie
 
 
 def home(request):
