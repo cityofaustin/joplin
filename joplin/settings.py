@@ -328,7 +328,7 @@ WAGTAILADMIN_NOTIFICATION_FROM_EMAIL = os.getenv('EMAIL_HOST_USER', None)
 WAGTAIL_EMAIL_MANAGEMENT_ENABLED = True
 WAGTAIL_PASSWORD_MANAGEMENT_ENABLED = True
 WAGTAIL_PASSWORD_RESET_ENABLED = True
-WAGTAILUSERS_PASSWORD_ENABLED = False
+WAGTAILUSERS_PASSWORD_ENABLED = False # Don't allow admins to edit passwords from the "Users" view
 
 JANIS_URL = os.getenv('JANIS_URL', 'http://localhost:3000')
 
@@ -451,7 +451,7 @@ JOPLIN_APP_HOST_PORT = os.getenv('JOPLIN_APP_HOST_PORT', 8000)
 if IS_LOCAL or IS_TEST:
     # Base URL to use when referring to full URLs within the Wagtail admin backend -
     # e.g. in notification emails. Don't include '/admin' or a trailing slash
-    BASE_URL = f'https://localhost:{JOPLIN_APP_HOST_PORT}'
+    BASE_URL = f'http://127.0.0.1:{JOPLIN_APP_HOST_PORT}'
     CMS_API = f"{BASE_URL}/api/graphql"
 else:
     BASE_URL = f"https://{os.getenv('APPNAME','')}.herokuapp.com"
