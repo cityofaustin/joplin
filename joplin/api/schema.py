@@ -768,7 +768,7 @@ class OfficialDocumentPageNode(DjangoObjectType):
     class Meta:
         model = OfficialDocumentPage
         filter_fields = ['date']
-        interfaces = [graphene.Node]
+        interfaces = [graphene.Node, DepartmentResolver]
 
     def resolve_document(self, info):
         # although documents are required for publishing, one can save a page without a document
@@ -930,6 +930,7 @@ class PageRevisionNode(DjangoObjectType):
     as_department_page = graphene.NonNull(DepartmentPageNode)
     as_topic_page = graphene.NonNull(TopicNode)
     as_topic_collection_page = graphene.NonNull(TopicCollectionNode)
+    as_official_document_page = graphene.NonNull(OfficialDocumentPageNode)
     as_official_document_collection = graphene.NonNull(OfficialDocumentCollectionNode)
     as_guide_page = graphene.NonNull(GuidePageNode)
     as_form_container = graphene.NonNull(FormContainerNode)
