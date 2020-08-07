@@ -31,6 +31,8 @@ class OfficialDocumentPage(JanisBasePage):
     document_es = models.ForeignKey(Document, blank=True, null=True, on_delete=models.SET_NULL, related_name='+',
                                     verbose_name="Document [es]")
 
+    body = models.TextField(verbose_name="Document body", blank=True)
+
     publish_requirements = (
         FieldPublishRequirement("date",
                                 message="You need to include a date before publishing"),
@@ -63,7 +65,8 @@ class OfficialDocumentPage(JanisBasePage):
         FieldPanel('name', widget=countMe),
         DocumentChooserPanel('document'),
         DocumentChooserPanel('document_es'),
-        InlinePanel('official_document_collection', label="Official document collections this document belongs to")
+        InlinePanel('official_document_collection', label="Official document collections this document belongs to"),
+        FieldPanel('body'),
     ]
 
 
