@@ -129,7 +129,7 @@ class DepartmentPage(JanisBasePage):
         NewsPage = apps.get_model('news_page', 'NewsPage')
 
         news_pages = []
-        news_page_set = NewsPage.objects.filter(live=True).order_by('first_published_at')
+        news_page_set = NewsPage.objects.filter(live=True).order_by('-first_published_at')
         for news_page in news_page_set.iterator():
             # todo: get this logic working in filter instead (maybe a bidirectional relationship bonus issue?)
             if self == news_page.published_under_department_page():
