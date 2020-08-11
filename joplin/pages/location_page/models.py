@@ -4,6 +4,7 @@ from wagtail.images.edit_handlers import ImageChooserPanel
 from phonenumber_field.modelfields import PhoneNumberField
 from phonenumber_field.widgets import PhoneNumberInternationalFallbackWidget
 from wagtail.core.models import Orderable
+from wagtail.core.fields import RichTextField
 from modelcluster.fields import ParentalKey
 from wagtail.admin.edit_handlers import (
     InlinePanel,
@@ -27,7 +28,11 @@ def add_hours_by_day_and_exceptions(model):
     """
     week_days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
     panels_to_add = []
-    models.TextField(max_length=DEFAULT_MAX_LENGTH, blank=True).contribute_to_class(model, 'hours_exceptions')
+    RichTextField(
+        max_length=DEFAULT_MAX_LENGTH,
+        blank=True,
+        features=['link']
+    ).contribute_to_class(model, 'hours_exceptions')
     for day in week_days:
         day_start_field = '%s_start_time' % day.lower()
         day_end_field = '%s_end_time' % day.lower()
