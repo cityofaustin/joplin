@@ -25,6 +25,7 @@ class OfficialDocumentPage(JanisBasePage):
     authoring_office = models.CharField(verbose_name="Authoring office of document", max_length=DEFAULT_MAX_LENGTH,
                                         blank=True)
     summary = models.TextField(verbose_name="Document summary", blank=True)
+    body = models.TextField(verbose_name="Document text", blank=True)
     name = models.CharField(verbose_name="Name of Document", max_length=DEFAULT_MAX_LENGTH, blank=True)
     document = models.ForeignKey(Document, null=True, blank=True, on_delete=models.SET_NULL, related_name='+',
                                  verbose_name="Document [en]")
@@ -60,10 +61,11 @@ class OfficialDocumentPage(JanisBasePage):
             'data-max-count': AUTHOR_LIMITS['document_summary'],
             'data-count-direction': 'down'
         })),
+        FieldPanel('body'),
         FieldPanel('name', widget=countMe),
         DocumentChooserPanel('document'),
         DocumentChooserPanel('document_es'),
-        InlinePanel('official_document_collection', label="Official document collections this document belongs to")
+        InlinePanel('official_document_collection', label="Official document collections this document belongs to"),
     ]
 
 
