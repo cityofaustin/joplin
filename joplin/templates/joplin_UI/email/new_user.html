@@ -1,0 +1,16 @@
+{% load i18n wagtailadmin_tags %}{% base_url_setting as base_url %}
+<html>
+<body>
+    <p>
+        Welcome {{ user.first_name }},
+    </p>
+    <p>
+        Congratulations! you are on your way to publishing content on Austin.gov.
+        A new Joplin account has been created for you.
+        <a href="{{ base_url }}{% url 'wagtailadmin_password_reset_confirm' uidb64=uid token=token %}">Set your password</a> to get started.
+    </p>
+    <p>
+        If you have questions about Joplin or austin.gov, check out the <a href="{{ styleguide_url }}">City of Austin digital style guide</a> or send an email to <a href="mailto:joplin_notifications@austintexas.gov">joplin_notifications@austintexas.gov</a>.
+    </p>
+</body>
+</html>
