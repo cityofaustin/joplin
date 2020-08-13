@@ -4,7 +4,7 @@ from wagtail.users.forms import UserEditForm, UserCreationForm
 from django.core.exceptions import ValidationError
 
 from django.contrib.auth.models import Group
-from groups.models import Department, AdditionalGroup
+from groups.models import Department
 
 
 '''
@@ -42,8 +42,8 @@ def custom_user_clean(self, cleaned_data):
             group_pks.append(role.pk)
     elif not is_superuser:
         self.add_error("roles", ValidationError("Non-Administrators must have at least one Role."))
-    if cleaned_data["additional_groups"]:
-        for role in cleaned_data["additional_groups"]:
+    if cleaned_data["translation"]:
+        for role in cleaned_data["translation"]:
             group_pks.append(role.pk)
     if group_pks:
         cleaned_data["groups"] = Group.objects.filter(pk__in=group_pks)
@@ -52,7 +52,7 @@ def custom_user_clean(self, cleaned_data):
 
 roles_form = forms.ModelMultipleChoiceField(queryset=Group.objects.filter(name__in=["Moderators", "Editors"]), widget=forms.CheckboxSelectMultiple, required=False, label=_("Roles"))
 department_form = forms.ModelChoiceField(queryset=Department.objects, required=False, label=_("Department"))
-additional_groups_form = forms.ModelMultipleChoiceField(queryset=AdditionalGroup.objects, widget=forms.CheckboxSelectMultiple, required=False, label=_("Optional Groups"))
+translation_form = forms.ModelMultipleChoiceField(queryset=Group.objects.filter(name="Translators"), widget=forms.CheckboxSelectMultiple, required=False, label=_("Translations"))
 
 # Have to edit both classes, and both templates
 # http://docs.wagtail.io/en/v2.1.1/advanced_topics/customisation/custom_user_models.html
@@ -61,7 +61,7 @@ class CustomUserEditForm(UserEditForm):
         return custom_user_clean(self, super(CustomUserEditForm, self).clean())
     roles = roles_form
     department = department_form
-    additional_groups = additional_groups_form
+    translation = translation_form
 
 
 class CustomUserCreationForm(UserCreationForm):
@@ -69,4 +69,4 @@ class CustomUserCreationForm(UserCreationForm):
         return custom_user_clean(self, super(CustomUserCreationForm, self).clean())
     roles = roles_form
     department = department_form
-    additional_groups = additional_groups_form
+    translation = translation_form

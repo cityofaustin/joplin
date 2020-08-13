@@ -25,11 +25,12 @@ $(function() {
     userGroups.department_groups.forEach(group => {
       $("select[name='department']").val(group)
     })
-    // Roles are selected by checkmarks
-    userGroups.additional_groups.forEach(group => {
-      $(`input[name='additional_groups'][value=${group}]`).prop("checked", true)
-    })
-
+    // Translation group is selected by checkmark
+    const translationGroupInput = $(`input[name='translation']`)
+    translationGroupInput[0].nextSibling.nodeValue = " Send translation notification emails" // Override default label
+    if (userGroups.is_translator) {
+      translationGroupInput.prop("checked", true)
+    }
   }
 
   // Insert error messages into form

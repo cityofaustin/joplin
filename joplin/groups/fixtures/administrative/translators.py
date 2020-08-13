@@ -1,4 +1,4 @@
-from groups.models import AdditionalGroup
+from django.contrib.auth.models import Group
 
 
 def translators():
@@ -8,7 +8,7 @@ def translators():
     This report is run by the command send_translation_report
     '''
     try:
-        translators_group = AdditionalGroup.objects.get(name="Translators")
-    except AdditionalGroup.DoesNotExist:
-        translators_group = AdditionalGroup.objects.create(name="Translators")
+        translators_group = Group.objects.get(name="Translators")
+    except Group.DoesNotExist:
+        translators_group = Group.objects.create(name="Translators")
     return translators_group
