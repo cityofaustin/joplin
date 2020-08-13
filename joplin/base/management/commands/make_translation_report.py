@@ -4,10 +4,9 @@ from pytz import timezone
 from datetime import datetime, timedelta
 from django.conf import settings
 from wagtail.core.models import PageRevision
-from wagtail.core.models import Page
-from django.template import Context, Template
-from django.core.management.base import BaseCommand, CommandError
-from django.core.mail import send_mail
+from django.template import loader, Context, Template
+from django.core.management.base import BaseCommand
+from wagtail.admin.mail import send_mail
 
 
 '''
@@ -70,13 +69,15 @@ class Command(BaseCommand):
                         "new_revision": page.get_latest_revision(),
                     }
 
-        context = Context({
+        context = {
             'start_date': lower_bound.strftime("%b %d %Y"),
             'end_date': upper_bound.strftime("%b %d %Y"),
             'published_pages': published_pages,
-        })
+        }
 
-        template_file = open(path.join(path.dirname(__file__), f'{settings.BASE_DIR}/joplin/templates/joplin_UI/reports/pages_to_translate.html'), "r")
-        template_to_render = Template(template_file.read())
-        rendered_template = template_to_render.render(context)
-        print(rendered_template)
+        subject = now.strftime(f'Joplin Translations: %m/%d/%Y')
+        message = loader.render_to_string('joplin_UI/reports/pages_to_translate.txt', context)
+        recipient_list = []
+        html_message = loader.render_to_string('joplin_UI/reports/pages_to_translate.html', context)
+
+        send_mail(subject, message, recipient_list, html_message=html_message)
