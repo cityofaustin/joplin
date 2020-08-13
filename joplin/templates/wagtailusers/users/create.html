@@ -46,6 +46,7 @@
                     <!-- COA Change: Instead of choosing all groups on one level, we split groups up into "roles" and "departments" -->
                     {% include "wagtailadmin/shared/field_as_li.html" with field=form.roles %}
                     {% include "wagtailadmin/shared/field_as_li.html" with field=form.department %}
+                    {% include "wagtailadmin/shared/field_as_li.html" with field=form.additional_groups %}
                     <li><button class="button">{% trans "Add user" %}</button></li>
                 </ul>
             </section>

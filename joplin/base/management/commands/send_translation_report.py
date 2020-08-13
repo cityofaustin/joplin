@@ -7,6 +7,7 @@ from wagtail.core.models import PageRevision
 from django.template import loader, Context, Template
 from django.core.management.base import BaseCommand
 from wagtail.admin.mail import send_mail
+from groups.models import AdditionalGroup
 
 
 class Command(BaseCommand):
@@ -79,7 +80,7 @@ class Command(BaseCommand):
 
         subject = now.strftime(f'Joplin Translations: %m/%d/%Y')
         message = loader.render_to_string('joplin_UI/reports/pages_to_translate.txt', context)
-        recipient_list = []
+        recipient_list = list(AdditionalGroup.objects.get(name="Translators").user_set.all().values_list('email', flat=True))
         html_message = loader.render_to_string('joplin_UI/reports/pages_to_translate.html', context)
 
         send_mail(subject, message, recipient_list, html_message=html_message)
