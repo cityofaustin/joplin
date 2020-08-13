@@ -9,13 +9,15 @@ from django.core.management.base import BaseCommand
 from wagtail.admin.mail import send_mail
 
 
-'''
+class Command(BaseCommand):
+    '''
     Creates a report that contains all pages that have to be translated.
 
     There is a report run on Monday, which contains all page updates from the prior Wednesday through Sunday.
     And there is a report run on Wednesday, which contains all page updates from the prior Monday and Tuesday.
-'''
-class Command(BaseCommand):
+
+    The recepients of this report are users who are part of the "Translators" group.
+    '''
     help = "Sends a report to alert translators about pages requiring translation."
 
     def handle(self, *args, **options):

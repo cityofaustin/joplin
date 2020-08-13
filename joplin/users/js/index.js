@@ -1,28 +1,35 @@
 $(function() {
   /**
-    Our User form only knows about values for "Groups".
+    This code will fill out a User edit form with the correct existing values for a user.
+    For example: if a user is part of the "Editors" group and part of the "Austin Public Health" department group,
+    then this code fill in the checkbox next to "Editors" and select "Austin Public Health" from the department dropdown.
+
+    Is is not done automatically because we created a custom user form that separates out the groups.
+
+    The default User form only knows about values for "Groups".
     So we need to parse the Groups that are set for that user,
     and set the values for "Roles" and "Departments" on the Form's UI.
 
     This code will only impact the "wagtailusers/users/edit" template.
     The "wagtailusers/users/create" template will not have existing Group data,
     because its creating a new user.
-
-    Groups 1 and 2 are the "Editor" and "Moderator" groups.
-    Those are selected by the "Roles" input checkbox fields.
-    A Group larger than 2 will be a Department.
-    That is selected by entering the value in the dropdown select field.
   **/
   const userGroupsRaw = $('#user-groups').text()
   if (userGroupsRaw) {
     const userGroups = JSON.parse(userGroupsRaw);
-    userGroups.forEach(group => {
-      if ([1,2].includes(group)) {
-        $(`input[name='roles'][value=${group}]`).prop("checked", true)
-      } else if (group > 2) {
-        $("select[name='department']").val(group)
-      }
+    // Roles are selected by checkmarks
+    userGroups.roles.forEach(group => {
+      $(`input[name='roles'][value=${group}]`).prop("checked", true)
     })
+    // Departmennt groups are selected by a dropdown
+    userGroups.department_groups.forEach(group => {
+      $("select[name='department']").val(group)
+    })
+    // Roles are selected by checkmarks
+    userGroups.additional_groups.forEach(group => {
+      $(`input[name='additional_groups'][value=${group}]`).prop("checked", true)
+    })
+
   }
 
   // Insert error messages into form

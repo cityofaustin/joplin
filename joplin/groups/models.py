@@ -23,3 +23,21 @@ class Department(ClusterableModel, Group):
 
     def __str__(self):
         return self.name
+
+
+class AdditionalGroup(ClusterableModel, Group):
+    '''
+        So far, "Translators" is the only other "AdditionalGroup" that we have.
+        A member of "Translators" will receive an automated report every Monday and Wednesday
+        about which pages have been published and need to be translated.
+    '''
+    panels = [
+        FieldPanel('name'),
+    ]
+
+    class Meta:
+        verbose_name_plural = "NonEditorGroups"
+        ordering = ['name']
+
+    def __str__(self):
+        return self.name
