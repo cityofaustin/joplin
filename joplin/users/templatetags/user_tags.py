@@ -9,7 +9,7 @@ register = template.Library()
 @register.filter(name='get_user_groups')
 def get_user_groups(form):
     user_groups = form['groups'].value() or []
-    user_roles = [g for g in list(Group.objects.filter(name__in=["Moderators", "Editors"]).values_list('id', flat=True)) if g in user_groups]
+    user_roles = list(Group.objects.filter(name__in=["Moderators", "Editors"], pk__in=user_groups).values_list('id', flat=True))
     user_department_groups = list(Department.objects.filter(pk__in=user_groups).values_list('id', flat=True))
     user_is_translator = Group.objects.get(name="Translators").id in user_groups
     return {
