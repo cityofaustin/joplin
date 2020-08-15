@@ -1,12 +1,14 @@
 # NOTE: This was mostly ripped from https://www.fomfus.com/articles/how-to-use-email-as-username-for-django-authentication-removing-the-username
-
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 
 class UserManager(BaseUserManager):
-    """Define a model manager for User model with no username field."""
+    """
+    Define a model manager for User model with no username field.
+    These create() methods are only utilized by fixtures, not wagtail itself
+    """
 
     use_in_migrations = True
 
@@ -34,7 +36,7 @@ class UserManager(BaseUserManager):
         extra_fields.setdefault('is_superuser', False)
         return self._create_user(email, password, **extra_fields)
 
-    def create_superuser(self, email, password, **extra_fields):
+    def create_superuser(self, email, password=None, **extra_fields):
         """Create and save a SuperUser with the given email and password."""
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)

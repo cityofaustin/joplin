@@ -1,6 +1,7 @@
 from django.db import models
 
 from wagtail.admin.edit_handlers import FieldPanel, InlinePanel
+from wagtail.core.fields import RichTextField
 
 from pages.topic_page.models import JanisBasePageWithTopics
 from base.forms import OfficialDocumentCollectionForm
@@ -21,7 +22,7 @@ class OfficialDocumentCollection(JanisBasePageWithTopics):
     janis_url_page_type = "official_document_collection"
     base_form_class = OfficialDocumentCollectionForm
 
-    description = models.TextField(blank=True)
+    description = RichTextField(blank=True, features=['link'])
 
     publish_requirements = (
         FieldPublishRequirement("description", langs=["en"],
@@ -43,6 +44,6 @@ class OfficialDocumentCollection(JanisBasePageWithTopics):
         FieldPanel('slug_es'),
         FieldPanel('slug_ar'),
         FieldPanel('slug_vi'),
-        FieldPanel('description', widget=countMeTextArea),
+        FieldPanel('description'),
         InlinePanel('topics', label='Topics'),
     ]
