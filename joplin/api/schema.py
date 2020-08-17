@@ -190,7 +190,7 @@ class JanisBasePageNode(DjangoObjectType):
         filter_fields = ['id', 'slug', 'live']
         interfaces = [graphene.Node]
 
-    @login_required
+    # @login_required
     def resolve_janis_urls(self, info):
         #print(info.context.user)
         return self.specific.janis_urls()

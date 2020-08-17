@@ -116,13 +116,13 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.auth.middleware.RemoteUserMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'wagtail.core.middleware.SiteMiddleware',
     'wagtail.contrib.redirects.middleware.RedirectMiddleware',
     'session_security.middleware.SessionSecurityMiddleware',
     'flags.middleware.FlagConditionsMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
 ]
 
 
@@ -342,6 +342,7 @@ GRAPHENE = {
 }
 
 AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.RemoteUserBackend',
     'django.contrib.auth.backends.ModelBackend',
     'graphql_jwt.backends.JSONWebTokenBackend',
 ]

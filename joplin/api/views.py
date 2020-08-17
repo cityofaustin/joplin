@@ -3,4 +3,5 @@ from graphene_django.views import GraphQLView
 
 
 class PrivateGraphQLView(LoginRequiredMixin, GraphQLView):
+    raise_exception = True
     pass
