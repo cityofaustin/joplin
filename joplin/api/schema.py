@@ -257,7 +257,8 @@ class JanisBasePageNode(DjangoObjectType):
             else:
                 by_department = None
 
-            instance = ContextualNavData(parent=parent, grandparent=grandparent, url=url, from_department=from_department, by_department=by_department)
+            instance = ContextualNavData(parent=parent, grandparent=grandparent, url=url,
+                                         from_department=from_department, by_department=by_department)
             instances.append(instance)
         return instances
 
@@ -317,9 +318,17 @@ def resolve_owner_handler(self, info):
         )
 
 
+class NewsPageNode(DjangoObjectType):
+    class Meta:
+        model = NewsPage
+        filter_fields = ['id', 'slug', 'live']
+        interfaces = [graphene.Node]
+
+
 class DepartmentPageNode(DjangoObjectType):
     page_type = graphene.String()
     owner = graphene.Field(OwnerNode)
+    news = graphene.List(NewsPageNode, first=graphene.Int())
 
     class Meta:
         model = DepartmentPage
@@ -332,6 +341,10 @@ class DepartmentPageNode(DjangoObjectType):
     @superuser_required
     def resolve_owner(self, info):
         return resolve_owner_handler(self, info)
+
+    def resolve_news(self, info, **kwargs):
+        first = kwargs.get('first')
+        return self.news()[:first]
 
 
 class DepartmentResolver(graphene.Interface):
@@ -721,13 +734,6 @@ class InformationPageNode(DjangoObjectType):
     @superuser_required
     def resolve_owner(self, info):
         return resolve_owner_handler(self, info)
-
-
-class NewsPageNode(DjangoObjectType):
-    class Meta:
-        model = NewsPage
-        filter_fields = ['id', 'slug', 'live']
-        interfaces = [graphene.Node]
 
 
 class FormContainerNode(DjangoObjectType):
