@@ -20,15 +20,8 @@ def test_department_page_no_department_group(home_page):
 # If we don't have any associated department group
 @pytest.mark.django_db
 def test_department_page_with_department_group(home_page, expected_publish_url_base):
-    department = DepartmentFactory.create(add_department_page__dummy=True)
+    department = DepartmentFactory.create(add_department_page__dummy=True, add_department_page__parent=home_page)
     page = department.department_page
-
-    # Adds an already saved page to a new homepage.
-    # home_page.add_child(instance=page) will not work since "page" has already been saved to the database.
-    page.move(home_page, 'last-child')
-    # Refreshing allows the "page" object to know that its parent is now "home_page".
-    # We need page.get_parent() to work in order to get page.janis_publish_url()
-    page.refresh_from_db()
 
     urls = page.janis_urls()
     janis_publish_url = page.janis_publish_url()

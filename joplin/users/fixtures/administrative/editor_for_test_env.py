@@ -4,7 +4,7 @@ from django.core.exceptions import ValidationError
 from users.fixtures.helpers.create_fixture import create_fixture
 from groups.fixtures.test_cases.kitchen_sink import kitchen_sink
 from django.contrib.auth.models import Group
-from groups.fixtures.helpers.group_permissions import add_editor_permissions
+from groups.fixtures import add_editor_permissions
 
 
 # An user for API Testing.
