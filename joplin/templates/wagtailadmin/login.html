@@ -2,10 +2,6 @@
 {% load render_bundle from webpack_loader %}
 {% load i18n %}
 
-{% if IS_PRODUCTION == False %}
-    {% render_bundle 'theme' %}
-{% endif %}
-
 {# coa: login_form block included here to update the branding_login and the "Forgot it?" link #}
 {% block login_form %}
     {% csrf_token %}
@@ -17,6 +13,7 @@
         {% block branding_login %}
         {% if IS_PRODUCTION == False %}
             Welcome to Joplin staging!
+            {% render_bundle 'theme' %}
         {% else %}
             Welcome to Joplin!
         {% endif %}
