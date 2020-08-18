@@ -1,4 +1,6 @@
 from django import template
+from django.contrib.auth.models import Group
+from groups.models import Department
 
 register = template.Library()
 
@@ -6,7 +8,15 @@ register = template.Library()
 # Get the groups for a user
 @register.filter(name='get_user_groups')
 def get_user_groups(form):
-    return form['groups'].value() or []
+    user_groups = form['groups'].value() or []
+    user_roles = list(Group.objects.filter(name__in=["Moderators", "Editors"], pk__in=user_groups).values_list('id', flat=True))
+    user_department_groups = list(Department.objects.filter(pk__in=user_groups).values_list('id', flat=True))
+    user_is_translator = Group.objects.get(name="Translators").id in user_groups
+    return {
+        "roles": user_roles,
+        "department_groups": user_department_groups,
+        "is_translator": user_is_translator,
+    }
 
 
 # Get custom validation errors from our "department" and "roles" fields.
