@@ -27,6 +27,7 @@ def mydecorator(view):
     @wraps(view)
     def wrapped_view(request, *args, **kwargs):
         token = get_credentials(request, **kwargs)
+        print(token)
         if token is not None:
             request.user = get_user_by_token(token, request)
             print(request.user)
@@ -73,7 +74,7 @@ urlpatterns = [
     url(r'^admin/', include(wagtailadmin_urls)),
     url(r'^documents/', include(wagtaildocs_urls)),
     path('__debug__/', include(debug_toolbar.urls)),
-    # url(r'^api/graphql', csrf_exempt(PrivateGraphQLView.as_view())),
+    # url(r'^api/graphql', csrf_exempt(GraphQLView.as_view())),
     url(r'^api/graphql', mydecorator(csrf_exempt(PrivateGraphQLView.as_view()))),
     url(r'^api/graphiql', csrf_exempt(PrivateGraphQLView.as_view(graphiql=True, pretty=True))),
     url(r'session_security/', include('session_security.urls')),
