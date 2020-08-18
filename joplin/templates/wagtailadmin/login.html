@@ -2,54 +2,74 @@
 {% load render_bundle from webpack_loader %}
 {% load i18n %}
 
-{% block branding_login %}
 {% if IS_PRODUCTION == False %}
     {% render_bundle 'theme' %}
-    Welcome to Joplin staging!
-{% else %}
-    Welcome to Joplin!
 {% endif %}
-{% endblock %}
 
-{# coa: fields block included here to replace Forgotten it? with Forgot it?  #}
-{% block fields %}
-<li class="full">
-    <div class="field iconfield">
-        {{ form.username.label_tag }}
-        <div class="input icon-user">
-            {{ form.username }}
-        </div>
-    </div>
-</li>
-<li class="full">
-    <div class="field iconfield">
-        {{ form.password.label_tag }}
-        <div class="input icon-password">
-            {{ form.password }}
-        </div>
-    </div>
+{# coa: login_form block included here to update the branding_login and the "Forgot it?" link #}
+{% block login_form %}
+    {% csrf_token %}
+
+    {% url 'wagtailadmin_home' as home_url %}
+    <input type="hidden" name="next" value="{{ next|default:home_url }}" />
+
+    <h1>
+        {% block branding_login %}
+        {% if IS_PRODUCTION == False %}
+            Welcome to Joplin staging!
+        {% else %}
+            Welcome to Joplin!
+        {% endif %}
+        {% endblock %}
+    </h1>
+
+    <ul class="fields">
+        {% block fields %}
+        <li class="full">
+            <div class="field iconfield">
+                {{ form.username.label_tag }}
+                <div class="input icon-user">
+                    {{ form.username }}
+                </div>
+            </div>
+        </li>
+        <li class="full">
+            <div class="field iconfield">
+                {{ form.password.label_tag }}
+                <div class="input icon-password">
+                    {{ form.password }}
+                </div>
+            </div>
+        </li>
+
+        {% block extra_fields %}
+        {% for field_name, field in form.extra_fields %}gs
+        <li class="full">
+            {{ field.label_tag }}
+            <div class="field iconfield">
+                {{ field }}
+            </div>
+        </li>
+        {% endfor %}
+        {% endblock extra_fields %}
+
+        {% comment %}
+            Removed until functionality exists
+            <li class="checkbox">
+                <div class="field">
+                    <label><input type="checkbox" />{% trans "Remember me" %}</label>
+                </div>
+            </li>
+        {% endcomment %}
+        {% endblock %}
+        <li class="submit">
+            {% block submit_buttons %}
+            <button type="submit" class="button button-longrunning" data-clicked-text="{% trans 'Signing in…' %}"><span class="icon icon-spinner"></span><em>{% trans 'Sign in' %}</em></button>
+            {% endblock %}
+        </li>
+    </ul>
+
     {% if show_password_reset %}
-        <p class="help"><a href="{% url 'wagtailadmin_password_reset' %}">{% trans "Forgot it?" %}</a></p>
+        <p class="help"><a href="{% url 'wagtailadmin_password_reset' %}" aria-label="{% trans 'Reset your password' %}">{% trans "Forgot it?" %}</a></p>
     {% endif %}
-</li>
-
-{% block extra_fields %}
-{% for field_name, field in form.extra_fields %}gs
-<li class="full">
-    {{ field.label_tag }}
-    <div class="field iconfield">
-        {{ field }}
-    </div>
-</li>
-{% endfor %}
-{% endblock extra_fields %}
-
-{% comment %}
-    Removed until functionality exists
-    <li class="checkbox">
-        <div class="field">
-            <label><input type="checkbox" />{% trans "Remember me" %}</label>
-        </div>
-    </li>
-{% endcomment %}
 {% endblock %}
