@@ -61,11 +61,14 @@ Or if you prefer to run without docker (for speed + ability to integrate with de
 **Run with prod data**
 
 ```
-./scripts/load_from_heroku joplin
+LOAD_DATA="prod" ./scripts/serve-local.sh
+LOAD_DATA="prod" ./scripts/undockered.sh
 ```
 
-This command will drop your existing database and run an undockered instance with production data.
-Note: this will only work if your local Joplin's migrations match production's.
+This will add some seeding content from the last prod datadump (`joplin/db/system-generated/prod.datadump.json`) created by migration-test.sh.
+LOAD_DATA and LOAD_PROD_DATA both load from the prod.datadump.json
+You have to run the LOAD_x_DATA commands on a clean db instance. You can wipe the DB and load data in the same step by running:
+    `DROP_DB=on LOAD_DATA="prod" ./scripts/serve-local.sh`
 
 **Run with staging data**
 
