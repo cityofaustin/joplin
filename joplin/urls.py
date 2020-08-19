@@ -4,7 +4,6 @@ from django.conf import settings
 from django.conf.urls import include, url
 from django.contrib import admin
 from django.views.decorators.csrf import csrf_exempt
-from graphene_django.views import GraphQLView
 from wagtail.admin import urls as wagtailadmin_urls
 from wagtail.core import urls as wagtail_urls
 from wagtail.documents import urls as wagtaildocs_urls
@@ -59,7 +58,6 @@ urlpatterns = [
     url(r'^admin/', include(wagtailadmin_urls)),
     url(r'^documents/', include(wagtaildocs_urls)),
     path('__debug__/', include(debug_toolbar.urls)),
-    # url(r'^api/graphql', csrf_exempt(GraphQLView.as_view())),
     url(r'^api/graphql', jwt_token_decorator(csrf_exempt(PrivateGraphQLView.as_view()))),
     url(r'^api/graphiql', csrf_exempt(PrivateGraphiQLView.as_view(graphiql=True, pretty=True))),
     url(r'session_security/', include('session_security.urls')),
