@@ -17,22 +17,7 @@ from snippets import urls as snippet_urls
 from django.urls import reverse
 import debug_toolbar
 from api.views import PrivateGraphQLView
-from graphql_jwt.decorators import jwt_cookie
-from graphql_jwt.utils import get_credentials
-from graphql_jwt.shortcuts import get_user_by_token
-from functools import wraps
-
-
-def mydecorator(view):
-    @wraps(view)
-    def wrapped_view(request, *args, **kwargs):
-        token = get_credentials(request, **kwargs)
-        print(token)
-        if token is not None:
-            request.user = get_user_by_token(token, request)
-            print(request.user)
-        return view(request, *args, **kwargs)
-    return wrapped_view
+from api.decorators import jwt_token_decorator
 
 
 def home(request):
@@ -75,7 +60,7 @@ urlpatterns = [
     url(r'^documents/', include(wagtaildocs_urls)),
     path('__debug__/', include(debug_toolbar.urls)),
     # url(r'^api/graphql', csrf_exempt(GraphQLView.as_view())),
-    url(r'^api/graphql', mydecorator(csrf_exempt(PrivateGraphQLView.as_view()))),
+    url(r'^api/graphql', jwt_token_decorator(csrf_exempt(PrivateGraphQLView.as_view()))),
     url(r'^api/graphiql', csrf_exempt(PrivateGraphQLView.as_view(graphiql=True, pretty=True))),
     url(r'session_security/', include('session_security.urls')),
     url(r'^performance/', include('silk.urls', namespace='silk')),
