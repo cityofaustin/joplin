@@ -13,3 +13,7 @@ class GetLoginRequiredMixin(AccessMixin):
 class PrivateGraphQLView(GetLoginRequiredMixin, GraphQLView):
     raise_exception = True
     pass
+
+
+class PrivateGraphiQLView(LoginRequiredMixin, GraphQLView):
+    pass

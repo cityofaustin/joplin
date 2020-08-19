@@ -16,7 +16,7 @@ from users.urls import users as user_urls
 from snippets import urls as snippet_urls
 from django.urls import reverse
 import debug_toolbar
-from api.views import PrivateGraphQLView
+from api.views import PrivateGraphQLView, PrivateGraphiQLView
 from api.decorators import jwt_token_decorator
 
 
@@ -61,7 +61,7 @@ urlpatterns = [
     path('__debug__/', include(debug_toolbar.urls)),
     # url(r'^api/graphql', csrf_exempt(GraphQLView.as_view())),
     url(r'^api/graphql', jwt_token_decorator(csrf_exempt(PrivateGraphQLView.as_view()))),
-    url(r'^api/graphiql', csrf_exempt(PrivateGraphQLView.as_view(graphiql=True, pretty=True))),
+    url(r'^api/graphiql', csrf_exempt(PrivateGraphiQLView.as_view(graphiql=True, pretty=True))),
     url(r'session_security/', include('session_security.urls')),
     url(r'^performance/', include('silk.urls', namespace='silk')),
     url('publish_succeeded', publish_succeeded.publish_succeeded),
