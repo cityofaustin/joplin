@@ -99,6 +99,10 @@ class ServicePage(JanisBasePageWithTopics):
 
     contact = models.ForeignKey(Contact, related_name='+', blank=True, null=True, on_delete=models.SET_NULL)
 
+    @property
+    def summary(self):
+        return self.short_description
+
     publish_requirements = (
         FieldPublishRequirement("short_description", message="A description is required", langs=["en"]),
         StreamFieldPublishRequirement("steps", langs=["en"]),

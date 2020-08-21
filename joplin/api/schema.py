@@ -649,25 +649,11 @@ class Language(graphene.Enum):
     BURMESE = 'my'
 
 
-class ServicePageNode(DjangoObjectType):
-    page_type = graphene.String()
-    janis_url = graphene.List(graphene.String)
-    owner = graphene.Field(OwnerNode)
-
+class ServicePageNode(JanisBasePageNode):
     class Meta:
         model = ServicePage
         filter_fields = ['id', 'slug', 'live', 'coa_global']
         interfaces = [graphene.Node, DepartmentResolver, RelatedEventPageResolver]
-
-    def resolve_page_type(self, info):
-        return ServicePage.get_verbose_name().lower()
-
-    def resolve_janis_url(self, info):
-        return self.janis_urls()
-
-    @superuser_required
-    def resolve_owner(self, info):
-        return resolve_owner_handler(self, info)
 
 
 class InformationPageNode(DjangoObjectType):
