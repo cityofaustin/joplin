@@ -58,6 +58,11 @@ class JanisBasePage(Page):
     # Has this page been published by Publisher? A "live" page may not necessarily be published to our frontend yet.
     published = models.BooleanField(default=False, blank=True, null=True)
 
+    # Used to display summary field in search results. Defaults to empty string
+    @property
+    def summary(self):
+        return ""
+
     def janis_urls(self):
         """
         Returns list of page urls (strings)

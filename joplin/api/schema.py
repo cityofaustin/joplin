@@ -179,11 +179,60 @@ class ContextualNavData(graphene.ObjectType):
     # related_to = graphene.List(JanisBasePageTopicCollectionNode)
 
 
+'''
+    Note: we do NOT want to use DjangoObjectType for the User model.
+    Otherwise owners and users will be visible on all nodes by default.
+    We want Nodes to be explicit if they want to resolve users,
+    and we want those resolvers to be wrapped in a @superuser_required decorator for authorization.
+    TODO: handle importing of department groups for non-superusers.
+'''
+class OwnerNode(graphene.ObjectType):
+    id = graphene.ID()
+    first_name = graphene.String()
+    last_name = graphene.String()
+    email = graphene.String()
+    is_superuser = graphene.String()
+
+    @superuser_required
+    def resolve_id(self, info):
+        return self.id
+
+    @superuser_required
+    def resolve_first_name(self, info):
+        return self.first_name
+
+    @superuser_required
+    def resolve_last_name(self, info):
+        return self.last_name
+
+    @superuser_required
+    def resolve_email(self, info):
+        return self.email
+
+    @superuser_required
+    def resolve_is_superuser(self, info):
+        return self.is_superuser
+
+
+# Add this method to a PageNode to allow authorized users to see page owner data.
+def resolve_owner_handler(self, info):
+    owner = self.owner
+    if owner:
+        return OwnerNode(
+            id=owner.id,
+            first_name=owner.first_name,
+            last_name=owner.last_name,
+            email=owner.email,
+            is_superuser=owner.is_superuser,
+        )
+
+
 class JanisBasePageNode(DjangoObjectType):
     janis_urls = graphene.List(graphene.String)
-    janis_instances = graphene.List(ContextualNavData)
     page_type = graphene.String()
-    summery = graphene.String()
+    summary = graphene.String()
+    janis_instances = graphene.List(ContextualNavData)
+    owner = graphene.Field(OwnerNode)
 
     class Meta:
         model = JanisBasePage
@@ -194,13 +243,10 @@ class JanisBasePageNode(DjangoObjectType):
         return self.specific.janis_urls()
 
     def resolve_page_type(self, info):
-        return self.content_type
+        return self.content_type.name
 
-    def resolve_summery(self, info):
-        if hasattr(self.specific, "short_description"):
-            return self.specific.short_description
-        elif hasattr(self.specific, "mission"):
-            return self.specific.mission
+    def resolve_summary(self, info):
+        return self.summary
 
     def resolve_janis_instances(self, info):
         instances = []
@@ -259,85 +305,31 @@ class JanisBasePageNode(DjangoObjectType):
             instances.append(instance)
         return instances
 
+    @superuser_required
+    def resolve_owner(self, info):
+        return resolve_owner_handler(self, info)
 
-class JanisBasePageWithTopicCollectionsNode(DjangoObjectType):
+
+class JanisBasePageWithTopicCollectionsNode(JanisBasePageNode):
     class Meta:
         model = JanisBasePageWithTopicCollections
         filter_fields = ['id', 'slug', 'live']
         interfaces = [graphene.Node]
 
-
-'''
-    Note: we do NOT want to use DjangoObjectType for the User model.
-    Otherwise owners and users will be visible on all nodes by default.
-    We want Nodes to be explicit if they want to resolve users,
-    and we want those resolvers to be wrapped in a @superuser_required decorator for authorization.
-    TODO: handle importing of department groups for non-superusers.
-'''
-class OwnerNode(graphene.ObjectType):
-    id = graphene.ID()
-    first_name = graphene.String()
-    last_name = graphene.String()
-    email = graphene.String()
-    is_superuser = graphene.String()
-
-    @superuser_required
-    def resolve_id(self, info):
-        return self.id
-
-    @superuser_required
-    def resolve_first_name(self, info):
-        return self.first_name
-
-    @superuser_required
-    def resolve_last_name(self, info):
-        return self.last_name
-
-    @superuser_required
-    def resolve_email(self, info):
-        return self.email
-
-    @superuser_required
-    def resolve_is_superuser(self, info):
-        return self.is_superuser
-
-
-# Add this method to a PageNode to allow authorized users to see page owner data.
-def resolve_owner_handler(self, info):
-    owner = self.owner
-    if owner:
-        return OwnerNode(
-            id=owner.id,
-            first_name=owner.first_name,
-            last_name=owner.last_name,
-            email=owner.email,
-            is_superuser=owner.is_superuser,
-        )
-
-
-class NewsPageNode(DjangoObjectType):
+class NewsPageNode(JanisBasePageNode):
     class Meta:
         model = NewsPage
         filter_fields = ['id', 'slug', 'live']
         interfaces = [graphene.Node]
 
 
-class DepartmentPageNode(DjangoObjectType):
-    page_type = graphene.String()
-    owner = graphene.Field(OwnerNode)
+class DepartmentPageNode(JanisBasePageNode):
     news = graphene.List(NewsPageNode, first=graphene.Int())
 
     class Meta:
         model = DepartmentPage
         filter_fields = ['id', 'slug', 'live']
         interfaces = [graphene.Node]
-
-    def resolve_page_type(self, info):
-        return DepartmentPage.get_verbose_name().lower()
-
-    @superuser_required
-    def resolve_owner(self, info):
-        return resolve_owner_handler(self, info)
 
     def resolve_news(self, info, **kwargs):
         first = kwargs.get('first')
@@ -381,17 +373,11 @@ class ThemeNode(DjangoObjectType):
         interfaces = [graphene.Node]
 
 
-class TopicCollectionNode(DjangoObjectType):
-    owner = graphene.Field(OwnerNode)
-
+class TopicCollectionNode(JanisBasePageNode):
     class Meta:
         model = TopicCollectionPage
         filter_fields = ['id', 'slug', 'live']
         interfaces = [graphene.Node]
-
-    @superuser_required
-    def resolve_owner(self, info):
-        return resolve_owner_handler(self, info)
 
 
 class JanisBasePageTopicCollectionNode(DjangoObjectType):
@@ -402,9 +388,8 @@ class JanisBasePageTopicCollectionNode(DjangoObjectType):
         interfaces = [graphene.Node]
 
 
-class TopicNode(DjangoObjectType):
+class TopicNode(JanisBasePageNode):
     topiccollections = graphene.List(TopicCollectionNode)
-    owner = graphene.Field(OwnerNode)
 
     class Meta:
         model = TopicPage
@@ -420,10 +405,6 @@ class TopicNode(DjangoObjectType):
         for t in self.topic_collections.values():
             tc.append(TopicCollectionPage.objects.get(id=t['topic_collection_id']))
         return tc
-
-    @superuser_required
-    def resolve_owner(self, info):
-        return resolve_owner_handler(self, info)
 
 
 class JanisBasePageTopicNode(DjangoObjectType):
@@ -458,26 +439,12 @@ class JanisBasePageWithTopicsNode(DjangoObjectType):
         return self.departments()
 
 
-class LocationPageNode(DjangoObjectType):
-    page_type = graphene.String()
-    janis_urls = graphene.List(graphene.String)
-    owner = graphene.Field(OwnerNode)
-
+class LocationPageNode(JanisBasePageNode):
     class Meta:
         model = LocationPage
         filter_fields = ['id', 'slug', 'live']
         fields = '__all__'
         interfaces = [graphene.Node, DepartmentResolver, RelatedEventPageResolver]
-
-    @superuser_required
-    def resolve_owner(self, info):
-        return resolve_owner_handler(self, info)
-
-    def resolve_page_type(self, info):
-        return LocationPage.get_verbose_name().lower()
-
-    def resolve_janis_urls(self, info):
-        return self.janis_urls()
 
 
 class LocationPageRelatedServices(DjangoObjectType):
@@ -625,11 +592,8 @@ class EventPageLocation(graphene.ObjectType):
             return EventPageRemoteLocation(value=self.value)
 
 
-class EventPageNode(DjangoObjectType):
+class EventPageNode(JanisBasePageNode):
     locations = graphene.List(EventPageLocation)
-    page_type = graphene.String()
-    janis_urls = graphene.List(graphene.String)
-    owner = graphene.Field(OwnerNode)
 
     class Meta:
         model = EventPage
@@ -644,16 +608,6 @@ class EventPageNode(DjangoObjectType):
             repr_locations.append(EventPageLocation(value=value, location_type=location_type))
 
         return repr_locations
-
-    @superuser_required
-    def resolve_owner(self, info):
-        return resolve_owner_handler(self, info)
-
-    def resolve_page_type(self, info):
-        return EventPage.get_verbose_name().lower()
-
-    def resolve_janis_urls(self, info):
-        return self.janis_urls()
 
 
 class EventPageFeeNode(DjangoObjectType):
