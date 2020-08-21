@@ -656,38 +656,18 @@ class ServicePageNode(JanisBasePageNode):
         interfaces = [graphene.Node, DepartmentResolver, RelatedEventPageResolver]
 
 
-class InformationPageNode(DjangoObjectType):
-    page_type = graphene.String()
-    owner = graphene.Field(OwnerNode)
-
+class InformationPageNode(JanisBasePageNode):
     class Meta:
         model = InformationPage
         filter_fields = ['id', 'slug', 'live', 'coa_global']
         interfaces = [graphene.Node, DepartmentResolver, RelatedEventPageResolver]
 
-    def resolve_page_type(self, info):
-        return InformationPage.get_verbose_name().lower()
 
-    @superuser_required
-    def resolve_owner(self, info):
-        return resolve_owner_handler(self, info)
-
-
-class FormContainerNode(DjangoObjectType):
-    page_type = graphene.String()
-    owner = graphene.Field(OwnerNode)
-
+class FormContainerNode(JanisBasePageNode):
     class Meta:
         model = FormContainer
         filter_fields = ['id', 'slug', 'live', 'coa_global']
         interfaces = [graphene.Node, DepartmentResolver]
-
-    def resolve_page_type(self, info):
-        return FormContainer.get_verbose_name().lower()
-
-    @superuser_required
-    def resolve_owner(self, info):
-        return resolve_owner_handler(self, info)
 
 
 class OfficialDocumentCollectionDocumentFilter(FilterSet):
@@ -708,7 +688,7 @@ class DocumentNodeDocument(graphene.ObjectType):
     url = graphene.String()
 
 
-class OfficialDocumentPageNode(DjangoObjectType):
+class OfficialDocumentPageNode(JanisBasePageNode):
     document = graphene.Field(DocumentNodeDocument)
 
     class Meta:
@@ -747,21 +727,11 @@ class OfficialDocumentCollectionOfficialDocumentPageNode(DjangoObjectType):
         interfaces = [graphene.Node]
 
 
-class OfficialDocumentCollectionNode(DjangoObjectType):
-    page_type = graphene.String()
-    owner = graphene.Field(OwnerNode)
-
+class OfficialDocumentCollectionNode(JanisBasePageNode):
     class Meta:
         model = OfficialDocumentCollection
         filter_fields = ['id', 'slug', 'live', 'coa_global']
         interfaces = [graphene.Node, DepartmentResolver]
-
-    def resolve_page_type(self, info):
-        return OfficialDocumentCollection.get_verbose_name().lower()
-
-    @superuser_required
-    def resolve_owner(self, info):
-        return resolve_owner_handler(self, info)
 
 
 def resolve_guide_page_section_as(model, self):
@@ -844,11 +814,8 @@ class GuidePageSection(graphene.ObjectType):
         return repr_pages
 
 
-class GuidePageNode(DjangoObjectType):
+class GuidePageNode(JanisBasePageNode):
     sections = graphene.List(GuidePageSection)
-    page_type = graphene.String()
-    owner = graphene.Field(OwnerNode)
-
     class Meta:
         model = GuidePage
         filter_fields = ['id', 'slug', 'live', 'coa_global']
@@ -861,13 +828,6 @@ class GuidePageNode(DjangoObjectType):
             repr_sections.append(GuidePageSection(value=value))
 
         return repr_sections
-
-    def resolve_page_type(self, info):
-        return GuidePage.get_verbose_name().lower()
-
-    @superuser_required
-    def resolve_owner(self, info):
-        return resolve_owner_handler(self, info)
 
 
 class PageRevisionNode(DjangoObjectType):
