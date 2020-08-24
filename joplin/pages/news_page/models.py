@@ -65,6 +65,13 @@ class NewsPage(JanisBasePage):
     def janis_urls(self):
         return [instance['url'] for instance in self.janis_instances()]
 
+    def published_under_department_page(self):
+        # If we have a different department, publish under that department only
+        if self.written_for_department:
+            return self.written_for_department
+        elif self.departments()[0]:
+            return self.departments()[0]
+
     def janis_instances(self):
         # If we have a different department, publish under that department only
         if self.written_for_department and self.written_for_department != self.departments()[0]:

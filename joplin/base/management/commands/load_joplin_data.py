@@ -81,7 +81,8 @@ class Command(BaseCommand):
                 event_page_fixtures.load_all()
                 location_page_fixtures.load_all()
                 department_page_fixtures.load_all()
-                news_page_fixtures.load_all()
+                # department pages used in news page fixtures do not have departments assigned (hasattr(self, dept) is False)
+                # news_page_fixtures.load_all()
 
                 # TODO: incorporate logging into DeploymentLog?
             if LOAD_DATA == 'importer':

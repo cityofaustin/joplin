@@ -1,0 +1,21 @@
+{% load wagtailadmin_tags %}{% base_url_setting as base_url %}
+
+Here is the list of all pages that were published in Joplin between
+{{ start_date }}
+and
+{{ end_date }}
+
+{% for page_id, data in published_pages.items %}
+{{ data.page.title|safe|escape }}
+Published on {{ data.new_revision.created_at|date:"M d, Y" }}.
+{% if data.type == "updated" %}
+    The last time it was published was on {{ data.old_revision.created_at|date:"M d, Y" }}.
+    Old published revision: {{ base_url }}/admin/pages/{{data.page.id}}/revisions/{{data.old_revision.id}}/revert/
+    Compare the two revisions: {{ base_url }}/admin/pages/{{data.page.id}}/revisions/compare/{{data.old_revision.id}}...{{data.new_revision.id}}/
+{% elif data.type == "new" %}
+    This is the first time this page has been published.
+{% endif %}
+    Edit here: {{ base_url }}/admin/pages/{{data.page.id}}/edit/
+{% endfor %}
+<br/>
+Have a nice day!

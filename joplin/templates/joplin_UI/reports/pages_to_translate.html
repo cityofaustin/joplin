@@ -1,3 +1,4 @@
+{% load wagtailadmin_tags %}{% base_url_setting as base_url %}
 <html>
     <body>
         Here is the list of all pages that were published in Joplin between <br/>
@@ -6,16 +7,20 @@
         {{ end_date }} <br/>
         <br/>
         {% for page_id, data in published_pages.items %}
-            {{ data.page.title|safe|escape }}
-            Published on {{ data.new_revision.created_at|date:"M d, Y" }}.
-            {% if data.type == "updated" %}
-                The last time it was published was on {{ data.old_revision.created_at|date:"M d, Y" }}.
-                Old published revision: https://joplin.herokuapp.com/admin/pages/{{data.page.id}}/revisions/{{data.old_revision.id}}/revert/
-                Compare the two revisions: https://joplin.herokuapp.com/admin/pages/{{data.page.id}}/revisions/compare/{{data.old_revision.id}}...{{data.new_revision.id}}/
-            {% elif data.type == "new" %}
-                This is the first time this page has been published.
-            {% endif %}
-                Edit here: https://joplin.herokuapp.com/admin/pages/{{data.page.id}}/edit/
+            <div>
+            {{ data.page.title|safe|escape }} <br/>
+                <div style="margin-left:40px;margin-bottom:1em;">
+                Published on {{ data.new_revision.created_at|date:"M d, Y" }}.<br/>
+                {% if data.type == "updated" %}
+                    The last time it was published was on {{ data.old_revision.created_at|date:"M d, Y" }}.<br/>
+                    <a href="{{ base_url }}/admin/pages/{{data.page.id}}/revisions/{{data.old_revision.id}}/revert/" target="_blank">Old published revision</a><br/>
+                    <a href="{{ base_url }}/admin/pages/{{data.page.id}}/revisions/compare/{{data.old_revision.id}}...{{data.new_revision.id}}/" target="_blank">Compare the two revisions</a><br/>
+                {% elif data.type == "new" %}
+                    This is the first time this page has been published.<br/>
+                {% endif %}
+                    <a href="{{ base_url }}/admin/pages/{{data.page.id}}/edit/" target="_blank">Edit here</a>
+                </div>
+            </div>
         {% endfor %}
         <br/>
         Have a nice day!
