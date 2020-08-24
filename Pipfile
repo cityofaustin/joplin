@@ -52,6 +52,7 @@ django-graphql-jwt = "==0.3.1"
 djangorestframework = "==3.11.0"
 djangorestframework-api-key = "==2.0.0"
 django-ses = "~=1.0.1"
+pymupdf = "*"
 
 [requires]
 python_version = "3.7"
