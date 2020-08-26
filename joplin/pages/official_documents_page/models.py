@@ -57,11 +57,7 @@ class OfficialDocumentPage(JanisBasePage):
         FieldPanel('slug_vi'),
         FieldPanel('date'),
         FieldPanel('authoring_office', widget=countMe),
-        FieldPanel('summary', widget=widgets.CountableWidget(attrs={
-            'data-count': 'characters',
-            'data-max-count': AUTHOR_LIMITS['document_summary'],
-            'data-count-direction': 'down'
-        })),
+        FieldPanel('summary'),
         FieldPanel('body'),
         FieldPanel('name', widget=countMe),
         DocumentChooserPanel('document'),
