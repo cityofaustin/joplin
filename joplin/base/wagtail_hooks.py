@@ -285,3 +285,8 @@ def register_link_handler(features):
 class PermissionMenuItem(MenuItem):
     def is_shown(self, request):
         return request.user.has_perm('base.view_snippets')
+
+
+@hooks.register('register_admin_menu_item')
+def register_tags_menu_item():
+    return MenuItem('Tags', "/admin/snippets/base/pagetag/", classnames="material-icons icon-tags", order=50)

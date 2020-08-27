@@ -1,5 +1,6 @@
 import django.utils.translation
 import graphene
+from graphene import String, List
 from django.core.exceptions import ObjectDoesNotExist
 from graphene_django import DjangoObjectType
 from graphene_django.converter import convert_django_field
@@ -14,6 +15,7 @@ from wagtail.documents.models import Document
 from wagtail.core.rich_text import expand_db_html
 import graphql_jwt
 from graphql_jwt.decorators import superuser_required
+from modelcluster.contrib.taggit import ClusterTaggableManager
 
 from snippets.contact.models import Contact, ContactPhoneNumber
 from snippets.theme.models import Theme
@@ -52,6 +54,15 @@ def convert_rich_text_field(field, registry=None):
     return RichTextFieldType(
         description=field.help_text, required=not field.null
     )
+
+
+@convert_django_field.register(ClusterTaggableManager)
+def convert_taggable_manager_to_string(field, registry=None):
+    '''
+    Tells graphene to turn a ClusterTaggableManager field into a list of Strings containing the page's tags.
+    "get_tags" was a property we defined on JanisBasePage.
+    '''
+    return List(String, source='get_tags')
 
 
 def try_expand_db_html(parsed_item):

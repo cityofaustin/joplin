@@ -52,6 +52,8 @@ django-graphql-jwt = "==0.3.1"
 djangorestframework = "==3.11.1"
 djangorestframework-api-key = "==2.0.0"
 django-ses = "~=1.0.1"
+factory-boy = "==2.10.0"
+wagtail-autocomplete = "==0.6"
 
 [requires]
 python_version = "3.7"

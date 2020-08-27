@@ -9,6 +9,9 @@ from wagtail.admin.edit_handlers import FieldPanel, ObjectList, TabbedInterface
 from wagtail.core.models import Page
 from wagtail.core.fields import RichTextField
 from flags.state import flag_enabled
+from modelcluster.contrib.taggit import ClusterTaggableManager
+from base.models import TaggedPage
+from wagtailautocomplete.edit_handlers import AutocompletePanel
 
 
 class JanisBasePage(Page):
@@ -57,6 +60,19 @@ class JanisBasePage(Page):
     publish_request_enqueued = models.BooleanField(default=False)
     # Has this page been published by Publisher? A "live" page may not necessarily be published to our frontend yet.
     published = models.BooleanField(default=False, blank=True, null=True)
+
+    tags = ClusterTaggableManager(through=TaggedPage, blank=True)
+
+    settings_panels = [
+        FieldPanel('tags'),
+    ]
+
+    @property
+    def get_tags(self):
+        '''
+        This is required for graphene to not throw errors. See "convert_taggable_manager_to_string"
+        '''
+        return self.tags.all()
 
     def janis_urls(self):
         """
@@ -220,12 +236,10 @@ class JanisBasePage(Page):
 
         try:
             if flag_enabled('SHOW_EXTRA_PANELS'):
-                editor_panels += [PermissionObjectList(cls.settings_panels,
-                                                       heading='Settings')]
-                # editor_panels += (PermissionObjectList(cls.promote_panels,
-                #                                        heading='SEO'),
-                #                   PermissionObjectList(cls.settings_panels,
-                #                                        heading='Settings'))
+                editor_panels += [
+                    PermissionObjectList(cls.settings_panels, heading='Settings'),
+                    # PermissionObjectList(cls.promote_panels, heading='SEO'),
+                ]
         except ProgrammingError as e:
             print("some problem, maybe with flags")
             print(traceback.format_exc())
