@@ -106,6 +106,7 @@ INSTALLED_APPS = [
     'pages.news_page',
     'snippets.contact',
     'snippets.theme',
+    'wagtailautocomplete',
 ]
 
 MIDDLEWARE = [

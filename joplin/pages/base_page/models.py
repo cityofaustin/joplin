@@ -9,8 +9,9 @@ from wagtail.admin.edit_handlers import FieldPanel, ObjectList, TabbedInterface
 from wagtail.core.models import Page
 from wagtail.core.fields import RichTextField
 from flags.state import flag_enabled
+from modelcluster.fields import ParentalManyToManyField
 from modelcluster.contrib.taggit import ClusterTaggableManager
-from base.models import TaggedPage
+from base.models import PageTag
 from wagtailautocomplete.edit_handlers import AutocompletePanel
 
 
@@ -61,10 +62,13 @@ class JanisBasePage(Page):
     # Has this page been published by Publisher? A "live" page may not necessarily be published to our frontend yet.
     published = models.BooleanField(default=False, blank=True, null=True)
 
-    tags = ClusterTaggableManager(through=TaggedPage, blank=True)
-
+    tags = ParentalManyToManyField(
+        PageTag,
+        related_name='pages'
+    )
+    autocomplete_search_field = "name"
     settings_panels = [
-        FieldPanel('tags'),
+        AutocompletePanel('tags', target_model=PageTag),
     ]
 
     @property
