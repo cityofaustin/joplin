@@ -76,7 +76,7 @@ function print_header {
 
 # Returns "True" if our app name exists in heroku.
 function app_exists {
-    HEROKU_TEAM_APPS=$(heroku apps --team $PIPELINE_TEAM | grep -Fx $APPNAME)
+    HEROKU_TEAM_APPS=$(heroku apps --team $PIPELINE_TEAM | awk '{print $1}' | grep -Fx $APPNAME)
 
     if [ "${HEROKU_TEAM_APPS}" != "" ]; then
         echo "true";
