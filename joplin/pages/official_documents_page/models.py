@@ -14,7 +14,6 @@ from pages.base_page.models import JanisBasePage
 
 from base.models.constants import DEFAULT_MAX_LENGTH
 from base.models.widgets import countMe, AUTHOR_LIMITS
-from countable_field import widgets
 from publish_preflight.requirements import FieldPublishRequirement, RelationPublishRequirement
 
 
