@@ -3,7 +3,7 @@ version: 2.1
 jobs:
   test:
     docker:
-      - image: cityofaustin/joplin-ci-test:5c638d3
+      - image: cityofaustin/joplin-ci-test:f283c20
         environment:
           PIPENV_VENV_IN_PROJECT: true
           DATABASE_URL: postgresql://root@localhost/circle_test?sslmode=disable
@@ -24,10 +24,8 @@ jobs:
             - deps-{{ .Branch }}-
             - deps-
       - run:
-          name: Install dependencies
-          command: |
-            sudo pip install pipenv
-            pipenv install --dev
+          name: Install python dependencies
+          command: pipenv install --dev
       - save_cache:
           paths:
             - ".venv"
