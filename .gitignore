@@ -16,7 +16,6 @@ media/original_images/*
 joplin/db/smuggler/*
 env.sh
 .env
-yarn.lock
 .pytest_cache/
 
 # Temporary datadumps
