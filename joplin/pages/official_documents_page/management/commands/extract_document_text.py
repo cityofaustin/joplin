@@ -32,10 +32,17 @@ def extract_document_text():
         get the data from the document url
         
         '''
-        doc_url = url_base + page.document.url
-        extracted_text = extract_text_from_url(doc_url)
-        page.body = extracted_text
-        page.save()
+        print(page.id)
+        if len(page.body) > 0:
+            continue
+        if page.document and page.document.url:
+            print('doing the thing')
+            doc_url = url_base + page.document.url
+            extracted_text = extract_text_from_url(doc_url)
+            page.body = extracted_text
+            page.save()
+        else:
+            print(f'Official Document Page with id {page.id} url does not exist')
 
 
 class Command(BaseCommand):
