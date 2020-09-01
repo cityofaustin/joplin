@@ -18,6 +18,8 @@ def extract_text_from_url(url):
             text += page.getText()
     except RuntimeError:
         print(f'Runtime Error for {url}')
+    except:
+        print('There was an error')
     return text
 
 
