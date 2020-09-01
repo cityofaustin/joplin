@@ -234,6 +234,7 @@ class JanisBasePageNode(DjangoObjectType):
     janis_instances = graphene.List(ContextualNavData)
     owner = graphene.Field(OwnerNode)
     parent_class = graphene.String()
+    page_id = graphene.Int()
 
     class Meta:
         model = JanisBasePage
@@ -313,6 +314,9 @@ class JanisBasePageNode(DjangoObjectType):
     def resolve_parent_class(self, info):
         # This is helpful for building the site index
         return self.specific.__class__.__base__.__name__.lower()
+
+    def resolve_page_id(self, info):
+        return self.id
 
 
 class JanisBasePageWithTopicCollectionsNode(JanisBasePageNode):
