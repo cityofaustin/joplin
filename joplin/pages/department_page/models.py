@@ -138,7 +138,7 @@ class DepartmentPage(JanisBasePage):
         return news_pages
 
     @property
-    def summary(self):
+    def search_summary(self):
         return self.mission
 
 

@@ -100,7 +100,7 @@ class ServicePage(JanisBasePageWithTopics):
     contact = models.ForeignKey(Contact, related_name='+', blank=True, null=True, on_delete=models.SET_NULL)
 
     @property
-    def summary(self):
+    def search_summary(self):
         return self.short_description
 
     publish_requirements = (

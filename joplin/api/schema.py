@@ -230,7 +230,7 @@ def resolve_owner_handler(self, info):
 class JanisBasePageNode(DjangoObjectType):
     janis_urls = graphene.List(graphene.String)
     page_type = graphene.String()
-    summary = graphene.String()
+    search_summary = graphene.String()
     janis_instances = graphene.List(ContextualNavData)
     owner = graphene.Field(OwnerNode)
     parent_class = graphene.String()
@@ -247,8 +247,8 @@ class JanisBasePageNode(DjangoObjectType):
     def resolve_page_type(self, info):
         return self.content_type.name
 
-    def resolve_summary(self, info):
-        return self.summary
+    def resolve_search_summary(self, info):
+        return self.specific.search_summary
 
     def resolve_janis_instances(self, info):
         instances = []

@@ -32,6 +32,10 @@ class OfficialDocumentPage(JanisBasePage):
     document_es = models.ForeignKey(Document, blank=True, null=True, on_delete=models.SET_NULL, related_name='+',
                                     verbose_name="Document [es]")
 
+    @property
+    def search_summary(self):
+        return self.summary
+
     publish_requirements = (
         FieldPublishRequirement("date",
                                 message="You need to include a date before publishing"),
