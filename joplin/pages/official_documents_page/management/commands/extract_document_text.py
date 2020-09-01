@@ -6,11 +6,9 @@ from pages.official_documents_page.models import OfficialDocumentPage
 
 
 def extract_text_from_url(url):
-    # url = 'https://joplin3-austin-gov-static.s3.amazonaws.com/production/media/documents/2020-0547.pdf'
     http = urllib3.PoolManager()
     resp = http.request('GET', url)
     file_stream = io.BytesIO(resp.data)
-    # Document('', < memory, doc  # 3>)
     text = ''
     try:
         pdf_doc = fitz.open(stream=file_stream, filetype='pdf')
@@ -18,14 +16,10 @@ def extract_text_from_url(url):
             text += page.getText()
     except RuntimeError:
         print(f'Runtime Error for {url}')
-    except:
-        print('There was an error')
     return text
 
 
 def extract_document_text():
-    """
-    """
     all_document_pages = OfficialDocumentPage.objects.all()
     print(f'Beginning extraction...')
 
@@ -38,6 +32,7 @@ def extract_document_text():
         set body as text and save
         '''
         print(f'Page id {page.id}')
+        # Check if page body already has content, if so skip
         if len(page.body) > 0:
             continue
         if page.document and page.document.url:
@@ -52,7 +47,7 @@ def extract_document_text():
 
 
 class Command(BaseCommand):
-    help = ""
+    help = "Script to extract text from pdfs on OfficialDocumentPages and save in body"
 
     def handle(self, *args, **options):
         extract_document_text()
