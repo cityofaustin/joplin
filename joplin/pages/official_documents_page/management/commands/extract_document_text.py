@@ -11,10 +11,13 @@ def extract_text_from_url(url):
     resp = http.request('GET', url)
     file_stream = io.BytesIO(resp.data)
     # Document('', < memory, doc  # 3>)
-    pdf_doc = fitz.open(stream=file_stream, filetype='pdf')
     text = ''
-    for page in pdf_doc:
-        text += page.getText()
+    try:
+        pdf_doc = fitz.open(stream=file_stream, filetype='pdf')
+        for page in pdf_doc:
+            text += page.getText()
+    except RuntimeError:
+        print(f'Runtime Error for {url}')
     return text
 
 
