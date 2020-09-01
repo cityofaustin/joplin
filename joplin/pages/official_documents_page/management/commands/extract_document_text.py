@@ -24,24 +24,24 @@ def extract_text_from_url(url):
 def extract_document_text():
     """
     """
-
     all_document_pages = OfficialDocumentPage.objects.all()
+    print(f'Beginning extraction...')
 
-    url_base = 'https://joplin3-austin-gov-static.s3.amazonaws.com/production'
+    # url_base = 'https://joplin3-austin-gov-static.s3.amazonaws.com/production'
 
     for page in all_document_pages:
         '''
         get the document url
         get the data from the document url
-        
+        set body as text and save
         '''
-        print(page.id)
+        print(f'Page id {page.id}')
         if len(page.body) > 0:
             continue
         if page.document and page.document.url:
             print('doing the thing')
-            doc_url = url_base + page.document.url
-            extracted_text = extract_text_from_url(doc_url)
+            # doc_url = url_base + page.document.url
+            extracted_text = extract_text_from_url(page.document.url)
             page.body = extracted_text
             page.save()
         else:
