@@ -27,7 +27,7 @@ def extract_document_text():
     all_document_pages = OfficialDocumentPage.objects.all()
     print(f'Beginning extraction...')
 
-    # url_base = 'https://joplin3-austin-gov-static.s3.amazonaws.com/production'
+    url_base = 'https://joplin3-austin-gov-static.s3.amazonaws.com/production'
 
     for page in all_document_pages:
         '''
@@ -39,9 +39,10 @@ def extract_document_text():
         if len(page.body) > 0:
             continue
         if page.document and page.document.url:
-            print('doing the thing')
-            # doc_url = url_base + page.document.url
-            extracted_text = extract_text_from_url(page.document.url)
+            filename = page.document.url.split('docs')[1]
+            print(f'reading {filename}')
+            doc_url = url_base + filename
+            extracted_text = extract_text_from_url(doc_url)
             page.body = extracted_text
             page.save()
         else:
