@@ -8,12 +8,12 @@ from base.forms import OfficialDocumentPageForm
 from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, PageChooserPanel
 from wagtail.documents.models import Document
 from wagtail.documents.edit_handlers import DocumentChooserPanel
+from wagtail.core.fields import RichTextField
 
 from pages.base_page.models import JanisBasePage
 
 from base.models.constants import DEFAULT_MAX_LENGTH
 from base.models.widgets import countMe, AUTHOR_LIMITS
-from countable_field import widgets
 from publish_preflight.requirements import FieldPublishRequirement, RelationPublishRequirement
 
 
@@ -24,7 +24,8 @@ class OfficialDocumentPage(JanisBasePage):
     date = models.DateField(verbose_name="Document date", null=True, blank=True)
     authoring_office = models.CharField(verbose_name="Authoring office of document", max_length=DEFAULT_MAX_LENGTH,
                                         blank=True)
-    summary = models.TextField(verbose_name="Document summary", blank=True)
+    summary = RichTextField(verbose_name="Document summary", blank=True, features=['link'],
+                            max_length=AUTHOR_LIMITS['document_summary'])
     body = models.TextField(verbose_name="Document text", blank=True)
     name = models.CharField(verbose_name="Name of Document", max_length=DEFAULT_MAX_LENGTH, blank=True)
     document = models.ForeignKey(Document, null=True, blank=True, on_delete=models.SET_NULL, related_name='+',
@@ -56,11 +57,7 @@ class OfficialDocumentPage(JanisBasePage):
         FieldPanel('slug_vi'),
         FieldPanel('date'),
         FieldPanel('authoring_office', widget=countMe),
-        FieldPanel('summary', widget=widgets.CountableWidget(attrs={
-            'data-count': 'characters',
-            'data-max-count': AUTHOR_LIMITS['document_summary'],
-            'data-count-direction': 'down'
-        })),
+        FieldPanel('summary'),
         FieldPanel('body'),
         FieldPanel('name', widget=countMe),
         DocumentChooserPanel('document'),
