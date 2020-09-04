@@ -451,9 +451,11 @@ if IS_LOCAL or IS_TEST:
     # e.g. in notification emails. Don't include '/admin' or a trailing slash
     BASE_URL = f'http://127.0.0.1:{JOPLIN_APP_HOST_PORT}'
     CMS_API = f"{BASE_URL}/api/graphql"
+    PREVIEW_CMS_API = f"{BASE_URL}/api/preview/graphql"
 else:
     BASE_URL = f"https://{os.getenv('APPNAME','')}.herokuapp.com"
     CMS_API = f"{BASE_URL}/api/graphql"
+    PREVIEW_CMS_API = f"{BASE_URL}/api/preview/graphql"
 
 
 # Sets the login_url redirect for "from django.contrib.auth.decorators import user_passes_test"
