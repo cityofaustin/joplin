@@ -4,7 +4,6 @@ from django.core.exceptions import ObjectDoesNotExist
 from graphene_django import DjangoObjectType
 from graphene_django.converter import convert_django_field
 from graphene_django.debug import DjangoDebug
-from graphene_django.filter import DjangoFilterConnectionField
 from graphene.types import Scalar
 from graphene.types.generic import GenericScalar
 from wagtail.core.fields import StreamField, RichTextField
