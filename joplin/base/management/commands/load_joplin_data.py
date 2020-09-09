@@ -59,6 +59,8 @@ class Command(BaseCommand):
                 DeploymentLog(operation=operation_name, completed=True).save()
 
         try:
+            # Load user for graphql authentication
+            user_fixtures.user_for_build_process()
             # Load seeding data if data hasn't been loaded already
             try:
                 info = DeploymentLog.objects.get(operation="load_data")
@@ -81,9 +83,8 @@ class Command(BaseCommand):
                 event_page_fixtures.load_all()
                 location_page_fixtures.load_all()
                 department_page_fixtures.load_all()
-                # department pages used in news page fixtures do not have departments assigned (hasattr(self, dept) is False)
+                # department pages in news page fixtures don't have departments assigned (hasattr(self, dept) is False)
                 # news_page_fixtures.load_all()
-
                 # TODO: incorporate logging into DeploymentLog?
             if LOAD_DATA == 'importer':
                 print("Importing data from http://joplin-staging.herokuapp.com/api/graphql")
@@ -96,7 +97,6 @@ class Command(BaseCommand):
                 elif LOAD_DATA == "new_datadump":
                     print("Adding new migration test datadump")
                     run_load_data_command('db/system-generated/tmp.datadump.json')
-
                     # Runs code from /db/scripts/sanitize_revision_data.sql
                     print("Sanitizing Revisions data")
                     sanitize_revision_path = os.path.join(settings.BASE_DIR, 'joplin/db/scripts/sanitize_revision_data.sql')
