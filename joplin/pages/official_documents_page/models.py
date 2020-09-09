@@ -72,6 +72,11 @@ class OfficialDocumentPage(JanisBasePage):
         InlinePanel('official_document_collection', label="Official document collections this document belongs to"),
     ]
 
+    class Meta:
+        indexes = [
+            models.Index(fields=['-date',]),
+        ]
+
 
 class OfficialDocumentCollectionOfficialDocumentPage(ClusterableModel):
     page = ParentalKey(OfficialDocumentPage, related_name="official_document_collection")
