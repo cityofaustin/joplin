@@ -59,8 +59,6 @@ class Command(BaseCommand):
                 DeploymentLog(operation=operation_name, completed=True).save()
 
         try:
-            # Load user for graphql authentication
-            user_fixtures.user_for_build_process()
             # Load seeding data if data hasn't been loaded already
             try:
                 info = DeploymentLog.objects.get(operation="load_data")
