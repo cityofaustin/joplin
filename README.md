@@ -373,6 +373,7 @@ The migration process currently consists of 3 commands:
         ```
 -   Access the Graphql API
     -   `localhost:8000/api/graphiql`
+    -  Once you enter your username and password, you will be able to query the graphiql endpoint. 
 -   Troubleshooting:
 
     -   Clean up older docker images and containers and rebuild the new application if necessary:
@@ -435,7 +436,7 @@ To get a full set of icons that Wagtail has available you'll need to upload [Wag
 
 #### Adding Scripts/Styles
 
-We're using webpack to bundle syles and scripts, and webpack_loader to include them in our templates. To create a new bundle it should be defined as an entry in `webpack.build.js` and `webpack.dev.js`, then included in a template using `{% load render_bundle from webpack_loader %}` and `{% render_bundle 'YOUR_BUNDLE_NAME_HERE' %}`.
+We're using webpack to bundle styles and scripts, and webpack_loader to include them in our templates. To create a new bundle it should be defined as an entry in `webpack.build.js` and `webpack.dev.js`, then included in a template using `{% load render_bundle from webpack_loader %}` and `{% render_bundle 'YOUR_BUNDLE_NAME_HERE' %}`.
 
 ---
 
