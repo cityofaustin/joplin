@@ -1,3 +1,4 @@
+# Preview schema exists so the graphql endpoint `api/preview/graphql` can be accessed without authentication
 import graphene
 from graphene_django import DjangoObjectType
 from graphene_django.debug import DjangoDebug
