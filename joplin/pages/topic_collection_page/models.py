@@ -62,7 +62,6 @@ class TopicCollectionPage(JanisBasePage):
         # should publish at /theme_slug/topic_collection_slug/
         if self.theme and self.theme.slug:
             return [{'url': f'/{self.theme.slug}/{self.slug_en}/', 'parent': None, 'grandparent': None}]
-
         return []
 
 

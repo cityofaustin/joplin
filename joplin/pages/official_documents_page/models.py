@@ -33,6 +33,10 @@ class OfficialDocumentPage(JanisBasePage):
     document_es = models.ForeignKey(Document, blank=True, null=True, on_delete=models.SET_NULL, related_name='+',
                                     verbose_name="Document [es]")
 
+    @property
+    def search_summary(self):
+        return self.summary
+
     publish_requirements = (
         FieldPublishRequirement("date",
                                 message="You need to include a date before publishing"),
@@ -64,6 +68,11 @@ class OfficialDocumentPage(JanisBasePage):
         DocumentChooserPanel('document_es'),
         InlinePanel('official_document_collection', label="Official document collections this document belongs to"),
     ]
+
+    class Meta:
+        indexes = [
+            models.Index(fields=['-date',]),
+        ]
 
 
 class OfficialDocumentCollectionOfficialDocumentPage(ClusterableModel):

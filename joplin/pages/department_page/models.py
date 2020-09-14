@@ -137,6 +137,10 @@ class DepartmentPage(JanisBasePage):
 
         return news_pages
 
+    @property
+    def search_summary(self):
+        return self.mission
+
 
 class DepartmentPageDirector(Orderable):
     page = ParentalKey(DepartmentPage, related_name='department_directors')
