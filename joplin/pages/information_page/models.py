@@ -25,7 +25,7 @@ class InformationPage(JanisBasePageWithTopics):
     description = models.TextField(blank=True, verbose_name='Write a description of this page')
 
     additional_content = RichTextField(
-        features=WYSIWYG_GENERAL,
+        features=WYSIWYG_GENERAL.append('image'),
         verbose_name='Write any additional content describing the service',
         blank=True
     )
