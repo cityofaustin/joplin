@@ -1,4 +1,5 @@
 from django.db import models
+from django.apps import apps
 
 from modelcluster.fields import ParentalKey
 
@@ -92,6 +93,8 @@ class DepartmentPage(JanisBasePage):
     def janis_urls(self):
         """
         Department pages should have at most one url
+        If DepartmentPage has a department assigned, return list containing /slug_en/
+        else, return empty list
         """
 
         # check the one to one relationship of pages to department groups
@@ -104,7 +107,9 @@ class DepartmentPage(JanisBasePage):
     def janis_instances(self):
         """
         Department pages should have at most one url
-        They don't have contextual nav, do i even need this?
+        If DepartmentPage has a department assigned, return list containing dictionary with keys url,
+        parent, grandparent
+        else, return empty list
         """
 
         # check the one to one relationship of pages to department groups
@@ -113,6 +118,28 @@ class DepartmentPage(JanisBasePage):
             return [{'url': f'/{self.slug_en}/', 'parent': None, 'grandparent': None}]
 
         return []
+
+    def news(self):
+        """
+        gets all live NewsPages and loops through looking for pages published under department
+        :return: list of news pages published under department
+        """
+        # Since news imports department, get news this way instead
+        # https://docs.djangoproject.com/en/3.0/ref/applications/#django.apps.AppConfig.get_model
+        NewsPage = apps.get_model('news_page', 'NewsPage')
+
+        news_pages = []
+        news_page_set = NewsPage.objects.filter(live=True).order_by('-first_published_at')
+        for news_page in news_page_set.iterator():
+            # todo: get this logic working in filter instead (maybe a bidirectional relationship bonus issue?)
+            if self == news_page.published_under_department_page():
+                news_pages.append(news_page)
+
+        return news_pages
+
+    @property
+    def search_summary(self):
+        return self.mission
 
 
 class DepartmentPageDirector(Orderable):
@@ -143,7 +170,7 @@ class DepartmentPageTopPage(Orderable):
     ]
 
     def __str__(self):
-        return self.page.text
+        return self.page.title
 
 
 class DepartmentPageRelatedPage(Orderable):
@@ -155,4 +182,4 @@ class DepartmentPageRelatedPage(Orderable):
     ]
 
     def __str__(self):
-        return self.page.text
+        return self.page.title

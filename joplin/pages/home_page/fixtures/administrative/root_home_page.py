@@ -23,3 +23,5 @@ def root_home_page():
         Site.objects.create(
             hostname='localhost', port=80, root_page=home, is_default_site=True
         )
+
+    return home

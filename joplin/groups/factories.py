@@ -15,7 +15,8 @@ class DepartmentFactory(factory.DjangoModelFactory):
         # pass "add_department_page__dummy"=True into Factory() to make dummy department page
         if create:
             if (kwargs.get("dummy", False)):
-                self.department_page = DepartmentPageFactory(title=self.name)
+                parent = kwargs.get("parent", None)
+                self.department_page = DepartmentPageFactory(title=self.name, parent=parent)
 
 
 class GroupPagePermissionFactory(factory.django.DjangoModelFactory):

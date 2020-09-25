@@ -52,11 +52,16 @@ class JanisBasePage(Page):
     publish_request_pk = models.TextField(blank=True, null=True)
     # sk for our publish request in Publisher dynamodb
     publish_request_sk = models.TextField(blank=True, null=True)
-    # Indicated whether a publish_request for this page been submitted to the Publisher, and we are
+    # Indicates whether a publish_request for this page been submitted to the Publisher, and we are
     # waiting for it to finish being processed.
     publish_request_enqueued = models.BooleanField(default=False)
     # Has this page been published by Publisher? A "live" page may not necessarily be published to our frontend yet.
     published = models.BooleanField(default=False, blank=True, null=True)
+
+    # Used to display search_summary field in search results. Defaults to empty string
+    @property
+    def search_summary(self):
+        return ""
 
     def janis_urls(self):
         """

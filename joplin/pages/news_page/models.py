@@ -39,12 +39,17 @@ class NewsPage(JanisBasePage):
 
     written_for_department = models.ForeignKey(DepartmentPage, blank=True, null=True, on_delete=models.SET_NULL,
                                                verbose_name="Assign a different department",
-                                               help_text="If this news is written for another department, select that department below. This ensures that this news is associated with that department's news content")
+                                               help_text="If this news article is written for another department, "
+                                                         "select that department below. This ensures that this news "
+                                                         "article is associated with that department's news content")
 
     publish_requirements = (
         FieldPublishRequirement("body", message="Body text is required to publish", langs=["en"]),
         FieldPublishRequirement("contact", message="A contact is required to publish"),
-        DepartmentPublishRequirement(message="🤠 can't publish without a department, this should only happen to admins that forgot to pick a department in the modal, or users that aren't in a department group. This requirement will not be satisfied by the 'different department' field 🌵"),
+        DepartmentPublishRequirement(message="🤠 can't publish without a department, this should only happen to admins "
+                                             "that forgot to pick a department in the modal, or users that aren't in a "
+                                             "department group. This requirement will not be satisfied by the "
+                                             "'different department' field 🌵"),
     )
 
     content_panels = [
@@ -64,6 +69,13 @@ class NewsPage(JanisBasePage):
 
     def janis_urls(self):
         return [instance['url'] for instance in self.janis_instances()]
+
+    def published_under_department_page(self):
+        # If we have a different department, publish under that department only
+        if self.written_for_department:
+            return self.written_for_department
+        elif self.departments()[0]:
+            return self.departments()[0]
 
     def janis_instances(self):
         # If we have a different department, publish under that department only
