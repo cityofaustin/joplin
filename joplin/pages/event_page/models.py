@@ -24,13 +24,26 @@ from wagtail.snippets.edit_handlers import SnippetChooserPanel
 from publish_preflight.requirements import FieldPublishRequirement, StreamFieldPublishRequirement
 
 
+def only_one_physical_location(stream_value):
+    if not stream_value:
+        return False
+    if len(stream_value) > 0:
+        if len(stream_value.stream_data) == 2:
+            loc1 = stream_value.stream_data[0][0]
+            loc2 = stream_value.stream_data[1][0]
+            print(loc1, loc2)
+            return loc1 == 'virtual_event' or loc2 == 'virtual_event'
+        return True
+    return False
+
+
 class EventPage(JanisBasePage):
     janis_url_page_type = 'event'
 
     description = RichTextField(
         features=WYSIWYG_GENERAL,
         verbose_name='Description',
-        help_text='Full description of the event',
+        help_text='Include any information people need to know, such as meeting agenda.',
         blank=True
     )
 
@@ -108,7 +121,8 @@ class EventPage(JanisBasePage):
         FieldPublishRequirement("description", message="Description is required.", langs=["en"]),
         FieldPublishRequirement("date", message="Date is required."),
         FieldPublishRequirement("start_time", message="Start time is required."),
-        StreamFieldPublishRequirement("location_blocks", message="Location is required."),
+        StreamFieldPublishRequirement("location_blocks", message="Please select only one physical location.",
+                                      criteria=only_one_physical_location),
     )
 
     content_panels = [
