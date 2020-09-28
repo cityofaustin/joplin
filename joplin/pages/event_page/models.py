@@ -41,7 +41,7 @@ class EventPage(JanisBasePage):
     location_blocks = StreamField(
         StreamBlock(
             [
-                ('city_location', StructBlock(
+                ('city_of_Austin_location', StructBlock(
                     [
                         ('location_page', PageChooserBlock(label="Location", page_type=[LocationPage], classname='do-not-hide')),
                         ('additional_details_en', TextBlock(label='Any other necessary location details, such as room number [en]', required=False)),
@@ -50,7 +50,7 @@ class EventPage(JanisBasePage):
                         ('additional_details_vi', TextBlock(label='Any other necessary location details, such as room number [vi]', required=False)),
                     ]
                 )),
-                ('remote_location', StructBlock(
+                ('remote_(non_COA)_location', StructBlock(
                     [
                         ('name_en', TextBlock(label='Name of venue [en]')),
                         ('name_es', TextBlock(label='Name of venue [es]', required=False)),
@@ -67,10 +67,22 @@ class EventPage(JanisBasePage):
                         ('additional_details_vi', TextBlock(label='Any other necessary location details, such as room number [vi]', required=False)),
                     ],
                 )),
+                ('virtual_event', StructBlock(
+                    [
+                        ('event_link', TextBlock(label='Event link or location')),
+                        ('additional_information_en', TextBlock(label='Any other necessary information, such as '
+                                                                      'meeting code [en]', required=False)),
+                        ('additional_information_es', TextBlock(label='Any other necessary information, such as '
+                                                                      'meeting code [es]', required=False)),
+                        ('additional_information_ar', TextBlock(label='Any other necessary information, such as '
+                                                                      'meeting code [ar]', required=False)),
+                        ('additional_information_vi', TextBlock(label='Any other necessary information, such as '
+                                                                      'meeting code [vi]', required=False)),
+                    ]))
             ],
             verbose_name='Add location of event',
             blank=True,
-            max_num=1,
+            max_num=2,
         )
     )
 
