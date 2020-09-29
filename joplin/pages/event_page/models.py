@@ -25,13 +25,18 @@ from publish_preflight.requirements import FieldPublishRequirement, StreamFieldP
 
 
 def only_one_physical_location(stream_value):
+    """
+    Streamfield requirement
+    :param stream_value:
+    Checks to see that the stream_value has length and if there are two locations that one of them is a virtual event
+    Events cannot have two physical locations
+    """
     if not stream_value:
         return False
     if len(stream_value) > 0:
         if len(stream_value.stream_data) == 2:
             loc1 = stream_value.stream_data[0][0]
             loc2 = stream_value.stream_data[1][0]
-            print(loc1, loc2)
             return loc1 == 'virtual_event' or loc2 == 'virtual_event'
         return True
     return False
@@ -121,7 +126,8 @@ class EventPage(JanisBasePage):
         FieldPublishRequirement("description", message="Description is required.", langs=["en"]),
         FieldPublishRequirement("date", message="Date is required."),
         FieldPublishRequirement("start_time", message="Start time is required."),
-        StreamFieldPublishRequirement("location_blocks", message="Please select only one physical location.",
+        StreamFieldPublishRequirement("location_blocks", message="Please select one physical location or one physical "
+                                                                 "location and one virtual location",
                                       criteria=only_one_physical_location),
     )
 
