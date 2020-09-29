@@ -1,7 +1,7 @@
-'''
+"""
     components.py contains elements that may be used
     interchangeably with multiple fixtures
-'''
+"""
 from pages.home_page.models import HomePage
 import pages.location_page.fixtures as location_page_fixtures
 
@@ -14,7 +14,7 @@ def city_location_block():
     location_page = location_page_fixtures.title()
     return [
         {
-            "type": "city_location",
+            "type": "city_of_Austin_location",
             "value": {
                 "location_page": location_page.pk,
                 "additional_details_en": "room 567",
@@ -29,7 +29,7 @@ def city_location_block():
 def remote_location_block():
     return [
         {
-            "type": "remote_location",
+            "type": "remote_(non_COA)_location",
             "value": [
                 {
                     "type": "name_en",
@@ -86,6 +86,7 @@ def remote_location_block():
             ]
         }
     ]
+
 
 three_fees = [
     {
