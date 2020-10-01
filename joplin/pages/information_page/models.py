@@ -8,7 +8,7 @@ from base.forms import InformationPageForm
 
 from snippets.contact.models import Contact
 
-from base.models.constants import WYSIWYG_GENERAL
+from base.models.constants import WYSIWYG_GENERAL_IMAGE
 from base.models.widgets import countMe, countMeTextArea
 
 from publish_preflight.requirements import FieldPublishRequirement, RelationPublishRequirement, ConditionalPublishRequirement, DepartmentPublishRequirement
@@ -25,7 +25,7 @@ class InformationPage(JanisBasePageWithTopics):
     description = models.TextField(blank=True, verbose_name='Write a description of this page')
 
     additional_content = RichTextField(
-        features=WYSIWYG_GENERAL,
+        features=WYSIWYG_GENERAL_IMAGE,
         verbose_name='Write any additional content describing the service',
         blank=True
     )
