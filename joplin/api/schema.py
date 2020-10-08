@@ -18,11 +18,13 @@ from graphql_jwt.decorators import superuser_required
 from snippets.contact.models import Contact, ContactPhoneNumber
 from snippets.theme.models import Theme
 from base.models import TranslatedImage
-from pages.topic_collection_page.models import TopicCollectionPage, JanisBasePageWithTopicCollections, JanisBasePageTopicCollection
+from pages.topic_collection_page.models import TopicCollectionPage, JanisBasePageWithTopicCollections, \
+    JanisBasePageTopicCollection
 from pages.topic_page.models import TopicPage, TopicPageTopPage, JanisBasePageWithTopics, JanisBasePageTopic
 from pages.service_page.models import ServicePage
 from pages.information_page.models import InformationPage
-from pages.department_page.models import DepartmentPage, DepartmentPageDirector, DepartmentPageTopPage, DepartmentPageRelatedPage
+from pages.department_page.models import DepartmentPage, DepartmentPageDirector, DepartmentPageTopPage,\
+    DepartmentPageRelatedPage
 from pages.official_documents_page.models import OfficialDocumentPage, OfficialDocumentCollectionOfficialDocumentPage
 from pages.official_documents_collection.models import OfficialDocumentCollection
 from pages.guide_page.models import GuidePage
