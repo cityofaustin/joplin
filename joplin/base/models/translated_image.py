@@ -7,9 +7,7 @@ from wagtail.images.models import AbstractImage, Image, AbstractRendition
 
 
 class TranslatedImage(AbstractImage):
-    # admin_form_fields = Image.admin_form_fields
-    admin_form_fields = ('title', 'file', 'collection', 'focal_point_x', 'focal_point_y', 'focal_point_width',
-                         'focal_point_height')
+    admin_form_fields = Image.admin_form_fields
 
     def __str__(self):
         return self.title or self.title_en
