@@ -35,6 +35,7 @@ from .content_type_map import content_type_map
 import traceback
 from pages.location_page.models import LocationPage, LocationPageRelatedServices
 from pages.event_page.models import EventPage, EventPageFee, EventPageRelatedPage
+from pages.home_page.models import HomePage, HomePageTopPage
 from graphql_relay import to_global_id
 
 
@@ -1006,6 +1007,45 @@ class TopicPageTopPageNode(DjangoObjectType):
         interfaces = [graphene.Node]
 
 
+class HomePageTopPageNode(DjangoObjectType):
+    title = graphene.String()
+    slug = graphene.String()
+    page_id = graphene.ID()
+    departments = graphene.List(DepartmentPageNode)
+    live = graphene.Boolean()
+    coa_global = graphene.Boolean()
+
+    def resolve_page_id(self, info):
+        return get_global_id_from_content_type(self)
+
+    def resolve_title(self, resolve_info, *args, **kwargs):
+        return get_page_from_content_type(self).title
+
+    def resolve_slug(self, resolve_info, *args, **kwargs):
+        return get_page_from_content_type(self).slug_en
+
+    def resolve_departments(self, resolve_info, *args, **kwargs):
+        return get_page_from_content_type(self).departments()
+
+    def resolve_live(self, resolve_info, *args, **kwargs):
+        return get_page_from_content_type(self).live
+
+    def resolve_coa_global(self, resolve_info, *args, **kwargs):
+        return get_page_from_content_type(self).coa_global
+
+
+    class Meta:
+        model = HomePageTopPage
+        interfaces = [graphene.Node]
+
+
+class HomePageNode(DjangoObjectType):
+    class Meta:
+        model = HomePage
+        filter_fields = ['id']
+        interfaces = [graphene.Node]
+
+
 # Allow users to request JWT token for authorization-protected resolvers
 # https://django-graphql-jwt.domake.io/en/latest/quickstart.html
 class Mutation(graphene.ObjectType):
@@ -1039,6 +1079,7 @@ class Query(graphene.ObjectType):
         filterset_class=OfficialDocumentCollectionDocumentFilter
     )
     base_page_topics = DjangoFilterConnectionField(JanisBasePageTopicNode)
+    all_home_pages = DjangoFilterConnectionField(HomePageNode)
 
     def resolve_page_revision(self, resolve_info, id=None):
         revision = graphene.Node.get_node_from_global_id(resolve_info, id)
