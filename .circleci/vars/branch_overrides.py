@@ -29,8 +29,9 @@ branch_overrides = {
         "LOAD_DATA": "fixtures",
         "V3_WIP": True,
     },
-    "4621-preview": {
+    "demo": {
         "LOAD_DATA": "",
+        "DELETION_PROTECTION": 1,
     },
     "4849-filter": {
         "DELETION_PROTECTION": 1,
