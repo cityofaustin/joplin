@@ -1,17 +1,14 @@
 from django.db import models
-
 from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
-
-from base.forms import OfficialDocumentPageForm
-
+from wagtail.search import index
 from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, PageChooserPanel
 from wagtail.documents.models import Document
 from wagtail.documents.edit_handlers import DocumentChooserPanel
 from wagtail.core.fields import RichTextField
 
 from pages.base_page.models import JanisBasePage
-
+from base.forms import OfficialDocumentPageForm
 from base.models.constants import DEFAULT_MAX_LENGTH
 from base.models.widgets import countMe, AUTHOR_LIMITS
 from publish_preflight.requirements import FieldPublishRequirement, RelationPublishRequirement
@@ -67,6 +64,15 @@ class OfficialDocumentPage(JanisBasePage):
         DocumentChooserPanel('document'),
         DocumentChooserPanel('document_es'),
         InlinePanel('official_document_collection', label="Official document collections this document belongs to"),
+    ]
+
+    search_fields = JanisBasePage.search_fields + [
+        index.SearchField('body'),
+        index.SearchField('summary'),
+        index.FilterField('date'),
+        index.RelatedFields('official_document_collection', [
+            index.FilterField('id'),
+        ])
     ]
 
     class Meta:

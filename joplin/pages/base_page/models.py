@@ -27,7 +27,9 @@ class JanisBasePage(Page):
         index.RelatedFields('owner', [
             index.SearchField('last_name', partial_match=True),
             index.FilterField('last_name'),
-        ])
+        ]),
+        index.FilterField('live'),
+        index.FilterField('published'),
     ]
 
     created_at = models.DateTimeField(auto_now_add=True)

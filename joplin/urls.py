@@ -11,7 +11,8 @@ from wagtail.documents import urls as wagtaildocs_urls
 from base.views import \
     new_page_from_modal, \
     joplin_search_views, \
-    publish_succeeded
+    publish_succeeded, \
+    site_search
 from users.urls import users as user_urls
 from snippets import urls as snippet_urls
 from django.urls import reverse
@@ -62,6 +63,7 @@ urlpatterns = [
     url(r'session_security/', include('session_security.urls')),
     url(r'^performance/', include('silk.urls', namespace='silk')),
     url('publish_succeeded', publish_succeeded.publish_succeeded),
+    url('site_search', site_search.site_search),
 
 
     # For anything not caught by a more specific rule above, hand over to

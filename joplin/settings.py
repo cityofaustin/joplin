@@ -106,6 +106,7 @@ INSTALLED_APPS = [
     'pages.news_page',
     'snippets.contact',
     'snippets.theme',
+    'wagtail.contrib.postgres_search',
 ]
 
 MIDDLEWARE = [
@@ -533,3 +534,10 @@ else:
     # Redirect to HTTPS
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
     SECURE_SSL_REDIRECT = True
+
+# Search
+WAGTAILSEARCH_BACKENDS = {
+    'default': {
+        'BACKEND': 'wagtail.contrib.postgres_search.backend',
+    }
+}
