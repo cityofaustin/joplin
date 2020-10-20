@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import translation
 from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
 from wagtail.search import index
@@ -33,6 +34,41 @@ class OfficialDocumentPage(JanisBasePage):
     @property
     def search_summary(self):
         return self.summary
+
+
+    @property
+    def get_document(self):
+        if self.document:
+            english_doc = self.document
+            if translation.get_language() == 'es':
+                if self.document_es:
+                    return self.document_es
+                else:
+                    return english_doc
+            else:
+                return english_doc
+        return None
+
+
+    @property
+    def search_output(self):
+        output = {}
+        output.update(super().search_output)
+        output.update({
+            "date": self.date and self.date.isoformat(),
+            "authoringOffice": self.authoring_office,
+            "summary": self.summary,
+            "name": self.name,
+
+        })
+        document = self.get_document
+        if document:
+            output["link"] = document.url
+            # There's nothing stopping us from including the size of any document, I'm just following our prior acceptance criteria
+            if document.file_extension == 'pdf':
+                output["pdfSize"] = document.file_size
+        return output
+
 
     publish_requirements = (
         FieldPublishRequirement("date",

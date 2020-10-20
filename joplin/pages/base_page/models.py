@@ -32,6 +32,15 @@ class JanisBasePage(Page):
         index.FilterField('published'),
     ]
 
+    @property
+    def search_output(self):
+        return {
+            "title": self.title,
+            "searchSummary": self.specific.search_summary,
+            "url": self.specific.janis_urls() and self.specific.janis_urls()[0],
+            "pageType": self.content_type.name,
+        }
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
