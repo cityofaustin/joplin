@@ -36,6 +36,7 @@ class JanisBasePage(Page):
     def search_output(self):
         return {
             "title": self.title,
+            "id": self.id,
             "searchSummary": self.specific.search_summary,
             "url": self.specific.janis_urls() and self.specific.janis_urls()[0],
             "pageType": self.content_type.name,

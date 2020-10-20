@@ -104,9 +104,10 @@ class JanisBasePageWithTopics(JanisBasePage):
     def search_output(self):
         output = {}
         output.update(super().search_output)
-        output.update({
-            "topics": [t.topic.title for t in self.specific.topics.all()]
-        })
+        output["topics"] = [{
+            "title": t.topic.title,
+            "url": t.topic.janis_urls() and t.topic.janis_urls()[0],
+        } for t in self.specific.topics.all()]
         return output
 
 

@@ -63,10 +63,15 @@ class OfficialDocumentPage(JanisBasePage):
         })
         document = self.get_document
         if document:
+            output["filename"] = document.filename
             output["link"] = document.url
-            # There's nothing stopping us from including the size of any document, I'm just following our prior acceptance criteria
+            # There's nothing stopping us from including the size of any type of document, I'm just following our prior acceptance criteria
             if document.file_extension == 'pdf':
                 output["pdfSize"] = document.file_size
+        output["officialDocumentCollections"] = [{
+            "title": c.official_document_collection.title,
+            "url": c.official_document_collection.janis_urls() and c.official_document_collection.janis_urls()[0],
+        } for c in self.specific.official_document_collection.all()]
         return output
 
 

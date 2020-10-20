@@ -1,4 +1,6 @@
 import sys
+import math
+import json
 from rest_framework.decorators import api_view
 from django.http import HttpResponse
 from django.utils import translation
@@ -6,6 +8,9 @@ from django.utils import translation
 from pages.base_page.models import JanisBasePage
 from pages.official_documents_page.models import OfficialDocumentPage
 
+'''
+    ex: http://localhost:8000/site_search?q=get&page=3&limit=20&lang=es
+'''
 @api_view(['GET'])
 def site_search(request):
     try:
@@ -15,7 +20,8 @@ def site_search(request):
         limit = int(params.get("limit") or 10)
         lang = params.get("lang") or "en"
         official_document_collection_id = params.get("official_document_collection_id")
-        result = None
+        result_data = []
+        result_meta = {}
 
         # A query for an official_document_collection will only need to return the pages that are part of it.
         if (official_document_collection_id):
@@ -30,20 +36,26 @@ def site_search(request):
                 official_document_collection__official_document_collection__id__in=[official_document_collection_id]
             ).values_list('id', flat=True)
 
-            result = OfficialDocumentPage.objects.filter(
+            result_data = OfficialDocumentPage.objects.filter(
                 id__in=doc_ids_for_collection
             ).order_by("-date").search(q)
         # If a query doesn't have an official_document_collection_id, then assume that it's for the global SearchPage
         else:
-            result = JanisBasePage.objects.filter(published=True, live=True).search(q)
+            result_data = JanisBasePage.objects.filter(published=True, live=True).search(q)
 
+        result_meta["totalResults"] = result_data.count()
+        result_meta["totalPages"] = math.ceil(result_meta["totalResults"]/limit)
         offset = ((page-1) * limit)
-        result = result[offset:(offset + limit)]
+        result_data = result_data[offset:(offset + limit)]
 
-        # Set the set language for return values
+        # Set the language for search_output values
         translation.activate(lang)
-        # return HttpResponse([r.to_json() for r in result], content_type='application/json')
-        return HttpResponse([r.specific.search_output for r in result], content_type="application/json")
+        result_data = [r.specific.search_output for r in result_data]
+
+        return HttpResponse(json.dumps({
+            "_meta": result_meta,
+            "data": result_data,
+        }), content_type="application/json")
     except Exception as err:
         print(f"Error on site_search", sys.exc_info()[0])
-        return HttpResponse(500)
+        return HttpResponse(status=500)
