@@ -9,7 +9,9 @@ from pages.base_page.models import JanisBasePage
 from pages.official_documents_page.models import OfficialDocumentPage
 
 '''
-    ex: http://localhost:8000/site_search?q=get&page=3&limit=20&lang=es
+    ex:
+        http://localhost:8000/site_search?q=get&page=3&limit=20&lang=es
+        http://localhost:8000/site_search?lang=en&limit=10&officialDocumentCollectionId=319&page=1
 '''
 @api_view(['GET'])
 def site_search(request):
@@ -19,7 +21,9 @@ def site_search(request):
         page = int(params.get("page") or 1)
         limit = int(params.get("limit") or 10)
         lang = params.get("lang") or "en"
-        official_document_collection_id = params.get("official_document_collection_id")
+        to_date = params.get("toDate")
+        from_date = params.get("fromDate")
+        official_document_collection_id = params.get("officialDocumentCollectionId")
         result_data = []
         result_meta = {}
 
@@ -36,9 +40,22 @@ def site_search(request):
                 official_document_collection__official_document_collection__id__in=[official_document_collection_id]
             ).values_list('id', flat=True)
 
+            filter = {
+                "id__in": doc_ids_for_collection,
+            }
+            if to_date:
+                filter["date__lte"] = to_date
+            if from_date:
+                filter["date__gte"] = from_date
+
             result_data = OfficialDocumentPage.objects.filter(
-                id__in=doc_ids_for_collection
-            ).order_by("-date").search(q)
+                **filter
+            ).order_by("-date")
+
+            # q is not mandatory for searching in OfficialDocumentCollection
+            if q:
+                result_data = result_data.search(q)
+
         # If a query doesn't have an official_document_collection_id, then assume that it's for the global SearchPage
         else:
             result_data = JanisBasePage.objects.filter(published=True, live=True).search(q)
@@ -57,5 +74,5 @@ def site_search(request):
             "data": result_data,
         }), content_type="application/json")
     except Exception as err:
-        print(f"Error on site_search", sys.exc_info()[0])
+        print(f"Error on site_search", sys.exc_info())
         return HttpResponse(status=500)
