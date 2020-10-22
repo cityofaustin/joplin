@@ -134,7 +134,7 @@ class JanisBasePage(Page):
         else:
             # Pass address of CMS_API if we are not running on Staging or Production
             # Janis will query from its default CMS_API if a param is not provided
-            return url_end + f"?CMS_API={settings.CMS_API}"
+            return url_end + f"?PREVIEW_CMS_API={settings.PREVIEW_CMS_API}"
 
     def preview_url_data(self, revision=None):
         """

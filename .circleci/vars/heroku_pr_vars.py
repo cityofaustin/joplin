@@ -30,6 +30,9 @@ config = {}
 
 # Set all variables sourced from circleci
 vars_from_circleci = [
+    "API_PASSWORD_PROD",  # CircleCI
+    "API_PASSWORD_STAGING",  # CircleCI
+    "API_PASSWORD_REVIEW",  # CircleCI
     "APPNAME",  # .circleci/scripts/helpers.sh
     "AWS_ACCESS_KEY_ID",  # CircleCI
     "AWS_SECRET_ACCESS_KEY",  # CircleCI
