@@ -729,6 +729,14 @@ class OfficialDocumentCollectionOfficialDocumentPageNode(DjangoObjectType):
 
 
 class OfficialDocumentCollectionNode(JanisBasePageNode):
+    documents_count = graphene.Int()
+
+    def resolve_documents_count(self, info):
+        return OfficialDocumentPage.objects.filter(
+            live=True,
+            official_document_collection__official_document_collection__id__in=[self.id]
+        ).count()
+
     class Meta:
         model = OfficialDocumentCollection
         filter_fields = ['id', 'slug', 'live', 'coa_global']
