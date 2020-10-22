@@ -122,7 +122,6 @@ MIDDLEWARE = [
     'wagtail.contrib.redirects.middleware.RedirectMiddleware',
     'session_security.middleware.SessionSecurityMiddleware',
     'flags.middleware.FlagConditionsMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
 ]
 
 
@@ -453,9 +452,11 @@ if IS_LOCAL or IS_TEST:
     # e.g. in notification emails. Don't include '/admin' or a trailing slash
     BASE_URL = f'http://127.0.0.1:{JOPLIN_APP_HOST_PORT}'
     CMS_API = f"{BASE_URL}/api/graphql"
+    PREVIEW_CMS_API = f"{BASE_URL}/api/preview/graphql"
 else:
     BASE_URL = f"https://{os.getenv('APPNAME','')}.herokuapp.com"
     CMS_API = f"{BASE_URL}/api/graphql"
+    PREVIEW_CMS_API = f"{BASE_URL}/api/preview/graphql"
 
 
 # Sets the login_url redirect for "from django.contrib.auth.decorators import user_passes_test"
@@ -485,18 +486,22 @@ if IS_LOCAL:
     # Add mock "Publishing" status notifications when running locally.
     # Publishing does not work locally, the page will not actually be published.
     MOCK_PUBLISH = True
+    API_PASSWORD = os.getenv("API_PASSWORD", 'x')
 if IS_REVIEW:
-    PUBLISHER_V2_URL=os.getenv("CI_COA_PUBLISHER_V2_URL_PR")
-    PUBLISHER_V2_API_KEY=os.getenv("COA_PUBLISHER_V2_API_KEY_PR")
+    PUBLISHER_V2_URL = os.getenv("CI_COA_PUBLISHER_V2_URL_PR")
+    PUBLISHER_V2_API_KEY = os.getenv("COA_PUBLISHER_V2_API_KEY_PR")
     PUBLISH_ENABLED = True
+    API_PASSWORD = os.getenv("API_PASSWORD_REVIEW")
 elif IS_STAGING:
-    PUBLISHER_V2_URL=os.getenv("CI_COA_PUBLISHER_V2_URL_STAGING")
-    PUBLISHER_V2_API_KEY=os.getenv("COA_PUBLISHER_V2_API_KEY_STAGING")
+    PUBLISHER_V2_URL = os.getenv("CI_COA_PUBLISHER_V2_URL_STAGING")
+    PUBLISHER_V2_API_KEY = os.getenv("COA_PUBLISHER_V2_API_KEY_STAGING")
     PUBLISH_ENABLED = True
+    API_PASSWORD = os.getenv("API_PASSWORD_STAGING")
 elif IS_PRODUCTION:
-    PUBLISHER_V2_URL=os.getenv("CI_COA_PUBLISHER_V2_URL_PROD")
-    PUBLISHER_V2_API_KEY=os.getenv("COA_PUBLISHER_V2_API_KEY_PROD")
+    PUBLISHER_V2_URL = os.getenv("CI_COA_PUBLISHER_V2_URL_PROD")
+    PUBLISHER_V2_API_KEY = os.getenv("COA_PUBLISHER_V2_API_KEY_PROD")
     PUBLISH_ENABLED = True
+    API_PASSWORD = os.getenv("API_PASSWORD_PROD")
 # For use with rest_framework_api_key
 # Sets the name of the header required for Publisher to access publish_succeeded endpoint
 # "Joplin-Api-Key": "********"
