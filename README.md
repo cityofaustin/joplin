@@ -65,10 +65,10 @@ LOAD_DATA="prod" ./scripts/serve-local.sh
 LOAD_DATA="prod" ./scripts/undockered.sh
 ```
 
--   This will add some seeding content from the last prod datadump (`joplin/db/system-generated/prod.datadump.json`) created by migration-test.sh.
--   LOAD_DATA and LOAD_PROD_DATA both load from the prod.datadump.json
--   You have to run the LOAD_x_DATA commands on a clean db instance. You can wipe the DB and load data in the same step by running:
-    -   `DROP_DB=on LOAD_DATA="prod" ./scripts/serve-local.sh`
+- This will add some seeding content from the last prod datadump (`joplin/db/system-generated/prod.datadump.json`) created by migration-test.sh.
+- LOAD_DATA and LOAD_PROD_DATA both load from the prod.datadump.json
+- You have to run the LOAD_x_DATA commands on a clean db instance. You can wipe the DB and load data in the same step by running:
+    - `DROP_DB=on LOAD_DATA="prod" ./scripts/serve-local.sh`
 
 **Run with staging data**
 
@@ -373,6 +373,7 @@ The migration process currently consists of 3 commands:
         ```
 -   Access the Graphql API
     -   `localhost:8000/api/graphiql`
+    -  Once you enter your username and password, you will be able to query the graphiql endpoint. 
 -   Troubleshooting:
 
     -   Clean up older docker images and containers and rebuild the new application if necessary:
@@ -435,7 +436,7 @@ To get a full set of icons that Wagtail has available you'll need to upload [Wag
 
 #### Adding Scripts/Styles
 
-We're using webpack to bundle syles and scripts, and webpack_loader to include them in our templates. To create a new bundle it should be defined as an entry in `webpack.build.js` and `webpack.dev.js`, then included in a template using `{% load render_bundle from webpack_loader %}` and `{% render_bundle 'YOUR_BUNDLE_NAME_HERE' %}`.
+We're using webpack to bundle styles and scripts, and webpack_loader to include them in our templates. To create a new bundle it should be defined as an entry in `webpack.build.js` and `webpack.dev.js`, then included in a template using `{% load render_bundle from webpack_loader %}` and `{% render_bundle 'YOUR_BUNDLE_NAME_HERE' %}`.
 
 ---
 
