@@ -53,8 +53,9 @@ def site_search(request):
             ).order_by("-date")
 
             # q is not mandatory for searching in OfficialDocumentCollection
+            # order_by_relevance=False is to preserve descending order by date for OfficialDocuments
             if q:
-                result_data = result_data.search(q)
+                result_data = result_data.search(q, order_by_relevance=False)
 
         # If a query doesn't have an official_document_collection_id, then assume that it's for the global SearchPage
         else:
