@@ -707,26 +707,17 @@ class OfficialDocumentPageNode(JanisBasePageNode):
         interfaces = [graphene.Node, DepartmentResolver]
 
     def resolve_document(self, info):
+        document = self.get_document
         # although documents are required for publishing, one can save a page without a document
         # and since the filtering on live pages is done on Janis, it could cause an error
-        if self.document:
-            english_doc = DocumentNodeDocument(
-                filename=self.document.filename,
-                fileSize=self.document.file_size,
-                url=self.document.url,
+        if document:
+            return DocumentNodeDocument(
+                filename=document.filename,
+                fileSize=document.file_size,
+                url=document.url,
             )
-            if django.utils.translation.get_language() == 'es':
-                if self.document_es:
-                    return DocumentNodeDocument(
-                        filename=self.document_es.filename,
-                        fileSize=self.document_es.file_size,
-                        url=self.document_es.url,
-                    )
-                else:
-                    return english_doc
-            else:
-                return english_doc
-        return None
+        else:
+            return None
 
 
 class OfficialDocumentCollectionOfficialDocumentPageNode(DjangoObjectType):
@@ -738,6 +729,14 @@ class OfficialDocumentCollectionOfficialDocumentPageNode(DjangoObjectType):
 
 
 class OfficialDocumentCollectionNode(JanisBasePageNode):
+    documents_count = graphene.Int()
+
+    def resolve_documents_count(self, info):
+        return OfficialDocumentPage.objects.filter(
+            live=True,
+            official_document_collection__official_document_collection__id__in=[self.id]
+        ).count()
+
     class Meta:
         model = OfficialDocumentCollection
         filter_fields = ['id', 'slug', 'live', 'coa_global']

@@ -27,8 +27,20 @@ class JanisBasePage(Page):
         index.RelatedFields('owner', [
             index.SearchField('last_name', partial_match=True),
             index.FilterField('last_name'),
-        ])
+        ]),
+        index.FilterField('live'),
+        index.FilterField('published'),
     ]
+
+    @property
+    def search_output(self):
+        return {
+            "title": self.title,
+            "id": self.id,
+            "searchSummary": self.specific.search_summary,
+            "url": self.specific.janis_urls() and self.specific.janis_urls()[0],
+            "pageType": self.content_type.name,
+        }
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
