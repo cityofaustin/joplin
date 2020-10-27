@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import translation
 from wagtail.core.blocks import StructBlock, PageChooserBlock, TextBlock
 from modelcluster.fields import ParentalKey
 from wagtail.admin.edit_handlers import (
@@ -91,6 +92,62 @@ class EventPage(JanisBasePage):
     )
 
     base_form_class = EventPageForm
+
+    @property
+    def fees_range(self):
+        fees = self.fees.values_list('fee')
+        if fees:
+            formatted_fees = []
+            for f in fees:
+                f = f[0]
+                if f%1 == 0:
+                    # If fee is a whole dollar amount, remove trailing .00 cents
+                    f = f.to_integral()
+                f = f.to_eng_string()
+                formatted_fees.append("$" + f)
+            formatted_fees.sort()
+            if len(formatted_fees) >= 2:
+                return formatted_fees[0] + '-' + formatted_fees[-1]
+            else:
+                return formatted_fees[0]
+        elif self.event_is_free:
+            return ""
+        return ""
+
+    # Get the name of the first location, for use in search results
+    @property
+    def location_name(self):
+        locations = self.location_blocks.stream_data
+        if locations:
+            location = locations[0]
+            location_value = location['value']
+            location_type = location['type']
+
+            if location_type == "remote_location":
+                english_name = location_value['name_en']
+                if translation.get_language() == 'en':
+                    return english_name
+                elif translation.get_language() == 'es':
+                    return location_value['name_es'] or english_name
+            elif location_type == "city_location":
+                return LocationPage.objects.get(id=location_value['location_page']).title
+        return ""
+
+    @property
+    def search_output(self):
+        output = {}
+        output.update(super().search_output)
+        output.update({
+            "date": self.date and self.date.isoformat(),
+            "startTime": self.start_time and self.start_time.isoformat(),
+            "endTime": self.end_time and self.end_time.isoformat(),
+            "eventIsFree": self.event_is_free,
+            "registrationUrl": self.registration_url,
+            "locationName": self.location_name,
+            "eventUrl": self.janis_urls()[0],
+            "feesRange": self.fees_range,
+        })
+        return output
 
     publish_requirements = (
         FieldPublishRequirement("description", message="Description is required.", langs=["en"]),

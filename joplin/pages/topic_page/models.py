@@ -100,6 +100,16 @@ class JanisBasePageWithTopics(JanisBasePage):
 
         return departments
 
+    @property
+    def search_output(self):
+        output = {}
+        output.update(super().search_output)
+        output["topics"] = [{
+            "title": t.topic.title,
+            "url": t.topic.janis_urls() and t.topic.janis_urls()[0],
+        } for t in self.specific.topics.all()]
+        return output
+
 
 class JanisBasePageTopic(ClusterableModel):
     page = ParentalKey(JanisBasePageWithTopics, related_name='topics')
