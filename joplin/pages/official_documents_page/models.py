@@ -1,17 +1,15 @@
 from django.db import models
-
+from django.utils import translation
 from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
-
-from base.forms import OfficialDocumentPageForm
-
+from wagtail.search import index
 from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, PageChooserPanel
 from wagtail.documents.models import Document
 from wagtail.documents.edit_handlers import DocumentChooserPanel
 from wagtail.core.fields import RichTextField
 
 from pages.base_page.models import JanisBasePage
-
+from base.forms import OfficialDocumentPageForm
 from base.models.constants import DEFAULT_MAX_LENGTH
 from base.models.widgets import countMe, AUTHOR_LIMITS
 from publish_preflight.requirements import FieldPublishRequirement, RelationPublishRequirement
@@ -36,6 +34,46 @@ class OfficialDocumentPage(JanisBasePage):
     @property
     def search_summary(self):
         return self.summary
+
+
+    @property
+    def get_document(self):
+        if self.document:
+            english_doc = self.document
+            if translation.get_language() == 'es':
+                if self.document_es:
+                    return self.document_es
+                else:
+                    return english_doc
+            else:
+                return english_doc
+        return None
+
+
+    @property
+    def search_output(self):
+        output = {}
+        output.update(super().search_output)
+        output.update({
+            "date": self.date and self.date.isoformat(),
+            "authoringOffice": self.authoring_office,
+            "summary": self.summary,
+            "name": self.name,
+
+        })
+        document = self.get_document
+        if document:
+            output["filename"] = document.filename
+            output["link"] = document.url
+            # There's nothing stopping us from including the size of any type of document, I'm just following our prior acceptance criteria
+            if document.file_extension == 'pdf':
+                output["pdfSize"] = document.file_size
+        output["officialDocumentCollections"] = [{
+            "title": c.official_document_collection.title,
+            "url": c.official_document_collection.janis_urls() and c.official_document_collection.janis_urls()[0],
+        } for c in self.specific.official_document_collection.all()]
+        return output
+
 
     publish_requirements = (
         FieldPublishRequirement("date",
@@ -67,6 +105,15 @@ class OfficialDocumentPage(JanisBasePage):
         DocumentChooserPanel('document'),
         DocumentChooserPanel('document_es'),
         InlinePanel('official_document_collection', label="Official document collections this document belongs to"),
+    ]
+
+    search_fields = JanisBasePage.search_fields + [
+        index.SearchField('body'),
+        index.SearchField('summary'),
+        index.FilterField('date'),
+        index.RelatedFields('official_document_collection', [
+            index.FilterField('id'),
+        ])
     ]
 
     class Meta:

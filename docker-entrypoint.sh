@@ -28,6 +28,10 @@ case "${DEPLOYMENT_MODE}" in
     python ./joplin/manage.py load_joplin_data
   ;;
 esac
+
+# Update our search index in case newly loaded data or existing data has not been indexed yet.
+python ./joplin/manage.py update_index
+
 case "${DEPLOYMENT_MODE}" in
   REVIEW|STAGING|PRODUCTION)
     echo "Collecting static files"

@@ -68,7 +68,8 @@ def test_create_event_page_with_city_location():
     assert page.location_blocks.stream_data == expected_location_blocks
 
 
-@pytest.mark.skip
+# @pytest.mark.django_db
+@pytest.mark.skip("importer test")
 def test_import_event_page_with_city_location(remote_staging_preview_url, test_api_url, test_api_jwt_token):
     url = f'{remote_staging_preview_url}/event/UGFnZVJldmlzaW9uTm9kZTo0NA==?CMS_API={test_api_url}'
     page = PageImporter(url, test_api_jwt_token).fetch_page_data().create_page()
@@ -88,7 +89,8 @@ def test_create_event_page_with_remote_location():
     assert page.location_blocks.stream_data == expected_location_blocks
 
 
-@pytest.mark.skip
+# @pytest.mark.django_db
+@pytest.mark.skip("importer test")
 def test_import_event_page_with_remote_location(remote_staging_preview_url, test_api_url, test_api_jwt_token):
     url = f'{remote_staging_preview_url}/event/UGFnZVJldmlzaW9uTm9kZTo0Ng==?CMS_API={test_api_url}'
     page = PageImporter(url, test_api_jwt_token).fetch_page_data().create_page()
@@ -129,7 +131,8 @@ def test_create_event_page_with_fees():
         assert actual_fee.fee == Decimal(expected_fee['fee'])
 
 
-@pytest.mark.skip
+# @pytest.mark.django_db
+@pytest.mark.skip("importer test")
 def test_import_event_page_with_fees(remote_staging_preview_url, test_api_url, test_api_jwt_token):
     url = f'{remote_staging_preview_url}/event/UGFnZVJldmlzaW9uTm9kZTo3Nw==?CMS_API={test_api_url}'
     page = PageImporter(url, test_api_jwt_token).fetch_page_data().create_page()

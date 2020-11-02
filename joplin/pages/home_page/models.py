@@ -2,7 +2,13 @@ import re
 from django.db import models
 from django.conf import settings
 from wagtail.core.models import Page
-from wagtail.admin.edit_handlers import FieldPanel
+from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, PageChooserPanel
+from wagtail.core.models import Orderable
+from modelcluster.fields import ParentalKey
+from pages.information_page.models import InformationPage
+from pages.service_page.models import ServicePage
+from pages.guide_page.models import GuidePage
+from pages.official_documents_collection.models import OfficialDocumentCollection
 
 
 class HomePage(Page):
@@ -23,6 +29,9 @@ class HomePage(Page):
     )
 
     content_panels = [
+        InlinePanel('top_pages', heading='Links to top services', label='top link',
+                    help_text='Add links to 1-4 top service pages (4 maximum allowed).',
+                    min_num=None, max_num=4),
         FieldPanel('preview_janis_branch_for_pr'),
         FieldPanel('publish_janis_branch_for_pr'),
     ]
@@ -69,3 +78,15 @@ class HomePage(Page):
             return "production"
         else:
             return getattr(self, "publish_janis_branch_for_pr")
+
+
+class HomePageTopPage(Orderable):
+    home_page = ParentalKey(HomePage, related_name='top_pages')
+    page = models.ForeignKey('wagtailcore.Page', verbose_name='Select a page', related_name='+', on_delete=models.CASCADE)
+
+    panels = [
+        PageChooserPanel('page', page_type=[ServicePage]),
+    ]
+
+    def __str__(self):
+        return self.page.title

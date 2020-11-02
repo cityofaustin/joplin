@@ -104,6 +104,19 @@ class LocationPage(JanisBasePage):
 
     base_form_class = LocationPageForm
 
+    @property
+    def search_output(self):
+        output = {}
+        output.update(super().search_output)
+        output.update({
+            "physicalStreet": self.physical_street,
+            "physicalUnit": self.physical_unit,
+            "physicalCity": self.physical_city,
+            "physicalState": self.physical_state,
+            "physicalZip": self.physical_zip,
+        })
+        return output
+
     publish_requirements = (
         FieldPublishRequirement("physical_street", message="Street address is required."),
         FieldPublishRequirement("physical_zip", message="ZIP Code is required."),

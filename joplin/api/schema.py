@@ -33,6 +33,7 @@ from .content_type_map import content_type_map
 import traceback
 from pages.location_page.models import LocationPage, LocationPageRelatedServices
 from pages.event_page.models import EventPage, EventPageFee, EventPageRelatedPage
+from pages.home_page.models import HomePage, HomePageTopPage
 from graphql_relay import to_global_id
 
 
@@ -706,26 +707,17 @@ class OfficialDocumentPageNode(JanisBasePageNode):
         interfaces = [graphene.Node, DepartmentResolver]
 
     def resolve_document(self, info):
+        document = self.get_document
         # although documents are required for publishing, one can save a page without a document
         # and since the filtering on live pages is done on Janis, it could cause an error
-        if self.document:
-            english_doc = DocumentNodeDocument(
-                filename=self.document.filename,
-                fileSize=self.document.file_size,
-                url=self.document.url,
+        if document:
+            return DocumentNodeDocument(
+                filename=document.filename,
+                fileSize=document.file_size,
+                url=document.url,
             )
-            if django.utils.translation.get_language() == 'es':
-                if self.document_es:
-                    return DocumentNodeDocument(
-                        filename=self.document_es.filename,
-                        fileSize=self.document_es.file_size,
-                        url=self.document_es.url,
-                    )
-                else:
-                    return english_doc
-            else:
-                return english_doc
-        return None
+        else:
+            return None
 
 
 class OfficialDocumentCollectionOfficialDocumentPageNode(DjangoObjectType):
@@ -737,6 +729,14 @@ class OfficialDocumentCollectionOfficialDocumentPageNode(DjangoObjectType):
 
 
 class OfficialDocumentCollectionNode(JanisBasePageNode):
+    documents_count = graphene.Int()
+
+    def resolve_documents_count(self, info):
+        return OfficialDocumentPage.objects.filter(
+            live=True,
+            official_document_collection__official_document_collection__id__in=[self.id]
+        ).count()
+
     class Meta:
         model = OfficialDocumentCollection
         filter_fields = ['id', 'slug', 'live', 'coa_global']
@@ -1004,6 +1004,45 @@ class TopicPageTopPageNode(DjangoObjectType):
         interfaces = [graphene.Node]
 
 
+class HomePageTopPageNode(DjangoObjectType):
+    title = graphene.String()
+    slug = graphene.String()
+    page_id = graphene.ID()
+    departments = graphene.List(DepartmentPageNode)
+    live = graphene.Boolean()
+    coa_global = graphene.Boolean()
+
+    def resolve_page_id(self, info):
+        return get_global_id_from_content_type(self)
+
+    def resolve_title(self, resolve_info, *args, **kwargs):
+        return get_page_from_content_type(self).title
+
+    def resolve_slug(self, resolve_info, *args, **kwargs):
+        return get_page_from_content_type(self).slug_en
+
+    def resolve_departments(self, resolve_info, *args, **kwargs):
+        return get_page_from_content_type(self).departments()
+
+    def resolve_live(self, resolve_info, *args, **kwargs):
+        return get_page_from_content_type(self).live
+
+    def resolve_coa_global(self, resolve_info, *args, **kwargs):
+        return get_page_from_content_type(self).coa_global
+
+
+    class Meta:
+        model = HomePageTopPage
+        interfaces = [graphene.Node]
+
+
+class HomePageNode(DjangoObjectType):
+    class Meta:
+        model = HomePage
+        filter_fields = ['id']
+        interfaces = [graphene.Node]
+
+
 # Allow users to request JWT token for authorization-protected resolvers
 # https://django-graphql-jwt.domake.io/en/latest/quickstart.html
 class Mutation(graphene.ObjectType):
@@ -1037,6 +1076,7 @@ class Query(graphene.ObjectType):
         filterset_class=OfficialDocumentCollectionDocumentFilter
     )
     base_page_topics = DjangoFilterConnectionField(JanisBasePageTopicNode)
+    all_home_pages = DjangoFilterConnectionField(HomePageNode)
 
     def resolve_page_revision(self, resolve_info, id=None):
         revision = graphene.Node.get_node_from_global_id(resolve_info, id)

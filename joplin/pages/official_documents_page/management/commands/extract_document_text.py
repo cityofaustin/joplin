@@ -34,7 +34,7 @@ def extract_document_text():
         if len(page.body) > 0:
             continue
         if page.document and page.document.url:
-            filename = page.document.url.split('docs')[1]
+            filename = page.document.url.split('documents')[1]
             print(f'reading {filename}')
             extracted_text = extract_text_from_url(page.document.url)
             page.body = extracted_text

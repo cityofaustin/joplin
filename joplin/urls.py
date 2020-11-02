@@ -4,18 +4,22 @@ from django.conf import settings
 from django.conf.urls import include, url
 from django.contrib import admin
 from django.views.decorators.csrf import csrf_exempt
-from graphene_django.views import GraphQLView
 from wagtail.admin import urls as wagtailadmin_urls
 from wagtail.core import urls as wagtail_urls
 from wagtail.documents import urls as wagtaildocs_urls
+from graphene_django.views import GraphQLView
 from base.views import \
     new_page_from_modal, \
     joplin_search_views, \
-    publish_succeeded
+    publish_succeeded, \
+    site_search
 from users.urls import users as user_urls
 from snippets import urls as snippet_urls
 from django.urls import reverse
 import debug_toolbar
+from api.views import PrivateGraphQLView, PrivateGraphiQLView
+from api.decorators import jwt_token_decorator
+from api.preview_schema import preview_schema
 
 
 def home(request):
@@ -57,11 +61,13 @@ urlpatterns = [
     url(r'^admin/', include(wagtailadmin_urls)),
     url(r'^documents/', include(wagtaildocs_urls)),
     path('__debug__/', include(debug_toolbar.urls)),
-    url(r'^api/graphql', csrf_exempt(GraphQLView.as_view())),
-    url(r'^api/graphiql', csrf_exempt(GraphQLView.as_view(graphiql=True, pretty=True))),
+    url(r'^api/graphql', jwt_token_decorator(csrf_exempt(PrivateGraphQLView.as_view()))),
+    url(r'^api/graphiql', csrf_exempt(PrivateGraphiQLView.as_view(graphiql=True, pretty=True))),
+    url(r'^api/preview/graphql', csrf_exempt(GraphQLView.as_view(schema=preview_schema))),
     url(r'session_security/', include('session_security.urls')),
     url(r'^performance/', include('silk.urls', namespace='silk')),
     url('publish_succeeded', publish_succeeded.publish_succeeded),
+    url('site_search', site_search.site_search),
 
 
     # For anything not caught by a more specific rule above, hand over to
