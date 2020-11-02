@@ -14,15 +14,15 @@ def check_app_status():
                             capture_output=True,
                             text=True
                             )
-    if (output.stdout):
+    if output.stdout:
         print(output.stdout)
-    if (output.stderr):
+    if output.stderr:
         print('There was an error from heroku cli, check it out:')
         print(output.stderr)
 
     app_info = json.loads(output.stdout)
     app_state = app_info[0]['state']
-    if (app_state == 'up'):
+    if app_state == 'up':
         print(f"App {APPNAME} is up. Ready to migrate.")
         return
     elif (app_state == 'starting') or (app_state == 'restarting'):
