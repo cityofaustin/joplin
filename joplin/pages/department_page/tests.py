@@ -30,7 +30,8 @@ def test_department_page_with_department_group(home_page, expected_publish_url_b
     assert janis_publish_url == f'{expected_publish_url_base}/{page.slug}/'
 
 
-@pytest.mark.django_db
+@pytest.mark.skip("importer test")
+# @pytest.mark.django_db
 def test_create_department_page_from_api(remote_staging_preview_url, test_api_url, test_api_jwt_token):
     url = f'{remote_staging_preview_url}/department/UGFnZVJldmlzaW9uTm9kZToyNg==?CMS_API={test_api_url}'
     page = PageImporter(url, test_api_jwt_token).fetch_page_data().create_page()
