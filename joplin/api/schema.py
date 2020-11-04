@@ -487,7 +487,7 @@ class EventFilter(FilterSet):
 
 class EventPageRemoteLocation(graphene.ObjectType):
     """
-    Remote Location = non city owned location
+    Remote non COA Location = non city owned location
     """
     value = GenericScalar()
 
@@ -559,19 +559,30 @@ eventPage {
     location
 }
 """
-
-
 # we need to use a custom resolver
 # we could also try to make our streamfield type queryable,
 # but that is a rabbit hole I haven't jumped all the way down yet
+
+
+class EventPageVirtualLocation(graphene.ObjectType):
+    """
+    Remote non COA Location = non city owned location
+    """
+    value = GenericScalar()
+
+    event_link = graphene.String()
+
+    def resolve_event_link(self, info):
+        return self.value['event_link']
 
 
 class EventPageLocation(graphene.ObjectType):
     value = GenericScalar()
     location_type = graphene.String()
     additional_details = graphene.String()
-    city_location = graphene.Field(LocationPageNode)
-    remote_location = graphene.Field(EventPageRemoteLocation)
+    city_of_Austin_location = graphene.Field(LocationPageNode)
+    remote_non_COA_location = graphene.Field(EventPageRemoteLocation)
+    virtual_event = graphene.Field(EventPageVirtualLocation)
 
     def resolve_additional_details(self, info):
         # We're doing our own translations in our model here
@@ -588,18 +599,22 @@ class EventPageLocation(graphene.ObjectType):
         elif django.utils.translation.get_language() == 'vi':
             return self.value['additional_details_vi']
 
-    def resolve_city_location(self, info):
+    def resolve_city_of_Austin_location(self, info):
         page = None
-        if self.location_type == 'city_location':
+        if self.location_type == 'city_of_Austin_location':
             try:
                 page = LocationPage.objects.get(id=self.value['location_page'])
             except ObjectDoesNotExist:
                 pass
             return page
 
-    def resolve_remote_location(self, info):
-        if self.location_type == 'remote_location':
+    def resolve_remote_non_COA_location(self, info):
+        if self.location_type == 'remote_(non_COA)_location':
             return EventPageRemoteLocation(value=self.value)
+
+    def resolve_virtual_event(self, info):
+        if self.location_type == 'virtual_event':
+            return EventPageVirtualLocation(value=self.value)
 
 
 class EventPageNode(JanisBasePageNode):

@@ -69,7 +69,7 @@ class EventPage(JanisBasePage):
                         ('additional_details_vi', TextBlock(label='Any other necessary location details, such as room number [vi]', required=False)),
                     ]
                 )),
-                ('remote_(non_COA)_location', StructBlock(
+                ('remote_non_COA_location', StructBlock(
                     [
                         ('name_en', TextBlock(label='Name of venue [en]')),
                         ('name_es', TextBlock(label='Name of venue [es]', required=False)),
@@ -89,13 +89,13 @@ class EventPage(JanisBasePage):
                 ('virtual_event', StructBlock(
                     [
                         ('event_link', TextBlock(label='Event link or location')),
-                        ('additional_information_en', TextBlock(label='Any other necessary information, such as '
+                        ('additional_details_en', TextBlock(label='Any other necessary information, such as '
                                                                       'meeting code [en]', required=False)),
-                        ('additional_information_es', TextBlock(label='Any other necessary information, such as '
+                        ('additional_details_es', TextBlock(label='Any other necessary information, such as '
                                                                       'meeting code [es]', required=False)),
-                        ('additional_information_ar', TextBlock(label='Any other necessary information, such as '
+                        ('additional_details_ar', TextBlock(label='Any other necessary information, such as '
                                                                       'meeting code [ar]', required=False)),
-                        ('additional_information_vi', TextBlock(label='Any other necessary information, such as '
+                        ('additional_details_vi', TextBlock(label='Any other necessary information, such as '
                                                                       'meeting code [vi]', required=False)),
                     ]))
             ],
