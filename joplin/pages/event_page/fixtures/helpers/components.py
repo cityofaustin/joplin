@@ -29,7 +29,7 @@ def city_location_block():
 def remote_location_block():
     return [
         {
-            "type": "remote_(non_COA)_location",
+            "type": "remote_non_COA_location",
             "value": [
                 {
                     "type": "name_en",
