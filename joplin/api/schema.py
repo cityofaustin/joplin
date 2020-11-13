@@ -580,6 +580,7 @@ class EventPageLocation(graphene.ObjectType):
     value = GenericScalar()
     location_type = graphene.String()
     additional_details = graphene.String()
+    additional_information = graphene.String()
     city_of_Austin_location = graphene.Field(LocationPageNode)
     remote_non_COA_location = graphene.Field(EventPageRemoteLocation)
     virtual_event = graphene.Field(EventPageVirtualLocation)
@@ -598,6 +599,21 @@ class EventPageLocation(graphene.ObjectType):
             return self.value['additional_details_ar']
         elif django.utils.translation.get_language() == 'vi':
             return self.value['additional_details_vi']
+
+    def resolve_additional_information(self, info):
+        # We're doing our own translations in our model here
+        # so let's make sure the API still works as expected
+        if django.utils.translation.get_language() == 'en':
+            return self.value['additional_information_en']
+        elif django.utils.translation.get_language() == 'es':
+            # if there is not a spanish translation available, return english
+            if self.value['additional_information_es'] == '':
+                return self.value['additional_information_en']
+            return self.value['additional_information_es']
+        elif django.utils.translation.get_language() == 'ar':
+            return self.value['additional_information_ar']
+        elif django.utils.translation.get_language() == 'vi':
+            return self.value['additional_information_vi']
 
     def resolve_city_of_Austin_location(self, info):
         page = None
