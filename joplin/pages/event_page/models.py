@@ -25,13 +25,31 @@ from wagtail.snippets.edit_handlers import SnippetChooserPanel
 from publish_preflight.requirements import FieldPublishRequirement, StreamFieldPublishRequirement
 
 
+def only_one_physical_location(stream_value):
+    """
+    Streamfield requirement
+    :param stream_value:
+    Checks to see that the stream_value has length and if there are two locations that one of them is a virtual event
+    Events cannot have two physical locations
+    """
+    if not stream_value:
+        return False
+    if len(stream_value) > 0:
+        if len(stream_value.stream_data) == 2:
+            loc1 = stream_value.stream_data[0][0]
+            loc2 = stream_value.stream_data[1][0]
+            return loc1 == 'virtual_event' or loc2 == 'virtual_event'
+        return True
+    return False
+
+
 class EventPage(JanisBasePage):
     janis_url_page_type = 'event'
 
     description = RichTextField(
         features=WYSIWYG_GENERAL,
         verbose_name='Description',
-        help_text='Full description of the event',
+        help_text='Include any information people need to know, such as meeting agenda.',
         blank=True
     )
 
@@ -42,7 +60,7 @@ class EventPage(JanisBasePage):
     location_blocks = StreamField(
         StreamBlock(
             [
-                ('city_location', StructBlock(
+                ('city_of_Austin_location', StructBlock(
                     [
                         ('location_page', PageChooserBlock(label="Location", page_type=[LocationPage], classname='do-not-hide')),
                         ('additional_details_en', TextBlock(label='Any other necessary location details, such as room number [en]', required=False)),
@@ -51,7 +69,7 @@ class EventPage(JanisBasePage):
                         ('additional_details_vi', TextBlock(label='Any other necessary location details, such as room number [vi]', required=False)),
                     ]
                 )),
-                ('remote_location', StructBlock(
+                ('remote_non_COA_location', StructBlock(
                     [
                         ('name_en', TextBlock(label='Name of venue [en]')),
                         ('name_es', TextBlock(label='Name of venue [es]', required=False)),
@@ -68,10 +86,22 @@ class EventPage(JanisBasePage):
                         ('additional_details_vi', TextBlock(label='Any other necessary location details, such as room number [vi]', required=False)),
                     ],
                 )),
+                ('virtual_event', StructBlock(
+                    [
+                        ('event_link', TextBlock(label='Event link or location')),
+                        ('additional_information_en', TextBlock(label='Any other necessary information, such as '
+                                                                      'meeting code [en]', required=False)),
+                        ('additional_information_es', TextBlock(label='Any other necessary information, such as '
+                                                                      'meeting code [es]', required=False)),
+                        ('additional_information_ar', TextBlock(label='Any other necessary information, such as '
+                                                                      'meeting code [ar]', required=False)),
+                        ('additional_information_vi', TextBlock(label='Any other necessary information, such as '
+                                                                      'meeting code [vi]', required=False)),
+                    ]))
             ],
             verbose_name='Add location of event',
             blank=True,
-            max_num=1,
+            max_num=2,
         )
     )
 
@@ -153,7 +183,9 @@ class EventPage(JanisBasePage):
         FieldPublishRequirement("description", message="Description is required.", langs=["en"]),
         FieldPublishRequirement("date", message="Date is required."),
         FieldPublishRequirement("start_time", message="Start time is required."),
-        StreamFieldPublishRequirement("location_blocks", message="Location is required."),
+        StreamFieldPublishRequirement("location_blocks", message="Please select one physical location or one physical "
+                                                                 "location and one virtual location",
+                                      criteria=only_one_physical_location),
     )
 
     content_panels = [

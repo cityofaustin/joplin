@@ -131,7 +131,6 @@ def test_create_event_page_with_fees():
         assert actual_fee.fee == Decimal(expected_fee['fee'])
 
 
-# @pytest.mark.django_db
 @pytest.mark.skip("importer test")
 def test_import_event_page_with_fees(remote_staging_preview_url, test_api_url, test_api_jwt_token):
     url = f'{remote_staging_preview_url}/event/UGFnZVJldmlzaW9uTm9kZTo3Nw==?CMS_API={test_api_url}'

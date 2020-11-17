@@ -39,7 +39,9 @@ class NewsPage(JanisBasePage):
 
     written_for_department = models.ForeignKey(DepartmentPage, blank=True, null=True, on_delete=models.SET_NULL,
                                                verbose_name="Assign a different department",
-                                               help_text="If this news is written for another department, select that department below. This ensures that this news is associated with that department's news content")
+                                               help_text="If this news is written for another department, select that "
+                                                         "department below. This ensures that this news is associated "
+                                                         "with that department's news content")
 
     publish_requirements = (
         FieldPublishRequirement("body", message="Body text is required to publish", langs=["en"]),
