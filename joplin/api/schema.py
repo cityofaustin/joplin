@@ -362,7 +362,7 @@ class RelatedEventPageResolver(graphene.Interface):
         events = []
         event_relationships = EventPageRelatedPage.objects.filter(page__id=instance.pk).order_by('event__date')
         for page in event_relationships:
-            if not page.event.canceled:
+            if page.event.live and not page.event.canceled:
                 events.append(page.event)
         return events
 
@@ -487,10 +487,9 @@ class EventFilter(FilterSet):
 
 class EventPageRemoteLocation(graphene.ObjectType):
     """
-    Remote Location = non city owned location
+    Remote non COA Location = non city owned location
     """
     value = GenericScalar()
-
     street = graphene.String()
     unit = graphene.String()
     city = graphene.String()
@@ -517,11 +516,6 @@ class EventPageRemoteLocation(graphene.ObjectType):
     def resolve_name(self, info):
         # We're doing our own translations in our model here
         # so let's make sure the API returns the appropriate name for:
-        '''
-        remoteLocation {
-            name
-        }
-        '''
         # based on the Accept-Language header of the request
         if django.utils.translation.get_language() == 'en':
             return self.value['name_en']
@@ -559,47 +553,83 @@ eventPage {
     location
 }
 """
-
-
 # we need to use a custom resolver
 # we could also try to make our streamfield type queryable,
 # but that is a rabbit hole I haven't jumped all the way down yet
+
+
+class EventPageVirtualLocation(graphene.ObjectType):
+    """
+    Remote non COA Location = non city owned location
+    """
+    value = GenericScalar()
+    event_link = graphene.String()
+    additional_information = graphene.String()
+
+    def resolve_additional_information(self, info):
+        if self.value['additional_information_en']:
+            # We're doing our own translations in our model here
+            # so let's make sure the API still works as expected
+            if django.utils.translation.get_language() == 'en':
+                return self.value['additional_information_en']
+            elif django.utils.translation.get_language() == 'es':
+                # if there is not a spanish translation available, return english
+                if self.value['additional_information_es'] == '':
+                    return self.value['additional_information_en']
+                return self.value['additional_information_es']
+            elif django.utils.translation.get_language() == 'ar':
+                return self.value['additional_information_ar']
+            elif django.utils.translation.get_language() == 'vi':
+                return self.value['additional_information_vi']
+        else:
+            return None
+
+    def resolve_event_link(self, info):
+        return self.value['event_link']
 
 
 class EventPageLocation(graphene.ObjectType):
     value = GenericScalar()
     location_type = graphene.String()
     additional_details = graphene.String()
-    city_location = graphene.Field(LocationPageNode)
-    remote_location = graphene.Field(EventPageRemoteLocation)
+    city_of_Austin_location = graphene.Field(LocationPageNode)
+    remote_non_COA_location = graphene.Field(EventPageRemoteLocation)
+    virtual_event = graphene.Field(EventPageVirtualLocation)
 
     def resolve_additional_details(self, info):
-        # We're doing our own translations in our model here
-        # so let's make sure the API still works as expected
-        if django.utils.translation.get_language() == 'en':
-            return self.value['additional_details_en']
-        elif django.utils.translation.get_language() == 'es':
-            # if there is not a spanish translation available, return english
-            if self.value['additional_details_es'] == '':
+        if self.location_type == 'city_of_Austin_location' or self.location_type == 'remote_non_COA_location':
+            # We're doing our own translations in our model here
+            # so let's make sure the API still works as expected
+            if django.utils.translation.get_language() == 'en':
                 return self.value['additional_details_en']
-            return self.value['additional_details_es']
-        elif django.utils.translation.get_language() == 'ar':
-            return self.value['additional_details_ar']
-        elif django.utils.translation.get_language() == 'vi':
-            return self.value['additional_details_vi']
+            elif django.utils.translation.get_language() == 'es':
+                # if there is not a spanish translation available, return english
+                if self.value['additional_details_es'] == '':
+                    return self.value['additional_details_en']
+                return self.value['additional_details_es']
+            elif django.utils.translation.get_language() == 'ar':
+                return self.value['additional_details_ar']
+            elif django.utils.translation.get_language() == 'vi':
+                return self.value['additional_details_vi']
+        else:
+            return None
 
-    def resolve_city_location(self, info):
+    def resolve_city_of_Austin_location(self, info):
         page = None
-        if self.location_type == 'city_location':
+        if self.location_type == 'city_of_Austin_location':
             try:
                 page = LocationPage.objects.get(id=self.value['location_page'])
             except ObjectDoesNotExist:
                 pass
             return page
 
-    def resolve_remote_location(self, info):
-        if self.location_type == 'remote_location':
+    def resolve_remote_non_COA_location(self, info):
+        if self.location_type == 'remote_non_COA_location':
             return EventPageRemoteLocation(value=self.value)
+
+    def resolve_virtual_event(self, info):
+        if self.location_type == 'virtual_event':
+            return EventPageVirtualLocation(value=self.value)
 
 
 class EventPageNode(JanisBasePageNode):
