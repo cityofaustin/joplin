@@ -19,6 +19,7 @@ def extract_text_from_url(url):
         for page in pdf_doc:
             text += page.getText()
     except RuntimeError:
+        print(f'RuntimeError url: {url}')
         pass
     return text
 
