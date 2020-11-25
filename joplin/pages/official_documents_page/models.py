@@ -22,8 +22,7 @@ class OfficialDocumentPage(JanisBasePage):
     date = models.DateField(verbose_name="Document date", null=True, blank=True)
     authoring_office = models.CharField(verbose_name="Authoring office of document", max_length=DEFAULT_MAX_LENGTH,
                                         blank=True)
-    summary = RichTextField(verbose_name="Document summary", blank=True, features=['link'],
-                            max_length=AUTHOR_LIMITS['document_summary'])
+    summary = RichTextField(verbose_name="Document summary", blank=True, features=['link'])
     body = models.TextField(verbose_name="Document text", blank=True)
     name = models.CharField(verbose_name="Name of Document", max_length=DEFAULT_MAX_LENGTH, blank=True)
     document = models.ForeignKey(Document, null=True, blank=True, on_delete=models.SET_NULL, related_name='+',
