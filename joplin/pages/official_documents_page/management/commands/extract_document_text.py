@@ -33,7 +33,7 @@ def extract_document_text():
     print(f'Beginning extraction...')
 
     for page in all_document_pages:
-        print(f'Page id {page.id}')
+        # commenting out for now - print(f'Page id {page.id}')
         # Check if page body already has content, if so skip
         if len(page.body) > 0:
             continue
@@ -41,7 +41,7 @@ def extract_document_text():
             filename = page.document.url.split('documents')[1]
             print(f'reading {filename}')
             extracted_text = extract_text_from_url(page.document.url)
-            # should we include a message if the extracted text is blank?
+            # TODO: if the extracted_text is "", replace with message per content/OPO
             page.body = extracted_text
             page.save()
         else:
