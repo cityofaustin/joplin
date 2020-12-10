@@ -153,13 +153,13 @@ class EventPage(JanisBasePage):
             location_value = location['value']
             location_type = location['type']
 
-            if location_type == "remote_location":
+            if location_type == "remote_non_COA_location":
                 english_name = location_value['name_en']
                 if translation.get_language() == 'en':
                     return english_name
                 elif translation.get_language() == 'es':
                     return location_value['name_es'] or english_name
-            elif location_type == "city_location":
+            elif location_type == "city_of_Austin_location":
                 return LocationPage.objects.get(id=location_value['location_page']).title
         return ""
 
