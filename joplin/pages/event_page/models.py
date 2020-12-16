@@ -161,6 +161,10 @@ class EventPage(JanisBasePage):
                     return location_value['name_es'] or english_name
             elif location_type == "city_of_Austin_location":
                 return LocationPage.objects.get(id=location_value['location_page']).title
+            elif location_type == "virtual_event":
+                if translation.get_language() == 'es':
+                    return "Evento Virtual"
+                return "Virtual Event"
         return ""
 
     @property
@@ -173,7 +177,7 @@ class EventPage(JanisBasePage):
             "endTime": self.end_time and self.end_time.isoformat(),
             "eventIsFree": self.event_is_free,
             "registrationUrl": self.registration_url,
-            "locationName": self.location_name,
+            "locationNameSearch": self.location_name,
             "eventUrl": self.janis_urls()[0],
             "feesRange": self.fees_range,
         })
