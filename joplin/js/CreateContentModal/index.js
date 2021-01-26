@@ -61,8 +61,9 @@ class CreateContentModal extends Component {
 
   handleNextButton = e => {
     if (this.onLastStep()) {
-      // Validate title max length
-      if (this.state.titleCharacterCount > MAX_TITLE_LENGTH) return false;
+      if (this.state.content_or_topic !== "importer")
+        // Validate title max length
+        if (this.state.titleCharacterCount > MAX_TITLE_LENGTH) return false;
 
       // Validate title min length
       if (this.state.titleCharacterCount <= 0) {

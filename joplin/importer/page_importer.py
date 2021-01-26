@@ -17,6 +17,7 @@ from pages.service_page.factories import ServicePageFactory
 ENDPOINTS = {
     'alpha.austin.gov': 'https://joplin.herokuapp.com/api/graphql',
     'janis-pytest.netlify.com': 'https://joplin-pr-pytest.herokuapp.com/api/graphql',
+    'janis.austintexas.io': 'https://joplin-staging.herokuapp.com/api/graphql',
 }
 
 
