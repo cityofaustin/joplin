@@ -490,6 +490,71 @@ unparsed_query_strings = {
           }
         }
     ''',
+    'guide': '''
+        query getGuidePageRevision($id: ID) {
+          pageRevision(id: $id) {
+            asGuidePage {
+              id
+              title
+              description
+              slug
+              contact {
+                name
+                email
+                phoneNumbers {
+                  edges {
+                    node {
+                      id
+                      phoneDescription
+                      phoneNumber
+                    }
+                  }
+                }
+                socialMedia
+              }
+              image {
+                id
+                filename
+                title
+              }
+              departments {
+                id
+                title
+                slug
+              }
+              sections {
+                heading
+                pages {
+                  url
+                  servicePage {
+                    title
+                    shortDescription
+                    additionalContent
+                    steps
+                    slug
+                    departments {
+                      id
+                      title
+                      slug
+                    }
+                  }
+                  informationPage {
+                    title
+                    description
+                    additionalContent
+                    slug
+                    departments {
+                      id
+                      title
+                      slug
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+''',
     'all_revisions': '''
     query getAllPageRevisions($afterCursor: String) {
       allPageRevisions(first: 100, after: $afterCursor) {

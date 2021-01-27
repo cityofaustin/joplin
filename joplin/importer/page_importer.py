@@ -101,7 +101,7 @@ class PageImporter:
         return cleaned_page_dictionary
 
     def fetch_page_data(self):
-        # todo: don't just hardcode lang here
+        # Fetches page data in both languages
         for lang in ['en', 'es']:
             sample_transport = RequestsHTTPTransport(
                 url=self.joplin_api_endpoint,
@@ -119,7 +119,8 @@ class PageImporter:
             )
 
             result = client.execute(queries[self.page_type], variable_values=json.dumps({'id': self.revision_id}))
-            revision_node = result['allPageRevisions']['edges'][0]['node']
+            # revision_node = result['allPageRevisions']['edges'][0]['node']
+            revision_node = result['pageRevision']['asGuidePage']
 
             # this gets us into the 'as____Page' stuff
             page_dictionary_from_revision = next(iter(revision_node.values()))
