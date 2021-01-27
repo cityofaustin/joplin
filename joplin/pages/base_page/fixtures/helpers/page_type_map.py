@@ -19,6 +19,8 @@ from pages.event_page.factories import EventPageFactory
 from pages.form_container.models import FormContainer
 from pages.form_container.factories import FormContainerFactory
 from pages.news_page.factories import NewsPage, NewsPageFactory
+from pages.guide_page.models import GuidePage
+from pages.guide_page.factories import GuidePageFactory
 
 
 # TODO: Perhaps there is a better way to organize this all in one place.
@@ -70,5 +72,9 @@ page_type_map = {
     "form": {
         "model": FormContainer,
         "factory": FormContainerFactory,
+    },
+    "guide": {
+        "model": GuidePage,
+        "factory": GuidePageFactory,
     }
 }
