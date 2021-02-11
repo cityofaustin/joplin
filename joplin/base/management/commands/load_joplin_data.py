@@ -81,7 +81,7 @@ class Command(BaseCommand):
                 event_page_fixtures.load_all()
                 location_page_fixtures.load_all()
                 department_page_fixtures.load_all()
-                # department pages used in news page fixtures do not have departments assigned (hasattr(self, dept) is False)
+                # department pages in news page fixtures don't have departments assigned (hasattr(self, dept) is False)
                 # news_page_fixtures.load_all()
 
                 # TODO: incorporate logging into DeploymentLog?
@@ -96,7 +96,6 @@ class Command(BaseCommand):
                 elif LOAD_DATA == "new_datadump":
                     print("Adding new migration test datadump")
                     run_load_data_command('db/system-generated/tmp.datadump.json')
-
                     # Runs code from /db/scripts/sanitize_revision_data.sql
                     print("Sanitizing Revisions data")
                     sanitize_revision_path = os.path.join(settings.BASE_DIR, 'joplin/db/scripts/sanitize_revision_data.sql')

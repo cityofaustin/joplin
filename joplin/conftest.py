@@ -37,6 +37,7 @@ def test_suite_cleanup_thing(request):
     yield
     # Teardown: Everything after yield will happen at the end of your pytest session
 
+
 def register_factories(factories):
     """
     lil loop to go through and register factory objects
@@ -58,40 +59,40 @@ https://docs.pytest.org/en/latest/fixture.html#conftest-py-sharing-fixture-funct
 def test_api_url():
     return 'https://joplin-pr-pytest.herokuapp.com/api/graphql'
 
-
-@pytest.fixture()
-def test_api_jwt_token(request, test_api_url):
-    # Requesting the jwt_token takes a long time.
-    # So we'll put it in the cache once we've retrieved it once for this session.
-    jwt_token = request.config.cache.get('test_api_jwt_token', None)
-    if jwt_token:
-        return jwt_token
-    transport = RequestsHTTPTransport(
-        url=test_api_url,
-        headers={
-            'Accept-Language': 'en',
-        },
-        verify=False,
-        retries=3,
-    )
-    client = Client(
-        transport=transport,
-        fetch_schema_from_transport=True,
-    )
-    jwt_token_query = gql('''
-        mutation TokenAuth($email: String!, $password: String!) {
-          tokenAuth(email: $email, password: $password) {
-            token
-          }
-        }
-    ''')
-    result = client.execute(jwt_token_query, variable_values=json.dumps({
-        'email': "apitest@austintexas.io",
-        'password': os.getenv("API_TEST_USER_PASSWORD"),
-    }))
-    jwt_token = result['tokenAuth']['token']
-    request.config.cache.set('test_api_jwt_token', jwt_token)
-    return jwt_token
+#
+# @pytest.fixture()
+# def test_api_jwt_token(request, test_api_url):
+#     # Requesting the jwt_token takes a long time.
+#     # So we'll put it in the cache once we've retrieved it once for this session.
+#     jwt_token = request.config.cache.get('test_api_jwt_token', None)
+#     if jwt_token:
+#         return jwt_token
+#     transport = RequestsHTTPTransport(
+#         url=test_api_url,
+#         headers={
+#             'Accept-Language': 'en',
+#         },
+#         verify=False,
+#         retries=3,
+#     )
+#     client = Client(
+#         transport=transport,
+#         fetch_schema_from_transport=True,
+#     )
+#     jwt_token_query = gql('''
+#         mutation TokenAuth($email: String!, $password: String!) {
+#           tokenAuth(email: $email, password: $password) {
+#             token
+#           }
+#         }
+#     ''')
+#     result = client.execute(jwt_token_query, variable_values=json.dumps({
+#         'email': "apitest@austintexas.io",
+#         'password': os.getenv("API_TEST_USER_PASSWORD"),
+#     }))
+#     jwt_token = result['tokenAuth']['token']
+#     request.config.cache.set('test_api_jwt_token', jwt_token)
+#     return jwt_token
 
 
 @pytest.fixture()

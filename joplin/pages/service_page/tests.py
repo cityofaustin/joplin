@@ -194,7 +194,6 @@ def test_import_step_with_2_already_existing_locations(remote_staging_preview_ur
     assert page.steps.stream_data[0]["value"]["locations"][1] == location_page_2.pk
 
 
-# @pytest.mark.django_db
 @pytest.mark.skip("importer test")
 def test_import_step_with_1_imported_and_some_unimported_internal_links(remote_staging_preview_url, test_api_url, test_api_jwt_token):
     # this fixture has the same slug as the first link of the page we're importing,
@@ -212,7 +211,6 @@ def test_import_step_with_1_imported_and_some_unimported_internal_links(remote_s
     assert not page.live
 
 
-# @pytest.mark.django_db
 @pytest.mark.skip("importer test")
 def test_import_step_with_1_imported_internal_link(remote_staging_preview_url, test_api_url, test_api_jwt_token):
     topic_page_fixtures.title()

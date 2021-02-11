@@ -14,9 +14,13 @@ def extract_text_from_url(url):
     resp = http.request('GET', url)
     file_stream = io.BytesIO(resp.data)
     text = ''
-    pdf_doc = fitz.open(stream=file_stream, filetype='pdf')
-    for page in pdf_doc:
-        text += page.getText()
+    try:
+        pdf_doc = fitz.open(stream=file_stream, filetype='pdf')
+        for page in pdf_doc:
+            text += page.getText()
+    except RuntimeError:
+        print(f'RuntimeError url: {url}')
+        pass
     return text
 
 
@@ -29,12 +33,12 @@ def extract_document_text():
     print(f'Beginning extraction...')
 
     for page in all_document_pages:
-        print(f'Page id {page.id}')
+        # print(f'Page id {page.id}')
         # Check if page body already has content, if so skip
         if len(page.body) > 0:
             continue
         if page.document and page.document.url:
-            filename = page.document.url.split('docs')[1]
+            filename = page.document.url.split('documents')[1]
             print(f'reading {filename}')
             extracted_text = extract_text_from_url(page.document.url)
             page.body = extracted_text

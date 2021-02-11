@@ -177,7 +177,6 @@ def test_get_live_page_from_api(remote_staging_preview_url, test_api_url, test_a
     assert page.live
 
 
-# @pytest.mark.django_db
 @pytest.mark.skip("importer test")
 def test_get_draft_page_from_api(remote_staging_preview_url, test_api_url, test_api_jwt_token):
     url = f'{remote_staging_preview_url}/information/UGFnZVJldmlzaW9uTm9kZTo0MA==?CMS_API={test_api_url}'
