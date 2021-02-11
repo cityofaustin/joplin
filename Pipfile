@@ -12,7 +12,6 @@ coverage = "==5.1"
 django-coverage-plugin = "==1.8.0"
 pytest-cov = "==2.9.0"
 snapshottest = "==0.5.1"
-pytest = "==6.0.2"
 
 [packages]
 wagtail = "==2.9.3"
