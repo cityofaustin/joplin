@@ -6,7 +6,8 @@ import pages.location_page.fixtures as fixtures
 from pages.location_page.factories import LocationPageFactory
 
 
-@pytest.mark.django_db
+# @pytest.mark.django_db
+@pytest.mark.skip("importer test")
 def test_create_location_page_from_api(remote_staging_preview_url, test_api_url, test_api_jwt_token):
     url = f'{remote_staging_preview_url}/location/UGFnZVJldmlzaW9uTm9kZToyNA==?CMS_API={test_api_url}'
     page = PageImporter(url, test_api_jwt_token).fetch_page_data().create_page()

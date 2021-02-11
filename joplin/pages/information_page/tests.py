@@ -10,6 +10,7 @@ from importer.create_from_importer import create_page_from_importer
 create_topic_page_from_importer_dictionaries = lambda page_dictionaries, revision_id=None: create_page_from_importer('topics', page_dictionaries, revision_id)
 create_information_page_from_importer_dictionaries = lambda page_dictionaries, revision_id=None: create_page_from_importer('information', page_dictionaries, revision_id)
 
+
 def page_dictionaries():
     return decamelize({
         'en': {
@@ -98,7 +99,8 @@ def page_dictionaries():
 
 # when importing the same page twice, we should just
 # return the id of the previously imported page
-@pytest.mark.django_db
+# @pytest.mark.django_db
+@pytest.mark.skip("importer test")
 def test_import_from_page_dictionary_twice():
     revision_id = 'UGFnZVJldmlzaW9uTm9kZToxMQ=='
 
@@ -116,7 +118,8 @@ def test_import_from_page_dictionary_twice():
 # when importing the same page twice, with a different revision id
 # we should just return the id of the previously imported page
 # todo: decide if this is how we want this to work
-@pytest.mark.django_db
+# @pytest.mark.django_db
+@pytest.mark.skip("importer test")
 def test_import_from_page_dictionary_twice_different_revisions():
     first_revision_id = 'first_revision_id'
     second_revision_id = 'second_revision_id'
@@ -134,7 +137,8 @@ def test_import_from_page_dictionary_twice_different_revisions():
 
 # when importing a page with an existing topic,
 # we should use the existing topic for the page
-@pytest.mark.django_db
+# @pytest.mark.django_db
+@pytest.mark.skip("importer test")
 def test_import_from_page_dictionary_existing_topic():
     revision_id = 'UGFnZVJldmlzaW9uTm9kZToxMQ=='
     topic_page_revision_id = page_dictionaries()['en']['topics']['edges'][0]['node']['topic']['live_revision']['id']
@@ -152,7 +156,8 @@ def test_import_from_page_dictionary_existing_topic():
     assert topics_on_page == topic_pages
 
 
-@pytest.mark.django_db
+# @pytest.mark.django_db
+@pytest.mark.skip("importer test")
 def test_create_information_page_with_contact_from_api(remote_staging_preview_url, test_api_url, test_api_jwt_token):
     url = f'{remote_staging_preview_url}/information/UGFnZVJldmlzaW9uTm9kZToyMg==?CMS_API={test_api_url}'
     page = PageImporter(url, test_api_jwt_token).fetch_page_data().create_page()
@@ -161,7 +166,8 @@ def test_create_information_page_with_contact_from_api(remote_staging_preview_ur
     assert page.contact.name == 'Contact name'
 
 
-@pytest.mark.django_db
+# @pytest.mark.django_db
+@pytest.mark.skip("importer test")
 def test_get_live_page_from_api(remote_staging_preview_url, test_api_url, test_api_jwt_token):
     url = f'{remote_staging_preview_url}/information/UGFnZVJldmlzaW9uTm9kZTo0Mg==?CMS_API={test_api_url}'
     page = PageImporter(url, test_api_jwt_token).fetch_page_data().create_page()
@@ -171,7 +177,8 @@ def test_get_live_page_from_api(remote_staging_preview_url, test_api_url, test_a
     assert page.live
 
 
-@pytest.mark.django_db
+# @pytest.mark.django_db
+@pytest.mark.skip("importer test")
 def test_get_draft_page_from_api(remote_staging_preview_url, test_api_url, test_api_jwt_token):
     url = f'{remote_staging_preview_url}/information/UGFnZVJldmlzaW9uTm9kZTo0MA==?CMS_API={test_api_url}'
     page = PageImporter(url, test_api_jwt_token).fetch_page_data().create_page()

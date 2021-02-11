@@ -8,14 +8,16 @@ import pages.location_page.fixtures as location_page_fixtures
 import pages.topic_page.fixtures as topic_page_fixtures
 
 
-@pytest.mark.django_db
+# @pytest.mark.django_db
+@pytest.mark.skip("importer test")
 def test_create_service_page_from_api(remote_staging_preview_url, test_api_url, test_api_jwt_token):
     url = f'{remote_staging_preview_url}/services/UGFnZVJldmlzaW9uTm9kZToxNQ==?CMS_API={test_api_url}'
     page = PageImporter(url, test_api_jwt_token).fetch_page_data().create_page()
     assert isinstance(page, ServicePage)
 
 
-@pytest.mark.django_db
+# @pytest.mark.django_db
+@pytest.mark.skip("importer test")
 def test_create_service_page_with_contact_from_api(remote_staging_preview_url, test_api_url, test_api_jwt_token):
     url = f'{remote_staging_preview_url}/services/UGFnZVJldmlzaW9uTm9kZToyMA==?CMS_API={test_api_url}'
     page = PageImporter(url, test_api_jwt_token).fetch_page_data().create_page()
@@ -24,7 +26,8 @@ def test_create_service_page_with_contact_from_api(remote_staging_preview_url, t
     assert page.contact.name == 'Contact name'
 
 
-@pytest.mark.django_db
+# @pytest.mark.django_db
+@pytest.mark.skip("importer test")
 def test_create_service_page_with_department_from_api(remote_staging_preview_url, test_api_url, test_api_jwt_token):
     url = f'{remote_staging_preview_url}/services/UGFnZVJldmlzaW9uTm9kZTozNg==?CMS_API={test_api_url}'
     page = PageImporter(url, test_api_jwt_token).fetch_page_data().create_page()
@@ -141,7 +144,8 @@ def test_create_service_page_with_step_with_2_locations():
         assert step["value"] == expected_steps[i]["value"]
 
 
-@pytest.mark.django_db
+# @pytest.mark.django_db
+@pytest.mark.skip("importer test")
 def test_import_step_with_1_already_existing_location(remote_staging_preview_url, test_api_url, test_api_jwt_token):
     location_page = location_page_fixtures.title()
     url = f'{remote_staging_preview_url}/services/UGFnZVJldmlzaW9uTm9kZTo1OA==?CMS_API={test_api_url}'
@@ -152,7 +156,8 @@ def test_import_step_with_1_already_existing_location(remote_staging_preview_url
     assert page.steps.stream_data[0]["value"]["locations"][0] == location_page.pk
 
 
-@pytest.mark.django_db
+# @pytest.mark.django_db
+@pytest.mark.skip("importer test")
 def test_import_step_with_1_new_location(remote_staging_preview_url, test_api_url, test_api_jwt_token):
     url = f'{remote_staging_preview_url}/services/UGFnZVJldmlzaW9uTm9kZTo1OA==?CMS_API={test_api_url}'
     page = PageImporter(url, test_api_jwt_token).fetch_page_data().create_page()
@@ -163,7 +168,8 @@ def test_import_step_with_1_new_location(remote_staging_preview_url, test_api_ur
     assert not page.steps
 
 
-@pytest.mark.django_db
+# @pytest.mark.django_db
+@pytest.mark.skip("importer test")
 def test_import_step_with_1_already_existing_location_1_new_location(remote_staging_preview_url, test_api_url, test_api_jwt_token):
     location_page = location_page_fixtures.title()
     url = f'{remote_staging_preview_url}/services/UGFnZVJldmlzaW9uTm9kZTo2Mg==?CMS_API={test_api_url}'
@@ -175,7 +181,8 @@ def test_import_step_with_1_already_existing_location_1_new_location(remote_stag
     assert page.steps.stream_data[0]["value"]["locations"][0] == location_page.pk
 
 
-@pytest.mark.django_db
+# @pytest.mark.django_db
+@pytest.mark.skip("importer test")
 def test_import_step_with_2_already_existing_locations(remote_staging_preview_url, test_api_url, test_api_jwt_token):
     location_page_1 = location_page_fixtures.title()
     location_page_2 = location_page_fixtures.live_library()
@@ -187,7 +194,8 @@ def test_import_step_with_2_already_existing_locations(remote_staging_preview_ur
     assert page.steps.stream_data[0]["value"]["locations"][1] == location_page_2.pk
 
 
-@pytest.mark.django_db
+# @pytest.mark.django_db
+@pytest.mark.skip("importer test")
 def test_import_step_with_1_imported_and_some_unimported_internal_links(remote_staging_preview_url, test_api_url, test_api_jwt_token):
     # this fixture has the same slug as the first link of the page we're importing,
     # let's create it so the importer can link to it
@@ -204,7 +212,8 @@ def test_import_step_with_1_imported_and_some_unimported_internal_links(remote_s
     assert not page.live
 
 
-@pytest.mark.django_db
+# @pytest.mark.django_db
+@pytest.mark.skip("importer test")
 def test_import_step_with_1_imported_internal_link(remote_staging_preview_url, test_api_url, test_api_jwt_token):
     topic_page_fixtures.title()
     expected_steps = components.step_with_one_imported_internal_link()
@@ -219,7 +228,8 @@ def test_import_step_with_1_imported_internal_link(remote_staging_preview_url, t
         assert step["value"] == expected_steps[i]["value"]
 
 
-@pytest.mark.django_db
+# @pytest.mark.django_db
+@pytest.mark.skip("importer test")
 def test_do_not_import_english_as_spanish(remote_staging_preview_url, test_api_url, test_api_jwt_token):
     url = f'{remote_staging_preview_url}/services/UGFnZVJldmlzaW9uTm9kZTo3MA==?CMS_API={test_api_url}'
     page = PageImporter(url, test_api_jwt_token).fetch_page_data().create_page()
@@ -232,7 +242,8 @@ def test_do_not_import_english_as_spanish(remote_staging_preview_url, test_api_u
     assert page.slug_es is None
 
 
-@pytest.mark.django_db
+# @pytest.mark.django_db
+@pytest.mark.skip("importer test")
 def test_import_page_with_step_with_location_followed_by_basic_step(remote_staging_preview_url, test_api_url, test_api_jwt_token):
     url = f'{remote_staging_preview_url}/services/UGFnZVJldmlzaW9uTm9kZTo3Ng==?CMS_API={test_api_url}'
     page = PageImporter(url, test_api_jwt_token).fetch_page_data().create_page()
