@@ -86,8 +86,8 @@ class DepartmentPage(JanisBasePage):
                     help_text='Add links to 1-4 top service pages or guides (4 maximum allowed).',
                     min_num=None, max_num=4),
         InlinePanel('related_pages', heading='Links to related pages', label='related page',
-                    help_text='Add links to 1-4 related information pages or guides (4 maximum allowed).',
-                    min_num=None, max_num=4)
+                    help_text='Add links to 1-5 related information pages or guides (4 maximum allowed).',
+                    min_num=None, max_num=5)
     ]
 
     def janis_urls(self):
