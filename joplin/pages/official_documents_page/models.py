@@ -83,7 +83,7 @@ class OfficialDocumentPage(JanisBasePage):
                                 message="You need to include a summary before publishing"),
         FieldPublishRequirement("name", langs=["en"],
                                 message="You need to include a name before publishing"),
-        FieldPublishRequirement('document'),
+        # FieldPublishRequirement('document'),
         RelationPublishRequirement('official_document_collection'),
     )
 
