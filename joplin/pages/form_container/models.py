@@ -1,12 +1,8 @@
 from django.db import models
 
-from modelcluster.fields import ParentalKey
-from modelcluster.models import ClusterableModel
-from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, PageChooserPanel
+from wagtail.admin.edit_handlers import FieldPanel, InlinePanel
 
 from base.forms import FormContainerForm
-
-from pages.base_page.models import JanisBasePage
 
 from base.models.widgets import countMe, countMeTextArea
 from publish_preflight.requirements import FieldPublishRequirement, RelationPublishRequirement, ConditionalPublishRequirement, DepartmentPublishRequirement

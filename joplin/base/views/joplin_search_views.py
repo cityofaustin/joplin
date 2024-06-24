@@ -38,7 +38,7 @@ def dept_explorable_pages(user):
     if not user.is_active:
         return Page.objects.none()
     if user.is_superuser:
-        return Page.objects.all()  # todo: check this, we don't want the home page returned
+        return Page.objects.all()
 
     user_perms = UserPagePermissionsProxy(user)
     explorable_pages = Page.objects.none()
